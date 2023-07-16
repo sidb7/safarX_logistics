@@ -1,0 +1,504 @@
+import ProfileImage from "../assets/ReturningUser/profileIcon.svg";
+import EditImage from "../assets/PickUp/Edit.svg";
+import PhoneIcon from "../assets/ReturningUser/phoneIcon.svg";
+import locationImage from "../assets/Location.png";
+import ItemIcon from "../assets/Product/Item.svg";
+import ProImage from "../assets/ReturningUser/Product.svg";
+import ShopifyIcon from "../assets/Catalogue/shopify.svg";
+import AmazonIcon from "../assets/Catalogue/amazon.svg";
+import SalesforceIcon from "../assets/Catalogue/salesforce.svg";
+import FingerIcon from "../assets/Catalogue/finger.svg";
+import WooIcon from "../assets/Catalogue/woo.svg";
+import MeeshoIcon from "../assets/Catalogue/meesho.svg";
+
+export const deliveryAddress = [
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImage,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImage,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+];
+
+export const pickupAddress = [
+  {
+    header: "Warehouse",
+    editImage: EditImage,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Warehouse Mumbai",
+    editImage: EditImage,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+];
+
+export const productCardQuantity = [
+  {
+    recommended: true,
+    proImage: ProImage,
+    header: "Mac book air + Airpodes + Charger",
+    text: "5 kg | ₹500",
+  },
+];
+
+export const productData = [
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+];
+
+export const customServiceData = [
+  {
+    serviceType: "Economy",
+    servicePrice: "₹ 2300 | ",
+    serviceSpan: " Save ₹100 using this service",
+    serviceETA: "ETA: 24 Jun 23",
+  },
+  {
+    serviceType: "Standard",
+    servicePrice: "₹ 2300 | ",
+    serviceSpan: " Save ₹100 using this service",
+    serviceETA: "ETA: 23 Jun 23",
+  },
+  {
+    serviceType: "Premium",
+    servicePrice: "₹ 2300 | ",
+    serviceSpan: " Save ₹100 using this service",
+    serviceETA: "ETA: 24 Jun 23",
+  },
+];
+
+export const customDeliveryData = [
+  {
+    locationImage: locationImage,
+    header: "Your top delivery location",
+    editImage: EditImage,
+    text: "Mumbai Warehouse",
+    address: "ICICI Bank, Andheri, Mumbai, Maharastra 422012",
+  },
+  {
+    locationImage: locationImage,
+    header: "Your top delivery location",
+    editImage: EditImage,
+    text: "Mumbai Warehouse",
+    address: "ICICI Bank, Andheri, Mumbai, Maharastra 422012",
+  },
+  {
+    locationImage: locationImage,
+    header: "Your top delivery location",
+    editImage: EditImage,
+    text: "Mumbai Warehouse",
+    address: "ICICI Bank, Andheri, Mumbai, Maharastra 422012",
+  },
+];
+
+export const customPickUpData = [
+  {
+    locationImage: locationImage,
+    header: "Your top pickup location",
+    editImage: EditImage,
+    text: "Jhindal Warehouse",
+    address:
+      "Plot no. ICICI Bank, Andheri link road Andheri, Mumbai, Maharastra 422012",
+  },
+  {
+    locationImage: locationImage,
+    header: "Your top pickup location",
+    editImage: EditImage,
+    text: "Jhindal Warehouse",
+    address: "ICICI Bank, Andheri,Mumbai, Maharastra 422012",
+  },
+  {
+    locationImage: locationImage,
+    header: "Your top pickup location",
+    editImage: EditImage,
+    text: "Jhindal Warehouse",
+    address: "ICICI Bank, Andheri, Mumbai, Maharastra 422012",
+  },
+];
+
+export const customContactData = [
+  {
+    profileImage: ProfileImage,
+    profileImage1: ProfileImage,
+    header: "Your top contact person",
+    editImage: EditImage,
+    role: "Warehouse Associate",
+    personName: "Anish Sharma",
+    phoneIcon: PhoneIcon,
+    personContact: "9112345123",
+  },
+];
+
+export const ReturnContactData = [
+  {
+    profileImage: "",
+    profileImage1: "",
+    header: "",
+    editImage: "",
+    role: "",
+    personName: "",
+    phoneIcon: "",
+    personContact: "",
+  },
+];
+
+export const standardServiceData = [
+  {
+    serviceType: "Economy",
+    price: 2300,
+    savedPrice: 100,
+    etaDate: "02 JUN 2023",
+  },
+  {
+    serviceType: "Standard",
+    price: 2300,
+    savedPrice: 100,
+    etaDate: "02 JUN 2023",
+  },
+  {
+    serviceType: "Premium",
+    price: 2300,
+    savedPrice: 100,
+    etaDate: "02 JUN 2023",
+  },
+];
+
+export const RecommendedServiceData = [
+  {
+    isRecommendation: true,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "1",
+  },
+  {
+    isRecommendation: true,
+    recommendation: "Fastest",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "2",
+  },
+];
+
+export const FilterServiceData = [
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "3",
+  },
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "4",
+  },
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "5",
+  },
+];
+
+export const dummyDayData = [
+  {
+    label: "Today",
+    value: "today",
+  },
+  {
+    label: "Tomorrow",
+    value: "tomorrow",
+  },
+  {
+    label: "This week",
+    value: "thisWeek",
+  },
+];
+
+export const dummyTimeData = [
+  {
+    label: "11:00 AM",
+    value: "11:00 AM",
+  },
+  {
+    label: "12:00 PM",
+    value: "12:00 PM",
+  },
+  {
+    label: "01:00 PM",
+    value: "01:00 PM",
+  },
+  {
+    label: "02:00 PM",
+    value: "02:00 PM",
+  },
+  {
+    label: "03:00 PM",
+    value: "03:00 PM",
+  },
+];
+
+export const dummyTransactionFilterData = [
+  {
+    name: "Date",
+    isCollapse: false,
+    menu: [
+      {
+        name: "Today",
+
+        isActive: false,
+      },
+      {
+        name: "This Week",
+
+        isActive: false,
+      },
+      {
+        name: "This Month",
+
+        isActive: false,
+      },
+      {
+        name: "This Quarter",
+
+        isActive: false,
+      },
+      {
+        name: "This Year",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Credited",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Below ₹500",
+
+        isActive: false,
+      },
+      {
+        name: "Between ₹500-1000",
+
+        isActive: false,
+      },
+      {
+        name: "Between ₹1000-2000",
+
+        isActive: false,
+      },
+
+      {
+        name: "Between ₹2000-3000",
+
+        isActive: false,
+      },
+      {
+        name: "Above ₹3000",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Debited",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Below ₹500",
+
+        isActive: false,
+      },
+      {
+        name: "Between ₹500-1000",
+
+        isActive: false,
+      },
+      {
+        name: "Between ₹1000-2000",
+
+        isActive: false,
+      },
+
+      {
+        name: "Between ₹2000-3000",
+
+        isActive: false,
+      },
+      {
+        name: "Above ₹3000",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Status",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Approved",
+
+        isActive: false,
+      },
+      {
+        name: "Requested",
+
+        isActive: false,
+      },
+
+      {
+        name: "Declined",
+
+        isActive: false,
+      },
+    ],
+  },
+];
+
+export const dummyChannelIntegrationData = [
+  {
+    title: "Carts",
+    channels: [
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        integrated: true,
+        storesIntegrated: 5,
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        integrated: true,
+        storesIntegrated: 5,
+      },
+    ],
+  },
+
+  {
+    title: "Marketplace",
+    channels: [
+      {
+        name: "Amazon",
+        icon: AmazonIcon,
+        integrated: false,
+      },
+      {
+        name: "Meesho",
+        icon: MeeshoIcon,
+        integrated: false,
+      },
+    ],
+  },
+
+  {
+    title: "Order Management System",
+    channels: [
+      {
+        name: "Salesforce",
+        icon: SalesforceIcon,
+        integrated: false,
+      },
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        integrated: false,
+      },
+    ],
+  },
+
+  {
+    title: "Warehouse Management System",
+    channels: [
+      {
+        name: "Name",
+        icon: FingerIcon,
+        integrated: false,
+      },
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        integrated: false,
+      },
+    ],
+  },
+
+  {
+    title: "Inventory Management System",
+    channels: [
+      {
+        name: "Salesforce",
+        icon: SalesforceIcon,
+        integrated: false,
+      },
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        integrated: false,
+      },
+    ],
+  },
+];

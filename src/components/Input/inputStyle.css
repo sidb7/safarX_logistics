@@ -1,0 +1,23 @@
+.custom-label {
+  transform: translateY(-50%);
+  background-color: white;
+
+  margin-left: 10px;
+  transition: 0.1s ease-out;
+  transform-origin: left top;
+  pointer-events: none;
+}
+.custom-input {
+  transition: 0.1s ease-out;
+  width: 100%;
+}
+
+.custom-input:focus + label {
+  top: 0;
+
+  transform: translateY(-50%) scale(0.9);
+}
+.custom-input:not(:placeholder-shown) + label {
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}

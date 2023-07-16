@@ -1,0 +1,14 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.7359 3.33398H29.2526C35.1859 3.33398 36.6693 4.81732 36.6693 10.734V21.284C36.6693 27.2173 35.1859 28.684 29.2693 28.684H10.7359C4.81927 28.7006 3.33594 27.2173 3.33594 21.3007V10.734C3.33594 4.81732 4.81927 3.33398 10.7359 3.33398Z" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20 28.6992V36.6659" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M12.5 36.666H27.5" stroke="#1C1C1C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20.2312 8.84414L25.8562 11.0941C26.075 11.1816 26.25 11.4441 26.25 11.6754V13.7504C26.25 14.0941 25.9688 14.3754 25.625 14.3754H14.375C14.0312 14.3754 13.75 14.0941 13.75 13.7504V11.6754C13.75 11.4441 13.925 11.1816 14.1438 11.0941L19.7688 8.84414C19.8938 8.79414 20.1062 8.79414 20.2312 8.84414Z" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M26.25 21.25H13.75V19.375C13.75 19.0312 14.0312 18.75 14.375 18.75H25.625C25.9688 18.75 26.25 19.0312 26.25 19.375V21.25Z" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15 18.75V14.375" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17.5 18.75V14.375" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20 18.75V14.375" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M22.5 18.75V14.375" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M25 18.75V14.375" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.125 21.25H26.875" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M20 12.8125C20.5178 12.8125 20.9375 12.3928 20.9375 11.875C20.9375 11.3572 20.5178 10.9375 20 10.9375C19.4822 10.9375 19.0625 11.3572 19.0625 11.875C19.0625 12.3928 19.4822 12.8125 20 12.8125Z" stroke="#1C1C1C" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,238 @@
+[
+  {
+    "name": "Delivery Address",
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Saved address 1/recent",
+
+        "isActive": false
+      },
+      {
+        "name": "Saved address 2",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Pickup Address",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Saved address 1/recent",
+
+        "isActive": false
+      },
+      {
+        "name": "Saved address 2",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "City",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Nagpur",
+
+        "isActive": false
+      },
+      {
+        "name": "Mumbai",
+
+        "isActive": false
+      },
+
+      {
+        "name": "Pune",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Zone",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Zone 1",
+
+        "isActive": false
+      },
+      {
+        "name": "Zone 2",
+
+        "isActive": false
+      },
+
+      {
+        "name": "Zone 3",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Date",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Today",
+
+        "isActive": false
+      },
+      {
+        "name": "This Week",
+
+        "isActive": false
+      },
+
+      {
+        "name": "This Month",
+
+        "isActive": false
+      },
+      {
+        "name": "This Quartar",
+
+        "isActive": false
+      },
+      {
+        "name": "This Year",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Weight range",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "0 to 20 Kg",
+
+        "isActive": false
+      },
+      {
+        "name": "20 to 50 Kg",
+
+        "isActive": false
+      },
+
+      {
+        "name": "50 to 100 Kg",
+
+        "isActive": false
+      },
+      {
+        "name": "100 Kg and more",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Service",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "International",
+
+        "isActive": false
+      },
+      {
+        "name": "Hyperlocal",
+
+        "isActive": false
+      },
+
+      {
+        "name": "Full Truck",
+
+        "isActive": false
+      },
+      {
+        "name": "Half Truck",
+
+        "isActive": false
+      },
+      {
+        "name": "Premium",
+
+        "isActive": false
+      },
+      {
+        "name": "Economy",
+
+        "isActive": false
+      },
+      {
+        "name": "Standard",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Channel platforms",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Delhivery",
+
+        "isActive": false
+      },
+      {
+        "name": "DHL",
+
+        "isActive": false
+      },
+
+      {
+        "name": "Ekart",
+
+        "isActive": false
+      },
+      {
+        "name": "Maruti",
+
+        "isActive": false
+      }
+    ]
+  },
+
+  {
+    "name": "Status",
+
+    "isCollapse": false,
+    "menu": [
+      {
+        "name": "Placed",
+
+        "isActive": false
+      },
+      {
+        "name": "Picked",
+
+        "isActive": false
+      }
+    ]
+  }
+]

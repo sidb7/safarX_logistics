@@ -1,0 +1,13 @@
+.datePickerWithLogo {
+  background-image: url("../../src/assets/calendar.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 30px;
+}
+
+.datePickerWithLogo::placeholder {
+  color: #a4a4a4; /* change as needed */
+  font-size: 16px; /* change as needed */
+  /* add any other styles as needed */
+  /* margin-right: 10rem; */
+}
