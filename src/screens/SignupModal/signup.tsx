@@ -48,7 +48,9 @@ const Index = (props:any) => {
         <div className="flex justify-center">
           <GoogleLogin
             text="signup_with"
-            onSuccess={responseMessage}
+            
+            onSuccess={
+              responseMessage}
             onError={() => {
               console.log("Google Signup Failed");
             }}
