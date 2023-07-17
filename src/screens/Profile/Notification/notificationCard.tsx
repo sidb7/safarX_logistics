@@ -1,5 +1,5 @@
 import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
-import DownArrowIcon from "../../../assets/Filter/downArrow.svg";
+import RightArrowIcon from "../../../assets/Profile/RightArrowIcon.svg";
 import NotificationBellIcon from "../../../assets/Profile/NotificationBellIcon.svg";
 import { useNavigate } from "react-router-dom";
 export const ProfileNotification = () => {
@@ -17,7 +17,7 @@ export const ProfileNotification = () => {
           </span>
         </div>
         <div className="mr-4">
-          <img src={DownArrowIcon} alt="" className="ml-4" />
+          <img src={RightArrowIcon} alt="" className="ml-4" />
         </div>
       </div>
     </div>
