@@ -68,6 +68,7 @@ import { ChangePassword } from "../screens/Profile/Settings/changePassword";
 import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
+import { AccountQuestion } from "../screens/Question";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -82,7 +83,9 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} />
+          <Route path="question" element={<AccountQuestion/>}/>
           <Route path="/neworder" element={<NewOrderLayout />}>
+            
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
