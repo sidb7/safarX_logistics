@@ -16,7 +16,6 @@ export const insufficientBalance = [
   {
     header: "Insufficient  balance",
     header2: "RECHARGE",
-    downwardArrow : DownWardArrow,
     orders: "04 Orders",
     nameOfTheOrder: "Name of the order",
     recharge: "Recharge"
@@ -24,34 +23,29 @@ export const insufficientBalance = [
   {
     header: "Duplicate ID",
     header2: "FIX",
-    downwardArrow : DownWardArrow,
     orders: "24 Orders",
   },
   {
     header: "Landmark not found",
     header2: "FIX",
-    downwardArrow : DownWardArrow,
     orders: "24 Orders",
    
   },
   {
     header: "Landmark not found",
     header2: "FIX",
-    downwardArrow : DownWardArrow,
     orders: "24 Orders",
    
   },
   {
     header: "Low address accuracy",
     header2: "FIX",
-    downwardArrow : DownWardArrow,
     orders: "24 Orders",
    
   },
   {
     header: "High risk customer",
     header2: "FIX",
-    downwardArrow : DownWardArrow,
     orders: "24 Orders",
    
   } 

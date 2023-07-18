@@ -5,7 +5,6 @@ interface IProductData{
     props:{
         header: string;
         header2: string;
-        downwardArrow : string;
         orders: string;
         nameOfTheOrder?: string;
         recharge?: string;
