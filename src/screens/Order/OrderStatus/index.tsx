@@ -3,6 +3,12 @@ import FilterIcon from "../../../assets/Order/FilterIcon.svg";
 import { useState } from "react";
 
 const statusBar = (statusName: string, orderNumber: string) => {
+
+ interface Itype {
+  filterId: any,
+  setFilterId: any
+ } 
+
   return (
     <div className="flex justify-center items-center border-b-4 border-[#777777] px-4">
       <span className="text-[#777777] text-[14px]">{statusName}</span>
@@ -13,8 +19,8 @@ const statusBar = (statusName: string, orderNumber: string) => {
   );
 };
 
-export const OrderStatus = () => {
-  const [filterId, setFilterId] = useState(-1);
+export const OrderStatus = ({setIndex, filterId, setFilterId}: any) => {
+ 
   const [statusId, setStatusId] = useState(-1);
 
   const [filterData, setFilterData] = useState([
@@ -23,6 +29,7 @@ export const OrderStatus = () => {
     { label: "Error", isActive: false },
   ]);
 
+  
   const [statusData, setStatusData] = useState([
     {
       statusName: "New Order",
@@ -37,6 +44,8 @@ export const OrderStatus = () => {
       orderNumber: "05",
     },
   ]);
+
+  
 
   return (
     <div>
@@ -68,7 +77,7 @@ export const OrderStatus = () => {
         })}
       </div>
 
-      <div className="grid grid-cols-2 justify-center mt-4 h-[36px]">
+      <div className="grid grid-cols-2  justify-center mt-4 h-[36px]">
         <div className="flex items-center">
           <span className="text-[#494949] text-[14px] font-semibold">
             00 Order
@@ -96,13 +105,16 @@ export const OrderStatus = () => {
                   ? "rounded-l-md bg-[#D2D2D2] font-medium text-[#1C1C1C]"
                   : ""
               }`}
-              onClick={() => setFilterId(index)}
+              
+              onClick={()=>(setFilterId(index))  }
             >
               {singleData.label}
             </span>
           );
         })}
+        
       </div>
+     
     </div>
   );
 };
