@@ -1,13 +1,14 @@
 import Checkbox from "../../components/CheckBox";
-import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif"
-import CargoRatingGif from "../../../assets/AccountQuestions/CargoRating.gif"
-import DroneDeliveryGif from "../../../assets/AccountQuestions/DroneDelivery.gif";
+// import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif"
+import WarehouseTruckGif from "../../assets/AccountQuestions/WarehouseTruck.gif";
+import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif"
+import DroneDeliveryGif from "../../assets/AccountQuestions/DroneDelivery.gif";
 export const QuestionComponent1 = () => {
   return (
     <div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <img src={WarehouseTruckGif} alt="" width="180px" />
-      </div>
+      </div> */}
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
@@ -28,7 +29,7 @@ export const QuestionComponent2 = () => {
   return (
     <div>
       
-      <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[224px]">
+      <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[224px] lg:mt-[18px]">
         <div className="">
           <span className="text-xl font-semibold">Describe yourself</span>
         </div>
@@ -53,13 +54,13 @@ export const QuestionComponent2 = () => {
 export const QuestionComponent3 = () => {
   return (
     <div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <img src={CargoRatingGif} alt="" width="180px" />
-      </div>
+      </div> */}
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
-            What is your monthly order volume
+            What is your monthly order volume?
           </span>
         </div>
         <div className="flex flex-col items-start mt-4">
@@ -77,9 +78,9 @@ export const QuestionComponent3 = () => {
 export const QuestionComponent4 = () => {
   return (
     <div>
-      <div className="flex justify-center">
+      {/* <div className="flex justify-center">
         <img src={DroneDeliveryGif} alt="" width="180px" />
-      </div>
+      </div> */}
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
@@ -97,6 +98,35 @@ export const QuestionComponent4 = () => {
             className="text-base"
           />
           <Checkbox label="Physical Store" className="text-base" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const QuestionComponent5 = () => {
+  return (
+    <div>
+      {/* <div className="flex justify-center">
+        <img src={DroneDeliveryGif} alt="" width="180px" />
+      </div> */}
+      <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
+        <div className="">
+          <span className="text-xl font-semibold">
+            Benefits of doing KYC
+          </span>
+        </div>
+        <div className="flex flex-col items-start mt-4">
+          <Checkbox
+            label="Faster COD pay-outs"
+            className="text-base"
+          />
+          <Checkbox label="Faster hiccup free shipping" className="text-base" />
+          <Checkbox
+            label="Protection against Identity Theft"
+            className="text-base"
+          />
+          <Checkbox label="Regulatory compliance" className="text-base" />
         </div>
       </div>
     </div>
