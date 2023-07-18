@@ -62,6 +62,12 @@ import { NotificationLayout } from "../layout/notificationLayout";
 import { ProfileNotificationTab } from "../screens/Profile/Notification/notificationTab";
 import { ReferLayout } from "../layout/ReferLayout";
 import { ReferTab } from "../screens/Profile/ReferEarn/referTab";
+import { SettingLayout } from "../layout/SettingLayout";
+import { SettingTab } from "../screens/Profile/Settings/settingTab";
+import { ChangePassword } from "../screens/Profile/Settings/changePassword";
+import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
+import { EditProfileLayout } from "../layout/EditProfileLayout";
+import { EditProfile } from "../screens/Profile/Settings/editProfile";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -148,6 +154,21 @@ const MyRoutes: React.FC = () => {
           </Route>
           <Route path="profile" element={<ReferLayout />}>
             <Route path="profile-refer-earn" element={<ReferTab />} />
+          </Route>
+          <Route path="profile" element={<SettingLayout />}>
+            <Route path="profile-setting" element={<SettingTab />} />
+          </Route>
+          <Route path="profile" element={<ChangePasswordLayout />}>
+            <Route
+              path="profile-setting-change-password"
+              element={<ChangePassword />}
+            />
+          </Route>
+          <Route path="profile" element={<EditProfileLayout />}>
+            <Route
+              path="profile-setting-edit-profile"
+              element={<EditProfile />}
+            />
           </Route>
 
           <Route path="/neworder/payment" element={<PaymentScreen />} />
