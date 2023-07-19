@@ -21,7 +21,7 @@ export const AccountQuestion = () => {
     <>
         <div className="mx-4 lg:hidden">
           <WelcomeQuestion label="Please complete your profile" />
-          <QuestionComponent2 />
+          <QuestionComponent1 />
         </div>
 
         {/* 1st screen of questionneir for desktop modal (What other services do you want?) */}

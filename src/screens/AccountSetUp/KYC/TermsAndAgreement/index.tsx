@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import Card from "./Card";
+import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,9 +12,10 @@ type Props = {};
 
 const BottomButton = () => {
   const navigate = useNavigate();
+  
 
   return (
-    <div className="flex flex-col items-center   pb-4 gap-y-5   ">
+    <div className="flex flex-col items-center lg:items-start pb-4 gap-y-5">
       <div className="flex items-center">
         <CustomCheckBox />
         <p className="font-normal text-[12px] text-[#494949]">
@@ -47,16 +50,46 @@ export const GSTComponent = (props: Props) => {
 };
 
 export const ServiceComponent = (props: Props) => {
+  
+  const [openModal, setOpenModal] = useState(true);
+  const closeModal = () => setOpenModal(false);
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  
   return (
-    <div className="relative px-5">
-      <WelcomeHeader title="Welcome to Shipyaari" content="Terms & Agreement" />
-      <div className="mb-8">
-        <Card
-          title="SERVICE AGREEMENT"
-          subTitleOne="Forward delivery of the shipments"
-        />
+    <div>
+      
+      <div className="relative px-5 lg:hidden">
+        <WelcomeHeader title="Welcome to Shipyaari" content="Terms & Agreement" />
+        <div className="mb-8">
+          <Card
+            title="SERVICE AGREEMENT"
+            subTitleOne="Forward delivery of the shipments"
+          />
+        </div>
+        {BottomButton()}
       </div>
-      {BottomButton()}
+
+      {isBigScreen && (
+        <div className="mx-4 hidden lg:block lg:h-[602px]">
+          <CustomBottomModal
+            isOpen={openModal}
+            onRequestClose={closeModal}
+            className="!p-0 !w-[500px] !h-[700px]"
+            overlayClassName="flex  items-center"
+          >
+              <div className="hidden lg:block relative px-5">
+                <WelcomeHeader title="Welcome to Shipyaari" content="Terms & Agreement" />
+                <div className="mb-8">
+                  <Card
+                    title="SERVICE AGREEMENT"
+                    subTitleOne="Forward delivery of the shipments"
+                  />
+                </div>
+                {BottomButton()}
+              </div>
+            </CustomBottomModal>
     </div>
+     )}
+     </div>
   );
 };

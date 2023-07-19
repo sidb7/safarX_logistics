@@ -13,7 +13,7 @@ const card = (props: ITypesProps) => {
 
   return (
     <>
-      <div className="flex flex-col justify-start border-[1px] rounded p-4 mb-4 border-[#E8E8E8] w-full">
+      <div className="flex flex-col justify-start border-[1px] rounded p-4 mb-4   border-[#E8E8E8] w-full">
         <div className="flex items-center gap-x-2 ">
           <CustomRadioButton name={name} value={value} />
           <p className="font-semibold text-[16px] text-[#1C1C1C]">{title}</p>

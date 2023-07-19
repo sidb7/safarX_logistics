@@ -31,6 +31,7 @@ import KycPhotoIdentificationScreen from "../screens/AccountSetUp/KYC/PhotoIdent
 import KycSendOtpFormScreen from "../screens/AccountSetUp/KYC/SendOtpForm";
 import KycMobileVerificationScreen from "../screens/AccountSetUp/KYC/MobileVerification";
 import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
+import {ServiceComponent} from "../screens/AccountSetUp/KYC/TermsAndAgreement/index"
 import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
 import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
 import TransactionLayout from "../layout/TransactionLayout";
@@ -130,6 +131,7 @@ const MyRoutes: React.FC = () => {
               element={<KycMobileVerificationScreen />}
             />
             <Route path="kyc-terms" element={<GSTComponent />} />
+            <Route path="kyc-terms/ServiceComponent" element={<ServiceComponent/>}/>
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
           </Route>
