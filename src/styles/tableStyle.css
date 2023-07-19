@@ -1,0 +1,16 @@
+.tableContainerStyle {
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+
+th,
+td {
+  width: 150px;
+  text-align: center;
+  border-right: 1px solid #e8e8e8;
+  padding: 5px;
+}
+
+th:last-child {
+  border-right: none;
+}
