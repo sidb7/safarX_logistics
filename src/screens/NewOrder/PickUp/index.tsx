@@ -23,6 +23,8 @@ import CustomBottomModal from "../../../components/CustomModal/customBottomModal
 import SelectDateModalContent from "./selectDateModal";
 import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
+import { MdOutlineCancel } from "react-icons/md";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -61,6 +63,16 @@ const Index = () => {
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     setLocateAddress(address);
@@ -437,12 +449,11 @@ const Index = () => {
         setAudio={setDirectionAudio}
         audio={directionAudio}
       />
-      <div>
-        <button onClick={openModal}>Open Modal</button>
-        <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
-          <SelectDateModalContent />
-        </CustomBottomModal>
-      </div>
+
+      <button onClick={openModal}>Open Modal</button>
+      <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+        <SelectDateModalContent />
+      </CustomBottomModal>
     </div>
   );
 };
