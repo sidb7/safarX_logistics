@@ -102,7 +102,7 @@ const Index = (props: Props) => {
             text="DONE"
             className="bg-[#1C1C1C] text-white w-full mb-5"
             onClick={() => {
-              navigate("/account/kyc-terms");
+              navigate("/account/kyc-terms/GSTComponent");
             }}
           />
           </div>

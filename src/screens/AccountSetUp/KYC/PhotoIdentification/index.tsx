@@ -186,14 +186,14 @@ const Index = (props: Props) => {
                         <video className="absolute top-1 left-1 z-200" ref={videoRef} />
                       )}
                     </div>
-                    <div className="flex flex-col pb-12 lg:pb-28 xl:pb-40 w-full mt-5">
+                    <div className="flex flex-col pb-12  w-full mt-5">
                       <ServiceButton
                         text="CAPTURE SELFIE"
                         className="bg-[#1C1C1C] text-white w-full mb-5"
                         onClick={() => {
                           getSnapshot();
                           // getCameraPermission();
-                          // navigate("/account/kyc-otp-form");
+                          navigate("/account/kyc-otp-form");
                         }}
                       />
                     </div>

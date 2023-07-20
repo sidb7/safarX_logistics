@@ -30,10 +30,11 @@ import AccountLayoutScreen from "../layout/accountLayout";
 import KycPhotoIdentificationScreen from "../screens/AccountSetUp/KYC/PhotoIdentification";
 import KycSendOtpFormScreen from "../screens/AccountSetUp/KYC/SendOtpForm";
 import KycMobileVerificationScreen from "../screens/AccountSetUp/KYC/MobileVerification";
-import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
+import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/gstComponent";
 import {ServiceComponent} from "../screens/AccountSetUp/KYC/TermsAndAgreement/index"
 import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
 import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
+import SelectAddress from "../screens/AccountSetUp/KYC/SelectAddress/index";
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
@@ -130,10 +131,11 @@ const MyRoutes: React.FC = () => {
               path="kyc-mobile-verify"
               element={<KycMobileVerificationScreen />}
             />
-            <Route path="kyc-terms" element={<GSTComponent />} />
+            <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
             <Route path="kyc-terms/ServiceComponent" element={<ServiceComponent/>}/>
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
+            <Route path="select-address" element={<SelectAddress/>}/>
           </Route>
 
           <Route path="order" element={<OrderLayout />}>
