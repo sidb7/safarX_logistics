@@ -21,6 +21,8 @@ import { CommonBottomModal } from "../../../components/CustomModal/commonBottomM
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
 import SelectDateModalContent from "./selectDateModal";
+import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
+import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ const Index = () => {
 
   const [saveContact, setSaveContact] = useState({
     shopkeeper: false,
-    other: false,
+
     warehouse: true,
   });
 
@@ -66,16 +68,18 @@ const Index = () => {
 
   return (
     <div>
-      <div className="inline-flex space-x-2 items-center justify-start px-5">
-        <img src={LocationIcon} alt="" />
+      <div className="inline-flex space-x-2 items-center justify-start px-5 mb-5 lg:mb-[10px]">
+        <img src={LocationIcon} alt="" className="lg:hidden" />
 
-        <p className="text-lg font-semibold text-center text-gray-900">
+        <img src={WebLocationIcon} alt="" className="hidden lg:block" />
+
+        <p className="text-lg font-semibold text-center text-gray-900 lg:font-normal lg:text-[28px] lg:text-[#1C1C1C]  ">
           Pickup location
         </p>
       </div>
-      <div className="flex flex-col gap-y-4 p-5">
-        <div>
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg relative">
+      <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
+        <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
+          <div className="bg-white rounded-lg overflow-hidden shadow-lg relative   ">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
               <img
                 src={MagicLocationIcon}
@@ -111,7 +115,10 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div>
+
+        <div className="hidden lg:block col-span-1 "></div>
+
+        <div className=" mb-4 lg:mb-6 lg:mr-6">
           <CustomInputWithImage
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
@@ -122,16 +129,14 @@ const Index = () => {
           />
         </div>
 
-        <div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Plot no., floor, building name" />
         </div>
-        <div>
-          <CustomInputBox label="Your address" />
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="Locality" />
         </div>
-        <div>
-          <CustomInputBox label="Sector" />
-        </div>
-        <div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -149,35 +154,50 @@ const Index = () => {
             ]}
           />
         </div>
-        <div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="City" />
+        </div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Pincode" />
         </div>
-        <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <div>
-            <CustomInputBox label="City" />
+            <CustomInputBox label="State" />
           </div>
           <div>
             <CustomInputBox label="Country" />
           </div>
         </div>
-        <div>
+
+        <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="State" />
+        </div>
+
+        <div className="hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="Country" />
+        </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <AudioInputBox
-            label="Record the directions(optional)"
+            label="Add directions(optional)"
             audio={directionAudio}
             setAudio={setDirectionAudio}
             onClick={() => !directionAudio && setIsAudioModal(true)}
           />
         </div>
-        <div>
-          <p className="text-[18px] font-semibold">Save your address as</p>
+
+        <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
+          <p className="text-[18px] font-semibold lg:text-[20px] lg:text-[#323232] ">
+            Save your address as
+          </p>
         </div>
 
-        <div className="flex flex-nowrap overflow-x-scroll space-x-4 p-4 ">
+        <div className="flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4  lg:w-[172px] ${
               saveAddress.office === true
-                ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
             }`}
             onClick={() =>
               setSaveAddress({
@@ -188,13 +208,13 @@ const Index = () => {
             }
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p>Office</p>
+            <p className="lg:font-semibold lg:text-[14px] ">Office</p>
           </div>
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] lg:px-4 lg:py-2 ${
               saveAddress.warehouse === true
-                ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
+                ? "border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
             }`}
             onClick={() =>
               setSaveAddress({
@@ -205,13 +225,13 @@ const Index = () => {
             }
           >
             <img src={LocationIcon} alt="Other" />
-            <p>Warehouse</p>
+            <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
           </div>
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] lg:px-4 lg:py-2 ${
               saveAddress.other === true
                 ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
+                : "border-gray-300  text-[#1C1C1C]"
             }`}
             onClick={() =>
               setSaveAddress({
@@ -222,100 +242,94 @@ const Index = () => {
             }
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p>Other</p>
+            <p className="lg:font-semibold lg:text-[14px] ">Other</p>
           </div>
         </div>
 
-        <div className="flex flex-row items-center gap-[8px]">
+        <div className="flex flex-row items-center gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
           <CustomCheckbox />
-          <p className="text-[14px] font-medium uppercase text-[#004EFF]">
-            MASK MY PROVIDER
+          <p className="text-[14px] font-medium uppercase text-[#004EFF] lg:font-semibold">
+            RETURN ADDRESS SAME AS PICKUP
           </p>
         </div>
-        <div className="flex flex-row items-center gap-2 ">
-          <img src={ContactIcon} alt="Contact" />
-          <p className="text-[18px]">Contact</p>
+
+        <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+          <img src={ContactIcon} alt="Contact" className="lg:hidden" />
+          <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
+
+          <p className="text-[18px] lg:text-[24px] lg:font-normal lg:text-[#323232]">
+            Contact
+          </p>
         </div>
 
-        <div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Name of the contact person" />
         </div>
 
-        <div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Mobile Number" />
         </div>
 
-        <div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Email ID(optional)" />
         </div>
-        <div>
+        <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Alternate mobile number(optional)" />
         </div>
-        <div>
-          <p className="text-[#202427] text-[18px] font-semibold">
+
+        <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
+          <p className="text-[#202427] text-[18px] font-semibold lg:text-[20px] lg:text-[#323232] ">
             Save your contact as
           </p>
         </div>
 
-        <div className="flex flex-nowrap overflow-x-scroll space-x-4 p-4 ">
+        <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4   ${
               saveContact.shopkeeper === true
                 ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
+                : "border-gray-300 text-[#1C1C1C]"
             }`}
             onClick={() =>
               setSaveContact({
                 shopkeeper: true,
-                other: false,
+
                 warehouse: false,
               })
             }
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p>Shopkeeper</p>
+            <p className="lg:font-semibold lg:text-[14px] ">Shopkeeper</p>
           </div>
+
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
-              saveContact.other === true
-                ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
-            }`}
-            onClick={() =>
-              setSaveContact({
-                shopkeeper: false,
-                other: true,
-                warehouse: false,
-              })
-            }
-          >
-            <img src={LocationIcon} alt="Other" />
-            <p>Other</p>
-          </div>
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4   whitespace-nowrap ${
               saveContact.warehouse === true
                 ? "border-[#004EFF] text-[#004EFF] "
-                : "border-gray-300"
+                : "border-gray-300 text-[#1C1C1C]"
             }`}
             onClick={() =>
               setSaveContact({
                 shopkeeper: false,
-                other: false,
+
                 warehouse: true,
               })
             }
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p>Warehouse associate</p>
+            <p className="lg:font-semibold lg:text-[14px] ">
+              Warehouse associate
+            </p>
           </div>
         </div>
 
-        <div>
+        <div className="mb-7">
           <CustomDatePicker />
         </div>
 
-        <div>
+        <div className="hidden lg:block mb-7"></div>
+
+        <div className="mb-7">
           <div className="flex flex-col">
             <div
               className={`grid grid-cols-2 p-2 ${
@@ -426,17 +440,6 @@ const Index = () => {
       <div>
         <button onClick={openModal}>Open Modal</button>
         <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
-          {/* <h2>Hello</h2>
-          <button onClick={closeModal}>Close</button>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Obcaecati,
-            consequuntur natus. Cumque rem sint eius vitae quia! Dolorum
-            perferendis quae eos quasi vitae, architecto beatae vero? Quidem
-            accusamus minus maiores molestias voluptatem perferendis totam,
-            assumenda cum minima quibusdam. Provident adipisci ex quia possimus
-            minima nihil maxime eius iusto accusantium praesentium porro,
-            tempore expedita eum eaque molestiae placeat cumque dicta. Enim!
-          </p> */}
           <SelectDateModalContent />
         </CustomBottomModal>
       </div>
