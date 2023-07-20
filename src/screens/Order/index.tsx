@@ -12,6 +12,9 @@ import { OrderDetails } from "./OrderDetails";
 import DeliveryGIF from "../../assets/OrderCard/Gif.gif";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
+import { useState } from "react";
+import ErrorFile from "./OrderStatus/errorFile";
+import { insufficientBalance } from "../../utils/dummyData";
 
 const ArrowNavigator = () => {
   return (
@@ -287,6 +290,8 @@ const columns = [
 ];
 
 const Index = () => {
+  const [filterId, setFilterId] = useState(-1);
+
   return (
     <div className="mx-4">
       <div className="flex flex-col gay-y-4">
@@ -315,10 +320,35 @@ const Index = () => {
         )}
       </div>
 
-      <OrderStatus />
-      {/* <OrderDetails />
-      <OrderDetails />
-      <OrderDetails /> */}
+      <OrderStatus filterId={filterId} setFilterId={setFilterId} />
+      {filterId === -1 && (
+        <>
+          <OrderDetails />
+          <OrderDetails />
+          <OrderDetails />
+          <ErrorFile props={insufficientBalance} />
+        </>
+      )}
+      {filterId === 0 && (
+        <>
+          <OrderDetails />
+          <OrderDetails />
+          <OrderDetails />
+          <ErrorFile props={insufficientBalance} />
+        </>
+      )}
+      {filterId === 1 && (
+        <>
+          <OrderDetails />
+          <OrderDetails />
+          <OrderDetails />
+        </>
+      )}
+      {filterId === 2 && (
+        <>
+          <ErrorFile props={insufficientBalance} />
+        </>
+      )}
 
       <div>
         <CustomTable data={data} columns={columns} />

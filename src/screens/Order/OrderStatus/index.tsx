@@ -4,6 +4,11 @@ import { useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 
+interface IOrderstatusProps {
+  filterId: any;
+  setFilterId: any;
+}
+
 const statusBar = (statusName: string, orderNumber: string) => {
   return (
     <div className="flex justify-center items-center border-b-4 border-[#777777] px-4">
@@ -15,9 +20,11 @@ const statusBar = (statusName: string, orderNumber: string) => {
   );
 };
 
-export const OrderStatus = () => {
+export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
+  filterId,
+  setFilterId,
+}) => {
   const { isLgScreen } = ResponsiveState();
-  const [filterId, setFilterId] = useState(-1);
   const [statusId, setStatusId] = useState(-1);
 
   const [filterData, setFilterData] = useState([
