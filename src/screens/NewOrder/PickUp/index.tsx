@@ -25,9 +25,14 @@ import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { MdOutlineCancel } from "react-icons/md";
+import { useMediaQuery } from "react-responsive";
+import Map from "../../NewOrder/Map";
 
 const Index = () => {
   const navigate = useNavigate();
+  const isItLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   const [pastedData, setPastedData] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -60,6 +65,7 @@ const Index = () => {
   const [directionAudio, setDirectionAudio] = useState("");
   const { address } = useAppSelector((state) => state.rootReducer.map);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isLocationModal, setIsLocationModal] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -136,7 +142,9 @@ const Index = () => {
             imgSrc={ChooseLocationIcon}
             value={locateAddress}
             onClick={() => {
-              navigate("/neworder/map");
+              isItLgScreen
+                ? setIsLocationModal(true)
+                : navigate("/neworder/map");
             }}
           />
         </div>
@@ -454,6 +462,13 @@ const Index = () => {
       <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
         <SelectDateModalContent />
       </CustomBottomModal>
+
+      <RightSideModal
+        isOpen={isLocationModal}
+        onClose={() => setIsLocationModal(false)}
+      >
+        <Map />
+      </RightSideModal>
     </div>
   );
 };
