@@ -11,7 +11,8 @@ const Modal = (props: ITypesProps) => {
   const navigate = useNavigate();
 
   return (
-    <div className="">
+    <div>
+        <div className="">
       <PopUpModal
         isOpen={showModal}
         contentLabel="hello"
@@ -19,7 +20,7 @@ const Modal = (props: ITypesProps) => {
           setShowModal(false);
         }}
         overlayClassName=" px-4 flex items-center "
-        className="!rounded !border-none w-[320px] h-[298px]"
+        className="!rounded !border-none w-[320px] h-[298px] lg:w-[500px]"
       >
         <div className="flex flex-col items-center ">
           <div className="flex flex-col items-center mb-6">
@@ -41,7 +42,11 @@ const Modal = (props: ITypesProps) => {
           />
         </div>
       </PopUpModal>
+        </div>
+
+        
     </div>
+    
   );
 };
 
