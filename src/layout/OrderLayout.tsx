@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
-import BackArrowIcon from "../assets/backArrow.svg";
 import { BottomNavBar } from "../components/BottomNavBar";
 import Order from "../screens/Order/index";
 const OrderLayout = () => {
@@ -11,15 +10,7 @@ const OrderLayout = () => {
       </header>
 
       <div className="relative top-20">
-        <div>
-          <div className="inline-flex space-x-2 items-center justify-start px-5">
-            <img src={BackArrowIcon} alt="" />
-
-            <p className="text-lg font-semibold text-center text-gray-900 ">
-              Order
-            </p>
-          </div>
-        </div>
+        
 
         <Order />
 
