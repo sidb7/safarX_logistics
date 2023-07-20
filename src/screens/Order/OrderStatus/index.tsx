@@ -10,6 +10,12 @@ interface IOrderstatusProps {
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
+
+ interface Itype {
+  filterId: any,
+  setFilterId: any
+ } 
+
   return (
     <div className="flex justify-center items-center border-b-4 border-[#777777] px-4">
       <span className="text-[#777777] text-[14px]">{statusName}</span>
@@ -33,6 +39,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     { label: "Error", isActive: false },
   ]);
 
+  
   const [statusData, setStatusData] = useState([
     {
       statusName: "New Order",
