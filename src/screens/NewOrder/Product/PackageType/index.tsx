@@ -14,7 +14,7 @@ const Index = () => {
         <h1 className="font-bold text-lg leading-6">Box types</h1>
       </div>
 
-      <div className="flex gap-x-4 mt-4 overflow-x-scroll">
+      <div className="flex  gap-x-4 mt-4 overflow-x-scroll lg:grid grid-cols-4">
         <PackageBox
           packageType="Triple wall 7 ply"
           weight="5"
@@ -42,12 +42,14 @@ const Index = () => {
         />
       </div>
 
+      
+
       <ProductDetails />
       <UploadInput />
 
       <div className="mb-8">
         <AddButton
-          text="ADD PRODUCT"
+          text="ADD PACKAGE"
           onClick={() => {}}
           showIcon={true}
           icon={ButtonIcon}

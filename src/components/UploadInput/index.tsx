@@ -23,7 +23,7 @@ export const UploadInput = () => {
 
   const fileComponent = (fileName: string, productImage: any, key: number) => {
     return (
-      <div className="flex justify-between items-center border-[#E8E8E8] border-t-2 h-[62px] w-full">
+      <div className="flex justify-between items-center border-[#E8E8E8] border-t-2 h-[62px] w-full ">
         <div className="flex items-center">
           <img className="ml-4" src={productImage} alt="Product" width="32px" />
           <span className="ml-4 text-[#1C1C1C] text-md">{fileName}</span>
@@ -53,7 +53,7 @@ export const UploadInput = () => {
 
   return (
     <div className="relative py-2">
-      <div className="border-2 border-slate-300 rounded-md h-[48px]">
+      <div className="border-2 border-slate-300 rounded-md h-[48px] lg:w-[372px]">
         <input
           id="uploadPackages"
           className="relative opacity-0 top-0 left-0 right-0 bottom-0 w-full h-full"
