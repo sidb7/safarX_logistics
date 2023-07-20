@@ -459,7 +459,11 @@ const Index = () => {
       <RightSideModal isOpen={isModalOpen} onClose={handleCloseModal}>
         <div className="flex items-center justify-between w-full p-4 bg-gray-200">
           <h2 className="text-xl font-bold">Modal Title</h2>
-          <button onClick={handleCloseModal} className="text-gray-600">
+          <button
+            onClick={handleCloseModal}
+            className="text-gray-600"
+            title="button"
+          >
             <MdOutlineCancel size={24} />
           </button>
         </div>
