@@ -16,7 +16,7 @@ import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import Switch from "react-switch";
-import { useAppSelector } from "../../../hooks/typeHook";
+import { useAppSelector } from "../../../redux/hooks";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
@@ -63,7 +63,7 @@ const Index = () => {
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
-  const { address } = useAppSelector((state) => state.rootReducer.map);
+  const { address } = useAppSelector((state) => state.map);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
 
