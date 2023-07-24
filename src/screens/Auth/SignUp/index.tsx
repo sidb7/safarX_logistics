@@ -5,7 +5,7 @@ import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 
 const Index = () => {
@@ -107,12 +107,9 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {signUp()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && signUp()}

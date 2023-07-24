@@ -5,7 +5,7 @@ import BannerPagination from "../../../assets/Banner pagination.svg";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 
@@ -50,7 +50,10 @@ const WalletRecharge = () => {
               </h1>
               <p className="mt-3 text-[#494949] font-light text-center">
                 Recharge your wallet with minimum of
-                <span className="text-[#323232] font-medium lg:block"> ₹100</span>
+                <span className="text-[#323232] font-medium lg:block">
+                  {" "}
+                  ₹100
+                </span>
               </p>
               {isLgScreen && note("text-left")}
             </div>
@@ -115,13 +118,13 @@ const WalletRecharge = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
+        <CenterModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           className="h-[490px] w-[688px]"
         >
           {walletRecharge()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && walletRecharge()}

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Card from "./offersCard";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -90,12 +90,9 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {offerScreen()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && offerScreen()}

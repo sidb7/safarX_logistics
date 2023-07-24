@@ -2,7 +2,7 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CloseIcon from "./../../../assets/CloseIcon.svg";
 import ShippingSupplies from "./../../../assets/Delivery/Shipping Supplies 1.svg";
 import CustomButton from "../../../components/Button/index";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 
@@ -35,7 +35,11 @@ const Index = () => {
         <div className="lg:mx-24 lg:mt-[84px]">
           <div className="flex flex-col gap-y-8">
             <div className="product-box flex items-center lg:hidden">
-              <img className="m-4 h-[25px] object-contain" src={CompanyLogo} alt="CompanyLogo"/>
+              <img
+                className="m-4 h-[25px] object-contain"
+                src={CompanyLogo}
+                alt="CompanyLogo"
+              />
             </div>
 
             <div className="flex flex-col mt-7 mx-4 gap-y-6">
@@ -47,7 +51,11 @@ const Index = () => {
             </div>
 
             <div className=" flex flex-col mx-4 gap-y-6">
-              <img className="h-[180px] " src={ShippingSupplies} alt="SupplyGif" />
+              <img
+                className="h-[180px] "
+                src={ShippingSupplies}
+                alt="SupplyGif"
+              />
 
               <CustomButton onClick={() => {}} text="SET UP MY ACCOUNT" />
             </div>
@@ -60,12 +68,9 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {getStarted()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && getStarted()}

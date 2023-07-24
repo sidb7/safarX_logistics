@@ -5,7 +5,7 @@ import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useState } from "react";
 const Index = () => {
@@ -45,7 +45,11 @@ const Index = () => {
         <div className="lg:mx-24 lg:mt-[84px]">
           <div className="flex flex-col gap-y-8 w-full">
             <div className="product-box flex items-center lg:hidden">
-              <img className="m-4 h-[25px] object-contain" src={CompanyLogo} alt="Company Logo" />
+              <img
+                className="m-4 h-[25px] object-contain"
+                src={CompanyLogo}
+                alt="Company Logo"
+              />
             </div>
 
             <div className="flex flex-col mt-7 mx-4 gap-y-6">
@@ -95,12 +99,9 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {loginComponent()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && loginComponent()}

@@ -7,7 +7,7 @@ import { useState } from "react";
 import OtpInput from "react-otp-input";
 import "../../../styles/otpStyle.css";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import CenterSideModal from "../../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -94,12 +94,9 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterSideModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        >
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           {verifyOtp()}
-        </CenterSideModal>
+        </CenterModal>
       )}
 
       {!isLgScreen && verifyOtp()}
