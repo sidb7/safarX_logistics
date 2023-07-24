@@ -2,7 +2,7 @@ import "../../styles/inputBox.css";
 
 interface IInputBoxProps {
   type?: string;
-  label: string;
+  label?: string;
   className?: string;
   name?: string;
   value?: string | number;
@@ -12,7 +12,7 @@ interface IInputBoxProps {
 const Index: React.FunctionComponent<IInputBoxProps> = ({
   label,
   className,
-  type = "text",  
+  type = "text",
   name,
   value,
   onChange,

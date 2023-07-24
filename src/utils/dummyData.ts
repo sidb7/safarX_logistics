@@ -538,3 +538,30 @@ export const dummyChannelIntegrationData = [
     ],
   },
 ];
+
+export const dummyPickupDropdownData = [
+  {
+    label: "Select/ type exact landmark",
+    value: "select",
+  },
+  {
+    label: "Andheri metro station",
+    value: "andheriMetroStation",
+  },
+  {
+    label: "Bus stop",
+    value: "busStop",
+  },
+  {
+    label: "AIO Gardens",
+    value: "aioGardens",
+  },
+  {
+    label: "Jogeshwari Caves",
+    value: "jogeshwariCaves",
+  },
+  {
+    label: "Other",
+    value: "other",
+  },
+];

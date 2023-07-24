@@ -55,7 +55,7 @@ const Layout = () => {
         </header>
 
         <div className="relative top-20 ">
-          <div className="hidden lg:block px-5 ml-14 ">
+          <div className="hidden lg:block px-5 ml-14 mb-1 ">
             <p className="font-normal text-[14px] text-[#777777] ">
               Home/
               <span className="font-semibold text-[14px] text-[#1C1C1C]">
