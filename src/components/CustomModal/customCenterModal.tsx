@@ -1,13 +1,13 @@
 import ReactModal from "react-modal";
 
-interface CenterSideModalProps {
+interface CenterModalProps {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
   className?: string;
 }
 
-const CenterSideModal: React.FC<CenterSideModalProps> = ({
+const CenterModal: React.FC<CenterModalProps> = ({
   isOpen,
   onClose,
   children,
@@ -25,4 +25,4 @@ const CenterSideModal: React.FC<CenterSideModalProps> = ({
   );
 };
 
-export default CenterSideModal;
+export default CenterModal;

@@ -30,7 +30,7 @@ const CustomInputBox = (props: propTypes) => {
     isRequired = false,
   } = props;
   return (
-    <div className="flex justify-center items-center ">
+    <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>
         <input
           placeholder=" "
