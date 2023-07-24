@@ -9,7 +9,10 @@ const index = (props: Props) => {
 
   return (
     <div>
-      <CustomAccordian dummyDatas={dummyDatas} />
+      <CustomAccordian
+        cardClassName="lg:!px-0 lg:!mt-4"
+        dummyDatas={dummyDatas}
+      />
     </div>
   );
 };
