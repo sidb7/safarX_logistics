@@ -18,11 +18,18 @@ const Index = (props: IPropsTypes) => {
             Channel Integration
           </p>
         </div>
-        {dummyChannelIntegrationData.map((eachChannelType, index) => {
-          return (
-            <CardsWithScroll eachChannelType={eachChannelType} key={index} />
-          );
-        })}
+        <div
+          className="overflow-scroll	"
+          style={{
+            height: "calc(100vh - 200px)",
+          }}
+        >
+          {dummyChannelIntegrationData.map((eachChannelType, index) => {
+            return (
+              <CardsWithScroll eachChannelType={eachChannelType} key={index} />
+            );
+          })}
+        </div>
       </div>
 
       <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] w-full  fixed bottom-0">
