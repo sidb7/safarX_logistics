@@ -4,14 +4,14 @@ import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 import CustomButton from "../../../components/Button";
 import GPSIcon from "../../../assets/Map/gps.svg";
 import LocationIcon from "../../../assets/Map/Location.svg";
-import { useAppDispatch } from "../../../hooks/typeHook";
+import { useAppDispatch } from "../../../redux/hooks";
 import { mapAddress } from "../../../redux/reducers/mapReducer";
 import { useNavigate } from "react-router-dom";
 const googleMapApiKey = "AIzaSyBEi1iP1YW3fGeKg---Rn7QCelztyYYfVk";
 
 const Index: React.FunctionComponent = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  const dispatch: any = useAppDispatch();
+  const navigate = useNavigate();
 
   const containerStyle = {
     width: "100%",
@@ -42,7 +42,7 @@ const Index: React.FunctionComponent = () => {
         method: "post",
         url: `http://65.2.176.43:8006/api/v1/address/getAddress`,
         headers: { authorization: "6481876edafb412cf0294413" },
-        data: {placeId: placeId }
+        data: { placeId: placeId },
       };
       const { data } = await axios(config);
       if (data.status === true) {
@@ -76,7 +76,7 @@ const Index: React.FunctionComponent = () => {
 
   const confirmLocation = () => {
     dispatch(mapAddress({ address: address }));
-    navigate("/neworder/pickup")
+    navigate("/neworder/pickup");
   };
 
   return (
