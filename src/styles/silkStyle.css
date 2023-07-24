@@ -1,0 +1,25 @@
+/* .slick-slide {
+  opacity: 0;
+}
+.slick-slide.slick-center {
+  opacity: 1;
+} */
+
+/* .slick-slider {
+  width: 200%;
+  margin-left: -50%;
+}
+
+.slick-prev {
+  margin-left: 25%;
+  z-index: 1;
+}
+
+.slick-next {
+  margin-right: 25%;
+  z-index: 1;
+} */
+
+div.slick-list {
+  padding: 0 50px 0 0;
+}
