@@ -7,8 +7,8 @@ const options = [
 ];
 export const EditProfileBank = () => {
   return (
-    <div className="mx-4 mt-8 space-y-4">
-      <CustomInputBox label="Account holder name" />
+    <div className="mx-4 mt-8 space-y-4 lg:grid lg:grid-cols-3 gap-4">
+      <CustomInputBox containerStyle={'self-end'} label="Account holder name" />
       <CustomInputBox label="Bank name" />
       <CustomInputBox label="Branch name" />
       <CustomInputBox label="IFSC code" />

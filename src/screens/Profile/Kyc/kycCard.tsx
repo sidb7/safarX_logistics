@@ -1,7 +1,11 @@
+import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
 export const ProfileKycCard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const isItLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   return (
     <div
       className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
@@ -24,91 +28,178 @@ export const ProfileKycCard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 ml-4 mt-2">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-[#777777] font-normal">
-            User Name
-          </span>
-          <div className="flex">
-            <span className="text-xs text-[#1C1C1C] font-semibold	">Bunty</span>
+      {!isItLgScreen ? (
+        <div>
+          <div className="grid grid-cols-2 ml-4 mt-2">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#777777] font-normal">
+                User Name
+              </span>
+              <div className="flex">
+                <span className="text-xs text-[#1C1C1C] font-semibold	">
+                  Bunty
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+                GST Details
+              </span>
+              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
+                <span>HD35K3JDT4D5D2</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 mt-2">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#777777] font-normal">
+                Aadhar Details
+              </span>
+              <div className="flex">
+                <span className="text-xs text-[#1C1C1C] font-semibold	">
+                  114626443
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+                PAN Details
+              </span>
+              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
+                <span>DI4RI4IR3</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 mt-2">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#777777] font-normal">
+                Plot no, Sector
+              </span>
+              <div className="flex">
+                <span className="text-xs text-[#1C1C1C] font-semibold	">
+                  Plot no. 8 Sector 1
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+                Locality, Landmark
+              </span>
+              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
+                <span>Locality details</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 my-2">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#777777] font-normal">
+                City, Pin code
+              </span>
+              <div className="flex">
+                <span className="text-xs text-[#1C1C1C] font-semibold	">
+                  Mumbai 324212
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+                State, Country
+              </span>
+              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
+                <span>Maharashtra, India</span>
+              </span>
+            </div>
           </div>
         </div>
+      ) : (
+        <div className="grid grid-cols-5 gap-y-8">
+          <div className="flex flex-col mt-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              User Name
+            </span>
+            <div className="flex">
+              <span className="text-[14px] text-[#1C1C1C] font-semibold">
+                Bunty
+              </span>
+            </div>
+          </div>
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              GST Details
+            </span>
+            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
+              <span>HD35K3JDT4D5D2</span>
+            </span>
+          </div>
 
-        <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-          <span className="ml-3 text-[10px] text-[#777777] font-normal">
-            GST Details
-          </span>
-          <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-            <span>HD35K3JDT4D5D2</span>
-          </span>
-        </div>
-      </div>
+          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
+            <span className="text-[12px] text-[#777777] font-normal">
+              Aadhar Details
+            </span>
+            <div className="flex">
+              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
+                114626443
+              </span>
+            </div>
+          </div>
 
-      <div className="grid grid-cols-2 ml-4 mt-2">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-[#777777] font-normal">
-            Aadhar Details
-          </span>
-          <div className="flex">
-            <span className="text-xs text-[#1C1C1C] font-semibold	">
-              114626443
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              PAN Details
+            </span>
+            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
+              <span>DI4RI4IR3</span>
+            </span>
+          </div>
+
+          <div className="flex flex-col border-l-[1px] mt-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              Plot no, Sector
+            </span>
+            <div className="flex">
+              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
+                Plot no. 8 Sector 1
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col border-[#E8E8E8] mb-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              Locality, Landmark
+            </span>
+            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
+              <span>Locality details</span>
+            </span>
+          </div>
+
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
+            <span className="text-[12px] text-[#777777] font-normal">
+              City, Pin code
+            </span>
+            <div className="flex">
+              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
+                Mumbai 324212
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mb-5 px-5">
+            <span className="text-[12px] text-[#777777] font-normal">
+              State, Country
+            </span>
+            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
+              <span>Maharashtra, India</span>
             </span>
           </div>
         </div>
-
-        <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-          <span className="ml-3 text-[10px] text-[#777777] font-normal">
-            PAN Details
-          </span>
-          <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-            <span>DI4RI4IR3</span>
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 ml-4 mt-2">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-[#777777] font-normal">
-            Plot no, Sector
-          </span>
-          <div className="flex">
-            <span className="text-xs text-[#1C1C1C] font-semibold	">
-              Plot no. 8 Sector 1
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-          <span className="ml-3 text-[10px] text-[#777777] font-normal">
-            Locality, Landmark
-          </span>
-          <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-            <span>Locality details</span>
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 ml-4 my-2">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-[#777777] font-normal">
-            City, Pin code
-          </span>
-          <div className="flex">
-            <span className="text-xs text-[#1C1C1C] font-semibold	">
-              Mumbai 324212
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-          <span className="ml-3 text-[10px] text-[#777777] font-normal">
-            State, Country
-          </span>
-          <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-            <span>Maharashtra, India</span>
-          </span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

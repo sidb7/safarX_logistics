@@ -4,8 +4,8 @@ import { CustomUploadInput } from "../../../components/UploadInput/customUploadI
 
 export const EditProfileKyc = () => {
   return (
-    <div className="mx-4 mt-8 space-y-4">
-      <CustomInputBox label="Frist name" />
+    <div className="mx-4 mt-8 space-y-4 lg:grid lg:grid-cols-3 lg:gap-4">
+      <CustomInputBox containerStyle={'self-end'} label="Frist name"  />
       <CustomInputBox label="Last name" />
       <CustomInputBox label="GST Number" />
       <CustomUploadInput label="Upload GST file" id="gstFile" />
