@@ -1,8 +1,13 @@
 import SelectIcon from "../../../assets/Order/SelectIcon.svg";
 import FilterIcon from "../../../assets/Order/FilterIcon.svg";
+import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
+import FilterScreen from "../../../screens/NewOrder/Filter/index";
+import ServiceButton from "../../../components/Button/ServiceButton";
+import { useNavigate } from "react-router-dom";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -10,11 +15,10 @@ interface IOrderstatusProps {
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
-
- interface Itype {
-  filterId: any,
-  setFilterId: any
- } 
+  interface Itype {
+    filterId: any;
+    setFilterId: any;
+  }
 
   return (
     <div className="flex justify-center items-center border-b-4 border-[#777777] px-4">
@@ -30,8 +34,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId,
   setFilterId,
 }) => {
+  const navigate = useNavigate();
+
   const { isLgScreen } = ResponsiveState();
   const [statusId, setStatusId] = useState(-1);
+  const [filterModal, setFilterModal] = useState(false);
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
@@ -39,7 +46,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     { label: "Error", isActive: false },
   ]);
 
-  
   const [statusData, setStatusData] = useState([
     {
       statusName: "New Order",
@@ -97,7 +103,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           <div>
             <SearchBox label="Search" value="" onChange={() => {}} />
           </div>
-          <div className="flex justify-between items-center p-2 gap-x-2">
+          <div
+            className="flex justify-between items-center p-2 gap-x-2"
+            onClick={() => setFilterModal(true)}
+          >
             <img src={FilterIcon} alt="" />
             <span className="text-[#004EFF] text-[14px] font-semibold">
               FILTER
@@ -114,7 +123,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               SELECT
             </span>
           </div>
-          <div className="grid justify-center items-center border-[1px] rounded-md border-[#A4A4A4]">
+          <div
+            className="grid justify-center items-center border-[1px] rounded-md border-[#A4A4A4] "
+            onClick={() => {
+              navigate("/neworder/filter");
+            }}
+          >
             <img src={FilterIcon} alt="Filter Order" width="16px" />
           </div>
         </div>
@@ -123,7 +137,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       <div className="flex gap-x-2 overflow-x-scroll whitespace-nowrap mt-2 h-[34px] lg:mt-9">
         {statusData.map(({ statusName, orderNumber }, index) => {
           return (
@@ -166,6 +180,54 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       </div>
 
       {filterComponent("")}
+
+      {/* filter modal */}
+
+      {isLgScreen && (
+        <RightSideModal
+          isOpen={filterModal}
+          onClose={() => {
+            setFilterModal(false);
+          }}
+          className="!justify-between !items-stretch !hidden lg:!block"
+        >
+          <div className="">
+            <div className="flex justify-between mt-5 mx-5">
+              <div>
+                <p className="text-2xl font-normal">Filter</p>
+              </div>
+              <div>
+                <img
+                  src={CloseIcon}
+                  alt="close button"
+                  onClick={() => {
+                    setFilterModal(false);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="mx-5">
+              <FilterScreen />
+            </div>
+
+            <div
+              className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
+              style={{ width: "-webkit-fill-available" }}
+            >
+              <ServiceButton
+                text="RESET ALL"
+                onClick={() => {}}
+                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+              />
+              <ServiceButton
+                text="APPLY"
+                onClick={() => {}}
+                className="bg-[#1C1C1C] text-[#FFFFFF] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+              />
+            </div>
+          </div>
+        </RightSideModal>
+      )}
     </div>
   );
 };
