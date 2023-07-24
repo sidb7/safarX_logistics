@@ -1,13 +1,13 @@
 import ReactModal from "react-modal";
 
-interface RightSideModalProps {
+interface CenterModalProps {
   isOpen: boolean;
   onClose: () => void;
   children?: React.ReactNode;
   className?: string;
 }
 
-const RightSideModal: React.FC<RightSideModalProps> = ({
+const CenterModal: React.FC<CenterModalProps> = ({
   isOpen,
   onClose,
   children,
@@ -17,7 +17,7 @@ const RightSideModal: React.FC<RightSideModalProps> = ({
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
-      className={`${className} fixed  inset-y-0 right-0 flex flex-col justify-center items-center bg-white w-1/3`}
+      className={`${className} fixed inset-0 m-auto w-3/6 flex flex-col justify-center items-center rounded-lg overflow-hidden bg-white h-5/6`}
       overlayClassName="fixed z-20 inset-0 bg-gray-800 bg-opacity-50"
     >
       {children}
@@ -25,4 +25,4 @@ const RightSideModal: React.FC<RightSideModalProps> = ({
   );
 };
 
-export default RightSideModal;
+export default CenterModal;

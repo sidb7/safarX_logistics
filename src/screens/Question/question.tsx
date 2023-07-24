@@ -1,14 +1,15 @@
 import Checkbox from "../../components/CheckBox";
 // import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif"
 import WarehouseTruckGif from "../../assets/AccountQuestions/WarehouseTruck.gif";
-import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif"
+import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif";
 import DroneDeliveryGif from "../../assets/AccountQuestions/DroneDelivery.gif";
+import CustomButton from "../../components/Button";
 export const QuestionComponent1 = () => {
   return (
-    <div>
-      {/* <div className="flex justify-center">
+    <div className="w-full">
+      <div className="flex justify-center">
         <img src={WarehouseTruckGif} alt="" width="180px" />
-      </div> */}
+      </div>
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
@@ -21,14 +22,16 @@ export const QuestionComponent1 = () => {
           <Checkbox label="Fulfilment" className="text-base" />
         </div>
       </div>
+      <div className="mt-6">
+        <CustomButton text="SUBMIT" onClick={() => {}} />
+      </div>
     </div>
   );
 };
 
 export const QuestionComponent2 = () => {
   return (
-    <div>
-      
+    <div className="w-full">
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[224px] lg:mt-[18px]">
         <div className="">
           <span className="text-xl font-semibold">Describe yourself</span>
@@ -53,10 +56,10 @@ export const QuestionComponent2 = () => {
 
 export const QuestionComponent3 = () => {
   return (
-    <div>
-      {/* <div className="flex justify-center">
+    <div className="w-full">
+      <div className="flex justify-center">
         <img src={CargoRatingGif} alt="" width="180px" />
-      </div> */}
+      </div>
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
@@ -77,10 +80,10 @@ export const QuestionComponent3 = () => {
 
 export const QuestionComponent4 = () => {
   return (
-    <div>
-      {/* <div className="flex justify-center">
+    <div className="w-full">
+      <div className="flex justify-center">
         <img src={DroneDeliveryGif} alt="" width="180px" />
-      </div> */}
+      </div>
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
         <div className="">
           <span className="text-xl font-semibold">
@@ -100,27 +103,22 @@ export const QuestionComponent4 = () => {
           <Checkbox label="Physical Store" className="text-base" />
         </div>
       </div>
+      <div className="mt-6">
+        <CustomButton text="SUBMIT" onClick={() => {}} />
+      </div>
     </div>
   );
 };
 
 export const QuestionComponent5 = () => {
   return (
-    <div>
-      {/* <div className="flex justify-center">
-        <img src={DroneDeliveryGif} alt="" width="180px" />
-      </div> */}
-      <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
+    <div className="w-full">
+      <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px]">
         <div className="">
-          <span className="text-xl font-semibold">
-            Benefits of doing KYC
-          </span>
+          <span className="text-xl font-semibold">Benefits of doing KYC</span>
         </div>
         <div className="flex flex-col items-start mt-4">
-          <Checkbox
-            label="Faster COD pay-outs"
-            className="text-base"
-          />
+          <Checkbox label="Faster COD pay-outs" className="text-base" />
           <Checkbox label="Faster hiccup free shipping" className="text-base" />
           <Checkbox
             label="Protection against Identity Theft"
@@ -128,6 +126,17 @@ export const QuestionComponent5 = () => {
           />
           <Checkbox label="Regulatory compliance" className="text-base" />
         </div>
+      </div>
+      <div className="mt-6">
+        <CustomButton text="PROCEED FOR KYC" onClick={() => {}} />
+      </div>
+
+      <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">
+        SKIP FOR NOW
+      </div>
+
+      <div className="mt-6.5 text-[#494949] text-xs mt-[86px]">
+        NOTE: KYC is mandatory for shipping orders and identification.
       </div>
     </div>
   );

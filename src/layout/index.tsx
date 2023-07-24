@@ -100,7 +100,7 @@ const Layout = () => {
             </div>
           </main>
 
-          <footer className="w-full fixed  bottom-0 	">
+          <footer className="w-full fixed  bottom-0 z-[10]">
             <div
               className={`  ${
                 isItLgScreen ? "flex justify-end " : " grid grid-cols-2"

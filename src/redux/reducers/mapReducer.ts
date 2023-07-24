@@ -12,7 +12,6 @@ const initialState: AddressState = {
 
 export const mapSlice = createSlice({
   name: "map",
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     mapAddress: (state, action: PayloadAction<{ address: string }>) => {
@@ -22,5 +21,3 @@ export const mapSlice = createSlice({
 });
 
 export const { mapAddress } = mapSlice.actions;
-
-export default mapSlice.reducer;

@@ -1,16 +1,25 @@
 import BoxDetails from "./boxDetails";
 import SummaryService from "./summaryService";
 import SummaryAddressBox from "./summaryAddressBox";
+import React, { useState } from "react";
+import ServiceButton from "../../../components/Button/ServiceButton";
+
+import serviceIcon from "../../../assets/serv/service.svg";
 import contactIcon from "../../../assets/serv/contact.svg";
 import locationIcon from "../../../assets/serv/location.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 
 import SummaryIcon from "../../../assets/serv/Summary.svg";
+import copySuccess from "../../../assets/serv/copy-success.svg";
+
+import { HighRiskPincodeModal } from "./whatsappModal";
 
 type Props = {};
 
 const Summary = (props: Props) => {
+  const [ishighRisk, setIsHighRisk] = useState(false);
+
   return (
     <div>
       <div className="grid grid-cols-1 gap-y-5 p-5   ">

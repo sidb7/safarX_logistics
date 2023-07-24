@@ -26,9 +26,6 @@ const Index = (props: Props) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const GenerateImageWithCanvas = (videoElem: HTMLVideoElement) => {
-    const navigate = useNavigate();
-    
-
     if (videoStarted) {
       const canvas = document.createElement("canvas");
       canvas.width = 264;
@@ -39,12 +36,14 @@ const Index = (props: Props) => {
     }
   };
   const getSnapshot = async () => {
-    const video: any = videoRef.current;
-    video?.srcObject?.getVideoTracks()[0]?.stop();
-    await GenerateImageWithCanvas(video);
-    video.srcObject = null;
-    setVideoStarted(false);
-    setShowModal(false);
+    if (videoStarted) {
+      const video: any = videoRef.current;
+      video?.srcObject?.getVideoTracks()[0]?.stop();
+      await GenerateImageWithCanvas(video);
+      video.srcObject = null;
+      setVideoStarted(false);
+      setShowModal(false);
+    }
   };
 
   const startVideo = () => {
@@ -64,73 +63,72 @@ const Index = (props: Props) => {
   return (
     <div>
       <div className="relative top-0 px-5 lg:hidden">
-      <WelcomeHeader
-        title="Welcome to Shipyaari"
-        content="Kindly complete your KYC"
-      />
+        <WelcomeHeader
+          title="Welcome to Shipyaari"
+          content="Kindly complete your KYC"
+        />
 
-      <div className="flex flex-col items-center   mb-10">
-        <p className="font-semibold text-[18px] text-[#1C1C1C] mb-12">
-          Photo Identification
-        </p>
+        <div className="flex flex-col items-center   mb-10">
+          <p className="font-semibold text-[18px] text-[#1C1C1C] mb-12">
+            Photo Identification
+          </p>
 
-        <div
-          className="relative"
-          onClick={() => {
-            if (cameraPermission && !videoStarted) {
-              startVideo();
-            } else if (!cameraPermission) {
-              setShowModal(true);
-            }
-          }}
-        >
-          {cameraPermission && (
-            <img src={PhotoScreenIcon} alt="" width={264} height={282} />
-          )}
-          {snapImage ? (
-            <img
-              className="absolute top-1 left-1 z-200"
-              src={snapImage}
-              alt=""
-              width={264}
-              height={282}
-            />
-          ) : (
-            <img
-              src={ImageCenterIcon}
-              alt=""
-              className=" absolute top-[40%] left-[40%] "
-            />
-          )}
-          {cameraPermission && (
-            <video className="absolute top-1 left-1 z-200" ref={videoRef} />
-          )}
+          <div
+            className="relative"
+            onClick={() => {
+              if (cameraPermission && !videoStarted) {
+                startVideo();
+              } else if (!cameraPermission) {
+                setShowModal(true);
+              }
+            }}
+          >
+            {cameraPermission && (
+              <img src={PhotoScreenIcon} alt="" width={264} height={282} />
+            )}
+            {snapImage ? (
+              <img
+                className="absolute top-1 left-1 z-200"
+                src={snapImage}
+                alt=""
+                width={264}
+                height={282}
+              />
+            ) : (
+              <img
+                src={ImageCenterIcon}
+                alt=""
+                className=" absolute top-[40%] left-[40%] "
+              />
+            )}
+            {cameraPermission && (
+              <video className="absolute top-1 left-1 z-200" ref={videoRef} />
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="flex flex-col fixed bottom-0 right-5 left-5  pb-12">
-        <ServiceButton
-          text="CAPTURE SELFIE"
-          className="bg-[#1C1C1C] text-white w-full mb-5"
-          onClick={() => {
-            getSnapshot();
-            // getCameraPermission();
-            // navigate("/account/kyc-otp-form");
+        <div className="flex flex-col fixed bottom-0 right-5 left-5  pb-12">
+          <ServiceButton
+            text="CAPTURE SELFIE"
+            className="bg-[#1C1C1C] text-white w-full mb-5"
+            onClick={() => {
+              getSnapshot();
+              // getCameraPermission();
+              // navigate("/account/kyc-otp-form");
+            }}
+          />
+        </div>
+        <Modal
+          showModal={showModal}
+          setShowModal={() => {
+            setShowModal(false);
           }}
+          cameraPermission={cameraPermission}
+          setCameraPermission={setCameraPermission}
+          setVideoStarted={setVideoStarted}
+          videoRef={videoRef}
         />
       </div>
-      <Modal
-        showModal={showModal}
-        setShowModal={() => {
-          setShowModal(false);
-        }}
-        cameraPermission={cameraPermission}
-        setCameraPermission={setCameraPermission}
-        setVideoStarted={setVideoStarted}
-        videoRef={videoRef}
-      />
-      </div>
-
       {isBigScreen && (
         <div className="mx-4 hidden lg:block lg:h-[602px]">
           <CustomBottomModal
@@ -139,7 +137,7 @@ const Index = (props: Props) => {
             className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
           >
-          <div className="relative hidden lg:block">
+            <div className="relative hidden lg:block">
               <div className="flex justify-between items-center shadow-md  p-4 ">
                 <img src={CompanyLogo} alt="" />
                 <img src={CrossLogo} alt="" onClick={closeModal} />
@@ -150,56 +148,63 @@ const Index = (props: Props) => {
               />
 
               <div className="flex flex-col items-center mb-10 mx-[90px]">
-                    <p className="font-semibold text-[18px] text-[#1C1C1C] mb-12">
-                      Photo Identification
-                    </p>
+                <p className="font-semibold text-[18px] text-[#1C1C1C] mb-12">
+                  Photo Identification
+                </p>
 
-                    <div
-                      className="relative"
-                      onClick={() => {
-                        if (cameraPermission && !videoStarted) {
-                          startVideo();
-                        } else if (!cameraPermission) {
-                          setShowModal(true);
-                        }
-                      }}
-                    >
-                      {cameraPermission && (
-                        <img src={PhotoScreenIcon} alt="" width={264} height={282} />
-                      )}
-                      {snapImage ? (
-                        <img
-                          className="absolute top-1 left-1 z-200"
-                          src={snapImage}
-                          alt=""
-                          width={264}
-                          height={282}
-                        />
-                      ) : (
-                        <img
-                          src={ImageCenterIcon}
-                          alt=""
-                          className=" absolute top-[40%] left-[40%] "
-                        />
-                      )}
-                      {cameraPermission && (
-                        <video className="absolute top-1 left-1 z-200" ref={videoRef} />
-                      )}
-                    </div>
-                    <div className="flex flex-col pb-12  w-full mt-5">
-                      <ServiceButton
-                        text="CAPTURE SELFIE"
-                        className="bg-[#1C1C1C] text-white w-full mb-5"
-                        onClick={() => {
-                          getSnapshot();
-                          // getCameraPermission();
-                          navigate("/account/kyc-otp-form");
-                        }}
-                      />
-                    </div>
+                <div
+                  className="relative"
+                  onClick={() => {
+                    if (cameraPermission && !videoStarted) {
+                      startVideo();
+                    } else if (!cameraPermission) {
+                      setShowModal(true);
+                    }
+                  }}
+                >
+                  {cameraPermission && (
+                    <img
+                      src={PhotoScreenIcon}
+                      alt=""
+                      width={264}
+                      height={282}
+                    />
+                  )}
+                  {snapImage ? (
+                    <img
+                      className="absolute top-1 left-1 z-200"
+                      src={snapImage}
+                      alt=""
+                      width={264}
+                      height={282}
+                    />
+                  ) : (
+                    <img
+                      src={ImageCenterIcon}
+                      alt=""
+                      className=" absolute top-[40%] left-[40%] "
+                    />
+                  )}
+                  {cameraPermission && (
+                    <video
+                      className="absolute top-1 left-1 z-200"
+                      ref={videoRef}
+                    />
+                  )}
+                </div>
+                <div className="flex flex-col pb-12  w-full mt-5">
+                  <ServiceButton
+                    text="CAPTURE SELFIE"
+                    className="bg-[#1C1C1C] text-white w-full mb-5"
+                    onClick={() => {
+                      getSnapshot();
+                      // getCameraPermission();
+                      navigate("/account/kyc-otp-form");
+                    }}
+                  />
+                </div>
               </div>
 
-             
               <Modal
                 showModal={showModal}
                 setShowModal={() => {
@@ -210,14 +215,11 @@ const Index = (props: Props) => {
                 setVideoStarted={setVideoStarted}
                 videoRef={videoRef}
               />
-          </div>
-        
-        </CustomBottomModal>
-      </div>
-
-  )};
-
-  </div>
+            </div>
+          </CustomBottomModal>
+        </div>
+      )}
+    </div>
   );
 };
 

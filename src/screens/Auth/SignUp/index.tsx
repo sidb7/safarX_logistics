@@ -3,9 +3,15 @@ import CustomButton from "../../../components/Button/index";
 import { GoogleLogin } from "@react-oauth/google";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import { useState } from "react";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import CloseIcon from "../../../assets/CloseIcon.svg";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { isLgScreen } = ResponsiveState();
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const signUpOnClick = () => {
     navigate("/auth/sendOtp");
@@ -18,53 +24,96 @@ const Index = () => {
     console.log("response data", response);
   };
 
-  return (
-    <div className="flex flex-col gap-y-8">
-      <div className="product-box flex items-center">
-        <img className="m-4 h-[25px] object-contain" src={CompanyLogo} />
-      </div>
+  const signUp = () => {
+    return (
+      <div className="relative h-full w-full">
+        {isLgScreen && modalTitle()}
+        <div className="lg:mx-24 lg:mt-[84px]">
+          <div className="flex flex-col gap-y-8">
+            <div className="product-box flex items-center lg:hidden">
+              <img
+                className="m-4 h-[25px] object-contain"
+                src={CompanyLogo}
+                alt="CompanyLogo"
+              />
+            </div>
 
-      <div className="flex flex-col mt-7 mx-4 gap-y-6">
-        <p className="text-center	 text-2xl font-medium">Welcome to Shipyaari</p>
-        <p className="text-center	 font-thin">
-          Fast and Easy Shipping from your doorstep to your customer's.{" "}
-        </p>
+            <div className="flex flex-col mt-7 mx-4 gap-y-6">
+              <p className="text-center	 text-2xl font-medium">
+                Welcome to Shipyaari
+              </p>
+              <p className="text-center	 font-thin">
+                Fast and Easy Shipping from your doorstep to your customer's.{" "}
+              </p>
+            </div>
+            <div className=" flex flex-col mx-4  gap-y-6">
+              <div className="flex gap-x-6">
+                <CustomInputBox containerStyle="" label="First Name" />
+                <CustomInputBox containerStyle="" label="Last Name" />
+              </div>
+              <CustomInputBox label="Email" />
+              <CustomInputBox inputType="password" label="Password" />
+              <CustomButton onClick={signUpOnClick} text="SIGN UP" />
+              <hr className="mb-[-30px]" />
+              <div className="flex justify-center my-[-7px]">
+                <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>
+              </div>
+              <div className="flex justify-center">
+                <GoogleLogin
+                  text="signup_with"
+                  onSuccess={responseMessage}
+                  onError={() => {
+                    console.log("Google Signup Failed");
+                  }}
+                />
+              </div>
+              <div className="flex justify-center">
+                <p className="text-[#777777] font-light">
+                  Already Have An Account ?{" "}
+                </p>
+                <button
+                  type="button"
+                  onClick={logInOnClick}
+                  className="text-[#004EFF]"
+                >
+                  Log In
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div className=" flex flex-col mx-4 gap-y-6">
-        <div className="flex ">
-          <CustomInputBox containerStyle="mr-4" label="First Name" />
-          <CustomInputBox containerStyle="ml-4" label="Last Name" />
-        </div>
-        <CustomInputBox label="Email" />
-        <CustomInputBox inputType="password" label="Password" />
-        <CustomButton onClick={signUpOnClick} text="SIGN UP" />
-        <hr className="mb-[-30px]" />
-        <div className="flex justify-center my-[-7px]">
-          <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>
-        </div>
-        <div className="flex justify-center">
-          <GoogleLogin
-            text="signup_with"
-            onSuccess={responseMessage}
-            onError={() => {
-              console.log("Google Signup Failed");
-            }}
-          />
-        </div>
-        <div className="flex justify-center">
-          <p className="text-[#777777] font-light">
-            Already Have An Account ?{" "}
-          </p>
-          <button
-            type="button"
-            onClick={logInOnClick}
-            className="text-[#004EFF]"
-          >
-            Log In
-          </button>
-        </div>
+    );
+  };
+
+  const modalTitle = () => {
+    return (
+      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+        <img
+          className="my-auto ml-6  h-[25px] object-contain"
+          src={CompanyLogo}
+          alt="Company Logo"
+        />
+        <img
+          className="my-auto mr-6"
+          src={CloseIcon}
+          alt="Close"
+          onClick={() => setIsModalOpen(false)}
+        />
       </div>
-    </div>
+    );
+  };
+
+  return (
+    <>
+      {isLgScreen && isModalOpen && (
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          {signUp()}
+        </CenterModal>
+      )}
+
+      {!isLgScreen && signUp()}
+    </>
   );
 };
 
