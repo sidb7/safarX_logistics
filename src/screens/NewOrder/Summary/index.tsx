@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ServiceButton from "../../../components/Button/ServiceButton";
 
 import serviceIcon from "../../../assets/serv/service.svg";
@@ -10,12 +10,15 @@ import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import copySuccess from "../../../assets/serv/copy-success.svg";
 import SummaryAddressBox from "./summaryAddressBox";
-import Product from './product';
+import Product from "./product";
 import Service from "./service";
+import { HighRiskPincodeModal } from "./whatsappModal";
 
 type Props = {};
 
 const Summary = (props: Props) => {
+  const [ishighRisk, setIsHighRisk] = useState(false);
+
   return (
     <div>
       <div className="grid grid-cols-1 gap-y-5 p-5   ">
@@ -27,46 +30,44 @@ const Summary = (props: Props) => {
           <p className="text-[12px] text-[#1C1C1C]">Generate order ID</p>
           <p className="text-[#004EFF] text-[14px] font-bold">AUTO GENERATE</p>
         </div>
-        
-       
-        <SummaryAddressBox 
-       
+
+        <SummaryAddressBox
           locationImage={locationIcon}
           summaryTitle="Pickup Location"
-          
           editImage={editIcon}
           locationImage2={locationIcon}
           summaryAddres="Door 12, sector 8, Shankar Nagar"
           city=" Andheri East, Mumbai 422011"
           profileImage={contactIcon}
-          contactNumber= "+91 12345 12345"
+          contactNumber="+91 12345 12345"
           contactImage={phoneIcon}
           contactName="Amith Sharma"
         />
-        
+
         {/* Delivery */}
-        <SummaryAddressBox 
-       
+        <SummaryAddressBox
           locationImage={locationIcon}
           summaryTitle="Delivery Location"
-          
           editImage={editIcon}
           locationImage2={locationIcon}
           summaryAddres="Door 12, sector 8, Shankar Nagar"
           city=" Andheri East, Mumbai 422011"
           profileImage={contactIcon}
-          contactNumber= "+91 12345 12345"
+          contactNumber="+91 12345 12345"
           contactImage={phoneIcon}
           contactName="Amith Sharma"
         />
-       
+
         <Product />
-        
+
         {/*Service */}
 
         <Service />
+        <HighRiskPincodeModal
+          ishighRisk={ishighRisk}
+          setIsHighRisk={setIsHighRisk}
+        />
       </div>
-
     </div>
   );
 };
