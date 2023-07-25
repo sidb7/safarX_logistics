@@ -31,6 +31,7 @@ import Map from "../../NewOrder/Map";
 import { dummyPickupDropdownData } from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+import { getLocalStorage } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
