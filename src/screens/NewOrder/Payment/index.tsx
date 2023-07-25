@@ -149,11 +149,14 @@ const Index = () => {
       </div>
       <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
         <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
-          <p className="lg:hidden">
+          <p
+            className={`${
+              isItLgScreen
+                ? "px-[16px] py-[13px] text-[16px] font-semibold"
+                : ""
+            }`}
+          >
             Get welcome gift of 100 bonus point with wallet payments
-          </p>
-          <p className="hidden lg:block px-[16px] py-[13px] text-[16px] font-semibold">
-            Get welcome gift of 100 Yaari points with wallet payment
           </p>
         </div>
       </div>
@@ -276,10 +279,43 @@ const Index = () => {
           </p>
         </div>
 
-        <p className="mt-3 text-[12px] text-[#BBBBBB] lg:font-normal lg:mb-5">
+        <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
           Add money to wallet with COD
         </p>
 
+        {/* Available Offers Mobile */}
+        <div className="flex  gap-2 lg:hidden">
+          <img src={discountIcon} alt="" />
+          <p className="text-lg font-semibold">Available offers</p>
+        </div>
+        <div className="flex flex-nowwrap overflow-x-scroll space-x-4 mb-7 lg:hidden">
+          <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
+            <p className="text-[14px] font-semibold">10% EXTRA up to ₹1000</p>
+            <p className="mt-[7px] text-[12px] text-[#606060]">
+              Use standard charter Digismart credit card
+            </p>
+            <div className="w-[245px] flex flex-row justify-between my-3">
+              <p className="text-[12px] text-[#004EFF] mt-1">
+                Save up to ₹500 with this code
+              </p>
+              <p className="text-[16px]">Apply</p>
+            </div>
+          </div>
+          <div className="bg-[#FDF6EA] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
+            <p className="text-[14px] font-semibold">10% EXTRA up to ₹1000</p>
+            <p className="mt-[7px] text-[12px] text-[#606060]">
+              Use standard charter Digismart credit card
+            </p>
+            <div className="w-[245px] flex flex-row justify-between my-3">
+              <p className="text-[12px] text-[#004EFF] mt-1">
+                Save up to ₹500 with this code
+              </p>
+              <p className="text-[16px]">Apply</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Available Offers Web */}
         <div className=" gap-2 hidden lg:flex ">
           <img src={discountIcon} alt="" />
           <p className="text-lg font-semibold  lg:font-normal lg:text-2xl lg:text-[#323232]">
@@ -326,53 +362,15 @@ const Index = () => {
           </div>
         </div>
 
-        <div className=" hidden lg:block lg:mb-6 lg:w-1/3">
+        <div className=" mb-7 lg:mb-6 lg:w-1/3">
           <CustomInputBox
             inputClassName="border-2 border-solid border-[#A4A4A4]"
             label="Have a gift card?"
             labelClassName="text-[#A4A4A4]"
           />
         </div>
-
-        <div className="lg:grid grid-cols-2">
-          <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
-            <div className="flex  gap-x-2 text-[14px]">
-              <img src={rechargeIcon} alt="" className="object-contain" />
-              <p className="lg:font-semibold lg:text-[18px] lg:text-[#1C1C1C]">
-                Payment gateway
-              </p>
-            </div>
-
-            <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
-              <div
-                className="flex flex-col items-center gap-y-2"
-                onClick={handleUpi}
-              >
-                <img
-                  src={upiIcon}
-                  onClick={openModal}
-                  alt=""
-                  className="ml-0 object-contain"
-                />
-                <p className="text-[12px]">UPI</p>
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <img src={cardPayment} alt="" className="object-contain" />
-                <p className="text-[12px]">Cardpayment</p>
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <img src={bankTransfer} alt="" className="object-contain" />
-                <p className="text-[12px]">Bank transfer</p>
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <img src={netBanking} alt="" className="object-contain" />
-                <p className="text-[12px]">Netbanking</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className=" lg:hidden  grid grid-cols-2 w-100%  p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
+        {/* Yaari Points Mobile */}
+        <div className=" lg:hidden  grid grid-cols-2 w-100%  mb-7 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
           {checkYaariPoints ? (
             <div className="w-[200px] flex flex-col justify-between">
               <div>
@@ -421,41 +419,43 @@ const Index = () => {
             <img src={customerReward} alt="" className="object-contain" />
           </div>
         </div>
-        <div className="my-5 lg:hidden">
-          <CustomInputBox
-            inputClassName="border-2 border-solid border-[#A4A4A4]"
-            label="Have a gift card?"
-            labelClassName="text-[#A4A4A4]"
-          />
-        </div>
-
-        <div className="flex  gap-2 lg:hidden">
-          <img src={discountIcon} alt="" />
-          <p className="text-lg font-semibold">Available offers</p>
-        </div>
-        <div className="flex flex-nowwrap overflow-x-scroll space-x-4 lg:hidden">
-          <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
-            <p className="text-[14px] font-semibold">10% EXTRA up to ₹1000</p>
-            <p className="mt-[7px] text-[12px] text-[#606060]">
-              Use standard charter Digismart credit card
-            </p>
-            <div className="w-[245px] flex flex-row justify-between my-3">
-              <p className="text-[12px] text-[#004EFF] mt-1">
-                Save up to ₹500 with this code
+        {/* Payment Gateway */}
+        <div className="lg:grid grid-cols-2">
+          <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
+            <div className="flex  gap-x-2 text-[14px]">
+              <img src={rechargeIcon} alt="" className="object-contain" />
+              <p className="  font-semibold text-sm lg:text-lg lg:text-[#1C1C1C]">
+                {isItLgScreen
+                  ? "Payment gateway"
+                  : "Recharge with payment gateway"}
               </p>
-              <p className="text-[16px]">Apply</p>
             </div>
-          </div>
-          <div className="bg-[#FDF6EA] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
-            <p className="text-[14px] font-semibold">10% EXTRA up to ₹1000</p>
-            <p className="mt-[7px] text-[12px] text-[#606060]">
-              Use standard charter Digismart credit card
-            </p>
-            <div className="w-[245px] flex flex-row justify-between my-3">
-              <p className="text-[12px] text-[#004EFF] mt-1">
-                Save up to ₹500 with this code
-              </p>
-              <p className="text-[16px]">Apply</p>
+
+            <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+              <div
+                className="flex flex-col items-center gap-y-2"
+                onClick={handleUpi}
+              >
+                <img
+                  src={upiIcon}
+                  onClick={openModal}
+                  alt=""
+                  className="ml-0 object-contain"
+                />
+                <p className="text-[12px]">UPI</p>
+              </div>
+              <div className="flex flex-col items-center gap-y-2">
+                <img src={cardPayment} alt="" className="object-contain" />
+                <p className="text-[12px]">Cardpayment</p>
+              </div>
+              <div className="flex flex-col items-center gap-y-2">
+                <img src={bankTransfer} alt="" className="object-contain" />
+                <p className="text-[12px]">Bank transfer</p>
+              </div>
+              <div className="flex flex-col items-center gap-y-2">
+                <img src={netBanking} alt="" className="object-contain" />
+                <p className="text-[12px]">Netbanking</p>
+              </div>
             </div>
           </div>
         </div>
