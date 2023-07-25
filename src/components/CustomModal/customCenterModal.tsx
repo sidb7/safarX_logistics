@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 interface CenterModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children?: React.ReactNode;
+  children?: any;
   className?: string;
 }
 

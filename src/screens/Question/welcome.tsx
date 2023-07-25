@@ -1,16 +1,13 @@
 import React from "react";
-import WarehouseTruckGif from "../../assets/AccountQuestions/WarehouseTruck.gif";
-import Onboarding from "../../assets/AccountQuestions/Onboarding gif.svg";
-import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif";
-import DroneDeliveryGif from "../../assets/AccountQuestions/DroneDelivery.gif";
 interface IWelcomeQuestionProps {
   label: string;
+  className?: string;
 }
 export const WelcomeQuestion: React.FunctionComponent<
   IWelcomeQuestionProps
-> = ({ label }) => {
+> = ({ label, className }) => {
   return (
-    <div className="flex flex-col items-center mt-11">
+    <div className={`${className} flex flex-col items-center mt-11`}>
       <div className="text-center	text-[#323232] text-[22px] font-bold">
         Welcome to Shipyaari
       </div>
