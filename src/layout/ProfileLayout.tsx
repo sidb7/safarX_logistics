@@ -13,9 +13,9 @@ const ProfileLayout = () => {
       <div className="relative top-20">
         <div>
           <div className="inline-flex space-x-2 items-center justify-start px-5">
-            <img src={BackArrowIcon} alt="" />
+            <img src={BackArrowIcon} alt="" className="lg:w-[16px]" />
 
-            <p className="text-lg font-semibold text-center text-gray-900 ">
+            <p className="text-lg font-semibold text-center text-gray-900 lg:text-[28px] ">
               Profile
             </p>
           </div>

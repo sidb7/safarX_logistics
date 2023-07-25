@@ -5,14 +5,30 @@ import EmailIcon from "../../../assets/Profile/EmailIcon.svg";
 import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
 import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
+import React from "react";
+
+const LabelComponent: React.FC<{ label: string; className?: string, info:string, classNameInfo?:string }> = ({
+  label,
+  className,
+  info, 
+  classNameInfo
+}) => {
+  return (
+    <div className="flex flex-col">
+      <span className={`text-[#1C1C1C] font-semibold ${className}`}>{label}</span>
+      <span className={`text-[16px] text-[#004EFF] ${classNameInfo}`}>{info}</span>
+    </div>
+  );
+};
 
 export const ProfileCard = () => {
   const isItLgScreen = useMediaQuery({
-    query: "(min-width: 1024px)",
+    query: "(min-width: 768px)",
   });
+
   return (
     <div className="flex flex-col">
-      <div className="lg:grid lg:grid-cols-2">
+      <div className="md:grid md:grid-cols-2">
         <div className="grid grid-cols-3 border-[1px] border-[#E8E8E8] rounded-md mt-4">
           <div className="flex flex-col col-span-1 items-center py-4">
             <img src={ProfileIcon} alt="Profile" className="w-[82px]" />
@@ -43,20 +59,20 @@ export const ProfileCard = () => {
         <div>
           <div className="flex justify-between mt-4">
             <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold pl-2 py-2">
-                Yaari Points
-              </span>
-              <span className="text-[16px] text-[#004EFF] font-semibold pl-2 py-2">
-                100
-              </span>
+              <LabelComponent
+                label="Yaari Points"
+                className={"text-[14px] pl-2 py-2"}
+                info="100"
+                classNameInfo="pl-2 py-2"
+              />
             </div>
             <div className="flex flex-col drop-shadow-sm rounded-md bg-[#FDF6EA] w-[148px] h-[74px]">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold pl-2 py-2">
-                Wallet Balance
-              </span>
-              <span className="text-[16px] text-[#004EFF] font-semibold pl-2 py-2">
-                5,000
-              </span>
+              <LabelComponent
+                label="Wallet Balance"
+                className={"text-[14px] pl-2 py-2"}
+                info="5,000"
+                classNameInfo="pl-2 py-2"
+              />
             </div>
           </div>
 
@@ -77,25 +93,18 @@ export const ProfileCard = () => {
       ) : (
         <div className="grid grid-cols-3 mt-4 gap-4">
           <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
-          <span className="text-[18px] text-[#1C1C1C] font-semibold pl-3">
-                Yaari Points
-              </span>
-              <span className="text-[28px] text-[#004EFF] font-semibold pl-3">
-                100
-              </span>
+            <LabelComponent label="Yaari Points" className={"text-[18px] pl-3"} info="100" classNameInfo="!text-[28px] !text-[#004EFF] pl-3" />
+            
           </div>
           <div className="flex flex-col justify-center rop-shadow-sm rounded-md bg-[#FDF6EA]">
-          <span className="text-[18px] text-[#1C1C1C] font-semibold pl-2">
-                Wallet Balance
-              </span>
-              <span className="text-[28px] text-[#004EFF] font-semibold pl-2">
-                5,000
-              </span>            
+            <LabelComponent label="Wallet Balance" className={"text-[18px] pl-3"} info="5,000" classNameInfo="!text-[28px] !text-[#004EFF] pl-3" />
           </div>
           <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">
             <div className="flex justify-between">
-              <span className="text-[20px] font-semibold font-[#1C1C1C]">Sliver Plan</span>
-              <span className="text-[14px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded">
+              <span className="text-[20px] font-semibold font-[#1C1C1C]">
+                Sliver Plan
+              </span>
+              <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded">
                 CHANGE
               </span>
             </div>

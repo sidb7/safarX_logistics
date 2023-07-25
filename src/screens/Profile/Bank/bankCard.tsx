@@ -2,6 +2,7 @@ import { useMediaQuery } from "react-responsive";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
 import DummyImage from "../../../assets/Profile/DummyImage.svg";
 import { useNavigate } from "react-router-dom";
+import LabelContainer from "../../../components/LabelContainer";
 export const ProfileBankCard = () => {
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
@@ -33,153 +34,118 @@ export const ProfileBankCard = () => {
         <div>
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
-                Account Holder Name
-              </span>
-              <div className="flex">
-                <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  Raj Sharma
-                </span>
-              </div>
+              <LabelContainer label="Account Holder Name" info="Raj Sharma" />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <span className="ml-3 text-[10px] text-[#777777] font-normal">
-                Bank Name
-              </span>
-              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-                <span>HDFC</span>
-              </span>
+              <LabelContainer
+                label="Bank Name"
+                info="HDFC"
+                className="ml-3"
+                classNameInfo="ml-3"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
-                Branch Name
-              </span>
-              <div className="flex">
-                <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  Malad East
-                </span>
-              </div>
+              <LabelContainer label=" Branch Name" info=" Malad East" />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <span className="ml-3 text-[10px] text-[#777777] font-normal">
-                IFSC Code
-              </span>
-              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-                <span>BOB2342</span>
-              </span>
+              <LabelContainer
+                label="IFSC Code"
+                info="BOB2342"
+                className="ml-3"
+                classNameInfo="ml-3"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
-                Account Type
-              </span>
-              <div className="flex">
-                <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  Saving
-                </span>
-              </div>
+              <LabelContainer label="Account Type" info="Saving" />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <span className="ml-3 text-[10px] text-[#777777] font-normal">
-                Account number
-              </span>
-              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-                <span>3868316485</span>
-              </span>
+              <LabelContainer
+                label="Account number"
+                info="3868316485"
+                className="ml-3"
+                classNameInfo="ml-3"
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-2 ml-4 my-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
-                Cheque Details
-              </span>
-              <div className="flex">
-                <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  Cheque. png
-                </span>
-              </div>
+              <LabelContainer label="Cheque Details" info="Cheque. png" />
             </div>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-5 gap-y-8">
           <div className="flex flex-col mt-5 px-5">
-            <span className="text-[12px] text-[#777777] font-normal">
-              Account Holder Name
-            </span>
-            <div className="flex">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold">
-              Raj Sharma
-              </span>
-            </div>
+            <LabelContainer
+              label="Account Holder Name"
+              info="Raj Sharma"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
+
           <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
-            <span className="text-[12px] text-[#777777] font-normal">
-            Bank Name
-            </span>
-            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
-              <span>HDFC</span>
-            </span>
+            <LabelContainer
+              label="Bank Name"
+              info="HDFC"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
 
           <div className="flex flex-col mt-5 px-5 border-l-[1px]">
-            <span className="text-[12px] text-[#777777] font-normal">
-            Branch Name
-            </span>
-            <div className="flex">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
-              Malad East
-              </span>
-            </div>
+            <LabelContainer
+              label="Branch Name"
+              info="Malad East"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
 
           <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
-            <span className="text-[12px] text-[#777777] font-normal">
-            IFSC Code
-            </span>
-            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
-              <span>BOB2342</span>
-            </span>
+            <LabelContainer
+              label="IFSC Code"
+              info="BOB2342"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
 
           <div className="flex flex-col border-l-[1px] mt-5 px-5">
-            <span className="text-[12px] text-[#777777] font-normal">
-            Account Type
-            </span>
-            <div className="flex">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
-              Saving
-              </span>
-            </div>
+            <LabelContainer
+              label="Account Type"
+              info="Saving"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
 
           <div className="flex flex-col border-[#E8E8E8] mb-5 px-5">
-            <span className="text-[12px] text-[#777777] font-normal">
-            Account number
-            </span>
-            <span className="flex text-[14px] text-[#1C1C1C] font-semibold">
-              <span>3868316485</span>
-            </span>
+            <LabelContainer
+              label="Account number"
+              info="3868316485"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
 
           <div className="flex flex-col mb-5 px-5 border-l-[1px]">
-            <span className="text-[12px] text-[#777777] font-normal">
-            Cheque Details
-            </span>
-            <div className="flex">
-              <span className="text-[14px] text-[#1C1C1C] font-semibold	">
-              Cheque. png
-              </span>
-            </div>
+            <LabelContainer
+              label="Cheque Details"
+              info="Cheque. png"
+              className="text-[12px]"
+              classNameInfo="!text-[14px]"
+            />
           </div>
         </div>
       )}

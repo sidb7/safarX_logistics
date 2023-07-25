@@ -1,5 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import PersonIcon from "../../../assets/Profile/Notification/PersonIcon.svg";
+import ToggleIcon from "../../../assets/notifications/Property 1=toggle on.svg"
 import CustomInputBox from "../../../components/Input";
 import { ToggleButton } from "../../../components/ToggleButton";
 export const ProfileNotificationTab = () => {
@@ -25,7 +26,7 @@ export const ProfileNotificationTab = () => {
           <br/>
           <div className="flex justify-between items-center shadow-sm rounded-md px-2 h-[44px]">
             <span className="whitespace-nowrap">Notification (Email, SMS)</span>
-            <ToggleButton />
+            <ToggleButton imgSrc={ToggleIcon} />
           </div>
         </div>
       </div>
@@ -47,20 +48,20 @@ export const ProfileNotificationTab = () => {
           <br/>
           <div className="flex justify-between items-center shadow-md rounded-md px-2 mt-4 h-[44px]">
             <span className="flex whitespace-nowrap">Notification (Email, SMS)</span>
-            <ToggleButton />
+            <ToggleButton imgSrc={ToggleIcon} />
           </div>
         </div>
       </div>
 
-      <div className="lg:grid lg:grid-cols-2 gap-4 mt-10">
+      <div className="lg:grid lg:grid-cols-3 gap-4 mt-10">
         <div className="flex justify-between items-center shadow-md rounded-md px-2 h-[44px]">
           <span className="flex whitespace-nowrap">Tracking notification</span>
-          <ToggleButton />
+          <ToggleButton imgSrc={ToggleIcon} />
         </div>
 
         <div className="flex justify-between items-center shadow-md rounded-md px-2 h-[44px]">
           <span className="whitespace-nowrap">Rating email</span>
-          <ToggleButton />
+          <ToggleButton imgSrc={ToggleIcon} />
         </div>
       </div>
     </div>
