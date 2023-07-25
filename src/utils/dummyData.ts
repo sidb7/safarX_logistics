@@ -289,6 +289,56 @@ export const FilterServiceData = [
     name: "service",
     value: "5",
   },
+
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "5",
+  },
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "5",
+  },
+
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "5",
+  },
+  {
+    isRecommendation: false,
+    recommendation: "Recipient",
+    courierPartner: "DHL",
+    serviceType: "Economy",
+    weight: 1,
+    totalPrice: 2300,
+    savePrice: 200,
+    etaDate: "24 Jun 23",
+    name: "service",
+    value: "5",
+  },
 ];
 
 export const dummyDayData = [
@@ -536,5 +586,32 @@ export const dummyChannelIntegrationData = [
         integrated: false,
       },
     ],
+  },
+];
+
+export const dummyPickupDropdownData = [
+  {
+    label: "Select/ type exact landmark",
+    value: "select",
+  },
+  {
+    label: "Andheri metro station",
+    value: "andheriMetroStation",
+  },
+  {
+    label: "Bus stop",
+    value: "busStop",
+  },
+  {
+    label: "AIO Gardens",
+    value: "aioGardens",
+  },
+  {
+    label: "Jogeshwari Caves",
+    value: "jogeshwariCaves",
+  },
+  {
+    label: "Other",
+    value: "other",
   },
 ];
