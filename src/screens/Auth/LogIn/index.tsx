@@ -8,10 +8,37 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useState } from "react";
+import {POST_SIGN_IN_URL} from "../../../utils/ApiUrls";
+import {POST} from "../../../utils/webService";
+import { toast } from "react-toastify";
+
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const [loginCredentials, setLoginCredentials] = useState({
+    email: "",
+    password: ""
+  })
+
+  console.log("loginDetails", loginCredentials)
+
+  const logInOnClick = async (value  :any) => {
+    try {
+      const { data: response } = await POST(POST_SIGN_IN_URL, value);
+      if (response?.success) {
+        console.log("Success",response?.data);
+        navigate("/auth/verifyOtp")
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+
   const signUpOnClick = () => {
     navigate("/auth/signup");
   };
@@ -61,9 +88,12 @@ const Index = () => {
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
-              <CustomInputBox containerStyle="mt-[17px]" label="Email" />
-              <CustomInputBox inputType="password" label="Password" />
-              <CustomButton onClick={() => {}} text="LOG IN" />
+             
+            <CustomInputBox containerStyle="mt-[17px]" label="Email" onChange={(e)=>{
+          // console.log("email",e.target.value)
+          setLoginCredentials({...loginCredentials, email:e.target.value})}} />
+        <CustomInputBox inputType="password" label="Password" onChange={(e)=>setLoginCredentials({...loginCredentials,password:e.target.value})}/>
+              <CustomButton onClick={(e:any)=>logInOnClick(loginCredentials)} text="LOG IN" />
               <hr className="mb-[-30px]" />
               <div className="flex justify-center my-[-7px]">
                 <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>

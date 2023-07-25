@@ -37,6 +37,7 @@ const CustomInputBox = (props: propTypes) => {
           type={inputType}
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
+          onChange={onChange}
         />
         <label
           className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4  custom-label ${labelClassName}`}

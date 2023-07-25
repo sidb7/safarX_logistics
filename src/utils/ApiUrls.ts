@@ -19,6 +19,6 @@ switch (Enviornment) {
     break;
 }
 
-const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/auth/signin`;
+const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
 
 export { SELLER_URL, POST_SIGN_IN_URL };

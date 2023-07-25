@@ -16,9 +16,8 @@ const initialState: UserState = {
   loggedIn: false,
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     login: (
@@ -41,5 +40,3 @@ const userSlice = createSlice({
 });
 
 export const { login, logout } = userSlice.actions;
-
-export default userSlice.reducer;
