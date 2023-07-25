@@ -27,6 +27,12 @@ import CustomBottomModal from "../../../components/CustomModal/customBottomModal
 import { paymentState } from "../../../redux/reducers/paymentReducer";
 import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 import { useMediaQuery } from "react-responsive";
+import Label from "../Label";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
+import CustomCenterModal from "../../../components/CustomModal/customCenterModal";
+import { Link } from "react-router-dom";
+import DoneIcon from "../../../assets/Payment/Done.gif";
+import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
 
 const steps = [
   {
@@ -67,9 +73,11 @@ const Index = () => {
   const [payment, setPayment] = useState(false);
   const [modal, setModal] = useState(false);
   const [toast, setToast] = useState(false);
-  const [placeOrder, setPlaceOrder] = useState(false);
+  const [placeOrder, setPlaceOrder] = useState(true);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [footer, setFooter] = useState(true);
+  const [isLabelRightModal, setIsLabelRightModal] = useState(false);
+  const [isPostPaymentModal, setIsPostPaymentModal] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -114,6 +122,37 @@ const Index = () => {
       }, 5000);
     }
   }, [checkBoolean]);
+
+  const ModalContent = () => {
+    return (
+      <div className="flex flex-col  w-full h-full p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsPostPaymentModal(false)}
+          />
+        </div>
+        <div className="flex flex-col  mt-4">
+          <div className="flex justify-center items-center mt-7   ">
+            <img src={DoneIcon} alt="Done Gif" width={124} height={125} />
+          </div>
+          <div className="flex flex-col items-center mt-4 font-semibold text-[18px]  ">
+            <p>Thank you!</p>
+            <p>Your order has been placed.</p>
+            <p>You can find your orders in order section</p>
+          </div>
+        </div>
+        <div className="flex justify-center items-center mt-10">
+          <ServiceButton
+            text="GO TO ORDER"
+            className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+          />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -468,7 +507,7 @@ const Index = () => {
       </CustomBottomModal>
       {footer && (
         <div className="mt-24">
-          <footer className="w-full fixed  bottom-0 z-[9999]">
+          <footer className="w-full fixed  bottom-0 ">
             <div
               className={` ${
                 isItLgScreen ? "flex justify-end" : "grid grid-cols-2"
@@ -484,48 +523,42 @@ const Index = () => {
               {placeOrder ? (
                 <ServiceButton
                   text="PLACE ORDER"
-                  className="bg-[#1C1C1C] text-[#FFFFFF] text-[14px] border-none"
+                  className="bg-[#1C1C1C] text-[#FFFFFF] text-[14px] border-none lg:!py-2 lg:!px-4"
                   onClick={() => {
-                    console.log(window.location.pathname);
-
-                    if (window.location.pathname === "/neworder/pickup") {
-                      navigate("/neworder/delivery");
-                    } else if (
-                      window.location.pathname === "/neworder/delivery"
-                    ) {
-                      navigate("/neworder/product");
-                    } else if ("/neworder/product") {
-                      navigate("/neworder/service");
-                    } else if ("/neworder/payment") {
-                      navigate("/neworder/summary");
-                    }
+                    isItLgScreen
+                      ? setIsLabelRightModal(true)
+                      : navigate("/neworder/label");
                   }}
                 />
               ) : (
                 <ServiceButton
                   text="PAY NOW ₹2000"
                   className="bg-[#E8E8E8] text-[#BBBBBB] text-[14px] border-none lg:!py-2 lg:!px-4"
-                  onClick={() => {
-                    console.log(window.location.pathname);
-
-                    if (window.location.pathname === "/neworder/pickup") {
-                      navigate("/neworder/delivery");
-                    } else if (
-                      window.location.pathname === "/neworder/delivery"
-                    ) {
-                      navigate("/neworder/product");
-                    } else if ("/neworder/product") {
-                      navigate("/neworder/service");
-                    } else if ("/neworder/payment") {
-                      navigate("/neworder/summary");
-                    }
-                  }}
+                  onClick={() => {}}
                 />
               )}
             </div>
           </footer>
         </div>
       )}
+
+      <RightSideModal
+        isOpen={isLabelRightModal}
+        onClose={() => setIsLabelRightModal(false)}
+      >
+        <Label
+          onClick={setIsLabelRightModal}
+          setIsPostPaymentModal={setIsPostPaymentModal}
+        />
+      </RightSideModal>
+
+      <CustomCenterModal
+        isOpen={isPostPaymentModal}
+        onClose={() => setIsPostPaymentModal(false)}
+        className="!h-[450px] !w-[580px]"
+      >
+        <ModalContent />
+      </CustomCenterModal>
     </div>
   );
 };
