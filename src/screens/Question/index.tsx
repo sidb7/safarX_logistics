@@ -1,20 +1,22 @@
-import React from "react";
-import { useMediaQuery } from "react-responsive";
-import {
-  QuestionComponent1,
-  QuestionComponent2,
-  QuestionComponent3,
-  QuestionComponent4,
-  QuestionComponent5,
-} from "./question";
-import { WelcomeQuestion } from "./welcome";
+import { useState } from "react";
 import CompanyLogo from "../../assets/Navbar/ShipyaariLogos.svg";
+import CloseIcon from "../../assets/Navbar/ShipyaariLogos.svg";
 import Slider from "react-slick";
+import { ResponsiveState } from "../../utils/responsiveState";
+import { WelcomeQuestion } from "./welcome";
+// import {
+//   QuestionComponent1,
+//   QuestionComponent2,
+//   QuestionComponent3,
+//   QuestionComponent4,
+//   QuestionComponent5,
+// } from "./question1";
 import "../../styles/navBar.css";
 import "../../styles/silkStyle.css";
 
 export const AccountQuestion = () => {
-
+  const { isLgScreen } = ResponsiveState();
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const silderSettings = {
     dots: true,
     infinite: true,
@@ -23,6 +25,26 @@ export const AccountQuestion = () => {
     slidesToScroll: 1,
     initialSlide: 0, // Start from the second slide to hide the slide on the left side
   };
+
+  const modalTitle = () => {
+    return (
+      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+        <img
+          className="my-auto ml-6  h-[25px] object-contain"
+          src={CompanyLogo}
+          alt="Company Logo"
+        />
+        <img
+          className="my-auto mr-6"
+          src={CloseIcon}
+          alt="Close"
+          onClick={() => setIsModalOpen(false)}
+        />
+      </div>
+    );
+  };
+
+  const questionComponent = () => {};
 
   return (
     <div className="flex flex-col ">
@@ -34,7 +56,7 @@ export const AccountQuestion = () => {
         <WelcomeQuestion label="Please complete your profile" />
       </div>
 
-      <Slider {...silderSettings} className="">
+      {/* <Slider {...silderSettings} className="">
         <div className="mx-2 !w-[95%]">
           <QuestionComponent1 />
         </div>
@@ -50,7 +72,7 @@ export const AccountQuestion = () => {
         <div className="mx-2 !w-[95%]">
           <QuestionComponent5 />
         </div>
-      </Slider>
+      </Slider> */}
     </div>
   );
 };
