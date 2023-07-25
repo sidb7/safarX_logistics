@@ -4,12 +4,128 @@ import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
 import { useState } from "react";
 import Collapsible from "react-collapsible";
+// import { Cancelled } from "../StatusComponents";
+import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
+import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
+import { createColumnHelper } from "@tanstack/react-table";
+import filterIconTable from "../../../assets/Transaction/filtericon.svg";
+import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 
 interface ICashbackProps {
-  data: {title: string, rupee: string, date: string, time: string, description: string}
+  data: {
+    title: string;
+    rupee: string;
+    date: string;
+    time: string;
+    description: string;
+  };
 }
 
-export const CashbackHistory: React.FunctionComponent<ICashbackProps> = ({data}) => {
+const columnsHelper = createColumnHelper<any>();
+export const cashbackDetailsColumns = () => {
+  return [
+    columnsHelper.accessor("roleId", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[208px]">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">Date</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="whitespace-nowrap my-4 space-y-2">23 May 2023</div>
+        );
+      },
+    }),
+    columnsHelper.accessor("roleName", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[254px] ">
+            <h1 className="text-sm font-semibold leading-5 ">Recieved via</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  whitespace-nowrap">
+            <p className="uppercase">coupon</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[220px]">
+            <h1 className="text-sm font-semibold leading-5 ">Amount </h1>
+
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <span>₹ 5000</span>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[371px] ">
+            <h1>Description</h1>
+
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex">
+            <span>
+              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+              Dignissimos deleniti itaque laboriosam, voluptatibus inventore
+              iure ab! Quia asperiores laborum consequatur?
+            </span>
+          </div>
+        );
+      },
+    }),
+
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1 className="text-sm font-semibold leading-5 ">Actions</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex space-x-2 items-center">
+            <img src={copyIcon} alt="" />
+            <img src={shareIcon} alt="" />
+          </div>
+        );
+        // <span>Actions</span>;
+      },
+    }),
+  ];
+};
+
+export const CashbackHistory: React.FunctionComponent<ICashbackProps> = ({
+  data,
+}) => {
   const [onOpen, setOnOpen] = useState(false);
 
   const header = () => {

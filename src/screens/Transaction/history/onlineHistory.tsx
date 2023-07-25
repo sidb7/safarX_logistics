@@ -6,20 +6,185 @@ import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import ShareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { useState } from "react";
 import Collapsible from "react-collapsible";
+import { Cancelled } from "../StatusComponents";
+import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
+import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
+import { createColumnHelper } from "@tanstack/react-table";
+import filterIconTable from "../../../assets/Transaction/filtericon.svg";
+import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 
 interface IOnlineProps {
   data: {
     title: string;
     status: string;
     reference: string;
-    amount: string
-    requestedDate: string
-    approvedDate: string
-    description: string
+    amount: string;
+    requestedDate: string;
+    approvedDate: string;
+    description: string;
   };
 }
 
-export const OnlineHistory: React.FunctionComponent<IOnlineProps>  = ({data}) => {
+const columnsHelper = createColumnHelper<any>();
+export const OnlineDetailsColumns = () => {
+  return [
+    columnsHelper.accessor("roleId", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[156px]">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">
+                Transaction ID
+              </h1>
+            </div>
+            <div className="">
+              <img src={sortIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="whitespace-nowrap my-4 space-y-2">10678235167</div>
+        );
+      },
+    }),
+    columnsHelper.accessor("roleName", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center ">
+            <h1 className="text-sm font-semibold leading-5 ">Amount</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  whitespace-nowrap">
+            <span> ₹ 51189876</span>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[236px]">
+            <h1 className="text-sm font-semibold leading-5 ">Description </h1>
+
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex">
+            <span>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis,
+              molestias!
+            </span>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[146px] ">
+            <h1>Request Date</h1>
+
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>23 May 2023</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  min-w-[142px]">
+            <h1>Approve Date</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>4 June 2023</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  min-w-[147px]">
+            <h1>Remark</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex justify-start whitespace-nowrap ">
+            <p>-</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-sm font-semibold leading-5">Status</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div>
+            <Cancelled />
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1 className="text-sm font-semibold leading-5 ">Actions</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex space-x-2 items-center">
+            <img src={copyIcon} alt="" />
+            <img src={shareIcon} alt="" />
+          </div>
+        );
+        // <span>Actions</span>;
+      },
+    }),
+  ];
+};
+
+export const OnlineHistory: React.FunctionComponent<IOnlineProps> = ({
+  data,
+}) => {
   const [onOpen, setOnOpen] = useState(false);
 
   const header = () => {
