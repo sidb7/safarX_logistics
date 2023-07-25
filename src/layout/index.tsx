@@ -47,6 +47,17 @@ const Layout = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+
+  let subMenu;
+
+  if (
+    window.location.pathname === "/neworder/service" ||
+    window.location.pathname === "/neworder/summary"
+  ) {
+    subMenu = "Partner list";
+  } else {
+    subMenu = "Order";
+  }
   return (
     <>
       <div className="flex flex-col h-screen justify-between ">
@@ -55,16 +66,17 @@ const Layout = () => {
         </header>
 
         <div className="relative top-20 ">
-          <div className="hidden lg:block px-5 ml-14 ">
-            <p className="font-normal text-[14px] text-[#777777] ">
-              Home/
-              <span className="font-semibold text-[14px] text-[#1C1C1C]">
-                Order
-              </span>
-            </p>
+          <div className="hidden   lg:flex lg:items-center px-5 ml-14 mb-1 ">
+            <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
+            <span className="font-normal text-[14px] text-[#777777] mr-1">
+              /
+            </span>
+            <span className="font-semibold text-[14px] text-[#1C1C1C]">
+              {subMenu}
+            </span>
           </div>
           <div>
-            <div className="inline-flex space-x-2 items-center justify-start px-5">
+            <div className="inline-flex space-x-2 items-center justify-start px-5 lg:mb-8">
               <img src={BackArrowIcon} alt="" className="lg:hidden" />
               <img
                 src={BackArrowIconWeb}
@@ -78,17 +90,17 @@ const Layout = () => {
             </div>
           </div>
 
-          <div>
+          <div className="lg:mb-8">
             <Stepper steps={steps} />
           </div>
 
-          <main className="pb-24">
+          <main className="pb-24  ">
             <div className="relative top-0">
               <Outlet />
             </div>
           </main>
 
-          <footer className="w-full fixed  bottom-0 	">
+          <footer className="w-full fixed  bottom-0 z-[10]">
             <div
               className={`  ${
                 isItLgScreen ? "flex justify-end " : " grid grid-cols-2"

@@ -2,7 +2,7 @@ import { Spinner } from "../Spinner";
 
 interface CustomButtonProps {
   text: any;
-  onClick: () => void;
+  onClick: (e:any) => void;
   className?: string;
   disabled?: boolean;
   type?: any;

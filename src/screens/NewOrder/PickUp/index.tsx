@@ -6,17 +6,18 @@ import ChooseLocationIcon from "../../../assets/PickUp/chooseLocation.svg";
 import Warehouse from "../../../assets/PickUp/Warehouse.svg";
 import OfficeIcon from "../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../assets/PickUp/Location.svg";
-import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+
 import ContactIcon from "../../../assets/PickUp/Contact.svg";
 import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
 import EditIcon from "../../../assets/PickUp/Edit.svg";
 import CustomDropDown from "../../../components/DropDown";
-import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
+// import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
+import CustomDatePicker from "../../../components/Datepicker";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import Switch from "react-switch";
-import { useAppSelector } from "../../../hooks/typeHook";
+import { useAppSelector } from "../../../redux/hooks";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
@@ -27,6 +28,10 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
+import { dummyPickupDropdownData } from "../../../utils/dummyData";
+import RightModalContent from "./RightModalContent";
+import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+import { getLocalStorage } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -60,12 +65,18 @@ const Index = () => {
   };
 
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
+  const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
+  const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
+
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
-  const { address } = useAppSelector((state) => state.rootReducer.map);
+  const { address } = useAppSelector((state) => state.map);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
+  const [isLocationRightModal, setIsLocationRightModal] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -143,7 +154,7 @@ const Index = () => {
             value={locateAddress}
             onClick={() => {
               isItLgScreen
-                ? setIsLocationModal(true)
+                ? setIsLocationRightModal(true)
                 : navigate("/neworder/map");
             }}
           />
@@ -161,25 +172,24 @@ const Index = () => {
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
+              if (event.target.value === "other") {
+                isItLgScreen
+                  ? setIsRightLandmarkModal(true)
+                  : setIsLandmarkModal(true);
+              }
             }}
-            options={[
-              {
-                label: "Select/ type exact landmark",
-                value: "select",
-              },
-              {
-                label: "Option 1",
-                value: "option1",
-              },
-            ]}
+            options={dummyPickupDropdownData}
           />
         </div>
-        <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="City" />
-        </div>
+
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Pincode" />
         </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="City" />
+        </div>
+
         <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <div>
             <CustomInputBox label="State" />
@@ -214,7 +224,7 @@ const Index = () => {
 
         <div className="flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4  lg:w-[172px] ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
               saveAddress.office === true
                 ? "!border-[#004EFF] !text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
@@ -231,7 +241,7 @@ const Index = () => {
             <p className="lg:font-semibold lg:text-[14px] ">Office</p>
           </div>
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] lg:px-4 lg:py-2 ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
               saveAddress.warehouse === true
                 ? "border-[#004EFF] !text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
@@ -248,7 +258,7 @@ const Index = () => {
             <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
           </div>
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] lg:px-4 lg:py-2 ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
               saveAddress.other === true
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300  text-[#1C1C1C]"
@@ -305,7 +315,7 @@ const Index = () => {
 
         <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4   ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
               saveContact.shopkeeper === true
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
@@ -323,18 +333,22 @@ const Index = () => {
           </div>
 
           <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]  px-8 rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:py-2 lg:px-4   whitespace-nowrap ${
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
               saveContact.warehouse === true
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={() => {
               setSaveContact({
                 shopkeeper: false,
 
                 warehouse: true,
-              })
-            }
+              });
+
+              isItLgScreen
+                ? setIsSaveContactRightModal(true)
+                : setIsSaveContactModal(true);
+            }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
             <p className="lg:font-semibold lg:text-[14px] ">
@@ -343,8 +357,12 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mb-7">
-          <CustomDatePicker />
+        <div className="mb-7 lg:hidden">
+          <CustomDatePicker onClick={openModal} />
+        </div>
+
+        <div className="hidden lg:block mb-7">
+          <CustomDatePicker onClick={() => setIsDateRightModal(true)} />
         </div>
 
         <div className="hidden lg:block mb-7"></div>
@@ -358,7 +376,7 @@ const Index = () => {
                   : "shadow-md rounded "
               }`}
             >
-              <h1 className="self-center justify-start text-[14px] font-semibold text-[#1C1C1C] ">
+              <h1 className="self-center justify-start text-[14px] font-semibold text-[#1C1C1C] lg:text-base ">
                 Custom Branding
               </h1>
               <div className="flex justify-end items-center gap-x-1">
@@ -458,16 +476,48 @@ const Index = () => {
         audio={directionAudio}
       />
 
-      <button onClick={openModal}>Open Modal</button>
       <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
         <SelectDateModalContent />
       </CustomBottomModal>
 
       <RightSideModal
-        isOpen={isLocationModal}
-        onClose={() => setIsLocationModal(false)}
+        isOpen={isDateRightModal}
+        onClose={() => setIsDateRightModal(false)}
       >
-        <Map />
+        <SelectDateModalContent onClick={() => setIsDateRightModal(false)} />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={isLocationRightModal}
+        onClose={() => setIsLocationRightModal(false)}
+      >
+        <Map onClick={() => setIsLocationRightModal(false)} />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={isRightLandmarkModal}
+        onClose={() => setIsRightLandmarkModal(false)}
+      >
+        <RightModalContent
+          title="Save Landmark as"
+          titleIcon={MapIcon}
+          buttonText="CONFIRM"
+          inputLabel="Type landmark"
+          onClick={() => setIsRightLandmarkModal(false)}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={isSaveContactRightModal}
+        onClose={() => setIsSaveContactRightModal(false)}
+      >
+        <RightModalContent
+          title="Save Contact as"
+          titleIcon={ContactIcon}
+          buttonText="SAVE"
+          inputLabel="Warehouse Associate"
+          onClick={() => setIsSaveContactRightModal(false)}
+        />
       </RightSideModal>
     </div>
   );
