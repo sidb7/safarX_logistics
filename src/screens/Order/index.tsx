@@ -19,6 +19,7 @@ import "../../styles/silkStyle.css";
 
 import { insufficientBalance } from "../../utils/dummyData";
 import { useMediaQuery } from "react-responsive";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 const ArrowNavigator = () => {
   return (
@@ -296,7 +297,7 @@ const columns = [
 const Index = () => {
   const [filterId, setFilterId] = useState(-1);
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
-
+  const { isLgScreen } = ResponsiveState();
   //  settings for desktop view
 
   const desktopSettings = {
@@ -445,9 +446,11 @@ const Index = () => {
         </>
       )}
 
-      <div>
-        <CustomTable data={data} columns={columns} />
-      </div>
+      {isLgScreen && (
+        <div className="overflow-x-auto">
+          <CustomTable data={data} columns={columns} />
+        </div>
+      )}
     </div>
   );
 };
