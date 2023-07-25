@@ -1,8 +1,4 @@
 import React from "react";
-import WarehouseTruckGif from "../../assets/AccountQuestions/WarehouseTruck.gif";
-import Onboarding from "../../assets/AccountQuestions/Onboarding gif.svg";
-import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif";
-import DroneDeliveryGif from "../../assets/AccountQuestions/DroneDelivery.gif";
 interface IWelcomeQuestionProps {
   label: string;
 }
