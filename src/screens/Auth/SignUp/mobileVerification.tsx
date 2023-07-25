@@ -7,14 +7,43 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const dispatch = useDispatch();
 
-  const sendOtpOnClick = () => {
-    navigate("/auth/verifyOtp");
+  const [mobileNumber, setMobileNumber] = useState({
+    mobileNo: "",
+  });
+
+  const signUpUser = useSelector((state: any) => state.signup);
+
+  let body = {
+    emailId: signUpUser.emailId,
+    firstName: signUpUser.firstName,
+    mobileNo: mobileNumber.mobileNo,
+  };
+
+  const sendOtpOnClick = async (value: any) => {
+    console.log("value", value);
+    try {
+      const { data: response } = await POST(POST_SEND_OTP_URL, body);
+
+      if (response?.success) {
+        console.log("success", response?.data);
+        navigate("/auth/verifyOtp");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
   };
 
   const modalTitle = () => {
@@ -62,8 +91,17 @@ const Index = () => {
               <CustomInputBox
                 inputType="number"
                 label="Enter Your Mobile Number"
+                onChange={(e) => {
+                  setMobileNumber({
+                    ...mobileNumber,
+                    mobileNo: e.target.value,
+                  });
+                }}
               />
-              <CustomButton onClick={sendOtpOnClick} text="SEND OTP" />
+              <CustomButton
+                onClick={(e: any) => sendOtpOnClick(body)}
+                text="SEND OTP"
+              />
             </div>
           </div>
         </div>
