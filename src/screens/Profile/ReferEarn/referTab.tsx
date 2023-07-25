@@ -1,9 +1,13 @@
+import { useMediaQuery } from "react-responsive";
 import ReferCode from "../../../assets/Profile/Refer/ReferCode.svg";
 import ShareIcon from "../../../assets/Label/share.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
 import CustomButton from "../../../components/Button";
 export const ReferTab = () => {
+  const isItLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   return (
     <div className="mt-[77px]">
       <div className="flex justify-center items-center">
