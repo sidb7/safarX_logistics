@@ -32,5 +32,6 @@ export const getQueryJson = () => {
   });
   return json;
 };
+//export verifyToken = apiIntergration function
 
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";
