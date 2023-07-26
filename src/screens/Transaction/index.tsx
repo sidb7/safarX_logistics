@@ -17,12 +17,12 @@ const arrayData = [
   { label: "Passbook" },
   { label: "NEFT /IMPS / RTGS" },
   { label: "Cashback" },
-  { label: "Wallet" },
 ];
 
 export const Transaction = () => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(10);
+  const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
 
   const data = [
@@ -47,172 +47,16 @@ export const Transaction = () => {
       userCount: 3,
     },
   ];
-  // const columnsHelper = createColumnHelper<any>();
-  // const columns = [
-  //   columnsHelper.accessor("roleId", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center">
-  //           <div>
-  //             <h1 className="text-sm font-semibold leading-5 ">Date</h1>
-  //           </div>
-  //           <div className="flex">
-  //             <img src={sortIconTable} alt="" />
-  //             <img src={filterIconTable} alt="" />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="whitespace-nowrap my-4 space-y-2">23 may 2023 </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("roleName", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center ">
-  //           <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
-  //           <img src={sortIconTable} alt="" />
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex  whitespace-nowrap">
-  //           <p className="uppercase ">
-  //             shipyaari - <span>5118971</span>
-  //           </p>
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center min-w-[142px]">
-  //           <div>
-  //             <h1 className="text-sm font-semibold leading-5 ">Credited </h1>
-  //           </div>
-  //           <div className="flex">
-  //             <img src={sortIconTable} alt="" />
-  //             <img src={filterIconTable} alt="" />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex whitespace-nowrap ">
-  //           <p>₹ 500</p>
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center  min-w-[142px]">
-  //           <div>
-  //             <h1>Debited</h1>
-  //           </div>
-  //           <div className="flex">
-  //             <img src={sortIconTable} alt="" />
-  //             <img src={filterIconTable} alt="" />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex whitespace-nowrap ">
-  //           <p>₹ 0</p>
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center  min-w-[142px]">
-  //           <h1>Balance</h1>
-  //           <img src={sortIconTable} alt="" />
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex whitespace-nowrap ">
-  //           <p>₹ 500</p>
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center  min-w-[162px]">
-  //           <h1>Redeem Amount</h1>
-  //           <img src={sortIconTable} alt="" />
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex whitespace-nowrap ">
-  //           <p>₹ 0</p>
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between items-center">
-  //           <div>
-  //             <h1 className="text-sm font-semibold leading-5">Status</h1>
-  //           </div>
-  //           <div className="flex">
-  //             <img src={sortIconTable} alt="" />
-  //             <img src={filterIconTable} alt="" />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div>
-  //           <Cancelled />
-  //         </div>
-  //       );
-  //     },
-  //   }),
-  //   columnsHelper.accessor("userCount", {
-  //     header: () => {
-  //       return (
-  //         <div className="flex justify-between">
-  //           <h1 className="text-sm font-semibold leading-5 ">Actions</h1>
-  //         </div>
-  //       );
-  //     },
-  //     cell: (info: any) => {
-  //       return (
-  //         <div className="flex space-x-2 items-center">
-  //           <img src={copyIcon} alt="" />
-  //           <img src={shareIcon} alt="" />
-  //         </div>
-  //       );
-  //       // <span>Actions</span>;
-  //     },
-  //   }),
-  // ];
 
   //on page change index
   const onPageIndexChange = () => {};
 
   // on per page item change
   const onPerPageItemChange = () => {};
+
+  const setScrollIndex = (id: number) => {
+    setRenderingComponents(id);
+  };
 
   // search and filter component
   const filterButton = () => {
@@ -255,11 +99,25 @@ export const Transaction = () => {
     }
   };
 
+  const render = () => {
+    if (renderingComponents === 0) {
+      return <CustomTable data={data} columns={PassbookColumns()} />;
+    } else if (renderingComponents === 1) {
+      return <CustomTable data={data} columns={OnlineDetailsColumns()} />;
+    } else if (renderingComponents === 2) {
+      return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
+    }
+  };
+
   return (
     <div className="flex flex-col mx-4">
       <div className="lg:flex justify-between">
         <div>
-          <ScrollNav arrayData={arrayData} showNumber={false} />
+          <ScrollNav
+            arrayData={arrayData}
+            showNumber={false}
+            setScrollIndex={setScrollIndex}
+          />
         </div>
         <div className="hidden lg:block">{filterButton()}</div>
       </div>
@@ -319,11 +177,7 @@ export const Transaction = () => {
         </div>
       </div>
       <div>
-        {isLgScreen && (
-          <div className="overflow-x-auto">
-            <CustomTable data={data} columns={OnlineDetailsColumns()} />
-          </div>
-        )}
+        {isLgScreen && <div className="overflow-x-auto">{render()}</div>}
       </div>
       {totalItemCount > 0 && (
         <PaginationComponent
