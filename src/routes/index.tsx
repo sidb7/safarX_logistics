@@ -71,6 +71,7 @@ import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
 import { AccountQuestion } from "../screens/Question";
+import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -227,6 +228,10 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/neworder/channel-integration"
             element={<CatalogueChannelIntegrationScreen />}
+          />
+          <Route
+            path="/neworder/channel-integration/addproduct"
+            element={<AddProduct />}
           />
           <Route
             path="/neworder/box-catalogue"

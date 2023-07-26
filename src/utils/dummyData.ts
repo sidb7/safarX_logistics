@@ -11,6 +11,18 @@ import FingerIcon from "../assets/Catalogue/finger.svg";
 import WooIcon from "../assets/Catalogue/woo.svg";
 import MeeshoIcon from "../assets/Catalogue/meesho.svg";
 import DownWardArrow from "../assets/downwardArrow.svg";
+import ShopifyLg from "../assets/Catalogue/shopifyLg.svg";
+import MagentoLg from "../assets/Catalogue/MagentoLg.svg";
+import OpenCartLg from "../assets/Catalogue/OpenCartLg.svg";
+import PrestashopLg from "../assets/Catalogue/PrestashopLg.svg";
+import SquareSpaceLg from "../assets/Catalogue/SquareSpaceLg.svg";
+import WixLg from "../assets/Catalogue/WixLg.svg";
+import WooCommerceLg from "../assets/Catalogue/WooCommerceLg.svg";
+import instamojoLg from "../assets/Catalogue/instamojoLg.svg";
+import EditImageWithBlack from "../assets/Catalogue/edit.svg";
+
+
+
 
 export const insufficientBalance = [
   {
@@ -51,7 +63,7 @@ export const deliveryAddress = [
   {
     header: "Name",
     headerText: "Warehouse Mumbai",
-    editImage: EditImage,
+    editImage: EditImageWithBlack,
     address:
       "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
     PhoneIcon: PhoneIcon,
@@ -60,7 +72,43 @@ export const deliveryAddress = [
   {
     header: "Name",
     headerText: "Warehouse Mumbai",
-    editImage: EditImage,
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Name",
+    headerText: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
     address:
       "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
     PhoneIcon: PhoneIcon,
@@ -71,7 +119,7 @@ export const deliveryAddress = [
 export const pickupAddress = [
   {
     header: "Warehouse",
-    editImage: EditImage,
+    editImage: EditImageWithBlack,
     address:
       "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
     ProfileImage: ProfileImage,
@@ -81,7 +129,47 @@ export const pickupAddress = [
   },
   {
     header: "Warehouse Mumbai",
-    editImage: EditImage,
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Warehouse",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Warehouse",
+    editImage: EditImageWithBlack,
+    address:
+      "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
+    ProfileImage: ProfileImage,
+    ProfileName: "Anish Sharma",
+    PhoneIcon: PhoneIcon,
+    PhoneNumber: "+91 12345 12345",
+  },
+  {
+    header: "Warehouse Mumbai",
+    editImage: EditImageWithBlack,
     address:
       "Plot No 12, Sector 8, Western express way, Andheri, Mumbai, Maharastra 4220112",
     ProfileImage: ProfileImage,
@@ -106,6 +194,50 @@ export const productData = [
     header: "Mac book air",
     text: "5 kg | 12 x 12 x 12 cm",
   },
+];
+
+export const productCatalogueData = [
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  {
+    itemImage: ItemIcon,
+    header: "Mac book air",
+    text: "5 kg | 12 x 12 x 12 cm",
+  },
+  
 ];
 
 export const customServiceData = [
@@ -462,14 +594,53 @@ export const dummyChannelIntegrationData = [
       {
         name: "Shopify",
         icon: ShopifyIcon,
+        iconLg : ShopifyLg,
         integrated: true,
         storesIntegrated: 5,
       },
       {
         name: "Woo",
         icon: WooIcon,
+        iconLg : ShopifyLg,
         integrated: true,
         storesIntegrated: 5,
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        iconLg : ShopifyLg,
+        integrated: true,
+        storesIntegrated: 5,
+      },
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        iconLg : ShopifyLg,
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        iconLg : ShopifyLg,
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        iconLg : ShopifyLg
+      },
+      {
+        name: "Shopify",
+        icon: ShopifyIcon,
+        iconLg : ShopifyLg
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        iconLg : ShopifyLg
+      },
+      {
+        name: "Woo",
+        icon: WooIcon,
+        iconLg : ShopifyLg
       },
     ],
   },
@@ -480,11 +651,37 @@ export const dummyChannelIntegrationData = [
       {
         name: "Amazon",
         icon: AmazonIcon,
+        iconLg : WooCommerceLg,
         integrated: false,
       },
       {
         name: "Meesho",
         icon: MeeshoIcon,
+        iconLg : WooCommerceLg,
+        integrated: false,
+      },
+      {
+        name: "Amazon",
+        icon: AmazonIcon,
+        iconLg : WooCommerceLg,
+        integrated: false,
+      },
+      {
+        name: "Meesho",
+        icon: MeeshoIcon,
+        iconLg : WooCommerceLg,
+        integrated: false,
+      },
+      {
+        name: "Amazon",
+        icon: AmazonIcon,
+        iconLg : WooCommerceLg,
+        integrated: false,
+      },
+      {
+        name: "Meesho",
+        icon: MeeshoIcon,
+        iconLg : WooCommerceLg,
         integrated: false,
       },
     ],
@@ -496,11 +693,13 @@ export const dummyChannelIntegrationData = [
       {
         name: "Salesforce",
         icon: SalesforceIcon,
+        iconLg: WixLg,
         integrated: false,
       },
       {
         name: "Shopify",
         icon: ShopifyIcon,
+        iconLg: WixLg,
         integrated: false,
       },
     ],
@@ -538,3 +737,143 @@ export const dummyChannelIntegrationData = [
     ],
   },
 ];
+
+// export const dummyChannelBothIntegrationData = [
+//   { 
+//     mobile : [
+//     {
+//       title: "Carts",
+//       channels: [
+//         {
+//           name: "Shopify",
+//           icon: ShopifyIcon,
+//           integrated: true,
+//           storesIntegrated: 5,
+//         },
+//         {
+//           name: "Woo",
+//           icon: WooIcon,
+//           integrated: true,
+//           storesIntegrated: 5,
+//         },
+//       ],
+//     },
+  
+//     {
+//       title: "Marketplace",
+//       channels: [
+//         {
+//           name: "Amazon",
+//           icon: AmazonIcon,
+//           integrated: false,
+//         },
+//         {
+//           name: "Meesho",
+//           icon: MeeshoIcon,
+//           integrated: false,
+//         },
+//       ],
+//     },
+  
+//     {
+//       title: "Order Management System",
+//       channels: [
+//         {
+//           name: "Salesforce",
+//           icon: SalesforceIcon,
+//           integrated: false,
+//         },
+//         {
+//           name: "Shopify",
+//           icon: ShopifyIcon,
+//           integrated: false,
+//         },
+//       ],
+//     },
+  
+//     {
+//       title: "Warehouse Management System",
+//       channels: [
+//         {
+//           name: "Name",
+//           icon: FingerIcon,
+//           integrated: false,
+//         },
+//         {
+//           name: "Shopify",
+//           icon: ShopifyIcon,
+//           integrated: false,
+//         },
+//       ],
+//     },
+  
+//     {
+//       title: "Inventory Management System",
+//       channels: [
+//         {
+//           name: "Salesforce",
+//           icon: SalesforceIcon,
+//           integrated: false,
+//         },
+//         {
+//           name: "Shopify",
+//           icon: ShopifyIcon,
+//           integrated: false,
+//         },
+//       ],
+//     },
+//   ], 
+//   web : [
+//     {
+//       title : "Shopify",
+//       icon : ShopifyLg,
+//       integrated: true,
+//       storesIntegrated: 5
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//     {
+//       title : "WooCommerce",
+//       icon : WooCommerceLg,
+//       integrated: true,
+//       storesIntegrated: 0
+//     },
+//   ] }
+  
+
+
+// ]

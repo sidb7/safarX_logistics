@@ -1,0 +1,83 @@
+import NavBar from "../../../../layout/NavBar";
+import BackArrow from "../../../assets/backArrow.svg";
+import CustomButton from "../../../../components/Button";
+import { useState } from "react";
+import { pickupAddress, deliveryAddress } from "../../../../utils/dummyData";
+import CustomPickUpAddress from "../customPickUpAddress";
+import CustomDeliveryAddress from "../customDeliveryAddress";
+import ServiceButton from "../../../../components/Button/ServiceButton";
+import { useNavigate } from "react-router-dom";
+import CustomDropDown from "../../../../components/DropDown";
+// import DownloadIcon from "../../../assets/Label/download.svg";
+
+const AddressBook = () => {
+  const navigate = useNavigate();
+
+  const [filterId, setFilterId] = useState(-1);
+  const [statusAddress, setStatusAddress] = useState("pickup_address");
+
+  return (
+    <div>
+      <header className="fixed top-0 z-10 w-full">
+        <NavBar />
+      </header>
+      <div className="flex ml-5 overflow-x-scroll cursor-pointer  whitespace-nowrap mt-5 h-[48px]">
+        <div
+          className={`flex items-center border-solid border-2 border-[#E8E8E8] rounded-l px-4 ${
+            statusAddress === "pickup_address"
+              ? " !bg-[#F6F6F6] !border-[#D2D2D2]"
+              : ""
+          }`}
+          onClick={() => setStatusAddress("pickup_address")}
+        >
+          <span
+            className={`text-[#777] text-[14px] ${
+              statusAddress === "pickup_address" ? "!text-[#1C1C1C]" : ""
+            }`}
+          >
+            Pickup Address
+          </span>
+        </div>
+        <div
+          className={`flex items-center border-solid border-2 cursor-pointer border-[#E8E8E8] rounded-r px-4 ${
+            statusAddress === "delivery_address"
+              ? " !bg-[#F6F6F6] !border-[#D2D2D2]"
+              : ""
+          }`}
+          onClick={() => setStatusAddress("delivery_address")}
+        >
+          <span
+            className={`text-[#777] text-[14px] ${
+              statusAddress === "delivery_address" ? "!text-[#1C1C1C]" : ""
+            }`}
+          >
+            Delivery Address
+          </span>
+        </div>
+        <div className="ml-2">
+        <CustomDropDown
+              value=""
+              onChange={() => {}}
+              options={[
+                {
+                  label: "Domestic",
+                  value: "Domestic",
+                },
+              ]}
+              selectClassName="rounded-md bg-[#FEFEFE] w-[265px] h-9"
+            />
+        </div>
+      </div>
+      {statusAddress === "pickup_address" ? (
+        <div className="mt-6">
+          <CustomPickUpAddress props={pickupAddress} />
+        </div>
+      ) : (
+        <div className="mt-6">
+          <CustomDeliveryAddress props={deliveryAddress} />
+        </div>
+      )}
+    </div>
+  );
+};
+export default AddressBook;
