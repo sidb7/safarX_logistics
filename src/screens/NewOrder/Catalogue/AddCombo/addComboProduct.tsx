@@ -6,19 +6,21 @@ import ButtonIcon from "../../../../assets/Product/Button.svg";
 import { useNavigate } from "react-router-dom";
 import ForwardArrowIcon from "../../../../assets/Delivery/forwardArrow.svg";
 import MagicLocationIcon from "../../../../assets/Delivery/magicLocation.svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomButton from "../../../../components/Button";
 import FileUploadWithText from "../../../../components/FileUploadWithText/fileUploadWithText";
 import UploadImg from "../../../../assets/Catalogue/upload.svg";
 import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import ItemIcon from "../../../../assets/Product/Item.svg";
 
-const AddProduct = () => {
+const AddComboProduct = () => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [pastedData, setPastedData] = useState("");
   const [products, setProducts] = useState(false);
   const [productsArray, setProductArray]: any = useState([]);
+  const [disabled, setDisabled] = useState(true);
   const [data, setData]: any = useState<any>({
     productName: "",
     productCategory: "",
@@ -28,6 +30,15 @@ const AddProduct = () => {
     breadth: "",
     height: "",
   });
+
+  useEffect(()=>{
+    if(data.productName!=='' && data.productCategory!=='' && data.productPrice!=='' && data.productTax!=='' && data.length!=='' && data.breadth!=='' && data.height!==''){
+        setDisabled(false)
+    }else{
+        setDisabled(true)
+    }
+    
+  },[data])
 
   const handleData = (e: any) => {
     e.preventDefault();
@@ -98,12 +109,12 @@ const AddProduct = () => {
           </div>
         </div>
       </div>
-      {/* {products ? (
-          <>
+      {products ? (
+          <div className="mb-12">
             {productsArray.map((each: any, index: any) => {
               return (
-                <>
-                  <h1 className="text-[14px] font-semibold mt-4 text-[#004EFF]">
+                <div className="w-[272px] h-[76px] ml-5 mb-10">
+                  <h1 className="text-[22px] font-semibold mt-4 text-[#004EFF]">
                     Product {index + 1}
                   </h1>
                   <div className="flex gap-x-3 border-2 border-[#E8E8E8] p-3 rounded-lg mt-3">
@@ -122,15 +133,15 @@ const AddProduct = () => {
                       </div>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })}
-          </>
+          </div>
         ) : (
           ""
-        )} */}
-      <div className="m-5">
-        <div className="mt-6 w-[221px] h-[71px]">
+        )}
+      <div className="mx-5">
+        <div className="w-[221px] h-[55px]">
           <h1 className="font-semibold text-[#004EFF] text-[22px]">
             Product {length + 1}
           </h1>
@@ -238,7 +249,7 @@ const AddProduct = () => {
           </div>
         </div>
 
-        <div className="flex mt-6 p-[8px] bg-[#F2F6FF] w-[174px]">
+        <div className="flex mt-6 p-[8px] bg-[#F2F6FF] w-[174px] cursor-pointer">
           <img
             src={ButtonIcon}
             className="ml-[25px]"
@@ -258,13 +269,13 @@ const AddProduct = () => {
           text="BACK"
           className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
         />
-        <ServiceButton
-          text="SAVE"
-          className="bg-[#1C1C1C] text-[#FFFFFF] lg:px-[37px]"
+       <ServiceButton
+          text="SAVE COMBO"
+          className= {`${ disabled===true ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#1C1C1C]'}  text-[#FFFFFF] lg:px-[37px]`}
         />
       </div>
     </div>
     // </div>
   );
 };
-export default AddProduct;
+export default AddComboProduct;

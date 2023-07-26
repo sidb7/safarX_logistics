@@ -6,8 +6,18 @@ import DynamicBtnWithScroll from "../../../../components/DynamicButtonScroll/ind
 import ProductBox from "../../Product/productBox";
 import ProductIcon from "../../../../assets/Catalogue/Product.svg";
 import ItemIcon from "../../../../assets/Product/Item.svg";
+import { useSelector, useDispatch } from "react-redux";
+import { productBtnName } from "../../../../redux/reducers/catalogue";
 
 const ProductCatalogue = () => {
+  // console.log('useSelector :',useSelector(state:any));
+
+  const catalogueState = useSelector(
+    (state: any) => state?.rootReducer?.catalogue
+  );
+  console.log("reduxstate :", catalogueState);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [statusId, setStatusId] = useState(-1);
@@ -23,15 +33,17 @@ const ProductCatalogue = () => {
       <div className="flex ml-5 overflow-x-scroll cursor-pointer  whitespace-nowrap mt-5 h-[48px]">
         <div
           className={`flex items-center border-solid border-2 border-[#E8E8E8] rounded-l px-4 ${
-            statusData === "single_product"
+            catalogueState?.productBtnName === "Single Product"
               ? " !bg-[#F6F6F6] !border-[#D2D2D2]"
               : ""
           }`}
-          onClick={() => setStatusData("single_product")}
+          onClick={() => dispatch(productBtnName("Single Product"))}
         >
           <span
             className={`text-[#777] text-[14px] ${
-              statusData === "single_product" ? "!text-[#1C1C1C]" : ""
+              catalogueState?.productBtnName === "Single Product"
+                ? "!text-[#1C1C1C]"
+                : ""
             }`}
           >
             Single Product
@@ -39,15 +51,17 @@ const ProductCatalogue = () => {
         </div>
         <div
           className={`flex items-center border-solid border-2 cursor-pointer border-[#E8E8E8] rounded-r px-4 ${
-            statusData === "combo_product"
+            catalogueState?.productBtnName === "Combo Product"
               ? " !bg-[#F6F6F6] !border-[#D2D2D2]"
               : ""
           }`}
-          onClick={() => setStatusData("combo_product")}
+          onClick={() => dispatch(productBtnName("Combo Product"))}
         >
           <span
             className={`text-[#777] text-[14px] ${
-              statusData === "combo_product" ? "!text-[#1C1C1C]" : ""
+              catalogueState?.productBtnName === "Combo Product"
+                ? "!text-[#1C1C1C]"
+                : ""
             }`}
           >
             Combo Product
@@ -71,18 +85,38 @@ const ProductCatalogue = () => {
         />
       </div>
 
-      <div className="grid grid-cols-4 px-4 justify-center mt-1">
-        {productCatalogueData.map((item: any, index: number) => (
-          <div className="w-[272px]">
-            <ProductBox
-              image={ItemIcon}
-              productName="Mac book air"
-              weight="5"
-              dimension="12 x 12 x 12"
-            />
-          </div>
-        ))}
-      </div>
+      {catalogueState?.productBtnName === "Single Product" && (
+        <div className="grid grid-cols-4 px-4 justify-center mt-1 gap-x-[25px] gap-y-[34px]">
+          {productCatalogueData.map((item: any, index: number) => (
+            <div className="w-[272px] h-[76px]">
+              <ProductBox
+                image={ItemIcon}
+                productName="Mac book air"
+                weight="5"
+                dimension="12 x 12 x 12"
+                className="p-[16px]"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {catalogueState?.productBtnName === "Combo Product" && (
+        <div className="grid grid-cols-4 px-4 justify-center mt-1 gap-x-[25px] gap-y-[34px]">
+          {productCatalogueData.map((item: any, index: number) => (
+            <div className="w-[272px] h-[76px]">
+              <ProductBox
+                image={ItemIcon}
+                productName="Mac book air"
+                weight="5"
+                dimension="12 x 12 x 12"
+                label={`Product ${index + 1}`}
+                className="p-[16px]"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

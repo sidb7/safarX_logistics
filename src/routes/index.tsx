@@ -72,6 +72,8 @@ import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
 import { AccountQuestion } from "../screens/Question";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
+import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
+import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -232,6 +234,14 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/neworder/channel-integration/addproduct"
             element={<AddProduct />}
+          />
+          <Route
+            path="/neworder/channel-integration/addcombo"
+            element={<AddCombo />}
+          />
+          <Route
+            path="/neworder/channel-integration/addcomboproduct"
+            element={<AddComboProduct />}
           />
           <Route
             path="/neworder/box-catalogue"

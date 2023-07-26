@@ -15,7 +15,7 @@ const PickupAddress: React.FunctionComponent<IPickUpData> = ({ props }) => {
     <div className="block lg:grid lg:grid-cols-3">
       {props.map((each, index) => {
         return (
-          <div className="p-[12px] shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF] mx-5 my-4">
+          <div className="p-[12px] shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF] mx-5 my-4" key={index}>
             <div className="flex justify-between">
               <p className="text-[#3371FF] text-[16px] font-medium">
                 {each.header}

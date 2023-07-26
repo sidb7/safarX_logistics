@@ -23,10 +23,13 @@ const ServiceButton = (props: IServiceButtonProps) => {
     showIcon,
     iconClass,
   } = props;
+
+  console.log("disabled", disabled);
+  
   return (
     <button
       className={` flex items-center justify-center border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-[14px] font-semibold text-[#1C1C1C] text-center ${className}`}
-      onClick={onClick}
+      disabled={disabled}
     >
       {showIcon && <img className={`${iconClass} mr-2`} src={icon} alt="" />}{" "}
       {text}

@@ -8,12 +8,17 @@ import AddressBook from "../AddressBook/AddressBook";
 import CustomButton from "../../../../components/Button";
 import AddImage from "../../../../assets/Catalogue/add.svg";
 import ProductCatalogue from "../ProductCatalogue/productCatalogue";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { channelName, productBtnName } from "../../../../redux/reducers/catalogue";
 
 interface IPropsTypes {}
 
 const Index = (props: IPropsTypes) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const catalogueState = useSelector((state:any)=>state?.rootReducer?.catalogue);
+  
   const [statusId, setStatusId] = useState(0);
   const [statusData, setStatusData] = useState([
     {
@@ -30,8 +35,8 @@ const Index = (props: IPropsTypes) => {
     },
   ]);
 
-  console.log("statusId :", statusId);
-
+  // console.log("statusId :", statusId);
+  
   return (
     <div className="relative">
       <NavBar />
@@ -50,7 +55,7 @@ const Index = (props: IPropsTypes) => {
         </div>
 
         {
-          statusId===1 && <div className="mr-5">
+          catalogueState?.channelName === "Address Book" && <div className="mr-5">
           <CustomButton
             icon={AddImage}
             showIcon={true}
@@ -61,9 +66,9 @@ const Index = (props: IPropsTypes) => {
             }}
           />
         </div>
-        }
+        } 
         {
-          statusId===2 && <div className="mr-5">
+          catalogueState?.channelName === "Product Catalogue" && catalogueState?.productBtnName === "Single Product" && <div className="mr-5">
           <CustomButton
             icon={AddImage}
             showIcon={true}
@@ -75,20 +80,33 @@ const Index = (props: IPropsTypes) => {
           />
         </div>
         }
+        {
+          catalogueState?.channelName === "Product Catalogue" && catalogueState?.productBtnName === "Combo Product" && <div className="mr-5">
+          <CustomButton
+            icon={AddImage}
+            showIcon={true}
+            text={"ADD COMBO"}
+            className="!p-3"
+            onClick={function (): void {
+              navigate('/neworder/channel-integration/addcombo')
+            }}
+          />
+        </div>
+        } 
       </div>
       <div className="flex gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 h-[34px] lg:mt-9">
         {statusData.map(({ statusName }, index) => {
           return (
             <div
               className={`flex justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 ${
-                statusId === index ? "!border-[#004EFF]" : ""
+                catalogueState?.channelName === statusName ? "!border-[#004EFF]" : ""
               }`}
-              onClick={() => setStatusId(index)}
+              onClick={() => dispatch(channelName(statusName)) }
               key={index}
             >
               <span
                 className={`text-[#777777] text-[14px] lg:text-[18px] ${
-                  statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
+                  catalogueState?.channelName === statusName ? "!text-[#004EFF] lg:text-[18px]" : ""
                 }`}
               >
                 {statusName}
@@ -97,7 +115,7 @@ const Index = (props: IPropsTypes) => {
           );
         })}
       </div>
-      {statusId === 0 && (
+      {catalogueState?.channelName === "Channel Integration" && (
         <div className="flex flex-col px-5 ">
           <div
             className="overflow-scroll	"
@@ -116,9 +134,13 @@ const Index = (props: IPropsTypes) => {
           </div>
         </div>
       )}
-      {statusId === 1 && <AddressBook />}
-      {statusId === 2 && <ProductCatalogue />}
+      
+      
 
+      { catalogueState?.channelName === "Address Book" && (  <AddressBook /> ) }
+      { catalogueState?.channelName === "Product Catalogue" && <ProductCatalogue /> }
+
+     
 
       <div className="grid grid-cols-2 lg:!flex lg:!justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] w-full  fixed bottom-0">
         <ServiceButton
