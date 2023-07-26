@@ -8,12 +8,16 @@ import OtpInput from "react-otp-input";
 import "../../../styles/otpStyle.css";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import CustomInputBox from "../../../components/Input";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [otp, setOtp] = useState("");
+  const [otp, setOtp] = useState({
+    loginOtp: "",
+  });
+  console.log("otp", otp);
   const offersOnClick = () => {
     navigate("/auth/offers");
   };
@@ -65,12 +69,12 @@ const Index = () => {
               <img className="h-[180px] " src={MobileIcon} alt="MobileIcon" />
 
               <div className="flex justify-center">
-                <OtpInput
-                  value={otp}
-                  onChange={setOtp}
-                  numInputs={6}
-                  renderSeparator={<span>-</span>}
-                  renderInput={(props) => <input {...props} />}
+                <CustomInputBox
+                  containerStyle="mt-[17px]"
+                  label="Enter OTP"
+                  onChange={(e) => {
+                    setOtp({ ...otp, loginOtp: e.target.value });
+                  }}
                 />
               </div>
 

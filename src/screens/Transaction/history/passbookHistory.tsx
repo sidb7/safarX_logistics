@@ -4,8 +4,14 @@ import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import ShareIcon from "../../../assets/Transaction/ShareIcon.svg";
+import filterIconTable from "../../../assets/Transaction/filtericon.svg";
+import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 import { useState } from "react";
 import Collapsible from "react-collapsible";
+import { Cancelled } from "../StatusComponents";
+import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
+import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
+import { createColumnHelper } from "@tanstack/react-table";
 
 interface IPassbookProps {
   data: {
@@ -20,6 +26,168 @@ interface IPassbookProps {
     redeemPoint: string;
   };
 }
+const columnsHelper = createColumnHelper<any>();
+export const PassbookColumns = () => {
+  return [
+    columnsHelper.accessor("roleId", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">Date</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="whitespace-nowrap my-4 space-y-2">23 may 2023 </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("roleName", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center ">
+            <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  whitespace-nowrap">
+            <p className="uppercase ">
+              shipyaari - <span>5118971</span>
+            </p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center min-w-[142px]">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">Credited </h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>₹ 500</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  min-w-[142px]">
+            <div>
+              <h1>Debited</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>₹ 0</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  min-w-[142px]">
+            <h1>Balance</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>₹ 500</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  min-w-[162px]">
+            <h1>Redeem Amount</h1>
+            <img src={sortIconTable} alt="" />
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            <p>₹ 0</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-sm font-semibold leading-5">Status</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+              <img src={filterIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div>
+            <Cancelled />
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("userCount", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1 className="text-sm font-semibold leading-5 ">Actions</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex space-x-2 items-center">
+            <img src={copyIcon} alt="" />
+            <img src={shareIcon} alt="" />
+          </div>
+        );
+        // <span>Actions</span>;
+      },
+    }),
+  ];
+};
 
 export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
   data,

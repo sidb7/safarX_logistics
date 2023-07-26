@@ -7,15 +7,45 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import { POST_SIGN_UP_URL } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { signUpUser } from "../../../redux/reducers/signUpReducer";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
-  const signUpOnClick = () => {
-    navigate("/auth/sendOtp");
+  const dispatch = useDispatch();
+
+  const [sellerData, setsellerData] = useState({
+    emailId: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    referalCode: "",
+    mobileNo: 0,
+  });
+
+  const signUpOnClick = async (value: any) => {
+    try {
+      let payload = {
+        sellerData: value,
+      };
+      const { data: response } = await POST(POST_SIGN_UP_URL, payload);
+      dispatch(signUpUser(sellerData));
+      if (response?.success === true) {
+        navigate("/auth/sendOtp");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
   };
+
   const logInOnClick = () => {
     navigate("/auth/login");
   };
@@ -48,12 +78,59 @@ const Index = () => {
             </div>
             <div className=" flex flex-col mx-4  gap-y-6">
               <div className="flex gap-x-6">
-                <CustomInputBox containerStyle="" label="First Name" />
-                <CustomInputBox containerStyle="" label="Last Name" />
+                <CustomInputBox
+                  containerStyle=""
+                  label="First Name"
+                  onChange={(e) => {
+                    setsellerData({
+                      ...sellerData,
+                      firstName: e.target.value,
+                    });
+                  }}
+                />
+                <CustomInputBox
+                  containerStyle=""
+                  label="Last Name"
+                  onChange={(e) => {
+                    setsellerData({
+                      ...sellerData,
+                      lastName: e.target.value,
+                    });
+                  }}
+                />
               </div>
-              <CustomInputBox label="Email" />
-              <CustomInputBox inputType="password" label="Password" />
-              <CustomButton onClick={signUpOnClick} text="SIGN UP" />
+              <CustomInputBox
+                label="Email"
+                onChange={(e) => {
+                  setsellerData({
+                    ...sellerData,
+                    emailId: e.target.value,
+                  });
+                }}
+              />
+              <CustomInputBox
+                inputType="password"
+                label="Password"
+                onChange={(e) => {
+                  setsellerData({
+                    ...sellerData,
+                    password: e.target.value,
+                  });
+                }}
+              />
+              <CustomInputBox
+                label="Referal Code"
+                onChange={(e) => {
+                  setsellerData({
+                    ...sellerData,
+                    referalCode: e.target.value,
+                  });
+                }}
+              />
+              <CustomButton
+                onClick={(e: any) => signUpOnClick(sellerData)}
+                text="SIGN UP"
+              />
               <hr className="mb-[-30px]" />
               <div className="flex justify-center my-[-7px]">
                 <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>

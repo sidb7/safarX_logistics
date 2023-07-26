@@ -73,6 +73,11 @@ import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
 import { AccountQuestion } from "../screens/Question";
+import { QuestionComponent1 } from "../screens/Question/question1";
+import { QuestionComponent2 } from "../screens/Question/question2";
+import { QuestionComponent3 } from "../screens/Question/question3";
+import { QuestionComponent4 } from "../screens/Question/question4";
+import { QuestionComponent5 } from "../screens/Question/question5";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -120,7 +125,12 @@ const MyRoutes: React.FC = () => {
             <Route path="signupmodal" element={<SignupModal />} />
           </Route>
 
-          <Route path="/account" element={<AccountLayoutScreen />}>
+          <Route path="account" element={<AccountLayoutScreen />}>
+            <Route path="question1" element={<QuestionComponent1 />} />
+            <Route path="question2" element={<QuestionComponent2 />} />
+            <Route path="question3" element={<QuestionComponent3 />} />
+            <Route path="question4" element={<QuestionComponent4 />} />
+            <Route path="question5" element={<QuestionComponent5 />} />
             <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
             <Route
               path="kyc-photo"

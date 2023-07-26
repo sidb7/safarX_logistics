@@ -20,7 +20,9 @@ const TransactionLayout = () => {
           </div>
         </div>
 
-        <Transaction />
+        <div className="">
+          <Transaction />
+        </div>
 
         <main className="pb-24">
           <div className="relative top-0">
