@@ -31,9 +31,11 @@ import KycPhotoIdentificationScreen from "../screens/AccountSetUp/KYC/PhotoIdent
 import KycSendOtpFormScreen from "../screens/AccountSetUp/KYC/SendOtpForm";
 import KycMobileVerificationScreen from "../screens/AccountSetUp/KYC/MobileVerification";
 import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/gstComponent";
-import {ServiceComponent} from "../screens/AccountSetUp/KYC/TermsAndAgreement/index"
+import { ServiceComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
 import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
 import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
+import KycAadharForm from "../screens/AccountSetUp/KYC/AadharForm";
+
 import SelectAddress from "../screens/AccountSetUp/KYC/SelectAddress/index";
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
@@ -85,9 +87,8 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} />
-          <Route path="question" element={<AccountQuestion/>}/>
+          <Route path="question" element={<AccountQuestion />} />
           <Route path="/neworder" element={<NewOrderLayout />}>
-            
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
@@ -132,10 +133,14 @@ const MyRoutes: React.FC = () => {
               element={<KycMobileVerificationScreen />}
             />
             <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
-            <Route path="kyc-terms/ServiceComponent" element={<ServiceComponent/>}/>
+            <Route
+              path="kyc-terms/ServiceComponent"
+              element={<ServiceComponent />}
+            />
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
-            <Route path="select-address" element={<SelectAddress/>}/>
+            <Route path="select-address" element={<SelectAddress />} />
+            <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
 
           <Route path="order" element={<OrderLayout />}>
