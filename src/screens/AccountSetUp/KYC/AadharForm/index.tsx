@@ -17,7 +17,7 @@ const Index = (props: Props) => {
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
-  const sendOtpFormComponent = () => {
+  const aadharFormComponent = () => {
     return (
       <div className="px-5 lg:px-0">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
@@ -35,9 +35,8 @@ const Index = (props: Props) => {
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col  items-center lg:mt-[92px]  gap-y-5 mb-6">
-          <CustomInputBox label="GST Number" className="lg:!w-[320px]" />
-          <CustomInputBox label=" Pan Number" className="lg:!w-[320px]" />
+        <div className="flex flex-col  items-center  mt-[140px]   mb-4">
+          <CustomInputBox label="Aadhar Number" className="lg:!w-[320px]" />
         </div>
         <div className="flex  lg:justify-center lg:items-center  pb-12 ">
           <ServiceButton
@@ -45,7 +44,7 @@ const Index = (props: Props) => {
             className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px]"
             onClick={() => {
               navigate("/account/kyc-mobile-verify", {
-                state: { path: "otp-form" },
+                state: { path: "aadhar-form" },
               });
             }}
           />
@@ -56,7 +55,7 @@ const Index = (props: Props) => {
 
   return (
     <div>
-      {!isBigScreen && sendOtpFormComponent()}
+      {!isBigScreen && aadharFormComponent()}
 
       {isBigScreen && (
         <CustomBottomModal
@@ -65,7 +64,7 @@ const Index = (props: Props) => {
           className="!p-0 !w-[500px] !h-[700px]"
           overlayClassName="flex  items-center"
         >
-          {sendOtpFormComponent()}
+          {aadharFormComponent()}
         </CustomBottomModal>
       )}
     </div>

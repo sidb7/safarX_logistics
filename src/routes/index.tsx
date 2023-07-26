@@ -34,6 +34,8 @@ import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/gstC
 import { ServiceComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
 import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
 import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
+import KycAadharForm from "../screens/AccountSetUp/KYC/AadharForm";
+
 import SelectAddress from "../screens/AccountSetUp/KYC/SelectAddress/index";
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
@@ -148,6 +150,7 @@ const MyRoutes: React.FC = () => {
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
             <Route path="select-address" element={<SelectAddress />} />
+            <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
 
           <Route path="order" element={<OrderLayout />}>

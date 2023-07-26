@@ -52,7 +52,8 @@ const Layout = () => {
 
   if (
     window.location.pathname === "/neworder/service" ||
-    window.location.pathname === "/neworder/summary"
+    window.location.pathname === "/neworder/summary" ||
+    window.location.pathname === "/neworder/payment"
   ) {
     subMenu = "Partner list";
   } else {
