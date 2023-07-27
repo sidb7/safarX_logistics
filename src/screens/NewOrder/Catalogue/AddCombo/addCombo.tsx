@@ -20,7 +20,6 @@ const ProductCatalogue = () => {
   const catalogueState = useSelector(
     (state: any) => state?.rootReducer?.catalogue
   );
-  console.log("reduxstate :", catalogueState);
   const [viewed, setViewed] = useState(-1);
   const [disabled, setDisabled] = useState(true);
   
@@ -43,7 +42,7 @@ const ProductCatalogue = () => {
       </div>
       <div className="hidden lg:flex lg:justify-between flex-row gap-x-1 mb-5 items-center ml-5">
         <div className="flex">
-          <img src={BackArrow} alt="" />
+          <img src={BackArrow} alt="" className="cursor-pointer" onClick={()=>navigate(-1)} />
           <p className="font-bold text-[28px] text-[#1C1C1C]">Add Combo</p>
         </div>
         <div className="flex">
@@ -127,6 +126,7 @@ const ProductCatalogue = () => {
         <ServiceButton
           text="BACK"
           className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
+          onClick={()=>navigate(-1)}
         />
         <ServiceButton
           text="SAVE COMBO"

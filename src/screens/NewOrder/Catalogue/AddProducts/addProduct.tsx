@@ -70,7 +70,7 @@ const AddProduct = () => {
       </div>
       <div className="hidden lg:flex lg:justify-between flex-row gap-x-1 mb-5 items-center ml-5">
         <div className="flex">
-          <img src={BackArrow} alt="" />
+          <img src={BackArrow} alt="" className="cursor-pointer" onClick={()=>navigate(-1)} />
           <p className="font-bold text-[28px] text-[#1C1C1C]">Add Product</p>
         </div>
         <div className="flex">
@@ -257,6 +257,7 @@ const AddProduct = () => {
         <ServiceButton
           text="BACK"
           className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
+          onClick={()=>navigate(-1)}
         />
         <ServiceButton
           text="SAVE"

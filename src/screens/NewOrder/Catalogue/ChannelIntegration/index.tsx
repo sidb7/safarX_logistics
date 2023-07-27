@@ -11,6 +11,7 @@ import ProductCatalogue from "../ProductCatalogue/productCatalogue";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { channelName, productBtnName } from "../../../../redux/reducers/catalogue";
+import BoxCatalogueNew from "../BoxCatalogueNew/boxCatalogueNew";
 
 interface IPropsTypes {}
 
@@ -50,8 +51,10 @@ const Index = (props: IPropsTypes) => {
       </div>
       <div className="hidden lg:flex lg:justify-between flex-row gap-x-1 mb-5 items-center ml-5">
         <div className="flex">
-        <img src={BackArrow} alt="" />
-        <p className="font-bold text-[28px] text-[#1C1C1C]">Catalogue</p>
+        <img src={BackArrow} alt="" className="cursor-pointer" onClick={()=>navigate(-1)} />
+        <p className="font-bold text-[28px] text-[#1C1C1C]">
+        { catalogueState.channelName==='Box Catalogue' ?  'Box Catalogue' : 'Catalogue' }  
+        </p>
         </div>
 
         {
@@ -62,7 +65,7 @@ const Index = (props: IPropsTypes) => {
             text={"ADD ADDRESS"}
             className="!p-3"
             onClick={function (): void {
-              throw new Error("Function not implemented.");
+              alert('Add Address Function')
             }}
           />
         </div>
@@ -94,7 +97,10 @@ const Index = (props: IPropsTypes) => {
         </div>
         } 
       </div>
-      <div className="flex gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 h-[34px] lg:mt-9">
+      { catalogueState.channelName === 'Box Catalogue' ? 
+      '' 
+      :
+       <div className="flex gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 h-[34px] lg:mt-9">
         {statusData.map(({ statusName }, index) => {
           return (
             <div
@@ -114,7 +120,8 @@ const Index = (props: IPropsTypes) => {
             </div>
           );
         })}
-      </div>
+      </div> }
+      
       {catalogueState?.channelName === "Channel Integration" && (
         <div className="flex flex-col px-5 ">
           <div
@@ -139,6 +146,7 @@ const Index = (props: IPropsTypes) => {
 
       { catalogueState?.channelName === "Address Book" && (  <AddressBook /> ) }
       { catalogueState?.channelName === "Product Catalogue" && <ProductCatalogue /> }
+      { catalogueState?.channelName === "Box Catalogue" && <BoxCatalogueNew /> }
 
      
 
@@ -146,6 +154,7 @@ const Index = (props: IPropsTypes) => {
         <ServiceButton
           text="BACK"
           className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
+          onClick={()=>navigate(-1)}
         />
         <ServiceButton
           text="SAVE"
