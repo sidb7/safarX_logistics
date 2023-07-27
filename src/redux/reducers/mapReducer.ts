@@ -21,3 +21,4 @@ export const mapSlice = createSlice({
 });
 
 export const { mapAddress } = mapSlice.actions;
+export default mapSlice.reducer;
