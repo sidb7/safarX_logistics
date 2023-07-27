@@ -16,9 +16,13 @@ import BoxCatalogueNew from "../BoxCatalogueNew/boxCatalogueNew";
 interface IPropsTypes {}
 
 const Index = (props: IPropsTypes) => {
+  console.log('hiiiii');
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const catalogueState = useSelector((state:any)=>state?.rootReducer?.catalogue);
+  const catalogueState = useSelector((state:any)=>state?.catalogue);
+  console.log('catalogueState :',catalogueState);
+  
   
   const [statusId, setStatusId] = useState(0);
   const [statusData, setStatusData] = useState([

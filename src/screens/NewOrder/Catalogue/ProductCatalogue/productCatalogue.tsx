@@ -13,18 +13,16 @@ const ProductCatalogue = () => {
   // console.log('useSelector :',useSelector(state:any));
 
   const catalogueState = useSelector(
-    (state: any) => state?.rootReducer?.catalogue
+    (state: any) => state?.catalogue
   );
-  console.log("reduxstate :", catalogueState);
-
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [statusId, setStatusId] = useState(-1);
 
   const [statusData, setStatusData] = useState("single_product");
-  console.log("statusId", statusId);
-
+  
   return (
     <div>
       <header className="fixed top-0 z-10 w-full">

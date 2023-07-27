@@ -15,7 +15,7 @@ import { addressBtnName } from "../../../../redux/reducers/catalogue";
 const AddressBook = () => {
   const navigate = useNavigate();
   const catalogueState = useSelector(
-    (state: any) => state?.rootReducer?.catalogue
+    (state: any) => state?.catalogue
   );
   const dispatch = useDispatch();
 
