@@ -788,7 +788,6 @@ export const dummyChannelIntegrationData = [
   },
 ];
 
-<<<<<<< HEAD
 // export const dummyChannelBothIntegrationData = [
 //   { 
 //     mobile : [
@@ -928,7 +927,6 @@ export const dummyChannelIntegrationData = [
 
 
 // ]
-=======
 export const dummyPickupDropdownData = [
   {
     label: "Select/ type exact landmark",
@@ -955,4 +953,3 @@ export const dummyPickupDropdownData = [
     value: "other",
   },
 ];
->>>>>>> 9c6567120f6f30da435f2f9a4a2c25d3579635c3
