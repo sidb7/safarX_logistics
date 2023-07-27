@@ -18,7 +18,7 @@ const ProductCatalogue = () => {
   // console.log('useSelector :',useSelector(state:any));
 
   const catalogueState = useSelector(
-    (state: any) => state?.rootReducer?.catalogue
+    (state: any) => state?.catalogue
   );
   const [viewed, setViewed] = useState(-1);
   const [disabled, setDisabled] = useState(true);
