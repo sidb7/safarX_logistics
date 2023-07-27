@@ -7,19 +7,21 @@ interface ITypesProps {
 }
 
 const Card = (props: ITypesProps) => {
-  const { title, subTitleOne, titleClassName} = props;
+  const { title, subTitleOne, titleClassName } = props;
 
   return (
     <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-[27px]">
       <div>
-        <p className={`font-semibold text-[16px] text-[#1C1C1C] text-center mb-3 ${titleClassName}`}>
+        <p
+          className={`font-semibold text-[16px] text-[#1C1C1C] text-center mb-3 ${titleClassName}`}
+        >
           {title}
         </p>
         <div className="px-8 flex flex-col gap-y-2">
           <p className="font-semibold text-[16px] text-[#323232]">
             {`1.${subTitleOne}`}
           </p>
-          <p className="h-[385px] overflow-y-scroll lg:text-[12px]">
+          <p className="h-[370px] overflow-y-scroll lg:text-[12px]">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
             fugit accusamus nisi, iusto voluptas dolores repellendus minus vel
             reiciendis corrupti facere assumenda ipsum corporis totam

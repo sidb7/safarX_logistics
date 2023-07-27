@@ -31,9 +31,11 @@ import KycPhotoIdentificationScreen from "../screens/AccountSetUp/KYC/PhotoIdent
 import KycSendOtpFormScreen from "../screens/AccountSetUp/KYC/SendOtpForm";
 import KycMobileVerificationScreen from "../screens/AccountSetUp/KYC/MobileVerification";
 import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/gstComponent";
-import {ServiceComponent} from "../screens/AccountSetUp/KYC/TermsAndAgreement/index"
+import { ServiceComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
 import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
 import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
+import KycAadharForm from "../screens/AccountSetUp/KYC/AadharForm";
+
 import SelectAddress from "../screens/AccountSetUp/KYC/SelectAddress/index";
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
@@ -74,6 +76,11 @@ import { AccountQuestion } from "../screens/Question";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
 import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
+import { QuestionComponent1 } from "../screens/Question/question1";
+import { QuestionComponent2 } from "../screens/Question/question2";
+import { QuestionComponent3 } from "../screens/Question/question3";
+import { QuestionComponent4 } from "../screens/Question/question4";
+import { QuestionComponent5 } from "../screens/Question/question5";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -88,9 +95,8 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} />
-          <Route path="question" element={<AccountQuestion/>}/>
+          <Route path="question" element={<AccountQuestion />} />
           <Route path="/neworder" element={<NewOrderLayout />}>
-            
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
@@ -122,7 +128,12 @@ const MyRoutes: React.FC = () => {
             <Route path="signupmodal" element={<SignupModal />} />
           </Route>
 
-          <Route path="/account" element={<AccountLayoutScreen />}>
+          <Route path="account" element={<AccountLayoutScreen />}>
+            <Route path="question1" element={<QuestionComponent1 />} />
+            <Route path="question2" element={<QuestionComponent2 />} />
+            <Route path="question3" element={<QuestionComponent3 />} />
+            <Route path="question4" element={<QuestionComponent4 />} />
+            <Route path="question5" element={<QuestionComponent5 />} />
             <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
             <Route
               path="kyc-photo"
@@ -135,10 +146,14 @@ const MyRoutes: React.FC = () => {
               element={<KycMobileVerificationScreen />}
             />
             <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
-            <Route path="kyc-terms/ServiceComponent" element={<ServiceComponent/>}/>
+            <Route
+              path="kyc-terms/ServiceComponent"
+              element={<ServiceComponent />}
+            />
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
-            <Route path="select-address" element={<SelectAddress/>}/>
+            <Route path="select-address" element={<SelectAddress />} />
+            <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
 
           <Route path="order" element={<OrderLayout />}>

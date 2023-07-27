@@ -1,10 +1,13 @@
-export const ToggleButton = () => {
+interface ToggleButtonPropTypes {
+  imgSrc :string
+}
+
+export const ToggleButton = (props:ToggleButtonPropTypes) => {
+  const {imgSrc} = props
   return (
-    <div className={`flex h-[36px] p-2`}>
-      <span className={`w-[24px] h-[24px] py-1`}>
-        {/* <span className={`bg-[#7CCA62] whitespace-pre w-full`}>{""} </span> */}
-      </span>
-      <span className={`text-[#7CCA62]`}>Active</span>
+    <div className={`flex h-[32px] px-4 rounded-md py-2 items-center gap-2 border-1 bg-[#7CCA62]`}>
+      <span><img src={imgSrc} alt="toggle icon" /> </span>
+      <span className={`text-white`}>ACTIVE</span>
     </div>
   );
 };

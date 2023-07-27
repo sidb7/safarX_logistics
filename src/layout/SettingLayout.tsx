@@ -18,10 +18,11 @@ export const SettingLayout = () => {
               <img
                 src={BackArrowIcon}
                 alt=""
+                className="lg:w-[16px]"
                 onClick={() => navigate("/profile/")}
               />
 
-              <p className="text-lg font-bold text-center text-[#1C1C1C] ">
+              <p className="text-lg font-bold text-center text-[#1C1C1C] lg:text-[28px]">
                 Settings
               </p>
             </div>
@@ -33,7 +34,7 @@ export const SettingLayout = () => {
             </div>
           </main>
 
-          <footer className="w-full fixed  bottom-0 	">
+          <footer className="w-full fixed  bottom-0 lg:hidden 	">
             <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0">
               <ServiceButton text="BACK" onClick={() => navigate("/profile")} />
 

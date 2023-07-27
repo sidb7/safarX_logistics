@@ -14,8 +14,12 @@ import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { useState } from "react";
 import ErrorFile from "./OrderStatus/errorFile";
+import Slider from "react-slick";
+import "../../styles/silkStyle.css";
 
 import { insufficientBalance } from "../../utils/dummyData";
+import { useMediaQuery } from "react-responsive";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 const ArrowNavigator = () => {
   return (
@@ -292,6 +296,42 @@ const columns = [
 
 const Index = () => {
   const [filterId, setFilterId] = useState(-1);
+  const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
+  const { isLgScreen } = ResponsiveState();
+  //  settings for desktop view
+
+  const desktopSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    centerMode: false,
+  };
+
+  //  settings for mobile view
+
+  // Define settings for mobile view
+  const mobileSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1, // Adjust the number of slides shown on mobile
+    centerMode: true,
+    slidesToScroll: 1,
+    initialSlide: 0, // Start from the second slide to hide the slide on the left side
+  };
+
+  // const mobileSettings = {
+  //   dots: true,
+  //   infinite: true,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   centerMode: true,
+  // };
+
+  const currentSettings = isMobileView ? mobileSettings : desktopSettings;
 
   return (
     <div className="mx-4">
@@ -315,6 +355,61 @@ const Index = () => {
             number="23,000"
           /> */}
           <OrderCard label="Success Rate" number="5%" />
+        </div>
+        <div>
+          <div className="">
+            <h2> Single Item</h2>
+            <Slider {...currentSettings} className="">
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+              <div className="mx-2 !w-[95%]">
+                <OrderCard
+                  gif={DeliveryGIF}
+                  showGif={true}
+                  label="Today's delivery"
+                  number="23"
+                />
+              </div>
+            </Slider>
+          </div>
         </div>
         {Buttons(
           "lg:hidden grid grid-cols-4 gap-x-2 mt-4 h-[54px] items-center"
@@ -351,9 +446,11 @@ const Index = () => {
         </>
       )}
 
-      <div>
-        <CustomTable data={data} columns={columns} />
-      </div>
+      {isLgScreen && (
+        <div className="overflow-x-auto">
+          <CustomTable data={data} columns={columns} />
+        </div>
+      )}
     </div>
   );
 };

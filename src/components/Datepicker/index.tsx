@@ -3,7 +3,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/datePicker.css";
 
-const CustomDatePicker = () => {
+interface ITypeProps {
+  onClick?: () => void;
+}
+
+const CustomDatePicker = (props: ITypeProps) => {
+  const { onClick } = props;
+
   const [startDate, setStartDate] = useState();
   return (
     <div>
@@ -18,6 +24,7 @@ const CustomDatePicker = () => {
         timeIntervals={1}
         timeCaption="time"
         dateFormat="MMMM d, yyyy h:mm aa"
+        onInputClick={onClick}
       />
     </div>
   );

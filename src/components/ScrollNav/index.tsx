@@ -1,15 +1,22 @@
 import React, { useState } from "react";
 
 interface IScrollNavProps {
-  arrayData: { label: string; number?: string }[]
-  showNumber: boolean
+  arrayData: { label: string; number?: string }[];
+  showNumber: boolean;
+  setScrollIndex?: any;
 }
 
 export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
   arrayData,
-  showNumber=true,
+  showNumber = true,
+  setScrollIndex,
 }) => {
-  const [selectedId, setSelectedId] = useState(-1);
+  const [selectedId, setSelectedId] = useState(0);
+
+  const setValue = (id: number) => {
+    setSelectedId(id);
+    setScrollIndex(id);
+  };
 
   return (
     <div>
@@ -20,7 +27,8 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
               className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
                 selectedId === index ? "!border-[#004EFF]" : ""
               }`}
-              onClick={() => setSelectedId(index)}
+              // onClick={() => setSelectedId(index)}
+              onClick={() => setValue(index)}
             >
               <span
                 className={`text-[#777777] text-[14px] ${
