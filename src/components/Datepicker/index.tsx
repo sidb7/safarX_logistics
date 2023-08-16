@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "../../styles/datePicker.css";
+import "../../styles/locationStyle.css";
 
 interface ITypeProps {
   onClick?: () => void;
@@ -12,7 +12,7 @@ const CustomDatePicker = (props: ITypeProps) => {
 
   const [startDate, setStartDate] = useState();
   return (
-    <div>
+    <div className="relative flex  justify-left">
       <DatePicker
         selected={startDate}
         onChange={(date: any) => setStartDate(date)}

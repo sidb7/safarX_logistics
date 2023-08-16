@@ -102,7 +102,7 @@ const Index = () => {
 
         <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
-        <p className="text-lg font-semibold text-center text-gray-900 lg:font-normal lg:text-[28px] lg:text-[#1C1C1C]  ">
+        <p className="text-lg font-semibold font-Lato text-center text-gray-900 lg:font-normal lg:text-[28px] lg:text-[#1C1C1C]  ">
           Pickup location
         </p>
       </div>
@@ -115,7 +115,7 @@ const Index = () => {
                 alt="Magic Location Icon"
                 className=""
               />
-              <div className="text-white text-[12px] font-normal">
+              <div className="text-white text-[12px] font-Open">
                 Magic Address
               </div>
             </div>
@@ -124,7 +124,7 @@ const Index = () => {
               <div className="w-full max-w-xs mx-auto">
                 <div
                   onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none bg-transparent border-none cursor-text"
+                  className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
                 >
                   {pastedData || "Click here to paste..."}
                 </div>
@@ -217,7 +217,7 @@ const Index = () => {
         </div>
 
         <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
-          <p className="text-[18px] font-semibold lg:text-[20px] lg:text-[#323232] ">
+          <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
             Save your address as
           </p>
         </div>
@@ -278,7 +278,7 @@ const Index = () => {
 
         <div className="flex flex-row items-center gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
           <CustomCheckbox />
-          <p className="text-[14px] font-medium uppercase text-[#004EFF] lg:font-semibold">
+          <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
             RETURN ADDRESS SAME AS PICKUP
           </p>
         </div>
@@ -287,7 +287,7 @@ const Index = () => {
           <img src={ContactIcon} alt="Contact" className="lg:hidden" />
           <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
 
-          <p className="text-[18px] lg:text-[24px] lg:font-normal lg:text-[#323232]">
+          <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
             Contact
           </p>
         </div>
@@ -308,7 +308,7 @@ const Index = () => {
         </div>
 
         <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
-          <p className="text-[#202427] text-[18px] font-semibold lg:text-[20px] lg:text-[#323232] ">
+          <p className="text-[#202427] text-[18px] font-Lato lg:font-Lato lg:text-[20px] lg:text-[#323232] ">
             Save your contact as
           </p>
         </div>
@@ -329,7 +329,9 @@ const Index = () => {
             }
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p className="lg:font-semibold lg:text-[14px] ">Shopkeeper</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Shopkeeper
+            </p>
           </div>
 
           <div
@@ -351,7 +353,7 @@ const Index = () => {
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p className="lg:font-semibold lg:text-[14px] ">
+            <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
               Warehouse associate
             </p>
           </div>
