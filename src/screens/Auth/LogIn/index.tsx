@@ -31,7 +31,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_IN_URL, value);
       dispatch(signInUser(loginCredentials));
       if (response?.success) {
-        setLocalStorage(tokenKey, JSON.stringify(response?.data[0]?.token));
+        setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/newOrder/pickup");
       } else {
         toast.error(response?.message);
