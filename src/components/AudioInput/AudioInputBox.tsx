@@ -4,10 +4,10 @@ import DeleteIcon from "../../assets/AudioInput/DeleteIcon.svg";
 import PlayIcon from "../../assets/AudioInput/PlayIcon.svg";
 
 interface IAudioInputProps {
-  label:string
-  onClick: any
+  label: string;
+  onClick: any;
   audio: string;
-  setAudio: any
+  setAudio: any;
 }
 
 export const AudioInputBox: React.FunctionComponent<IAudioInputProps> = ({
@@ -34,8 +34,8 @@ export const AudioInputBox: React.FunctionComponent<IAudioInputProps> = ({
       return (
         <>
           <img className="ml-4" src={MicrophoneIcon} alt="Microphone" />
-          <span className="text-[12px] text-[#777777] ml-4">
-           {label}
+          <span className="text-[12px] font-Open text-[#777777] ml-4">
+            {label}
           </span>
         </>
       );
