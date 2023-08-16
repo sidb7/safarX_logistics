@@ -1,25 +1,25 @@
 import { useMediaQuery } from "react-responsive";
-import {useState} from 'react';
-import CrossIcon from "../../../assets/CloseIcon.svg"
-import ReferCode from "../../../assets/Profile/Refer/ReferCode.svg"
+import { useState } from "react";
+import CrossIcon from "../../../assets/CloseIcon.svg";
+import ReferCode from "../../../assets/Profile/Refer/ReferCode.svg";
 import CustomButton from "../../../components/Button";
 import RightArrowIcon from "../../../assets/Profile/RightArrowIcon.svg";
 import ReferEarn from "../../../assets/Profile/ReferEarn.svg";
 import { useNavigate } from "react-router-dom";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
-import ShareIcon from "../../../assets/Label/share.svg"
-import CopyIcon from "../../../assets/Transaction/CopyIcon.svg"
+import ShareIcon from "../../../assets/Label/share.svg";
+import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
 export const ProfileReferEarn = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
   const navigateTo = () => {
-    if(!isItLgScreen) navigate("/profile/profile-refer-earn") 
-    else setIsOpen(true)
-  }
+    if (!isItLgScreen) navigate("/profile/profile-refer-earn");
+    else setIsOpen(true);
+  };
   return (
     <>
       <div
@@ -38,8 +38,12 @@ export const ProfileReferEarn = () => {
           </div>
         </div>
       </div>
-      <RightSideModal isOpen={isOpen} onClose={() => setIsOpen(false)} wrapperClassName="!justify-start outline-none">
-      <div className="flex flex-col w-full p-4 mt-5 ">
+      <RightSideModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        wrapperClassName="!justify-start outline-none"
+      >
+        <div className="flex flex-col w-full p-4 mt-5 ">
           <div className="flex justify-between w-full ">
             <div className="text-[24px] font-normal">Refer And Earn</div>
             <div>
@@ -47,13 +51,19 @@ export const ProfileReferEarn = () => {
                 src={CrossIcon}
                 onClick={() => setIsOpen(false)}
                 alt="close Icon"
-                width="35px"
+                width="25px"
               />{" "}
             </div>
           </div>
           <div className="flex flex-col mt-8 gap-y-4 w-ful justify-center items-center">
-            <img src={ReferCode} alt="Referral Code" className="w-[156px] mt-[10rem]"/>
-            <p className="p-3 mt-4 text-[16px] font-semibold whitespace-nowrap">Referral Code - QYHR78171JEY</p>
+            <img
+              src={ReferCode}
+              alt="Referral Code"
+              className="w-[156px] mt-[10rem]"
+            />
+            <p className="p-3 mt-4 text-[16px] font-semibold whitespace-nowrap">
+              Referral Code - QYHR78171JEY
+            </p>
           </div>
         </div>
         <div style={{ width: "-webkit-fill-available" }}>
@@ -62,8 +72,11 @@ export const ProfileReferEarn = () => {
             className=" fixed  bottom-0	"
           >
             <div
-              style={{ width: "-webkit-fill-available" }}
-              className="flex justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[10px] rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0"
+              style={{
+                width: "-webkit-fill-available",
+                boxShadow: "0px -4px 8px 0px rgba(0, 0, 0, 0.04)",
+              }}
+              className="flex justify-end shadow-lg border-[1px] border-white bg-[#FFFFFF] gap-[32px] p-[10px] rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0"
             >
               <div className="flex justify-center">
                 <div className="p-2">
@@ -84,7 +97,7 @@ export const ProfileReferEarn = () => {
                     className="p-2 rounded !bg-[#F2F6FF] !text-[#0066FF]"
                   />
                 </div>
-              </div> 
+              </div>
             </div>
           </footer>
         </div>
