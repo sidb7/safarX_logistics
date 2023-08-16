@@ -22,7 +22,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const [loginCredentials, setLoginCredentials] = useState({
-    emailId: "",
+    email: "",
     password: "",
   });
 
@@ -97,7 +97,7 @@ const Index = () => {
                   // console.log("email",e.target.value)
                   setLoginCredentials({
                     ...loginCredentials,
-                    emailId: e.target.value,
+                    email: e.target.value,
                   });
                 }}
               />
