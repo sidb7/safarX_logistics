@@ -1,5 +1,6 @@
 import React from "react";
 import dummyImage from "../../assets/Delivery/Warehouse.svg";
+import "../../styles/datePicker.css";
 
 interface IInputProps {
   label?: string;
@@ -40,20 +41,18 @@ const InputWithImage = (props: IInputProps) => {
       <img
         src={imgSrc ? imgSrc : dummyImage}
         alt=""
-        className="absolute z-2   left-[18px]"
+        className="absolute z-2 left-[18px]"
       />
 
-      <div className=" w-[100%] ">
-        <input
-          placeholder={placeholder}
-          type="text"
-          className="rounded  border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-normal  bg-white h-[48px] pl-[12%] font-semibold text-[12px] text-[#1C1C1C] outline-none  "
-          required={isRequired}
-          onChange={onChange}
-          onClick={onClick}
-          value={value}
-        />
-      </div>
+      <input
+        placeholder={placeholder}
+        type="text"
+        className="rounded  border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white h-[48px] pl-[12%]  text-[12px] text-[#1C1C1C] outline-none  "
+        required={isRequired}
+        onChange={onChange}
+        onClick={onClick}
+        value={value}
+      />
     </div>
   );
 };
