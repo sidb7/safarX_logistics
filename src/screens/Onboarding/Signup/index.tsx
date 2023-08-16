@@ -59,7 +59,7 @@ const Index = () => {
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
         <div className="lg:mx-24 lg:mt-[84px]">
-          <div className="flex flex-col gap-y-8">
+          <div className="flex flex-col xl:gap-y-9 lg:gap-y-4">
             <div className="product-box flex items-center lg:hidden">
               <img
                 className="m-4 h-[25px] object-contain"
@@ -68,16 +68,16 @@ const Index = () => {
               />
             </div>
 
-            <div className="flex flex-col mt-7 mx-4 gap-y-6">
-              <p className="text-center	 text-2xl font-medium">
+            <div className="flex flex-col mt-7 mx-4 gap-y-3">
+              <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                 Welcome to Shipyaari
               </p>
-              <p className="text-center	 font-thin">
+              <p className="text-center font-Open font-light text-sm leading-[22px]">
                 Fast and Easy Shipping from your doorstep to your customer's.{" "}
               </p>
             </div>
-            <div className=" flex flex-col mx-4  gap-y-6">
-              <div className="flex gap-x-6">
+            <div className=" flex flex-col mx-4 gap-y-7">
+              <div className="flex gap-x-5">
                 <CustomInputBox
                   containerStyle=""
                   label="First Name"
@@ -131,13 +131,15 @@ const Index = () => {
                 onClick={(e: any) => signUpOnClick(sellerData)}
                 text="SIGN UP"
               />
-              <hr className="mb-[-30px]" />
+              <hr className="mb-[-30px] mt-2" />
               <div className="flex justify-center my-[-7px]">
-                <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>
+                <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
+                  OR
+                </button>
               </div>
               <div className="flex justify-center">
                 <GoogleLogin
-                  text="signup_with"
+                  text="continue_with"
                   onSuccess={responseMessage}
                   onError={() => {
                     // console.log("Google Signup Failed");
@@ -145,13 +147,13 @@ const Index = () => {
                 />
               </div>
               <div className="flex justify-center">
-                <p className="text-[#777777] font-light">
+                <p className="text-[#777777] font-normal text-xs leading-4 font-Open">
                   Already Have An Account ?{" "}
                 </p>
                 <button
                   type="button"
                   onClick={logInOnClick}
-                  className="text-[#004EFF]"
+                  className="text-[#004EFF] font-normal text-xs leading-4 font-Open"
                 >
                   Log In
                 </button>
@@ -171,12 +173,12 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
@@ -184,7 +186,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {signUp()}
         </CenterModal>
       )}
