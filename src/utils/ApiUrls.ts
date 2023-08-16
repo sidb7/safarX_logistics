@@ -22,5 +22,12 @@ switch (Enviornment) {
 const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
 const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=SHIPYAARI`;
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
+const GET_PROFILE_URL = `${SELLER_URL}/api/v1/customers/fetchSeller`;
 
-export { SELLER_URL, POST_SIGN_IN_URL, POST_SIGN_UP_URL, POST_SEND_OTP_URL };
+export {
+  SELLER_URL,
+  POST_SIGN_IN_URL,
+  POST_SIGN_UP_URL,
+  POST_SEND_OTP_URL,
+  GET_PROFILE_URL,
+};
