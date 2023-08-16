@@ -5,10 +5,12 @@ import CustomButton from "../../../components/Button/index";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const navigate = useNavigate();
 
   const modalTitle = () => {
     return (
@@ -57,7 +59,10 @@ const Index = () => {
                 alt="SupplyGif"
               />
 
-              <CustomButton onClick={() => {}} text="SET UP MY ACCOUNT" />
+              <CustomButton
+                onClick={() => navigate("/onboarding/questionnaire/question1")}
+                text="SET UP MY ACCOUNT"
+              />
             </div>
           </div>
         </div>

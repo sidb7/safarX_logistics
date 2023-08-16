@@ -19,11 +19,11 @@ import BulkOrder from "../screens/NewOrder/BulkOrder";
 import FilterScreen from "../screens/NewOrder/Filter";
 import BootScreen from "../screens/BootScreen/index";
 import LogInScreen from "../screens/Auth/LogIn";
-import SignUpScreen from "../screens/Auth/SignUp";
-import SendOTPScreen from "../screens/Auth/SignUp/mobileVerification";
-import VerifyOTPScreen from "../screens/Auth/SignUp/verifyOtp";
-import OffersScreen from "../screens/Auth/SignUp/offerScreen";
-import GetStartedScreen from "../screens/Auth/SignUp/getStarted";
+import SignUpScreen from "../screens/Onboarding/Signup/index";
+import SendOTPScreen from "../screens/Onboarding/Signup/mobileVerification";
+import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
+import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
+import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/AccountSetUp/KYC/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -72,15 +72,15 @@ import { ChangePassword } from "../screens/Profile/Settings/changePassword";
 import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
-import { AccountQuestion } from "../screens/Question";
+import { AccountQuestion } from "../screens/Onboarding/Questionnaire";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
 import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
-import { QuestionComponent1 } from "../screens/Question/question1";
-import { QuestionComponent2 } from "../screens/Question/question2";
-import { QuestionComponent3 } from "../screens/Question/question3";
-import { QuestionComponent4 } from "../screens/Question/question4";
-import { QuestionComponent5 } from "../screens/Question/question5";
+import { QuestionComponent1 } from "../screens/Onboarding/Questionnaire/question1";
+import { QuestionComponent2 } from "../screens/Onboarding/Questionnaire/question2";
+import { QuestionComponent3 } from "../screens/Onboarding/Questionnaire/question3";
+import { QuestionComponent4 } from "../screens/Onboarding/Questionnaire/question4";
+import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question5";
 
 //order/service - suresh
 import Service from "../screens/Order/Service";
@@ -95,11 +95,11 @@ const MyRoutes: React.FC = () => {
           <Route path="/swiper" element={<DummySwiperScreen />} />
           <Route path="/" element={<BootScreen />} />
           <Route path="/auth/login" element={<LogInScreen />} />
-          <Route path="/auth/signUp" element={<SignUpScreen />} />
-          <Route path="/auth/sendOtp" element={<SendOTPScreen />} />
+          {/* <Route path="/auth/signUp" element={<SignUpScreen />} /> */}
+          {/* <Route path="/auth/sendOtp" element={<SendOTPScreen />} />
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
-          <Route path="/auth/getStarted" element={<GetStartedScreen />} />
+          <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
           <Route path="question" element={<AccountQuestion />} />
           <Route path="/neworder" element={<NewOrderLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
@@ -132,12 +132,35 @@ const MyRoutes: React.FC = () => {
             <Route path="returningproduct" element={<ReturningProduct />} />
             <Route path="signupmodal" element={<SignupModal />} />
           </Route>
-          <Route path="account" element={<AccountLayoutScreen />}>
-            <Route path="question1" element={<QuestionComponent1 />} />
-            <Route path="question2" element={<QuestionComponent2 />} />
-            <Route path="question3" element={<QuestionComponent3 />} />
-            <Route path="question4" element={<QuestionComponent4 />} />
-            <Route path="question5" element={<QuestionComponent5 />} />
+
+          {/* onboarding routes  */}
+
+          <Route path="onboarding" element={<AccountLayoutScreen />}>
+            <Route path="signup" element={<SignUpScreen />} />
+            <Route path="sendotp" element={<SendOTPScreen />} />
+            <Route path="verifyotp" element={<VerifyOTPScreen />} />
+            <Route path="offers" element={<OffersScreen />} />
+            <Route path="getStarted" element={<GetStartedScreen />} />
+            <Route
+              path="questionnaire/question1"
+              element={<QuestionComponent1 />}
+            />
+            <Route
+              path="questionnaire/question2"
+              element={<QuestionComponent2 />}
+            />
+            <Route
+              path="questionnaire/question3"
+              element={<QuestionComponent3 />}
+            />
+            <Route
+              path="questionnaire/question4"
+              element={<QuestionComponent4 />}
+            />
+            <Route
+              path="questionnaire/question5"
+              element={<QuestionComponent5 />}
+            />
             <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
             <Route
               path="kyc-photo"

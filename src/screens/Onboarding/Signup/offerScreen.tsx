@@ -11,7 +11,7 @@ const Index = () => {
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const skipForNowOnClick = () => {
-    navigate("/auth/getStarted");
+    navigate("/onboarding/getStarted");
   };
 
   const modalTitle = () => {
