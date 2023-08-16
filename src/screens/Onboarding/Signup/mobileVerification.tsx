@@ -2,27 +2,49 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CloseIcon from "./../../../assets/CloseIcon.svg";
 import CustomButton from "../../../components/Button/index";
 import MobileIcon from "../../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import OtpInput from "react-otp-input";
-import "../../../styles/otpStyle.css";
-import { ResponsiveState } from "../../../utils/responsiveState";
-import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CustomInputBox from "../../../components/Input";
+import { useNavigate } from "react-router-dom";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import { useState } from "react";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const [otp, setOtp] = useState({
-    loginOtp: "",
+  // const dispatch = useDispatch();
+
+  const [mobileNumber, setMobileNumber] = useState({
+    mobileNo: "",
   });
-  console.log("otp", otp);
-  const offersOnClick = () => {
-    navigate("/auth/offers");
+
+  const signUpUser = useSelector((state: any) => state.signup);
+
+  let body = {
+    email: signUpUser.email,
+    firstName: signUpUser.firstName,
+    mobileNo: mobileNumber.mobileNo,
   };
 
-  const contactNumber = "+91-987654321";
+  const sendOtpOnClick = async (value: any) => {
+    // console.log("value", value);
+    try {
+      const { data: response } = await POST(POST_SEND_OTP_URL, body);
+
+      if (response?.success) {
+        // console.log("success", response?.data);
+        navigate("/onboarding/verifyOtp");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   const modalTitle = () => {
     return (
@@ -42,7 +64,7 @@ const Index = () => {
     );
   };
 
-  const verifyOtp = () => {
+  const mobileVerification = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
@@ -61,33 +83,25 @@ const Index = () => {
                 Mobile Verification
               </p>
               <p className="text-center font-thin">
-                Enter The OTP Sent To {contactNumber}.
+                Please verify your phone number to proceed further.
               </p>
             </div>
-
             <div className=" flex flex-col mx-4 gap-y-6">
-              <img className="h-[180px] " src={MobileIcon} alt="MobileIcon" />
-
-              <div className="flex justify-center">
-                <CustomInputBox
-                  containerStyle="mt-[17px]"
-                  label="Enter OTP"
-                  onChange={(e) => {
-                    setOtp({ ...otp, loginOtp: e.target.value });
-                  }}
-                />
-              </div>
-
-              <div className="flex justify-center">
-                <p className="text-[#777777] font-light">
-                  Didn't Receive Code ?
-                </p>
-                <button type="button" className="text-[#004EFF]">
-                  Resend
-                </button>
-              </div>
-
-              <CustomButton onClick={offersOnClick} text="DONE" />
+              <img className="h-[180px]" src={MobileIcon} alt="MobileIcon" />
+              <CustomInputBox
+                inputType="number"
+                label="Enter Your Mobile Number"
+                onChange={(e) => {
+                  setMobileNumber({
+                    ...mobileNumber,
+                    mobileNo: e.target.value,
+                  });
+                }}
+              />
+              <CustomButton
+                onClick={(e: any) => sendOtpOnClick(body)}
+                text="SEND OTP"
+              />
             </div>
           </div>
         </div>
@@ -99,11 +113,11 @@ const Index = () => {
     <>
       {isLgScreen && isModalOpen && (
         <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {verifyOtp()}
+          {mobileVerification()}
         </CenterModal>
       )}
 
-      {!isLgScreen && verifyOtp()}
+      {!isLgScreen && mobileVerification()}
     </>
   );
 };

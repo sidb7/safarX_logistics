@@ -6,22 +6,29 @@ import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
 import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const LabelComponent: React.FC<{ label: string; className?: string, info:string, classNameInfo?:string }> = ({
-  label,
-  className,
-  info, 
-  classNameInfo
-}) => {
+const LabelComponent: React.FC<{
+  label: string;
+  className?: string;
+  info: string;
+  classNameInfo?: string;
+}> = ({ label, className, info, classNameInfo }) => {
   return (
     <div className="flex flex-col">
-      <span className={`text-[#1C1C1C] font-semibold ${className}`}>{label}</span>
-      <span className={`text-[16px] text-[#004EFF] ${classNameInfo}`}>{info}</span>
+      <span className={`text-[#1C1C1C] font-semibold ${className}`}>
+        {label}
+      </span>
+      <span className={`text-[16px] text-[#004EFF] ${classNameInfo}`}>
+        {info}
+      </span>
     </div>
   );
 };
 
 export const ProfileCard = () => {
+  const navigate = useNavigate();
+
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 768px)",
   });
@@ -37,7 +44,14 @@ export const ProfileCard = () => {
           <div className="col-span-2 whitespace-nowrap flex flex-col space-y-1 text-[14px] font-normal py-4">
             <span className="flex justify-between">
               Divya Sharma
-              <img src={BlackEditIcon} alt="" className="pr-4" />
+              <img
+                src={BlackEditIcon}
+                alt=""
+                className="pr-4"
+                onClick={() =>
+                  navigate("/profile/profile-setting-edit-profile")
+                }
+              />
             </span>
             <span className="flex">
               <img src={EmailIcon} alt="Email" className="w-[16px] mr-1" />
@@ -93,11 +107,20 @@ export const ProfileCard = () => {
       ) : (
         <div className="grid grid-cols-3 mt-4 gap-4">
           <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
-            <LabelComponent label="Yaari Points" className={"text-[18px] pl-3"} info="100" classNameInfo="!text-[28px] !text-[#004EFF] pl-3" />
-            
+            <LabelComponent
+              label="Yaari Points"
+              className={"text-[18px] pl-3"}
+              info="100"
+              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
+            />
           </div>
           <div className="flex flex-col justify-center rop-shadow-sm rounded-md bg-[#FDF6EA]">
-            <LabelComponent label="Wallet Balance" className={"text-[18px] pl-3"} info="5,000" classNameInfo="!text-[28px] !text-[#004EFF] pl-3" />
+            <LabelComponent
+              label="Wallet Balance"
+              className={"text-[18px] pl-3"}
+              info="5,000"
+              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
+            />
           </div>
           <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">
             <div className="flex justify-between">

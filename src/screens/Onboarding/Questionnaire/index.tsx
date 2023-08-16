@@ -1,8 +1,8 @@
 import { useState } from "react";
-import CompanyLogo from "../../assets/Navbar/ShipyaariLogos.svg";
-import CloseIcon from "../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../assets/Navbar/ShipyaariLogos.svg";
+import CloseIcon from "../../../assets/Navbar/ShipyaariLogos.svg";
 import Slider from "react-slick";
-import { ResponsiveState } from "../../utils/responsiveState";
+import { ResponsiveState } from "../../../utils/responsiveState";
 import { WelcomeQuestion } from "./welcome";
 // import {
 //   QuestionComponent1,
@@ -11,8 +11,8 @@ import { WelcomeQuestion } from "./welcome";
 //   QuestionComponent4,
 //   QuestionComponent5,
 // } from "./question1";
-import "../../styles/navBar.css";
-import "../../styles/silkStyle.css";
+import "../../../styles/navBar.css";
+import "../../../styles/silkStyle.css";
 
 export const AccountQuestion = () => {
   const { isLgScreen } = ResponsiveState();
