@@ -86,6 +86,7 @@ import { QuestionComponent5 } from "../screens/Question/question5";
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
+// import Sidebar from "../layout/HoverSidebar";
 
 const MyRoutes: React.FC = () => {
   return (
