@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import Checkbox from "../../components/CheckBox";
-import CustomButton from "../../components/Button";
+import Checkbox from "../../../components/CheckBox";
+import CustomButton from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
-import CloseIcon from "../../assets/CloseIcon.svg";
-import CompanyLogo from "../../assets/CompanyLogo/shipyaari icon.svg";
-import { ResponsiveState } from "../../utils/responsiveState";
-import CenterModal from "../../components/CustomModal/customCenterModal";
+import CloseIcon from "../../../assets/CloseIcon.svg";
+import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 export const QuestionComponent5: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -73,7 +73,10 @@ export const QuestionComponent5: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton text="PROCEED FOR KYC" onClick={() => {}} />
+              <CustomButton
+                text="PROCEED FOR KYC"
+                onClick={() => navigate("/onboarding/kyc-type")}
+              />
             </div>
 
             <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">

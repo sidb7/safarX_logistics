@@ -20,7 +20,6 @@ axios.defaults.baseURL = SELLER_URL;
 // );
 
 const createHeader = (_URL: string, options = {}) => {
-  console.log("token ", localStorage.getItem(tokenKey));
   let header = {
     Accept: "/",
     Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
