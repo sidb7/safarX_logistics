@@ -42,7 +42,7 @@ const Index = () => {
   };
 
   const signUpOnClick = () => {
-    navigate("/auth/signup");
+    navigate("/onboarding/signup");
   };
 
   const responseMessage = (response: any) => {

@@ -1,15 +1,15 @@
+import Checkbox from "../../../components/CheckBox";
+import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
+import CustomButton from "../../../components/Button";
 import React, { useState } from "react";
-import Checkbox from "../../components/CheckBox";
-import CargoRatingGif from "../../assets/AccountQuestions/CargoRating.gif";
-import CustomButton from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
-import { ResponsiveState } from "../../utils/responsiveState";
-import CloseIcon from "../../assets/CloseIcon.svg";
-import CompanyLogo from "../../assets/CompanyLogo/shipyaari icon.svg";
-import CenterModal from "../../components/CustomModal/customCenterModal";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import CloseIcon from "../../../assets/CloseIcon.svg";
+import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 
-export const QuestionComponent3: React.FunctionComponent = () => {
+export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
@@ -31,7 +31,8 @@ export const QuestionComponent3: React.FunctionComponent = () => {
       </div>
     );
   };
-  const question3 = () => {
+
+  const question1 = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
@@ -39,28 +40,26 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           <div>
             <WelcomeHeader welcomeClassName="lg:!mt-4" className="hidden" />
             <div className="flex justify-center">
-              <img src={CargoRatingGif} alt="" width="180px" />
+              <img src={WarehouseTruckGif} alt="" width="180px" />
             </div>
           </div>
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
               <div className="">
                 <span className="text-xl font-semibold">
-                  What is your monthly order volume?
+                  What other services do you want?
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                <Checkbox label="1-100" className="text-base" />
-                <Checkbox label="100-500" className="text-base" />
-                <Checkbox label="500-1000" className="text-base" />
-                <Checkbox label="1000-5000" className="text-base" />
-                <Checkbox label="Above 5000" className="text-base" />
+                <Checkbox label="Courier" className="text-base" />
+                <Checkbox label="Warehouse" className="text-base" />
+                <Checkbox label="Fulfilment" className="text-base" />
               </div>
             </div>
             <div className="mt-6">
               <CustomButton
                 text="NEXT"
-                onClick={() => navigate("/account/question4")}
+                onClick={() => navigate("/onboarding/questionnaire/question2")}
               />
             </div>
           </div>
@@ -77,11 +76,11 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          {question3()}
+          {question1()}
         </CenterModal>
       )}
 
-      {!isLgScreen && question3()}
+      {!isLgScreen && question1()}
     </>
   );
 };
