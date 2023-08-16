@@ -6,15 +6,15 @@ Enviornment = process.env.REACT_APP_ENV || "development";
 
 switch (Enviornment) {
   case "development":
-    SELLER_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     break;
   case "production":
-    SELLER_URL = `${process.env.REACT_APP_ADMIN_PROD}`;
+    SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     break;
   default:
-    SELLER_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
+    SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     break;
 }
