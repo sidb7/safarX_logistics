@@ -31,6 +31,7 @@ import Map from "../../NewOrder/Map";
 import { dummyPickupDropdownData } from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+import "../../../styles/switch.css";
 import { getLocalStorage } from "../../../utils/utility";
 
 const Index = () => {
@@ -121,12 +122,12 @@ const Index = () => {
             </div>
 
             <div className="relative h-[75px]">
-              <div className="w-full max-w-xs mx-auto">
+              <div className="w-full max-w-xs ">
                 <div
                   onClick={handleClick}
                   className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
                 >
-                  {pastedData || "Click here to paste..."}
+                  {pastedData || "Paste Address for the Magic"}
                 </div>
                 <input
                   ref={inputRef}
@@ -138,7 +139,7 @@ const Index = () => {
                   title="inputBox"
                 />
               </div>
-              <div className="absolute right-[5%] top-[70%] transform -translate-y-1/2">
+              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
             </div>
@@ -381,22 +382,40 @@ const Index = () => {
               <h1 className="self-center justify-start text-[14px] font-semibold text-[#1C1C1C] lg:text-base ">
                 Custom Branding
               </h1>
-              <div className="flex justify-end items-center gap-x-1">
-                {toggleStatus && <img src={EditIcon} alt="" />}
-                <Switch
-                  onChange={() => {
-                    if (toggleStatus === true) setToggleStatus(false);
-                    else setToggleStatus(true);
-                  }}
-                  checked={toggleStatus}
-                />
-                <p
+
+              <div className="flex justify-end items-center gap-x-1 ">
+                <button
+                  className={`${
+                    toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
+                  } flex justify-end items-center gap-x-1  w-[123px] h-[30px] px-[16px] py-[8px]`}
+                >
+                  <Switch
+                    onChange={() => {
+                      setToggleStatus(!toggleStatus);
+                    }}
+                    checked={toggleStatus}
+                    onColor="#FFFFF"
+                    onHandleColor="#7CCA62"
+                    offColor="#FFFFF"
+                    offHandleColor="#F35838"
+                    handleDiameter={12}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    height={16}
+                    width={32}
+                  />
+
+                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] ">
+                    {toggleStatus ? "ACTIVE" : "DEACTIVE"}
+                  </p>
+                </button>
+                {/* <p
                   className={`${
                     toggleStatus ? "text-[#7CCA62]" : "text-[#F35838]"
                   } font-semibold text-[14px] `}
                 >
                   {toggleStatus ? "ACTIVE" : "DEACTIVE"}
-                </p>
+                </p> */}
               </div>
             </div>
             {toggleStatus && (
