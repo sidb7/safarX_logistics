@@ -93,6 +93,27 @@ export const ProfileKycCard = () => {
               />
             </div>
           </div>
+
+          <div className="grid grid-cols-2 ml-4 my-2">
+            <div className="flex flex-col">
+              <LabelContainer label="GST Documents" info="User Details" />
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <LabelContainer
+                label="Aadhar Documents"
+                className="ml-3"
+                info="User Details"
+                classNameInfo="ml-3"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 my-2">
+            <div className="flex flex-col">
+              <LabelContainer label="PAN Card" info="User Details" />
+            </div>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-5 gap-y-8">
@@ -140,7 +161,7 @@ export const ProfileKycCard = () => {
             />
           </div>
 
-          <div className="flex flex-col border-[#E8E8E8] mb-5 px-5">
+          <div className="flex flex-col border-[#E8E8E8]  px-5">
             <LabelContainer
               label="Locality, Landmark"
               className="text-[12px]"
@@ -149,7 +170,7 @@ export const ProfileKycCard = () => {
             />
           </div>
 
-          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
+          <div className="flex flex-col  px-5 border-l-[1px]">
             <LabelContainer
               label="City, Pin code"
               className="text-[12px]"
@@ -158,11 +179,38 @@ export const ProfileKycCard = () => {
             />
           </div>
 
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mb-5 px-5">
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
             <LabelContainer
               label="State, Country"
               className="text-[12px]"
               info="Maharashtra, India"
+              classNameInfo="!text-[14px]"
+            />
+          </div>
+
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
+            <LabelContainer
+              label="GST Documents"
+              className="text-[12px]"
+              info="UserDetails"
+              classNameInfo="!text-[14px]"
+            />
+          </div>
+
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
+            <LabelContainer
+              label="Aadhar Documents"
+              className="text-[12px]"
+              info="User Details"
+              classNameInfo="!text-[14px]"
+            />
+          </div>
+
+          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mb-5 px-5">
+            <LabelContainer
+              label="PAN Documents"
+              className="text-[12px]"
+              info="User Details"
               classNameInfo="!text-[14px]"
             />
           </div>
