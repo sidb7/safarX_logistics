@@ -8,7 +8,6 @@ import ServiceButton from "../components/Button/ServiceButton";
 import TickLogo from "../assets/common/Tick.svg";
 import DownloadIcon from "../assets/Label/download.svg";
 import { useMediaQuery } from "react-responsive";
-import Sidebar from "./HoverSidebar";
 
 const steps = [
   {
@@ -62,15 +61,7 @@ const Layout = () => {
   }
   return (
     <>
-      <div className="flex">
-        <Sidebar />
-        <main className="pb-52">
-          <div className=" relative top-20">
-            <Outlet />
-          </div>
-        </main>
-      </div>
-      {/* <div className="flex flex-col h-screen justify-between ">
+      <div className="flex flex-col h-screen justify-between ">
         <header className="fixed top-0 z-10 w-full ">
           <NavBar />
         </header>
@@ -161,7 +152,7 @@ const Layout = () => {
             </div>
           </footer>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };

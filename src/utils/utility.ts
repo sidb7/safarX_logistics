@@ -17,16 +17,6 @@ export const maskMobileNumber = (mobileNumber: any) => {
   }
   return mobileNumber;
 };
-export const GetCurrentPath = () => {
-  const currentUrl = window.location.href;
-  const url = new URL(currentUrl);
-  const location = url;
-  const path = location.pathname;
-  const pathArray = path.split("/");
-  const removedFirstPath = pathArray.slice(1);
-  return removedFirstPath;
-};
-// u
 export const getQueryJson = () => {
   let queryParams: string = window.location.search.substring(1);
   if (queryParams.charAt(0) === "?") {
