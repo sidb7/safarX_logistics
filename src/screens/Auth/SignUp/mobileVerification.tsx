@@ -25,7 +25,7 @@ const Index = () => {
   const signUpUser = useSelector((state: any) => state.signup);
 
   let body = {
-    emailId: signUpUser.emailId,
+    email: signUpUser.email,
     firstName: signUpUser.firstName,
     mobileNo: mobileNumber.mobileNo,
   };

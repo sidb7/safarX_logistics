@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SignUpState {
-  emailId: string;
+  email: string;
   firstName: string;
   lastName: string;
   mobileNo?: number;
@@ -10,7 +10,7 @@ interface SignUpState {
 }
 
 const initialState: SignUpState = {
-  emailId: "",
+  email: "",
   firstName: "",
   lastName: "",
   mobileNo: 0,
@@ -25,7 +25,7 @@ export const SignupSlice = createSlice({
     signUpUser: (
       state,
       action: PayloadAction<{
-        emailId: string;
+        email: string;
         firstName: string;
         lastName: string;
         mobileNo: number;
@@ -33,7 +33,7 @@ export const SignupSlice = createSlice({
         password: string;
       }>
     ) => {
-      state.emailId = action.payload.emailId;
+      state.email = action.payload.email;
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.mobileNo = action.payload.mobileNo;

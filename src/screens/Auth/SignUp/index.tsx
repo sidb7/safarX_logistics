@@ -21,7 +21,7 @@ const Index = () => {
   const dispatch = useDispatch();
 
   const [sellerData, setsellerData] = useState({
-    emailId: "",
+    email: "",
     firstName: "",
     lastName: "",
     password: "",
@@ -104,7 +104,7 @@ const Index = () => {
                 onChange={(e) => {
                   setsellerData({
                     ...sellerData,
-                    emailId: e.target.value,
+                    email: e.target.value,
                   });
                 }}
               />
