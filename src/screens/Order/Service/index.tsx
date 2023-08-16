@@ -15,7 +15,7 @@ const Service: React.FC = () => {
 
   return (
     <div className="flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div>
         <div className="flex flex-row gap-x-2 mb-5 lg:mb-[38px] mx-5">
           <img src={TruckIcon} alt="Truck Icon" className="lg:hidden" />
