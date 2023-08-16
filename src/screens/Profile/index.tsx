@@ -9,18 +9,18 @@ import { POST } from "../../utils/webService";
 import { GET_PROFILE_URL } from "../../utils/ApiUrls";
 
 export const Profile = () => {
-  const [profileData, setProfileData] = useState([]);
+  const [profileData, setProfileData]: any = useState([]);
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
-      console.log("🚀 ~ file: index.tsx:16 ~ data:", data)
+      setProfileData(data.data[0]);
     })();
   }, []);
   return (
     <div className="mx-4">
-      <ProfileCard />
-      <ProfileKycCard />
-      <ProfileBankCard />
+      <ProfileCard ProfileDetails={profileData} />
+      <ProfileKycCard KycDetails={profileData?.kycDetails} />
+      <ProfileBankCard BankDetails={profileData?.bankDetails} />
       <div className="lg:grid lg:grid-cols-2 gap-4">
         <ProfileNotification />
         <ProfileReferEarn />
