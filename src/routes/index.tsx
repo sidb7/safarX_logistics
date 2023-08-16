@@ -82,6 +82,11 @@ import { QuestionComponent3 } from "../screens/Question/question3";
 import { QuestionComponent4 } from "../screens/Question/question4";
 import { QuestionComponent5 } from "../screens/Question/question5";
 
+//order/service - suresh
+import Service from "../screens/Order/Service";
+import Summary from "../screens/Order/Summary";
+import Payment from "../screens/Order/Payment";
+
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -127,7 +132,6 @@ const MyRoutes: React.FC = () => {
             <Route path="returningproduct" element={<ReturningProduct />} />
             <Route path="signupmodal" element={<SignupModal />} />
           </Route>
-
           <Route path="account" element={<AccountLayoutScreen />}>
             <Route path="question1" element={<QuestionComponent1 />} />
             <Route path="question2" element={<QuestionComponent2 />} />
@@ -155,7 +159,6 @@ const MyRoutes: React.FC = () => {
             <Route path="select-address" element={<SelectAddress />} />
             <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
-
           <Route path="order" element={<OrderLayout />}>
             <Route path="order-details" element />
           </Route>
@@ -195,7 +198,6 @@ const MyRoutes: React.FC = () => {
               element={<EditProfile />}
             />
           </Route>
-
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
           <Route path="/neworder/walletrecharge" element={<WalletRecharge />} />
@@ -204,7 +206,6 @@ const MyRoutes: React.FC = () => {
             path="/neworder/returningsummary"
             element={<ReturningSummary />}
           />
-
           <Route path="/neworder/returningLabel" element={<ReturningLabel />} />
           <Route
             path="/neworder/returningsummary"
@@ -214,7 +215,6 @@ const MyRoutes: React.FC = () => {
             path="/neworder/searchfilterproduct"
             element={<SearchFilterProduct />}
           />
-
           <Route path="/neworder/addressbook" element={<AddressBook />} />
           <Route
             path="/neworder/productcatalogueaddcambo"
@@ -262,6 +262,11 @@ const MyRoutes: React.FC = () => {
             path="/neworder/box-catalogue"
             element={<CatalogueBoxCatalogueScreen />}
           />
+          {/* order/service - suresh */}
+          <Route path="/order/service" element={<Service />} />
+          <Route path="/order/summary" element={<Summary />} />
+          <Route path="/order/payment" element={<Payment />} />
+
           <Route
             path="*"
             element={
