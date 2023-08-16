@@ -37,7 +37,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
-        navigate("/auth/sendOtp");
+        navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
       }
@@ -51,7 +51,7 @@ const Index = () => {
   };
 
   const responseMessage = (response: any) => {
-    console.log("response data", response);
+    // console.log("response data", response);
   };
 
   const signUp = () => {
@@ -140,7 +140,7 @@ const Index = () => {
                   text="signup_with"
                   onSuccess={responseMessage}
                   onError={() => {
-                    console.log("Google Signup Failed");
+                    // console.log("Google Signup Failed");
                   }}
                 />
               </div>

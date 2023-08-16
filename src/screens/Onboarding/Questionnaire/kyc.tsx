@@ -1,5 +1,5 @@
-import CustomButton from "../../components/Button";
-import Checkbox from "../../components/CheckBox";
+import CustomButton from "../../../components/Button";
+import Checkbox from "../../../components/CheckBox";
 
 export const KycActivation = () => {
   return (

@@ -4,6 +4,7 @@ import RightArrowIcon from "../../../assets/Profile/RightArrowIcon.svg";
 import { useNavigate } from "react-router-dom";
 import PassModal from "./PassModal";
 import ProfileModal from "./ProfileModal";
+import DeleteModal from "../../../components/CustomModal/DeleteModal";
 
 export const SettingTab = () => {
   const navigate = useNavigate();
@@ -12,6 +13,7 @@ export const SettingTab = () => {
   });
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const navigateTo = (text?: string) => {
     if (!isItLgScreen) {
       if (text == "settings")
@@ -20,8 +22,7 @@ export const SettingTab = () => {
     } else {
       if (text == "settings") {
         setIsPassModalOpen(true);
-      }
-      else setIsProfileModalOpen(true);
+      } else setIsProfileModalOpen(true);
     }
   };
   return (
@@ -29,6 +30,10 @@ export const SettingTab = () => {
       <div className="mx-4 mt-8">
         <div
           className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
+          style={{
+            boxShadow:
+              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+          }}
         >
           <div
             className={`flex justify-between items-center h-[44px]`}
@@ -53,6 +58,10 @@ export const SettingTab = () => {
         <div
           className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
           onClick={() => navigateTo()}
+          style={{
+            boxShadow:
+              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+          }}
         >
           <div className={`flex justify-between items-center h-[44px]`}>
             <div className="flex">
@@ -73,7 +82,11 @@ export const SettingTab = () => {
 
         <div
           className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
-          onClick={() => navigate("/profile/")}
+          onClick={() => setIsDeleteModalOpen(true)}
+          style={{
+            boxShadow:
+              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+          }}
         >
           <div className={`flex justify-between items-center h-[44px]`}>
             <div className="flex">
@@ -93,9 +106,21 @@ export const SettingTab = () => {
         </div>
       </div>
 
-      <PassModal isPassModalOpen={isPassModalOpen} setIsPassModalOpen={setIsPassModalOpen} />
+      <PassModal
+        isPassModalOpen={isPassModalOpen}
+        setIsPassModalOpen={setIsPassModalOpen}
+      />
 
-      <ProfileModal isProfileModalOpen={isProfileModalOpen} setIsProfileModalOpen={setIsProfileModalOpen} />
+      <ProfileModal
+        isProfileModalOpen={isProfileModalOpen}
+        setIsProfileModalOpen={setIsProfileModalOpen}
+      />
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        setModal={setIsDeleteModalOpen}
+        deleteTextMessage="Are you sure you want to delete this user"
+      />
     </>
   );
 };
