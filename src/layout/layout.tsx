@@ -15,7 +15,7 @@ export const CommonLayout = (props: Props) => {
             <Breadcrumb/>
           </div> */}
 
-        <main className="pb-24">
+        <main className="overflow-y-auto !h-[calc(100vh-165px)]">
           <div className="relative top-0">
             <Outlet />
           </div>

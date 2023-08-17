@@ -52,7 +52,7 @@ export const ProfileNotificationTab = () => {
   return (
     <div className="h-full">
       <Breadcum />
-      <div className="mx-4 mt-4 overflow-y-auto !h-[calc(100vh-165px)]">
+      <div className="mx-4 mt-4">
         <div className="flex flex-col">
           <div className="flex items-center">
             {!isItLgScreen && <img src={PersonIcon} alt="personIcon" />}
