@@ -85,6 +85,8 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
+import Layout from "../layout";
+import {CommonLayout} from "../layout/layout"
 
 const MyRoutes: React.FC = () => {
   return (
@@ -195,9 +197,9 @@ const MyRoutes: React.FC = () => {
           <Route path="profile" element={<BankLayout />}>
             <Route path="profileEdit-bank" element={<EditProfileBank />} />
           </Route>
-          <Route path="profile" element={<NotificationLayout />}>
+          <Route path="/" element={<CommonLayout />}>
             <Route
-              path="profile-notification"
+              path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
           </Route>

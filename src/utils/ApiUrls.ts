@@ -24,6 +24,8 @@ const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyNam
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
 const POST_VERIFY_OTP = `${SELLER_URL}/api/v1/seller/verifySignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
+const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
+const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
 
 export {
   SELLER_URL,
@@ -32,4 +34,6 @@ export {
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
   POST_VERIFY_OTP,
+  GET_PROFILE_NOTIFICATION,
+  UPDATE_PROFILE_NOTIFICATION,
 };
