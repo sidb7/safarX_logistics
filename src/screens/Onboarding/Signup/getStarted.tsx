@@ -1,6 +1,7 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import CloseIcon from "./../../../assets/CloseIcon.svg";
-import ShippingSupplies from "./../../../assets/Delivery/Shipping Supplies 1.svg";
+// import CloseIcon from "./../../../assets/CloseIcon.svg";
+import shippingSupplies from "../../../assets/Shipping Supplies 1.gif";
+// import ShippingSupplies from "./../../../assets/Delivery/Shipping Supplies 1.svg";
 import CustomButton from "../../../components/Button/index";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -20,12 +21,12 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
@@ -53,13 +54,16 @@ const Index = () => {
             </div>
 
             <div className=" flex flex-col mx-4 gap-y-6">
-              <img
-                className="h-[180px] "
-                src={ShippingSupplies}
-                alt="SupplyGif"
-              />
+              <div className="flex justify-center">
+                <img
+                  className="h-[180px] w-[180px] "
+                  src={shippingSupplies}
+                  alt="SupplyGif"
+                />
+              </div>
 
               <CustomButton
+                className="hover:bg-opacity-50 hover:-translate-y-[2px] hover:scale-100 duration-150 "
                 onClick={() => navigate("/onboarding/questionnaire/question1")}
                 text="SET UP MY ACCOUNT"
               />
@@ -73,7 +77,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {getStarted()}
         </CenterModal>
       )}

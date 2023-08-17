@@ -10,7 +10,7 @@ interface IPropTypes {
   initValue?: any;
 }
 
-const ToggleButton = (props: IPropTypes) => {
+const CustomSwitchToggle = (props: IPropTypes) => {
   const { toggleValue } = props;
   const [toggle, setToggle] = useState(props.initValue || false);
   const toggleClass = " transform translate-x-5";
@@ -41,4 +41,4 @@ const ToggleButton = (props: IPropTypes) => {
   );
 };
 
-export default ToggleButton;
+export default CustomSwitchToggle;
