@@ -5,6 +5,7 @@ interface CenterModalProps {
   onClose: () => void;
   children?: any;
   className?: string;
+  shouldCloseOnOverlayClick?: boolean;
 }
 
 const CenterModal: React.FC<CenterModalProps> = ({
@@ -12,6 +13,7 @@ const CenterModal: React.FC<CenterModalProps> = ({
   onClose,
   children,
   className = "",
+  shouldCloseOnOverlayClick,
 }) => {
   return (
     <ReactModal
@@ -19,6 +21,7 @@ const CenterModal: React.FC<CenterModalProps> = ({
       onRequestClose={onClose}
       className={`${className} fixed inset-0 m-auto w-3/6 flex flex-col justify-center items-center rounded-lg overflow-hidden bg-white h-5/6`}
       overlayClassName="fixed z-20 inset-0 bg-gray-800 bg-opacity-50"
+      shouldCloseOnOverlayClick={shouldCloseOnOverlayClick}
     >
       {children}
     </ReactModal>

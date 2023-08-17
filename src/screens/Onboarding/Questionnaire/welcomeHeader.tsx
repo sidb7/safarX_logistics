@@ -1,5 +1,5 @@
 import { WelcomeQuestion } from "./welcome";
-import CompanyLogo from "../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../assets/Navbar/ShipyaariLogos.svg";
 
 interface IWelcomeProps {
   className?: string;
@@ -21,7 +21,7 @@ const WelcomeHeader: React.FunctionComponent<IWelcomeProps> = ({
       </div>
 
       <div className="mx-4">
-        <WelcomeQuestion  className={welcomeClassName} label={welcomeLabel} />
+        <WelcomeQuestion className={welcomeClassName} label={welcomeLabel} />
       </div>
     </>
   );

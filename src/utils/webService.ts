@@ -1,5 +1,6 @@
 import axios from "axios";
 import { SELLER_URL } from "./ApiUrls";
+import { tokenKey } from "./utility";
 
 axios.defaults.baseURL = SELLER_URL;
 
@@ -21,8 +22,7 @@ axios.defaults.baseURL = SELLER_URL;
 const createHeader = (_URL: string, options = {}) => {
   let header = {
     Accept: "/",
-    Authorization:
-      "Bearer " + localStorage.getItem("891f5e6d-b3b3-4c16-929d-b06c3895e38d"),
+    Authorization: `Bearer ${localStorage.getItem(tokenKey)}`,
   };
   options = { ...options, headers: header };
   return { URL: _URL, options: options };
