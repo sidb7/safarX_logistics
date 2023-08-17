@@ -1,8 +1,10 @@
+import { useState } from "react";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 
-const BottomLayout = () => {
+const BottomLayout = ({ callApi }: any) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   return (
     <footer className="w-full fixed bottom-0">
@@ -14,9 +16,13 @@ const BottomLayout = () => {
         />
 
         <ServiceButton
-          text="SAVE"
+          text={loading ? "LOADING" : "SAVE"}
           className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
-          onClick={() => {}}
+          onClick={async () => {
+            setLoading(true);
+            await callApi();
+            setLoading(false);
+          }}
         />
       </div>
     </footer>
