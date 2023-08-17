@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
-import CloseIcon from "../../../assets/CloseIcon.svg";
+// import CloseIcon from "../../../assets/CloseIcon.svg";
 import { POST_SIGN_UP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
