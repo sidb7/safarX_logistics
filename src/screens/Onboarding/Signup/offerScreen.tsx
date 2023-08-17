@@ -1,5 +1,5 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import CloseIcon from "./../../../assets/CloseIcon.svg";
+// import CloseIcon from "./../../../assets/CloseIcon.svg";
 import { useNavigate } from "react-router-dom";
 import Card from "./offersCard";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -22,12 +22,12 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
@@ -47,8 +47,10 @@ const Index = () => {
             </div>
 
             <div className="flex flex-col mt-[55px] mx-4 gap-y-3">
-              <p className="text-center text-2xl font-medium">Offers</p>
-              <p className="text-center font-thin">
+              <p className="text-center text-[22px] font-bold leading-7 font-Lato text-[#323232]">
+                Offers
+              </p>
+              <p className="text-center text-[#494949] font-Open text-base font-light leading-[22px]">
                 Choose from our lists of offers that suits you the best.
               </p>
             </div>
@@ -57,19 +59,19 @@ const Index = () => {
                 cardHeaderText="10 % EXTRA up to ₹1000"
                 cardBodyText="Use standard charter Digismart credit card"
                 cardFooterText="Save up to ₹500 with this code"
-                wrapperClassName="!bg-[#F2FAEF]"
+                // wrapperClassName="!bg-[#F2FAEF]"
               />
               <Card
                 cardHeaderText="10 % EXTRA up to ₹1000"
                 cardBodyText="Use standard charter Digismart credit card"
                 cardFooterText="Save up to ₹500 with this code"
-                wrapperClassName="!bg-[#FDF6EA]"
+                // wrapperClassName="!bg-[#FDF6EA]"
               />
               <Card
                 cardHeaderText="10 % EXTRA up to ₹1000"
                 cardBodyText="Use standard charter Digismart credit card"
                 cardFooterText="Save up to ₹500 with this code"
-                wrapperClassName="!bg-[#F2FAEF]"
+                // wrapperClassName="!bg-[#F2FAEF]"
               />
             </div>
             <div className="flex justify-center mt-4">
@@ -90,7 +92,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {offerScreen()}
         </CenterModal>
       )}
