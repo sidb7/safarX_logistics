@@ -199,9 +199,9 @@ const MyRoutes: React.FC = () => {
           <Route path="profile" element={<BankLayout />}>
             <Route path="profileEdit-bank" element={<EditProfileBank />} />
           </Route>
-          <Route path="profile" element={<CommonLayout />}>
+          <Route path="/" element={<CommonLayout />}>
             <Route
-              path="profile-notification"
+              path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
           </Route>
