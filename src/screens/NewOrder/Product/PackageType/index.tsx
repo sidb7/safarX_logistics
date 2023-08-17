@@ -42,6 +42,8 @@ const Index = () => {
         />
       </div>
 
+      
+
       <ProductDetails />
       <UploadInput />
 

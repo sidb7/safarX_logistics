@@ -72,7 +72,6 @@ import { ChangePassword } from "../screens/Profile/Settings/changePassword";
 import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
-import { AccountQuestion } from "../screens/Onboarding/Questionnaire";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
 import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
@@ -87,7 +86,7 @@ import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
 import Layout from "../layout";
-import { CommonLayout } from "../layout/layout";
+import {CommonLayout} from "../layout/layout"
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
@@ -100,20 +99,17 @@ const MyRoutes: React.FC = () => {
           <Route path="/swiper" element={<DummySwiperScreen />} />
           <Route path="/" element={<BootScreen />} />
           <Route path="/auth/login" element={<LogInScreen />} />
-          <Route path="/auth/signUp" element={<SignUpScreen />} />
-          <Route path="/auth/signUp" element={<SignUpScreen />} />
-          <Route path="/auth/sendOtp" element={<SendOTPScreen />} />
+          {/* <Route path="/auth/signUp" element={<SignUpScreen />} /> */}
+          {/* <Route path="/auth/sendOtp" element={<SendOTPScreen />} />
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
-          <Route path="/auth/getStarted" element={<GetStartedScreen />} />
-          <Route path="question" element={<AccountQuestion />} />
-          <Route path="question" element={<AccountQuestion />} />
+          <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
           <Route path="/neworder" element={<NewOrderLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
             <Route path="service" element={<ServiceScreen />} />
-            <Route path="payment" element={<PaymentScreen />} />
+            {/* <Route path="payment" element={<PaymentScreen />} /> */}
             <Route path="summary" element={<SummaryScreen />} />
             <Route
               path="standard-service"
@@ -123,14 +119,6 @@ const MyRoutes: React.FC = () => {
             <Route path="post-payment" element={<PostPaymentScreen />} />
             <Route path="productpage" element={<ProductPage />} />
             <Route path="productfilled" element={<ProductFilled />} />
-
-            {/*AddProduct screen in Product */}
-            <Route path="newOrder/addnewproduct" element={<AddNewProduct />} />
-            <Route
-              path="newOrder/productpackage"
-              element={<ProductPackage />}
-            />
-
             <Route path="package" element={<Package />} />
             <Route path="map" element={<Map />} />
             <Route path="label" element={<LabelScreen />} />
@@ -149,127 +137,54 @@ const MyRoutes: React.FC = () => {
           </Route>
 
           {/* onboarding routes  */}
-          <Route path="/account" element={<AccountLayoutScreen />}>
-            <Route path="question1" element={<QuestionComponent1 />} />
-            <Route path="question2" element={<QuestionComponent2 />} />
-            <Route path="question3" element={<QuestionComponent3 />} />
-            <Route path="question4" element={<QuestionComponent4 />} />
-            <Route path="question5" element={<QuestionComponent5 />} />
+
+          <Route path="onboarding" element={<AccountLayoutScreen />}>
+            <Route path="signup" element={<SignUpScreen />} />
+            <Route path="sendotp" element={<SendOTPScreen />} />
+            <Route path="verifyotp" element={<VerifyOTPScreen />} />
+            <Route path="offers" element={<OffersScreen />} />
+            <Route path="getStarted" element={<GetStartedScreen />} />
+            <Route
+              path="questionnaire/question1"
+              element={<QuestionComponent1 />}
+            />
+            <Route
+              path="questionnaire/question2"
+              element={<QuestionComponent2 />}
+            />
+            <Route
+              path="questionnaire/question3"
+              element={<QuestionComponent3 />}
+            />
+            <Route
+              path="questionnaire/question4"
+              element={<QuestionComponent4 />}
+            />
+            <Route
+              path="questionnaire/question5"
+              element={<QuestionComponent5 />}
+            />
             <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
             <Route
               path="kyc-photo"
               element={<KycPhotoIdentificationScreen />}
             />
 
-            <Route path="onboarding" element={<AccountLayoutScreen />}>
-              <Route path="signup" element={<SignUpScreen />} />
-              <Route path="sendotp" element={<SendOTPScreen />} />
-              <Route path="verifyotp" element={<VerifyOTPScreen />} />
-              <Route path="offers" element={<OffersScreen />} />
-              <Route path="getStarted" element={<GetStartedScreen />} />
-              <Route
-                path="questionnaire/question1"
-                element={<QuestionComponent1 />}
-              />
-              <Route
-                path="questionnaire/question2"
-                element={<QuestionComponent2 />}
-              />
-              <Route
-                path="questionnaire/question3"
-                element={<QuestionComponent3 />}
-              />
-              <Route
-                path="questionnaire/question4"
-                element={<QuestionComponent4 />}
-              />
-              <Route
-                path="questionnaire/question5"
-                element={<QuestionComponent5 />}
-              />
-              <Route path="account" element={<AccountLayoutScreen />}>
-                <Route path="question1" element={<QuestionComponent1 />} />
-                <Route path="question2" element={<QuestionComponent2 />} />
-                <Route path="question3" element={<QuestionComponent3 />} />
-                <Route path="question4" element={<QuestionComponent4 />} />
-                <Route path="question5" element={<QuestionComponent5 />} />
-                <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
-                <Route
-                  path="kyc-photo"
-                  element={<KycPhotoIdentificationScreen />}
-                />
-
-                <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
-                <Route
-                  path="kyc-mobile-verify"
-                  element={<KycMobileVerificationScreen />}
-                />
-                <Route
-                  path="kyc-terms/GSTComponent"
-                  element={<GSTComponent />}
-                />
-                <Route
-                  path="kyc-terms/ServiceComponent"
-                  element={<ServiceComponent />}
-                />
-                <Route
-                  path="kyc-company"
-                  element={<KycCompanyDetailsScreen />}
-                />
-                <Route path="kyc-modal" element={<KycModalScreen />} />
-                <Route path="select-address" element={<SelectAddress />} />
-                <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
-              </Route>
-              <Route path="order" element={<OrderLayout />}></Route>
-
-              <Route path="order" element={<OrderLayout />}>
-                <Route path="order-details" element />
-              </Route>
-              <Route path="transaction" element={<TransactionLayout />}></Route>
-              <Route
-                path="transaction/filter"
-                element={<TransactionFilterScreen />}
-              ></Route>
-              <Route path="profile" element={<ProfileLayout />}></Route>
-              <Route path="profile" element={<KycLayout />}>
-                <Route path="profileEdit-kyc" element={<EditProfileKyc />} />
-              </Route>
-              <Route path="profile" element={<BankLayout />}>
-                <Route path="profileEdit-bank" element={<EditProfileBank />} />
-              </Route>
-              {/* <Route path="/" element={<CommonLayout />}>
-                <Route
-                  path="profile/profile-notification"
-                  element={<ProfileNotificationTab />}
-                />
-              </Route> */}
-              <Route path="profile" element={<ReferLayout />}>
-                <Route path="profile-refer-earn" element={<ReferTab />} />
-              </Route>
-              <Route path="profile" element={<SettingLayout />}>
-                <Route path="profile-setting" element={<SettingTab />} />
-              </Route>
-              <Route path="profile" element={<ChangePasswordLayout />}>
-                <Route
-                  path="profile-setting-change-password"
-                  element={<ChangePassword />}
-                />
-              </Route>
-              <Route path="profile" element={<EditProfileLayout />}>
-                <Route
-                  path="profile-setting-edit-profile"
-                  element={<EditProfile />}
-                />
-              </Route>
-              <Route path="neworder/payment" element={<PaymentScreen />} />
-            </Route>
-
+            <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
+            <Route
+              path="kyc-mobile-verify"
+              element={<KycMobileVerificationScreen />}
+            />
+            <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
+            <Route
+              path="kyc-terms/ServiceComponent"
+              element={<ServiceComponent />}
+            />
             <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
             <Route path="kyc-modal" element={<KycModalScreen />} />
             <Route path="select-address" element={<SelectAddress />} />
             <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
-
           <Route path="order" element={<OrderLayout />}>
             <Route path="order-details" element />
           </Route>
@@ -285,9 +200,9 @@ const MyRoutes: React.FC = () => {
           <Route path="profile" element={<BankLayout />}>
             <Route path="profileEdit-bank" element={<EditProfileBank />} />
           </Route>
-          <Route path="profile" element={<NotificationLayout />}>
+          <Route path="/" element={<CommonLayout />}>
             <Route
-              path="profile-notification"
+              path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
           </Route>
@@ -309,7 +224,6 @@ const MyRoutes: React.FC = () => {
               element={<EditProfile />}
             />
           </Route>
-
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
           <Route path="/neworder/walletrecharge" element={<WalletRecharge />} />
@@ -327,8 +241,6 @@ const MyRoutes: React.FC = () => {
             path="/neworder/searchfilterproduct"
             element={<SearchFilterProduct />}
           />
-          <Route path="/neworder/addressbook" element={<AddressBook />} />
-
           <Route path="/neworder/addressbook" element={<AddressBook />} />
           <Route
             path="/neworder/productcatalogueaddcambo"
@@ -380,7 +292,8 @@ const MyRoutes: React.FC = () => {
           <Route path="/order/service" element={<Service />} />
           <Route path="/order/summary" element={<Summary />} />
           <Route path="/order/payment" element={<Payment />} />
-
+          <Route path="newOrder/addnewproduct" element={<AddNewProduct />} />
+          <Route path="newOrder/productpackage" element={<ProductPackage />} />
           <Route
             path="*"
             element={
