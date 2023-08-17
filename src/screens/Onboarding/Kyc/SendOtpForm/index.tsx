@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import WelcomeHeader from "../welcomeHeader";
 import { useMediaQuery } from "react-responsive";
-import CustomInputBox from "../../../../components/InputBox";
+import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
@@ -35,9 +35,17 @@ const Index = (props: Props) => {
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col  items-center lg:mt-[92px]  gap-y-5 mb-6">
-          <CustomInputBox label="GST Number" className="lg:!w-[320px]" />
-          <CustomInputBox label=" Pan Number" className="lg:!w-[320px]" />
+        <div className="flex flex-col justify-center items-center mt-[53px] lg:mt-[92px]  gap-y-5 mb-6">
+          <CustomInputBox
+            containerStyle="lg:!w-auto"
+            label="GST Number"
+            className="lg:!w-[320px]   !font-Open"
+          />
+          <CustomInputBox
+            containerStyle="lg:!w-auto"
+            label=" Pan Number"
+            className="lg:!w-[320px] !font-Open"
+          />
         </div>
         <div className="flex  lg:justify-center lg:items-center  pb-12 ">
           <ServiceButton
@@ -62,7 +70,7 @@ const Index = (props: Props) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px]"
+          className="!p-0 !w-[500px] !h-[602px]"
           overlayClassName="flex  items-center"
         >
           {sendOtpFormComponent()}

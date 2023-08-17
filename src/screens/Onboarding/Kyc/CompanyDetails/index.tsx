@@ -17,7 +17,6 @@ const Index = (props: Props) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   return (
     <div>
-      
       <div className="px-5 lg:hidden">
         <WelcomeHeader
           title="Welcome to Shipyaari"
@@ -38,7 +37,7 @@ const Index = (props: Props) => {
             className="bg-[#1C1C1C] text-white w-full mb-5"
           />
         </div>
-      </div>  
+      </div>
 
       {isBigScreen && (
         <div className="mx-4 hidden lg:block lg:h-[602px]">
@@ -49,40 +48,38 @@ const Index = (props: Props) => {
             overlayClassName="flex  items-center"
           >
             <div className="hidden lg:block">
-            <div className="flex justify-between items-center shadow-md  p-4 ">
+              <div className="flex justify-between items-center shadow-md  p-4 ">
                 <img src={CompanyLogo} alt="" />
                 <img src={CrossLogo} alt="" onClick={closeModal} />
-            </div>
-        <WelcomeHeader
-          title="Welcome to Shipyaari"
-          content="Tell us more about your company"
-        />
-        <div className="flex flex-col gap-y-5 mb-5 mx-[90px]">
-          <CustomInputBox label="Plot no, floor, building name" />
-          <CustomInputBox label="Landmark" />
-          <div className="flex gap-x-4">
-            <CustomInputBox label="City" />
-            <CustomInputBox label="Pincode" />
-          </div>
-          <div className="flex gap-x-4">
-            <CustomInputBox label="State" />
-            <CustomInputBox label="Country" />
-          </div>
-          <CustomInputBox label="Brand Name" />
+              </div>
+              <WelcomeHeader
+                title="Welcome to Shipyaari"
+                content="Tell us more about your company"
+              />
+              <div className="flex flex-col gap-y-5 mb-5 mx-[90px]">
+                <CustomInputBox label="Plot no, floor, building name" />
+                <CustomInputBox label="Landmark" />
+                <div className="flex gap-x-4">
+                  <CustomInputBox label="City" />
+                  <CustomInputBox label="Pincode" />
+                </div>
+                <div className="flex gap-x-4">
+                  <CustomInputBox label="State" />
+                  <CustomInputBox label="Country" />
+                </div>
+                <CustomInputBox label="Brand Name" />
 
-          <CustomInputWithFileUpload label="Upload Logo" />
-          <ServiceButton
-            text="SUBMIT"
-            className="bg-[#1C1C1C] text-white w-full mb-5"
-          />
-        </div>
-        <div className="flex flex-col   pb-12">
-          
-        </div>
+                <CustomInputWithFileUpload label="Upload Logo" />
+                <ServiceButton
+                  text="SUBMIT"
+                  className="bg-[#1C1C1C] text-white w-full mb-5"
+                />
+              </div>
+              <div className="flex flex-col   pb-12"></div>
             </div>
           </CustomBottomModal>
-    </div>
-    )}
+        </div>
+      )}
     </div>
   );
 };

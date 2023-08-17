@@ -8,9 +8,9 @@ import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
 import CrossLogo from "../../../../assets/cross.svg";
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+interface ITypeProps {}
 
-const Index = (props: Props) => {
+const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(false);
@@ -35,8 +35,11 @@ const Index = (props: Props) => {
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col  items-center  mt-[140px]   mb-4">
-          <CustomInputBox label="Aadhar Number" className="lg:!w-[320px]" />
+        <div className="flex flex-col  items-center  mt-[96px]   mb-4">
+          <CustomInputBox
+            label="Aadhar Number"
+            className="lg:!w-[320px] !font-Open"
+          />
         </div>
         <div className="flex  lg:justify-center lg:items-center  pb-12 ">
           <ServiceButton

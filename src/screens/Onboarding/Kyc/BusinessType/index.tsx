@@ -8,9 +8,9 @@ import CrossLogo from "../../../../assets/cross.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+interface ITypeProps {}
 
-const BusinessType = (props: Props) => {
+const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(false);
@@ -19,15 +19,15 @@ const BusinessType = (props: Props) => {
 
   const businessTypeComponent = () => {
     return (
-      <div className="px-5 relative lg:px-0">
+      <div className="px-5 h-screen lg:h-full  lg:px-0">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
-          <img
+          {/* <img
             src={CrossLogo}
             alt=""
             onClick={closeModal}
             className="cursor-pointer"
-          />
+          /> */}
         </div>
 
         <WelcomeHeader
@@ -35,8 +35,8 @@ const BusinessType = (props: Props) => {
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col items-center lg:justify-center  mb-10 lg:mb-6">
-          <p className="font-semibold text-[18px] text-[#1C1C1C] mb-7 lg:mb-3">
+        <div className="flex flex-col items-center lg:justify-center  mb-[96px] lg:mb-6">
+          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-3">
             Please confirm your business type
           </p>
           <Card
@@ -60,10 +60,10 @@ const BusinessType = (props: Props) => {
             subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
           />
         </div>
-        <div className="flex flex-col lg:items-center lg:justify-center  pb-12">
+        <div className="flex flex-col gap-y-4  lg:gap-y-3 lg:items-center lg:justify-center   pb-12 lg:pb-0 lg:mb-6">
           <ServiceButton
             text="PROCEED FOR KYC"
-            className="bg-[#1C1C1C] !w-[320px] text-white !py-2 !px-4 mb-4 lg:mb-3"
+            className="bg-[#1C1C1C] !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "
             onClick={() => {
               navigate("/account/kyc-photo");
             }}
@@ -71,7 +71,7 @@ const BusinessType = (props: Props) => {
 
           <ServiceButton
             text="SKIP FOR NOW"
-            className="!text-[#004EFF] !font-semibold !text-[14px]  underline !border-none"
+            className="!text-[#004EFF]   underline !border-none"
           />
         </div>
       </div>
@@ -86,7 +86,7 @@ const BusinessType = (props: Props) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] mt-5 "
+          className="!p-0 !w-[500px] mt-5  "
           overlayClassName="!items-center"
         >
           {businessTypeComponent()}

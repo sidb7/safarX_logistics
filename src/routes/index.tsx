@@ -25,18 +25,19 @@ import VerifyOTPScreen from "../screens/Auth/SignUp/verifyOtp";
 import OffersScreen from "../screens/Auth/SignUp/offerScreen";
 import GetStartedScreen from "../screens/Auth/SignUp/getStarted";
 import OrderLayout from "../layout/OrderLayout";
-import KycBusinessTypeScreen from "../screens/AccountSetUp/KYC/BusinessType";
+import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
-import KycPhotoIdentificationScreen from "../screens/AccountSetUp/KYC/PhotoIdentification";
-import KycSendOtpFormScreen from "../screens/AccountSetUp/KYC/SendOtpForm";
-import KycMobileVerificationScreen from "../screens/AccountSetUp/KYC/MobileVerification";
-import { GSTComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/gstComponent";
-import { ServiceComponent } from "../screens/AccountSetUp/KYC/TermsAndAgreement/index";
-import KycCompanyDetailsScreen from "../screens/AccountSetUp/KYC/CompanyDetails";
-import KycModalScreen from "../screens/AccountSetUp/KYC/TermsAndAgreement/Modal";
-import KycAadharForm from "../screens/AccountSetUp/KYC/AadharForm";
+import KycPhotoIdentificationScreen from "../screens/Onboarding/Kyc/PhotoIdentification";
+import KycSendOtpFormScreen from "../screens/Onboarding/Kyc/SendOtpForm";
+import KycMobileVerificationScreen from "../screens/Onboarding/Kyc/MobileVerification";
+import { GSTComponent } from "../screens/Onboarding/Kyc/TermsAndAgreement/gstComponent";
+import { ServiceComponent } from "../screens/Onboarding/Kyc/TermsAndAgreement/index";
+import KycCompanyDetailsScreen from "../screens/Onboarding/Kyc/CompanyDetails";
+import KycModalScreen from "../screens/Onboarding/Kyc/TermsAndAgreement/Modal";
+import KycAadharForm from "../screens/Onboarding/Kyc/AadharForm";
 
-import SelectAddress from "../screens/AccountSetUp/KYC/SelectAddress/index";
+import SelectAddress from "../screens/Onboarding/Kyc/SelectAddress/index";
+import SelectAddressProprietor from "../screens/Onboarding/Kyc/SelectAddress/proprietor";
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
@@ -141,6 +142,10 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
+            <Route
+              path="select-address-proprietor"
+              element={<SelectAddressProprietor />}
+            />
             <Route
               path="kyc-mobile-verify"
               element={<KycMobileVerificationScreen />}

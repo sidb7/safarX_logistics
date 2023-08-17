@@ -10,9 +10,9 @@ import Modal from "./Modal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
 import CrossLogo from "../../../../assets/cross.svg";
 
-type Props = {};
+interface ITypeProps {}
 
-const Index = (props: Props) => {
+const Index = (props: ITypeProps) => {
   const [showModal, setShowModal] = useState(false);
   const [cameraPermission, setCameraPermission] = useState(false);
   const [snapImage, setSnapImage] = useState("");
@@ -62,7 +62,7 @@ const Index = (props: Props) => {
 
   const photoIdentificationComponent = () => {
     return (
-      <div className="relative top-0 px-5 lg:px-0">
+      <div className="relative top-0 px-5 h-screen lg:h-full lg:px-0">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
           <img
@@ -77,8 +77,8 @@ const Index = (props: Props) => {
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col items-center mb-12 lg:mb-11">
-          <p className="font-semibold text-[18px] text-[#1C1C1C] mb-12 lg:mb-6">
+        <div className="flex flex-col items-center mb-[84px]  lg:mb-11">
+          <p className="font-semibold font-Lato text-lg text-[#1C1C1C] mb-11 lg:mb-6">
             Photo Identification
           </p>
 
@@ -116,14 +116,14 @@ const Index = (props: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col lg:justify-center lg:items-center pb-12 mb-5 lg:pb-0 lg:mb-6">
+        <div className="flex flex-col   lg:justify-center lg:items-center  lg:pb-0 lg:mb-6">
           <ServiceButton
             text="CAPTURE SELFIE"
-            className="bg-[#1C1C1C] text-white !w-[320px] !py-2 !px-4 "
+            className="bg-[#1C1C1C] text-white !w-full lg:!w-[320px] !py-2 !px-4 "
             onClick={() => {
               getSnapshot();
               // getCameraPermission();
-              // navigate("/account/kyc-otp-form");
+              navigate("/account/kyc-otp-form");
             }}
           />
         </div>
@@ -149,10 +149,10 @@ const Index = (props: Props) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] "
+          className="!p-0 !w-[500px] !h-[602px] "
           overlayClassName="flex  items-center"
         >
-          {photoIdentificationComponent()}{" "}
+          {photoIdentificationComponent()}
         </CustomBottomModal>
       )}
     </div>

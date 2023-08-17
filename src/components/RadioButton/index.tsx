@@ -15,13 +15,13 @@ const index = (props: IRadioButtonProps) => {
     props;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center ">
       <input
         type="radio"
         name={name}
         value={value}
         onChange={onChange}
-        className={`${inputClassName}`}
+        className={`  ${inputClassName}`}
         id={id}
       />
       <label htmlFor={id} className={`${labelClassName}`}>
