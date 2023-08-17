@@ -2,7 +2,30 @@ import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
 import LabelContainer from "../../../components/LabelContainer";
-export const ProfileKycCard = () => {
+
+interface KYCProps {
+  KycDetails: any;
+}
+
+export const ProfileKycCard = (props: KYCProps) => {
+  const aadharFile = props?.KycDetails?.aadharFile;
+  const aadharNumber = props?.KycDetails?.aadharNumber;
+  const address = props?.KycDetails?.address;
+  const firstName = props?.KycDetails?.firstName;
+  const gstFile = props?.KycDetails?.gstFile;
+  const gstNumber = props?.KycDetails?.gstNumber;
+  const lastName = props?.KycDetails?.lastName;
+  const panFile = props?.KycDetails?.panFile;
+  const panNumber = props?.KycDetails?.panNumber;
+
+  const city = props?.KycDetails?.address?.city;
+  const country = props?.KycDetails?.address?.country;
+  const district = props?.KycDetails?.address?.district;
+  const locality = props?.KycDetails?.address?.locality;
+  const pincode = props?.KycDetails?.address?.pincode;
+  const plotNumber = props?.KycDetails?.address?.plotNumber;
+  const state = props?.KycDetails?.address?.state;
+
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
@@ -33,14 +56,17 @@ export const ProfileKycCard = () => {
         <div>
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer label="User Name" info="Bunty" />
+              <LabelContainer
+                label="User Name"
+                info={`${firstName} ${lastName}`}
+              />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="GST Details"
                 className={"ml-3"}
-                info="HD35K3JDT4D5D2"
+                info={gstNumber}
                 classNameInfo="ml-3"
               />
             </div>
@@ -48,14 +74,14 @@ export const ProfileKycCard = () => {
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer label="Aadhar Details" info="114626443" />
+              <LabelContainer label="Aadhar Details" info={aadharNumber} />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="PAN Details"
                 className={"ml-3"}
-                info="DI4RI4IR3"
+                info={panNumber}
                 classNameInfo="ml-3"
               />
             </div>
@@ -63,17 +89,14 @@ export const ProfileKycCard = () => {
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer
-                label="Plot no, Sector"
-                info="Plot no. 8 Sector 1"
-              />
+              <LabelContainer label="Plot no, Sector" info={plotNumber} />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="Locality, Landmark"
                 className={"ml-3"}
-                info="Locality details"
+                info={locality}
                 classNameInfo="ml-3"
               />
             </div>
@@ -81,14 +104,17 @@ export const ProfileKycCard = () => {
 
           <div className="grid grid-cols-2 ml-4 my-2">
             <div className="flex flex-col">
-              <LabelContainer label="City, Pin code" info="Mumbai 324212" />
+              <LabelContainer
+                label="City, Pin code"
+                info={`${city}, ${pincode} `}
+              />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="State, Country"
                 className="ml-3"
-                info="Maharashtra, India"
+                info={`${state} , ${country}`}
                 classNameInfo="ml-3"
               />
             </div>
@@ -96,14 +122,14 @@ export const ProfileKycCard = () => {
 
           <div className="grid grid-cols-2 ml-4 my-2">
             <div className="flex flex-col">
-              <LabelContainer label="GST Documents" info="User Details" />
+              <LabelContainer label="GST Documents" info={gstFile} />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="Aadhar Documents"
                 className="ml-3"
-                info="User Details"
+                info={aadharFile}
                 classNameInfo="ml-3"
               />
             </div>
@@ -111,7 +137,7 @@ export const ProfileKycCard = () => {
 
           <div className="grid grid-cols-2 ml-4 my-2">
             <div className="flex flex-col">
-              <LabelContainer label="PAN Card" info="User Details" />
+              <LabelContainer label="PAN Card" info={panFile} />
             </div>
           </div>
         </div>
@@ -121,7 +147,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="User Name"
               className="text-[12px]"
-              info="Bunty"
+              info={`${firstName} ${lastName}`}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -129,7 +155,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="GST Details"
               className="text-[12px]"
-              info="HD35K3JDT4D5D2"
+              info={gstNumber}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -138,7 +164,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="Aadhar Details"
               className="text-[12px]"
-              info="114626443"
+              info={aadharNumber}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -147,7 +173,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="PAN Details"
               className="text-[12px]"
-              info="DI4RI4IR3"
+              info={panNumber}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -156,7 +182,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="Plot no, Sector"
               className="text-[12px]"
-              info="Plot no. 8 Sector 1"
+              info={plotNumber}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -165,7 +191,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="Locality, Landmark"
               className="text-[12px]"
-              info="Locality details"
+              info={locality}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -174,7 +200,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="City, Pin code"
               className="text-[12px]"
-              info=" Mumbai 324212"
+              info={`${city}, ${pincode} `}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -183,7 +209,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="State, Country"
               className="text-[12px]"
-              info="Maharashtra, India"
+              info={`${state} , ${country}`}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -192,7 +218,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="GST Documents"
               className="text-[12px]"
-              info="UserDetails"
+              info={gstFile}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -201,7 +227,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="Aadhar Documents"
               className="text-[12px]"
-              info="User Details"
+              info={aadharFile}
               classNameInfo="!text-[14px]"
             />
           </div>
@@ -210,7 +236,7 @@ export const ProfileKycCard = () => {
             <LabelContainer
               label="PAN Documents"
               className="text-[12px]"
-              info="User Details"
+              info={panFile}
               classNameInfo="!text-[14px]"
             />
           </div>

@@ -5,8 +5,12 @@ import EmailIcon from "../../../assets/Profile/EmailIcon.svg";
 import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
 import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+interface ProfileCardProps {
+  ProfileDetails: any;
+}
 
 const LabelComponent: React.FC<{
   label: string;
@@ -26,7 +30,21 @@ const LabelComponent: React.FC<{
   );
 };
 
-export const ProfileCard = () => {
+export const ProfileCard = (props: ProfileCardProps) => {
+  const {
+    sellerId,
+    profileImageUrl,
+    firstName,
+    lastName,
+    middleName,
+    email,
+    contactNumber,
+    companyName,
+    activePlan,
+    yaariPoints,
+    walletBalance,
+  }: any = props?.ProfileDetails;
+
   const navigate = useNavigate();
 
   const isItLgScreen = useMediaQuery({
@@ -38,12 +56,34 @@ export const ProfileCard = () => {
       <div className="md:grid md:grid-cols-2">
         <div className="grid grid-cols-3 border-[1px] border-[#E8E8E8] rounded-md mt-4">
           <div className="flex flex-col col-span-1 items-center py-4">
-            <img src={ProfileIcon} alt="Profile" className="w-[82px]" />
-            <span className="text-[12px] text-[#1C1C1C]">Seller ID: 5943</span>
+            <div
+              style={{
+                width: "82px",
+                height: "82px",
+                overflow: "hidden",
+                borderRadius: "50%",
+              }}
+            >
+              <img
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  mask: "radial-gradient(circle, transparent 50%, black 50%)",
+                }}
+                // src={ProfileIcon}
+                src={profileImageUrl}
+                alt="Profile"
+                className="w-[82px]"
+              />
+            </div>
+            <span className="text-[12px] text-[#1C1C1C]">
+              Seller ID: {sellerId}
+            </span>
           </div>
           <div className="col-span-2 whitespace-nowrap flex flex-col space-y-1 text-[14px] font-normal py-4">
             <span className="flex justify-between">
-              Divya Sharma
+              {`${firstName} ${lastName}`}
               <img
                 src={BlackEditIcon}
                 alt=""
@@ -55,15 +95,15 @@ export const ProfileCard = () => {
             </span>
             <span className="flex">
               <img src={EmailIcon} alt="Email" className="w-[16px] mr-1" />
-              Divya.Sharma@gmail.com
+              {email}
             </span>
             <span className="flex">
               <img src={PhoneIcon} alt="Phone" className="w-[16px] mr-1" />
-              +91 7387324442
+              {`+91 ${contactNumber}`}
             </span>
             <span className="flex">
               <img src={WebsiteIcon} alt="Website" className="w-[16px] mr-1" />
-              FreeProducts.com
+              {companyName}
             </span>
           </div>
         </div>
@@ -76,7 +116,7 @@ export const ProfileCard = () => {
               <LabelComponent
                 label="Yaari Points"
                 className={"text-[14px] pl-2 py-2"}
-                info="100"
+                info={yaariPoints || "100"}
                 classNameInfo="pl-2 py-2"
               />
             </div>
@@ -84,7 +124,7 @@ export const ProfileCard = () => {
               <LabelComponent
                 label="Wallet Balance"
                 className={"text-[14px] pl-2 py-2"}
-                info="5,000"
+                info={walletBalance || "5,000"}
                 classNameInfo="pl-2 py-2"
               />
             </div>
@@ -110,7 +150,7 @@ export const ProfileCard = () => {
             <LabelComponent
               label="Yaari Points"
               className={"text-[18px] pl-3"}
-              info="100"
+              info={yaariPoints || "100"}
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>
@@ -118,7 +158,7 @@ export const ProfileCard = () => {
             <LabelComponent
               label="Wallet Balance"
               className={"text-[18px] pl-3"}
-              info="5,000"
+              info={walletBalance || "5,000"}
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>
