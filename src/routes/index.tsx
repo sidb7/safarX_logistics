@@ -72,7 +72,6 @@ import { ChangePassword } from "../screens/Profile/Settings/changePassword";
 import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
-import { AccountQuestion } from "../screens/Onboarding/Questionnaire";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
 import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
@@ -86,6 +85,11 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
+import Layout from "../layout";
+import {CommonLayout} from "../layout/layout"
+
+import AddNewProduct from "../screens/Order/Product/AddProduct";
+import ProductPackage from "../screens/Order/Product/ProductPackage";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -100,7 +104,6 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
-          <Route path="question" element={<AccountQuestion />} />
           <Route path="/neworder" element={<NewOrderLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
@@ -197,9 +200,9 @@ const MyRoutes: React.FC = () => {
           <Route path="profile" element={<BankLayout />}>
             <Route path="profileEdit-bank" element={<EditProfileBank />} />
           </Route>
-          <Route path="profile" element={<NotificationLayout />}>
+          <Route path="/" element={<CommonLayout />}>
             <Route
-              path="profile-notification"
+              path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
           </Route>
@@ -289,7 +292,8 @@ const MyRoutes: React.FC = () => {
           <Route path="/order/service" element={<Service />} />
           <Route path="/order/summary" element={<Summary />} />
           <Route path="/order/payment" element={<Payment />} />
-
+          <Route path="newOrder/addnewproduct" element={<AddNewProduct />} />
+          <Route path="newOrder/productpackage" element={<ProductPackage />} />
           <Route
             path="*"
             element={
