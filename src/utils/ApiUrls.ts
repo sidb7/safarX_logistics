@@ -20,8 +20,9 @@ switch (Enviornment) {
 }
 
 const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
-const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=SHIPYAARI`;
+const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
+const POST_VERIFY_OTP = `${SELLER_URL}/api/v1/seller/verifySignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
 
 export {
@@ -30,4 +31,5 @@ export {
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
+  POST_VERIFY_OTP,
 };

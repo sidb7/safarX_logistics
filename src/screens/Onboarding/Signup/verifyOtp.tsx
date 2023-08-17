@@ -1,15 +1,16 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-// import CloseIcon from "./../../../assets/CloseIcon.svg";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import CustomButton from "../../../components/Button/index";
-// import MobileIcon from "../../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import OtpInput from "react-otp-input";
 import "../../../styles/otpStyle.css";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CustomInputBox from "../../../components/Input";
+import { useSelector } from "react-redux";
+import { POST } from "../../../utils/webService";
+import { POST_VERIFY_OTP } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -18,12 +19,25 @@ const Index = () => {
   const [otp, setOtp] = useState({
     loginOtp: "",
   });
-  // console.log("otp", otp);
-  const offersOnClick = () => {
-    navigate("/onboarding/offers");
-  };
 
-  // const contactNumber = "+91-987654321";
+  const signUpUser = useSelector((state: any) => state.signup);
+
+  const onClickVerifyOtp = async () => {
+    try {
+      let payload = {
+        email: signUpUser.email,
+        otp: otp.loginOtp,
+      };
+      const { data: response } = await POST(POST_VERIFY_OTP, payload);
+      if (response?.success === true) {
+        navigate("/onboarding/offers");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   const modalTitle = () => {
     return (
@@ -107,7 +121,7 @@ const Index = () => {
               </div>
 
               <CustomButton
-                onClick={offersOnClick}
+                onClick={onClickVerifyOtp}
                 text="DONE"
                 className="mt-4"
               />

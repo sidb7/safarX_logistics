@@ -72,7 +72,6 @@ import { ChangePassword } from "../screens/Profile/Settings/changePassword";
 import { ChangePasswordLayout } from "../layout/ChangePasswordLayout";
 import { EditProfileLayout } from "../layout/EditProfileLayout";
 import { EditProfile } from "../screens/Profile/Settings/editProfile";
-import { AccountQuestion } from "../screens/Onboarding/Questionnaire";
 import AddProduct from "../screens/NewOrder/Catalogue/AddProducts/addProduct";
 import AddCombo from "../screens/NewOrder/Catalogue/AddCombo/addCombo";
 import AddComboProduct from "../screens/NewOrder/Catalogue/AddCombo/addComboProduct";
@@ -100,7 +99,6 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
-          <Route path="question" element={<AccountQuestion />} />
           <Route path="/neworder" element={<NewOrderLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />

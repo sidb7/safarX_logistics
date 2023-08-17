@@ -17,7 +17,6 @@ const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  // const dispatch = useDispatch();
 
   const [mobileNumber, setMobileNumber] = useState({
     mobileNo: "",
@@ -30,14 +29,12 @@ const Index = () => {
     firstName: signUpUser.firstName,
     mobileNo: mobileNumber.mobileNo,
   };
+  console.log(body);
 
   const sendOtpOnClick = async (value: any) => {
-    // console.log("value", value);
     try {
-      const { data: response } = await POST(POST_SEND_OTP_URL, body);
-
-      if (response?.success) {
-        // console.log("success", response?.data);
+      const { data: response } = await POST(POST_SEND_OTP_URL, value);
+      if (response?.success === true) {
         navigate("/onboarding/verifyOtp");
       } else {
         toast.error(response?.message);
@@ -55,12 +52,6 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        {/* <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        /> */}
       </div>
     );
   };
