@@ -1,7 +1,7 @@
 import SelectIcon from "../../../assets/Order/SelectIcon.svg";
 import FilterIcon from "../../../assets/Order/FilterIcon.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
@@ -9,15 +9,18 @@ import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 
+
 interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
+  statusData: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
   interface Itype {
     filterId: any;
     setFilterId: any;
+    statusData: any;
   }
 
   return (
@@ -33,6 +36,7 @@ const statusBar = (statusName: string, orderNumber: string) => {
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId,
   setFilterId,
+  statusData,
 }) => {
   const navigate = useNavigate();
 
@@ -44,33 +48,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     { label: "All", isActive: false },
     { label: "Success", isActive: false },
     { label: "Error", isActive: false },
-  ]);
-
-  const [statusData, setStatusData] = useState([
-    {
-      statusName: "New Order",
-      orderNumber: "00",
-    },
-    {
-      statusName: "Ready to ship",
-      orderNumber: "02",
-    },
-    {
-      statusName: "Ready to pickup",
-      orderNumber: "05",
-    },
-    {
-      statusName: "In transit",
-      orderNumber: "00",
-    },
-    {
-      statusName: "Complete",
-      orderNumber: "02",
-    },
-    {
-      statusName: "All",
-      orderNumber: "08",
-    },
   ]);
 
   const filterComponent = (className?: string) => {
@@ -137,36 +114,38 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   return (
-    <div className="flex flex-col ">
-      <div className="flex gap-x-2 overflow-x-scroll whitespace-nowrap mt-2 h-[34px] lg:mt-9">
-        {statusData.map(({ statusName, orderNumber }, index) => {
-          return (
-            <div
-              className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
-                statusId === index ? "!border-[#004EFF]" : ""
-              }`}
-              onClick={() => setStatusId(index)}
-            >
-              <span
-                className={`text-[#777777] text-[14px] lg:text-[18px] ${
-                  statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
+    <div className="flex flex-col pt-7">
+      <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
+        {statusData.map(
+          ({ statusName, orderNumber }: any, index: SetStateAction<number>) => {
+            return (
+              <div
+                className={`flex justify-center items-center border-b-2 border-[#777777] px-6 cursor-pointer ${
+                  statusId === index ? "!border-[#004EFF]" : ""
                 }`}
+                onClick={() => setStatusId(index)}
               >
-                {statusName}
-              </span>
-              <span
-                className={`flex justify-center items-center rounded-full ml-2 text-[8px] text-white bg-[#777777] h-[16px] w-[16px] ${
-                  statusId === index ? "!bg-[#004EFF]" : ""
-                }`}
-              >
-                {orderNumber}
-              </span>
-            </div>
-          );
-        })}
+                <span
+                  className={`text-[#777777] text-[15px] lg:text-[18px] ${
+                    statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
+                  }`}
+                >
+                  {statusName}
+                </span>
+                <span
+                  className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] w-5 h-5 ${
+                    statusId === index ? "!bg-[#004EFF]" : ""
+                  }`}
+                >
+                  {orderNumber}
+                </span>
+              </div>
+            );
+          }
+        )}
       </div>
 
-      <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:flex lg:justify-between">
+      <div className="grid grid-cols-2 justify-center mt-4 h-[46px] my-6 lg:flex lg:justify-between">
         <div className="lg:flex lg:gap-x-4">
           <div className="flex items-center">
             <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
