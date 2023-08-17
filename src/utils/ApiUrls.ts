@@ -23,6 +23,8 @@ const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
 const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=SHIPYAARI`;
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
+const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
+const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
 
 export {
   SELLER_URL,
@@ -30,4 +32,6 @@ export {
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
+  GET_PROFILE_NOTIFICATION,
+  UPDATE_PROFILE_NOTIFICATION,
 };
