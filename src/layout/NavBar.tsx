@@ -4,6 +4,7 @@ import HamburgerLogo from "../assets/Navbar/menu.svg";
 import SearchLogo from "../assets/Navbar/search.svg";
 import ProfileLogo from "../assets/Navbar/Essential.svg";
 import "../styles/navBar.css";
+import Sidebar from "./hoverSideBar";
 
 const NavBar: React.FC = () => {
   return (
