@@ -1,19 +1,22 @@
-import React from "react";
+import { useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import DeleteIcon from "../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
-import PackageType from "../Product/PackageType/index";
+import Box from "./Box";
 import ProductBox from "../Product/productBox";
 import SampleProduct from "../../../assets/SampleProduct.svg";
-import toggle from "../../../assets//toggle-off-circle.svg";
+import toggle from "../../../assets/toggle-off-circle.svg";
+import toggleBlack from "../../../assets/toggleBlack.svg";
 import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
 import { useMediaQuery } from "react-responsive";
 import "../../../styles/productStyle.css";
-
+import RightSideModal from "../../../components/CustomModal/customRightModal";
 import AddButton from "../../../components/Button/addButton";
+import AddComboModal from "./AddComboModal";
+import AddInsuranceModal from "./AddInsuranceModal";
 
 interface IPackageProps {}
 
@@ -21,6 +24,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const isLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+
+  const [combo, setCombo] = useState(false);
+  const [insurance, setInsurance] = useState(false);
+
+  const insuranceFun = (e: any) => {
+    console.log("setCombo inside fun:", combo);
+
+    setCombo(false);
+    setInsurance(true);
+  };
+  console.log("setCombo:", combo);
+
   return (
     <div className="mx-4">
       <div className="flex justify-between ">
@@ -43,7 +58,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </h2>
         </div>
         <div className="flex items-center">
-          <img src={EditIcon} alt="Edit Product" className="mr-2" />
+          <img
+            src={EditIcon}
+            alt="Edit Product"
+            className="cursor-pointer mr-2"
+            onClick={() => setCombo(true)}
+          />
           <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
           <img
             src={isLgScreen ? DeleteIconForLg : DeleteIcon}
@@ -76,14 +96,31 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         </div>
 
         <div className="bg-[white] flex  items-center rounded-md gap-x-3 px-2">
-          <img src={toggle} alt="toggle" />
+          <img src={toggleBlack} alt="toggle" />
 
           <p className="text-[14px] text-[#F35838]">DEACTIVATE</p>
         </div>
       </div>
       <div className="mt-7">
-        <PackageType />
+        <Box />
       </div>
+      {combo && (
+        <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
+          <AddComboModal
+            combo={combo}
+            setCombo={setCombo}
+            insuranceModal={insuranceFun}
+          />
+        </RightSideModal>
+      )}
+      {insurance && (
+        <RightSideModal isOpen={insurance} onClose={() => setInsurance(false)}>
+          <AddInsuranceModal
+            insurance={insurance}
+            setInsurance={setInsurance}
+          />
+        </RightSideModal>
+      )}
     </div>
   );
 };

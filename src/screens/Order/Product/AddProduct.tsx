@@ -9,7 +9,6 @@ import InputBox from "../../../components/InputBox/index";
 import CustomDropDown from "../../../components/DropDown";
 import CustomButton from "../../../components/Button";
 import Upload from "../../../components/Upload";
-import PackageType from "../Product/PackageType/index";
 import ProductBox from "../Product/productBox";
 import "../../../styles/productStyle.css";
 import AddButton from "../../../components/Button/addButton";
@@ -19,7 +18,7 @@ import SampleProduct from "../../../assets/SampleProduct.svg";
 
 interface IProductFilledProps {}
 
-const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
+const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const [productState, setProductState] = useState<any>({
     productName: "",
     productCategory: "",
@@ -52,42 +51,6 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
         <h1 className="font-bold leading-6 text-lg font-Lato">Product</h1>
       </div>
 
-      {/* {[...Array(addedProductTotal)].map((_, i) => {
-        return (
-          <div key={i}>
-            <div className="flex justify-between mt-3">
-              <div className="">
-                <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
-                  Product {i + 1}
-                </h2>
-              </div>
-              <div className="flex">
-                <img
-                  src={EditIcon}
-                  alt="Edit Product"
-                  className="mr-2"
-                  onClick={() => {
-                    console.log(i);
-                  }}
-                />
-                <img
-                  src={BookmarkIcon}
-                  alt="Bookmark Product"
-                  className="mr-2"
-                />
-                <img src={DeleteIcon} alt="Delete Product" className="mr-2" />
-              </div>
-            </div>
-            <ProductBox
-              image={ItemIcon}
-              productName="Mac book air"
-              weight="5"
-              dimension="12 x 12 x 12"
-              className="p-3"
-            />
-          </div>
-        );
-      })} */}
       {addedProductData.map((product: any, i: number) => {
         return (
           <div key={i}>
@@ -239,4 +202,4 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
   );
 };
 
-export default ProductFilled;
+export default AddProduct;
