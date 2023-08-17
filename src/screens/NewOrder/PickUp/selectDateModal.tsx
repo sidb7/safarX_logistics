@@ -17,17 +17,25 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const { onClick } = props;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
   const handleDayButtonClick = (selectedDay: string) => {
     if (selectedDay === "schedule") {
       setShowDatePicker(true);
+      setSelectedDay(selectedDay);
     } else {
       setShowDatePicker(false);
-      setSelectedDay(selectedDay); // Update selected day
+      setSelectedDay(selectedDay);
+      setSelectedTime(null);
     }
   };
 
   const handleDayButtonClicked = (item: any) => {
     handleDayButtonClick(item.value);
+  };
+
+  const handleTimeSlotClick = (time: string) => {
+    setSelectedTime(time);
   };
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
@@ -53,6 +61,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
         <DynamicButtonScrollComponentForDay
           items={dummyDayData}
           onClick={handleDayButtonClicked}
+          selectedDay={selectedDay}
         />
       </div>
 
@@ -65,8 +74,9 @@ const SelectDateModalContent = (props: ITypeProps) => {
           <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
           <DynamicButtonScrollComponentForTime
             items={dummyTimeData}
+            selectedTime={selectedTime}
             selectedDay={selectedDay}
-            onClick={() => {}}
+            onClick={handleTimeSlotClick}
           />
         </div>
       )}

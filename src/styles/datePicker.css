@@ -13,3 +13,8 @@
   /* add any other styles as needed */
   /* margin-right: 10rem; */
 }
+
+
+.input-container-aligned input {
+  left: calc(18px + 20%);
+}
