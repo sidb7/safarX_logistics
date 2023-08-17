@@ -38,7 +38,7 @@ const ServiceCard = (props: IServiceCardProps) => {
     <div
       className={`${
         isRecommendation && "relative z-1"
-      } border-[1px] rounded-lg border-[#E8E8E8] bg-[#FFFFFF] drop-shadow-lg  `}
+      } border-[1px] rounded-lg  bg-[#FFFFFF] drop-shadow-lg lg:min-w-[300px] `}
     >
       <div className="flex flex-col  px-3 pb-2 ">
         <div className="flex  items-center  text-[16px] font-semibold text-[#1C1C1C] gap-x-2 ">
@@ -53,15 +53,15 @@ const ServiceCard = (props: IServiceCardProps) => {
           <div>{serviceType}</div>
           {!isStandardService && <div>{`${weight} Kg`}</div>}
         </div>
-        <div className="flex items-center gap-x-2 mb-2">
+        <div className="flex items-center gap-x-2 mb-2  lg:ml-5">
           <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} Kg`}</div>
           <div className="text-[14px] text-[#1C1C1C]">|</div>
-          <div className="text-[12px] text-[#004EFF]">
+          <div className="text-[12px] text-[#004EFF]   ">
             {`Save ₹ ${savePrice} using this service`}
           </div>
         </div>
-        <div className="flex  items-center ">
-          <div className="text-[#004EFF] text-[14px] font-semibold">
+        <div className="flex  items-center lg:ml-5 ">
+          <div className="text-[#004EFF] text-[14px] font-semibold lg:font-bold">
             {`ETA: ${etaDate}`}
           </div>
         </div>

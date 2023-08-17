@@ -1,15 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import rootReducer from "./rootReducer";
-import PaymentSlice from "./reducers/paymentReducer";
+import { userSlice } from "./reducers/userReducer";
+import { PaymentSlice } from "./reducers/paymentReducer";
+import { mapSlice } from "./reducers/mapReducer";
+import { SignupSlice } from "./reducers/signUpReducer";
+import { SignInSlice } from "./reducers/signInReducer";
+import { catalogueSlice } from "./reducers/catalogue";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
-    rootReducer, 
-  payment: PaymentSlice,
-  }
+    user: userSlice.reducer,
+    payment: PaymentSlice.reducer,
+    map: mapSlice.reducer,
+    signup: SignupSlice.reducer,
+    signin: SignInSlice.reducer,
+    catalogue : catalogueSlice.reducer
+  },
 });
 
-export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
-
-export default store;
+export type AppDispatch = ReturnType<typeof store.dispatch>;
