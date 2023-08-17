@@ -36,13 +36,17 @@ const InputWithImage = (props: IInputProps) => {
     imgSrc,
   } = props;
 
+  const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
+
   return (
     <div className="relative flex items-center justify-center  ">
-      <img
-        src={imgSrc ? imgSrc : dummyImage}
-        alt=""
-        className="absolute z-2 left-[18px]"
-      />
+      {!value && imgSrc && (
+        <img
+          src={imgSrc ? imgSrc : dummyImage}
+          alt=""
+          className="absolute z-2 left-[18px]"
+        />
+      )}
 
       <input
         placeholder={placeholder}
