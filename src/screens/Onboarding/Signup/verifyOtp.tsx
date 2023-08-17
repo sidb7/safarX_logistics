@@ -121,7 +121,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {verifyOtp()}
         </CenterModal>
       )}

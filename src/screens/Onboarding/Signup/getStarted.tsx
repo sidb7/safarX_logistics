@@ -1,5 +1,5 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import CloseIcon from "./../../../assets/CloseIcon.svg";
+// import CloseIcon from "./../../../assets/CloseIcon.svg";
 import ShippingSupplies from "./../../../assets/Delivery/Shipping Supplies 1.svg";
 import CustomButton from "../../../components/Button/index";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -20,12 +20,12 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
@@ -73,7 +73,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {getStarted()}
         </CenterModal>
       )}
