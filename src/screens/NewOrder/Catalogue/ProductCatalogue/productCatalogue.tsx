@@ -2,7 +2,7 @@ import NavBar from "../../../../layout/NavBar";
 import { useState } from "react";
 import { productCatalogueData } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";
-import DynamicBtnWithScroll from "../../../../components/DynamicButtonScroll/index";
+import DynamicBtnWithScroll from "../../../../components/DynamicButtonScrollForDay/index";
 import ProductBox from "../../Product/productBox";
 import ProductIcon from "../../../../assets/Catalogue/Product.svg";
 import ItemIcon from "../../../../assets/Product/Item.svg";
@@ -12,17 +12,15 @@ import { productBtnName } from "../../../../redux/reducers/catalogue";
 const ProductCatalogue = () => {
   // console.log('useSelector :',useSelector(state:any));
 
-  const catalogueState = useSelector(
-    (state: any) => state?.catalogue
-  );
-  
+  const catalogueState = useSelector((state: any) => state?.catalogue);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [statusId, setStatusId] = useState(-1);
 
   const [statusData, setStatusData] = useState("single_product");
-  
+
   return (
     <div>
       <header className="fixed top-0 z-10 w-full">

@@ -6,7 +6,7 @@ import ChooseLocationIcon from "../../../assets/PickUp/chooseLocation.svg";
 import Warehouse from "../../../assets/PickUp/Warehouse.svg";
 import OfficeIcon from "../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../assets/PickUp/Location.svg";
-
+import CalenderIcon from "../../../assets/calendar.svg";
 import ContactIcon from "../../../assets/PickUp/Contact.svg";
 import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -56,6 +56,8 @@ const Index = () => {
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
+  const [pickupDate, setPickupDate] = useState("");
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -360,12 +362,21 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mb-7 lg:hidden">
+        {/* <div className="mb-7 lg:hidden">
           <CustomDatePicker onClick={openModal} />
-        </div>
+        </div> */}
+
+        {/* <div className="hidden lg:block mb-7">
+          <CustomDatePicker onClick={() => setIsDateRightModal(true)} />
+        </div> */}
 
         <div className="hidden lg:block mb-7">
-          <CustomDatePicker onClick={() => setIsDateRightModal(true)} />
+          <CustomInputWithImage
+            placeholder="Pickup Date"
+            imgSrc={CalenderIcon}
+            value={pickupDate}
+            onClick={() => setIsDateRightModal(true)}
+          />
         </div>
 
         <div className="hidden lg:block mb-7"></div>
@@ -497,9 +508,9 @@ const Index = () => {
         audio={directionAudio}
       />
 
-      <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+      {/* <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
         <SelectDateModalContent />
-      </CustomBottomModal>
+      </CustomBottomModal> */}
 
       <RightSideModal
         isOpen={isDateRightModal}

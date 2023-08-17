@@ -153,12 +153,12 @@ const Index = () => {
             </div>
 
             <div className="relative h-[75px] ">
-              <div className="w-full max-w-xs mx-auto">
+              <div className="w-full max-w-xs ">
                 <div
                   onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none bg-transparent border-none cursor-text"
+                  className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
                 >
-                  {pastedData || "Click here to paste..."}
+                  {pastedData || "Paste Address for the Magic"}
                 </div>
                 <input
                   ref={inputRef}
@@ -170,7 +170,7 @@ const Index = () => {
                   title="inputWithImage"
                 />
               </div>
-              <div className="absolute right-[5%] top-[70%] transform -translate-y-1/2">
+              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
             </div>
