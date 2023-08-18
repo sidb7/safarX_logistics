@@ -211,6 +211,15 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-setting-edit-profile"
               element={<EditProfile />}
             />
+            {/* order/service - suresh */}
+            <Route path="/order/service" element={<Service />} />
+            <Route path="/order/summary" element={<Summary />} />
+            <Route path="/order/payment" element={<Payment />} />
+            <Route path="newOrder/addnewproduct" element={<AddNewProduct />} />
+            <Route
+              path="newOrder/productpackage"
+              element={<ProductPackage />}
+            />
           </Route>
           <Route path="profile" element={<ReferLayout />}>
             <Route path="profile-refer-earn" element={<ReferTab />} />
@@ -288,12 +297,7 @@ const MyRoutes: React.FC = () => {
             path="/neworder/box-catalogue"
             element={<CatalogueBoxCatalogueScreen />}
           />
-          {/* order/service - suresh */}
-          <Route path="/order/service" element={<Service />} />
-          <Route path="/order/summary" element={<Summary />} />
-          <Route path="/order/payment" element={<Payment />} />
-          <Route path="newOrder/addnewproduct" element={<AddNewProduct />} />
-          <Route path="newOrder/productpackage" element={<ProductPackage />} />
+
           <Route
             path="*"
             element={
