@@ -1,19 +1,19 @@
-import React, { useState } from "react";
-// import "../../styles/customToggle.css"
-// import "./customToggle.module.css";
-// import ToggleSwitch from "../ToggleSwitch";
+import { useEffect, useState } from "react";
 
 interface IPropTypes {
-  // onClick : (event: React.MouseEventHandler<HTMLDivElement>) => void;
-  // toggle?: boolean
   toggleValue?: any;
   initValue?: any;
 }
 
 const ToggleButton = (props: IPropTypes) => {
   const { toggleValue } = props;
-  const [toggle, setToggle] = useState(props.initValue || false);
+  const [toggle, setToggle] = useState(false);
   const toggleClass = " transform translate-x-5";
+
+  useEffect(() => {
+    setToggle(props.initValue);
+  }, [props.initValue]);
+
   return (
     <>
       <div className="flex">
@@ -23,7 +23,6 @@ const ToggleButton = (props: IPropTypes) => {
               ? `w-[37px] h-[18px] flex items-center bg-[#7CCA62] rounded-full cursor-pointer`
               : `w-[37px] h-[18px] flex items-center bg-[#E8E8E8] rounded-full cursor-pointer`
           }
-          //   onClick={()=>toggleValue}
           onClick={() => {
             setToggle(!toggle);
             toggleValue(!toggle);

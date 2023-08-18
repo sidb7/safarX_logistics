@@ -13,6 +13,9 @@ import PackageType from "../Product/PackageType/index";
 import ProductBox from "../Product/productBox";
 import "../../../styles/productStyle.css";
 import AddButton from "../../../components/Button/addButton";
+import { useMediaQuery } from "react-responsive";
+import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
+import SampleProduct from "../../../assets/SampleProduct.svg";
 
 interface IProductFilledProps {}
 
@@ -28,6 +31,9 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
     productHeight: "",
   });
 
+  const isLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
   const [addedProductData, setAddedProductData] = useState<any>([]);
   console.log(addedProductData);
@@ -41,9 +47,9 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   return (
     <div className="mx-4">
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-8">
         <img src={ProductIcon} alt="Product Icon" className="" />
-        <h1 className="font-bold leading-6 text-lg ">Product</h1>
+        <h1 className="font-bold leading-6 text-lg font-Lato">Product</h1>
       </div>
 
       {/* {[...Array(addedProductTotal)].map((_, i) => {
@@ -85,35 +91,39 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
       {addedProductData.map((product: any, i: number) => {
         return (
           <div key={i}>
-            <div className="flex justify-between mt-3">
+            <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
               <div className="">
-                <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
+                <h2 className="text-[#004EFF] text-sm font-bold leading-18px font-Lato">
                   Product {i + 1}
                 </h2>
               </div>
-              <div className="flex">
-                <img
+              <div className="flex ">
+                {/* <img
                   src={EditIcon}
                   alt="Edit Product"
                   className="mr-2"
                   onClick={() => {
                     console.log(i);
                   }}
-                />
+                /> */}
                 <img
                   src={BookmarkIcon}
                   alt="Bookmark Product"
                   className="mr-2"
                 />
-                <img src={DeleteIcon} alt="Delete Product" className="mr-2" />
+                <img
+                  src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+                  alt="Delete Product"
+                  className="w-5 h-5"
+                />
               </div>
             </div>
             <ProductBox
-              image={ItemIcon}
+              image={SampleProduct}
               productName={product.productName}
               weight="5"
               dimension="12 x 12 x 12"
-              className="p-3"
+              className="p-3 lg:max-w-[272px]"
             />
           </div>
         );
@@ -126,18 +136,24 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           setAddedProductTotal(addedProductTotal + 1);
         }}
       >
-        <div className="flex justify-between mt-3">
+        <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
           <div className="">
-            <h2 className="text-[#004EFF] text-sm font-bold leading-18px ">
+            <h2 className="text-[#004EFF] text-sm font-bold leading-18px font-Lato">
               Product {addedProductTotal + 1}
             </h2>
           </div>
           <div className="flex">
             <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
-            <img src={DeleteIcon} alt="Delete Product" className="mr-2" />
+
+            <img
+              src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+              alt="Delete Product"
+              className="w-5 h-5"
+            />
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-y-4 mt-4">
+
+        <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
           <InputBox
             label="Product name"
             name="productName"
@@ -156,65 +172,63 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
             value={productState.productPrice}
             onChange={handleProductInputChange}
           />
-
           <InputBox
             label="Product tax"
             name="productTax"
             value={productState.productTax}
             onChange={handleProductInputChange}
           />
-        </div>
-        <div className="grid grid-cols-2 gap-x-2 mt-4">
-          <div className="grid grid-cols-2 gap-x-2">
-            <CustomDropDown
-              value={productState.productUnits}
-              onChange={() => {
-                console.log("hello");
-              }}
-              options={[
-                {
-                  label: "CM",
-                  value: "CM",
-                },
-              ]}
-              selectClassName="rounded-md bg-[#FEFEFE]"
-              name="productUnits"
-            />
+          <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
+            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+              <CustomDropDown
+                value={productState.productUnits}
+                onChange={() => {}}
+                options={[
+                  {
+                    label: "CM",
+                    value: "CM",
+                  },
+                ]}
+                selectClassName="rounded-md bg-[#FEFEFE]"
+                name="productUnits"
+              />
 
-            <InputBox
-              className=""
-              label="Length"
-              name="productLength"
-              value={productState.productLength}
-              onChange={handleProductInputChange}
-            />
+              <InputBox
+                className=""
+                label="Length"
+                name="productLength"
+                value={productState.productLength}
+                onChange={handleProductInputChange}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+              <InputBox
+                className=""
+                label="Breadth"
+                name="productBreadth"
+                value={productState.productBreadth}
+                onChange={handleProductInputChange}
+              />
+              <InputBox
+                label="Height"
+                name="productHeight"
+                onChange={handleProductInputChange}
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-x-2">
-            <InputBox
-              className=""
-              label="Breadth"
-              name="productBreadth"
-              value={productState.productBreadth}
-              onChange={handleProductInputChange}
-            />
-            <InputBox
-              label="Height"
-              name="productHeight"
-              onChange={handleProductInputChange}
-            />
+          <div className="mt-4">
+            <Upload />
           </div>
         </div>
         <div className="text-gray-400	text-xs	mt-3">
           <p>Volumetric weight includes dimensions of the product</p>
         </div>
-        <div className="mt-4">
-          <Upload />
-        </div>
+
         <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
           <img src={ButtonIcon} alt="Add Product" width="16px" />
 
           <button
-            className="ml-2 text-[#004EFF] text-sm font-semibold leading-5"
+            className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
             type="submit"
           >
             ADD PRODUCT

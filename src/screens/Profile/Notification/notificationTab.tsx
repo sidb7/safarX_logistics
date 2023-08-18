@@ -5,9 +5,13 @@ import CustomInputBox from "../../../components/Input";
 import ToggleButton from "../../../components/ToggleButton";
 import { useEffect, useState } from "react";
 import { POST } from "../../../utils/webService";
-import { GET_PROFILE_NOTIFICATION } from "../../../utils/ApiUrls";
+import {
+  GET_PROFILE_NOTIFICATION,
+  UPDATE_PROFILE_NOTIFICATION,
+} from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcum } from "../../../components/Layout/breadcum";
+import { toast } from "react-toastify";
 
 export const ProfileNotificationTab = () => {
   // const { setData }: any = useOutletContext();
@@ -31,7 +35,17 @@ export const ProfileNotificationTab = () => {
   });
 
   const updateHandler = async () => {
-    // setData(notificationData);
+    const { data } = await POST(UPDATE_PROFILE_NOTIFICATION, {
+      notificationUpdate: {
+        accountDetails: notificationData.accountDetails,
+        operationDetails: notificationData.operationDetails,
+      },
+    });
+    if (data.success) {
+      toast.success(data.message);
+    } else {
+      toast.error(data.message);
+    }
   };
 
   useEffect(() => {
@@ -43,6 +57,7 @@ export const ProfileNotificationTab = () => {
           operationDetails: data.data[0].operationDetails,
         });
       } else {
+        toast.error(data.message);
       }
     })();
   }, []);
@@ -243,7 +258,7 @@ export const ProfileNotificationTab = () => {
           </div>
         </div>
       </div>
-      <BottomLayout />
+      <BottomLayout callApi={updateHandler} />
     </div>
   );
 };
