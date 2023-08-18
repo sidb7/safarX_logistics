@@ -483,31 +483,39 @@ export const dummyDayData = [
     value: "tomorrow",
   },
   {
-    label: "This week",
-    value: "thisWeek",
+    label: "Schedule",
+    value: "schedule",
   },
 ];
 
 export const dummyTimeData = [
   {
-    label: "11:00 AM",
-    value: "11:00 AM",
+    label: "11:00 AM - 12:00 PM",
+    value: "11:00 AM - 12:00 PM",
   },
   {
-    label: "12:00 PM",
-    value: "12:00 PM",
+    label: "12:00 PM - 01:00 PM",
+    value: "12:00 PM - 01:00 PM",
   },
   {
-    label: "01:00 PM",
-    value: "01:00 PM",
+    label: "01:00 PM - 02:00 PM",
+    value: "01:00 PM - 02:00 PM",
   },
   {
-    label: "02:00 PM",
-    value: "02:00 PM",
+    label: "02:00 PM - 03:00 PM",
+    value: "02:00 PM - 03:00 PM",
   },
   {
-    label: "03:00 PM",
-    value: "03:00 PM",
+    label: "03:00 PM - 04.00 PM",
+    value: "03:00 PM - 04.00 PM",
+  },
+  {
+    label: "04:00 PM - 05.00 PM",
+    value: "04:00 PM - 05.00 PM",
+  },
+  {
+    label: "05:00 PM - 06.00 PM",
+    value: "05:00 PM - 06.00 PM",
   },
 ];
 

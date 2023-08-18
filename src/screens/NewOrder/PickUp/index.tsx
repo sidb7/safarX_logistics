@@ -6,7 +6,7 @@ import ChooseLocationIcon from "../../../assets/PickUp/chooseLocation.svg";
 import Warehouse from "../../../assets/PickUp/Warehouse.svg";
 import OfficeIcon from "../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../assets/PickUp/Location.svg";
-
+import CalenderIcon from "../../../assets/calendar.svg";
 import ContactIcon from "../../../assets/PickUp/Contact.svg";
 import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -56,6 +56,8 @@ const Index = () => {
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
+  const [pickupDate, setPickupDate] = useState("");
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -122,10 +124,48 @@ const Index = () => {
             </div>
 
             <div className="relative h-[75px]">
+              <div className="w-full max-w-xs">
+                <div onClick={handleClick}>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "1px",
+                      height: "75px",
+                      zIndex: 1, // Ensure the text is displayed above the input
+                    }}
+                  >
+                    {pastedData || "Paste Address for the Magic"}
+                  </div>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={pastedData}
+                    onPaste={handlePaste}
+                    onChange={() => {}}
+                    style={{
+                      position: "absolute",
+                      left: "1px",
+                      height: "75px",
+                      zIndex: 2, // Ensure the input is displayed above the text
+                    }}
+                    title="inputBox"
+                  />
+                </div>
+              </div>
+              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
+                <img src={ForwardArrowIcon} alt="Arrow" />
+              </div>
+            </div>
+
+            {/* <div className="relative h-[75px]">
               <div className="w-full max-w-xs ">
                 <div
                   onClick={handleClick}
                   className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
+                  style={{
+                    position: "absolute",
+                    zIndex: 2, // Set a higher z-index to bring the text forward
+                  }}
                 >
                   {pastedData || "Paste Address for the Magic"}
                 </div>
@@ -135,14 +175,26 @@ const Index = () => {
                   value={pastedData}
                   onPaste={handlePaste}
                   onChange={() => {}}
-                  style={{ position: "absolute", left: "-9999px" }}
+                  style={{
+                    position: "absolute",
+                    border: "5px", // Note: this line might not be needed
+                    width: "100%", // Use the full width of the input container
+                    height: "75px",
+                    padding: "10px", // Add padding to push the text down a bit
+                    textAlign: "left", // Align the text to the left
+                    boxSizing: "border-box", // Include padding in the width calculation
+                    top: "-10px",
+                    textIndent: "5px",
+                    zIndex: 1, // Adjust the text indentation to move placeholder text to top left
+                  }}
+                  // placeholder="Paste Address for the Magic"
                   title="inputBox"
                 />
               </div>
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -360,12 +412,21 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mb-7 lg:hidden">
+        {/* <div className="mb-7 lg:hidden">
           <CustomDatePicker onClick={openModal} />
-        </div>
+        </div> */}
+
+        {/* <div className="hidden lg:block mb-7">
+          <CustomDatePicker onClick={() => setIsDateRightModal(true)} />
+        </div> */}
 
         <div className="hidden lg:block mb-7">
-          <CustomDatePicker onClick={() => setIsDateRightModal(true)} />
+          <CustomInputWithImage
+            placeholder="Pickup Date"
+            imgSrc={CalenderIcon}
+            value={pickupDate}
+            onClick={() => setIsDateRightModal(true)}
+          />
         </div>
 
         <div className="hidden lg:block mb-7"></div>
@@ -497,9 +558,9 @@ const Index = () => {
         audio={directionAudio}
       />
 
-      <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
+      {/* <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
         <SelectDateModalContent />
-      </CustomBottomModal>
+      </CustomBottomModal> */}
 
       <RightSideModal
         isOpen={isDateRightModal}
