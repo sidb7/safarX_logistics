@@ -20,7 +20,7 @@ const WelcomeHeader: React.FunctionComponent<IWelcomeProps> = ({
         <img src={CompanyLogo} alt="" className="ml-6" />
       </div>
 
-      <div className="mx-4">
+      <div className="mx-4 text-base font-Open font-light leading-[22px] text-[#494949]">
         <WelcomeQuestion className={welcomeClassName} label={welcomeLabel} />
       </div>
     </>

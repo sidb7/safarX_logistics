@@ -26,7 +26,6 @@ const Index = () => {
     lastName: "",
     password: "",
     referalCode: "",
-    mobileNo: 0,
   });
 
   const signUpOnClick = async (value: any) => {
@@ -48,10 +47,6 @@ const Index = () => {
 
   const logInOnClick = () => {
     navigate("/auth/login");
-  };
-
-  const responseMessage = (response: any) => {
-    // console.log("response data", response);
   };
 
   const signUp = () => {
@@ -140,10 +135,8 @@ const Index = () => {
               <div className="flex justify-center">
                 <GoogleLogin
                   text="continue_with"
-                  onSuccess={responseMessage}
-                  onError={() => {
-                    // console.log("Google Signup Failed");
-                  }}
+                  onSuccess={() => {}}
+                  onError={() => {}}
                 />
               </div>
               <div className="flex justify-center">
@@ -173,12 +166,6 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        {/* <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        /> */}
       </div>
     );
   };

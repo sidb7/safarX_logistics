@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
-import CloseIcon from "../../../assets/CloseIcon.svg";
+import { toast } from "react-toastify";
+// import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { POST } from "../../../utils/webService";
+import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 
 export const QuestionComponent5: React.FunctionComponent = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state || {};
+
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const questionsData = state?.questionsData;
+  const question = questionsData[4]?.question;
 
   const modalTitle = () => {
     return (
@@ -21,23 +29,43 @@ export const QuestionComponent5: React.FunctionComponent = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
 
   const note = () => {
     return (
-      <div className="mt-6.5 text-[#494949] text-xs mt-[86px]">
+      <div className=" ml-6 text-[#494949] text-xs mt-7 leading-4 font-Open">
         NOTE: KYC is mandatory for shipping orders and identification.
       </div>
     );
   };
+
+  function handleCheckBox(element: any, index: any) {
+    questionsData[4].options[index].isChecked = element;
+  }
+
+  let payload = { answerBody: questionsData };
+
+  async function submitAnswer(payload: any) {
+    try {
+      const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
+      if (response?.success === true) {
+        navigate("/onboarding/kyc-type");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("Failed to submit question bank!!!");
+      return error;
+    }
+  }
 
   const question5 = () => {
     return (
@@ -55,33 +83,35 @@ export const QuestionComponent5: React.FunctionComponent = () => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px] lg:mt-0">
               <div className="">
-                <span className="text-xl font-semibold">
-                  Benefits of doing KYC
+                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                  {question}
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                <Checkbox label="Faster COD pay-outs" className="text-base" />
-                <Checkbox
-                  label="Faster hiccup free shipping"
-                  className="text-base"
-                />
-                <Checkbox
-                  label="Protection against Identity Theft"
-                  className="text-base"
-                />
-                <Checkbox label="Regulatory compliance" className="text-base" />
+                {questionsData[4]?.options.map((element: any, index: any) => {
+                  return (
+                    <Checkbox
+                      onChange={(element) => {
+                        handleCheckBox(element.target.checked, index);
+                      }}
+                      label={element.value}
+                      className="text-base font-Open font-normal leading-[22px]"
+                      style={{ accentColor: "black" }}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div className="mt-6">
               <CustomButton
                 text="PROCEED FOR KYC"
-                onClick={() => navigate("/onboarding/kyc-type")}
+                onClick={() => submitAnswer(payload)}
               />
             </div>
 
-            <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">
+            {/* <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">
               SKIP FOR NOW
-            </div>
+            </div> */}
             {!isLgScreen && note()}
           </div>
         </div>
@@ -93,6 +123,7 @@ export const QuestionComponent5: React.FunctionComponent = () => {
     <>
       {isLgScreen && isModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[700px]"
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

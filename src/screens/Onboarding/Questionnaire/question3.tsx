@@ -2,17 +2,23 @@ import React, { useState } from "react";
 import Checkbox from "../../../components/CheckBox";
 import CargoRatingGif from "../../../assets/AccountQuestions/CargoRating.gif";
 import CustomButton from "../../../components/Button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import CloseIcon from "../../../assets/CloseIcon.svg";
+// import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const state = location.state || {};
+
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+
+  const questionsData = state?.questionsData;
 
   const modalTitle = () => {
     return (
@@ -22,15 +28,22 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
+
+  function handleCheckBox(element: any, index: any) {
+    questionsData[2].options[index].isChecked = element;
+  }
+
+  const question = questionsData[2]?.question;
+
   const question3 = () => {
     return (
       <div className="relative h-full w-full">
@@ -45,22 +58,33 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
               <div className="">
-                <span className="text-xl font-semibold">
-                  What is your monthly order volume?
+                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                  {question}
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                <Checkbox label="1-100" className="text-base" />
-                <Checkbox label="100-500" className="text-base" />
-                <Checkbox label="500-1000" className="text-base" />
-                <Checkbox label="1000-5000" className="text-base" />
-                <Checkbox label="Above 5000" className="text-base" />
+                {questionsData[2]?.options.map((element: any, index: any) => {
+                  return (
+                    <Checkbox
+                      onChange={(element) => {
+                        handleCheckBox(element.target.checked, index);
+                      }}
+                      label={element.value}
+                      className="text-base font-Open font-normal leading-[22px]"
+                      style={{ accentColor: "black" }}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div className="mt-6">
               <CustomButton
                 text="NEXT"
-                onClick={() => navigate("/onboarding/questionnaire/question4")}
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question4", {
+                    state: { questionsData },
+                  })
+                }
               />
             </div>
           </div>
@@ -73,6 +97,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     <>
       {isLgScreen && isModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[688px]"
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
