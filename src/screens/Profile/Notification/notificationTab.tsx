@@ -66,7 +66,7 @@ export const ProfileNotificationTab = () => {
 
   return (
     <div className="h-full">
-      <Breadcum />
+      <Breadcum label="Notification" />
       <div className="mx-4 mt-4">
         <div className="flex flex-col">
           <div className="flex items-center">

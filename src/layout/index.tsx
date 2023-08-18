@@ -15,39 +15,6 @@ import Sidebar from "./hoverSideBar";
 import { clearLocalStorage } from "../utils/utility";
 import InputWithImage from "../components/InputWithImage/InputWithImage";
 
-const steps = [
-  {
-    label: "Pickup",
-    isCompleted: true,
-    isActive: false,
-    imgSrc: TickLogo,
-  },
-  {
-    label: "Delivery",
-    isCompleted: true,
-    isActive: false,
-    imgSrc: TickLogo,
-  },
-  {
-    label: "Product",
-    isCompleted: true,
-    isActive: false,
-    imgSrc: TickLogo,
-  },
-  {
-    label: "Service",
-    isCompleted: false,
-    isActive: true,
-    imgSrc: TickLogo,
-  },
-  {
-    label: "Payment",
-    isCompleted: false,
-    isActive: true,
-    imgSrc: TickLogo,
-  },
-];
-
 const Layout = () => {
   const navigate = useNavigate();
 
