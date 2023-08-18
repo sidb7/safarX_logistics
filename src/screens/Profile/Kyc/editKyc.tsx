@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import { CustomUploadInput } from "../../../components/UploadInput/customUploadInput";
 import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { useLocation } from "react-router-dom";
 import { POST } from "../../../utils/webService";
-import { UPDATE_SELLER } from "../../../utils/ApiUrls";
+import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 export const EditProfileKyc = () => {
-  const { KycDetailsProps } = useLocation().state;
 
-  const [kycDetails, setKycDetails] = useState(KycDetailsProps);
+  const [kycDetails, setKycDetails] = useState<any>({});
 
   const changeHandler = (key: string, event: any) => {
     setKycDetails({ ...kycDetails, [key]: event.target.value });
@@ -38,6 +36,13 @@ export const EditProfileKyc = () => {
       toast.error(data.message);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_PROFILE_URL, {});
+      setKycDetails(data.data[0]?.kycDetails);
+    })();
+  }, []);
 
   return (
     <div className="h-full">

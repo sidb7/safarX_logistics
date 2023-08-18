@@ -1,9 +1,8 @@
-import { useLocation } from "react-router-dom";
 import CustomDropDown from "../../../components/DropDown";
 import CustomInputBox from "../../../components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { POST } from "../../../utils/webService";
-import { UPDATE_SELLER } from "../../../utils/ApiUrls";
+import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcum } from "../../../components/Layout/breadcum";
@@ -13,8 +12,7 @@ const options = [
   { value: "Current", label: "Current" },
 ];
 export const EditProfileBank = () => {
-  const { BankDetails } = useLocation().state;
-  const [editBankDetails, setEditBankDetails] = useState(BankDetails);
+  const [editBankDetails, setEditBankDetails] = useState<any>({});
 
   const changeHandler = (key: string, event: any) => {
     setEditBankDetails({ ...editBankDetails, [key]: event.target.value });
@@ -31,6 +29,13 @@ export const EditProfileBank = () => {
       toast.error(data.message);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_PROFILE_URL, {});
+      setEditBankDetails(data.data[0]?.bankDetails);
+    })();
+  }, []);
 
   return (
     <div className="h-full">

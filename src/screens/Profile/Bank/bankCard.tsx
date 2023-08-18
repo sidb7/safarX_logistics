@@ -32,11 +32,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             src={EditIcon}
             alt=""
             className="mr-4"
-            onClick={() =>
-              navigate("/profile/profileEdit-bank", {
-                state: { BankDetails },
-              })
-            }
+            onClick={() => navigate("/profile/profileEdit-bank")}
           />
         </div>
       </div>

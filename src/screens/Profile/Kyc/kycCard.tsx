@@ -48,11 +48,7 @@ export const ProfileKycCard = (props: KYCProps) => {
             src={EditIcon}
             alt=""
             className="mr-4"
-            onClick={() =>
-              navigate("/profile/profileEdit-kyc", {
-                state: { KycDetailsProps: props?.KycDetails },
-              })
-            }
+            onClick={() => navigate("/profile/profileEdit-kyc")}
           />
         </div>
       </div>
