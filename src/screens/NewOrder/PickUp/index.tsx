@@ -33,9 +33,14 @@ import RightModalContent from "./RightModalContent";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
 import "../../../styles/switch.css";
 import { getLocalStorage } from "../../../utils/utility";
+import { useLocation } from "react-router-dom";
+import { POST } from "../../../utils/webService";
+import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
 
 const Index = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const address = location.state?.address || "";
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
@@ -58,15 +63,6 @@ const Index = () => {
   const [locateAddress, setLocateAddress] = useState("");
   const [pickupDate, setPickupDate] = useState("");
 
-  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    const pastedData = event.clipboardData.getData("text");
-    setPastedData(pastedData);
-  };
-
-  const handleClick = () => {
-    // inputRef.current?.focus();
-  };
-
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
 
@@ -75,11 +71,40 @@ const Index = () => {
 
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
-  const { address } = useAppSelector((state) => state.map);
+  // const { address } = useAppSelector((state) => state.map);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+  const [plotNo, setPlotNo] = useState("");
+  const [locality, setLocality] = useState("");
+  const [selectedDropdown, setSelectedDropdown] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+
+  const [contactName, setContactName] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [alternateMobile, setAlternateMobile] = useState("");
+
+  const [addressData, setAddressData] = useState({
+    plotNo: "",
+    locality: "",
+    selectedDropdown: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+  });
+
+  const [contactData, setContactData] = useState({
+    contactName: "",
+    mobileNumber: "",
+    email: "",
+    alternateMobile: "",
+  });
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -94,9 +119,44 @@ const Index = () => {
     setIsModalOpen(false);
   };
 
+  console.log("mapAddressoutsideUE", address);
+
   useEffect(() => {
+    console.log("mapAddress", address);
     setLocateAddress(address);
   }, [address]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPastedData(e.target.value);
+  };
+
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedData = event.clipboardData.getData("text");
+    setPastedData(pastedData);
+  };
+
+  const handleAddressChange = (
+    fieldName: keyof typeof addressData,
+    value: string
+  ) => {
+    setAddressData((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleContactChange = (
+    fieldName: keyof typeof contactData,
+    value: string
+  ) => {
+    setContactData((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+  // const handleClick = () => {
+  //   // inputRef.current?.focus();
+  // };
 
   return (
     <div>
@@ -123,7 +183,7 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="relative h-[75px]">
+            {/* <div className="relative h-[75px]">
               <div className="w-full max-w-xs">
                 <div onClick={handleClick}>
                   <div
@@ -155,46 +215,41 @@ const Index = () => {
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
-            </div>
+            </div> */}
 
-            {/* <div className="relative h-[75px]">
+            <div className="relative h-[75px]">
               <div className="w-full max-w-xs ">
                 <div
-                  onClick={handleClick}
+                  // onClick={handleClick}
                   className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
-                  style={{
-                    position: "absolute",
-                    zIndex: 2, // Set a higher z-index to bring the text forward
-                  }}
                 >
-                  {pastedData || "Paste Address for the Magic"}
+                  {/* {pastedData || "Paste Address for the Magic"} */}
                 </div>
                 <input
                   ref={inputRef}
                   type="text"
                   value={pastedData}
                   onPaste={handlePaste}
-                  onChange={() => {}}
+                  onChange={handleChange}
+                  className="custom-input"
                   style={{
                     position: "absolute",
-                    border: "5px", // Note: this line might not be needed
-                    width: "100%", // Use the full width of the input container
+                    border: "5px",
+                    // left: "10px",
+                    // background: "black",
+                    width: "10px",
                     height: "75px",
-                    padding: "10px", // Add padding to push the text down a bit
-                    textAlign: "left", // Align the text to the left
-                    boxSizing: "border-box", // Include padding in the width calculation
+
                     top: "-10px",
-                    textIndent: "5px",
-                    zIndex: 1, // Adjust the text indentation to move placeholder text to top left
                   }}
-                  // placeholder="Paste Address for the Magic"
+                  placeholder="Paste Address for the Magic"
                   title="inputBox"
                 />
               </div>
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
-            </div> */}
+            </div>
           </div>
         </div>
 
@@ -214,10 +269,19 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Plot no., floor, building name" />
+          <CustomInputBox
+            label="Plot no., floor, building name"
+            value={addressData.plotNo}
+            onChange={(e) => handleAddressChange("plotNo", e.target.value)}
+          />
         </div>
+
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Locality" />
+          <CustomInputBox
+            label="Locality"
+            value={addressData.locality}
+            onChange={(e) => handleAddressChange("locality", e.target.value)}
+          />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -225,6 +289,7 @@ const Index = () => {
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
+              handleAddressChange("selectedDropdown", event.target.value);
               if (event.target.value === "other") {
                 isItLgScreen
                   ? setIsRightLandmarkModal(true)
@@ -236,19 +301,33 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Pincode" />
+          <CustomInputBox
+            label="Pincode"
+            value={addressData.pincode}
+            onChange={(e) => handleAddressChange("pincode", e.target.value)}
+          />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="City" />
+          <CustomInputBox
+            label="City"
+            value={addressData.city}
+            onChange={(e) => handleAddressChange("city", e.target.value)}
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="State"
+            value={addressData.state}
+            onChange={(e) => handleAddressChange("state", e.target.value)}
+          />
           <div>
-            <CustomInputBox label="State" />
-          </div>
-          <div>
-            <CustomInputBox label="Country" />
+            <CustomInputBox
+              label="Country"
+              value={addressData.country}
+              onChange={(e) => handleAddressChange("country", e.target.value)}
+            />
           </div>
         </div>
 
@@ -346,18 +425,38 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Name of the contact person" />
+          <CustomInputBox
+            label="Name of the contact person"
+            value={contactData.contactName}
+            onChange={(e) => handleContactChange("contactName", e.target.value)}
+          />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Mobile Number" />
+          <CustomInputBox
+            label="Mobile Number"
+            value={contactData.mobileNumber}
+            onChange={(e) =>
+              handleContactChange("mobileNumber", e.target.value)
+            }
+          />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Email ID(optional)" />
+          <CustomInputBox
+            label="Email ID(optional)"
+            value={contactData.email}
+            onChange={(e) => handleContactChange("email", e.target.value)}
+          />
         </div>
         <div className="mb-7 lg:mb-6 lg:mr-6">
-          <CustomInputBox label="Alternate mobile number(optional)" />
+          <CustomInputBox
+            label="Alternate mobile number(optional)"
+            value={contactData.alternateMobile}
+            onChange={(e) =>
+              handleContactChange("alternateMobile", e.target.value)
+            }
+          />
         </div>
 
         <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
