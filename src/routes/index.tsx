@@ -194,16 +194,22 @@ const MyRoutes: React.FC = () => {
             element={<TransactionFilterScreen />}
           ></Route>
           <Route path="profile" element={<ProfileLayout />}></Route>
-          <Route path="profile" element={<KycLayout />}>
-            <Route path="profileEdit-kyc" element={<EditProfileKyc />} />
-          </Route>
-          <Route path="profile" element={<BankLayout />}>
-            <Route path="profileEdit-bank" element={<EditProfileBank />} />
-          </Route>
           <Route path="/" element={<CommonLayout />}>
             <Route
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
+            />
+            <Route
+              path="profile/profileEdit-bank"
+              element={<EditProfileBank />}
+            />
+            <Route
+              path="profile/profileEdit-kyc"
+              element={<EditProfileKyc />}
+            />
+            <Route
+              path="profile/profile-setting-edit-profile"
+              element={<EditProfile />}
             />
             <Route path="/neworder/pickup" element={<PickUpScreen />} />
             {/* order/service - suresh */}
@@ -226,12 +232,6 @@ const MyRoutes: React.FC = () => {
             <Route
               path="profile-setting-change-password"
               element={<ChangePassword />}
-            />
-          </Route>
-          <Route path="profile" element={<EditProfileLayout />}>
-            <Route
-              path="profile-setting-edit-profile"
-              element={<EditProfile />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />

@@ -15,6 +15,7 @@ export const ProfileKycCard = (props: KYCProps) => {
   const gstFile = props?.KycDetails?.gstFile;
   const gstNumber = props?.KycDetails?.gstNumber;
   const lastName = props?.KycDetails?.lastName;
+  const middleName = props?.KycDetails?.middleName;
   const panFile = props?.KycDetails?.panFile;
   const panNumber = props?.KycDetails?.panNumber;
 
@@ -56,10 +57,22 @@ export const ProfileKycCard = (props: KYCProps) => {
         <div>
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
+              <LabelContainer label="First Name" info={firstName} />
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
-                label="User Name"
-                info={`${firstName} ${lastName}`}
+                label="Last Name"
+                className={"ml-3"}
+                classNameInfo="ml-3"
+                info={lastName}
               />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 mt-2">
+            <div className="flex flex-col">
+              <LabelContainer label="Middle Name" info={middleName} />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
@@ -119,39 +132,37 @@ export const ProfileKycCard = (props: KYCProps) => {
               />
             </div>
           </div>
-
-          <div className="grid grid-cols-2 ml-4 my-2">
-            <div className="flex flex-col">
-              <LabelContainer label="GST Documents" info={gstFile} />
-            </div>
-
-            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <LabelContainer
-                label="Aadhar Documents"
-                className="ml-3"
-                info={aadharFile}
-                classNameInfo="ml-3"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 ml-4 my-2">
-            <div className="flex flex-col">
-              <LabelContainer label="PAN Card" info={panFile} />
-            </div>
-          </div>
         </div>
       ) : (
         <div className="grid grid-cols-5 gap-y-8">
-          <div className="flex flex-col mt-5 px-5">
+          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer
-              label="User Name"
+              label="First Name"
               className="text-[12px]"
-              info={`${firstName} ${lastName}`}
+              info={firstName}
               classNameInfo="!text-[14px]"
             />
           </div>
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
+
+          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
+            <LabelContainer
+              label="Last Name"
+              className="text-[12px]"
+              info={lastName}
+              classNameInfo="!text-[14px]"
+            />
+          </div>
+
+          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
+            <LabelContainer
+              label="Middle Name"
+              className="text-[12px]"
+              info={middleName}
+              classNameInfo="!text-[14px]"
+            />
+          </div>
+
+          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer
               label="GST Details"
               className="text-[12px]"
@@ -169,7 +180,7 @@ export const ProfileKycCard = (props: KYCProps) => {
             />
           </div>
 
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="PAN Details"
               className="text-[12px]"
@@ -178,7 +189,7 @@ export const ProfileKycCard = (props: KYCProps) => {
             />
           </div>
 
-          <div className="flex flex-col border-l-[1px] mt-5 px-5">
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="Plot no, Sector"
               className="text-[12px]"
@@ -187,7 +198,7 @@ export const ProfileKycCard = (props: KYCProps) => {
             />
           </div>
 
-          <div className="flex flex-col border-[#E8E8E8]  px-5">
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="Locality, Landmark"
               className="text-[12px]"
@@ -196,7 +207,7 @@ export const ProfileKycCard = (props: KYCProps) => {
             />
           </div>
 
-          <div className="flex flex-col  px-5 border-l-[1px]">
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="City, Pin code"
               className="text-[12px]"
@@ -205,38 +216,11 @@ export const ProfileKycCard = (props: KYCProps) => {
             />
           </div>
 
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
+          <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="State, Country"
               className="text-[12px]"
               info={`${state} , ${country}`}
-              classNameInfo="!text-[14px]"
-            />
-          </div>
-
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
-            <LabelContainer
-              label="GST Documents"
-              className="text-[12px]"
-              info={gstFile}
-              classNameInfo="!text-[14px]"
-            />
-          </div>
-
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px]  px-5">
-            <LabelContainer
-              label="Aadhar Documents"
-              className="text-[12px]"
-              info={aadharFile}
-              classNameInfo="!text-[14px]"
-            />
-          </div>
-
-          <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mb-5 px-5">
-            <LabelContainer
-              label="PAN Documents"
-              className="text-[12px]"
-              info={panFile}
               classNameInfo="!text-[14px]"
             />
           </div>
