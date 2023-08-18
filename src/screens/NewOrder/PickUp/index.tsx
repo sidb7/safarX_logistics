@@ -39,6 +39,7 @@ import { getLocalStorage } from "../../../utils/utility";
 import { useLocation } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
+import { format, parse } from "date-fns";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -221,6 +222,25 @@ const Index = () => {
   console.log("pickupAddress", pickupAddress);
   console.log("contact", contact);
   console.log("customBranding", customBranding);
+
+  const handlePickupTimeSelected = (pickupTime: string) => {
+    console.log("Selected Pickup Time:", pickupTime);
+    setPickupDate(pickupTime);
+  };
+  console.log("pickupdate", pickupDate);
+
+  const pickupDateForEpoch = "18/08/2023 11:00 AM";
+  const convertToEpoch = (dateTimeString: any) => {
+    const parsedDateTime = parse(
+      dateTimeString,
+      "dd/MM/yyyy hh:mm a",
+      new Date()
+    );
+    return Math.floor(parsedDateTime.getTime() / 1000);
+  };
+  const epochPickupDate = convertToEpoch(pickupDateForEpoch);
+
+  console.log("epochPickupDate", epochPickupDate);
 
   return (
     <div>
@@ -603,6 +623,7 @@ const Index = () => {
             placeholder="Pickup Date"
             imgSrc={CalenderIcon}
             value={pickupDate}
+            onClick={() => setIsDateRightModal(true)}
             onChange={(e) => setPickupDate(e.target.value)}
           />
         </div>
@@ -744,7 +765,10 @@ const Index = () => {
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
       >
-        <SelectDateModalContent onClick={() => setIsDateRightModal(false)} />
+        <SelectDateModalContent
+          onClick={() => setIsDateRightModal(false)}
+          onPickupTimeSelected={handlePickupTimeSelected}
+        />
       </RightSideModal>
 
       <RightSideModal

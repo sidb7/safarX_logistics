@@ -398,7 +398,7 @@ const Index = () => {
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
       >
-        <SelectDateModalContent onClick={() => setIsDateRightModal(false)} />
+        {/* <SelectDateModalContent onClick={() => setIsDateRightModal(false)} /> */}
       </RightSideModal>
     </div>
   );
