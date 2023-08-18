@@ -13,7 +13,7 @@ const options = [
   { value: "Current", label: "Current" },
 ];
 export const EditProfileBank = () => {
-  const { BankDetails, setProfileData } = useLocation().state;
+  const { BankDetails } = useLocation().state;
   const [editBankDetails, setEditBankDetails] = useState(BankDetails);
 
   const changeHandler = (key: string, event: any) => {
@@ -26,7 +26,6 @@ export const EditProfileBank = () => {
     });
     if (data.success) {
       setEditBankDetails(data?.data?.bankDetails);
-      setProfileData(data.data);
       toast.success(data.message);
     } else {
       toast.error(data.message);

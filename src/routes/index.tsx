@@ -194,12 +194,6 @@ const MyRoutes: React.FC = () => {
             element={<TransactionFilterScreen />}
           ></Route>
           <Route path="profile" element={<ProfileLayout />}></Route>
-          <Route path="profile" element={<KycLayout />}>
-            <Route path="profileEdit-kyc" element={<EditProfileKyc />} />
-          </Route>
-          {/* <Route path="profile" element={<BankLayout />}>
-            <Route path="profileEdit-bank" element={<EditProfileBank />} />
-          </Route> */}
           <Route path="/" element={<CommonLayout />}>
             <Route
               path="profile/profile-notification"
@@ -208,6 +202,10 @@ const MyRoutes: React.FC = () => {
             <Route
               path="profile/profileEdit-bank"
               element={<EditProfileBank />}
+            />
+            <Route
+              path="profile/profileEdit-kyc"
+              element={<EditProfileKyc />}
             />
           </Route>
           <Route path="profile" element={<ReferLayout />}>
