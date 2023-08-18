@@ -30,6 +30,8 @@ const POST_VERIFY_AADHAR_OTP_URL = `${SELLER_URL}/api/v1/seller/verifyAadhaarCar
 const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardLite`;
 const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
+const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
 
 export {
   SELLER_URL,
@@ -43,4 +45,6 @@ export {
   POST_VERIFY_PAN_URL,
   POST_VERIFY_GST_URL,
   POST_UPDATE_COMPANY_URL,
+  POST_GET_SINGLE_FILE,
+  POST_UPDATE_COMPANY_ADDRESS,
 };

@@ -43,19 +43,20 @@ const Index = (props: Props) => {
       );
       if (response?.success) {
         toast.success(response?.message);
-      }
-
-      if (businessType === "individual") {
-        navigate("/onboarding/kyc-terms/GSTComponent");
-      } else if (businessType === "soleProprietor") {
-        if (location.state.path === "otp-form") {
-          navigate("/onboarding/kyc-aadhar-form");
-        }
-        if (location.state.path === "aadhar-form") {
+        if (businessType === "individual") {
+          navigate("/onboarding/kyc-terms/GSTComponent");
+        } else if (businessType === "soleProprietor") {
+          if (location.state.path === "otp-form") {
+            navigate("/onboarding/kyc-aadhar-form");
+          }
+          if (location.state.path === "aadhar-form") {
+            navigate("/onboarding/kyc-terms/ServiceComponent");
+          }
+        } else {
           navigate("/onboarding/kyc-terms/ServiceComponent");
         }
       } else {
-        navigate("/onboarding/kyc-terms/ServiceComponent");
+        toast.error("OTP Verification Failed!");
       }
     } catch (error) {
       return error;

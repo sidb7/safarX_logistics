@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { POST } from "../../../../utils/webService";
+import { POST_GET_SINGLE_FILE } from "../../../../utils/ApiUrls";
 
 interface ITypesProps {
   title?: string;
@@ -8,6 +10,22 @@ interface ITypesProps {
 
 const Card = (props: ITypesProps) => {
   const { title, subTitleOne, titleClassName } = props;
+  const [pdfUrl, setPdfUrl] = useState("");
+
+  async function fetchPdf() {
+    try {
+      const payload = { fileName: "test" };
+      const { data: response } = await POST(POST_GET_SINGLE_FILE, payload);
+      console.log("Response", response.data[0]);
+      setPdfUrl(response.data[0]);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  useEffect(() => {
+    fetchPdf();
+  }, []);
 
   return (
     <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-[27px]">
@@ -18,10 +36,10 @@ const Card = (props: ITypesProps) => {
           {title}
         </p>
         <div className="px-8 flex flex-col gap-y-2">
-          <p className="font-semibold text-[16px] text-[#323232] font-Open ">
+          {/* <p className="font-semibold text-[16px] text-[#323232] font-Open ">
             {`1.${subTitleOne}`}
-          </p>
-          <p className="h-[370px] overflow-y-scroll lg:text-[12px] font-Open  ">
+          </p> */}
+          {/* <p className="h-[370px] overflow-y-scroll lg:text-[12px] font-Open  ">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus
             fugit accusamus nisi, iusto voluptas dolores repellendus minus vel
             reiciendis corrupti facere assumenda ipsum corporis totam
@@ -46,7 +64,10 @@ const Card = (props: ITypesProps) => {
             adipisicing elit. Nemo odio non incidunt et ea soluta dolore dolorum
             expedita ratione temporibus vitae, possimus magni laboriosam commodi
             eum. Quo architecto eaque harum!
-          </p>
+          </p> */}
+          <div className="h-[370px] overflow-y-scroll">
+            <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe>
+          </div>
         </div>
       </div>
     </div>

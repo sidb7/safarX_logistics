@@ -8,12 +8,22 @@ interface OnboardingState {
   aadharNumber?: number;
   onOtpClientId?: string;
   otp?: number;
+  verifyForOtpBtn?: {
+    aadharVerify?: boolean;
+    gstVerify?: boolean;
+    panVerify?: boolean;
+  };
   otpFormBtnStatus?: boolean;
   errorDetails?: {
     gstError?: string;
     panError?: string;
     aadharError?: string;
     otpError?: string;
+  };
+  navigateOnOtpFormVerify?: {
+    aadharVerifyNavigate?: boolean;
+    gstVerifyNavigate?: boolean;
+    panVerifyNavigate?: boolean;
   };
 }
 
@@ -26,12 +36,21 @@ const initialState: OnboardingState = {
   otp: 0,
   onOtpClientId: "",
   otpFormBtnStatus: false,
-
+  verifyForOtpBtn: {
+    aadharVerify: false,
+    gstVerify: false,
+    panVerify: false,
+  },
   errorDetails: {
     gstError: "",
     panError: "",
     aadharError: "",
     otpError: "",
+  },
+  navigateOnOtpFormVerify: {
+    aadharVerifyNavigate: false,
+    gstVerifyNavigate: false,
+    panVerifyNavigate: false,
   },
 };
 
@@ -75,6 +94,34 @@ export const onboardingSlice = createSlice({
         ...action.payload,
       };
     },
+
+    setVerifyDetailsForOtpBtn: (
+      state,
+      action: PayloadAction<{
+        aadharVerify?: boolean;
+        gstVerify?: boolean;
+        panVerify?: boolean;
+      }>
+    ) => {
+      state.verifyForOtpBtn = {
+        ...state.verifyForOtpBtn,
+        ...action.payload,
+      };
+    },
+
+    setNavigateOnOtpFormVerify: (
+      state,
+      action: PayloadAction<{
+        aadharVerifyNavigate?: boolean;
+        gstVerifyNavigate?: boolean;
+        panVerifyNavigate?: boolean;
+      }>
+    ) => {
+      state.navigateOnOtpFormVerify = {
+        ...state.navigateOnOtpFormVerify,
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -87,6 +134,8 @@ export const {
   setErrorDetails,
   setOnOtpClientId,
   setOtpFormBtnStatus,
+  setVerifyDetailsForOtpBtn,
+  setNavigateOnOtpFormVerify,
 } = onboardingSlice.actions;
 
 export default onboardingSlice.reducer;

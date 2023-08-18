@@ -13,6 +13,9 @@ import {
   setAadharNumber,
   setPANNumber,
   setErrorDetails,
+  setVerifyDetailsForOtpBtn,
+  setOtpFormBtnStatus,
+  setNavigateOnOtpFormVerify,
 } from "../../../../redux/reducers/onboarding";
 import { POST } from "../../../../utils/webService";
 import {
@@ -46,11 +49,31 @@ const Index = (props: Props) => {
   const { gstError, panError, aadharError } = useSelector(
     (state: any) => state?.onboarding.errorDetails
   );
+  const { aadharVerify, gstVerify, panVerify } = useSelector(
+    (state: any) => state?.onboarding.verifyForOtpBtn
+  );
+
+  const { aadharVerifyNavigate, gstVerifyNavigate, panVerifyNavigate } =
+    useSelector((state: any) => state?.onboarding.navigateOnOtpFormVerify);
+
+  const otpFormBtnStatus = useSelector(
+    (state: any) => state?.onboarding.otpFormBtnStatus
+  );
   console.log("Business Type", businessType);
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  if (businessType === "individual") {
+    if (aadharVerify === true && panVerify === true) {
+      dispatch(setOtpFormBtnStatus(true));
+    }
+  } else {
+    if (gstVerify === true && panVerify === true) {
+      dispatch(setOtpFormBtnStatus(true));
+    }
+  }
 
   const verifyAadhar = async (value: any) => {
     try {
@@ -60,7 +83,18 @@ const Index = (props: Props) => {
       if (response?.success) {
         toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            aadharVerifyNavigate: true,
+          })
+        );
       } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            aadharVerifyNavigate: false,
+          })
+        );
+        toast.error("Aadhar Verification Failed!");
       }
     } catch (error) {
       return error;
@@ -73,7 +107,18 @@ const Index = (props: Props) => {
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
       console.log("GST verify", response);
       if (response?.success) {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            gstVerifyNavigate: true,
+          })
+        );
       } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            gstVerifyNavigate: false,
+          })
+        );
+        toast.error("GST Verification Failed!");
       }
     } catch (error) {
       return error;
@@ -86,7 +131,18 @@ const Index = (props: Props) => {
       const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
       console.log("PAN verify", response);
       if (response?.success) {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            panVerifyNavigate: true,
+          })
+        );
       } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            panVerifyNavigate: false,
+          })
+        );
+        toast.error("PAN Verification Failed!");
       }
     } catch (error) {
       return error;
@@ -105,6 +161,15 @@ const Index = (props: Props) => {
           dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         }
         verifyPAN(panNumber);
+        if (aadharVerifyNavigate === true && panVerifyNavigate === true) {
+          if (businessType === "soleProprietor") {
+            navigate("/onboarding/kyc-mobile-verify", {
+              state: { path: "otp-form" },
+            });
+          } else {
+            navigate("/onboarding/kyc-mobile-verify");
+          }
+        }
       }
       if (businessType !== "individual") {
         if (gstNumber === "") {
@@ -115,17 +180,29 @@ const Index = (props: Props) => {
           dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         }
         verifyPAN(panNumber);
-      }
 
-      if (businessType === "soleProprietor") {
-        navigate("/onboarding/kyc-mobile-verify", {
-          state: { path: "otp-form" },
-        });
-      } else {
-        navigate("/onboarding/kyc-mobile-verify");
+        if (gstVerifyNavigate === true && panVerifyNavigate === true) {
+          if (businessType === "soleProprietor") {
+            navigate("/onboarding/kyc-mobile-verify", {
+              state: { path: "otp-form" },
+            });
+          } else {
+            navigate("/onboarding/kyc-mobile-verify");
+          }
+        }
       }
     } catch (error) {}
   };
+
+  // const [css, setCss] = useState("");
+  // function checkAadhar(value: any) {
+  //   if (value !== aadharRegex) {
+  //     console.log("success");
+  //     setCss("  !border-[#F35838]");
+  //   }
+  // }
+
+  // console.log("hi", css);
 
   const sendOtpFormComponent = () => {
     return (
@@ -144,13 +221,13 @@ const Index = (props: Props) => {
             {businessType === "individual" ? (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
                 <CustomInputBox
-                  containerStyle={`  lg:!w-auto`}
+                  containerStyle={`lg:!w-auto`}
                   label="Aadhar Number"
-                  className={` ${
-                    aadharError !== "" && "!border-[#F35838]"
-                  }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
-                  onChange={(e) => {
+                  className={` ${aadharError !== "" && "!border-[#F35838]"}
+                    lg:!w-[320px]   !font-Open`}
+                  onChange={(e: any) => {
+                    // checkAadhar(e.target.value);
                     if (!aadharRegex.test(e.target.value)) {
                       dispatch(
                         setErrorDetails({
@@ -161,6 +238,11 @@ const Index = (props: Props) => {
                       dispatch(
                         setErrorDetails({
                           aadharError: "",
+                        })
+                      );
+                      dispatch(
+                        setVerifyDetailsForOtpBtn({
+                          aadharVerify: true,
                         })
                       );
                     }
@@ -202,6 +284,8 @@ const Index = (props: Props) => {
                           gstError: "",
                         })
                       );
+
+                      dispatch(setVerifyDetailsForOtpBtn({ gstVerify: true }));
                     }
                   }}
                 />
@@ -221,7 +305,7 @@ const Index = (props: Props) => {
                 containerStyle="lg:!w-auto"
                 label=" Pan Number"
                 className={`${
-                  panNumber !== "" && "border-[#F35838]"
+                  panError !== "" && "border-[#F35838]"
                 }   lg:!w-[320px] !font-Open`}
                 labelClassName="!font-Open"
                 onChange={(e) => {
@@ -238,6 +322,7 @@ const Index = (props: Props) => {
                         panError: "",
                       })
                     );
+                    dispatch(setVerifyDetailsForOtpBtn({ panVerify: true }));
                   }
                 }}
               />
@@ -256,7 +341,11 @@ const Index = (props: Props) => {
             <ServiceButton
               text="SEND OTP"
               btnType="submit"
-              className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px] !font-Open"
+              className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px] !font-Open ${
+                otpFormBtnStatus === true
+                  ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                  : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+              }`}
               onClick={() => {
                 // if (businessType === "soleProprietor") {
                 //   navigate("/onboarding/kyc-mobile-verify", {
