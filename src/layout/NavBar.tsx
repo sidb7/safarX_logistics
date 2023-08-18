@@ -9,7 +9,7 @@ import "../styles/navBar.css";
 import Sidebar from "./hoverSideBar";
 import { useOutsideTriggered } from "../hooks";
 import { useNavigate } from "react-router-dom";
-import { GetCurrentPath } from "../utils/utility";
+import { GetCurrentPath, clearLocalStorage } from "../utils/utility";
 import { ToastContainer } from "react-toastify";
 
 interface IpropTypes {
@@ -19,18 +19,31 @@ interface IpropTypes {
 // const NavBar: React.FC = () => {
 const NavBar = (props: IpropTypes) => {
   const { menuData } = props;
+  const navigate = useNavigate();
 
   const [activeUrlPath, setActiveUrlPath] = useState(GetCurrentPath()[0]);
-
-  const [sidebarWidth, setSidebarWidth] = useState(0);
-
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState<any>(null);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<any>();
+
+  const handleOutsideClick = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
   // const sidebarRef = useRef<any>(null);
   // useOutsideTriggered(sidebarRef, setOpen);
-
-  const navigate = useNavigate();
 
   const Nav_animation = {
     open: {
@@ -83,9 +96,49 @@ const NavBar = (props: IpropTypes) => {
             <img src={HamburgerLogo} onClick={() => handleToggle()} alt="" />
             <img src={CompanyLogo} alt="" />
           </div>
+
           <div className="flex gap-x-3 ">
             <img src={SearchLogo} alt="" />
-            <img src={ProfileLogo} alt="" />
+            <div
+              className="relative cursor-pointer col-span-1"
+              ref={dropdownRef}
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <img src={ProfileLogo} alt="" />
+              {isOpen && (
+                <div
+                  className="origin-top-right absolute right-4 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="options-menu"
+                >
+                  <div className="py-1" role="none">
+                    <button
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      Your Profile
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                    >
+                      Settings
+                    </button>
+                    <button
+                      className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      onClick={() => {
+                        clearLocalStorage();
+                        navigate("/");
+                      }}
+                    >
+                      Sign out
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </nav>
