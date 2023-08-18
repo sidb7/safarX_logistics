@@ -86,7 +86,7 @@ import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
 import Layout from "../layout";
-import {CommonLayout} from "../layout/layout"
+import { CommonLayout } from "../layout/layout";
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
@@ -205,6 +205,7 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
+            <Route path="/neworder/pickup" element={<PickUpScreen />} />
           </Route>
           <Route path="profile" element={<ReferLayout />}>
             <Route path="profile-refer-earn" element={<ReferTab />} />
