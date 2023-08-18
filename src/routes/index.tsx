@@ -211,6 +211,7 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-setting-edit-profile"
               element={<EditProfile />}
             />
+            <Route path="/neworder/pickup" element={<PickUpScreen />} />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />
