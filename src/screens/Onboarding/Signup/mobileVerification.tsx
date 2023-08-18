@@ -1,7 +1,8 @@
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
-import CloseIcon from "./../../../assets/CloseIcon.svg";
+// import CloseIcon from "./../../../assets/CloseIcon.svg";
 import CustomButton from "../../../components/Button/index";
-import MobileIcon from "../../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
+// import MobileIcon from "../../../assets/PhoneVerificationOtp/mobileVerificationIcon.svg";
+import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -54,12 +55,12 @@ const Index = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
@@ -68,7 +69,7 @@ const Index = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[84px]">
+        <div className="xl:mx-[90px] lg:mt-[125px] md:mx-6">
           <div className="flex flex-col gap-y-8">
             <div className="product-box flex items-center lg:hidden">
               <img
@@ -79,15 +80,22 @@ const Index = () => {
             </div>
 
             <div className="flex flex-col mt-7 mx-4 gap-y-6">
-              <p className="text-center text-2xl font-medium">
+              <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
                 Mobile Verification
               </p>
-              <p className="text-center font-thin">
+              <p className="text-center font-Open font-light leading-[22px]">
                 Please verify your phone number to proceed further.
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
-              <img className="h-[180px]" src={MobileIcon} alt="MobileIcon" />
+              <div className="flex justify-center">
+                <img
+                  className="h-[180px] w-[180px] object-contain"
+                  src={MobileGif}
+                  alt="MobileIcon"
+                />{" "}
+              </div>
+
               <CustomInputBox
                 inputType="number"
                 label="Enter Your Mobile Number"
@@ -112,7 +120,11 @@ const Index = () => {
   return (
     <>
       {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
           {mobileVerification()}
         </CenterModal>
       )}

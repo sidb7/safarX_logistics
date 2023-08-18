@@ -1,42 +1,40 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface ToggleButtonPropTypes {
-  imgSrc: string;
+interface IPropTypes {
   toggleValue?: any;
   initValue?: any;
 }
 
-export const ToggleButton = (props: ToggleButtonPropTypes) => {
-  const { toggleValue, imgSrc } = props;
-  const [toggle, setToggle] = useState(props.initValue || false);
+const ToggleButton = (props: IPropTypes) => {
+  const { toggleValue } = props;
+  const [toggle, setToggle] = useState(false);
   const toggleClass = " transform translate-x-5";
+
+  useEffect(() => {
+    setToggle(props.initValue);
+  }, [props.initValue]);
+
   return (
     <>
-      <div
-        className={`flex items-center gap-x-3 border-[1px] border-green rounded-[4px] py-1 px-4 ${
-          toggle == true ? "bg-[#7CCA62] text-white" : "bg-[#E8E8E8] text-black"
-        }  `}
-        onClick={() => {
-          setToggle(!toggle);
-          // toggleValue(!toggle);
-        }}
-      >
+      <div className="flex">
         <div
           className={
             toggle === true
-              ? `w-[37px] h-[15px] flex items-center bg-[white] rounded-full cursor-pointer`
-              : `w-[37px] h-[15px] flex items-center bg-[white] rounded-full cursor-pointer`
+              ? `w-[37px] h-[18px] flex items-center bg-[#7CCA62] rounded-full cursor-pointer`
+              : `w-[37px] h-[18px] flex items-center bg-[#E8E8E8] rounded-full cursor-pointer`
           }
-          //   onClick={()=>toggleValue}
+          onClick={() => {
+            setToggle(!toggle);
+            toggleValue(!toggle);
+          }}
         >
           <div
             className={
-              "bg-[#7CCA62] h-2 w-2 rounded-full shadow-md transform duration-300 ease-in-out" +
+              "bg-[#fff] h-3 w-3 rounded-full shadow-md transform duration-300 ease-in-out" +
               (toggle ? toggleClass : null)
             }
           ></div>
         </div>
-        <p>{toggle === true ? "ACTIVE" : "DEACTIVE"}</p>
       </div>
     </>
   );

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import ClockIcon from "../../../assets/common/clock.svg";
 import CancelIcon from "../../../assets/common/cancel.svg";
-import DynamicButtonScrollComponent from "../../../components/DynamicButtonScroll";
+import DynamicButtonScrollComponentForDay from "../../../components/DynamicButtonScrollForDay";
+import DynamicButtonScrollComponentForTime from "../../../components/DynamicButtonScrollForTime";
+
 import { dummyDayData, dummyTimeData } from "../../../utils/dummyData";
 import Button from "../../../components/Button";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import CustomDatePicker from "../../../components/Datepicker";
 
 interface ITypeProps {
   onClick?: any;
@@ -12,13 +15,34 @@ interface ITypeProps {
 
 const SelectDateModalContent = (props: ITypeProps) => {
   const { onClick } = props;
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
+  const handleDayButtonClick = (selectedDay: string) => {
+    if (selectedDay === "schedule") {
+      setShowDatePicker(true);
+      setSelectedDay(selectedDay);
+    } else {
+      setShowDatePicker(false);
+      setSelectedDay(selectedDay);
+      setSelectedTime(null);
+    }
+  };
+
+  const handleDayButtonClicked = (item: any) => {
+    handleDayButtonClick(item.value);
+  };
+
+  const handleTimeSlotClick = (time: string) => {
+    setSelectedTime(time);
+  };
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
       <div className="flex justify-between lg:mb-10 lg:px-5">
         <div className="flex gap-x-2 lg:gap-x-3">
           <img src={ClockIcon} alt="" />
-          <h3 className="lg:font-normal lg:text-2xl lg:text-[#323232]">
+          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232]">
             Schedule pick up
           </h3>
         </div>
@@ -33,23 +57,29 @@ const SelectDateModalContent = (props: ITypeProps) => {
       </div>
 
       <div className="flex flex-col lg:mb-9 lg:px-5 ">
-        <p className="lg:font-bold lg:text-xl lg:mb-5 ">Day</p>
-        <DynamicButtonScrollComponent
+        <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Day</p>
+        <DynamicButtonScrollComponentForDay
           items={dummyDayData}
-          onClick={() => {
-            alert("Hello");
-          }}
+          onClick={handleDayButtonClicked}
+          selectedDay={selectedDay}
         />
       </div>
 
-      <div className="flex flex-col lg:px-5">
-        <p className="lg:font-bold lg:text-xl lg:mb-5 ">Time</p>
-
-        <DynamicButtonScrollComponent
-          items={dummyTimeData}
-          onClick={() => {}}
-        />
-      </div>
+      {showDatePicker ? (
+        <div className="hidden lg:block mb-7 w-[85%] ml-5">
+          <CustomDatePicker />
+        </div>
+      ) : (
+        <div className="flex flex-col lg:px-5">
+          <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
+          <DynamicButtonScrollComponentForTime
+            items={dummyTimeData}
+            selectedTime={selectedTime}
+            selectedDay={selectedDay}
+            onClick={handleTimeSlotClick}
+          />
+        </div>
+      )}
 
       <div className="lg:hidden">
         <Button

@@ -32,6 +32,8 @@ const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
 const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
 const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
+const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
 
 export {
   SELLER_URL,
@@ -47,4 +49,6 @@ export {
   POST_UPDATE_COMPANY_URL,
   POST_GET_SINGLE_FILE,
   POST_UPDATE_COMPANY_ADDRESS,
+  GET_PROFILE_NOTIFICATION,
+  UPDATE_PROFILE_NOTIFICATION,
 };

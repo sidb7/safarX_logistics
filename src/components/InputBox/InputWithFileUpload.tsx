@@ -16,6 +16,7 @@ interface propTypes {
   isRequired?: boolean;
   type?: string;
   imgSrc?: string;
+  uploadText?: string;
 }
 
 const InputWithFileUpload = (props: propTypes) => {
@@ -34,6 +35,7 @@ const InputWithFileUpload = (props: propTypes) => {
     isRequired = false,
     imgSrc,
     type,
+    uploadText,
   } = props;
 
   return (
@@ -58,6 +60,7 @@ const InputWithFileUpload = (props: propTypes) => {
             alt=""
             className="absolute z-20  right-[8%] top-[30%]  "
           />
+          {uploadText}
         </div>
       </div>
     </div>
