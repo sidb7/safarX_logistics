@@ -42,8 +42,8 @@ const NavBar = (props: IpropTypes) => {
     };
   }, []);
 
-  // const sidebarRef = useRef<any>(null);
-  // useOutsideTriggered(sidebarRef, setOpen);
+  const sidebarRef = useRef<any>(null);
+  useOutsideTriggered(sidebarRef, setOpen);
 
   const Nav_animation = {
     open: {
@@ -154,7 +154,7 @@ const NavBar = (props: IpropTypes) => {
         ></div>
 
         <motion.div
-          // ref={sidebarRef}
+          ref={sidebarRef}
           variants={Nav_animation}
           initial={{ x: 0 }}
           animate={open ? "open" : "closed"}

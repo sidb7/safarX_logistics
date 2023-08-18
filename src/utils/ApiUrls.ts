@@ -28,6 +28,7 @@ const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotifica
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
 const GET_QUESTIONNAIRE = `${SELLER_URL}/api/v1/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SUBMIT_QUESTIONNAIRE = `${SELLER_URL}/api/v1/sellerQnA/submitAnswer`;
+const UPDATE_SELLER = `${SELLER_URL}/api/v1/seller/updateSingleSeller`;
 
 export {
   SELLER_URL,
@@ -40,4 +41,5 @@ export {
   UPDATE_PROFILE_NOTIFICATION,
   GET_QUESTIONNAIRE,
   POST_SUBMIT_QUESTIONNAIRE,
+  UPDATE_SELLER,
 };
