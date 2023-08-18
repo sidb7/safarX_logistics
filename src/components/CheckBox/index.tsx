@@ -7,6 +7,7 @@ interface IProps {
   labelClassName?: string;
   name?: string;
   value?: string;
+  style?: any;
 
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -19,9 +20,10 @@ const Checkbox: React.FC<IProps> = ({
   labelClassName,
   name,
   value,
+  style,
 }) => {
   return (
-    <div className="flex items-center justify-start p-1 transition-colors duration-200 text-gray-600 rounded-md hover:bg-gray-100 whitespace-nowrap">
+    <div className="flex items-center justify-start p-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap">
       <input
         type="checkbox"
         name={name}
@@ -29,6 +31,7 @@ const Checkbox: React.FC<IProps> = ({
         checked={checked}
         onChange={onChange}
         title="Checkbox"
+        style={style}
         className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out`}
       />
       <span className={`ml-2 ${labelClassName} text-sm`}>{label}</span>

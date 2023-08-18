@@ -20,11 +20,14 @@ switch (Enviornment) {
 }
 
 const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
-const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=SHIPYAARI`;
+const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
+const POST_VERIFY_OTP = `${SELLER_URL}/api/v1/seller/verifySignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
 const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
+const GET_QUESTIONNAIRE = `${SELLER_URL}/api/v1/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;
+const POST_SUBMIT_QUESTIONNAIRE = `${SELLER_URL}/api/v1/sellerQnA/submitAnswer`;
 const UPDATE_SELLER = `${SELLER_URL}/api/v1/seller/updateSingleSeller`;
 
 export {
@@ -33,7 +36,10 @@ export {
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
+  POST_VERIFY_OTP,
   GET_PROFILE_NOTIFICATION,
   UPDATE_PROFILE_NOTIFICATION,
+  GET_QUESTIONNAIRE,
+  POST_SUBMIT_QUESTIONNAIRE,
   UPDATE_SELLER,
 };

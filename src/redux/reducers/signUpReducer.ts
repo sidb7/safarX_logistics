@@ -4,7 +4,7 @@ interface SignUpState {
   email: string;
   firstName: string;
   lastName: string;
-  mobileNo?: number;
+  // mobileNo?: number;
   referalCode?: string;
   password?: string;
 }
@@ -13,7 +13,7 @@ const initialState: SignUpState = {
   email: "",
   firstName: "",
   lastName: "",
-  mobileNo: 0,
+  // mobileNo: 0,
   referalCode: "",
   password: "",
 };
@@ -28,7 +28,7 @@ export const SignupSlice = createSlice({
         email: string;
         firstName: string;
         lastName: string;
-        mobileNo: number;
+        // mobileNo: number;
         referalCode: string;
         password: string;
       }>
@@ -36,7 +36,7 @@ export const SignupSlice = createSlice({
       state.email = action.payload.email;
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
-      state.mobileNo = action.payload.mobileNo;
+      // state.mobileNo = action.payload.mobileNo;
       state.referalCode = action.payload.referalCode;
       state.password = action.payload.password;
     },
