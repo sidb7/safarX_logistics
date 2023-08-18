@@ -230,6 +230,9 @@ const Index = () => {
   console.log("pickupdate", pickupDate);
 
   const pickupDateForEpoch = "18/08/2023 11:00 AM";
+
+  const editedPickupDateForEpoch = pickupDate.substring(0, 20);
+  console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
       dateTimeString,
@@ -238,7 +241,7 @@ const Index = () => {
     );
     return Math.floor(parsedDateTime.getTime() / 1000);
   };
-  const epochPickupDate = convertToEpoch(pickupDateForEpoch);
+  const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
 
   console.log("epochPickupDate", epochPickupDate);
 
