@@ -205,6 +205,7 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
+            <Route path="/neworder/pickup" element={<PickUpScreen />} />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />

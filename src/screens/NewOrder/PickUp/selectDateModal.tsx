@@ -11,10 +11,11 @@ import CustomDatePicker from "../../../components/Datepicker";
 
 interface ITypeProps {
   onClick?: any;
+  onPickupTimeSelected: (pickupTime: string) => void;
 }
 
 const SelectDateModalContent = (props: ITypeProps) => {
-  const { onClick } = props;
+  const { onClick, onPickupTimeSelected } = props;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -37,6 +38,22 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const handleTimeSlotClick = (time: string) => {
     setSelectedTime(time);
   };
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const selectedPickupTime =
+    selectedDay === "today" && selectedTime
+      ? `${formatDate(new Date())} ${selectedTime}`
+      : `${selectedDay} ${selectedTime}`;
+  console.log("selectedPickupTime", selectedPickupTime);
+
+  if (selectedTime) {
+    onPickupTimeSelected(selectedPickupTime);
+  }
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
       <div className="flex justify-between lg:mb-10 lg:px-5">
