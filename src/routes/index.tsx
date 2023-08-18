@@ -207,6 +207,10 @@ const MyRoutes: React.FC = () => {
               path="profile/profileEdit-kyc"
               element={<EditProfileKyc />}
             />
+            <Route
+              path="profile/profile-setting-edit-profile"
+              element={<EditProfile />}
+            />
           </Route>
           <Route path="profile" element={<ReferLayout />}>
             <Route path="profile-refer-earn" element={<ReferTab />} />
@@ -218,12 +222,6 @@ const MyRoutes: React.FC = () => {
             <Route
               path="profile-setting-change-password"
               element={<ChangePassword />}
-            />
-          </Route>
-          <Route path="profile" element={<EditProfileLayout />}>
-            <Route
-              path="profile-setting-edit-profile"
-              element={<EditProfile />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
