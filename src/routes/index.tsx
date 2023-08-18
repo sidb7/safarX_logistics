@@ -24,6 +24,7 @@ import SendOTPScreen from "../screens/Onboarding/Signup/mobileVerification";
 import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
+import Order from "../screens/Order/index";
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/Onboarding/Kyc/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -196,26 +197,34 @@ const MyRoutes: React.FC = () => {
             <Route path="select-address" element={<SelectAddress />} />
             <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
-          <Route path="order" element={<OrderLayout />}>
-            <Route path="order-details" element />
-          </Route>
+
           <Route path="transaction" element={<TransactionLayout />}></Route>
           <Route
             path="transaction/filter"
             element={<TransactionFilterScreen />}
           ></Route>
           <Route path="profile" element={<ProfileLayout />}></Route>
-          <Route path="profile" element={<KycLayout />}>
-            <Route path="profileEdit-kyc" element={<EditProfileKyc />} />
-          </Route>
-          <Route path="profile" element={<BankLayout />}>
-            <Route path="profileEdit-bank" element={<EditProfileBank />} />
-          </Route>
           <Route path="/" element={<CommonLayout />}>
+            <Route path="order" element={<Order />}>
+              <Route path="order-details" />
+            </Route>
             <Route
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
             />
+            <Route
+              path="profile/profileEdit-bank"
+              element={<EditProfileBank />}
+            />
+            <Route
+              path="profile/profileEdit-kyc"
+              element={<EditProfileKyc />}
+            />
+            <Route
+              path="profile/profile-setting-edit-profile"
+              element={<EditProfile />}
+            />
+            <Route path="/neworder/pickup" element={<PickUpScreen />} />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />
@@ -236,12 +245,6 @@ const MyRoutes: React.FC = () => {
             <Route
               path="profile-setting-change-password"
               element={<ChangePassword />}
-            />
-          </Route>
-          <Route path="profile" element={<EditProfileLayout />}>
-            <Route
-              path="profile-setting-edit-profile"
-              element={<EditProfile />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />

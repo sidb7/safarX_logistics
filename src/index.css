@@ -3,6 +3,6 @@
 @tailwind utilities;
 @import url("./styles/hideScrollbar.css");
 
-.ReactModal__Content{
+/* .ReactModal__Content{
     width: 388px;
-}
+} */

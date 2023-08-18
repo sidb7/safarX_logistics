@@ -9,11 +9,11 @@ import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 
-
 interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
   statusData: any;
+  handleTabChange: Function;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -34,14 +34,15 @@ const statusBar = (statusName: string, orderNumber: string) => {
 };
 
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
-  filterId,
+  filterId = 0,
   setFilterId,
   statusData,
+  handleTabChange,
 }) => {
   const navigate = useNavigate();
 
   const { isLgScreen } = ResponsiveState();
-  const [statusId, setStatusId] = useState(-1);
+  const [statusId, setStatusId] = useState(0);
   const [filterModal, setFilterModal] = useState(false);
 
   const [filterData, setFilterData] = useState([
@@ -113,17 +114,24 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
+  const handleStatusChanges = (index: any) => {
+    console.log("handleStatusChanges", index);
+    handleTabChange(index);
+    setStatusId(index);
+  };
+
   return (
-    <div className="flex flex-col pt-7">
+    <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
         {statusData.map(
           ({ statusName, orderNumber }: any, index: SetStateAction<number>) => {
             return (
               <div
-                className={`flex justify-center items-center border-b-2 border-[#777777] px-6 cursor-pointer ${
+                style={{ borderBottomWidth: "3px" }}
+                className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
                   statusId === index ? "!border-[#004EFF]" : ""
                 }`}
-                onClick={() => setStatusId(index)}
+                onClick={() => handleStatusChanges(index)}
               >
                 <span
                   className={`text-[#777777] text-[15px] lg:text-[18px] ${
@@ -145,7 +153,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         )}
       </div>
 
-      <div className="grid grid-cols-2 justify-center mt-4 h-[46px] my-6 lg:flex lg:justify-between">
+      <div className="grid grid-cols-2 justify-center my-8 h-[46px] lg:flex lg:justify-between">
         <div className="lg:flex lg:gap-x-4">
           <div className="flex items-center">
             <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">

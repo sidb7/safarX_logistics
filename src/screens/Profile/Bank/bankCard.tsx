@@ -9,13 +9,7 @@ interface ProfileCardProps {
 }
 
 export const ProfileBankCard = (props: ProfileCardProps) => {
-  const accountType = props?.BankDetails?.accountType;
-  const bankAccountHolderName = props?.BankDetails?.bankAccountHolderName;
-  const bankAccountNumber = props?.BankDetails?.bankAccountNumber;
-  const bankName = props?.BankDetails?.bankName;
-  const ifscCode = props?.BankDetails?.ifscCode;
-  const chequeDetails = props?.BankDetails?.chequeDetails;
-  const branchName = props?.BankDetails?.branchName;
+  const { BankDetails } = props;
 
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
@@ -49,14 +43,14 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             <div className="flex flex-col">
               <LabelContainer
                 label="Account Holder Name"
-                info={bankAccountHolderName}
+                info={BankDetails?.bankAccountHolderName}
               />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="Bank Name"
-                info={bankName}
+                info={BankDetails?.bankName}
                 className="ml-3"
                 classNameInfo="ml-3"
               />
@@ -65,13 +59,16 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer label=" Branch Name" info={branchName} />
+              <LabelContainer
+                label=" Branch Name"
+                info={BankDetails?.branchName}
+              />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="IFSC Code"
-                info={ifscCode}
+                info={BankDetails?.ifscCode}
                 className="ml-3"
                 classNameInfo="ml-3"
               />
@@ -80,13 +77,16 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer label="Account Type" info={accountType} />
+              <LabelContainer
+                label="Account Type"
+                info={BankDetails?.accountType}
+              />
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="Account number"
-                info={bankAccountNumber}
+                info={BankDetails?.bankAccountNumber}
                 className="ml-3"
                 classNameInfo="ml-3"
               />
@@ -97,7 +97,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             <div className="flex flex-col">
               <LabelContainer
                 label="Cheque Details"
-                info={chequeDetails || "Cheque.png"}
+                info={BankDetails?.chequeDetails || "Cheque.png"}
               />
             </div>
           </div>
@@ -107,7 +107,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col mt-5 px-5">
             <LabelContainer
               label="Account Holder Name"
-              info={bankAccountHolderName}
+              info={BankDetails?.bankAccountHolderName}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -116,7 +116,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
             <LabelContainer
               label="Bank Name"
-              info={bankName}
+              info={BankDetails?.bankName}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -125,7 +125,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer
               label="Branch Name"
-              info={branchName}
+              info={BankDetails?.branchName}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -134,7 +134,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col border-[#E8E8E8] border-l-[1px] mt-5 px-5">
             <LabelContainer
               label="IFSC Code"
-              info={ifscCode}
+              info={BankDetails?.ifscCode}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -143,7 +143,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col border-l-[1px] mt-5 px-5">
             <LabelContainer
               label="Account Type"
-              info={accountType}
+              info={BankDetails?.accountType}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -152,7 +152,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col border-[#E8E8E8] mb-5 px-5">
             <LabelContainer
               label="Account number"
-              info={bankAccountNumber}
+              info={BankDetails?.bankAccountNumber}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />
@@ -161,7 +161,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
           <div className="flex flex-col mb-5 px-5 border-l-[1px]">
             <LabelContainer
               label="Cheque Details"
-              info={chequeDetails || "Cheque.png"}
+              info={BankDetails?.chequeDetails || "Cheque.png"}
               className="text-[12px]"
               classNameInfo="!text-[14px]"
             />

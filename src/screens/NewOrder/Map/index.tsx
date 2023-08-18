@@ -6,10 +6,9 @@ import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 import CustomButton from "../../../components/Button";
 import GPSIcon from "../../../assets/Map/gps.svg";
 import LocationIcon from "../../../assets/Map/Location.svg";
-import { useAppDispatch } from "../../../redux/hooks";
-import { mapAddress } from "../../../redux/reducers/mapReducer";
 import { useNavigate } from "react-router-dom";
 import ServiceButton from "../../../components/Button/ServiceButton";
+
 const googleMapApiKey = "AIzaSyBEi1iP1YW3fGeKg---Rn7QCelztyYYfVk";
 
 interface IPropsTypes {
@@ -19,7 +18,6 @@ interface IPropsTypes {
 const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   const { onClick } = props;
 
-  const dispatch: any = useAppDispatch();
   const navigate = useNavigate();
 
   const containerStyle = {
@@ -32,9 +30,10 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   });
   const [zoom, setZoom] = useState(5);
   const [address, setAddress] = useState(
-    "Mahakali Caves Rd, Shanti Nagar, Andheri East, Mumbai, Maharashtra 400093"
+    "Shipyaari HQ, 12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062, India."
   );
-
+  const [shortAddress, setshortAddress] = useState("Goregaon West");
+  console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
     setCenterValue({
       lat: e.latLng.lat(),
@@ -53,9 +52,17 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
         headers: { authorization: "6481876edafb412cf0294413" },
         data: { placeId: placeId },
       };
-      const { data } = await axios(config);
-      if (data.status === true) {
-        setAddress(data?.result?.formatted_address);
+
+      const response = await axios(config);
+
+      if (response.data.success === 1 && response.data.data.result) {
+        const formattedAddress = response.data.data.result.formatted_address;
+        console.log("Formatted Address:", formattedAddress);
+        setAddress(formattedAddress);
+        const addressComponents = response.data.data.result.address_components;
+        const shortAddress = addressComponents[3].short_name;
+        setshortAddress(shortAddress);
+        console.log("addressComponents", addressComponents[3].short_name);
       } else {
         console.log("Failed to get address");
       }
@@ -84,8 +91,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   }, []);
 
   const confirmLocation = () => {
-    dispatch(mapAddress({ address: address }));
-    navigate("/neworder/pickup");
+    navigate("/neworder/pickup", { state: { address: address } });
   };
 
   return (
@@ -117,35 +123,6 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
                 onClick={onMapClick}
               >
                 <MarkerF position={centerValue} />
-                {/* <StandaloneSearchBox
-                onLoad={onLoad}
-                onPlacesChanged={onPlacesChanged}
-              >
-                <input
-                  type="text"
-                  placeholder="Customized your placeholder"
-                  style={{
-                    boxSizing: `border-box`,
-                    border: `1px solid transparent`,
-                    width: `240px`,
-                    height: `32px`,
-                    padding: `0 12px`,
-                    borderRadius: `3px`,
-                    boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                    fontSize: `14px`,
-                    outline: `none`,
-                    textOverflow: `ellipses`,
-                    position: "absolute",
-                    left: "50%",
-                    marginLeft: "-120px",
-                  }}
-                />
-              </StandaloneSearchBox> */}
-                {/* <InfoWindow
-                onLoad={onLoad}
-                position={centerValue}
-              >
-              </InfoWindow> */}
               </GoogleMap>
             </LoadScript>
             <div className="absolute top-[60%] left-[25%] w-1/2 flex justify-center">
@@ -171,13 +148,11 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
                 <div className="flex lg:gap-x-2">
                   <img src={LocationIcon} alt="Location" width="24px" />
                   <span className="pl-1 font-medium lg:font-semibold lg:text-base">
-                    Andheri East
+                    {shortAddress}
                   </span>
                 </div>
                 <div className="flex mt-2">
                   <span className="text-sm font-light lg:font-normal	">
-                    Mahakali Caves Rd, Shanti Nagar, Andheri East, Mumbai,
-                    Maharashtra 400093
                     {address}
                   </span>
                 </div>
@@ -208,4 +183,5 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     </>
   );
 };
+
 export default Index;
