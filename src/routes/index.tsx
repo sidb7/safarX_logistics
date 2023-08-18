@@ -24,6 +24,7 @@ import SendOTPScreen from "../screens/Onboarding/Signup/mobileVerification";
 import VerifyOTPScreen from "../screens/Onboarding/Signup/verifyOtp";
 import OffersScreen from "../screens/Onboarding/Signup/offerScreen";
 import GetStartedScreen from "../screens/Onboarding/Signup/getStarted";
+import Order from "../screens/Order/index";
 import OrderLayout from "../layout/OrderLayout";
 import KycBusinessTypeScreen from "../screens/AccountSetUp/KYC/BusinessType";
 import AccountLayoutScreen from "../layout/accountLayout";
@@ -185,9 +186,7 @@ const MyRoutes: React.FC = () => {
             <Route path="select-address" element={<SelectAddress />} />
             <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
           </Route>
-          <Route path="order" element={<OrderLayout />}>
-            <Route path="order-details" element />
-          </Route>
+
           <Route path="transaction" element={<TransactionLayout />}></Route>
           <Route
             path="transaction/filter"
@@ -195,6 +194,9 @@ const MyRoutes: React.FC = () => {
           ></Route>
           <Route path="profile" element={<ProfileLayout />}></Route>
           <Route path="/" element={<CommonLayout />}>
+            <Route path="order" element={<Order />}>
+              <Route path="order-details" />
+            </Route>
             <Route
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
