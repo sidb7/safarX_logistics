@@ -30,6 +30,10 @@ const Index = () => {
       };
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
+        localStorage.setItem(
+          "891f5e6d-b3b3-4c16-929d-b06c3895e38d",
+          response?.data[0].token
+        );
         navigate("/onboarding/offers");
       } else {
         toast.error(response?.message);

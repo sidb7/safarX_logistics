@@ -26,6 +26,8 @@ const POST_VERIFY_OTP = `${SELLER_URL}/api/v1/seller/verifySignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
 const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
+const GET_QUESTIONNAIRE = `${SELLER_URL}/api/v1/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;
+const POST_SUBMIT_QUESTIONNAIRE = `${SELLER_URL}/api/v1/sellerQnA/submitAnswer`;
 
 export {
   SELLER_URL,
@@ -36,4 +38,6 @@ export {
   POST_VERIFY_OTP,
   GET_PROFILE_NOTIFICATION,
   UPDATE_PROFILE_NOTIFICATION,
+  GET_QUESTIONNAIRE,
+  POST_SUBMIT_QUESTIONNAIRE,
 };
