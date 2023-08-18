@@ -86,7 +86,7 @@ import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
 import Layout from "../layout";
-import {CommonLayout} from "../layout/layout"
+import { CommonLayout } from "../layout/layout";
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
@@ -197,13 +197,17 @@ const MyRoutes: React.FC = () => {
           <Route path="profile" element={<KycLayout />}>
             <Route path="profileEdit-kyc" element={<EditProfileKyc />} />
           </Route>
-          <Route path="profile" element={<BankLayout />}>
+          {/* <Route path="profile" element={<BankLayout />}>
             <Route path="profileEdit-bank" element={<EditProfileBank />} />
-          </Route>
+          </Route> */}
           <Route path="/" element={<CommonLayout />}>
             <Route
               path="profile/profile-notification"
               element={<ProfileNotificationTab />}
+            />
+            <Route
+              path="profile/profileEdit-bank"
+              element={<EditProfileBank />}
             />
           </Route>
           <Route path="profile" element={<ReferLayout />}>

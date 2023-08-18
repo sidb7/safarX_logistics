@@ -25,6 +25,7 @@ const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
 const GET_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/readNotification`;
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_URL}/api/v1/notification/updateNotification`;
+const UPDATE_SELLER = `${SELLER_URL}/api/v1/seller/updateSingleSeller`;
 
 export {
   SELLER_URL,
@@ -34,4 +35,5 @@ export {
   GET_PROFILE_URL,
   GET_PROFILE_NOTIFICATION,
   UPDATE_PROFILE_NOTIFICATION,
+  UPDATE_SELLER,
 };
