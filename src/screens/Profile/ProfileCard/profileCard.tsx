@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ProfileCardProps {
-  ProfileDetails: any;
+  ProfileDetails?: any;
 }
 
 const LabelComponent: React.FC<{
@@ -31,19 +31,17 @@ const LabelComponent: React.FC<{
 };
 
 export const ProfileCard = (props: ProfileCardProps) => {
-  const {
-    sellerId,
-    profileImageUrl,
-    firstName,
-    lastName,
-    middleName,
-    email,
-    contactNumber,
-    companyName,
-    activePlan,
-    yaariPoints,
-    walletBalance,
-  }: any = props?.ProfileDetails;
+  const sellerId = props?.ProfileDetails?.sellerId;
+  const profileImageUrl = props?.ProfileDetails?.profileImageUrl;
+  const firstName = props?.ProfileDetails?.firstName;
+  const lastName = props?.ProfileDetails?.lastName;
+  const middleName = props?.ProfileDetails?.middleName;
+  const email = props?.ProfileDetails?.email;
+  const contactNumber = props?.ProfileDetails?.contactNumber;
+  const companyName = props?.ProfileDetails?.companyName;
+  const activePlan = props?.ProfileDetails?.activePlan;
+  const yaariPoints = props?.ProfileDetails?.yaariPoints;
+  const walletBalance = props?.ProfileDetails?.walletBalance;
 
   const navigate = useNavigate();
 
