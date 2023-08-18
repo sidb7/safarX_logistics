@@ -28,7 +28,10 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
-import { dummyPickupDropdownData } from "../../../utils/dummyData";
+import {
+  dummyPickupDropdownData,
+  pickupAddress,
+} from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
 import "../../../styles/switch.css";
@@ -61,7 +64,7 @@ const Index = () => {
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
+  // const [pickupDate, setPickupDate] = useState("");
 
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
@@ -76,35 +79,38 @@ const Index = () => {
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
-  const [plotNo, setPlotNo] = useState("");
-  const [locality, setLocality] = useState("");
-  const [selectedDropdown, setSelectedDropdown] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [country, setCountry] = useState("");
 
-  const [contactName, setContactName] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [alternateMobile, setAlternateMobile] = useState("");
-
-  const [addressData, setAddressData] = useState({
-    plotNo: "",
-    locality: "",
-    selectedDropdown: "",
+  const [pickupLocation, setPickupLocation] = useState({
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
     pincode: "",
     city: "",
     state: "",
     country: "",
+    addressType: "",
   });
 
-  const [contactData, setContactData] = useState({
-    contactName: "",
-    mobileNumber: "",
-    email: "",
-    alternateMobile: "",
+  const [contact, setContact] = useState({
+    name: "",
+    mobileNo: "",
+    alternateMobileNo: "",
+    emailId: "",
+    type: "",
   });
+
+  const [customBranding, setCustomBranding] = useState({
+    name: "",
+    logo: "",
+    address: "",
+    contact: {
+      name: "",
+      mobileNo: "",
+    },
+  });
+
+  const [pickupDate, setPickupDate] = useState("");
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -135,21 +141,31 @@ const Index = () => {
     setPastedData(pastedData);
   };
 
-  const handleAddressChange = (
-    fieldName: keyof typeof addressData,
+  const handlePickupLocationChange = (
+    fieldName: keyof typeof pickupLocation,
     value: string
   ) => {
-    setAddressData((prevData) => ({
+    setPickupLocation((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
 
   const handleContactChange = (
-    fieldName: keyof typeof contactData,
+    fieldName: keyof typeof contact,
     value: string
   ) => {
-    setContactData((prevData) => ({
+    setContact((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleCustomBrandingChange = (
+    fieldName: keyof typeof customBranding,
+    value: string
+  ) => {
+    setCustomBranding((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -157,6 +173,54 @@ const Index = () => {
   // const handleClick = () => {
   //   // inputRef.current?.focus();
   // };
+  const parseAddress = (address: any) => {
+    const addressParts = address.split(", ");
+    const [flatNo, addressLine] = addressParts[0].split(", ");
+    console.log("addressLine", addressLine);
+    const sector = addressParts[7];
+    const landmark = addressParts[5];
+    console.log("landmark", landmark);
+    const [city, state, pincode] = addressParts.slice(-3);
+    return {
+      flatNo,
+      address: address,
+      sector,
+      landmark,
+      pincode,
+      city,
+      state,
+      country: "India",
+    };
+  };
+
+  useEffect(() => {
+    const parsedAddress = parseAddress(locateAddress);
+    setPickupLocation((prevData) => ({
+      ...prevData,
+      ...parsedAddress,
+    }));
+  }, [locateAddress]);
+
+  // const parsedLandmarks = pickupLocation.landmark?.split(", ");
+  // const addressDropdownOptions = [
+  //   {
+  //     label: "Select/ type exact landmark",
+  //     value: "select",
+  //   },
+  //   ...parsedLandmarks?.map((item) => ({
+  //     label: item,
+  //     value: item,
+  //   })),
+  //   {
+  //     label: "Other",
+  //     value: "other",
+  //   },
+  // ];
+
+  console.log("pickupLocation", pickupLocation);
+  console.log("pickupAddress", pickupAddress);
+  console.log("contact", contact);
+  console.log("customBranding", customBranding);
 
   return (
     <div>
@@ -260,6 +324,7 @@ const Index = () => {
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
             value={locateAddress}
+            onChange={(e) => setLocateAddress(e.target.value)}
             onClick={() => {
               isItLgScreen
                 ? setIsLocationRightModal(true)
@@ -271,16 +336,20 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Plot no., floor, building name"
-            value={addressData.plotNo}
-            onChange={(e) => handleAddressChange("plotNo", e.target.value)}
+            value={pickupLocation.flatNo}
+            onChange={(e) =>
+              handlePickupLocationChange("flatNo", e.target.value)
+            }
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Locality"
-            value={addressData.locality}
-            onChange={(e) => handleAddressChange("locality", e.target.value)}
+            value={pickupLocation.sector}
+            onChange={(e) =>
+              handlePickupLocationChange("sector", e.target.value)
+            }
           />
         </div>
 
@@ -289,7 +358,7 @@ const Index = () => {
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
-              handleAddressChange("selectedDropdown", event.target.value);
+              handlePickupLocationChange("landmark", event.target.value);
               if (event.target.value === "other") {
                 isItLgScreen
                   ? setIsRightLandmarkModal(true)
@@ -303,30 +372,39 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Pincode"
-            value={addressData.pincode}
-            onChange={(e) => handleAddressChange("pincode", e.target.value)}
+            value={pickupLocation.pincode}
+            // onChange={(e) =>
+            //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+            // }
+            onChange={(e) =>
+              handlePickupLocationChange("pincode", e.target.value)
+            }
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="City"
-            value={addressData.city}
-            onChange={(e) => handleAddressChange("city", e.target.value)}
+            value={pickupLocation.city}
+            onChange={(e) => handlePickupLocationChange("city", e.target.value)}
           />
         </div>
 
         <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="State"
-            value={addressData.state}
-            onChange={(e) => handleAddressChange("state", e.target.value)}
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
           />
           <div>
             <CustomInputBox
               label="Country"
-              value={addressData.country}
-              onChange={(e) => handleAddressChange("country", e.target.value)}
+              value={pickupLocation.country}
+              onChange={(e) =>
+                handlePickupLocationChange("country", e.target.value)
+              }
             />
           </div>
         </div>
@@ -361,13 +439,14 @@ const Index = () => {
                 ? "!border-[#004EFF] !text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveAddress({
                 office: true,
                 warehouse: false,
                 other: false,
-              })
-            }
+              });
+              handlePickupLocationChange("addressType", "office");
+            }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
             <p className="lg:font-semibold lg:text-[14px] ">Office</p>
@@ -427,34 +506,32 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Name of the contact person"
-            value={contactData.contactName}
-            onChange={(e) => handleContactChange("contactName", e.target.value)}
+            value={contact.name}
+            onChange={(e) => handleContactChange("name", e.target.value)}
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Mobile Number"
-            value={contactData.mobileNumber}
-            onChange={(e) =>
-              handleContactChange("mobileNumber", e.target.value)
-            }
+            value={contact.mobileNo}
+            onChange={(e) => handleContactChange("mobileNo", e.target.value)}
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Email ID(optional)"
-            value={contactData.email}
-            onChange={(e) => handleContactChange("email", e.target.value)}
+            value={contact.emailId}
+            onChange={(e) => handleContactChange("emailId", e.target.value)}
           />
         </div>
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number(optional)"
-            value={contactData.alternateMobile}
+            value={contact.alternateMobileNo}
             onChange={(e) =>
-              handleContactChange("alternateMobile", e.target.value)
+              handleContactChange("alternateMobileNo", e.target.value)
             }
           />
         </div>
@@ -472,13 +549,14 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveContact({
                 shopkeeper: true,
 
                 warehouse: false,
-              })
-            }
+              });
+              handleContactChange("type", "shopkeeper");
+            }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
             <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -498,6 +576,7 @@ const Index = () => {
 
                 warehouse: true,
               });
+              handleContactChange("type", "warehouse associate");
 
               isItLgScreen
                 ? setIsSaveContactRightModal(true)
@@ -524,7 +603,7 @@ const Index = () => {
             placeholder="Pickup Date"
             imgSrc={CalenderIcon}
             value={pickupDate}
-            onClick={() => setIsDateRightModal(true)}
+            onChange={(e) => setPickupDate(e.target.value)}
           />
         </div>
 

@@ -30,9 +30,9 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   });
   const [zoom, setZoom] = useState(5);
   const [address, setAddress] = useState(
-    "Mahakali Caves Rd, Shanti Nagar, Andheri East, Mumbai, Maharashtra 400093"
+    "Shipyaari HQ, 12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062, India."
   );
-  const [shortAddress, setshortAddress] = useState("Andheri East");
+  const [shortAddress, setshortAddress] = useState("Goregaon West");
   console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
     setCenterValue({

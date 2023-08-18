@@ -51,7 +51,7 @@ const InputWithImage = (props: IInputProps) => {
       <input
         placeholder={placeholder}
         type="text"
-        className="rounded  border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white h-[48px] pl-[12%]  text-[12px] text-[#1C1C1C] outline-none  "
+        className="rounded  border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white h-[48px] text-[12px] text-[#1C1C1C] outline-none  "
         required={isRequired}
         onChange={onChange}
         onClick={onClick}
