@@ -16,7 +16,7 @@ export const ServiceComponent = (props: Props) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
+  const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
 
   const BottomButton = () => {
@@ -39,7 +39,7 @@ export const ServiceComponent = (props: Props) => {
               : "bg-[#E8E8E8] text-[#BBBBBB]"
           }`}
           onClick={() => {
-            navigate("/account/kyc-modal");
+            navigate("/onboarding/kyc-modal");
           }}
         />
       </div>
@@ -51,7 +51,6 @@ export const ServiceComponent = (props: Props) => {
       <div className=" px-5 lg:px-0 ">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
-          <img src={CrossLogo} alt="" onClick={closeModal} />
         </div>
         <WelcomeHeader
           title="Welcome to Shipyaari"

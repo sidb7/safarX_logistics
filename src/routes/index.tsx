@@ -37,7 +37,9 @@ import KycModalScreen from "../screens/Onboarding/Kyc/TermsAndAgreement/Modal";
 import KycAadharForm from "../screens/Onboarding/Kyc/AadharForm";
 
 import SelectAddress from "../screens/Onboarding/Kyc/SelectAddress/index";
-import SelectAddressProprietor from "../screens/Onboarding/Kyc/SelectAddress/proprietor";
+import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billing";
+import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
+
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
@@ -170,8 +172,12 @@ const MyRoutes: React.FC = () => {
 
             <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
             <Route
-              path="select-address-proprietor"
-              element={<SelectAddressProprietor />}
+              path="select-address-billing"
+              element={<SelectAddressBilling />}
+            />
+            <Route
+              path="select-address-pickup"
+              element={<SelectAddressPickUp />}
             />
             <Route
               path="kyc-mobile-verify"

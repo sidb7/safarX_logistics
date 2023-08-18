@@ -20,7 +20,7 @@ const Index = (props: ITypeProps) => {
   const videoRef = useRef(null);
 
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
+  const closeModal = () => setOpenModal(true);
   const navigate = useNavigate();
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -65,12 +65,6 @@ const Index = (props: ITypeProps) => {
       <div className="relative top-0 px-5 h-screen lg:h-full lg:px-0">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
-          <img
-            src={CrossLogo}
-            alt=""
-            onClick={closeModal}
-            className="cursor-pointer"
-          />
         </div>
         <WelcomeHeader
           title="Welcome to Shipyaari"
@@ -118,12 +112,12 @@ const Index = (props: ITypeProps) => {
 
         <div className="flex flex-col   lg:justify-center lg:items-center  lg:pb-0 lg:mb-6">
           <ServiceButton
-            text="CAPTURE SELFIE"
+            text="CAPTURE PHOTO"
             className="bg-[#1C1C1C] text-white !w-full lg:!w-[320px] !py-2 !px-4 "
             onClick={() => {
               getSnapshot();
               // getCameraPermission();
-              navigate("/account/kyc-otp-form");
+              navigate("/onboarding/kyc-otp-form");
             }}
           />
         </div>
@@ -149,7 +143,7 @@ const Index = (props: ITypeProps) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[602px] "
+          className="!p-0 !w-[500px] !h-[700px] "
           overlayClassName="flex  items-center"
         >
           {photoIdentificationComponent()}

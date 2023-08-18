@@ -4,30 +4,44 @@ import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
+import { POST } from "../../../../utils/webService";
+import { POST_BUSINESS_TYPE_URL } from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 interface ITypeProps {}
 
 const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
-
+  const closeModal = () => setOpenModal(true);
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const businessType = useSelector(
+    (state: any) => state?.onboarding.businessType
+  );
+
+  const onSubmitBusinessType = async (value: any) => {
+    try {
+      const payload = { businessType: value };
+      const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
+      if (response?.success) {
+        toast.success(response.message);
+        navigate("/onboarding/kyc-photo");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   const businessTypeComponent = () => {
     return (
       <div className="px-5 h-screen lg:h-full  lg:px-0">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
-          {/* <img
-            src={CrossLogo}
-            alt=""
-            onClick={closeModal}
-            className="cursor-pointer"
-          /> */}
         </div>
 
         <WelcomeHeader
@@ -41,21 +55,21 @@ const BusinessType = (props: ITypeProps) => {
           </p>
           <Card
             name="business"
-            value="Individual"
+            value="individual"
             title="Individual"
             subTitle="Shipper not having GST"
           />
 
           <Card
             name="business"
-            value="Sole Proprietor"
+            value="soleProprietor"
             title="Sole Proprietor"
             subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
           />
 
           <Card
             name="business"
-            value="Company"
+            value="company"
             title="Company"
             subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
           />
@@ -65,7 +79,7 @@ const BusinessType = (props: ITypeProps) => {
             text="PROCEED FOR KYC"
             className="bg-[#1C1C1C] !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "
             onClick={() => {
-              navigate("/account/kyc-photo");
+              onSubmitBusinessType(businessType);
             }}
           />
 
@@ -86,7 +100,7 @@ const BusinessType = (props: ITypeProps) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] mt-5  "
+          className="!p-0 !w-[500px] mt-5  !h-[700px]  "
           overlayClassName="!items-center"
         >
           {businessTypeComponent()}

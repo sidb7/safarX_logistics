@@ -5,6 +5,7 @@ import { mapSlice } from "./reducers/mapReducer";
 import { SignupSlice } from "./reducers/signUpReducer";
 import { SignInSlice } from "./reducers/signInReducer";
 import { catalogueSlice } from "./reducers/catalogue";
+import { onboardingSlice } from "./reducers/onboarding";
 
 export const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
     map: mapSlice.reducer,
     signup: SignupSlice.reducer,
     signin: SignInSlice.reducer,
-    catalogue : catalogueSlice.reducer
+    catalogue: catalogueSlice.reducer,
+    onboarding: onboardingSlice.reducer,
   },
 });
 

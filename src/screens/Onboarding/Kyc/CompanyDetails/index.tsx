@@ -12,7 +12,7 @@ type Props = {};
 
 const Index = (props: Props) => {
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
+  const closeModal = () => setOpenModal(true);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   return (

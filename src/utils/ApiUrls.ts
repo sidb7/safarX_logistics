@@ -23,6 +23,13 @@ const POST_SIGN_IN_URL = `${SELLER_URL}/api/v1/seller/signIn`;
 const POST_SIGN_UP_URL = `${SELLER_URL}/api/v1/seller/createNewSeller?companyName=SHIPYAARI`;
 const POST_SEND_OTP_URL = `${SELLER_URL}/api/v1/seller/sendSignUpOtp`;
 const GET_PROFILE_URL = `${SELLER_URL}/api/v1/seller/getSingleSeller`;
+//KYC API URLs
+const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;
+const POST_VERIFY_AADHAR_URL = `${SELLER_URL}/api/v1/seller/sendAadhaarCard`;
+const POST_VERIFY_AADHAR_OTP_URL = `${SELLER_URL}/api/v1/seller/verifyAadhaarCard`;
+const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardLite`;
+const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
+const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
 
 export {
   SELLER_URL,
@@ -30,4 +37,10 @@ export {
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
+  POST_BUSINESS_TYPE_URL,
+  POST_VERIFY_AADHAR_URL,
+  POST_VERIFY_AADHAR_OTP_URL,
+  POST_VERIFY_PAN_URL,
+  POST_VERIFY_GST_URL,
+  POST_UPDATE_COMPANY_URL,
 };

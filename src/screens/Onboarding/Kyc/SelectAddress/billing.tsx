@@ -14,10 +14,10 @@ import CustomInputWithFileUpload from "../../../../components/InputBox/InputWith
 
 interface ITypeProps {}
 
-const BusinessType = (props: ITypeProps) => {
+const Billing = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
+  const closeModal = () => setOpenModal(true);
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -27,7 +27,6 @@ const BusinessType = (props: ITypeProps) => {
         <div className="px-5 lg:px-0">
           <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
             <img src={CompanyLogo} alt="" />
-            <img src={CrossLogo} alt="" onClick={closeModal} />
           </div>
           <WelcomeHeader
             title="Welcome to Shipyaari"
@@ -156,7 +155,9 @@ const BusinessType = (props: ITypeProps) => {
               <ServiceButton
                 text="SUBMIT"
                 className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px]"
-                onClick={() => {}}
+                onClick={() => {
+                  navigate("/onboarding/select-address-pickup");
+                }}
               />
             </div>
           )}
@@ -171,7 +172,7 @@ const BusinessType = (props: ITypeProps) => {
               text="SUBMIT"
               className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
               onClick={() => {
-                navigate("/account/kyc-photo");
+                navigate("/onboarding/select-address-pickup");
               }}
             />
           </div>
@@ -200,4 +201,4 @@ const BusinessType = (props: ITypeProps) => {
   );
 };
 
-export default BusinessType;
+export default Billing;

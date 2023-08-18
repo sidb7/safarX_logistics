@@ -26,7 +26,7 @@ const card = (props: ITypesProps) => {
   return (
     <>
       <div
-        className={` ${cardClassName} border-[1px] rounded p-4   border-[#E8E8E8] w-full lg:w-[320px] `}
+        className={` ${cardClassName} border-[1px] rounded p-4   border-[#E8E8E8] w-full `}
       >
         <div className="flex items-center   gap-x-3 ">
           <CustomRadioButton

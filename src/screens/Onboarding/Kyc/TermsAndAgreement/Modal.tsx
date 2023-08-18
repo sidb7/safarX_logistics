@@ -4,11 +4,15 @@ import TickIcon from "../../../../assets/Payment/Done.gif";
 
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 interface ITypesProps {}
 
 const Modal = (props: ITypesProps) => {
   const [showModal, setShowModal] = useState(true);
+  const businessType = useSelector(
+    (state: any) => state?.onboarding.businessType
+  );
   const navigate = useNavigate();
 
   return (
@@ -37,8 +41,11 @@ const Modal = (props: ITypesProps) => {
             <ServiceButton
               text="NEXT"
               onClick={() => {
-                // navigate("/account/kyc-company");
-                navigate("/account/select-address-proprietor");
+                if (businessType === "individual") {
+                  navigate("/onboarding/select-address");
+                } else {
+                  navigate("/onboarding/select-address-billing");
+                }
               }}
               className="bg-[#1C1C1C] text-white p-2 mb-6 font-Open  "
             />
