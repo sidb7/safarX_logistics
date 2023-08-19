@@ -13,8 +13,9 @@ export const store = configureStore({
     map: mapSlice.reducer,
     signup: SignupSlice.reducer,
     signin: SignInSlice.reducer,
-    catalogue : catalogueSlice.reducer
+    catalogue: catalogueSlice.reducer,
   },
+  devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
