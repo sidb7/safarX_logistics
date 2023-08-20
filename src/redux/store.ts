@@ -17,6 +17,7 @@ export const store = configureStore({
     catalogue: catalogueSlice.reducer,
     onboarding: onboardingSlice.reducer,
   },
+  devTools: true,
 });
 
 export type RootState = ReturnType<typeof store.getState>;
