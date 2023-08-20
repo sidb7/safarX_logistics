@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+interface ITypeProps {}
 
-export const ServiceComponent = (props: Props) => {
+export const ServiceComponent = (props: ITypeProps) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
@@ -38,6 +36,7 @@ export const ServiceComponent = (props: Props) => {
               ? "bg-[#1C1C1C] text-white"
               : "bg-[#E8E8E8] text-[#BBBBBB]"
           }`}
+          disabled={!checkbox}
           onClick={() => {
             navigate("/onboarding/kyc-modal");
           }}

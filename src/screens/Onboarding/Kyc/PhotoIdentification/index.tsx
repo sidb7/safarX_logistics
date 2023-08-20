@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -8,7 +8,6 @@ import PhotoScreenIcon from "../../../../assets/KYC/PhotoScreen.svg";
 import ImageCenterIcon from "../../../../assets/KYC/PhotoCenter.svg";
 import Modal from "./Modal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 
 interface ITypeProps {}
 
@@ -113,7 +112,7 @@ const Index = (props: ITypeProps) => {
         <div className="flex flex-col   lg:justify-center lg:items-center  lg:pb-0 lg:mb-6">
           <ServiceButton
             text="CAPTURE PHOTO"
-            className="bg-[#1C1C1C] text-white !w-full lg:!w-[320px] !py-2 !px-4 "
+            className="bg-[#1C1C1C] text-white !h-[36px] !w-full lg:!w-[320px] !py-2 !px-4 "
             onClick={() => {
               getSnapshot();
               // getCameraPermission();

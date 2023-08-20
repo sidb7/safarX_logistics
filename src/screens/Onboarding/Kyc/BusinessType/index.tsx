@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -22,16 +22,21 @@ const BusinessType = (props: ITypeProps) => {
     (state: any) => state?.onboarding.businessType
   );
 
+  //Calling API on Submit
+
   const onSubmitBusinessType = async (value: any) => {
     try {
       const payload = { businessType: value };
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
         toast.success(response.message);
-        navigate("/onboarding/kyc-photo");
+
+        //Navigate Url' go here
       } else {
         toast.error(response?.message);
       }
+
+      navigate("/onboarding/kyc-photo");
     } catch (error) {
       return error;
     }
@@ -77,7 +82,7 @@ const BusinessType = (props: ITypeProps) => {
         <div className="flex flex-col gap-y-4  lg:gap-y-3 lg:items-center lg:justify-center   pb-12 lg:pb-0 lg:mb-6">
           <ServiceButton
             text="PROCEED FOR KYC"
-            className="bg-[#1C1C1C] !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "
+            className="bg-[#1C1C1C] !font-Open !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "
             onClick={() => {
               onSubmitBusinessType(businessType);
             }}
@@ -85,7 +90,7 @@ const BusinessType = (props: ITypeProps) => {
 
           <ServiceButton
             text="SKIP FOR NOW"
-            className="!text-[#004EFF]   underline !border-none"
+            className="!text-[#004EFF] !font-Open  underline !border-none"
           />
         </div>
       </div>
@@ -100,7 +105,7 @@ const BusinessType = (props: ITypeProps) => {
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
-          className="!p-0 !w-[500px] mt-5  !h-[700px]  "
+          className="!p-0 !w-[500px] "
           overlayClassName="!items-center"
         >
           {businessTypeComponent()}

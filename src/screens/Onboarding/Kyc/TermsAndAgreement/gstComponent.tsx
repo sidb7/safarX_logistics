@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+interface ITypeProps {}
 
-export const GSTComponent = (props: Props) => {
+export const GSTComponent = (props: ITypeProps) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
@@ -33,6 +31,7 @@ export const GSTComponent = (props: Props) => {
 
         <ServiceButton
           text="ACCEPT AND CONTINUE"
+          disabled={!checkbox}
           className={` w-full lg:!w-[320px] mb-1 mt-2 font-Open  ${
             checkbox === true
               ? "bg-[#1C1C1C] text-white"

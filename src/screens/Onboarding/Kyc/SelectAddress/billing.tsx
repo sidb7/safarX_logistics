@@ -4,13 +4,10 @@ import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
-import CustomInputBox from "../../../../components/Input";
-import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 
 interface ITypeProps {}
 
@@ -34,7 +31,7 @@ const Billing = (props: ITypeProps) => {
           />
 
           <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between     mt-2 mb-4 lg:px-5 lg:w-[320px] ">
+            <div className="flex items-center justify-between mt-2 mb-4  lg:w-[320px] ">
               <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p>

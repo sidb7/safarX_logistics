@@ -25,6 +25,11 @@ interface OnboardingState {
     gstVerifyNavigate?: boolean;
     panVerifyNavigate?: boolean;
   };
+  aadharNumberProprietor?: {
+    aadharNumber?: number;
+    otpBtnStatus?: boolean;
+    aadharError?: string;
+  };
 }
 
 // Define the initial state using that type
@@ -51,6 +56,11 @@ const initialState: OnboardingState = {
     aadharVerifyNavigate: false,
     gstVerifyNavigate: false,
     panVerifyNavigate: false,
+  },
+  aadharNumberProprietor: {
+    aadharNumber: 0,
+    otpBtnStatus: false,
+    aadharError: "",
   },
 };
 
@@ -122,6 +132,20 @@ export const onboardingSlice = createSlice({
         ...action.payload,
       };
     },
+
+    setAadharNumberProprietor: (
+      state,
+      action: PayloadAction<{
+        aadharNumber?: number;
+        otpBtnStatus?: boolean;
+        aadharError?: string;
+      }>
+    ) => {
+      state.aadharNumberProprietor = {
+        ...state.aadharNumberProprietor,
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -136,6 +160,7 @@ export const {
   setOtpFormBtnStatus,
   setVerifyDetailsForOtpBtn,
   setNavigateOnOtpFormVerify,
+  setAadharNumberProprietor,
 } = onboardingSlice.actions;
 
 export default onboardingSlice.reducer;

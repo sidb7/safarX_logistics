@@ -21,7 +21,7 @@ const index = (props: IRadioButtonProps) => {
         name={name}
         value={value}
         onChange={onChange}
-        className={`  ${inputClassName}`}
+        className={`  ${inputClassName} `}
         id={id}
       />
       <label htmlFor={id} className={`${labelClassName}`}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -6,7 +6,6 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import MobileVerificationIcon from "../../../../assets/common/MobileVerify.gif";
 import { useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import CustomInputBox from "../../../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { setOTPNumber } from "../../../../redux/reducers/onboarding";
@@ -14,12 +13,13 @@ import { POST } from "../../../../utils/webService";
 import { POST_VERIFY_AADHAR_OTP_URL } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
-type Props = {};
+interface ITypeProps {}
 
-const Index = (props: Props) => {
+const Index = (props: ITypeProps) => {
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
   );
+  console.log("BT", businessType);
   const clientId = useSelector((state: any) => state?.onboarding.onOtpClientId);
   const otp = useSelector((state: any) => state?.onboarding.otp);
 
@@ -43,20 +43,22 @@ const Index = (props: Props) => {
       );
       if (response?.success) {
         toast.success(response?.message);
-        if (businessType === "individual") {
-          navigate("/onboarding/kyc-terms/GSTComponent");
-        } else if (businessType === "soleProprietor") {
-          if (location.state.path === "otp-form") {
-            navigate("/onboarding/kyc-aadhar-form");
-          }
-          if (location.state.path === "aadhar-form") {
-            navigate("/onboarding/kyc-terms/ServiceComponent");
-          }
-        } else {
+        //Navigate Url's go here
+      } else {
+        toast.error("OTP Verification Failed!");
+      }
+
+      if (businessType === "individual") {
+        navigate("/onboarding/kyc-terms/GSTComponent");
+      } else if (businessType === "soleProprietor") {
+        if (location.state.path === "otp-form") {
+          navigate("/onboarding/kyc-aadhar-form");
+        }
+        if (location.state.path === "aadhar-form") {
           navigate("/onboarding/kyc-terms/ServiceComponent");
         }
       } else {
-        toast.error("OTP Verification Failed!");
+        navigate("/onboarding/kyc-terms/ServiceComponent");
       }
     } catch (error) {
       return error;
@@ -87,8 +89,9 @@ const Index = (props: Props) => {
               <div className="!w-full mb-2 lg:mb-2">
                 <CustomInputBox
                   label="Enter OTP"
+                  inputType="number"
                   containerStyle="lg:!w-auto"
-                  className="lg:px-16  lg:!w-[320px] !font-Open "
+                  className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   onChange={(e) => {
                     dispatch(setOTPNumber(e.target.value));
@@ -111,11 +114,8 @@ const Index = (props: Props) => {
           <div className="flex flex-col lg:justify-center lg:items-center lg:mb-[45px]  ">
             <ServiceButton
               text="DONE"
-              className="bg-[#1C1C1C] !font-Open text-white lg:!w-[320px] mb-5"
+              className="bg-[#1C1C1C] !h-[36px] !font-Open text-white lg:!w-[320px] mb-5"
               btnType="submit"
-              onClick={() => {
-                // onVerifyOtp
-              }}
             />
           </div>
         </form>

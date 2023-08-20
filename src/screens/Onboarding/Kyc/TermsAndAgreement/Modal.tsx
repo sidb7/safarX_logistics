@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
 import TickIcon from "../../../../assets/Payment/Done.gif";
-
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

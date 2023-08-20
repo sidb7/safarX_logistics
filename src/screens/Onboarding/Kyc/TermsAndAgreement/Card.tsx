@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { POST } from "../../../../utils/webService";
 import { POST_GET_SINGLE_FILE } from "../../../../utils/ApiUrls";
 
@@ -9,14 +9,14 @@ interface ITypesProps {
 }
 
 const Card = (props: ITypesProps) => {
-  const { title, subTitleOne, titleClassName } = props;
+  const { title, titleClassName } = props;
   const [pdfUrl, setPdfUrl] = useState("");
 
   async function fetchPdf() {
     try {
       const payload = { fileName: "test" };
       const { data: response } = await POST(POST_GET_SINGLE_FILE, payload);
-      console.log("Response", response.data[0]);
+
       setPdfUrl(response.data[0]);
     } catch (error) {
       return error;

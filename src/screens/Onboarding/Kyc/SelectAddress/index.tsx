@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import PlusIcon from "../../../../assets/plusIcon.svg";
@@ -12,9 +11,10 @@ import CustomInputBox from "../../../../components/Input";
 import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 import { POST } from "../../../../utils/webService";
 import { POST_UPDATE_COMPANY_URL } from "../../../../utils/ApiUrls";
-type Props = {};
+import AddButton from "../../../../components/Button/addButton";
+interface ITypeProps {}
 
-const BusinessType = (props: Props) => {
+const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
@@ -31,7 +31,7 @@ const BusinessType = (props: Props) => {
 
   const addressComponent = () => {
     return (
-      <div className="px-5 lg:px-0">
+      <div className="px-5 h-screen lg:h-full lg:px-0 ">
         <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
@@ -40,17 +40,22 @@ const BusinessType = (props: Props) => {
           content="Tell us more about your company"
         />
 
-        <div className="flex items-center justify-between mt-2 mb-4 lg:px-5  ">
-          <p className="font-Open  font-semibold text-sm text-[#1C1C1C]  ">
-            Address
-          </p>
-          <div className="flex justify-self-start gap-x-2 mb-3">
-            <img src={PlusIcon} alt="" />
-            <p className="text-[#004EFF] text-[14px]">ADD ADDRESS</p>
-          </div>
-        </div>
         <form onSubmit={onSubmitForm}>
-          <div className="flex flex-col lg:px-5 ">
+          <div className="flex flex-col justify-center items-center  lg:px-5 ">
+            <div className="flex items-center justify-between w-full  mt-2 mb-4  lg:!w-[320px] ">
+              <p className="font-Open  font-semibold text-sm text-[#1C1C1C]  ">
+                Default
+              </p>
+
+              <AddButton
+                onClick={() => {}}
+                text={"ADD ADDRESS"}
+                icon={PlusIcon}
+                showIcon={true}
+                className="!bg-white !border-npne "
+                textClassName="!font-semibold !text-sm !leading-5 !font-Open"
+              />
+            </div>
             <div className="mb-4">
               <Card
                 name="address"
@@ -61,29 +66,27 @@ const BusinessType = (props: Props) => {
               />
             </div>
 
-            <div className="mb-4">
+            <div className={` ${!isLgScreen && "w-full"}  mb-4   `}>
               <CustomInputBox
                 label="Brand Name"
-                className="font-Open"
+                className="font-Open !w-full lg:!w-[320px]"
                 labelClassName="font-Open"
               />
             </div>
 
-            <div className="mb-6">
+            <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
               <CustomInputWithFileUpload
                 label="Upload logo"
-                className="font-Open"
+                className="font-Open  "
+                inputClassName="  lg:!w-[320px]"
               />
             </div>
 
-            <div className="flex flex-col  w-full ">
+            <div className={`${!isLgScreen && "w-full"}`}>
               <ServiceButton
                 text="SUBMIT"
                 btnType="submit"
-                className="bg-[#1C1C1C]  text-white !py-2 !px-4 mb-3 w-full  font-Open "
-                onClick={() => {
-                  // navigate("/account/kyc-photo");
-                }}
+                className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open lg:!w-[320px] "
               />
             </div>
           </div>
@@ -97,7 +100,7 @@ const BusinessType = (props: Props) => {
       {!isLgScreen && addressComponent()}
 
       {isLgScreen && (
-        <div className="mx-4 hidden lg:block lg:h-[602px]">
+        <div className="mx-4 hidden lg:block ">
           <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}

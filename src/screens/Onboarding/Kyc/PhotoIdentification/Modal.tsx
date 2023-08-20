@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
 
 import ServiceButton from "../../../../components/Button/ServiceButton";

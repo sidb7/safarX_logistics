@@ -1,6 +1,4 @@
-import React from "react";
 import CustomRadioButton from "../../../../components/RadioButton";
-
 interface ITypesProps {
   name: string;
   value: string;
@@ -26,14 +24,10 @@ const card = (props: ITypesProps) => {
   return (
     <>
       <div
-        className={` ${cardClassName} border-[1px] rounded p-4   border-[#E8E8E8] w-full `}
+        className={` ${cardClassName} border-[1px] rounded p-4   border-[#E8E8E8] w-full  lg:!w-[320px]`}
       >
         <div className="flex items-center   gap-x-3 ">
-          <CustomRadioButton
-            name={name}
-            value={value}
-            // inputClassName="self-start"
-          />
+          <CustomRadioButton name={name} value={value} />
 
           {isSubContent && (
             <div className="border-[1px] rounded px-1 border-[#E8E8E8]  ">

@@ -1,16 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
-import CustomInputBox from "../../../../components/Input";
-import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 
 interface ITypeProps {}
 
@@ -34,7 +31,7 @@ const PickUp = (props: ITypeProps) => {
           />
 
           <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between     mt-2 mb-4 lg:px-5 lg:w-[320px] ">
+            <div className="flex items-center justify-between     mt-2 mb-4  lg:w-[320px] ">
               <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p>
@@ -154,7 +151,7 @@ const PickUp = (props: ITypeProps) => {
             <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT"
-                className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px]"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
                 onClick={() => {}}
               />
             </div>
