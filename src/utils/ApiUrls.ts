@@ -24,6 +24,16 @@ switch (Enviornment) {
     break;
 }
 
+//KYC  URLs
+const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;
+const POST_VERIFY_AADHAR_URL = `${SELLER_URL}/api/v1/seller/sendAadhaarCard`;
+const POST_VERIFY_AADHAR_OTP_URL = `${SELLER_URL}/api/v1/seller/verifyAadhaarCard`;
+const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardLite`;
+const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
+const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
+const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
+
 // Base URLs
 const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
 const PARTNER_BASE_URL = `${PARTNER_URL}/api/v1`;
@@ -55,6 +65,14 @@ export {
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
+  POST_BUSINESS_TYPE_URL,
+  POST_VERIFY_AADHAR_URL,
+  POST_VERIFY_AADHAR_OTP_URL,
+  POST_VERIFY_PAN_URL,
+  POST_VERIFY_GST_URL,
+  POST_UPDATE_COMPANY_URL,
+  POST_GET_SINGLE_FILE,
+  POST_UPDATE_COMPANY_ADDRESS,
   POST_VERIFY_OTP,
   GET_PROFILE_NOTIFICATION,
   UPDATE_PROFILE_NOTIFICATION,
