@@ -8,11 +8,20 @@ interface IRadioButtonProps {
   onChange?: (e: any) => void;
   id?: string;
   label?: string;
+  style?: any;
 }
 
 const index = (props: IRadioButtonProps) => {
-  const { name, value, onChange, inputClassName, label, id, labelClassName } =
-    props;
+  const {
+    name,
+    value,
+    onChange,
+    inputClassName,
+    label,
+    id,
+    labelClassName,
+    style,
+  } = props;
 
   return (
     <div className="flex items-center ">
@@ -23,6 +32,7 @@ const index = (props: IRadioButtonProps) => {
         onChange={onChange}
         className={`  ${inputClassName} `}
         id={id}
+        style={style}
       />
       <label htmlFor={id} className={`${labelClassName}`}>
         {label}
