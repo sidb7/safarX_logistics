@@ -42,7 +42,7 @@ export const EditProfile = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="KYC Details" />
+      <Breadcum label="Edit Profile" />
       <div className="flex flex-col mx-4 mt-4 gap-y-4">
         <div className="flex flex-col justify-center items-center mb-4">
           <div

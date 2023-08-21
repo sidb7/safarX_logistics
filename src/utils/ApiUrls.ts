@@ -54,6 +54,8 @@ const GET_PROFILE_URL = `${SELLER_BASE_URL}/seller/getSingleSeller`;
 const GET_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/readNotification`;
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/updateNotification`;
 const UPDATE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
+const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
+const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
@@ -79,4 +81,6 @@ export {
   GET_QUESTIONNAIRE,
   POST_SUBMIT_QUESTIONNAIRE,
   UPDATE_SELLER,
+  UPDATE_PASSWORD,
+  DELETE_SELLER,
 };

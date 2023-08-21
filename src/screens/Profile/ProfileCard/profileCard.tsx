@@ -5,7 +5,7 @@ import EmailIcon from "../../../assets/Profile/EmailIcon.svg";
 import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
 import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ProfileCardProps {
@@ -68,8 +68,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
                   objectFit: "cover",
                   mask: "radial-gradient(circle, transparent 50%, black 50%)",
                 }}
-                // src={ProfileIcon}
-                src={profileImageUrl}
+                src={profileImageUrl || ProfileIcon}
                 alt="Profile"
                 className="w-[82px]"
               />
