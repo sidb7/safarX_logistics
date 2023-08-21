@@ -94,6 +94,7 @@ import { CommonLayout } from "../layout/layout";
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
+import { ProfileSetting } from "../screens/Profile/Settings/setting";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -224,6 +225,12 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-setting-edit-profile"
               element={<EditProfile />}
             />
+            <Route path="profile/profile-setting" element={<SettingTab />} />
+            <Route path="profile/profile-refer-earn" element={<ReferTab />} />
+            <Route
+              path="profile/profile-setting-change-password"
+              element={<ChangePassword />}
+            />
             <Route path="/neworder/pickup" element={<PickUpScreen />} />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
@@ -233,18 +240,6 @@ const MyRoutes: React.FC = () => {
             <Route
               path="newOrder/productpackage"
               element={<ProductPackage />}
-            />
-          </Route>
-          <Route path="profile" element={<ReferLayout />}>
-            <Route path="profile-refer-earn" element={<ReferTab />} />
-          </Route>
-          <Route path="profile" element={<SettingLayout />}>
-            <Route path="profile-setting" element={<SettingTab />} />
-          </Route>
-          <Route path="profile" element={<ChangePasswordLayout />}>
-            <Route
-              path="profile-setting-change-password"
-              element={<ChangePassword />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
