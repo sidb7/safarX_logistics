@@ -13,6 +13,8 @@ import Checkbox from "../../../components/CheckBox";
 import CustomInputBox from "../../../components/Input";
 import CustomDropDown from "../../../components/DropDown";
 import ContactIcon from "../../../assets/Delivery/Contact.svg";
+import CalenderIcon from "../../../assets/calendar.svg";
+import RightSideModalPickup from "../../../components/CustomModal/customRightModalPickup";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import CustomDatepicker from "../../../components/Datepicker";
 import weather from "../../../assets/Delivery/weather.svg";
@@ -31,6 +33,9 @@ import Switch from "react-switch";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
 import { format, parse } from "date-fns";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
+import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
+import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
+import DeliveryMap from "./DeliveryMap";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -55,6 +60,8 @@ const Index = () => {
 
     warehouse: true,
   });
+
+  const [isSaveContactModal, setIsSaveContactModal] = useState(false);
 
   const [pastedData, setPastedData] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
@@ -105,7 +112,7 @@ const Index = () => {
     setPastedData(pastedData);
   };
 
-  const handledeliveryLocationChange = (
+  const handleDeliveryLocationChange = (
     fieldName: keyof typeof deliveryLocation,
     value: string
   ) => {
@@ -178,9 +185,10 @@ const Index = () => {
                   ? "border-[#1C1C1C]"
                   : "border-[#EAEAEA]"
               } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
-              onClick={() =>
-                setSelectRecipient({ business: true, consumer: false })
-              }
+              onClick={() => {
+                setSelectRecipient({ business: true, consumer: false });
+                handleDeliveryLocationChange("recipientType", "business");
+              }}
             >
               <img
                 src={CargoRating}
@@ -204,9 +212,10 @@ const Index = () => {
                   ? "border-[#1C1C1C]"
                   : "border-[#EAEAEA]"
               }  p-5 cursor-pointer`}
-              onClick={() =>
-                setSelectRecipient({ business: false, consumer: true })
-              }
+              onClick={() => {
+                setSelectRecipient({ business: false, consumer: true });
+                handleDeliveryLocationChange("recipientType", "consumer");
+              }}
             >
               <img
                 src={DroneDelivery}
@@ -239,7 +248,7 @@ const Index = () => {
         </div>
 
         <div className="lg:col-span-2 mb-5 lg:mb-6">
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg relative mt-5 lg:mt-6 ">
+          <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
               <img
                 src={MagicLocationIcon}
@@ -251,24 +260,28 @@ const Index = () => {
               </div>
             </div>
 
-            <div className="relative h-[75px] ">
-              <div className="w-full max-w-xs ">
-                <div
-                  onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
-                >
-                  {pastedData || "Paste Address for the Magic"}
-                </div>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={pastedData}
-                  onPaste={handlePaste}
-                  onChange={() => {}}
-                  style={{ position: "absolute", left: "-9999px" }}
-                  title="inputWithImage"
-                />
-              </div>
+            <div className="relative h-[75px]  ">
+              <input
+                ref={inputRef}
+                type="text"
+                value={pastedData}
+                onPaste={handlePaste}
+                onChange={handleChange}
+                className="custom-input"
+                style={{
+                  position: "absolute",
+                  border: "none",
+                  // left: "10px",
+                  // background: "black",
+                  // width: "10px",
+                  // height: "25px",
+
+                  // top: "-10px",
+                }}
+                placeholder="Paste Address for the Magic"
+                title="inputBox"
+              />
+
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
@@ -281,14 +294,35 @@ const Index = () => {
           <CustomInputWithImage
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
+            value={locateAddress}
+            onChange={(e) => setLocateAddress(e.target.value)}
+            onClick={() => {
+              isItLgScreen
+                ? setIsLocationRightModal(true)
+                : navigate("newrder/map", {
+                    state: { fromDeliveryPage: true },
+                  });
+            }}
           />
         </div>
 
         <div className="relative mb-5 lg:mb-6">
-          <CustomInputBox label="Plot no., floor, building name" />
+          <CustomInputBox
+            label="Plot no., floor, building name"
+            value={deliveryLocation.flatNo}
+            onChange={(e) =>
+              handleDeliveryLocationChange("flatNo", e.target.value)
+            }
+          />
         </div>
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Locality" />
+          <CustomInputBox
+            label="Locality"
+            value={deliveryLocation.sector}
+            onChange={(e) =>
+              handleDeliveryLocationChange("sector", e.target.value)
+            }
+          />
         </div>
 
         <div className="mb-5 lg:mb-6">
@@ -296,32 +330,56 @@ const Index = () => {
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
+              handleDeliveryLocationChange("landmark", event.target.value);
+              if (event.target.value === "other") {
+                isItLgScreen
+                  ? setIsRightLandmarkModal(true)
+                  : setIsLandmarkModal(true);
+              }
             }}
-            options={[
-              {
-                label: "Select/ type exact landmark",
-                value: "select",
-              },
-              {
-                label: "Option 1",
-                value: "option1",
-              },
-            ]}
+            options={dummyPickupDropdownData}
           />
         </div>
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Pincode" />
+          <CustomInputBox
+            label="Pincode"
+            value={deliveryLocation.pincode}
+            // onChange={(e) =>
+            //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+            // }
+            onChange={(e) =>
+              handleDeliveryLocationChange("pincode", e.target.value)
+            }
+          />
         </div>
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="City" />
+          <CustomInputBox
+            label="City"
+            value={deliveryLocation.city}
+            onChange={(e) =>
+              handleDeliveryLocationChange("city", e.target.value)
+            }
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-3 mb-5 lg:mb-6 lg:hidden">
           <div>
-            <CustomInputBox label="State" />
+            <CustomInputBox
+              label="State"
+              value={deliveryLocation.state}
+              onChange={(e) =>
+                handleDeliveryLocationChange("state", e.target.value)
+              }
+            />
           </div>
           <div>
-            <CustomInputBox label="Country" />
+            <CustomInputBox
+              label="Country"
+              value={deliveryLocation.country}
+              onChange={(e) =>
+                handleDeliveryLocationChange("country", e.target.value)
+              }
+            />
           </div>
         </div>
 
@@ -333,9 +391,11 @@ const Index = () => {
         </div>
 
         <div className="mb-5 lg:mb-6">
-          <CustomInputWithImage
-            placeholder="Record the directions(optional)"
-            imgSrc={microphone}
+          <AudioInputBox
+            label="Add directions(optional)"
+            audio={directionAudio}
+            setAudio={setDirectionAudio}
+            onClick={() => !directionAudio && setIsAudioModal(true)}
           />
         </div>
 
@@ -355,9 +415,14 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF] "
                 : " border-gray-300"
             }`}
-            onClick={() =>
-              setSaveAddress({ office: true, warehouse: false, other: false })
-            }
+            onClick={(e) => {
+              setSaveAddress({
+                office: true,
+                warehouse: false,
+                other: false,
+              });
+              handleDeliveryLocationChange("addressType", "office");
+            }}
           >
             <img src={OfficeIcon} alt="Office" />
             <p>Office</p>
@@ -368,9 +433,14 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF]"
                 : "border-gray-300"
             }`}
-            onClick={() =>
-              setSaveAddress({ office: false, warehouse: true, other: false })
-            }
+            onClick={(e) => {
+              setSaveAddress({
+                office: false,
+                warehouse: true,
+                other: false,
+              });
+              handleDeliveryLocationChange("addressType", "warehouse");
+            }}
           >
             <img src={Warehouse} alt="Office" />
             <p>Warehouse</p>
@@ -381,9 +451,14 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF]"
                 : "border-gray-300"
             }`}
-            onClick={() =>
-              setSaveAddress({ office: false, warehouse: false, other: true })
-            }
+            onClick={(e) => {
+              setSaveAddress({
+                office: false,
+                warehouse: false,
+                other: true,
+              });
+              handleDeliveryLocationChange("addressType", "other");
+            }}
           >
             <img src={LocationIcon} alt="Office" />
             <p>Other</p>
@@ -416,18 +491,36 @@ const Index = () => {
         </div>
 
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Name of the contact person" />
+          <CustomInputBox
+            label="Name of the contact person"
+            value={contact.name}
+            onChange={(e) => handleContactChange("name", e.target.value)}
+          />
         </div>
 
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Mobile Number" />
+          <CustomInputBox
+            label="Mobile Number"
+            value={contact.mobileNo}
+            onChange={(e) => handleContactChange("mobileNo", e.target.value)}
+          />
         </div>
 
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Email ID(optional)" />
+          <CustomInputBox
+            label="Email ID(optional)"
+            value={contact.emailId}
+            onChange={(e) => handleContactChange("emailId", e.target.value)}
+          />
         </div>
         <div className="mb-5 lg:mb-6">
-          <CustomInputBox label="Alternate mobile number(optional)" />
+          <CustomInputBox
+            label="Alternate mobile number(optional)"
+            value={contact.alternateMobileNo}
+            onChange={(e) =>
+              handleContactChange("alternateMobileNo", e.target.value)
+            }
+          />
         </div>
         <div className="mb-5 lg:mb-[18px] lg:col-span-3 ">
           <p className="text-[#202427] text-[18px] font-semibold lg:text-xl">
@@ -442,13 +535,14 @@ const Index = () => {
                   ? "border-[#004EFF] text-[#004EFF] "
                   : "border-gray-300"
               }`}
-              onClick={() =>
+              onClick={() => {
                 setSaveContact({
                   shopkeeper: true,
 
                   warehouse: false,
-                })
-              }
+                });
+                handleContactChange("type", "shopkeeper");
+              }}
             >
               <img src={OfficeIcon} alt="ShopKeeper" />
               <p>Shopkeeper</p>
@@ -466,8 +560,11 @@ const Index = () => {
 
                   warehouse: true,
                 });
+                handleContactChange("type", "warehouse associate");
 
-                setIsSaveContactRightModal(true);
+                // isItLgScreen
+                //   ? setIsSaveContactRightModal(true)
+                //   : setIsSaveContactModal(true);
               }}
             >
               <img src={Warehouse} alt="Warehouse associate" />
@@ -475,10 +572,52 @@ const Index = () => {
             </div>
           </div>
         </div>
-        <div className="mb-5 lg:mb-6">
-          <CustomDatepicker onSelect={() => setIsDateRightModal(true)} />
+        <div className="hidden lg:block mb-7">
+          <CustomInputWithImage
+            placeholder="Pickup Date"
+            imgSrc={CalenderIcon}
+            value={deliveryDate}
+            onClick={() => setIsDateRightModal(true)}
+            onChange={(e) => setDeliveryDate(e.target.value)}
+          />
         </div>
       </div>
+
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Enter Landmark as"
+        buttonLabel="CONFIRM"
+        inputLabel="Type landmark"
+        imgAlt="Landmark Icon"
+        isModalOpen={isLandmarkModal}
+        setIsModalOpen={setIsLandmarkModal}
+        onClick={() => {}}
+      />
+
+      <CommonBottomModal
+        icon={PersonIcon}
+        label="Save contact as"
+        buttonLabel="SAVE"
+        inputLabel="Enter name"
+        imgAlt="Save Contact"
+        isModalOpen={isSaveContactModal}
+        setIsModalOpen={setIsSaveContactModal}
+        onClick={() => {}}
+      />
+
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Directions to reach"
+        inputLabel="Tap to add directions"
+        imgAlt="mic"
+        showBtn={false}
+        audioInput={true}
+        isModalOpen={isAudioModal}
+        setIsModalOpen={setIsAudioModal}
+        onClick={() => {}}
+        setAudio={setDirectionAudio}
+        audio={directionAudio}
+      />
 
       <RightSideModal
         isOpen={isSaveContactRightModal}
@@ -497,7 +636,30 @@ const Index = () => {
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
       >
-        {/* <SelectDateModalContent onClick={() => setIsDateRightModal(false)} /> */}
+        <SelectDateModalContent
+          onClick={() => setIsDateRightModal(false)}
+          onPickupTimeSelected={handlePickupTimeSelected}
+        />
+      </RightSideModal>
+
+      <RightSideModalPickup
+        isOpen={isLocationRightModal}
+        onClose={() => setIsLocationRightModal(false)}
+      >
+        <DeliveryMap onClick={() => setIsLocationRightModal(false)} />
+      </RightSideModalPickup>
+
+      <RightSideModal
+        isOpen={isRightLandmarkModal}
+        onClose={() => setIsRightLandmarkModal(false)}
+      >
+        <RightModalContent
+          title="Save Landmark as"
+          titleIcon={MapIcon}
+          buttonText="CONFIRM"
+          inputLabel="Type landmark"
+          onClick={() => setIsRightLandmarkModal(false)}
+        />
       </RightSideModal>
     </div>
   );

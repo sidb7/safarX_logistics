@@ -258,7 +258,7 @@ const Index = () => {
       </div>
       <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
         <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
-          <div className="bg-white rounded-lg border-2 border-black overflow-hidden shadow-lg relative">
+          <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
               <img
                 src={MagicLocationIcon}
@@ -473,13 +473,14 @@ const Index = () => {
                 ? "border-[#004EFF] !text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveAddress({
                 office: false,
                 warehouse: true,
                 other: false,
-              })
-            }
+              });
+              handlePickupLocationChange("addressType", "warehouse");
+            }}
           >
             <img src={LocationIcon} alt="Other" />
             <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
@@ -490,13 +491,14 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300  text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveAddress({
                 office: false,
                 warehouse: false,
                 other: true,
-              })
-            }
+              });
+              handlePickupLocationChange("addressType", "other");
+            }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
             <p className="lg:font-semibold lg:text-[14px] ">Other</p>

@@ -15,7 +15,9 @@ interface IPropsTypes {
   onClick?: () => void;
 }
 
-const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
+const DeliveryMap: React.FunctionComponent<IPropsTypes> = (
+  props: IPropsTypes
+) => {
   const { onClick } = props;
 
   const navigate = useNavigate();
@@ -94,7 +96,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     if (onClick) {
       onClick();
     }
-    navigate("/neworder/pickup", { state: { address: address } });
+    navigate("/neworder/delivery", { state: { address: address } });
   };
 
   return (
@@ -187,4 +189,4 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   );
 };
 
-export default Index;
+export default DeliveryMap;
