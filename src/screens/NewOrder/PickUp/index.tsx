@@ -306,12 +306,6 @@ const Index = () => {
 
             <div className="relative h-[75px]">
               <div className="w-full max-w-xs ">
-                <div
-                  // onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
-                >
-                  {/* {pastedData || "Paste Address for the Magic"} */}
-                </div>
                 <input
                   ref={inputRef}
                   type="text"
@@ -321,13 +315,13 @@ const Index = () => {
                   className="custom-input"
                   style={{
                     position: "absolute",
-                    border: "5px",
+                    border: "1px",
                     // left: "10px",
                     // background: "black",
                     width: "10px",
                     height: "75px",
 
-                    top: "-10px",
+                    // top: "-10px",
                   }}
                   placeholder="Paste Address for the Magic"
                   title="inputBox"
