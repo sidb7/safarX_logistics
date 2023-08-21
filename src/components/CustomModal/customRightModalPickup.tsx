@@ -8,12 +8,12 @@ interface RightSideModalProps {
   wrapperClassName?: string;
 }
 
-const RightSideModal: React.FC<RightSideModalProps> = ({
+const RightSideModalPickup: React.FC<RightSideModalProps> = ({
   isOpen,
   onClose,
   children,
   wrapperClassName,
-  className,
+  className = "",
 }) => {
   return (
     <ReactModal
@@ -27,4 +27,4 @@ const RightSideModal: React.FC<RightSideModalProps> = ({
   );
 };
 
-export default RightSideModal;
+export default RightSideModalPickup;
