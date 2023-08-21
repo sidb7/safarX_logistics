@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ const Index = () => {
   const { isLgScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [showBootScreen, setShowBootScreen] = useState(true);
 
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
@@ -27,17 +28,13 @@ const Index = () => {
   });
 
   const logInOnClick = async (value: any) => {
-    try {
-      const { data: response } = await POST(POST_SIGN_IN_URL, value);
-      dispatch(signInUser(loginCredentials));
-      if (response?.success) {
-        setLocalStorage(tokenKey, response?.data[0]?.token);
-        navigate("/newOrder/pickup");
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
+    const { data: response } = await POST(POST_SIGN_IN_URL, value);
+    dispatch(signInUser(loginCredentials));
+    if (response?.success) {
+      setLocalStorage(tokenKey, response?.data[0]?.token);
+      navigate("/newOrder/pickup");
+    } else {
+      toast.error(response?.message);
     }
   };
 
@@ -48,6 +45,11 @@ const Index = () => {
   const responseMessage = (response: any) => {
     console.log("GoogleLogin Response Message :", response);
   };
+  useEffect(() => {
+    setTimeout(() => {
+      setShowBootScreen(false);
+    }, 2000);
+  }, []);
 
   const modalTitle = () => {
     return (
@@ -149,13 +151,24 @@ const Index = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {loginComponent()}
-        </CenterModal>
-      )}
+      {showBootScreen ? (
+        <div className="flex items-center justify-center h-screen">
+          <img className="animate-bounce object-contain" src={CompanyLogo} />
+        </div>
+      ) : (
+        <>
+          {isLgScreen && isModalOpen && (
+            <CenterModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            >
+              {loginComponent()}
+            </CenterModal>
+          )}
 
-      {!isLgScreen && loginComponent()}
+          {!isLgScreen && loginComponent()}
+        </>
+      )}
     </>
   );
 };

@@ -1,22 +1,20 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
-import CrossLogo from "../../../../assets/cross.svg";
 import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-
 import { useNavigate } from "react-router-dom";
 
-type Props = {};
+interface ITypeProps {}
 
-export const ServiceComponent = (props: Props) => {
-  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+export const GSTComponent = (props: ITypeProps) => {
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(false);
+  const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
 
   const BottomButton = () => {
@@ -26,41 +24,42 @@ export const ServiceComponent = (props: Props) => {
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
           />
-          <p className="font-normal text-[12px] text-[#494949]">
+          <p className="font-normal text-[12px] text-[#494949] font-Open ">
             I Agree with the terms & conditions
           </p>
         </div>
 
         <ServiceButton
           text="ACCEPT AND CONTINUE"
-          className={`w-full lg:!w-[320px]  mb-1 mt-2 ${
+          disabled={!checkbox}
+          className={` w-full lg:!w-[320px] mb-1 mt-2 font-Open  ${
             checkbox === true
               ? "bg-[#1C1C1C] text-white"
               : "bg-[#E8E8E8] text-[#BBBBBB]"
           }`}
           onClick={() => {
-            navigate("/account/kyc-modal");
+            navigate("/onboarding/kyc-terms/ServiceComponent");
           }}
         />
       </div>
     );
   };
 
-  const serviceCommonComponent = () => {
+  const gstCommonComponent = () => {
     return (
       <div className=" px-5 lg:px-0 ">
         <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
-          <img src={CrossLogo} alt="" onClick={closeModal} />
         </div>
+
         <WelcomeHeader
           title="Welcome to Shipyaari"
           content="Terms & Agreement"
         />
-        <div className=" mb-4  lg:mb-1 lg:mx-5 ">
+        <div className=" mb-4 lg:mb-1 lg:mx-5">
           <Card
-            title="SERVICE AGREEMENT"
-            subTitleOne="Forward delivery of the shipments"
+            title="DECLARATION OF GST NON-ENROLMENT"
+            subTitleOne="Sub: Declaration of"
           />
         </div>
         {BottomButton()}
@@ -70,16 +69,16 @@ export const ServiceComponent = (props: Props) => {
 
   return (
     <div>
-      {!isLgScreen && serviceCommonComponent()}
+      {!isBigScreen && gstCommonComponent()}
 
-      {isLgScreen && (
+      {isBigScreen && (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
           className="!p-0 !w-[500px] !h-[700px]"
           overlayClassName="flex  items-center"
         >
-          {serviceCommonComponent()}
+          {gstCommonComponent()}
         </CustomBottomModal>
       )}
     </div>

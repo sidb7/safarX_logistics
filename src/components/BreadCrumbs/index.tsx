@@ -56,15 +56,7 @@ const CustomBreadcrumb = () => {
             key={index}
           >
             <p
-              className={`${
-                index === 0
-                  ? "cursor-not-allowed text-[#777777]"
-                  : el === "pincode-management"
-                  ? "cursor-not-allowed"
-                  : el === "manage-services"
-                  ? "cursor-not-allowed"
-                  : "hover:underline cursor-pointer "
-              } !mb-0 font-semibold font-Open text-sm lg:text-xl md:text-lg text-[#1C1C1C]`}
+              className={`!mb-0 font-semibold font-Open text-sm lg:text-xl md:text-lg text-[#1C1C1C] cursor-pointer `}
               onClick={() => {
                 handleClick(index, el);
               }}

@@ -11,7 +11,7 @@ const ProductBox = ({ name, dimension }: any) => {
       <div>
         <span>Dimention: </span>
         <span className="font-semibold">
-          {/* {`${dimension.length}x${dimension.breadth}x${dimension.height}`} cm */}
+          {`${dimension.length}x${dimension.breadth}x${dimension.height}`} cm
         </span>
       </div>
       <div>
@@ -60,9 +60,10 @@ const mainCommonHelper = [
         <div className="flex justify-center items-center gap-x-2 p-2 bg-[#FDF6EA] rounded-md border-[1px] border-[#F0A22E] whitespace-nowrap h-[28px] w-[93px]">
           <img src={Delivery} alt="" className="w-[12px]" />
           <span className="text-[#F0A22E] text-[12px] font-semibold  ">
-            {info?.row?.original?.orderStatus.isOrderPlaced
-              ? "Sucsess"
-              : "Error"}
+            {info?.row?.original?.orderStatus?.isOrderPlaced &&
+              (info?.row?.original?.orderStatus.isOrderPlaced
+                ? "Sucsess"
+                : "Error")}
           </span>
         </div>
       );
@@ -149,7 +150,9 @@ const commonColumnHelper = [
     },
     cell: (info: any) => {
       return (
-        <div className="my-4 space-y-2">{ProductBox(info?.row?.original)} </div>
+        <div className="my-4 space-y-2">
+          {ProductBox(info?.row?.original?.packageType)}{" "}
+        </div>
       );
     },
   }),
@@ -167,14 +170,14 @@ const idHelper = [
     cell: (info: any) => {
       return (
         <>
-          <div className="flex flex-col gap-y-4">
+          <div className="flex flex-col gap-y-1">
             {info?.row?.original?.orderId ? (
               <div className="flex flex-col">
                 <div className="flex">
                   <span className="text-[12px] font-normal">Order :</span>
                 </div>
                 <div className="flex justify-between gap-x-2">
-                  <span className="text-[14px] font-semibold">
+                  <span className="text-[15px] ">
                     {info?.row?.original?.orderId}
                   </span>
                   <img src={CopyIcon} alt="" className="mr-4" />
@@ -189,7 +192,7 @@ const idHelper = [
                   <span className="text-[12px] font-normal">Shipyaari:</span>
                 </div>
                 <div className="flex justify-between gap-x-2">
-                  <span className="text-[14px] font-semibold">
+                  <span className="text-[15px] ">
                     {info?.row?.original?.shipyaariId}
                   </span>
                   <img src={CopyIcon} alt="" className="mr-4" />
@@ -204,7 +207,7 @@ const idHelper = [
                   <span className="text-[12px] font-normal">Tracking:</span>
                 </div>
                 <div className="flex justify-between gap-x-2">
-                  <span className="text-[14px] font-semibold">
+                  <span className="text-[15px] ">
                     {info?.row?.original?.trackingId}
                   </span>
                   <img src={CopyIcon} alt="" className="mr-4" />
@@ -236,6 +239,73 @@ export const columnHelperForNewOrder = [
           <div className="flex gap-x-2">
             <img src={BlackShipIcon} alt="" />
             <span className="text-[14px]">04 Jun 2023</span>
+          </div>
+        </div>
+      );
+    },
+  }),
+  ...idHelper,
+  ...mainCommonHelper,
+];
+
+export const columnHelperForBookedAndReadyToPicked = [
+  ...commonColumnHelper,
+  columnsHelper.accessor("createdAt", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>Pickup Expected</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      return (
+        <div className="flex flex-col whitespace-nowrap">
+          <div className="flex gap-x-2">
+            <img src={BlackShipIcon} alt="" />
+            <span className="text-[14px]">04 Jun 2023</span>
+          </div>
+        </div>
+      );
+    },
+  }),
+  ...idHelper,
+  ...mainCommonHelper,
+];
+export const columnHelpersForRest = [
+  ...commonColumnHelper,
+  columnsHelper.accessor("createdAt", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>ETA</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      return (
+        <div className="flex flex-col whitespace-nowrap">
+          <div className="flex gap-x-2">
+            <img src={BlackShipIcon} alt="" />
+            <span className="text-[14px]">04 Jun 2023</span>
+          </div>
+        </div>
+      );
+    },
+  }),
+  columnsHelper.accessor("createdAt", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>Remark</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      return (
+        <div className="flex flex-col whitespace-nowrap">
+          <div className="flex gap-x-2">
+            <span className="text-[14px]">Remarks</span>
           </div>
         </div>
       );

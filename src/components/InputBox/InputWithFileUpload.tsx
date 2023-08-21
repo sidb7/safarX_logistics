@@ -40,11 +40,11 @@ const InputWithFileUpload = (props: propTypes) => {
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="relative w-[100%] ">
+      <div className={`relative w-[100%] ${inputClassName}`}>
         <input
           placeholder=" "
           type={type ? type : "text"}
-          className="rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input  "
+          className={`${className}  rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input`}
           required={isRequired}
           title="inputBox"
         />

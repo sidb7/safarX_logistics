@@ -1,18 +1,22 @@
 import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
 import Onboarding from "../../../assets/AccountQuestions/Onboarding.gif";
-import CloseIcon from "../../../assets/CloseIcon.svg";
+// import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 
-export const QuestionComponent2: React.FunctionComponent = () => {
+export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const state = location.state || {};
+
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const questionsData = state?.questionsData;
 
   const modalTitle = () => {
     return (
@@ -22,15 +26,21 @@ export const QuestionComponent2: React.FunctionComponent = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
+        {/* <img
           className="my-auto mr-6"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
-        />
+        /> */}
       </div>
     );
   };
+
+  function handleCheckBox(element: any, index: any) {
+    questionsData[1].options[index].isChecked = element;
+  }
+
+  const question = questionsData[1]?.question;
 
   const question2 = () => {
     return (
@@ -46,26 +56,33 @@ export const QuestionComponent2: React.FunctionComponent = () => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4 lg:mt-[18px]">
               <div className="">
-                <span className="text-xl font-semibold">Describe yourself</span>
+                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                  {question}
+                </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                <Checkbox
-                  label="Trader / wholesaler / Reseller"
-                  className="text-base"
-                />
-                <Checkbox label="D2C Brand" className="text-base" />
-                <Checkbox
-                  label="Individual selling on marketplace"
-                  className="text-base"
-                />
-                <Checkbox label="Social seller" className="text-base" />
-                <Checkbox label="Other" className="text-base" />
+                {questionsData[1]?.options.map((element: any, index: any) => {
+                  return (
+                    <Checkbox
+                      onChange={(element) => {
+                        handleCheckBox(element.target.checked, index);
+                      }}
+                      label={element.value}
+                      className="text-base font-Open font-normal leading-[22px]"
+                      style={{ accentColor: "black" }}
+                    />
+                  );
+                })}
               </div>
             </div>
             <div className="mt-6">
               <CustomButton
                 text="NEXT"
-                onClick={() => navigate("/onboarding/questionnaire/question3")}
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question3", {
+                    state: { questionsData },
+                  })
+                }
               />
             </div>
           </div>
@@ -78,6 +95,7 @@ export const QuestionComponent2: React.FunctionComponent = () => {
     <>
       {isLgScreen && isModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[688px]"
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
