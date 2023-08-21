@@ -13,7 +13,7 @@ const RightSideModal: React.FC<RightSideModalProps> = ({
   onClose,
   children,
   wrapperClassName,
-  className = "",
+  className,
 }) => {
   return (
     <ReactModal

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import WebCloseModalIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
 import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";

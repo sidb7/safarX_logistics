@@ -28,6 +28,8 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
+import TickLogo from "../../../assets/common/Tick.svg";
+
 import {
   dummyPickupDropdownData,
   pickupAddress,
@@ -40,6 +42,11 @@ import { useLocation } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
 import { format, parse } from "date-fns";
+import Stepper from "../../../components/Stepper";
+import BackArrowIcon from "../../../assets/backArrow.svg";
+import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
+import NavBar from "../../../layout/NavBar";
+import ServiceButton from "../../../components/Button/ServiceButton";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -72,6 +79,7 @@ const Index = () => {
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
+  const [footer, setFooter] = useState(true);
 
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -245,8 +253,79 @@ const Index = () => {
 
   console.log("epochPickupDate", epochPickupDate);
 
+  const postPickupOrderDetails = async () => {
+    try {
+      let { data } = await POST("apiendpoint", pickupAddress);
+      navigate("/neworder/delivery");
+      if (data?.success) {
+      } else {
+        console.error("PickupDataerror");
+        // toast.error(data?.message);
+      }
+    } catch (error) {
+      console.log("Error in editServiceAPI", error);
+    }
+  };
+
+  const steps = [
+    {
+      label: "Pickup",
+      isCompleted: false,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Delivery",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Product",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Service",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Payment",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+  ];
+
   return (
     <div>
+      {/* <header className="fixed top-0 z-50 w-full ">
+        <NavBar />
+      </header> */}
+      <div>
+        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+          <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
+          <span className="font-normal text-[14px] text-[#777777] mr-1">/</span>
+          <span className="font-semibold text-[14px] text-[#1C1C1C]">
+            Order
+          </span>
+        </div>
+
+        <div className="inline-flex space-x-2 items-center justify-start px-5 lg:mb-8 ">
+          <img src={BackArrowIcon} alt="" className="lg:hidden" />
+          <img src={WebBackArrowIcon} alt="" className="hidden lg:block" />
+
+          <p className="text-lg font-semibold text-center text-gray-900 lg:text-[28px]">
+            Add new order
+          </p>
+        </div>
+      </div>
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
       <div className="inline-flex space-x-2 items-center justify-start px-5 mb-5 lg:mb-[10px]">
         <img src={LocationIcon} alt="" className="lg:hidden" />
 
@@ -762,6 +841,7 @@ const Index = () => {
       <RightSideModal
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
+        className="!w-[389px]"
       >
         <SelectDateModalContent
           onClick={() => setIsDateRightModal(false)}
@@ -769,16 +849,20 @@ const Index = () => {
         />
       </RightSideModal>
 
+      {/* <div className="suresh"> */}
       <RightSideModal
         isOpen={isLocationRightModal}
         onClose={() => setIsLocationRightModal(false)}
+        className="!w-[389px]"
       >
         <Map onClick={() => setIsLocationRightModal(false)} />
       </RightSideModal>
+      {/* </div> */}
 
       <RightSideModal
         isOpen={isRightLandmarkModal}
         onClose={() => setIsRightLandmarkModal(false)}
+        className="!w-[389px]"
       >
         <RightModalContent
           title="Save Landmark as"
@@ -792,6 +876,7 @@ const Index = () => {
       <RightSideModal
         isOpen={isSaveContactRightModal}
         onClose={() => setIsSaveContactRightModal(false)}
+        className="!w-[389px]"
       >
         <RightModalContent
           title="Save Contact as"
@@ -801,6 +886,22 @@ const Index = () => {
           onClick={() => setIsSaveContactRightModal(false)}
         />
       </RightSideModal>
+
+      {/* <footer className="w-full fixed  bottom-0 z-[10]">
+        <div
+          className={`  ${
+            isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+          }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+        >
+          <ServiceButton
+            text="NEXT"
+            className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-4"
+            onClick={() => {
+              navigate("/neworder/delivery");
+            }}
+          />
+        </div>
+      </footer> */}
     </div>
   );
 };
