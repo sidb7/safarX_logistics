@@ -35,7 +35,6 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const profileImageUrl = props?.ProfileDetails?.profileImageUrl;
   const firstName = props?.ProfileDetails?.firstName;
   const lastName = props?.ProfileDetails?.lastName;
-  const middleName = props?.ProfileDetails?.middleName;
   const email = props?.ProfileDetails?.email;
   const contactNumber = props?.ProfileDetails?.contactNumber;
   const companyName = props?.ProfileDetails?.companyName;
@@ -114,7 +113,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <LabelComponent
                 label="Yaari Points"
                 className={"text-[14px] pl-2 py-2"}
-                info={yaariPoints || "100"}
+                info={yaariPoints || "0"}
                 classNameInfo="pl-2 py-2"
               />
             </div>
@@ -122,7 +121,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <LabelComponent
                 label="Wallet Balance"
                 className={"text-[14px] pl-2 py-2"}
-                info={walletBalance || "5,000"}
+                info={walletBalance || "0"}
                 classNameInfo="pl-2 py-2"
               />
             </div>
@@ -130,7 +129,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
 
           <div className="flex flex-col w-full font-semibold border-[1px] border-[#E8E8E8] rounded-md h-[86px] p-2 mt-4">
             <div className="flex justify-between mt-4">
-              <span className="text-[16px] font-[#1C1C1C]">Sliver plan</span>
+              <span className="text-[16px] font-[#1C1C1C]">{activePlan}</span>
               <span className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
                 CHANGE
               </span>
@@ -148,7 +147,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <LabelComponent
               label="Yaari Points"
               className={"text-[18px] pl-3"}
-              info={yaariPoints || "100"}
+              info={yaariPoints || "0"}
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>
@@ -156,14 +155,14 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <LabelComponent
               label="Wallet Balance"
               className={"text-[18px] pl-3"}
-              info={walletBalance || "5,000"}
+              info={walletBalance || "0"}
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>
           <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">
             <div className="flex justify-between">
               <span className="text-[20px] font-semibold font-[#1C1C1C]">
-                Sliver Plan
+                {activePlan}
               </span>
               <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded">
                 CHANGE

@@ -143,7 +143,7 @@ const NavBar = (props: IpropTypes) => {
         </div>
       </nav>
 
-      <div className=" min-h-screen">
+      <div className={open ? "min-w-[100px] min-h-screen" : "hidden"}>
         <ToastContainer />
 
         <div
