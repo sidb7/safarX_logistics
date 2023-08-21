@@ -91,6 +91,9 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   }, []);
 
   const confirmLocation = () => {
+    if (onClick) {
+      onClick(); // Close the modal if onClick is defined
+    }
     navigate("/neworder/pickup", { state: { address: address } });
   };
 

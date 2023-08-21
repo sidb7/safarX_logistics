@@ -174,33 +174,35 @@ const Index = () => {
   // const handleClick = () => {
   //   // inputRef.current?.focus();
   // };
-  const parseAddress = (address: any) => {
-    const addressParts = address.split(", ");
-    const [flatNo, addressLine] = addressParts[0].split(", ");
-    console.log("addressLine", addressLine);
-    const sector = addressParts[7];
-    const landmark = addressParts[5];
-    console.log("landmark", landmark);
-    const [city, state, pincode] = addressParts.slice(-3);
-    return {
-      flatNo,
-      address: address,
-      sector,
-      landmark,
-      pincode,
-      city,
-      state,
-      country: "India",
-    };
-  };
 
-  useEffect(() => {
-    const parsedAddress = parseAddress(locateAddress);
-    setPickupLocation((prevData) => ({
-      ...prevData,
-      ...parsedAddress,
-    }));
-  }, [locateAddress]);
+  /* parsing code for prefilling address input fields  */
+  // const parseAddress = (address: any) => {
+  //   const addressParts = address.split(", ");
+  //   const [flatNo, addressLine] = addressParts[0].split(", ");
+  //   console.log("addressLine", addressLine);
+  //   const sector = addressParts[7];
+  //   const landmark = addressParts[5];
+  //   console.log("landmark", landmark);
+  //   const [city, state, pincode] = addressParts.slice(-3);
+  //   return {
+  //     flatNo,
+  //     address: address,
+  //     sector,
+  //     landmark,
+  //     pincode,
+  //     city,
+  //     state,
+  //     country: "India",
+  //   };
+  // };
+
+  // useEffect(() => {
+  //   const parsedAddress = parseAddress(locateAddress);
+  //   setPickupLocation((prevData) => ({
+  //     ...prevData,
+  //     ...parsedAddress,
+  //   }));
+  // }, [locateAddress]);
 
   // const parsedLandmarks = pickupLocation.landmark?.split(", ");
   // const addressDropdownOptions = [
@@ -258,7 +260,7 @@ const Index = () => {
       </div>
       <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
         <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg relative   ">
+          <div className="bg-white rounded-lg border-2 border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
               <img
                 src={MagicLocationIcon}
@@ -304,29 +306,28 @@ const Index = () => {
               </div>
             </div> */}
 
-            <div className="relative h-[75px]">
-              <div className="w-full max-w-xs ">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={pastedData}
-                  onPaste={handlePaste}
-                  onChange={handleChange}
-                  className="custom-input"
-                  style={{
-                    position: "absolute",
-                    border: "1px",
-                    // left: "10px",
-                    // background: "black",
-                    width: "10px",
-                    height: "75px",
+            <div className="relative h-[75px]  ">
+              <input
+                ref={inputRef}
+                type="text"
+                value={pastedData}
+                onPaste={handlePaste}
+                onChange={handleChange}
+                className="custom-input"
+                style={{
+                  position: "absolute",
+                  border: "none",
+                  // left: "10px",
+                  // background: "black",
+                  // width: "10px",
+                  // height: "25px",
 
-                    // top: "-10px",
-                  }}
-                  placeholder="Paste Address for the Magic"
-                  title="inputBox"
-                />
-              </div>
+                  // top: "-10px",
+                }}
+                placeholder="Paste Address for the Magic"
+                title="inputBox"
+              />
+
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
@@ -595,9 +596,9 @@ const Index = () => {
               });
               handleContactChange("type", "warehouse associate");
 
-              isItLgScreen
-                ? setIsSaveContactRightModal(true)
-                : setIsSaveContactModal(true);
+              // isItLgScreen
+              //   ? setIsSaveContactRightModal(true)
+              //   : setIsSaveContactModal(true);
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />

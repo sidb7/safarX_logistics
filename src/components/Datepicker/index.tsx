@@ -4,27 +4,29 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/locationStyle.css";
 
 interface ITypeProps {
-  onClick?: () => void;
+  onSelect: (selectedDate: Date) => void; // Change the prop name
 }
 
 const CustomDatePicker = (props: ITypeProps) => {
-  const { onClick } = props;
+  const { onSelect } = props;
 
-  const [startDate, setStartDate] = useState();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
   return (
-    <div className="relative flex  justify-left">
+    <div className="relative flex justify-left">
       <DatePicker
-        selected={startDate}
-        onChange={(date: any) => setStartDate(date)}
-        placeholderText="Pick up date"
-        className="datePickerWithLogo !w-full rounded h-[48px] border-[#A4A4A4] p-[16px] gap-[16px] "
-        wrapperClassName="!w-full"
+        selected={selectedDate}
+        onChange={(date: Date) => {
+          setSelectedDate(date);
+          onSelect(date); // Notify parent component of the selected date
+        }}
         showTimeSelect
-        timeFormat="HH:mm"
-        timeIntervals={1}
-        timeCaption="time"
+        timeFormat="h:mm aa"
+        timeIntervals={60}
+        timeCaption="Time"
         dateFormat="MMMM d, yyyy h:mm aa"
-        onInputClick={onClick}
+        popperPlacement="bottom-start" // Open the picker directly without input
+        inline // Display the picker inline
       />
     </div>
   );

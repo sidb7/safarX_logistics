@@ -377,7 +377,7 @@ const Index = () => {
           </div>
         </div>
         <div className="mb-5 lg:mb-6">
-          <CustomDatepicker onClick={() => setIsDateRightModal(true)} />
+          <CustomDatepicker onSelect={() => setIsDateRightModal(true)} />
         </div>
       </div>
 
