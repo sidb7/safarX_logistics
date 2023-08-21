@@ -7,7 +7,7 @@ interface IBreadcumProps {
 export const Breadcum = ({ label }: IBreadcumProps) => {
   const navigate = useNavigate();
   return (
-    <div className="inline-flex space-x-2 items-center justify-start px-5 my-4 mt-20">
+    <div className="inline-flex space-x-2 items-center justify-start px-5 my-4 mt-20 lg:mt-10">
       <img
         src={BackArrowIcon}
         alt=""
