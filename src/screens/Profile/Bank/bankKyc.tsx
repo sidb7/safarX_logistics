@@ -41,9 +41,9 @@ export const EditProfileBank = () => {
     <div className="h-full">
       <Breadcum label="Bank Details" />
 
-      <div className="mx-4 mt-4 space-y-4 lg:grid lg:grid-cols-3 gap-4">
+      <div className="mx-4 mt-4 overflow-y-auto h-[calc(100%-50px)] space-y-4 lg:grid lg:grid-cols-3 gap-4">
         <CustomInputBox
-          containerStyle={"self-end"}
+          containerStyle={"self-end mt-1"}
           label="Account holder name"
           className="!font-normal"
           value={editBankDetails?.bankAccountHolderName}

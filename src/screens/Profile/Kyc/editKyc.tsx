@@ -8,7 +8,6 @@ import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 export const EditProfileKyc = () => {
-
   const [kycDetails, setKycDetails] = useState<any>({});
 
   const changeHandler = (key: string, event: any) => {
@@ -47,9 +46,9 @@ export const EditProfileKyc = () => {
   return (
     <div className="h-full">
       <Breadcum label="KYC Details" />
-      <div className="mx-4 mt-4 space-y-4 lg:grid lg:grid-cols-3 lg:gap-4">
+      <div className="mx-4 mt-2 overflow-y-auto h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:h-auto">
         <CustomInputBox
-          containerStyle={"self-end"}
+          containerStyle={"self-end mt-2"}
           label="Frist name"
           className="!font-normal"
           value={kycDetails?.firstName}
@@ -63,6 +62,7 @@ export const EditProfileKyc = () => {
           onChange={(e) => changeHandler("middleName", e)}
         />
         <CustomInputBox
+          containerStyle={"self-end"}
           label="Last name"
           className="!font-normal"
           value={kycDetails?.lastName}
@@ -70,6 +70,7 @@ export const EditProfileKyc = () => {
         />
 
         <CustomInputBox
+          containerStyle={"self-end"}
           label="GST Number"
           className="!font-normal"
           value={kycDetails?.gstNumber}
@@ -86,6 +87,7 @@ export const EditProfileKyc = () => {
         <CustomUploadInput label="Upload PAN file" id="panFile" />
 
         <CustomInputBox
+          containerStyle={"self-end"}
           label="Aadhar Number"
           className="!font-normal"
           value={kycDetails?.aadharNumber}
@@ -94,24 +96,28 @@ export const EditProfileKyc = () => {
         <CustomUploadInput label="Upload Aadhar file" id="aadharFile" />
 
         <CustomInputBox
+          containerStyle={"self-end"}
           label="Plot no"
           className="!font-normal"
           value={kycDetails?.address?.plotNumber}
           onChange={(e) => changeAddressHandler("plotNumber", e)}
         />
         <CustomInputBox
+          containerStyle={"self-end"}
           label="Locality"
           className="!font-normal"
           value={kycDetails?.address?.locality}
           onChange={(e) => changeAddressHandler("locality", e)}
         />
         <CustomInputBox
+          containerStyle={"self-end"}
           label="City"
           className="!font-normal"
           value={kycDetails?.address?.city}
           onChange={(e) => changeAddressHandler("city", e)}
         />
         <CustomInputBox
+          containerStyle={"self-end"}
           label="District"
           className="!font-normal"
           value={kycDetails?.address?.district}
