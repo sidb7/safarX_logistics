@@ -126,8 +126,6 @@ const Index = () => {
     setIsModalOpen(false);
   };
 
-  console.log("mapAddressoutsideUE", address);
-
   useEffect(() => {
     console.log("mapAddress", address);
     setLocateAddress(address);
@@ -645,7 +643,7 @@ const Index = () => {
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-end items-center gap-x-1  w-[123px] h-[30px] px-[16px] py-[8px]`}
+                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[16px] py-[8px]`}
                 >
                   <Switch
                     onChange={() => {

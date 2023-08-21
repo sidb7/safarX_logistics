@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import MagicLocationIcon from "../../../assets/Delivery/magicLocation.svg";
 import ForwardArrowIcon from "../../../assets/Delivery/forwardArrow.svg";
 import microphone from "../../../assets/Delivery/microphone.svg";
@@ -20,8 +20,25 @@ import WebLocationIcon from "../../../assets/Delivery/WebLocation.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import RightModalContent from "../../../screens/NewOrder/PickUp/RightModalContent";
 import SelectDateModalContent from "../PickUp/selectDateModal";
+import {
+  dummyPickupDropdownData,
+  pickupAddress,
+} from "../../../utils/dummyData";
+import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import Map from "../../NewOrder/Map";
+import Switch from "react-switch";
+import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+import { format, parse } from "date-fns";
+import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const address = location.state?.address || "";
+  const isItLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
   const [selectRecipient, setSelectRecipient] = useState({
     business: true,
     consumer: false,
@@ -44,15 +61,97 @@ const Index = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
   const [isDateRightModal, setIsDateRightModal] = useState(false);
+  const [locateAddress, setLocateAddress] = useState("");
+  const [isLandmarkModal, setIsLandmarkModal] = useState(false);
+  const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+  const [isAudioModal, setIsAudioModal] = useState(false);
+  const [directionAudio, setDirectionAudio] = useState("");
+  const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+
+  const [deliveryLocation, setDeliveryLocation] = useState({
+    recipientType: "",
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "",
+  });
+
+  const [contact, setContact] = useState({
+    name: "",
+    mobileNo: "",
+    alternateMobileNo: "",
+    emailId: "",
+    type: "",
+  });
+
+  const [deliveryDate, setDeliveryDate] = useState("");
+
+  useEffect(() => {
+    console.log("mapAddress", address);
+    setLocateAddress(address);
+  }, [address]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPastedData(e.target.value);
+  };
 
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
   };
 
+  const handledeliveryLocationChange = (
+    fieldName: keyof typeof deliveryLocation,
+    value: string
+  ) => {
+    setDeliveryLocation((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+  const handleContactChange = (
+    fieldName: keyof typeof contact,
+    value: string
+  ) => {
+    setContact((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
   const handleClick = () => {
     // inputRef.current?.focus();
   };
+
+  console.log("deliveryLocation", deliveryLocation);
+  console.log("contact", contact);
+
+  const handlePickupTimeSelected = (deliveryTime: string) => {
+    console.log("Selected Pickup Time:", deliveryTime);
+    setDeliveryDate(deliveryTime);
+  };
+  console.log("deliveryDate", deliveryDate);
+
+  const deliveryDateForEpoch = "18/08/2023 11:00 AM";
+
+  const editeddeliveryDateForEpoch = deliveryDate.substring(0, 20);
+  console.log("editedPickupDateForEpoch", editeddeliveryDateForEpoch);
+  const convertToEpoch = (dateTimeString: any) => {
+    const parsedDateTime = parse(
+      dateTimeString,
+      "dd/MM/yyyy hh:mm a",
+      new Date()
+    );
+    return Math.floor(parsedDateTime.getTime() / 1000);
+  };
+  const epochDeliveryDate = convertToEpoch(editeddeliveryDateForEpoch);
+
+  console.log("epochDeliveryDate", epochDeliveryDate);
 
   return (
     <div className="grid grid-cols-1   gap-y-4 ">
