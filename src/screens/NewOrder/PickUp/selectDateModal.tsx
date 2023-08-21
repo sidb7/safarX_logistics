@@ -19,6 +19,8 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedScheduleDateTime, setSelectedScheduleDateTime] =
+    useState<Date | null>(null);
 
   const handleDayButtonClick = (selectedDay: string) => {
     if (selectedDay === "schedule") {
@@ -38,6 +40,13 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const handleTimeSlotClick = (time: string) => {
     setSelectedTime(time);
   };
+
+  const handleScheduleDateTimeChange = (selectedDate: Date) => {
+    setSelectedScheduleDateTime(selectedDate);
+  };
+
+  console.log("selectedScheduleDateTime", selectedScheduleDateTime);
+
   const formatDate = (date: Date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -45,15 +54,26 @@ const SelectDateModalContent = (props: ITypeProps) => {
     return `${day}/${month}/${year}`;
   };
 
-  const selectedPickupTime =
-    selectedDay === "today" && selectedTime
-      ? `${formatDate(new Date())} ${selectedTime}`
-      : `${selectedDay} ${selectedTime}`;
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  };
+
+  const selectedPickupTime = selectedScheduleDateTime
+    ? `${selectedScheduleDateTime}`
+    : selectedDay === "today" && selectedTime
+    ? `${formatDate(new Date())} ${selectedTime}`
+    : `${
+        selectedDay === "tomorrow" ? formatDate(getTomorrowDate()) : selectedDay
+      } ${selectedTime}`;
+
   console.log("selectedPickupTime", selectedPickupTime);
 
-  if (selectedTime) {
+  if (selectedTime || selectedScheduleDateTime) {
     onPickupTimeSelected(selectedPickupTime);
   }
+
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
       <div className="flex justify-between lg:mb-10 lg:px-5">
@@ -84,7 +104,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
 
       {showDatePicker ? (
         <div className="hidden lg:block mb-7 w-[85%] ml-5">
-          <CustomDatePicker />
+          <CustomDatePicker onSelect={handleScheduleDateTimeChange} />
         </div>
       ) : (
         <div className="flex flex-col lg:px-5">
