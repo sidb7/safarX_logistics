@@ -143,61 +143,74 @@ const MyRoutes: React.FC = () => {
 
           {/* onboarding routes  */}
 
-          <Route path="onboarding" element={<AccountLayoutScreen />}>
-            <Route path="signup" element={<SignUpScreen />} />
-            <Route path="sendotp" element={<SendOTPScreen />} />
-            <Route path="verifyotp" element={<VerifyOTPScreen />} />
-            <Route path="offers" element={<OffersScreen />} />
-            <Route path="getStarted" element={<GetStartedScreen />} />
-            <Route
-              path="questionnaire/question1"
-              element={<QuestionComponent1 />}
-            />
-            <Route
-              path="questionnaire/question2"
-              element={<QuestionComponent2 />}
-            />
-            <Route
-              path="questionnaire/question3"
-              element={<QuestionComponent3 />}
-            />
-            <Route
-              path="questionnaire/question4"
-              element={<QuestionComponent4 />}
-            />
-            <Route
-              path="questionnaire/question5"
-              element={<QuestionComponent5 />}
-            />
-            <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
-            <Route
-              path="kyc-photo"
-              element={<KycPhotoIdentificationScreen />}
-            />
+          <Route path="onboarding/signup" element={<SignUpScreen />} />
+          <Route path="onboarding/sendotp" element={<SendOTPScreen />} />
+          <Route path="onboarding/verifyotp" element={<VerifyOTPScreen />} />
+          <Route path="onboarding/offers" element={<OffersScreen />} />
+          <Route path="onboarding/getStarted" element={<GetStartedScreen />} />
+          <Route
+            path="onboarding/questionnaire/question1"
+            element={<QuestionComponent1 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question2"
+            element={<QuestionComponent2 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question3"
+            element={<QuestionComponent3 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question4"
+            element={<QuestionComponent4 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question5"
+            element={<QuestionComponent5 />}
+          />
+          <Route
+            path="onboarding/kyc-type"
+            element={<KycBusinessTypeScreen />}
+          />
+          <Route
+            path="onboarding/kyc-photo"
+            element={<KycPhotoIdentificationScreen />}
+          />
 
-            <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
-            <Route
-              path="select-address-billing"
-              element={<SelectAddressBilling />}
-            />
-            <Route
-              path="select-address-pickup"
-              element={<SelectAddressPickUp />}
-            />
-            <Route
-              path="kyc-mobile-verify"
-              element={<KycMobileVerificationScreen />}
-            />
-            <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
-            <Route
-              path="kyc-terms/ServiceComponent"
-              element={<ServiceComponent />}
-            />
-            <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
-            <Route path="kyc-modal" element={<KycModalScreen />} />
-            <Route path="select-address" element={<SelectAddress />} />
-            <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
-          </Route>
+          <Route
+            path="onboarding/kyc-otp-form"
+            element={<KycSendOtpFormScreen />}
+          />
+          <Route
+            path="onboarding/select-address-billing"
+            element={<SelectAddressBilling />}
+          />
+          <Route
+            path="onboarding/select-address-pickup"
+            element={<SelectAddressPickUp />}
+          />
+          <Route
+            path="onboarding/kyc-mobile-verify"
+            element={<KycMobileVerificationScreen />}
+          />
+          <Route
+            path="onboarding/kyc-terms/GSTComponent"
+            element={<GSTComponent />}
+          />
+          <Route
+            path="onboarding/kyc-terms/ServiceComponent"
+            element={<ServiceComponent />}
+          />
+          <Route
+            path="onboarding/kyc-company"
+            element={<KycCompanyDetailsScreen />}
+          />
+          <Route path="onboarding/kyc-modal" element={<KycModalScreen />} />
+          <Route path="onboarding/select-address" element={<SelectAddress />} />
+          <Route
+            path="onboarding/kyc-aadhar-form"
+            element={<KycAadharForm />}
+          />
 
           <Route path="transaction" element={<TransactionLayout />}></Route>
           <Route

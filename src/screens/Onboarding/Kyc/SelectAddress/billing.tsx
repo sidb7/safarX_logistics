@@ -6,8 +6,8 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
-import AddButton from "../../../../components/Button/addButton";
-import PlusIcon from "../../../../assets/plusIcon.svg";
+// import AddButton from "../../../../components/Button/addButton";
+// import PlusIcon from "../../../../assets/plusIcon.svg";
 
 interface ITypeProps {}
 
@@ -21,33 +21,34 @@ const Billing = (props: ITypeProps) => {
   const addressComponent = () => {
     return (
       <div className="relative">
-        <div className="px-5 lg:px-0">
-          <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+        <div className="">
+          <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
             <img src={CompanyLogo} alt="" />
           </div>
           <WelcomeHeader
+            className="!mt-[58px]"
             title="Welcome to Shipyaari"
             content="Select your Billing Address"
           />
 
-          <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between mt-2 mb-4  lg:w-[320px] ">
+          <div className="w-full lg:flex lg:justify-center">
+            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0 mt-2 mb-4  lg:w-[320px] ">
               <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p>
 
-              <AddButton
+              {/* <AddButton
                 onClick={() => {}}
                 text={"ADD ADDRESS"}
                 icon={PlusIcon}
                 showIcon={true}
                 className="!bg-transparent !border-0"
                 textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              />
+              /> */}
             </div>
           </div>
 
-          <div className="flex flex-col items-center  lg:px-5 ">
+          <div className="flex flex-col items-center px-4 md:px-12 lg:px-4 ">
             <Card
               name="address"
               value="haryana"
@@ -59,15 +60,15 @@ const Billing = (props: ITypeProps) => {
               titleClassName="!font-normal !text-[12px]"
             />
           </div>
-          <div className="flex flex-col items-center lg:px-5 lg:h-[215px] lg:overflow-y-scroll ">
+          <div className="flex flex-col items-center px-4 md:px-12 lg:px-0 lg:h-[215px] lg:overflow-y-scroll ">
             <p
               className={`${
                 !isLgScreen ? "self-start" : ""
-              }   font-Open font-semibold text-sm text-[#1C1C1C] mb-4 lg:w-[320px]`}
+              }   font-Open font-semibold text-sm  text-[#1C1C1C] mb-4 lg:w-[320px]`}
             >
               Maharastra(4 Address Found)
             </p>
-            <div className="  space-y-3 mb-6 ">
+            <div className="space-y-3 mb-6 ">
               <Card
                 name="address"
                 value="haryana"
@@ -117,7 +118,7 @@ const Billing = (props: ITypeProps) => {
               Gujrat(3 Address Found)
             </p>
 
-            <div className="space-y-3 mb-6 ">
+            <div className="space-y-3  mb-24 lg:mb-0">
               <Card
                 name="address"
                 value="haryana"
@@ -144,6 +145,24 @@ const Billing = (props: ITypeProps) => {
                 title="1st Floor, Plot A 3/4, Panchavati Township, Near Intercity Hall, Puna Kumbharia Road, Surat - 395 010"
                 titleClassName="!font-normal !text-[12px]"
               />
+
+              <Card
+                name="address"
+                value="haryana"
+                isSubContent={true}
+                subContent="GST"
+                title="1st Floor, Plot A 3/4, Panchavati Township, Near Intercity Hall, Puna Kumbharia Road, Surat - 395 010"
+                titleClassName="!font-normal !text-[12px]"
+              />
+
+              {/* <Card
+                name="address"
+                value="haryana"
+                isSubContent={true}
+                subContent="GST"
+                title="1st Floor, Plot A 3/4, Panchavati Township, Near Intercity Hall, Puna Kumbharia Road, Surat - 395 010"
+                titleClassName="!font-normal !text-[12px]"
+              /> */}
             </div>
           </div>
 
