@@ -7,14 +7,18 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import { toast } from "react-toastify";
 export const EditProfile = () => {
   const [profileData, setProfileData] = useState<any>({});
-
+  const [name, setName] = useState("");
   const changeHandler = (key: string, event: any) => {
     setProfileData({ ...profileData, [key]: event.target.value });
   };
 
   const updateProfile = async () => {
+    const splitName = name.split(" ");
+    const lastName = splitName.pop();
+    const firstName = splitName.join(" ");
+
     const { data } = await POST(UPDATE_SELLER, {
-      data: profileData,
+      data: { ...profileData, firstName: firstName, lastName: lastName },
     });
     if (data.success) {
       setProfileData(data?.data);
@@ -29,6 +33,7 @@ export const EditProfile = () => {
       const { data } = await POST(GET_PROFILE_URL, {});
       if (data.success) {
         setProfileData(data.data[0]);
+        setName(`${data.data[0]?.firstName} ${data.data[0]?.lastName}`);
       } else {
         toast.error(data.message);
       }
@@ -37,7 +42,7 @@ export const EditProfile = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="KYC Details" />
+      <Breadcum label="Edit Profile" />
       <div className="flex flex-col mx-4 mt-4 gap-y-4">
         <div className="flex flex-col justify-center items-center mb-4">
           <div
@@ -65,10 +70,15 @@ export const EditProfile = () => {
             Dimention: 68x68 Pixels | Image Size: 230 KB
           </span>
         </div>
-        <CustomInputBox label="Seller ID" value={profileData?.sellerId} />
+        <CustomInputBox
+          label="Seller ID"
+          value={profileData?.sellerId}
+          isDisabled={true}
+        />
         <CustomInputBox
           label="Name"
-          value={`${profileData?.firstName} ${profileData?.middleName} ${profileData?.lastName}`}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
         <CustomInputBox label="Email ID" value={profileData?.email} />
         <CustomInputBox
@@ -81,8 +91,16 @@ export const EditProfile = () => {
         />
         <CustomInputBox
           label="Brand Website"
-          value={profileData?.brandWebsite}
-          onChange={(e) => changeHandler("brandWebsite", e)}
+          value={profileData?.privateCompany?.brandWebsite}
+          onChange={(e) =>
+            setProfileData({
+              ...profileData,
+              privateCompany: {
+                ...profileData.privateCompany,
+                brandWebsite: e.target.value,
+              },
+            })
+          }
         />
       </div>
       <BottomLayout callApi={updateProfile} />
