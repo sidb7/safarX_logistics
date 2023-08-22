@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "./Old_NavBar";
 import { BottomNavBar } from "../components/BottomNavBar";
 import Order from "../screens/Order/index";
 const OrderLayout = () => {

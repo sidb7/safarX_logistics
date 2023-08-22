@@ -13,7 +13,7 @@ import Product from "../../Summary/boxDetails";
 import Service from "../../Summary/summaryService";
 import DownloadIcon from "../../../../assets/Label/download.svg";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrowIcon from "../../../../assets/backArrow.svg";
 import TickLogo from "../../../../assets/common/Tick.svg";
 import Stepper from "../../../../components/Stepper";

@@ -1,4 +1,4 @@
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import BackArrow from "../../../assets/backArrow.svg";
 import CustomButton from "../../../components/Button";
 import { useState } from "react";

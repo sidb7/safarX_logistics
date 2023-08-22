@@ -6,7 +6,7 @@ import ViewIcon from "../../../../assets/Label/view.svg";
 import CustomButton from "../../../../components/Button";
 import Base64FileRenderer from "../../../../components/Base64ConverterToPdf";
 import BackArrowIcon from "../../../../assets/backArrow.svg";
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import DownloadIcon from "../../../../assets/Label/download.svg";
 import { useNavigate } from "react-router-dom";
