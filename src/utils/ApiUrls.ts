@@ -60,6 +60,11 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 // Order URLs
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
+//NewOrder URLs
+const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+
+
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -83,4 +88,6 @@ export {
   UPDATE_SELLER,
   UPDATE_PASSWORD,
   DELETE_SELLER,
+  ADD_PICKUP_LOCATION,
+  ADD_DELIVERY_LOCATION
 };

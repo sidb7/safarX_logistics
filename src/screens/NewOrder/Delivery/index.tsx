@@ -42,6 +42,11 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import Stepper from "../../../components/Stepper";
 import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
+import { ADD_DELIVERY_LOCATION } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import ServiceButton from "../../../components/Button/ServiceButton";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -82,7 +87,7 @@ const Index = () => {
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
 
   const [deliveryLocation, setDeliveryLocation] = useState({
-    recipientType: "",
+    recipientType: "business",
     flatNo: "",
     address: "",
     sector: "",
@@ -91,7 +96,7 @@ const Index = () => {
     city: "",
     state: "",
     country: "",
-    addressType: "",
+    addressType: "warehouse",
     gstNo: "",
     orderType: "",
   });
@@ -196,17 +201,17 @@ const Index = () => {
   console.log("payload", payload);
   const postDeliveryOrderDetails = async (payload: any) => {
     try {
-      const { data: response } = await POST("apiendpoint", payload);
+      const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
 
       if (response?.success) {
-        //  toast.success(response?.message);
-        navigate("/neworder/delivery");
+        toast.success(response?.message);
+        navigate("/neworder/product");
       } else {
-        console.error("PickupDataerror");
-        // toast.error(response?.message);
+        console.error("DeliveryDataerror");
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in editServiceAPI", error);
+      console.log("Error in ADD_PICKUP_LOCATION_API", error);
     }
   };
 
@@ -243,8 +248,8 @@ const Index = () => {
     },
   ];
   return (
-    <div>
-      <div>
+    <div className="h-full">
+      {/* <div>
         <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
           <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
           <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
@@ -259,7 +264,15 @@ const Index = () => {
             Add new order
           </p>
         </div>
+      </div> */}
+
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+        <span className="font-Open text-[14px] text-[#1C1C1C]">Order</span>
       </div>
+
+      <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
@@ -318,6 +331,7 @@ const Index = () => {
                 onClick={() => {
                   setSelectRecipient({ business: false, consumer: true });
                   handleDeliveryLocationChange("recipientType", "consumer");
+                  handleDeliveryLocationChange("orderType", "B2C");
                 }}
               >
                 <img
@@ -526,6 +540,14 @@ const Index = () => {
                   ? "!border-[#004EFF] !text-[#004EFF] "
                   : "border-gray-300 text-[#1C1C1C]"
               }`}
+              onClick={(e) => {
+                setSaveAddress({
+                  office: true,
+                  warehouse: false,
+                  other: false,
+                });
+                handleDeliveryLocationChange("addressType", "office");
+              }}
             >
               <img src={OfficeIcon} alt="Office" />
               <p className="lg:font-semibold lg:font-Open lg:text-[14px]">
@@ -681,7 +703,7 @@ const Index = () => {
           </div>
           <div className="hidden lg:block mb-7">
             <CustomInputWithImage
-              placeholder="Pickup Date"
+              placeholder="Delivery Date"
               imgSrc={CalenderIcon}
               value={deliveryDate}
               onClick={() => setIsDateRightModal(true)}
@@ -773,6 +795,21 @@ const Index = () => {
           />
         </RightSideModal>
       </div>
+      <BottomLayout callApi={() => postDeliveryOrderDetails(payload)} />
+
+      {/* <div
+        className={`  ${
+          isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+        }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+      >
+        <ServiceButton
+          text="NEXT"
+          className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-16"
+          onClick={() => {
+            postDeliveryOrderDetails(payload);
+          }}
+        />
+      </div> */}
     </div>
   );
 };

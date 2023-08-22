@@ -29,6 +29,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
+import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
 
 import {
   dummyPickupDropdownData,
@@ -47,6 +48,9 @@ import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import NavBar from "../../../layout/NavBar";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { toast } from "react-toastify";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -98,7 +102,7 @@ const Index = () => {
     city: "",
     state: "",
     country: "",
-    addressType: "",
+    addressType: "warehouse",
   });
 
   const [contact, setContact] = useState({
@@ -286,19 +290,21 @@ const Index = () => {
     },
   };
   console.log("payload", payload);
+
   const postPickupOrderDetails = async (payload: any) => {
     try {
-      const { data: response } = await POST("apiendpoint", payload);
+      const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
       if (response?.success) {
-        //  toast.success(response?.message);
+        toast.success(response?.message);
         navigate("/neworder/delivery");
       } else {
         console.error("PickupDataerror");
-        // toast.error(response?.message);
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in editServiceAPI", error);
+      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
+      return error;
     }
   };
 
@@ -336,11 +342,11 @@ const Index = () => {
   ];
 
   return (
-    <div>
+    <div className="h-full">
       {/* <header className="fixed top-0 z-50 w-full ">
         <NavBar />
       </header> */}
-      <div>
+      {/* <div>
         <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
           <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
           <span className="font-normal text-[14px] text-[#777777] mr-1">/</span>
@@ -357,7 +363,15 @@ const Index = () => {
             Add new order
           </p>
         </div>
+      </div> */}
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+        <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
+          Order
+        </span>
       </div>
+      <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
@@ -934,6 +948,22 @@ const Index = () => {
           onClick={() => setIsSaveContactRightModal(false)}
         />
       </RightSideModal>
+
+      {/* <div
+        className={`  ${
+          isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+        }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+      >
+        <ServiceButton
+          text="NEXT"
+          className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-16"
+          onClick={() => {
+            postPickupOrderDetails(payload);
+          }}
+        />
+      </div> */}
+
+      <BottomLayout callApi={() => postPickupOrderDetails(payload)} />
 
       {/* <footer className="w-full fixed  bottom-0 z-[10]">
         <div
