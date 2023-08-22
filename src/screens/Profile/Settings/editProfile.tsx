@@ -91,8 +91,16 @@ export const EditProfile = () => {
         />
         <CustomInputBox
           label="Brand Website"
-          value={profileData?.brandWebsite}
-          onChange={(e) => changeHandler("brandWebsite", e)}
+          value={profileData?.privateCompany?.brandWebsite}
+          onChange={(e) =>
+            setProfileData({
+              ...profileData,
+              privateCompany: {
+                ...profileData.privateCompany,
+                brandWebsite: e.target.value,
+              },
+            })
+          }
         />
       </div>
       <BottomLayout callApi={updateProfile} />
