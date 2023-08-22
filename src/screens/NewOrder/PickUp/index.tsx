@@ -583,7 +583,9 @@ const Index = () => {
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p className="lg:font-semibold lg:text-[14px] ">Office</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Office
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -601,7 +603,9 @@ const Index = () => {
             }}
           >
             <img src={LocationIcon} alt="Other" />
-            <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Warehouse
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -619,7 +623,9 @@ const Index = () => {
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p className="lg:font-semibold lg:text-[14px] ">Other</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Other
+            </p>
           </div>
         </div>
 

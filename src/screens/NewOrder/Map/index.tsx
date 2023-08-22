@@ -148,7 +148,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
       {centerValue ? (
         <div className="lg:flex lg:flex-col lg:h-screen  lg:pt-5 lg:relative">
           <div className="hidden   lg:flex justify-between items-center mb-5 lg:px-5 ">
-            <p className="font-normal text-[24px] text-[#323232]">
+            <p className="font-Lato text-[24px] text-[#323232]">
               Search Location
             </p>
             <img
@@ -186,22 +186,22 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
 
             <div className="flex flex-col h-[254px] px-6 py-4 rounded-t-md w-full">
               <div className="flex items-center justify-between mt-4">
-                <span className="text-base font-light lg:font-normal lg:text-[16px]	">
+                <span className="text-base font-light lg:font-Open lg:text-[16px]	">
                   Select pickup location
                 </span>
-                <button className="text-blue-600 underline underline-offset-4 lg:font-semibold lg:text-[16px]">
+                <button className="text-blue-600 underline underline-offset-4 lg:font-Open lg:text-[16px]">
                   CHANGE
                 </button>
               </div>
               <div className="flex flex-col mt-8">
                 <div className="flex lg:gap-x-2">
                   <img src={LocationIcon} alt="Location" width="24px" />
-                  <span className="pl-1 font-medium lg:font-semibold lg:text-base">
+                  <span className="pl-1 font-medium lg:font-Open lg:text-base">
                     {shortAddress}
                   </span>
                 </div>
                 <div className="flex mt-2">
-                  <span className="text-sm font-light lg:font-normal	">
+                  <span className="text-sm font-light lg:font-Open	">
                     {address}
                   </span>
                 </div>
