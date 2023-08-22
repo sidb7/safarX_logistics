@@ -231,13 +231,15 @@ const Index = () => {
   console.log("contact", contact);
   console.log("customBranding", customBranding);
 
+  console.log("locateAddress", locateAddress);
+
   const handlePickupTimeSelected = (pickupTime: string) => {
     console.log("Selected Pickup Time:", pickupTime);
     setPickupDate(pickupTime);
   };
   console.log("pickupdate", pickupDate);
 
-  const pickupDateForEpoch = "18/08/2023 11:00 AM";
+  // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
   console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
@@ -253,14 +255,47 @@ const Index = () => {
 
   console.log("epochPickupDate", epochPickupDate);
 
-  const postPickupOrderDetails = async () => {
+  const payload = {
+    pickupLocation: {
+      flatNo: pickupLocation.flatNo,
+      address: locateAddress,
+      sector: pickupLocation.sector,
+      landmark: pickupLocation.landmark,
+      pincode: pickupLocation.pincode,
+      city: pickupLocation.city,
+      state: pickupLocation.state,
+      country: pickupLocation.country,
+      addressType: pickupLocation.addressType,
+      contact: {
+        name: contact.name,
+        mobileNo: contact.mobileNo,
+        alternateMobileNo: contact.alternateMobileNo,
+        emailId: contact.emailId,
+        type: contact.type,
+      },
+      customBranding: {
+        name: customBranding.name,
+        logo: customBranding.logo,
+        address: customBranding.address,
+        contact: {
+          name: customBranding.contact.name,
+          mobileNo: customBranding.contact.mobileNo,
+        },
+      },
+      pickupDate: epochPickupDate,
+    },
+  };
+  console.log("payload", payload);
+  const postPickupOrderDetails = async (payload: any) => {
     try {
-      let { data } = await POST("apiendpoint", pickupAddress);
-      navigate("/neworder/delivery");
-      if (data?.success) {
+      const { data: response } = await POST("apiendpoint", payload);
+
+      if (response?.success) {
+        //  toast.success(response?.message);
+        navigate("/neworder/delivery");
       } else {
         console.error("PickupDataerror");
-        // toast.error(data?.message);
+        // toast.error(response?.message);
       }
     } catch (error) {
       console.log("Error in editServiceAPI", error);
@@ -420,7 +455,10 @@ const Index = () => {
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
             value={locateAddress}
-            onChange={(e) => setLocateAddress(e.target.value)}
+            onChange={(e) => {
+              setLocateAddress(e.target.value);
+              handlePickupLocationChange("address", e.target.value);
+            }}
             onClick={() => {
               isItLgScreen
                 ? setIsLocationRightModal(true)

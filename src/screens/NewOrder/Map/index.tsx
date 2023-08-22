@@ -35,6 +35,8 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   const [shortAddress, setshortAddress] = useState("Goregaon West");
   console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
+    console.log("latitude", e.latLng.lat());
+    console.log("longitude", e.latLng.lng());
     setCenterValue({
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
@@ -71,24 +73,68 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     }
   }
 
-  async function getLocation() {
+  async function getLocationByLatLng(lat: number, lng: number) {
+    try {
+      const config = {
+        method: "post",
+        url: `http://65.2.176.43:8006/api/v1/address/getAddressByCoordinate`,
+        headers: { authorization: "6481876edafb412cf0294413" },
+        data: { lat: lat, lng: lng },
+      };
+
+      const response = await axios(config);
+      console.log("responsefromcoordinatesAPI", response);
+
+      if (response.data.success === 1 && response.data.data.results) {
+        const formattedAddress =
+          response.data.data.results[0].formatted_address;
+        console.log("Formatted Address:", formattedAddress);
+        setAddress(formattedAddress);
+        const addressComponents =
+          response.data.data.results[0].address_components;
+        const shortAddress = addressComponents[3].short_name;
+        setshortAddress(shortAddress);
+        console.log("addressComponents", addressComponents[3].short_name);
+      } else {
+        console.log("Failed to get address");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  const getLocation = async () => {
     if ("geolocation" in navigator) {
       console.log("Available");
-      navigator.geolocation.getCurrentPosition(function (position) {
+      try {
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          }
+        );
+
         setCenterValue({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
+
+        console.log("latt>>", position);
+
+        if (position) {
+          await getLocationByLatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+        }
+
         setZoom(15);
-      });
+      } catch (error) {
+        console.error("Error getting geolocation:", error);
+      }
     } else {
       console.log("Not Available");
     }
-  }
-
-  useEffect(() => {
-    (async () => await getLocation())();
-  }, []);
+  };
 
   const confirmLocation = () => {
     if (onClick) {
@@ -132,7 +178,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
               <CustomButton
                 className=""
                 text="LOCATE ME"
-                onClick={() => getLocation()}
+                onClick={getLocation}
                 showIcon={true}
                 icon={GPSIcon}
               ></CustomButton>
