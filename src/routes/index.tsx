@@ -5,7 +5,6 @@ import DeliveryScreen from "../screens/NewOrder/Delivery";
 import ProductScreen from "../screens/NewOrder/Product";
 import ServiceScreen from "../screens/NewOrder/Service";
 import PaymentScreen from "../screens/NewOrder/Payment";
-import NewOrderLayout from "../layout";
 import SummaryScreen from "../screens/NewOrder/Summary";
 import StandardServiceScreen from "../screens/NewOrder/Service/StandardService";
 import InsuranceScreen from "../screens/NewOrder/Insurance";
@@ -89,12 +88,14 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
-import Layout from "../layout";
-import { CommonLayout } from "../layout/layout";
+// import Layout from "../layout";
+// import { CommonLayout } from "../layout/layout";
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
+
+import CommonLayout from "../layout";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -109,7 +110,7 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
-          <Route path="/neworder" element={<NewOrderLayout />}>
+          <Route path="/neworder" element={<CommonLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
@@ -245,6 +246,7 @@ const MyRoutes: React.FC = () => {
               element={<ChangePassword />}
             />
             <Route path="/neworder/pickup" element={<PickUpScreen />} />
+            <Route path="/neworder/pickup" />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />

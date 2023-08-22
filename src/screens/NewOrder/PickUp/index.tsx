@@ -45,7 +45,7 @@ import { format, parse } from "date-fns";
 import Stepper from "../../../components/Stepper";
 import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import ServiceButton from "../../../components/Button/ServiceButton";
 
 const Index = () => {

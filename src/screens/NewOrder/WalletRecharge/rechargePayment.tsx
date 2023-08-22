@@ -20,7 +20,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "react-tooltip/dist/react-tooltip.css";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { Tooltip } from "react-tooltip";
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
 import { paymentState } from "../../../redux/reducers/paymentReducer";
 import BackArrowIcon from "../../../assets/common/backArrowWeb.svg";

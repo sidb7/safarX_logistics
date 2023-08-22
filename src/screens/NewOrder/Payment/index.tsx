@@ -21,7 +21,7 @@ import BackArrowIcon from "../../../assets/backArrow.svg";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { Tooltip } from "react-tooltip";
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import CustomModal from "../../../components/CustomModal";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
 import { paymentState } from "../../../redux/reducers/paymentReducer";

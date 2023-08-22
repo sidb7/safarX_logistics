@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "./Old_NavBar";
 import BackArrowIcon from "../assets/backArrow.svg";
 import ServiceButton from "../components/Button/ServiceButton";
 
