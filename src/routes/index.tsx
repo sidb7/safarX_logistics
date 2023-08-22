@@ -286,18 +286,18 @@ const MyRoutes: React.FC = () => {
             path="/neworder/rechargepayment"
             element={<RechargePayment />}
           />
-          <Route
+          {/* <Route
             path="/neworder/channel-integration"
             element={<CatalogueChannelIntegrationScreen />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/neworder/channel-integration/addproduct"
             element={<AddProduct />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/neworder/channel-integration/addcombo"
             element={<AddCombo />}
-          />
+          /> */}
           <Route
             path="/neworder/channel-integration/addcomboproduct"
             element={<AddComboProduct />}
