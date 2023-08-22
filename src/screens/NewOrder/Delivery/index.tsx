@@ -328,7 +328,7 @@ const Index = () => {
                   value={pastedData}
                   onPaste={handlePaste}
                   onChange={handleChange}
-                  className="custom-input"
+                  className="magicAddressInput"
                   style={{
                     position: "absolute",
                     border: "none",

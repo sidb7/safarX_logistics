@@ -239,7 +239,7 @@ const Index = () => {
 
   const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
-  const editedPickupDateForEpoch = pickupDate.substring(0, 20);
+  const editedPickupDateForEpoch = pickupDate.substring(0, 19);
   console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(

@@ -30,6 +30,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
       setShowDatePicker(false);
       setSelectedDay(selectedDay);
       setSelectedTime(null);
+      setSelectedScheduleDateTime(null);
     }
   };
 
@@ -60,13 +61,37 @@ const SelectDateModalContent = (props: ITypeProps) => {
     return tomorrow;
   };
 
-  const selectedPickupTime = selectedScheduleDateTime
-    ? `${selectedScheduleDateTime}`
-    : selectedDay === "today" && selectedTime
-    ? `${formatDate(new Date())} ${selectedTime}`
-    : `${
+  const getFormattedTimeRange = (start: Date, end: Date) => {
+    const formattedStart = start.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const formattedEnd = end.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return `${formattedStart} - ${formattedEnd}`;
+  };
+
+  const selectedPickupTime = (() => {
+    let timeRange = "";
+
+    if (selectedScheduleDateTime) {
+      const endTime = new Date(selectedScheduleDateTime);
+      endTime.setHours(endTime.getHours() + 1);
+      timeRange = getFormattedTimeRange(selectedScheduleDateTime, endTime);
+      console.log("timeRange", timeRange);
+      return `${formatDate(selectedScheduleDateTime)} ${timeRange}`;
+    } else if (selectedDay === "today" && selectedTime) {
+      return `${formatDate(new Date())} ${selectedTime}`;
+    } else {
+      return `${
         selectedDay === "tomorrow" ? formatDate(getTomorrowDate()) : selectedDay
       } ${selectedTime}`;
+    }
+  })();
 
   console.log("selectedPickupTime", selectedPickupTime);
 
