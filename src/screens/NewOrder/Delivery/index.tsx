@@ -26,6 +26,7 @@ import {
   dummyPickupDropdownData,
   pickupAddress,
 } from "../../../utils/dummyData";
+import { POST } from "../../../utils/webService";
 
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
@@ -152,7 +153,7 @@ const Index = () => {
   const deliveryDateForEpoch = "18/08/2023 11:00 AM";
 
   const editeddeliveryDateForEpoch = deliveryDate.substring(0, 20);
-  console.log("editedPickupDateForEpoch", editeddeliveryDateForEpoch);
+  console.log("editedDeliveryDateForEpoch", editeddeliveryDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
       dateTimeString,
@@ -164,6 +165,45 @@ const Index = () => {
   const epochDeliveryDate = convertToEpoch(editeddeliveryDateForEpoch);
 
   console.log("epochDeliveryDate", epochDeliveryDate);
+
+  const payload = {
+    deliveryLocation: {
+      flatNo: deliveryLocation.flatNo,
+      address: locateAddress,
+      sector: deliveryLocation.sector,
+      landmark: deliveryLocation.landmark,
+      pincode: deliveryLocation.pincode,
+      city: deliveryLocation.city,
+      state: deliveryLocation.state,
+      country: deliveryLocation.country,
+      addressType: deliveryLocation.addressType,
+      contact: {
+        name: contact.name,
+        mobileNo: contact.mobileNo,
+        alternateMobileNo: contact.alternateMobileNo,
+        emailId: contact.emailId,
+        type: contact.type,
+      },
+
+      pickupDate: epochDeliveryDate,
+    },
+  };
+  console.log("payload", payload);
+  const postDeliveryOrderDetails = async (payload: any) => {
+    try {
+      const { data: response } = await POST("apiendpoint", payload);
+
+      if (response?.success) {
+        //  toast.success(response?.message);
+        navigate("/neworder/delivery");
+      } else {
+        console.error("PickupDataerror");
+        // toast.error(response?.message);
+      }
+    } catch (error) {
+      console.log("Error in editServiceAPI", error);
+    }
+  };
 
   const steps = [
     {
