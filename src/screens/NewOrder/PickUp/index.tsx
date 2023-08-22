@@ -963,7 +963,10 @@ const Index = () => {
         />
       </div> */}
 
-      <BottomLayout callApi={() => postPickupOrderDetails(payload)} />
+      <BottomLayout
+        callApi={() => postPickupOrderDetails(payload)}
+        Button2Name={true}
+      />
 
       {/* <footer className="w-full fixed  bottom-0 z-[10]">
         <div
