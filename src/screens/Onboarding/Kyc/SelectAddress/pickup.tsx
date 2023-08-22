@@ -150,7 +150,7 @@ const PickUp = (props: ITypeProps) => {
                 </div>
               </div>
             </div>
-            {/* {isLgScreen && (
+            {isLgScreen && (
               <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
                 <ServiceButton
                   text="SUBMIT"
@@ -158,7 +158,7 @@ const PickUp = (props: ITypeProps) => {
                   onClick={() => {}}
                 />
               </div>
-            )} */}
+            )}
           </div>
           {!isLgScreen && (
             <div
