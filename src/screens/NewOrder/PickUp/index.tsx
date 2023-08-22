@@ -390,7 +390,8 @@ const Index = () => {
                 value={pastedData}
                 onPaste={handlePaste}
                 onChange={handleChange}
-                className="custom-input"
+                className="magicAddressInput"
+                // className="custom-input"
                 style={{
                   position: "absolute",
                   border: "none",
@@ -402,7 +403,7 @@ const Index = () => {
                   // top: "-10px",
                 }}
                 placeholder="Paste Address for the Magic"
-                title="inputBox"
+                title=""
               />
 
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
