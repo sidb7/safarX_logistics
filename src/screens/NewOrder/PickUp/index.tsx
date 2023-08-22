@@ -769,7 +769,10 @@ const Index = () => {
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[16px] py-[8px]`}
+                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
+                  onClick={() => {
+                    setToggleStatus(!toggleStatus);
+                  }}
                 >
                   <Switch
                     onChange={() => {
@@ -780,14 +783,14 @@ const Index = () => {
                     onHandleColor="#7CCA62"
                     offColor="#FFFFF"
                     offHandleColor="#F35838"
-                    handleDiameter={12}
+                    handleDiameter={4}
                     uncheckedIcon={false}
                     checkedIcon={false}
-                    height={16}
-                    width={32}
+                    height={8}
+                    width={14}
                   />
 
-                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] ">
+                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
                     {toggleStatus ? "ACTIVE" : "DEACTIVE"}
                   </p>
                 </button>
