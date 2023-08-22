@@ -31,30 +31,31 @@ const BusinessType = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div className="px-5 h-screen lg:h-full lg:px-0 ">
-        <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className="">
+        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[58px]"
           title="Welcome to Shipyaari"
           content="Tell us more about your company"
         />
 
         <form onSubmit={onSubmitForm}>
-          <div className="flex flex-col justify-center items-center  lg:px-5 ">
+          <div className="flex flex-col justify-center items-center px-5 ">
             <div className="flex items-center justify-between w-full  mt-2 mb-4  lg:!w-[320px] ">
-              <p className="font-Open  font-semibold text-sm text-[#1C1C1C]  ">
-                Default
+              <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#1C1C1C]  ">
+                Address
               </p>
 
-              <AddButton
+              {/* <AddButton
                 onClick={() => {}}
                 text={"ADD ADDRESS"}
                 icon={PlusIcon}
                 showIcon={true}
                 className="!bg-white !border-npne "
                 textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              />
+              /> */}
             </div>
             <div className="mb-4">
               <Card
