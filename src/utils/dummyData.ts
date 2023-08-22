@@ -21,9 +21,6 @@ import WooCommerceLg from "../assets/Catalogue/WooCommerceLg.svg";
 import instamojoLg from "../assets/Catalogue/instamojoLg.svg";
 import EditImageWithBlack from "../assets/Catalogue/edit.svg";
 
-
-
-
 export const insufficientBalance = [
   {
     header: "Insufficient  balance",
@@ -237,7 +234,6 @@ export const productCatalogueData = [
     header: "Mac book air",
     text: "5 kg | 12 x 12 x 12 cm",
   },
-  
 ];
 
 export const customServiceData = [
@@ -652,94 +648,94 @@ export const dummyChannelIntegrationData = [
       {
         name: "Shopify",
         icon: ShopifyIcon,
-        iconLg : ShopifyLg,
+        iconLg: ShopifyLg,
         integrated: true,
         storesIntegrated: 5,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg,
+        iconLg: ShopifyLg,
         integrated: true,
         storesIntegrated: 5,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg,
+        iconLg: ShopifyLg,
         integrated: true,
         storesIntegrated: 5,
       },
       {
         name: "Shopify",
         icon: ShopifyIcon,
-        iconLg : ShopifyLg,
+        iconLg: ShopifyLg,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg,
+        iconLg: ShopifyLg,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg
+        iconLg: ShopifyLg,
       },
       {
         name: "Shopify",
         icon: ShopifyIcon,
-        iconLg : ShopifyLg
+        iconLg: ShopifyLg,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg
+        iconLg: ShopifyLg,
       },
       {
         name: "Woo",
         icon: WooIcon,
-        iconLg : ShopifyLg
+        iconLg: ShopifyLg,
       },
     ],
   },
 
   {
-    title: "Marketplace",
+    title: "Marketplaces",
     channels: [
       {
         name: "Amazon",
         icon: AmazonIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
       {
         name: "Meesho",
         icon: MeeshoIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
       {
         name: "Amazon",
         icon: AmazonIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
       {
         name: "Meesho",
         icon: MeeshoIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
       {
         name: "Amazon",
         icon: AmazonIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
       {
         name: "Meesho",
         icon: MeeshoIcon,
-        iconLg : WooCommerceLg,
+        iconLg: WooCommerceLg,
         integrated: false,
       },
     ],
@@ -797,7 +793,7 @@ export const dummyChannelIntegrationData = [
 ];
 
 // export const dummyChannelBothIntegrationData = [
-//   { 
+//   {
 //     mobile : [
 //     {
 //       title: "Carts",
@@ -816,7 +812,7 @@ export const dummyChannelIntegrationData = [
 //         },
 //       ],
 //     },
-  
+
 //     {
 //       title: "Marketplace",
 //       channels: [
@@ -832,7 +828,7 @@ export const dummyChannelIntegrationData = [
 //         },
 //       ],
 //     },
-  
+
 //     {
 //       title: "Order Management System",
 //       channels: [
@@ -848,7 +844,7 @@ export const dummyChannelIntegrationData = [
 //         },
 //       ],
 //     },
-  
+
 //     {
 //       title: "Warehouse Management System",
 //       channels: [
@@ -864,7 +860,7 @@ export const dummyChannelIntegrationData = [
 //         },
 //       ],
 //     },
-  
+
 //     {
 //       title: "Inventory Management System",
 //       channels: [
@@ -880,7 +876,7 @@ export const dummyChannelIntegrationData = [
 //         },
 //       ],
 //     },
-//   ], 
+//   ],
 //   web : [
 //     {
 //       title : "Shopify",
@@ -931,8 +927,6 @@ export const dummyChannelIntegrationData = [
 //       storesIntegrated: 0
 //     },
 //   ] }
-  
-
 
 // ]
 export const dummyPickupDropdownData = [

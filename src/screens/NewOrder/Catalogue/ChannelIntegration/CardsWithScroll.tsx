@@ -3,26 +3,27 @@ import React from "react";
 interface ITypesProps {}
 
 const CardsWithScroll = (props: any) => {
-  const { eachChannelType } = props;  
+  const { eachChannelType } = props;
 
   return (
     <div className="mb-[42px]">
       <p className="font-bold text-[18px] text-[#323232] mb-4">
         {eachChannelType.title}
       </p>
-      <div className="flex items-center gap-x-3 overflow-x-scroll lg:flex-wrap">
+      <div className=" w-[360px] flex items-center gap-x-3 flex-nowrap lg:whitespace-nowrap overflow-x-scroll lg:w-full lg:flex-wrap">
         {eachChannelType.channels.map((eachChannel: any, index: any) => {
           return (
-            <div
-              className="relative z-1  mt-5"
-              key={index}
-            >
+            <div className="relative z-1  mt-5" key={index}>
               <div
                 className={`flex flex-col border-[1px] border-[#A4A4A4] rounded py-[14px] px-[16px] w-[248px] `}
               >
                 <div className="flex lg:flex-col lg:items-start lg:gap-y-5 items-center gap-x-6 mb-3 w-[118px]">
                   <img src={eachChannel.icon} alt="" className="lg:hidden" />
-                  <img src={eachChannel.iconLg} alt="" className="hidden lg:block" />
+                  <img
+                    src={eachChannel.iconLg}
+                    alt=""
+                    className="hidden lg:block"
+                  />
 
                   <p className="font-semibold text-[12px] text-[#323232]">
                     {eachChannel.name}

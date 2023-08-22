@@ -166,6 +166,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <RightSideModal
             isOpen={insurance}
             onClose={() => setInsurance(false)}
+            className="!w-[600px]"
           >
             <AddInsuranceModal
               insurance={insurance}
@@ -176,7 +177,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
 
       <div>
-        <BottomLayout />
+        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
       </div>
     </div>
   );

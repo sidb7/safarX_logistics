@@ -2,7 +2,7 @@ import { Spinner } from "../Spinner";
 
 interface CustomButtonProps {
   text: any;
-  onClick: (e:any) => void;
+  onClick: (e: any) => void;
   className?: string;
   disabled?: boolean;
   type?: any;
@@ -10,6 +10,7 @@ interface CustomButtonProps {
   icon?: any;
   showIcon?: boolean;
   loading?: boolean;
+  buttonClassName?: string;
 }
 const CustomButton = (props: CustomButtonProps) => {
   const {
@@ -22,6 +23,7 @@ const CustomButton = (props: CustomButtonProps) => {
     icon,
     iconClass,
     loading = false,
+    buttonClassName,
   } = props;
   return (
     <>
@@ -39,9 +41,11 @@ const CustomButton = (props: CustomButtonProps) => {
           disabled={disabled}
         >
           {showIcon && (
-            <img className={`${iconClass} mr-2`} src={icon} alt="" />
+            <img className={`${iconClass} mr-1`} src={icon} alt="" />
           )}
-          {text}
+          <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+            {text}
+          </p>
         </button>
       )}
     </>
