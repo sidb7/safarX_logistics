@@ -92,6 +92,8 @@ const Index = () => {
     state: "",
     country: "",
     addressType: "",
+    gstNo: "",
+    orderType: "",
   });
 
   const [contact, setContact] = useState({
@@ -168,6 +170,7 @@ const Index = () => {
 
   const payload = {
     deliveryLocation: {
+      recipientType: deliveryLocation.recipientType,
       flatNo: deliveryLocation.flatNo,
       address: locateAddress,
       sector: deliveryLocation.sector,
@@ -176,6 +179,7 @@ const Index = () => {
       city: deliveryLocation.city,
       state: deliveryLocation.state,
       country: deliveryLocation.country,
+      gstNo: deliveryLocation.gstNo,
       addressType: deliveryLocation.addressType,
       contact: {
         name: contact.name,
@@ -185,8 +189,9 @@ const Index = () => {
         type: contact.type,
       },
 
-      pickupDate: epochDeliveryDate,
+      deliveryDate: epochDeliveryDate,
     },
+    orderType: deliveryLocation.orderType,
   };
   console.log("payload", payload);
   const postDeliveryOrderDetails = async (payload: any) => {
@@ -285,6 +290,7 @@ const Index = () => {
                 onClick={() => {
                   setSelectRecipient({ business: true, consumer: false });
                   handleDeliveryLocationChange("recipientType", "business");
+                  handleDeliveryLocationChange("orderType", "B2B");
                 }}
               >
                 <img
@@ -499,7 +505,13 @@ const Index = () => {
           </div>
 
           <div className="mb-5 lg:mb-6">
-            <CustomInputBox label="GST no." />
+            <CustomInputBox
+              label="GST no."
+              value={deliveryLocation.gstNo}
+              onChange={(e) =>
+                handleDeliveryLocationChange("gstNo", e.target.value)
+              }
+            />
           </div>
 
           <div className="mb-5 lg:mb-[18px] lg:col-span-3 ">
