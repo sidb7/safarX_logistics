@@ -1,4 +1,4 @@
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import { useState } from "react";
 import { productCatalogueData } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";

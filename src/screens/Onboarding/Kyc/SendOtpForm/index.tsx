@@ -221,7 +221,9 @@ const Index = (props: ITypeProps) => {
                 <CustomInputBox
                   containerStyle={`lg:!w-auto`}
                   label="Aadhar Number"
-                  inputType="number"
+                  inputType="text"
+                  inputMode="numeric"
+                  maxLength={12}
                   labelClassName="!font-Open"
                   className={` ${aadharError !== "" && "!border-[#F35838]"}
                   lg:!w-[320px]   !font-Open`}

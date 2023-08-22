@@ -44,12 +44,15 @@
     "web-vitals": "2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "local-build": "REACT_APP_ENV=local react-scripts build",
+    "test-build": "REACT_APP_ENV=test react-scripts build",
+    "dev-build": "REACT_APP_ENV=development react-scripts build",
+    "prod-build": "REACT_APP_ENV=production react-scripts build",
+    "local": "REACT_APP_ENV=local react-scripts start",
     "dev": "REACT_APP_ENV=development react-scripts start",
-    "local": "REACT_APP_ENV=local react-scripts start"
+    "test": "REACT_APP_ENV=test react-scripts start",
+    "prod": "REACT_APP_ENV=production react-scripts start",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
