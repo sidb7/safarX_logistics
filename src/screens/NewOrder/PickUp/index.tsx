@@ -752,8 +752,8 @@ const Index = () => {
 
         <div className="hidden lg:block mb-7"></div>
 
-        <div className="mb-7">
-          <div className="flex flex-col">
+        <div className="mb-7 flex justify-end ">
+          <div className="flex flex-col  w-[392px] h-[140px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
                 toggleStatus
@@ -806,37 +806,37 @@ const Index = () => {
             {toggleStatus && (
               <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
-                  <p className="text-[10px] text-[#777777] font-normal ">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name and Logo
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C] ">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C] ">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Name
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8]">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Address
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Number
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
