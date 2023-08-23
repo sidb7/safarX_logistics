@@ -253,7 +253,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         </form>
       </div>
       <div>
-        <BottomLayout />
+        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
       </div>
     </div>
   );
