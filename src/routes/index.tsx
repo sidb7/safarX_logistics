@@ -203,10 +203,14 @@ const MyRoutes: React.FC = () => {
             path="onboarding/kyc-terms/ServiceComponent"
             element={<ServiceComponent />}
           />
-          <Route
+
+          {/* commented it as it is not there in the new screen */}
+
+          {/* <Route
             path="onboarding/kyc-company"
             element={<KycCompanyDetailsScreen />}
-          />
+          /> */}
+
           <Route path="onboarding/kyc-modal" element={<KycModalScreen />} />
           <Route path="onboarding/select-address" element={<SelectAddress />} />
           <Route

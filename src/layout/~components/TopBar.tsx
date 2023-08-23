@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import InputWithImage from "../../components/InputWithImage/InputWithImage";
 import PowerBoosterlogo from "../../assets/powerbooster.svg";
 import ProfileLogo from "../../assets/Navbar/Essential.svg";
+import HamMenu from "../../assets/Navbar/menu.svg";
 import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
 import SearchIcon from "../../assets/Search.svg";
 import CustomButton from "../../components/Button/index";
@@ -29,22 +30,28 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   return (
     <>
       <nav
-        className="p-3 grid justify-items-stretch items-center w-full box_shadow"
+        className="px-8 py-4 lg:p-3 grid justify-items-stretch items-center w-full box_shadow"
         style={{
           boxShadow: "0px 4px 6px 0px rgba(0, 0, 0, 0.04)",
         }}
       >
-        <div className="justify-self-end flex items-center gap-3">
+        <div className=" justify-between lg:justify-self-end flex items-center gap-3">
+          <div className=" lg:hidden">
+            <img src={HamMenu} alt="" />
+          </div>
+          <div className=" lg:hidden">
+            <img src={SearchIcon} width={"22px"} height={"22px"} alt="" />
+          </div>
           <InputWithImage
             imgSrc={SearchIcon}
-            inputClassName="!w-80"
+            inputClassName="hidden lg:!w-80 lg:flex"
             placeholder="Search"
           />
           <CustomButton
             icon={PowerBoosterlogo}
             showIcon={true}
             onlyIcon={true}
-            className="bg-white !w-12"
+            className="bg-white hidden lg:!w-12"
             text={""}
             onClick={() => {}}
           />
@@ -57,7 +64,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               icon={ProfileLogo}
               showIcon={true}
               onlyIcon={true}
-              className="bg-white w-fit "
+              className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
               text={""}
               onClick={() => {}}
             />
