@@ -28,32 +28,31 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
   };
   return (
     <div className="h-full">
-      <div className="flex justify-between">
-        <Breadcum label="Add Product" />
-
-        {/* here the button will come from the component  */}
-
-        {/* <div className="flex mt-6 mr-5">
-          <div className="mr-4">
-            <CustomButton
-              icon={AddOrder}
-              showIcon={true}
-              text={"UPLOAD"}
-              className="!p-4"
-              onClick={() => {}}
-            />
+      <Breadcum
+        label="Add Product"
+        component={
+          <div className="flex">
+            <div className="mr-4">
+              <CustomButton
+                icon={AddOrder}
+                showIcon={true}
+                text={"UPLOAD"}
+                className="!p-4"
+                onClick={() => {}}
+              />
+            </div>
+            <div className="">
+              <CustomButton
+                icon={AddOrder}
+                showIcon={true}
+                text={"FROM CHANNEL"}
+                className="!p-4"
+                onClick={() => {}}
+              />
+            </div>
           </div>
-          <div className="">
-            <CustomButton
-              icon={AddOrder}
-              showIcon={true}
-              text={"FROM CHANNEL"}
-              className="!p-4"
-              onClick={() => {}}
-            />
-          </div>
-        </div> */}
-      </div>
+        }
+      />
 
       <div className="mx-5">
         <div className="">
