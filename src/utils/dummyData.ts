@@ -360,7 +360,7 @@ export const standardServiceData = [
 export const RecommendedServiceData = [
   {
     isRecommendation: true,
-    recommendation: "Recipient",
+    recommendation: "Cheapest",
     courierPartner: "DHL",
     serviceType: "Economy",
     weight: 1,

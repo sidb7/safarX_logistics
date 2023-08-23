@@ -68,6 +68,7 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 //NewOrder URLs
 const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
 const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+const GET_COURIER_PARTNER_SERVICE= `${PARTNER_BASE_URL}/partnerServices/getCourierPartnerService`;
 
 
 export {
@@ -94,5 +95,6 @@ export {
   UPDATE_PASSWORD,
   DELETE_SELLER,
   ADD_PICKUP_LOCATION,
-  ADD_DELIVERY_LOCATION
+  ADD_DELIVERY_LOCATION,
+  GET_COURIER_PARTNER_SERVICE
 };

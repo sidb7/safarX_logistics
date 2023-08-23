@@ -13,7 +13,7 @@ const index = (props: IProps) => {
       {items.map((each: any) => {
         return (
           <div
-            className="flex justify-center lg:w-[172px] border-[1px] h-[35px] grow  bg-[#FEFEFE] py-[8px] px-[16px] rounded text-[14px] font-semibold text-[#1C1C1C]  border-[#A4A4A4] lg:text-center"
+            className="flex justify-center  lg:w-[172px] border-[1px] h-[35px] bg-[#FEFEFE] items-center rounded text-[14px] cursor-pointer font-Open font-semibold text-[#1C1C1C]  border-[#A4A4A4] lg:text-center"
             onClick={onClick}
             id={each}
           >
