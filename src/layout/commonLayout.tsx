@@ -9,11 +9,11 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   return (
     <>
       <main className="h-screen">
-        <NavBar />
-        <TopBar />
-        <main className="ml-12 p-6 h-[calc(100vh-74px)] overflow-auto">
+        {/* <NavBar /> */}
+        {/* <TopBar /> */}
+        {/* <main className="ml-12 p-6 h-[calc(100vh-74px)] overflow-auto">
           <Outlet />
-        </main>
+        </main> */}
       </main>
     </>
   );

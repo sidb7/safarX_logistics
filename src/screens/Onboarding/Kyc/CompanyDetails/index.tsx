@@ -5,7 +5,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomInputBox from "../../../../components/InputBox";
 import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CrossLogo from "../../../../assets/cross.svg";
 
 type Props = {};
