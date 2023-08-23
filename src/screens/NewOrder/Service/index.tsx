@@ -168,51 +168,15 @@ const Index: React.FC = () => {
     getCourierPartnerService();
   }, []);
 
-  //  useEffect(() => {
-  //    // Fetch data from the API and update the state
-  //    const fetchServiceData = async () => {
-  //      try {
-  //        // Make your GET API call here and store the response
-  //        const response = await fetch("YOUR_API_ENDPOINT");
-  //        const data = await response.json();
-
-  //        // Separate the data into recommended and filter data
-  //        const recommended = data.filter((item:any) => item.isRecommendation);
-  //        const filter = data.filter((item:any) => !item.isRecommendation);
-
-  //        setRecommendedData(recommended);
-  //        setFilterData(filter);
-  //      } catch (error) {
-  //        console.error("Error fetching data:", error);
-  //      }
-  //    };
-
-  //    fetchServiceData();
-  //  }, []);
-
-  // const handleServiceSelection = (selectedServiceDetails: any) => {
-  //   // Perform your POST request here using selectedServiceDetails
-  //   // You can use fetch or any HTTP client library for making the request
-  //   // Example:
-  //   fetch("YOUR_POST_API_ENDPOINT", {
-  //     method: "POST",
-  //     body: JSON.stringify(selectedServiceDetails),
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       // Handle response if needed
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error making POST request:", error);
-  //     });
-  // };
-
   const handleServiceSelection = (serviceDetails: any) => {
     setSelectedService(serviceDetails);
   };
+
+  const selectedServiceData = dataArray?.find(
+    (service: any) => service.serviceId === selectedService
+  );
+
+  console.log("selectedServiceEntireObject", selectedServiceData);
 
   const steps = [
     {
