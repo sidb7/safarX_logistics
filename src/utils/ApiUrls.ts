@@ -38,6 +38,7 @@ const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
 const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
 const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const FILE_UPLOAD = `${FILE_SERVER_URL}/api/v1/upload/uploadSingleFile`;
 
 // Base URLs
 const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
@@ -66,9 +67,11 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
-const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
-const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 
+//product URLs
+const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 
 export {
   SELLER_URL,
@@ -94,5 +97,7 @@ export {
   UPDATE_PASSWORD,
   DELETE_SELLER,
   ADD_PICKUP_LOCATION,
-  ADD_DELIVERY_LOCATION
+  ADD_DELIVERY_LOCATION,
+  POST_PRODUCT_URL,
+  FILE_UPLOAD,
 };
