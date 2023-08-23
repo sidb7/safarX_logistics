@@ -272,7 +272,7 @@ const MyRoutes: React.FC = () => {
             />
             <Route
               path="/neworder/catalogue/add-product"
-              element={<AddProduct />}
+              element={<AddProductScreen />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
