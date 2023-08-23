@@ -94,6 +94,7 @@ import Payment from "../screens/Order/Payment";
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
+import Catalogue from "../screens/NewOrder/NewCatalogue";
 
 import CommonLayout from "../layout";
 
@@ -256,6 +257,9 @@ const MyRoutes: React.FC = () => {
               path="newOrder/productpackage"
               element={<ProductPackage />}
             />
+
+            {/* Catalogue */}
+            <Route path="/neworder/catalogue" element={<Catalogue />} />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />

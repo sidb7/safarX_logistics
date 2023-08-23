@@ -641,6 +641,137 @@ export const dummyTransactionFilterData = [
   },
 ];
 
+export const ChannelIntegrationCarts = {
+  title: "Carts",
+  channels: [
+    {
+      name: "Shopify",
+      icon: ShopifyIcon,
+      iconLg: ShopifyLg,
+      integrated: true,
+      storesIntegrated: 5,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+      integrated: true,
+      storesIntegrated: 5,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+      integrated: true,
+      storesIntegrated: 5,
+    },
+    {
+      name: "Shopify",
+      icon: ShopifyIcon,
+      iconLg: ShopifyLg,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+    },
+    {
+      name: "Shopify",
+      icon: ShopifyIcon,
+      iconLg: ShopifyLg,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+    },
+    {
+      name: "Woo",
+      icon: WooIcon,
+      iconLg: ShopifyLg,
+    },
+  ],
+};
+
+export const ChannelIntegrationMarketPlace = {
+  title: "Marketplaces",
+  channels: [
+    {
+      name: "Amazon",
+      icon: AmazonIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+    {
+      name: "Meesho",
+      icon: MeeshoIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+    {
+      name: "Amazon",
+      icon: AmazonIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+    {
+      name: "Meesho",
+      icon: MeeshoIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+    {
+      name: "Amazon",
+      icon: AmazonIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+    {
+      name: "Meesho",
+      icon: MeeshoIcon,
+      iconLg: WooCommerceLg,
+      integrated: false,
+    },
+  ],
+};
+
+export const ChannelIntegrationWarehouse = {
+  title: "Warehouse Management System",
+  channels: [
+    {
+      name: "Name",
+      icon: FingerIcon,
+      integrated: false,
+    },
+    {
+      name: "Shopify",
+      icon: ShopifyIcon,
+      integrated: false,
+    },
+  ],
+};
+
+export const ChannelIntegrationInventory = {
+  title: "Inventory Management System",
+  channels: [
+    {
+      name: "Salesforce",
+      icon: SalesforceIcon,
+      integrated: false,
+    },
+    {
+      name: "Shopify",
+      icon: ShopifyIcon,
+      integrated: false,
+    },
+  ],
+};
+
 export const dummyChannelIntegrationData = [
   {
     title: "Carts",

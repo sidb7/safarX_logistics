@@ -1,6 +1,6 @@
 import BoxIcon from "../../../../assets/Catalogue/box.svg";
 import PackageBox from "../../Product/PackageType/packageBox";
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 
 interface Props {}
 
