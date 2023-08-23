@@ -70,10 +70,10 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
         </div>
         <div className="flex items-center gap-x-2 mb-2  lg:ml-5">
           <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} `}</div>
-          <div className="text-[14px] text-[#1C1C1C]">|</div>
+          {/* <div className="text-[14px] text-[#1C1C1C]">|</div>
           <div className="text-[12px] text-[#004EFF]   ">
             {`Save ₹ ${savePrice} using this service`}
-          </div>
+          </div> */}
         </div>
         <div className="flex  items-center lg:ml-5 ">
           <div className="text-[#004EFF] text-[14px] font-semibold lg:font-bold">

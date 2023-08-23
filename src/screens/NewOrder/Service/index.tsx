@@ -274,11 +274,11 @@ const Index: React.FC = () => {
         })}
       </div>
 
-      <div className="mx-5  mb-5 lg:mb-6">
+      {/* <div className="mx-5  mb-5 lg:mb-6">
         <FilterBy />
-      </div>
+      </div> */}
 
-      <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] overflow-y-scroll  lg:overflow-x-scroll flex-nowrap   lg:gap-x-6  ">
+      {/* <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] overflow-y-scroll  lg:overflow-x-scroll flex-nowrap   lg:gap-x-6  ">
         {dataArray?.map((each: any) => {
           return (
             <ServiceCard
@@ -298,7 +298,7 @@ const Index: React.FC = () => {
             />
           );
         })}
-      </div>
+      </div> */}
       <BottomLayout callApi={() => {}} />
     </div>
   );
