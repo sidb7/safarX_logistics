@@ -766,7 +766,7 @@ const Index = () => {
 
         <div className="hidden lg:block mb-7"></div>
 
-        <div className="mb-7 flex justify-end ">
+        <div className="mb-7  flex justify-end ">
           <div className="flex flex-col  w-[392px] h-[140px] ">
             <div
               className={`grid grid-cols-2 p-2 ${

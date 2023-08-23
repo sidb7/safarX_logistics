@@ -248,7 +248,7 @@ const Index = () => {
     },
   ];
   return (
-    <div className="h-full">
+    <div>
       {/* <div>
         <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
           <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
@@ -276,7 +276,7 @@ const Index = () => {
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="grid grid-cols-1   gap-y-4 ">
+      <div className="grid grid-cols-1 gap-y-4 ">
         <div className=" h-[54px] bg-[#F5BE6D] p-2 flex items-center  lg:mx-5 lg:mt-11 lg:mb-4 lg:col-span-3">
           <div className="text-sm mx-5 lg:mx-4 text-[#1C1C1C] lg:flex lg:items-center lg:gap-x-2 ">
             <div className="flex">
@@ -701,7 +701,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block mb-7">
+          <div className="hidden lg:block mb-7 pb-24">
             <CustomInputWithImage
               placeholder="Delivery Date"
               imgSrc={CalenderIcon}
@@ -796,7 +796,6 @@ const Index = () => {
         </RightSideModal>
       </div>
       <BottomLayout callApi={() => postDeliveryOrderDetails(payload)} />
-
       {/* <div
         className={`  ${
           isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
