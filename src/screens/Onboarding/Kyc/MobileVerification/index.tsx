@@ -5,7 +5,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import MobileVerificationIcon from "../../../../assets/common/MobileVerify.gif";
 import { useLocation, useNavigate } from "react-router-dom";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CustomInputBox from "../../../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { setOTPNumber } from "../../../../redux/reducers/onboarding";
@@ -67,18 +67,19 @@ const Index = (props: ITypeProps) => {
 
   const mobileVerificationComponent = () => {
     return (
-      <div className="px-5 lg:px-0 ">
-        <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className=" lg:px-0 ">
+        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[78px]"
           title="Mobile Verification"
           content="Enter the OTP sent to +91-8976500001"
         />
 
         <form onSubmit={onVerifyOtp}>
-          <div className="lg:mb-6 lg:mx-5">
-            <div className="flex flex-col lg:items-center  mb-10">
+          <div className="px-5 lg:mb-6">
+            <div className="flex flex-col lg:items-center ">
               <img
                 src={MobileVerificationIcon}
                 alt=""
@@ -101,7 +102,7 @@ const Index = (props: ITypeProps) => {
               <p className="font-semibold font-Open text-[12px] text-[#494949] mb-4 self-center">
                 00:30 sec
               </p>
-              <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6  self-center">
+              <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 lg:mb-0 self-center">
                 <p className="text-[#494949] font-Open lg:font-normal">
                   Don't receive code ?
                 </p>
@@ -111,7 +112,7 @@ const Index = (props: ITypeProps) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col lg:justify-center lg:items-center lg:mb-[45px]  ">
+          <div className="flex flex-col lg:justify-center px-4 lg:items-center">
             <ServiceButton
               text="DONE"
               className="bg-[#1C1C1C] !h-[36px] !font-Open text-white lg:!w-[320px] mb-5"

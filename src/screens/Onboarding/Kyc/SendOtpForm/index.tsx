@@ -4,7 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -204,18 +204,19 @@ const Index = (props: ITypeProps) => {
 
   const sendOtpFormComponent = () => {
     return (
-      <div className="px-5 lg:px-0">
-        <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className=" lg:px-0">
+        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
 
         <WelcomeHeader
+          className="!mt-[78px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <form onSubmit={onSendOtp}>
-          <div className="flex flex-col justify-center items-center mt-[53px] lg:mt-[92px]  gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
             {businessType === "individual" ? (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
                 <CustomInputBox
@@ -355,7 +356,7 @@ const Index = (props: ITypeProps) => {
               )}
             </div>
           </div>
-          <div className="flex  lg:justify-center lg:items-center  pb-12 ">
+          <div className="flex  lg:justify-center lg:items-center px-5 pb-12 ">
             <ServiceButton
               text="SEND OTP"
               disabled={!otpFormBtnStatus}

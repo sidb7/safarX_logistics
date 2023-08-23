@@ -4,7 +4,7 @@ import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 // import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
@@ -53,12 +53,13 @@ const BusinessType = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
+          className="mt-[58px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-6">
-          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-3">
+        <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
+          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
             Please confirm your business type
           </p>
           <Card
@@ -82,7 +83,7 @@ const BusinessType = (props: ITypeProps) => {
             subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
           />
         </div>
-        <div className="flex flex-col gap-y-4 mx-5 mt-[96px]  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
+        <div className="flex flex-col gap-y-4 mx-5 mt-[66px]  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
           <ServiceButton
             text="PROCEED FOR KYC"
             className="bg-[#1C1C1C] !font-Open !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "

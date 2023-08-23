@@ -1,0 +1,33 @@
+const Card = (props: any) => {
+  const { channel, key } = props;
+
+  return (
+    <div className="relative z-1  mt-5" key={key}>
+      <div
+        className={`border-[1px] border-[#A4A4A4] rounded py-[14px] px-[16px] w-[248px] `}
+      >
+        <div className="flex lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 w-[118px]">
+          <img src={channel.icon} alt="" className="lg:hidden" />
+          <img src={channel.iconLg} alt="" className="hidden lg:block" />
+
+          <p className="font-semibold text-[12px] text-[#323232]">
+            {channel.name}
+          </p>
+        </div>
+        <div className="border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]">
+          <p className="font-semibold text-[14px] text-[#1C1C1C] uppercase">
+            {channel.integrated ? "Integrated" : "Integrate"}
+          </p>
+        </div>
+      </div>
+
+      {channel.integrated && (
+        <p className="absolute -top-3 left-5  z-2 bg-[#4D83FF] flex items-center px-3 py-1 h-[24px] font-semibold text-[12px] rounded text-white">
+          {`${channel.storesIntegrated} Active Stores`}
+        </p>
+      )}
+    </div>
+  );
+};
+
+export default Card;

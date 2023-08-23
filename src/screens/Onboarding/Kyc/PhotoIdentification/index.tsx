@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PhotoScreenIcon from "../../../../assets/KYC/PhotoScreen.svg";
 import ImageCenterIcon from "../../../../assets/KYC/PhotoCenter.svg";
 import Modal from "./Modal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 
 interface ITypeProps {}
 

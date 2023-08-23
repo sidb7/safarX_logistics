@@ -38,6 +38,7 @@ const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
 const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
 const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const FILE_UPLOAD = `${FILE_SERVER_URL}/api/v1/upload/uploadSingleFile`;
 
 // Base URLs
 const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
@@ -76,6 +77,8 @@ const GET_LATEST_ORDER= `${SELLER_URL}/api/v1/order/getLatestOrder`;
 
 
 
+//product URLs
+const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 
 export {
   SELLER_URL,
@@ -103,5 +106,7 @@ export {
   ADD_PICKUP_LOCATION,
   ADD_DELIVERY_LOCATION,
   GET_COURIER_PARTNER_SERVICE,
-  GET_LATEST_ORDER
+  GET_LATEST_ORDER,
+  POST_PRODUCT_URL,
+  FILE_UPLOAD,
 };
