@@ -2,16 +2,17 @@ import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
+import AddressBook from "./AddressBook";
 
 const Catalogue = () => {
   const [tabName, setTabName] = useState([
     {
       statusName: "Channel Integration",
-      active: true,
+      active: false,
     },
     {
       statusName: "Address Book",
-      active: false,
+      active: true,
     },
     {
       statusName: "Product Catalogue",
@@ -30,15 +31,15 @@ const Catalogue = () => {
     if (activeTabName?.statusName === "Channel Integration") {
       return <ChannelIntegration />;
     } else if (activeTabName?.statusName === "Address Book") {
-      return <div>Address Book</div>;
+      return <AddressBook />;
     }
   };
 
   return (
-    <div className="overflow-y-auto h-[calc(100%-50px)]">
+    <div className="overflow-y-auto h-[calc(100%-75px)]">
       <Breadcum label="Catalogue" />
-      <div className="mt-4 mx-4">
-        <div className="flex flex-row gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
+      <div className="mt-4 mx-6">
+        <div className="flex flex-row overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
           {tabName.map(({ statusName }, index) => {
             return (
               <div
