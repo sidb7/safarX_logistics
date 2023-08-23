@@ -49,7 +49,7 @@ const InputWithFileUpload = (props: propTypes) => {
           required={isRequired}
           title="inputBox"
           onChange={onChange}
-          id="pranay"
+          id="fileName"
           // value={value}
         />
         <label
@@ -58,7 +58,7 @@ const InputWithFileUpload = (props: propTypes) => {
           {label}
         </label>
 
-        <div className="flex justify-center items-center  gap-2 ">
+        <div className="flex justify-center items-center  gap-2 z-[1]">
           <img
             src={imgSrc ? imgSrc : UploadFileIcon}
             alt=""

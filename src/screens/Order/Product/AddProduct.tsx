@@ -22,10 +22,8 @@ import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
 import { POST } from "../../../utils/webService";
 import { FILE_UPLOAD, POST_PRODUCT_URL } from "../../../utils/ApiUrls";
-// import UploadButton from "./CustomUploadButton";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
-import { convertToObject } from "typescript";
 
 interface IProductFilledProps {}
 
@@ -115,8 +113,10 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       reviews: [],
     };
     const { data: response } = await POST(POST_PRODUCT_URL, payload);
-    let a = window.document.getElementById("pranay") as HTMLInputElement;
-    a.value = "";
+    let fileName = window.document.getElementById(
+      "fileName"
+    ) as HTMLInputElement;
+    fileName.value = "";
     if (response?.success) {
       toast.success(response?.message);
       setSuccessProduct(true);
@@ -222,15 +222,15 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
           <img src={backArrow} alt="" className="w-6 h-6" />
           <p className="text-2xl font-Lato font-semibold">Add New Order</p>
         </div>
-        <div className="mb-8 mt-4">
+        <div className="my-8 ">
           <Stepper steps={steps} />
         </div>
 
-        <div className="flex gap-2 mb-8">
+        <div className="flex gap-2 my-5">
           <img src={ProductIcon} alt="Product Icon" className="" />
           <h1 className="font-bold leading-6 text-lg font-Lato">Product</h1>
         </div>
-        <div className="flex gap-x-6">
+        <div className="flex gap-x-6 my-5">
           {addedProductData.map((product: any, i: number) => {
             return (
               <>
@@ -238,7 +238,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   <div key={i}>
                     <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
                       <div className="">
-                        <h2 className="text-[#004EFF] text-sm font-bold leading-18px font-Lato">
+                        <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
                           Product {i + 1}
                         </h2>
                       </div>
@@ -284,7 +284,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         >
           <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
             <div className="">
-              <h2 className="text-[#004EFF] text-sm font-bold leading-18px font-Lato">
+              <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
                 Product {addedProductData.length + 1}
               </h2>
             </div>
@@ -376,15 +376,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
             <InputWithFileUpload
               type="file"
               onChange={(e) => uploadedInputFile(e)}
-              // value="suresh"
-              // uploadText={productState?.productImage}
-
-              // value={
-              //   productState?.productImage ? productState?.productImage : ""
-              // }
             />
           </div>
-          <div className="text-gray-400	text-xs	mt-3">
+          <div className="text-gray-400	text-xs	mt-3 lg:hidden">
             <p>Volumetric weight includes dimensions of the product</p>
           </div>
 
