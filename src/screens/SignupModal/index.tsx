@@ -3,7 +3,7 @@ import BackArrowIcon from "../../assets/backArrow.svg";
 import CustomButton from "../../components/Button";
 import downArrow from "../../assets/BulkOrder/downArrow.svg";
 import uploadIcon from "../../assets/BulkOrder/uploadIcon.svg";
-import NavBar from "../../layout/NavBar";
+import NavBar from "../../layout/Old_NavBar";
 import CustomBottomModal from "../../components/CustomModal/customBottomModal";
 import Signup from "./signup";
 import MobileVerification from "./mobileVerification";

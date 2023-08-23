@@ -29,6 +29,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
+import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
 
 import {
   dummyPickupDropdownData,
@@ -45,8 +46,11 @@ import { format, parse } from "date-fns";
 import Stepper from "../../../components/Stepper";
 import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { toast } from "react-toastify";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -98,7 +102,7 @@ const Index = () => {
     city: "",
     state: "",
     country: "",
-    addressType: "",
+    addressType: "warehouse",
   });
 
   const [contact, setContact] = useState({
@@ -231,15 +235,17 @@ const Index = () => {
   console.log("contact", contact);
   console.log("customBranding", customBranding);
 
+  console.log("locateAddress", locateAddress);
+
   const handlePickupTimeSelected = (pickupTime: string) => {
     console.log("Selected Pickup Time:", pickupTime);
     setPickupDate(pickupTime);
   };
   console.log("pickupdate", pickupDate);
 
-  const pickupDateForEpoch = "18/08/2023 11:00 AM";
+  // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
-  const editedPickupDateForEpoch = pickupDate.substring(0, 20);
+  const editedPickupDateForEpoch = pickupDate.substring(0, 19);
   console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
@@ -253,17 +259,52 @@ const Index = () => {
 
   console.log("epochPickupDate", epochPickupDate);
 
-  const postPickupOrderDetails = async () => {
+  const payload = {
+    pickupLocation: {
+      flatNo: pickupLocation.flatNo,
+      address: locateAddress,
+      sector: pickupLocation.sector,
+      landmark: pickupLocation.landmark,
+      pincode: pickupLocation.pincode,
+      city: pickupLocation.city,
+      state: pickupLocation.state,
+      country: pickupLocation.country,
+      addressType: pickupLocation.addressType,
+      contact: {
+        name: contact.name,
+        mobileNo: contact.mobileNo,
+        alternateMobileNo: contact.alternateMobileNo,
+        emailId: contact.emailId,
+        type: contact.type,
+      },
+      customBranding: {
+        name: customBranding.name,
+        logo: customBranding.logo,
+        address: customBranding.address,
+        contact: {
+          name: customBranding.contact.name,
+          mobileNo: customBranding.contact.mobileNo,
+        },
+      },
+      pickupDate: epochPickupDate,
+    },
+  };
+  console.log("payload", payload);
+
+  const postPickupOrderDetails = async (payload: any) => {
     try {
-      let { data } = await POST("apiendpoint", pickupAddress);
-      navigate("/neworder/delivery");
-      if (data?.success) {
+      const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
+
+      if (response?.success) {
+        toast.success(response?.message);
+        navigate("/neworder/delivery");
       } else {
         console.error("PickupDataerror");
-        // toast.error(data?.message);
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in editServiceAPI", error);
+      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
+      return error;
     }
   };
 
@@ -301,11 +342,11 @@ const Index = () => {
   ];
 
   return (
-    <div>
+    <div className="h-full">
       {/* <header className="fixed top-0 z-50 w-full ">
         <NavBar />
       </header> */}
-      <div>
+      {/* <div>
         <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
           <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
           <span className="font-normal text-[14px] text-[#777777] mr-1">/</span>
@@ -322,7 +363,15 @@ const Index = () => {
             Add new order
           </p>
         </div>
+      </div> */}
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+        <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
+          Order
+        </span>
       </div>
+      <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
@@ -390,7 +439,8 @@ const Index = () => {
                 value={pastedData}
                 onPaste={handlePaste}
                 onChange={handleChange}
-                className="custom-input"
+                className="magicAddressInput"
+                // className="custom-input"
                 style={{
                   position: "absolute",
                   border: "none",
@@ -402,7 +452,7 @@ const Index = () => {
                   // top: "-10px",
                 }}
                 placeholder="Paste Address for the Magic"
-                title="inputBox"
+                title=""
               />
 
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
@@ -419,7 +469,10 @@ const Index = () => {
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
             value={locateAddress}
-            onChange={(e) => setLocateAddress(e.target.value)}
+            onChange={(e) => {
+              setLocateAddress(e.target.value);
+              handlePickupLocationChange("address", e.target.value);
+            }}
             onClick={() => {
               isItLgScreen
                 ? setIsLocationRightModal(true)
@@ -544,7 +597,9 @@ const Index = () => {
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p className="lg:font-semibold lg:text-[14px] ">Office</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Office
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -562,7 +617,9 @@ const Index = () => {
             }}
           >
             <img src={LocationIcon} alt="Other" />
-            <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Warehouse
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -580,7 +637,9 @@ const Index = () => {
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p className="lg:font-semibold lg:text-[14px] ">Other</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Other
+            </p>
           </div>
         </div>
 
@@ -707,8 +766,8 @@ const Index = () => {
 
         <div className="hidden lg:block mb-7"></div>
 
-        <div className="mb-7">
-          <div className="flex flex-col">
+        <div className="mb-7 flex justify-end ">
+          <div className="flex flex-col  w-[392px] h-[140px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
                 toggleStatus
@@ -724,7 +783,10 @@ const Index = () => {
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[16px] py-[8px]`}
+                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
+                  onClick={() => {
+                    setToggleStatus(!toggleStatus);
+                  }}
                 >
                   <Switch
                     onChange={() => {
@@ -735,14 +797,14 @@ const Index = () => {
                     onHandleColor="#7CCA62"
                     offColor="#FFFFF"
                     offHandleColor="#F35838"
-                    handleDiameter={12}
+                    handleDiameter={4}
                     uncheckedIcon={false}
                     checkedIcon={false}
-                    height={16}
-                    width={32}
+                    height={8}
+                    width={14}
                   />
 
-                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] ">
+                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
                     {toggleStatus ? "ACTIVE" : "DEACTIVE"}
                   </p>
                 </button>
@@ -758,37 +820,37 @@ const Index = () => {
             {toggleStatus && (
               <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
-                  <p className="text-[10px] text-[#777777] font-normal ">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name and Logo
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C] ">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C] ">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Name
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8]">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Address
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Number
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
@@ -886,6 +948,25 @@ const Index = () => {
           onClick={() => setIsSaveContactRightModal(false)}
         />
       </RightSideModal>
+
+      {/* <div
+        className={`  ${
+          isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+        }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+      >
+        <ServiceButton
+          text="NEXT"
+          className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-16"
+          onClick={() => {
+            postPickupOrderDetails(payload);
+          }}
+        />
+      </div> */}
+
+      <BottomLayout
+        callApi={() => postPickupOrderDetails(payload)}
+        Button2Name={true}
+      />
 
       {/* <footer className="w-full fixed  bottom-0 z-[10]">
         <div

@@ -4,9 +4,9 @@
     color: white;
 }
 
-.custom-input::placeholder {
+.magicAddressInput::placeholder {
     position: absolute;
-    top: 0;
+    top: 5px;
     left: 10px;
    
     text-align: left;

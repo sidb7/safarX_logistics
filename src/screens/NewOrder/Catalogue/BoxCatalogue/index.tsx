@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import ProductBox from "./productBox";
 import ItemIcon from "../../../../assets/CargoRating .svg";
 import BackArrowIcon from "../../../../assets/backArrow.svg";

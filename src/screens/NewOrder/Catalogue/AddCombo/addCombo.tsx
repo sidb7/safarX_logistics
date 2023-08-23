@@ -1,4 +1,4 @@
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrow from "../../../../assets/Catalogue/backBTN.svg";
 import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 import ButtonIcon from "../../../../assets/Product/Button.svg";

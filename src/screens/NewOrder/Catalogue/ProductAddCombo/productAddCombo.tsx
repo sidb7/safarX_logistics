@@ -1,4 +1,4 @@
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrowIcon from "../../../../assets/backArrow.svg";
 import InputBox from "../../../../components/InputBox/index";
 import CustomDropDown from "../../../../components/DropDown";

@@ -1,0 +1,104 @@
+import { useEffect, useRef, useState } from "react";
+import InputWithImage from "../../components/InputWithImage/InputWithImage";
+import PowerBoosterlogo from "../../assets/powerbooster.svg";
+import ProfileLogo from "../../assets/Navbar/Essential.svg";
+import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
+import SearchIcon from "../../assets/Search.svg";
+import CustomButton from "../../components/Button/index";
+
+interface ITopBarProps {}
+
+const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
+  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<any>();
+
+  const handleOutsideClick = (event: any) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsOpen(false);
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, []);
+
+  return (
+    <>
+      <nav
+        className="p-3 grid justify-items-stretch items-center w-full box_shadow"
+        style={{
+          boxShadow: "0px 4px 6px 0px rgba(0, 0, 0, 0.04)",
+        }}
+      >
+        <div className="justify-self-end flex items-center gap-3">
+          <InputWithImage
+            imgSrc={SearchIcon}
+            inputClassName="!w-80"
+            placeholder="Search"
+          />
+          <CustomButton
+            icon={PowerBoosterlogo}
+            showIcon={true}
+            onlyIcon={true}
+            className="bg-white !w-12"
+            text={""}
+            onClick={() => {}}
+          />
+          <div
+            className="relative cursor-pointer col-span-1"
+            ref={dropdownRef}
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <CustomButton
+              icon={ProfileLogo}
+              showIcon={true}
+              onlyIcon={true}
+              className="bg-white w-fit "
+              text={""}
+              onClick={() => {}}
+            />
+            {/* <img src={ProfileLogo} alt="" /> */}
+            {isOpen && (
+              <div
+                className="origin-top-right absolute right-4 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="options-menu"
+              >
+                <div className="py-1" role="none">
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Your Profile
+                  </button>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                  >
+                    Settings
+                  </button>
+                  <button
+                    className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                    onClick={() => {
+                      clearLocalStorage();
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    </>
+  );
+};
+
+export default TopBar;
