@@ -3,7 +3,7 @@ import CompanyLogo from "../../assets/webshipyaarilogo.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import downArrow from "../../assets/downwardArrow.svg";
 import CustomButton from "../../components/Button";
-import CloseIcon from "../../assets/Navbar/closeIcon.svg";
+import CloseMenu from "../../assets/Navbar/closeMenu.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GetCurrentPath } from "../../utils/utility";
 import { ResponsiveState } from "../../utils/responsiveState";
@@ -566,8 +566,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               Menu
             </p>
             <img
-              className="cursor-pointer"
-              src={CloseIcon}
+              className="cursor-pointer !w-6 !h-6"
+              src={CloseMenu}
               alt=""
               onClick={() => setMobileSideBar(false)}
             />
