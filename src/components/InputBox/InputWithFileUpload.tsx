@@ -3,7 +3,8 @@ import UploadFileIcon from "../../assets/common/Upload.svg";
 
 interface propTypes {
   label?: string;
-  value?: string | number;
+  // value?: string | number;
+  value?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
@@ -35,7 +36,7 @@ const InputWithFileUpload = (props: propTypes) => {
     isRequired = false,
     imgSrc,
     type,
-    uploadText,
+    uploadText = "",
   } = props;
 
   return (
@@ -47,6 +48,9 @@ const InputWithFileUpload = (props: propTypes) => {
           className={`${className}  rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input`}
           required={isRequired}
           title="inputBox"
+          onChange={onChange}
+          id="pranay"
+          // value={value}
         />
         <label
           className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4  custom-label ${labelClassName}`}
