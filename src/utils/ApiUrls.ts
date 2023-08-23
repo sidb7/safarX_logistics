@@ -68,7 +68,13 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 //NewOrder URLs
 const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
 const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
-const GET_COURIER_PARTNER_SERVICE= `${PARTNER_BASE_URL}/partnerServices/getCourierPartnerService`;
+const GET_COURIER_PARTNER_SERVICE= `${SELLER_BASE_URL}/revenueRateCards/getRevenueRate`;
+const GET_LATEST_ORDER= `${SELLER_URL}/api/v1/order/getLatestOrder`;
+
+
+
+
+
 
 
 export {
@@ -96,5 +102,6 @@ export {
   DELETE_SELLER,
   ADD_PICKUP_LOCATION,
   ADD_DELIVERY_LOCATION,
-  GET_COURIER_PARTNER_SERVICE
+  GET_COURIER_PARTNER_SERVICE,
+  GET_LATEST_ORDER
 };

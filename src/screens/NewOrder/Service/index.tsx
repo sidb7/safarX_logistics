@@ -11,7 +11,13 @@ import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import "../../../styles/radioButtonForServiceCard.css";
 import { POST } from "../../../utils/webService";
-import { GET_COURIER_PARTNER_SERVICE } from "../../../utils/ApiUrls";
+import {
+  GET_COURIER_PARTNER_SERVICE,
+  GET_LATEST_ORDER,
+} from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const RecommendedServiceData = [
   {
@@ -134,6 +140,8 @@ const Index: React.FC = () => {
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [response, setResponse] = useState([]);
+  const [latestOrder, setLatestOrder] = useState([]);
+  const navigate = useNavigate();
 
   console.log("selectedService", selectedService);
 
@@ -143,9 +151,54 @@ const Index: React.FC = () => {
   const dataArray = (response as any).data;
   console.log("dataArray", dataArray);
 
+  //endpoint to maintain order state
+  const getLatestOrderDetails = async () => {
+    try {
+      const { data: response } = await POST(GET_LATEST_ORDER);
+
+      if (response?.success) {
+        // const recommended = response.filter(
+        //   (item: any) => item?.isRecommendation
+        // );
+        // const filter = response.filter((item: any) => !item?.isRecommendation);
+
+        setLatestOrder(response);
+        // setFilterData(filter);
+      } else {
+        setLatestOrder([]);
+        // toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getLatestOrderDetails();
+  }, []);
+
+  const pincodePayload = {};
+
+  //zoneAPI to be hit on Partner
+  //payload for zoneAPI
+
+  //getserviceAPI
+  const getServiceDetailsPayload = {
+    zone: "zone 1",
+    accountType: "B2C",
+    weight: 1.5,
+    invoiceValue: 50000,
+    paymentType: "COD",
+    pincodeFrom: 400012,
+    pincodeTo: 400099,
+  };
+
   const getCourierPartnerService = async () => {
     try {
-      const { data: response } = await POST(GET_COURIER_PARTNER_SERVICE);
+      const { data: response } = await POST(
+        GET_COURIER_PARTNER_SERVICE,
+        getServiceDetailsPayload
+      );
 
       if (response?.success) {
         // const recommended = response.filter(
@@ -170,6 +223,24 @@ const Index: React.FC = () => {
 
   const handleServiceSelection = (serviceDetails: any) => {
     setSelectedService(serviceDetails);
+  };
+
+  const postServiceDetailsPayload = {};
+  const postServiceDetails = async (payload: any) => {
+    try {
+      const { data: response } = await POST("", postServiceDetailsPayload);
+
+      if (response?.success) {
+        toast.success(response?.message);
+        navigate("/neworder/payment");
+      } else {
+        console.error("Serviceerror");
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.log("Error in  ServicePostAPI, error");
+      return error;
+    }
   };
 
   const selectedServiceData = dataArray?.find(
