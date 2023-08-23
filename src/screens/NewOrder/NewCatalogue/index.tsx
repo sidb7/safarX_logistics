@@ -4,12 +4,13 @@ import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
 import AddressBook from "./AddressBook";
 import ProductCatalogue from "./ProductCatalogue/index";
+import BoxCatalogue from "./BoxCatalogue";
 
 const Catalogue = () => {
   const [tabName, setTabName] = useState([
     {
       statusName: "Channel Integration",
-      active: false,
+      active: true,
     },
     {
       statusName: "Address Book",
@@ -17,7 +18,7 @@ const Catalogue = () => {
     },
     {
       statusName: "Product Catalogue",
-      active: true,
+      active: false,
     },
     {
       statusName: "Box Catalogue",
@@ -35,6 +36,8 @@ const Catalogue = () => {
       return <AddressBook />;
     } else if (activeTabName?.statusName === "Product Catalogue") {
       return <ProductCatalogue />;
+    } else if (activeTabName?.statusName === "Box Catalogue") {
+      return <BoxCatalogue />;
     }
   };
 
