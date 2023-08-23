@@ -63,8 +63,7 @@ const AddressBook = () => {
       {filterComponent()}
 
       {/* Display Address */}
-      <div className="grid grid-cols-3 gap-y-6 gap-x-0 mt-4">
-
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
         <AddressCard cardData={cardData} key="132213" />
         <AddressCard cardData={cardData} key="132213" />
         <AddressCard cardData={cardData} key="132213" />

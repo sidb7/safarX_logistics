@@ -3,6 +3,7 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
 import AddressBook from "./AddressBook";
+import ProductCatalogue from "./ProductCatalogue/index";
 
 const Catalogue = () => {
   const [tabName, setTabName] = useState([
@@ -12,11 +13,11 @@ const Catalogue = () => {
     },
     {
       statusName: "Address Book",
-      active: true,
+      active: false,
     },
     {
       statusName: "Product Catalogue",
-      active: false,
+      active: true,
     },
     {
       statusName: "Box Catalogue",
@@ -32,6 +33,8 @@ const Catalogue = () => {
       return <ChannelIntegration />;
     } else if (activeTabName?.statusName === "Address Book") {
       return <AddressBook />;
+    } else if (activeTabName?.statusName === "Product Catalogue") {
+      return <ProductCatalogue />;
     }
   };
 
