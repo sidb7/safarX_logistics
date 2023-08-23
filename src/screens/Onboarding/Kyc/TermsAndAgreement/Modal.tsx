@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
-import TickIcon from "../../../../assets/Payment/Done.gif";
+// import TickIcon from "../../../../assets/Payment/Done.gif";
 import TickGif from "../../../../assets/tick.gif";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
