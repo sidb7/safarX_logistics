@@ -4,7 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
 
 import {

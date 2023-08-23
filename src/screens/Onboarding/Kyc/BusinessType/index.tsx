@@ -4,7 +4,7 @@ import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 // import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
