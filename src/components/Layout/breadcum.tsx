@@ -11,7 +11,7 @@ export const Breadcum = ({ label }: IBreadcumProps) => {
       <img
         src={BackArrowIcon}
         alt=""
-        className="lg:w-[16px]"
+        className="lg:w-[16px] cursor-pointer"
         onClick={() => navigate(-1)}
       />
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrow from "../../../../assets/Catalogue/backBTN.svg";
 import CardsWithScroll from "./CardsWithScroll";
 import { dummyChannelIntegrationData } from "../../../../utils/dummyData";
