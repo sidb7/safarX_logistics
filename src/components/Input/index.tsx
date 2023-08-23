@@ -13,7 +13,7 @@ interface propTypes {
   isDisabled?: boolean;
   inputType?: string;
   isRequired?: boolean;
-  maxLength?: number
+  maxLength?: number;
 }
 
 const CustomInputBox = (props: propTypes) => {

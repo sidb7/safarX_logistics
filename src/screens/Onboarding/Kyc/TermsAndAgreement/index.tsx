@@ -7,6 +7,9 @@ import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
 import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
+import { POST } from "../../../../utils/webService";
+import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
+import { useSelector } from "react-redux";
 
 interface ITypeProps {}
 
@@ -16,6 +19,25 @@ export const ServiceComponent = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
+
+  const acceptTnC = useSelector((state: any) => state?.onboarding.acceptTnC);
+
+  const acceptService = async () => {
+    try {
+      const payload = {
+        accepted: checkbox,
+        version: "1.0.0",
+        acceptNoGST: acceptTnC,
+        noGSTVersion: "1.0.0",
+      };
+      const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
+      if (response?.success) {
+        navigate("/onboarding/kyc-modal");
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   const BottomButton = () => {
     return (
@@ -38,7 +60,7 @@ export const ServiceComponent = (props: ITypeProps) => {
           }`}
           disabled={!checkbox}
           onClick={() => {
-            navigate("/onboarding/kyc-modal");
+            acceptService();
           }}
         />
       </div>
