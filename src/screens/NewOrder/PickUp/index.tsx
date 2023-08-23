@@ -342,7 +342,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="h-full">
+    <div>
       {/* <header className="fixed top-0 z-50 w-full ">
         <NavBar />
       </header> */}
@@ -364,7 +364,7 @@ const Index = () => {
           </p>
         </div>
       </div> */}
-      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
         <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
         <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
         <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
