@@ -11,7 +11,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
       <main className="h-screen">
         <NavBar />
         <TopBar />
-        <main className="ml-12 p-6 h-[calc(100vh-74px)] overflow-auto">
+        <main className=" lg:ml-16 lg:pl-2 h-[calc(100vh-74px)] overflow-auto">
           <Outlet />
         </main>
       </main>

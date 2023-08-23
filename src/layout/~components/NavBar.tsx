@@ -428,7 +428,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       <nav
         onMouseEnter={() => handleOpner()}
         onMouseLeave={() => handleClose()}
-        className={`absolute cursor-pointer flex flex-col h-full gap-2 p-4 items-center bg-white z-50 rounded-r-lg overflow-scroll`}
+        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 items-center bg-white z-50 rounded-r-lg overflow-scroll`}
         style={{
           boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
           transition: `width .2s `,
