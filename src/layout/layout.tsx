@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import SearchIcon from "../assets/Search.svg";
 import PowerBoosterlogo from "../assets/powerbooster.svg";
-import ProfileLogo from "../assets/Navbar/Essential.svg";
+import ProfileLogo from "../assets/Navbar/essential.svg";
 import NavBar from "./Old_NavBar";
 import Sidebar from "./hoverSideBar";
 import { clearLocalStorage } from "../utils/utility";

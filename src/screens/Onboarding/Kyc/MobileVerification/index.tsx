@@ -5,7 +5,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import MobileVerificationIcon from "../../../../assets/common/MobileVerify.gif";
 import { useLocation, useNavigate } from "react-router-dom";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CustomInputBox from "../../../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
 import { setOTPNumber } from "../../../../redux/reducers/onboarding";

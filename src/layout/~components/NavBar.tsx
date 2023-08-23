@@ -1,12 +1,17 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import CompanyLogo from "../../assets/webshipyaarilogo.svg";
-import BigCompanyLogo from "../../assets/ShipyaariLogos.svg";
+import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import downArrow from "../../assets/downwardArrow.svg";
 import CustomButton from "../../components/Button";
+import CloseIcon from "../../assets/Navbar/closeIcon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GetCurrentPath } from "../../utils/utility";
+import { ResponsiveState } from "../../utils/responsiveState";
 
-interface INavBarProps {}
+interface INavBarProps {
+  openMobileSideBar: any;
+  setMobileSideBar: any;
+}
 const data = [
   {
     id: "1",
@@ -204,7 +209,7 @@ const data = [
         ],
       },
     ],
-    icon: "Orders",
+    icon: "orders",
   },
   {
     id: "14",
@@ -325,10 +330,19 @@ const data = [
   },
 ];
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
+  const { openMobileSideBar, setMobileSideBar } = props;
+  const { isLgScreen } = ResponsiveState();
   const navigate = useNavigate();
   const location = useLocation();
   const [isHover, setIsHover]: any = useState(false);
   const [sideBarMenus, setSideBarMenus]: any = useState(data);
+  const conditinalClass = {
+    width: `${isHover ? "25rem" : "75px"}`,
+    backdropFilter: `${
+      isHover ? "blur(2px) opacity(1)" : "blur(0px) opacity(0)"
+    }`,
+    mobileWidth: `${openMobileSideBar ? "100%" : "0"}`,
+  };
 
   useEffect(() => {
     let tempArr = sideBarMenus;
@@ -351,6 +365,28 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     setSideBarMenus([...tempArr]);
   }, []);
 
+  useEffect(() => {
+    console.log("location", location);
+    let tempArr = sideBarMenus;
+    tempArr.forEach((e: any) => {
+      if (e.menu) {
+        if (e.isActivePath) e.isActivePath = !e.isActivePath;
+        e.menu.forEach((e1: any) => {
+          if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
+          if (location.pathname === e1.path) {
+            e1.isActivePath = true;
+            e.isActivePath = true;
+          }
+          if (e1.menu.menu) {
+            e1.menu.menu.foEach((e2: any) => {
+              if (e2.isActivePath) e2.isActivePath = !e2.isActivePath;
+            });
+          }
+        });
+      }
+    });
+  }, [location]);
+
   const setIsActivePath = (index: number, childIndex: number, path: any) => {
     let tempArr = sideBarMenus;
     tempArr.forEach((e: any) => {
@@ -369,32 +405,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     tempArr[index].isActivePath = true;
     tempArr[index].menu[childIndex].isActivePath = true;
     setSideBarMenus([...tempArr]);
+    if (!isLgScreen) {
+      setMobileSideBar(false);
+      handleClose();
+    }
     navigate(path);
-  };
-
-  useEffect(() => {
-    console.log("location", location);
-    let tempArr = sideBarMenus;
-    tempArr.forEach((e: any) => {
-      if (e.menu) {
-        e.menu.forEach((e1: any) => {
-          if (location.pathname === e1.path) {
-            e1.isActivePath = true;
-            e.isActivePath = true;
-          }
-          if (e1.menu.menu) {
-            e1.menu.menu.foEach((e2: any) => {});
-          }
-        });
-      }
-    });
-  }, [location]);
-
-  const conditinalClass = {
-    width: `${isHover ? "25rem" : "75px"}`,
-    backdropFilter: `${
-      isHover ? "blur(2px) opacity(1)" : "blur(0px) opacity(0)"
-    }`,
   };
 
   const opneAndCloseChild = (index: number, toggle: boolean) => {
@@ -426,25 +441,26 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   return (
     <>
       <nav
-        onMouseEnter={() => handleOpner()}
-        onMouseLeave={() => handleClose()}
-        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 items-center bg-white z-50 rounded-r-lg overflow-scroll`}
+        onMouseEnter={handleOpner}
+        onMouseLeave={handleClose}
+        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-50 rounded-r-lg overflow-scroll`}
         style={{
           boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
-          transition: `width .2s `,
+          transition: `all .2s `,
           transitionTimingFunction: "ease-in-out",
           width: conditinalClass.width,
         }}
       >
-        <div className="!h-10">
+        <div className="flex w-full !h-10 mb-6">
           {isHover ? (
-            <img src={BigCompanyLogo} alt="" className="!w-32 !h-8" />
+            <img src={ShipyaariLogo} alt="" className="!w-32 !h-8" />
           ) : (
             <img src={CompanyLogo} alt="" />
           )}
         </div>
         {sideBarMenus.map((e: any, index: number) => {
-          const iconPath = require(`../../assets/Navbar/${e.icon}.svg`);
+          let iconName = e.icon.toLowerCase();
+          const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
           return (
             <div className="w-full flex-col">
               <div
@@ -462,7 +478,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                 />
                 {isHover ? (
                   <div
-                    className={` flex items-center justify-between w-full text-base font-semibold leading-5 font-Open capitalize overflow-hidden`}
+                    className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize overflow-hidden`}
                   >
                     <p
                       className={`px-2 whitespace-nowrap ${
@@ -529,10 +545,91 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           transitionTimingFunction: "ease-in-out",
           backdropFilter: conditinalClass.backdropFilter,
         }}
-        className={`fixed h-screen z-10 top-0 left-0" ${
+        className={`fixed h-screen  z-10 top-0 left-0" ${
           isHover ? "w-full" : "w-0"
         } `}
       ></div>
+
+      {/* Mobile Nav Bar */}
+      <>
+        <nav
+          className={`lg:hidden absolute  h-full font-Open bg-white z-50 overflow-scroll`}
+          style={{
+            boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+            transition: `all .2s `,
+            transitionTimingFunction: "ease-in-out",
+            width: conditinalClass.mobileWidth,
+          }}
+        >
+          <div className="py-3 pl-6 pr-3 flex justify-between ">
+            <p className="text-base font-semibold leading-5 capitalize ">
+              Menu
+            </p>
+            <img
+              className="cursor-pointer"
+              src={CloseIcon}
+              alt=""
+              onClick={() => setMobileSideBar(false)}
+            />
+          </div>
+          <div>
+            {sideBarMenus.map((e: any, index: number) => {
+              let iconName = e.icon.toLowerCase();
+              const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
+              return (
+                <>
+                  <div className="w-full flex-col px-6 py-4">
+                    <div
+                      className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
+                      onClick={() => {
+                        opneAndCloseChild(index, e.isChild);
+                      }}
+                    >
+                      <img src={iconPath} alt="" />
+                      <div
+                        className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                      >
+                        <p className={` whitespace-nowrap`}>{e.name}</p>
+
+                        <div className={` flex items-center gap-2`}>
+                          <CustomButton
+                            icon={downArrow}
+                            showIcon={true}
+                            onlyIcon={true}
+                            className={`
+                            bg-white w-fit !p-0 !h-fit`}
+                            text={""}
+                            onClick={() => {}}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    {e.isChild ? (
+                      <div className="flex flex-col overflow-hidden ">
+                        {e.menu.map((child: any, childIndex: number) => {
+                          return (
+                            <div
+                              className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
+                              onClick={() =>
+                                setIsActivePath(index, childIndex, child.path)
+                              }
+                            >
+                              {child.name}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <hr />
+                </>
+              );
+            })}
+          </div>
+        </nav>
+      </>
     </>
   );
 };
