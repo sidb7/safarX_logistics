@@ -767,15 +767,15 @@ const Index = () => {
         <div className="hidden lg:block mb-7"></div>
 
         <div className="mb-7  flex justify-end ">
-          <div className="flex flex-col  w-[392px] h-[140px] ">
+          <div className="flex flex-col  w-[372px] h-[134px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
                 toggleStatus
-                  ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                  ? "bg-[#E8E8E8] rounded-tr-lg w-[372px] h-[44px] rounded-tl-lg border-[1px]"
                   : "shadow-md rounded "
               }`}
             >
-              <h1 className="self-center justify-start text-[14px] font-semibold text-[#1C1C1C] lg:text-base ">
+              <h1 className="self-center justify-start text-[14px] font-semibold font-Open text-[#1C1C1C] lg:text-base ">
                 Custom Branding
               </h1>
 
