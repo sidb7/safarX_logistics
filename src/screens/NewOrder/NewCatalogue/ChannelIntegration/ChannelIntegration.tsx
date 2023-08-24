@@ -10,7 +10,7 @@ import Header from "./Header";
 const ChannelIntegration = () => {
   return (
     <div className="">
-      <div className="mt-4">
+      <div className="mt-6">
         <Header title={ChannelIntegrationCarts.title} />
         <div className="flex gap-x-4 overflow-x-auto ">
           {ChannelIntegrationCarts.channels.map((eachChannel, index) => {

@@ -2,6 +2,12 @@ import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
+import AddressBook from "./AddressBook";
+import ProductCatalogue from "./ProductCatalogue/index";
+import BoxCatalogue from "./BoxCatalogue";
+import CustomButton from "../../../components/Button";
+import addIcon from "../../../assets/Catalogue/add.svg";
+import AddOrder from "../../../assets/Catalogue/add_order.svg";
 
 const Catalogue = () => {
   const [tabName, setTabName] = useState([
@@ -30,41 +36,83 @@ const Catalogue = () => {
     if (activeTabName?.statusName === "Channel Integration") {
       return <ChannelIntegration />;
     } else if (activeTabName?.statusName === "Address Book") {
-      return <div>Address Book</div>;
+      return <AddressBook />;
+    } else if (activeTabName?.statusName === "Product Catalogue") {
+      return <ProductCatalogue />;
+    } else if (activeTabName?.statusName === "Box Catalogue") {
+      return <BoxCatalogue />;
+    }
+  };
+
+  const renderHeaderComponent = () => {
+    const activeTabName = tabName.find((singleTab) => {
+      return singleTab.active === true;
+    });
+    if (activeTabName?.statusName === "Address Book") {
+      return <CustomButton
+            icon={addIcon}
+            showIcon={true}
+            text={"ADD ADDRESS"}
+            className="!p-3"
+            onClick={() => {}}
+          />;
+    } else if (activeTabName?.statusName === "Product Catalogue") {
+      return (
+        <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"ADD PRODUCT"}
+          className="!p-3"
+          onClick={() => {}}
+        />
+      );
+    } else if (activeTabName?.statusName === "Box Catalogue") {
+      return (
+        <CustomButton
+          icon={AddOrder}
+          showIcon={true}
+          text={"UPLOAD"}
+          className="!p-4"
+          onClick={() => {}}
+        />
+      );
     }
   };
 
   return (
-    <div className="overflow-y-auto h-[calc(100%-50px)]">
-      <Breadcum label="Catalogue" />
-      <div className="mt-4 mx-4">
-        <div className="flex flex-row gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
-          {tabName.map(({ statusName }, index) => {
+    <div className="overflow-y-auto h-[calc(100%-75px)]">
+      <Breadcum
+        label="Catalogue"
+        component={
+          renderHeaderComponent()
+        }
+      />
+      <div className="mt-4 mx-6">
+        <div className="flex flex-row overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
+          {tabName.map(({ statusName, active }, index) => {
             return (
               <div
                 className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 
-                  ${
-                    ""
-                    // catalogueState?.channelName === statusName
-                    //   && "!border-[#004EFF]"
-                  }
+                  ${active && "!border-[#004EFF]"}
                   `}
-                // onClick={() => {
-                //   tabName.forEach((singleTab, index) => {
-                //     if(){
-
-                //     }
-                //   })
-                // }}
+                onClick={() => {
+                  const updatedTab = tabName.map((singleTab, updateIndex) => {
+                    const singleObject = {
+                      statusName: singleTab.statusName,
+                      active: false,
+                    };
+                    if (index === updateIndex) {
+                      singleObject.active = true;
+                    }
+                    return singleObject;
+                  });
+                  setTabName(updatedTab);
+                }}
                 key={index}
               >
                 <span
                   className={`text-[#777777] text-[14px] lg:text-[18px] 
-                    ${
-                      ""
-                      // catalogueState?.channelName === statusName
-                      //   && "!text-[#004EFF] lg:text-[18px]"
-                    }
+                    ${active && "!text-[#004EFF] lg:text-[18px]"}
                     `}
                 >
                   {statusName}
