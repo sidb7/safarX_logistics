@@ -6,6 +6,8 @@ import subtractIcon from "../../../assets/Product/subtract-circle.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
+// import { POST } from "../../../utils/webService";
+// import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 
 const BoxDetails = () => {
   return (
