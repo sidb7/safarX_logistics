@@ -27,7 +27,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
         <span className="font-medium mt-2">{packageType}</span>
         <div className="flex">
           <span className="font-medium">{weight}</span>
-          <span className="pl-1">{`Kg | ${dimension} cm`}</span>
+          <span className="pl-1">{` | ${dimension} `}</span>
         </div>
         <span className="text-gray-400">{boxType}</span>
       </div>
