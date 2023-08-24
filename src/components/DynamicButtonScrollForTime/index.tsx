@@ -17,7 +17,7 @@ const index = (props: IProps) => {
         <button
           key={index}
           className={`flex items-center justify-center border-[1px] w-[168px] h-[35px] rounded text-[14px] font-semibold ${
-            selectedDay === "today"
+            selectedDay === "today" || selectedDay === "tomorrow"
               ? "text-[#1C1C1C] border-[#A4A4A4] bg-[#FEFEFE]"
               : "text-[#A4A4A4] border-[#A4A4A4] bg-[#FEFEFE]"
           } ${

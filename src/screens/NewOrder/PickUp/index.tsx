@@ -51,6 +51,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import LandmarkContent from "./landmarkContent";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ const Index = () => {
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
   const [footer, setFooter] = useState(true);
-
+  const [customLandmark, setCustomLandmark] = useState("");
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
   // const { address } = useAppSelector((state) => state.map);
@@ -110,7 +111,7 @@ const Index = () => {
     mobileNo: "",
     alternateMobileNo: "",
     emailId: "",
-    type: "",
+    type: "warehouse associate",
   });
 
   const [customBranding, setCustomBranding] = useState({
@@ -243,6 +244,11 @@ const Index = () => {
   };
   console.log("pickupdate", pickupDate);
 
+  const handleLandmarkSelected = (landmark: string) => {
+    console.log("CustomLandmark:", landmark);
+    setCustomLandmark(landmark);
+  };
+  console.log("CustomLandmark:", customLandmark);
   // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
@@ -342,7 +348,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="h-full">
+    <div className="w-full">
       {/* <header className="fixed top-0 z-50 w-full ">
         <NavBar />
       </header> */}
@@ -364,7 +370,7 @@ const Index = () => {
           </p>
         </div>
       </div> */}
-      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
         <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
         <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
         <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
@@ -501,7 +507,8 @@ const Index = () => {
           />
         </div>
 
-        <div className="mb-4 lg:mb-6 lg:mr-6">
+        {/* Landmark with dropdown commented */}
+        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -514,6 +521,16 @@ const Index = () => {
               }
             }}
             options={dummyPickupDropdownData}
+          />
+        </div> */}
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Landmark"
+            value={pickupLocation.landmark}
+            onChange={(e) =>
+              handlePickupLocationChange("landmark", e.target.value)
+            }
           />
         </div>
 
@@ -538,7 +555,27 @@ const Index = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Country"
+            value={pickupLocation.country}
+            onChange={(e) =>
+              handlePickupLocationChange("country", e.target.value)
+            }
+          />
+        </div>
+
+        {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="State"
             value={pickupLocation.state}
@@ -555,15 +592,15 @@ const Index = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
 
-        <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+        {/* <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="State" />
         </div>
 
         <div className="hidden lg:block mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Country" />
-        </div>
+        </div> */}
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <AudioInputBox
@@ -766,16 +803,16 @@ const Index = () => {
 
         <div className="hidden lg:block mb-7"></div>
 
-        <div className="mb-7 flex justify-end ">
-          <div className="flex flex-col  w-[392px] h-[140px] ">
+        <div className="mb-7  flex justify-end ">
+          <div className="flex flex-col  w-[372px] h-[134px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
                 toggleStatus
-                  ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg border-[1px]"
+                  ? "bg-[#E8E8E8] rounded-tr-lg w-[372px] h-[44px] rounded-tl-lg border-[1px]"
                   : "shadow-md rounded "
               }`}
             >
-              <h1 className="self-center justify-start text-[14px] font-semibold text-[#1C1C1C] lg:text-base ">
+              <h1 className="self-center justify-start text-[14px] font-semibold font-Open text-[#1C1C1C] lg:text-base ">
                 Custom Branding
               </h1>
 
@@ -818,7 +855,7 @@ const Index = () => {
               </div>
             </div>
             {toggleStatus && (
-              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2">
+              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-20">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
                   <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name and Logo
@@ -926,12 +963,13 @@ const Index = () => {
         onClose={() => setIsRightLandmarkModal(false)}
         className="!w-[389px]"
       >
-        <RightModalContent
+        <LandmarkContent
           title="Save Landmark as"
           titleIcon={MapIcon}
           buttonText="CONFIRM"
           inputLabel="Type landmark"
           onClick={() => setIsRightLandmarkModal(false)}
+          onCustomLandmarkSelection={handleLandmarkSelected}
         />
       </RightSideModal>
 
