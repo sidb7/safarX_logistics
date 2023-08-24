@@ -82,7 +82,7 @@ const Catalogue = () => {
             showIcon={true}
             text={"ADD COMBO"}
             className="!p-3"
-            onClick={() => {}}
+            onClick={() => navigate("/catalogue/add-combo")}
           />
         );
       }

@@ -10,6 +10,7 @@ import Categorylogo2 from "../../../../assets/Product/watch.svg";
 import SportsLogo from "../../../../assets/Product/sports.svg";
 import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
+import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
 import { POST } from "../../../../utils/webService";
 import {
   GET_COMBO_PRODUCT_URL,
@@ -163,24 +164,50 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             Most Viewed
           </h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
-            {productData.map((data: any, index: number) => (
-              <div
-                className="w-[272px] h-[76px]"
-                // onClick={() => setViewed(index)}
-              >
-                <ProductBox
-                  image={data?.images[0].url || ""}
-                  productName={data?.productName}
-                  weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
-                  dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
-                  className={`cursor-pointer p-[16px] ${
-                    viewed === index
-                      ? "border-2 border-solid border-[#004EFF]"
-                      : ""
-                  }`}
-                />
-              </div>
-            ))}
+            {productData.map((data: any, index: number) => {
+              if (filterId === 0) {
+                return (
+                  <div
+                    className="w-[272px] h-[76px]"
+                    // onClick={() => setViewed(index)}
+                  >
+                    <ProductBox
+                      image={
+                        (data?.images?.length > 0 && data?.images[0].url) || ""
+                      }
+                      productName={data?.productName}
+                      weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
+                      dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
+                      className={`cursor-pointer p-[16px] ${
+                        viewed === index
+                          ? "border-2 border-solid border-[#004EFF]"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                );
+              } else if (filterId === 1) {
+                return (
+                  <div
+                    className="w-[272px] h-[76px]"
+                    // onClick={() => setViewed(index)}
+                  >
+                    <ProductBox
+                      image={StackLogo}
+                      productName={data?.comboProductName}
+                      weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
+                      dimension={`${data?.totalPrice}`}
+                      className={`cursor-pointer p-[16px] ${
+                        viewed === index
+                          ? "border-2 border-solid border-[#004EFF]"
+                          : ""
+                      }`}
+                      label={`Product: ${data?.productCount || 4}`}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
         </div>
       </div>
