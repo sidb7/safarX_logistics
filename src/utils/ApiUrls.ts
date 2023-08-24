@@ -73,6 +73,10 @@ const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 
+//catalogue URLs
+const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
+const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
+
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -100,4 +104,6 @@ export {
   ADD_DELIVERY_LOCATION,
   POST_PRODUCT_URL,
   FILE_UPLOAD,
+  GET_PICKUP_ADDRESS,
+  GET_DELIVERY_ADDRESS,
 };

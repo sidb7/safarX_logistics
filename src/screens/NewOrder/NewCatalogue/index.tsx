@@ -49,13 +49,15 @@ const Catalogue = () => {
       return singleTab.active === true;
     });
     if (activeTabName?.statusName === "Address Book") {
-      return <CustomButton
-            icon={addIcon}
-            showIcon={true}
-            text={"ADD ADDRESS"}
-            className="!p-3"
-            onClick={() => {}}
-          />;
+      return (
+        <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"ADD ADDRESS"}
+          className="!p-3"
+          onClick={() => {}}
+        />
+      );
     } else if (activeTabName?.statusName === "Product Catalogue") {
       return (
         <CustomButton
@@ -81,12 +83,7 @@ const Catalogue = () => {
 
   return (
     <div className="overflow-y-auto h-[calc(100%-75px)]">
-      <Breadcum
-        label="Catalogue"
-        component={
-          renderHeaderComponent()
-        }
-      />
+      <Breadcum label="Catalogue" component={renderHeaderComponent()} />
       <div className="mt-4 mx-6">
         <div className="flex flex-row overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
           {tabName.map(({ statusName, active }, index) => {
@@ -111,7 +108,7 @@ const Catalogue = () => {
                 key={index}
               >
                 <span
-                  className={`text-[#777777] text-[14px] lg:text-[18px] 
+                  className={`text-[#777777] text-[14px] lg:text-[18px]
                     ${active && "!text-[#004EFF] lg:text-[18px]"}
                     `}
                 >
