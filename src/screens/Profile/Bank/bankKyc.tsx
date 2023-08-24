@@ -24,7 +24,7 @@ export const EditProfileBank = () => {
     });
     if (data.success) {
       setEditBankDetails(data?.data?.bankDetails);
-      toast.success(data.message);
+      // toast.success(data.message);
     } else {
       toast.error(data.message);
     }

@@ -28,6 +28,9 @@ import CustomCenterModal from "../../../components/CustomModal/customCenterModal
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import Stepper from "../../../components/Stepper";
+import TickLogo from "../../../assets/common/Tick.svg";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -46,6 +49,39 @@ const Payment = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+
+  const steps = [
+    {
+      label: "Pickup",
+      isCompleted: true,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Delivery",
+      isCompleted: true,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Product",
+      isCompleted: true,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Service",
+      isCompleted: true,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Payment",
+      isCompleted: false,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+  ];
 
   const handleUpiPayment: any = () => {
     if (payment === true) {
@@ -117,7 +153,11 @@ const Payment = () => {
   };
 
   return (
-    <div>
+    <div className="h-full">
+      <Breadcum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
       <div className="inline-flex space-x-2 items-center px-3">
         <img src={Moneylogo} alt="" />
         <p className="text-lg font-semibold text-[#202427] lg:font-normal lg:text-[24px] ">

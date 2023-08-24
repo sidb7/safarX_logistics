@@ -22,10 +22,8 @@ const DeleteModal = (props: IDeleteProps) => {
     setLoading(true);
     const { data } = await POST(deleteURL, payloadBody);
     if (data.success) {
-      toast.success(data.message);
-      setModal(false)
-
-      
+      // toast.success(data.message);
+      setModal(false);
     } else {
       toast.error(data.message);
     }

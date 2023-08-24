@@ -33,12 +33,13 @@ const BusinessType = (props: ITypeProps) => {
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
         // toast.success(response.message);
+        // navigate("/onboarding/kyc-photo"); // temparory hide
+        navigate("/onboarding/kyc-otp-form");
+        // toast.success(response.message);
         //Navigate Url' go here
       } else {
         toast.error(response?.message);
       }
-
-      navigate("/onboarding/kyc-photo");
     } catch (error) {
       return error;
     }

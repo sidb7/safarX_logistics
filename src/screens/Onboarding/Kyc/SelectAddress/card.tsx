@@ -8,6 +8,7 @@ interface ITypesProps {
   subContent?: string;
   isSubContent?: boolean;
   cardClassName?: string;
+  onClick?: (e: any) => void;
 }
 
 const card = (props: ITypesProps) => {
@@ -19,12 +20,14 @@ const card = (props: ITypesProps) => {
     subContent,
     isSubContent,
     cardClassName,
+    onClick,
   } = props;
 
   return (
     <>
       <div
         className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow border-[#E8E8E8] w-full lg:!w-[320px]`}
+        onClick={onClick}
       >
         <div className="flex items-center   gap-x-3 ">
           <CustomRadioButton

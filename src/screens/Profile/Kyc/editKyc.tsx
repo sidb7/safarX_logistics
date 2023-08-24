@@ -30,7 +30,7 @@ export const EditProfileKyc = () => {
     });
     if (data.success) {
       setKycDetails(data?.data?.kycDetails);
-      toast.success(data.message);
+      // toast.success(data.message);
     } else {
       toast.error(data.message);
     }

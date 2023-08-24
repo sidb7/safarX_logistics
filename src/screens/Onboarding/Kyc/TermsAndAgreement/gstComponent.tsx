@@ -7,6 +7,8 @@ import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
+import { setAcceptTnCStatus } from "../../../../redux/reducers/onboarding";
+import { useDispatch } from "react-redux";
 
 interface ITypeProps {}
 
@@ -16,6 +18,12 @@ export const GSTComponent = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
+  const dispatch = useDispatch();
+
+  const acceptStatus = () => {
+    dispatch(setAcceptTnCStatus(true));
+    navigate("/onboarding/kyc-terms/ServiceComponent");
+  };
 
   const BottomButton = () => {
     return (
@@ -38,7 +46,7 @@ export const GSTComponent = (props: ITypeProps) => {
               : "bg-[#E8E8E8] text-[#BBBBBB]"
           }`}
           onClick={() => {
-            navigate("/onboarding/kyc-terms/ServiceComponent");
+            acceptStatus();
           }}
         />
       </div>

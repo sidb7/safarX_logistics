@@ -1,6 +1,7 @@
 let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
+let PAYMENT_URL = "";
 let Enviornment = "";
 
 // Environment Declaration
@@ -11,6 +12,12 @@ switch (Enviornment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
+    PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
+    break;
+  case "test":
+    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
+    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     break;
   case "test":
     SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
@@ -34,11 +41,16 @@ const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;
 const POST_VERIFY_AADHAR_URL = `${SELLER_URL}/api/v1/seller/sendAadhaarCard`;
 const POST_VERIFY_AADHAR_OTP_URL = `${SELLER_URL}/api/v1/seller/verifyAadhaarCard`;
 const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardLite`;
-const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTIN`;
+const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTINBySendOtp`;
+const POST_VERIFY_GST_OTP = `${SELLER_URL}/api/v1/seller/verifyGSTINBySubmitOtp`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
-const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getSingleFile`;
+const POST_GET_SINGLE_FILE = `${FILE_SERVER_URL}/api/v1/upload/getRawSingleFile`;
 const POST_UPDATE_COMPANY_ADDRESS = `${SELLER_URL}/api/v1/seller/updateCompany`;
+const POST_ACCEPT_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptAgreement`;
 const FILE_UPLOAD = `${FILE_SERVER_URL}/api/v1/upload/uploadSingleFile`;
+const GET_DEFAULT_ADDRESS = `${SELLER_URL}/api/v1/seller/getDocAddress`;
+const POST_UPDATE_DEFAULT_ADDRESS = `${SELLER_URL}/api/v1/seller/updatedDocAddress`;
+const MAGIC_ADDRESS = `${SELLER_URL}/api/v1/seller/verifyAddress`;
 
 // Base URLs
 const SELLER_BASE_URL = `${SELLER_URL}/api/v1`;
@@ -77,6 +89,10 @@ const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
+//paytm
+const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initialRecharge`;
+const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
+
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 export {
@@ -100,15 +116,22 @@ export {
   GET_QUESTIONNAIRE,
   POST_SUBMIT_QUESTIONNAIRE,
   UPDATE_SELLER,
+  POST_ACCEPT_AGREEMENTS,
+  POST_VERIFY_GST_OTP,
+  FILE_UPLOAD,
+  GET_DEFAULT_ADDRESS,
+  POST_UPDATE_DEFAULT_ADDRESS,
+  MAGIC_ADDRESS,
   UPDATE_PASSWORD,
   DELETE_SELLER,
   ADD_PICKUP_LOCATION,
   ADD_DELIVERY_LOCATION,
   POST_PRODUCT_URL,
-  FILE_UPLOAD,
   GET_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
+  INITIAL_RECHARGE,
+  RECHARGE_STATUS,
 };
