@@ -110,7 +110,7 @@ const Catalogue = () => {
                 key={index}
               >
                 <span
-                  className={`text-[#777777] text-[14px] lg:text-[18px] 
+                  className={`text-[#777777] text-[14px] lg:text-[18px]
                     ${active && "!text-[#004EFF] lg:text-[18px]"}
                     `}
                 >

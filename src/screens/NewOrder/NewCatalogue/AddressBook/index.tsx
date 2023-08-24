@@ -1,27 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddressCard from "./addressCard";
 import CustomDropDown from "../../../../components/DropDown";
-
-const cardData = {
-  addressLabel: "Warehouse Mumbai",
-  address:
-    "Plot No 12, sector 8, Western express way Andheri, Mumbai, Maharastra 4220112",
-  name: "Navin",
-  phoneNumber: "+91 12345 12345",
-};
+import { POST } from "../../../../utils/webService";
+import {
+  GET_PICKUP_ADDRESS,
+  GET_DELIVERY_ADDRESS,
+} from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 const AddressBook = () => {
   const [filterId, setFilterId] = useState(0);
+  const [address, setAddress]: any = useState();
 
   const [filterData, setFilterData] = useState([
     { label: "Pickup Address", isActive: false },
-    { label: "Deliery Address", isActive: false },
+    { label: "Delivery Address", isActive: false },
   ]);
+
+  const cardData = (address: any) => {
+    return {
+      addressLabel: address?.addressType,
+      address: [
+        address?.flatNo,
+        address?.address,
+        address?.sector,
+        address?.landmark,
+        address?.pincode,
+        address?.city,
+        address?.state,
+        address?.country,
+      ].join(","),
+      name: address?.contactName,
+      phoneNumber: address?.mobileNo || address?.alternateMobileNo || "",
+    };
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { data: allAddressData }: any = await POST(
+        filterId === 0 ? GET_PICKUP_ADDRESS : GET_DELIVERY_ADDRESS
+      );
+      if (allAddressData?.success) {
+        setAddress(allAddressData.data);
+      } else {
+        toast.error(allAddressData?.message);
+      }
+    })();
+  }, [filterId]);
 
   const filterComponent = (className?: string) => {
     return (
       <div className="flex  mt-6">
-        <div className={`flex text-[14px] text-[#777777] font-medium h-[44px]`}>
+        <div
+          className={`flex text-[14px] text-[#777777] font-medium h-[44px] cursor-pointer`}
+        >
           {filterData.map((singleData, index) => {
             return (
               <span
@@ -64,10 +96,9 @@ const AddressBook = () => {
 
       {/* Display Address */}
       <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
-        <AddressCard cardData={cardData} key="132213" />
-        <AddressCard cardData={cardData} key="132213" />
-        <AddressCard cardData={cardData} key="132213" />
-        <AddressCard cardData={cardData} key="132213" />
+        {address?.map((data: any, index: any) => {
+          return <AddressCard cardData={cardData(data)} key={index} />;
+        })}
       </div>
     </div>
   );
