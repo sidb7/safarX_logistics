@@ -3,8 +3,11 @@ interface IPackageBoxProps {
   recommended?: boolean;
   packageType: string;
   weight: string;
-  dimension: string;
+  dimension?: string;
   boxType: string;
+  height?: string;
+  breadth?: string;
+  length?: string;
 }
 
 const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -13,6 +16,9 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   weight = "",
   dimension = "",
   boxType = "",
+  height = "",
+  breadth = "",
+  length = "",
 }) => {
   return (
     <div className={recommended ? "relative py-2" : "py-2"}>
@@ -27,7 +33,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
         <span className="font-medium mt-2">{packageType}</span>
         <div className="flex">
           <span className="font-medium">{weight}</span>
-          <span className="pl-1">{`Kg | ${dimension} cm`}</span>
+          <span className="pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
         </div>
         <span className="text-gray-400">{boxType}</span>
       </div>
