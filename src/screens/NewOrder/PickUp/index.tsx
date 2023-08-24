@@ -51,6 +51,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import LandmarkContent from "./landmarkContent";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ const Index = () => {
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
   const [footer, setFooter] = useState(true);
-
+  const [customLandmark, setCustomLandmark] = useState("");
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
   // const { address } = useAppSelector((state) => state.map);
@@ -243,6 +244,11 @@ const Index = () => {
   };
   console.log("pickupdate", pickupDate);
 
+  const handleLandmarkSelected = (landmark: string) => {
+    console.log("CustomLandmark:", landmark);
+    setCustomLandmark(landmark);
+  };
+  console.log("CustomLandmark:", customLandmark);
   // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
@@ -501,7 +507,8 @@ const Index = () => {
           />
         </div>
 
-        <div className="mb-4 lg:mb-6 lg:mr-6">
+        {/* Landmark with dropdown commented */}
+        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
             value={selectedOption}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -514,6 +521,16 @@ const Index = () => {
               }
             }}
             options={dummyPickupDropdownData}
+          />
+        </div> */}
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Landmark"
+            value={pickupLocation.landmark}
+            onChange={(e) =>
+              handlePickupLocationChange("landmark", e.target.value)
+            }
           />
         </div>
 
@@ -946,12 +963,13 @@ const Index = () => {
         onClose={() => setIsRightLandmarkModal(false)}
         className="!w-[389px]"
       >
-        <RightModalContent
+        <LandmarkContent
           title="Save Landmark as"
           titleIcon={MapIcon}
           buttonText="CONFIRM"
           inputLabel="Type landmark"
           onClick={() => setIsRightLandmarkModal(false)}
+          onCustomLandmarkSelection={handleLandmarkSelected}
         />
       </RightSideModal>
 

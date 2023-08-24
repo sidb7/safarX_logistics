@@ -444,7 +444,8 @@ const Index = () => {
             />
           </div>
 
-          <div className="mb-5 lg:mb-6">
+          {/* Landmark with dropdown commented */}
+          {/* <div className="mb-5 lg:mb-6">
             <CustomDropDown
               value={selectedOption}
               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -458,7 +459,18 @@ const Index = () => {
               }}
               options={dummyPickupDropdownData}
             />
+          </div> */}
+
+          <div className="mb-4 lg:mb-6 ">
+            <CustomInputBox
+              label="Landmark"
+              value={deliveryLocation.landmark}
+              onChange={(e) =>
+                handleDeliveryLocationChange("landmark", e.target.value)
+              }
+            />
           </div>
+
           <div className="mb-5 lg:mb-6">
             <CustomInputBox
               label="Pincode"
