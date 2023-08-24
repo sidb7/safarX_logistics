@@ -77,7 +77,8 @@ const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
-
+const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
+const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -107,5 +108,7 @@ export {
   FILE_UPLOAD,
   GET_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  GET_SELLER_BOX_DETAILS,
+  GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
 };
