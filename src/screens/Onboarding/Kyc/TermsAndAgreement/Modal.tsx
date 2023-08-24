@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
-import TickIcon from "../../../../assets/Payment/Done.gif";
+// import TickIcon from "../../../../assets/Payment/Done.gif";
+import TickGif from "../../../../assets/tick.gif";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -28,11 +29,11 @@ const Modal = (props: ITypesProps) => {
         >
           <div className="flex flex-col items-center ">
             <div className="flex flex-col items-center mb-6">
-              <img src={TickIcon} alt="" width={124} height={124} />
-              <p className="font-bold text-[16px] text-[#1C1C1C] font-Open ">
+              <img src={TickGif} alt="" width={124} height={124} />
+              <p className="font-bold text-[16px] text-[#1C1C1C] font-Open leading-[22px]">
                 Congratulations!
               </p>
-              <p className="font-bold text-[16px] text-[#1C1C1C] text-center font-Open ">
+              <p className="font-bold text-[16px] text-[#1C1C1C] text-center font-Open leading-[22px] ">
                 Your KYC details have been successfully verified!
               </p>
             </div>
@@ -50,7 +51,7 @@ const Modal = (props: ITypesProps) => {
                   navigate("/onboarding/select-address-billing");
                 }
               }}
-              className="bg-[#1C1C1C] text-white p-2 mb-6 font-Open  "
+              className="bg-[#1C1C1C] text-white py-2 px-4 mb-6 font-Open  "
             />
           </div>
         </PopUpModal>

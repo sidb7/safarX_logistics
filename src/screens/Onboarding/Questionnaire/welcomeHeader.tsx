@@ -1,5 +1,5 @@
 import { WelcomeQuestion } from "./welcome";
-import CompanyLogo from "../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../assets/Navbar/shipyaariLogos.svg";
 
 interface IWelcomeProps {
   className?: string;

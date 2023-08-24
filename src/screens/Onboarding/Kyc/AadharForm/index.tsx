@@ -4,7 +4,7 @@ import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
 
 import {
@@ -45,7 +45,7 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
-        toast.success(response?.message);
+        // toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         //Navigate Urls go here
       } else {
@@ -77,7 +77,7 @@ const Index = (props: ITypeProps) => {
               <CustomInputBox
                 containerStyle={`lg:!w-auto`}
                 label="Aadhar Number"
-                inputType="number"
+                inputType="text"
                 className={`  ${
                   aadharError !== "" && "!border-[#F35838]"
                 }  lg:!w-[320px] !font-Open`}
@@ -142,7 +142,7 @@ const Index = (props: ITypeProps) => {
 
   return (
     <div>
-      {!isBigScreen && aadharFormComponent()}
+      {/* {!isBigScreen && aadharFormComponent()} */}
 
       {isBigScreen && (
         <CustomBottomModal

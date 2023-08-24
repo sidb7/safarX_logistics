@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { useMediaQuery } from "react-responsive";
+// import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
-import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
+// import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
 import { POST_BUSINESS_TYPE_URL } from "../../../../utils/ApiUrls";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -16,8 +18,9 @@ interface ITypeProps {}
 const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(true);
-  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  // const closeModal = () => setOpenModal(true);
+  // const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const { isLgScreen } = ResponsiveState();
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
   );
@@ -29,9 +32,10 @@ const BusinessType = (props: ITypeProps) => {
       const payload = { businessType: value };
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
-        toast.success(response.message);
+        // toast.success(response.message);
         // navigate("/onboarding/kyc-photo"); // temparory hide
         navigate("/onboarding/kyc-otp-form");
+        // toast.success(response.message);
         //Navigate Url' go here
       } else {
         toast.error(response?.message);
@@ -43,18 +47,20 @@ const BusinessType = (props: ITypeProps) => {
 
   const businessTypeComponent = () => {
     return (
-      <div className="px-5 h-screen lg:h-full  lg:px-0">
-        <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className="flex flex-col relative w-full !h-full lg:px-0 lg:gap-y-0">
+        {isLgScreen && modalTitle()}
+        <div className="flex justify-between items-center shadow-md h-[60px] px-6 mb-6 lg:hidden ">
           <img src={CompanyLogo} alt="" />
         </div>
 
         <WelcomeHeader
+          className="mt-[58px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
-        <div className="flex flex-col items-center lg:justify-center  mb-[96px] lg:mb-6">
-          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-3">
+        <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
+          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
             Please confirm your business type
           </p>
           <Card
@@ -78,7 +84,7 @@ const BusinessType = (props: ITypeProps) => {
             subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
           />
         </div>
-        <div className="flex flex-col gap-y-4  lg:gap-y-3 lg:items-center lg:justify-center   pb-12 lg:pb-0 lg:mb-6">
+        <div className="flex flex-col gap-y-4 mx-5 mt-[66px]  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
           <ServiceButton
             text="PROCEED FOR KYC"
             className="bg-[#1C1C1C] !font-Open !h-[36px] !w-full text-white !py-2 !px-4 lg:!w-[320px] "
@@ -96,21 +102,32 @@ const BusinessType = (props: ITypeProps) => {
     );
   };
 
+  const modalTitle = () => {
+    return (
+      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+        <img
+          className="my-auto ml-6 object-contain"
+          src={CompanyLogo}
+          alt="Company Logo"
+        />
+      </div>
+    );
+  };
   return (
-    <div>
-      {!isLgScreen && businessTypeComponent()}
-
-      {isLgScreen && (
-        <CustomBottomModal
+    <>
+      {isLgScreen && openModal && (
+        <CenterModal
+          shouldCloseOnOverlayClick={false}
           isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] "
-          overlayClassName="!items-center"
+          onClose={() => setOpenModal(false)}
+          className="!w-[500px]"
         >
           {businessTypeComponent()}
-        </CustomBottomModal>
+        </CenterModal>
       )}
-    </div>
+
+      {!isLgScreen && businessTypeComponent()}
+    </>
   );
 };
 

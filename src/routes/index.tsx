@@ -5,7 +5,6 @@ import DeliveryScreen from "../screens/NewOrder/Delivery";
 import ProductScreen from "../screens/NewOrder/Product";
 import ServiceScreen from "../screens/NewOrder/Service";
 import PaymentScreen from "../screens/NewOrder/Payment";
-import NewOrderLayout from "../layout";
 import SummaryScreen from "../screens/NewOrder/Summary";
 import StandardServiceScreen from "../screens/NewOrder/Service/StandardService";
 import InsuranceScreen from "../screens/NewOrder/Insurance";
@@ -43,6 +42,7 @@ import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup"
 
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
+import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
 import ReturningUserPickup from "../screens/NewOrder/ReturningUser/PickUp";
@@ -89,11 +89,19 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
-import Layout from "../layout";
-import { CommonLayout } from "../layout/layout";
+// import Layout from "../layout";
+// import { CommonLayout } from "../layout/layout";
 
 import AddNewProduct from "../screens/Order/Product/AddProduct";
 import ProductPackage from "../screens/Order/Product/ProductPackage";
+import { ProfileSetting } from "../screens/Profile/Settings/setting";
+import Catalogue from "../screens/NewOrder/NewCatalogue";
+import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addCombo";
+import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
+
+import CommonLayout from "../layout";
+import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddress";
+import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -108,7 +116,7 @@ const MyRoutes: React.FC = () => {
           <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
           <Route path="/auth/offers" element={<OffersScreen />} />
           <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
-          <Route path="/neworder" element={<NewOrderLayout />}>
+          <Route path="/neworder" element={<CommonLayout />}>
             <Route path="pickup" element={<PickUpScreen />} />
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="product" element={<ProductScreen />} />
@@ -142,61 +150,88 @@ const MyRoutes: React.FC = () => {
 
           {/* onboarding routes  */}
 
-          <Route path="onboarding" element={<AccountLayoutScreen />}>
-            <Route path="signup" element={<SignUpScreen />} />
-            <Route path="sendotp" element={<SendOTPScreen />} />
-            <Route path="verifyotp" element={<VerifyOTPScreen />} />
-            <Route path="offers" element={<OffersScreen />} />
-            <Route path="getStarted" element={<GetStartedScreen />} />
-            <Route
-              path="questionnaire/question1"
-              element={<QuestionComponent1 />}
-            />
-            <Route
-              path="questionnaire/question2"
-              element={<QuestionComponent2 />}
-            />
-            <Route
-              path="questionnaire/question3"
-              element={<QuestionComponent3 />}
-            />
-            <Route
-              path="questionnaire/question4"
-              element={<QuestionComponent4 />}
-            />
-            <Route
-              path="questionnaire/question5"
-              element={<QuestionComponent5 />}
-            />
-            <Route path="kyc-type" element={<KycBusinessTypeScreen />} />
-            <Route
-              path="kyc-photo"
-              element={<KycPhotoIdentificationScreen />}
-            />
+          <Route path="onboarding/signup" element={<SignUpScreen />} />
+          <Route path="onboarding/sendotp" element={<SendOTPScreen />} />
+          <Route path="onboarding/verifyotp" element={<VerifyOTPScreen />} />
+          <Route path="onboarding/offers" element={<OffersScreen />} />
+          <Route path="onboarding/getStarted" element={<GetStartedScreen />} />
+          <Route
+            path="onboarding/questionnaire/question1"
+            element={<QuestionComponent1 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question2"
+            element={<QuestionComponent2 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question3"
+            element={<QuestionComponent3 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question4"
+            element={<QuestionComponent4 />}
+          />
+          <Route
+            path="onboarding/questionnaire/question5"
+            element={<QuestionComponent5 />}
+          />
+          <Route
+            path="onboarding/kyc-type"
+            element={<KycBusinessTypeScreen />}
+          />
+          <Route
+            path="onboarding/kyc-photo"
+            element={<KycPhotoIdentificationScreen />}
+          />
 
-            <Route path="kyc-otp-form" element={<KycSendOtpFormScreen />} />
-            <Route
-              path="select-address-billing"
-              element={<SelectAddressBilling />}
-            />
-            <Route
-              path="select-address-pickup"
-              element={<SelectAddressPickUp />}
-            />
-            <Route
-              path="kyc-mobile-verify"
-              element={<KycMobileVerificationScreen />}
-            />
-            <Route path="kyc-terms/GSTComponent" element={<GSTComponent />} />
-            <Route
-              path="kyc-terms/ServiceComponent"
-              element={<ServiceComponent />}
-            />
-            <Route path="kyc-company" element={<KycCompanyDetailsScreen />} />
-            <Route path="kyc-modal" element={<KycModalScreen />} />
-            <Route path="select-address" element={<SelectAddress />} />
-            <Route path="kyc-aadhar-form" element={<KycAadharForm />} />
-          </Route>
+          <Route
+            path="onboarding/kyc-otp-form"
+            element={<KycSendOtpFormScreen />}
+          />
+          <Route
+            path="onboarding/select-address-billing"
+            element={<SelectAddressBilling />}
+          />
+          <Route
+            path="onboarding/select-address-pickup"
+            element={<SelectAddressPickUp />}
+          />
+          <Route
+            path="onboarding/kyc-mobile-verify"
+            element={<KycMobileVerificationScreen />}
+          />
+          <Route
+            path="onboarding/kyc-terms/GSTComponent"
+            element={<GSTComponent />}
+          />
+          <Route
+            path="onboarding/kyc-terms/ServiceComponent"
+            element={<ServiceComponent />}
+          />
+
+          {/* commented it as it is not there in the new screen */}
+
+          {/* <Route
+            path="onboarding/kyc-company"
+            element={<KycCompanyDetailsScreen />}
+          /> */}
+
+          <Route path="onboarding/kyc-modal" element={<KycModalScreen />} />
+          <Route path="onboarding/select-address" element={<SelectAddress />} />
+          <Route
+            path="onboarding/kyc-aadhar-form"
+            element={<KycAadharForm />}
+          />
+
+          <Route
+            path="onboarding/walletrecharge"
+            element={<OnBoundingWalletRecharge />}
+          />
+
+          <Route
+            path="onboarding/rechargepayment"
+            element={<RechargePayment />}
+          />
 
           <Route path="transaction" element={<TransactionLayout />}></Route>
           <Route
@@ -224,7 +259,14 @@ const MyRoutes: React.FC = () => {
               path="profile/profile-setting-edit-profile"
               element={<EditProfile />}
             />
+            <Route path="profile/profile-setting" element={<SettingTab />} />
+            <Route path="profile/profile-refer-earn" element={<ReferTab />} />
+            <Route
+              path="profile/profile-setting-change-password"
+              element={<ChangePassword />}
+            />
             <Route path="/neworder/pickup" element={<PickUpScreen />} />
+            <Route path="/neworder/pickup" />
             {/* order/service - suresh */}
             <Route path="/order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />
@@ -234,18 +276,16 @@ const MyRoutes: React.FC = () => {
               path="newOrder/productpackage"
               element={<ProductPackage />}
             />
-          </Route>
-          <Route path="profile" element={<ReferLayout />}>
-            <Route path="profile-refer-earn" element={<ReferTab />} />
-          </Route>
-          <Route path="profile" element={<SettingLayout />}>
-            <Route path="profile-setting" element={<SettingTab />} />
-          </Route>
-          <Route path="profile" element={<ChangePasswordLayout />}>
+
+            {/* Catalogue */}
+            <Route path="catalogue" element={<Catalogue />} />
+            <Route path="catalogue/add-combo" element={<AddComboScreen />} />
             <Route
-              path="profile-setting-change-password"
-              element={<ChangePassword />}
+              path="catalogue/add-product"
+              element={<AddProductScreen />}
             />
+            <Route path="catalogue/edit-address" element={<EditAddress />} />
+            <Route path="catalogue/add-address" element={<AddAddress />} />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
@@ -291,18 +331,18 @@ const MyRoutes: React.FC = () => {
             path="/neworder/rechargepayment"
             element={<RechargePayment />}
           />
-          <Route
+          {/* <Route
             path="/neworder/channel-integration"
             element={<CatalogueChannelIntegrationScreen />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/neworder/channel-integration/addproduct"
             element={<AddProduct />}
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/neworder/channel-integration/addcombo"
             element={<AddCombo />}
-          />
+          /> */}
           <Route
             path="/neworder/channel-integration/addcomboproduct"
             element={<AddComboProduct />}

@@ -1,4 +1,4 @@
-import NavBar from "../../../layout/NavBar";
+import NavBar from "../../../layout/Old_NavBar";
 import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
 import BannerPagination from "../../../assets/Banner pagination.svg";

@@ -1,6 +1,7 @@
 let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
+let PAYMENT_URL = "";
 let Enviornment = "";
 
 // Environment Declaration
@@ -11,16 +12,27 @@ switch (Enviornment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
+    PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
+    break;
+  case "test":
+    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
+    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
+    break;
+  case "test":
+    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
+    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     break;
   case "production":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
-    PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
+    SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
+    PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     break;
   default:
     SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
-    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
+    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     break;
 }
 
@@ -60,9 +72,26 @@ const GET_PROFILE_URL = `${SELLER_BASE_URL}/seller/getSingleSeller`;
 const GET_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/readNotification`;
 const UPDATE_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/updateNotification`;
 const UPDATE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
+const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
+const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+
+//NewOrder URLs
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+
+//product URLs
+const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
+const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
+
+//catalogue URLs
+const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
+const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
+//paytm
+const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initialRecharge`;
+const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 export {
   SELLER_URL,
@@ -91,4 +120,14 @@ export {
   GET_DEFAULT_ADDRESS,
   POST_UPDATE_DEFAULT_ADDRESS,
   MAGIC_ADDRESS,
+  UPDATE_PASSWORD,
+  DELETE_SELLER,
+  ADD_PICKUP_LOCATION,
+  ADD_DELIVERY_LOCATION,
+  POST_PRODUCT_URL,
+  GET_PICKUP_ADDRESS,
+  GET_DELIVERY_ADDRESS,
+  GET_LATEST_ORDER,
+  INITIAL_RECHARGE,
+  RECHARGE_STATUS,
 };

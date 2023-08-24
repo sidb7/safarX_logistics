@@ -1,4 +1,4 @@
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrow from "../../../../assets/Catalogue/backBTN.svg";
 import InputBox from "../../../../components/InputBox/index";
 import CustomDropDown from "../../../../components/DropDown";
@@ -12,6 +12,7 @@ import FileUploadWithText from "../../../../components/FileUploadWithText/fileUp
 import UploadImg from "../../../../assets/Catalogue/upload.svg";
 import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import BottomLayout from "../../../../components/Layout/bottomLayout";
 
 const AddProduct = () => {
   const navigate = useNavigate();
@@ -58,8 +59,6 @@ const AddProduct = () => {
 
   return (
     <div className="relative">
-      <NavBar />
-      {/* <div className="mx-5"> */}
       <div className="hidden ml-[60px] mt-5 lg:block">
         <p className="font-normal text-[14px] text-[#777777] ">
           Home /
@@ -70,7 +69,12 @@ const AddProduct = () => {
       </div>
       <div className="hidden lg:flex lg:justify-between flex-row gap-x-1 mb-5 items-center ml-5">
         <div className="flex">
-          <img src={BackArrow} alt="" className="cursor-pointer" onClick={()=>navigate(-1)} />
+          <img
+            src={BackArrow}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => navigate(-1)}
+          />
           <p className="font-bold text-[28px] text-[#1C1C1C]">Add Product</p>
         </div>
         <div className="flex">
@@ -253,19 +257,11 @@ const AddProduct = () => {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-2 lg:!flex lg:!justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] w-full  fixed bottom-0">
-        <ServiceButton
-          text="BACK"
-          className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
-          onClick={()=>navigate(-1)}
-        />
-        <ServiceButton
-          text="SAVE"
-          className="bg-[#1C1C1C] text-[#FFFFFF] lg:px-[37px]"
-        />
+
+      <div>
+        <BottomLayout backButtonText="BACK" nextButtonText="SAVE" />
       </div>
     </div>
-    // </div>
   );
 };
 export default AddProduct;

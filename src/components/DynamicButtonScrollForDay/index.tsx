@@ -13,18 +13,18 @@ const index = (props: IProps) => {
   console.log("items", items);
 
   return (
-    <div className="flex overflow-x-auto whitespace-nowrap space-x-4 py-2  w-[305px]">
+    <div className="flex overflow-x-auto whitespace-nowrap space-x-4 py-2 px-4">
       {items.map((item: any, index: number) => (
         <button
           key={index}
-          className={`flex items-center justify-center border-[1px] w-[74px] h-[35px] grow ${
+          className={`flex items-center justify-center border-[1px] w-[114px] h-[35px] grow ${
             selectedDay === item?.value
               ? "border-blue-500  text-blue-500"
               : "border-[#A4A4A4] bg-[#FEFEFE] text-[#1C1C1C]"
           } px-[26px] rounded text-[14px] font-semibold font-Open`}
           onClick={() => onClick(item)}
         >
-          {/* <img src={item?.icons} alt="" className="mr-2" /> */}
+          <img src={item?.icons} alt="" className="mr-2 w-4 h-4" />
           {item?.label}
         </button>
       ))}

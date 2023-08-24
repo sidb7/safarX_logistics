@@ -28,6 +28,9 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
+import TickLogo from "../../../assets/common/Tick.svg";
+import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
+
 import {
   dummyPickupDropdownData,
   pickupAddress,
@@ -40,6 +43,14 @@ import { useLocation } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
 import { format, parse } from "date-fns";
+import Stepper from "../../../components/Stepper";
+import BackArrowIcon from "../../../assets/backArrow.svg";
+import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
+import NavBar from "../../../layout/Old_NavBar";
+import ServiceButton from "../../../components/Button/ServiceButton";
+import { toast } from "react-toastify";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -72,6 +83,7 @@ const Index = () => {
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
+  const [footer, setFooter] = useState(true);
 
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -90,7 +102,7 @@ const Index = () => {
     city: "",
     state: "",
     country: "",
-    addressType: "",
+    addressType: "warehouse",
   });
 
   const [contact, setContact] = useState({
@@ -125,8 +137,6 @@ const Index = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
-
-  console.log("mapAddressoutsideUE", address);
 
   useEffect(() => {
     console.log("mapAddress", address);
@@ -174,33 +184,35 @@ const Index = () => {
   // const handleClick = () => {
   //   // inputRef.current?.focus();
   // };
-  const parseAddress = (address: any) => {
-    const addressParts = address.split(", ");
-    const [flatNo, addressLine] = addressParts[0].split(", ");
-    console.log("addressLine", addressLine);
-    const sector = addressParts[7];
-    const landmark = addressParts[5];
-    console.log("landmark", landmark);
-    const [city, state, pincode] = addressParts.slice(-3);
-    return {
-      flatNo,
-      address: address,
-      sector,
-      landmark,
-      pincode,
-      city,
-      state,
-      country: "India",
-    };
-  };
 
-  useEffect(() => {
-    const parsedAddress = parseAddress(locateAddress);
-    setPickupLocation((prevData) => ({
-      ...prevData,
-      ...parsedAddress,
-    }));
-  }, [locateAddress]);
+  /* parsing code for prefilling address input fields  */
+  // const parseAddress = (address: any) => {
+  //   const addressParts = address.split(", ");
+  //   const [flatNo, addressLine] = addressParts[0].split(", ");
+  //   console.log("addressLine", addressLine);
+  //   const sector = addressParts[7];
+  //   const landmark = addressParts[5];
+  //   console.log("landmark", landmark);
+  //   const [city, state, pincode] = addressParts.slice(-3);
+  //   return {
+  //     flatNo,
+  //     address: address,
+  //     sector,
+  //     landmark,
+  //     pincode,
+  //     city,
+  //     state,
+  //     country: "India",
+  //   };
+  // };
+
+  // useEffect(() => {
+  //   const parsedAddress = parseAddress(locateAddress);
+  //   setPickupLocation((prevData) => ({
+  //     ...prevData,
+  //     ...parsedAddress,
+  //   }));
+  // }, [locateAddress]);
 
   // const parsedLandmarks = pickupLocation.landmark?.split(", ");
   // const addressDropdownOptions = [
@@ -223,15 +235,17 @@ const Index = () => {
   console.log("contact", contact);
   console.log("customBranding", customBranding);
 
+  console.log("locateAddress", locateAddress);
+
   const handlePickupTimeSelected = (pickupTime: string) => {
     console.log("Selected Pickup Time:", pickupTime);
     setPickupDate(pickupTime);
   };
   console.log("pickupdate", pickupDate);
 
-  const pickupDateForEpoch = "18/08/2023 11:00 AM";
+  // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
-  const editedPickupDateForEpoch = pickupDate.substring(0, 20);
+  const editedPickupDateForEpoch = pickupDate.substring(0, 19);
   console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
@@ -245,8 +259,122 @@ const Index = () => {
 
   console.log("epochPickupDate", epochPickupDate);
 
+  const payload = {
+    pickupLocation: {
+      flatNo: pickupLocation.flatNo,
+      address: locateAddress,
+      sector: pickupLocation.sector,
+      landmark: pickupLocation.landmark,
+      pincode: pickupLocation.pincode,
+      city: pickupLocation.city,
+      state: pickupLocation.state,
+      country: pickupLocation.country,
+      addressType: pickupLocation.addressType,
+      contact: {
+        name: contact.name,
+        mobileNo: contact.mobileNo,
+        alternateMobileNo: contact.alternateMobileNo,
+        emailId: contact.emailId,
+        type: contact.type,
+      },
+      customBranding: {
+        name: customBranding.name,
+        logo: customBranding.logo,
+        address: customBranding.address,
+        contact: {
+          name: customBranding.contact.name,
+          mobileNo: customBranding.contact.mobileNo,
+        },
+      },
+      pickupDate: epochPickupDate,
+    },
+  };
+  console.log("payload", payload);
+
+  const postPickupOrderDetails = async (payload: any) => {
+    try {
+      const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
+
+      if (response?.success) {
+        toast.success(response?.message);
+        navigate("/neworder/delivery");
+      } else {
+        console.error("PickupDataerror");
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
+      return error;
+    }
+  };
+
+  const steps = [
+    {
+      label: "Pickup",
+      isCompleted: false,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Delivery",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Product",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Service",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Payment",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+  ];
+
   return (
-    <div>
+    <div className="h-full">
+      {/* <header className="fixed top-0 z-50 w-full ">
+        <NavBar />
+      </header> */}
+      {/* <div>
+        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+          <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
+          <span className="font-normal text-[14px] text-[#777777] mr-1">/</span>
+          <span className="font-semibold text-[14px] text-[#1C1C1C]">
+            Order
+          </span>
+        </div>
+
+        <div className="inline-flex space-x-2 items-center justify-start px-5 lg:mb-8 ">
+          <img src={BackArrowIcon} alt="" className="lg:hidden" />
+          <img src={WebBackArrowIcon} alt="" className="hidden lg:block" />
+
+          <p className="text-lg font-semibold text-center text-gray-900 lg:text-[28px]">
+            Add new order
+          </p>
+        </div>
+      </div> */}
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+        <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
+          Order
+        </span>
+      </div>
+      <Breadcum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
       <div className="inline-flex space-x-2 items-center justify-start px-5 mb-5 lg:mb-[10px]">
         <img src={LocationIcon} alt="" className="lg:hidden" />
 
@@ -258,7 +386,7 @@ const Index = () => {
       </div>
       <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
         <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
-          <div className="bg-white rounded-lg overflow-hidden shadow-lg relative   ">
+          <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
               <img
                 src={MagicLocationIcon}
@@ -304,35 +432,29 @@ const Index = () => {
               </div>
             </div> */}
 
-            <div className="relative h-[75px]">
-              <div className="w-full max-w-xs ">
-                <div
-                  // onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 font-Open leading-tight focus:outline-none bg-transparent border-none cursor-text"
-                >
-                  {/* {pastedData || "Paste Address for the Magic"} */}
-                </div>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={pastedData}
-                  onPaste={handlePaste}
-                  onChange={handleChange}
-                  className="custom-input"
-                  style={{
-                    position: "absolute",
-                    border: "5px",
-                    // left: "10px",
-                    // background: "black",
-                    width: "10px",
-                    height: "75px",
+            <div className="relative h-[75px]  ">
+              <input
+                ref={inputRef}
+                type="text"
+                value={pastedData}
+                onPaste={handlePaste}
+                onChange={handleChange}
+                className="magicAddressInput"
+                // className="custom-input"
+                style={{
+                  position: "absolute",
+                  border: "none",
+                  // left: "10px",
+                  // background: "black",
+                  // width: "10px",
+                  // height: "25px",
 
-                    top: "-10px",
-                  }}
-                  placeholder="Paste Address for the Magic"
-                  title="inputBox"
-                />
-              </div>
+                  // top: "-10px",
+                }}
+                placeholder="Paste Address for the Magic"
+                title=""
+              />
+
               <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
                 <img src={ForwardArrowIcon} alt="Arrow" />
               </div>
@@ -347,7 +469,10 @@ const Index = () => {
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
             value={locateAddress}
-            onChange={(e) => setLocateAddress(e.target.value)}
+            onChange={(e) => {
+              setLocateAddress(e.target.value);
+              handlePickupLocationChange("address", e.target.value);
+            }}
             onClick={() => {
               isItLgScreen
                 ? setIsLocationRightModal(true)
@@ -472,7 +597,9 @@ const Index = () => {
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
-            <p className="lg:font-semibold lg:text-[14px] ">Office</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Office
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -480,16 +607,19 @@ const Index = () => {
                 ? "border-[#004EFF] !text-[#004EFF] "
                 : "border-gray-300 text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveAddress({
                 office: false,
                 warehouse: true,
                 other: false,
-              })
-            }
+              });
+              handlePickupLocationChange("addressType", "warehouse");
+            }}
           >
             <img src={LocationIcon} alt="Other" />
-            <p className="lg:font-semibold lg:text-[14px] ">Warehouse</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Warehouse
+            </p>
           </div>
           <div
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
@@ -497,16 +627,19 @@ const Index = () => {
                 ? "border-[#004EFF] text-[#004EFF] "
                 : "border-gray-300  text-[#1C1C1C]"
             }`}
-            onClick={() =>
+            onClick={(e) => {
               setSaveAddress({
                 office: false,
                 warehouse: false,
                 other: true,
-              })
-            }
+              });
+              handlePickupLocationChange("addressType", "other");
+            }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
-            <p className="lg:font-semibold lg:text-[14px] ">Other</p>
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Other
+            </p>
           </div>
         </div>
 
@@ -601,9 +734,9 @@ const Index = () => {
               });
               handleContactChange("type", "warehouse associate");
 
-              isItLgScreen
-                ? setIsSaveContactRightModal(true)
-                : setIsSaveContactModal(true);
+              // isItLgScreen
+              //   ? setIsSaveContactRightModal(true)
+              //   : setIsSaveContactModal(true);
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
@@ -633,8 +766,8 @@ const Index = () => {
 
         <div className="hidden lg:block mb-7"></div>
 
-        <div className="mb-7">
-          <div className="flex flex-col">
+        <div className="mb-7 flex justify-end ">
+          <div className="flex flex-col  w-[392px] h-[140px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
                 toggleStatus
@@ -650,7 +783,10 @@ const Index = () => {
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-end items-center gap-x-1  w-[123px] h-[30px] px-[16px] py-[8px]`}
+                  } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
+                  onClick={() => {
+                    setToggleStatus(!toggleStatus);
+                  }}
                 >
                   <Switch
                     onChange={() => {
@@ -661,14 +797,14 @@ const Index = () => {
                     onHandleColor="#7CCA62"
                     offColor="#FFFFF"
                     offHandleColor="#F35838"
-                    handleDiameter={12}
+                    handleDiameter={4}
                     uncheckedIcon={false}
                     checkedIcon={false}
-                    height={16}
-                    width={32}
+                    height={8}
+                    width={14}
                   />
 
-                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] ">
+                  <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
                     {toggleStatus ? "ACTIVE" : "DEACTIVE"}
                   </p>
                 </button>
@@ -684,37 +820,37 @@ const Index = () => {
             {toggleStatus && (
               <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
-                  <p className="text-[10px] text-[#777777] font-normal ">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name and Logo
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C] ">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C] ">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Name
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8]">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Brand Address
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-[10px] text-[#777777] font-normal">
+                  <p className="text-[10px] text-[#777777] font-Open">
                     Contact Number
                   </p>
-                  <h1 className="font-semibold text-[12px] text-[#1C1C1C]">
+                  <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
                 </div>
@@ -767,6 +903,7 @@ const Index = () => {
       <RightSideModal
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
+        className="!w-[389px]"
       >
         <SelectDateModalContent
           onClick={() => setIsDateRightModal(false)}
@@ -774,16 +911,20 @@ const Index = () => {
         />
       </RightSideModal>
 
+      {/* <div className="suresh"> */}
       <RightSideModal
         isOpen={isLocationRightModal}
         onClose={() => setIsLocationRightModal(false)}
+        className="!w-[389px]"
       >
         <Map onClick={() => setIsLocationRightModal(false)} />
       </RightSideModal>
+      {/* </div> */}
 
       <RightSideModal
         isOpen={isRightLandmarkModal}
         onClose={() => setIsRightLandmarkModal(false)}
+        className="!w-[389px]"
       >
         <RightModalContent
           title="Save Landmark as"
@@ -797,6 +938,7 @@ const Index = () => {
       <RightSideModal
         isOpen={isSaveContactRightModal}
         onClose={() => setIsSaveContactRightModal(false)}
+        className="!w-[389px]"
       >
         <RightModalContent
           title="Save Contact as"
@@ -806,6 +948,41 @@ const Index = () => {
           onClick={() => setIsSaveContactRightModal(false)}
         />
       </RightSideModal>
+
+      {/* <div
+        className={`  ${
+          isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+        }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+      >
+        <ServiceButton
+          text="NEXT"
+          className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-16"
+          onClick={() => {
+            postPickupOrderDetails(payload);
+          }}
+        />
+      </div> */}
+
+      <BottomLayout
+        callApi={() => postPickupOrderDetails(payload)}
+        Button2Name={true}
+      />
+
+      {/* <footer className="w-full fixed  bottom-0 z-[10]">
+        <div
+          className={`  ${
+            isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
+          }   shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0`}
+        >
+          <ServiceButton
+            text="NEXT"
+            className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-4"
+            onClick={() => {
+              navigate("/neworder/delivery");
+            }}
+          />
+        </div>
+      </footer> */}
     </div>
   );
 };

@@ -18,6 +18,7 @@
     "@types/react-redux": "7.1.25",
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
+    "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
     "flowbite": "1.6.6",
@@ -44,12 +45,15 @@
     "web-vitals": "2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "local-build": "REACT_APP_ENV=local react-scripts build",
+    "test-build": "REACT_APP_ENV=test react-scripts build",
+    "dev-build": "REACT_APP_ENV=development react-scripts build",
+    "prod-build": "REACT_APP_ENV=production react-scripts build",
+    "local": "REACT_APP_ENV=local react-scripts start",
     "dev": "REACT_APP_ENV=development react-scripts start",
-    "local": "REACT_APP_ENV=local react-scripts start"
+    "test": "REACT_APP_ENV=test react-scripts start",
+    "prod": "REACT_APP_ENV=production react-scripts start",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

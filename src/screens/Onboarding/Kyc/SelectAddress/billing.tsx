@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import AddButton from "../../../../components/Button/addButton";
@@ -14,6 +14,8 @@ import {
 } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { toast } from "react-toastify";
+// import AddButton from "../../../../components/Button/addButton";
+// import PlusIcon from "../../../../assets/plusIcon.svg";
 
 interface ITypeProps {}
 
@@ -32,7 +34,7 @@ const Billing = (props: ITypeProps) => {
       // console.log("response", response);
       setDefaultAddress(response?.data);
 
-      toast.success(response?.message);
+      // toast.success(response?.message);
       //Navigate Url's go here
     } else {
       toast.error(response?.message);
@@ -50,7 +52,7 @@ const Billing = (props: ITypeProps) => {
       payload
     );
     if (responses?.success) {
-      toast.success(responses?.message);
+      // toast.success(responses?.message);
       navigate("/onboarding/select-address-pickup");
       //Navigate Url's go here
     } else {
@@ -61,17 +63,18 @@ const Billing = (props: ITypeProps) => {
   const addressComponent = () => {
     return (
       <div className="relative">
-        <div className="px-5 lg:px-0">
-          <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+        <div className="">
+          <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
             <img src={CompanyLogo} alt="" />
           </div>
           <WelcomeHeader
+            className="!mt-[58px]"
             title="Welcome to Shipyaari"
             content="Select your Billing Address"
           />
 
-          <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between mt-2 mb-4  lg:w-[320px] ">
+          <div className="w-full lg:flex lg:justify-center">
+            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0 mt-2 mb-4  lg:w-[320px] ">
               <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p>
@@ -89,12 +92,13 @@ const Billing = (props: ITypeProps) => {
 
           <div className="flex flex-col items-center lg:px-5 lg:h-[300px] lg:overflow-y-scroll ">
             <div className="  space-y-3 mb-6 ">
-              <div className="mb-4 h-[300px] overflow-auto">
+              <div className="flex flex-col items-center px-4 md:px-12 lg:px-4">
                 {defaultAddress?.map((el: any, i: number) => {
                   return (
                     <Card
                       onClick={(e) => setDefaultAddressSelect(e.target.value)}
                       name="address"
+                      cardClassName="!mb-3"
                       value={el?.addressId}
                       title={el?.fullAddress}
                       titleClassName="!font-normal !text-[12px]"
@@ -104,7 +108,6 @@ const Billing = (props: ITypeProps) => {
               </div>
             </div>
           </div>
-
           {isLgScreen && (
             <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
@@ -116,22 +119,22 @@ const Billing = (props: ITypeProps) => {
               />
             </div>
           )}
-        </div>
 
-        {!isLgScreen && (
-          <div
-            className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
-            style={{ width: "-webkit-fill-available" }}
-          >
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
-              onClick={() => {
-                onSubmit();
-              }}
-            />
-          </div>
-        )}
+          {!isLgScreen && (
+            <div
+              className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
+              style={{ width: "-webkit-fill-available" }}
+            >
+              <ServiceButton
+                text="SUBMIT"
+                className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
+                onClick={() => {
+                  onSubmit();
+                }}
+              />
+            </div>
+          )}
+        </div>
       </div>
     );
   };

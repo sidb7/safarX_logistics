@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import WebCloseModalIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "axios";
 import { GoogleMap, LoadScript, MarkerF } from "@react-google-maps/api";
 import CustomButton from "../../../components/Button";
 import GPSIcon from "../../../assets/Map/gps.svg";
 import LocationIcon from "../../../assets/Map/Location.svg";
-import { useNavigate } from "react-router-dom";
 import ServiceButton from "../../../components/Button/ServiceButton";
 
 const googleMapApiKey = "AIzaSyBEi1iP1YW3fGeKg---Rn7QCelztyYYfVk";
@@ -35,6 +35,8 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   const [shortAddress, setshortAddress] = useState("Goregaon West");
   console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
+    console.log("latitude", e.latLng.lat());
+    console.log("longitude", e.latLng.lng());
     setCenterValue({
       lat: e.latLng.lat(),
       lng: e.latLng.lng(),
@@ -71,26 +73,73 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     }
   }
 
-  async function getLocation() {
+  async function getLocationByLatLng(lat: number, lng: number) {
+    try {
+      const config = {
+        method: "post",
+        url: `http://65.2.176.43:8006/api/v1/address/getAddressByCoordinate`,
+        headers: { authorization: "6481876edafb412cf0294413" },
+        data: { lat: lat, lng: lng },
+      };
+
+      const response = await axios(config);
+      console.log("responsefromcoordinatesAPI", response);
+
+      if (response.data.success === 1 && response.data.data.results) {
+        const formattedAddress =
+          response.data.data.results[0].formatted_address;
+        console.log("Formatted Address:", formattedAddress);
+        setAddress(formattedAddress);
+        const addressComponents =
+          response.data.data.results[0].address_components;
+        const shortAddress = addressComponents[3].short_name;
+        setshortAddress(shortAddress);
+        console.log("addressComponents", addressComponents[3].short_name);
+      } else {
+        console.log("Failed to get address");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  }
+
+  const getLocation = async () => {
     if ("geolocation" in navigator) {
       console.log("Available");
-      navigator.geolocation.getCurrentPosition(function (position) {
+      try {
+        const position = await new Promise<GeolocationPosition>(
+          (resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject);
+          }
+        );
+
         setCenterValue({
           lat: position.coords.latitude,
           lng: position.coords.longitude,
         });
+
+        console.log("latt>>", position);
+
+        if (position) {
+          await getLocationByLatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+        }
+
         setZoom(15);
-      });
+      } catch (error) {
+        console.error("Error getting geolocation:", error);
+      }
     } else {
       console.log("Not Available");
     }
-  }
-
-  useEffect(() => {
-    (async () => await getLocation())();
-  }, []);
+  };
 
   const confirmLocation = () => {
+    if (onClick) {
+      onClick();
+    }
     navigate("/neworder/pickup", { state: { address: address } });
   };
 
@@ -99,7 +148,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
       {centerValue ? (
         <div className="lg:flex lg:flex-col lg:h-screen  lg:pt-5 lg:relative">
           <div className="hidden   lg:flex justify-between items-center mb-5 lg:px-5 ">
-            <p className="font-normal text-[24px] text-[#323232]">
+            <p className="font-Lato text-[24px] text-[#323232]">
               Search Location
             </p>
             <img
@@ -129,7 +178,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
               <CustomButton
                 className=""
                 text="LOCATE ME"
-                onClick={() => getLocation()}
+                onClick={getLocation}
                 showIcon={true}
                 icon={GPSIcon}
               ></CustomButton>
@@ -137,22 +186,22 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
 
             <div className="flex flex-col h-[254px] px-6 py-4 rounded-t-md w-full">
               <div className="flex items-center justify-between mt-4">
-                <span className="text-base font-light lg:font-normal lg:text-[16px]	">
+                <span className="text-base font-light lg:font-Open lg:text-[16px]	">
                   Select pickup location
                 </span>
-                <button className="text-blue-600 underline underline-offset-4 lg:font-semibold lg:text-[16px]">
+                <button className="text-blue-600 underline underline-offset-4 lg:font-Open lg:text-[16px]">
                   CHANGE
                 </button>
               </div>
               <div className="flex flex-col mt-8">
                 <div className="flex lg:gap-x-2">
                   <img src={LocationIcon} alt="Location" width="24px" />
-                  <span className="pl-1 font-medium lg:font-semibold lg:text-base">
+                  <span className="pl-1 font-medium lg:font-Open lg:text-base">
                     {shortAddress}
                   </span>
                 </div>
                 <div className="flex mt-2">
-                  <span className="text-sm font-light lg:font-normal	">
+                  <span className="text-sm font-light lg:font-Open	">
                     {address}
                   </span>
                 </div>

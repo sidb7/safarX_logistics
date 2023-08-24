@@ -5,7 +5,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomInputBox from "../../../../components/InputBox";
 import CustomInputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CrossLogo from "../../../../assets/cross.svg";
 
 type Props = {};
@@ -17,12 +17,16 @@ const Index = (props: Props) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   return (
     <div>
-      <div className="px-5 lg:hidden">
+      <div className="lg:hidden">
+        <div className=" lg:hidden flex justify-between items-center shadow-md  p-4 ">
+          <img src={CompanyLogo} alt="" />
+        </div>
         <WelcomeHeader
+          className="mt-[58px]"
           title="Welcome to Shipyaari"
           content="Tell us more about your company"
         />
-        <div className="flex flex-col gap-y-5 mb-5">
+        <div className="flex flex-col px-5 gap-y-5 mb-5">
           <CustomInputBox label="Full Address" />
           <CustomInputBox label="Pin code" />
           <CustomInputBox label="City" />
@@ -44,15 +48,15 @@ const Index = (props: Props) => {
           <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}
-            className="!p-0 !w-[500px] !h-[700px]"
+            className="!p-0 !w-[500px] "
             overlayClassName="flex  items-center"
           >
             <div className="hidden lg:block">
               <div className="flex justify-between items-center shadow-md  p-4 ">
                 <img src={CompanyLogo} alt="" />
-                <img src={CrossLogo} alt="" onClick={closeModal} />
               </div>
               <WelcomeHeader
+                className="lg:!mt-[58px]"
                 title="Welcome to Shipyaari"
                 content="Tell us more about your company"
               />

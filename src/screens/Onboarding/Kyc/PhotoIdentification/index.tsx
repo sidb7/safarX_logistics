@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import PhotoScreenIcon from "../../../../assets/KYC/PhotoScreen.svg";
 import ImageCenterIcon from "../../../../assets/KYC/PhotoCenter.svg";
 import Modal from "./Modal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 
 interface ITypeProps {}
 
@@ -61,11 +61,12 @@ const Index = (props: ITypeProps) => {
 
   const photoIdentificationComponent = () => {
     return (
-      <div className="relative top-0 px-5 h-screen lg:h-full lg:px-0">
-        <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className="relative  lg:h-full lg:px-0">
+        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6">
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[44px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
@@ -109,7 +110,7 @@ const Index = (props: ITypeProps) => {
           </div>
         </div>
 
-        <div className="flex flex-col   lg:justify-center lg:items-center  lg:pb-0 lg:mb-6">
+        <div className="flex flex-col px-5 lg:justify-center lg:items-center  lg:pb-0 lg:mb-6">
           <ServiceButton
             text="CAPTURE PHOTO"
             className="bg-[#1C1C1C] text-white !h-[36px] !w-full lg:!w-[320px] !py-2 !px-4 "

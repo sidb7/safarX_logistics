@@ -1,4 +1,4 @@
-import NavBar from "../../../../layout/NavBar";
+import NavBar from "../../../../layout/Old_NavBar";
 import BackArrow from "../../../../assets/Catalogue/backBTN.svg";
 import InputBox from "../../../../components/InputBox/index";
 import CustomDropDown from "../../../../components/DropDown";
@@ -31,14 +31,21 @@ const AddComboProduct = () => {
     height: "",
   });
 
-  useEffect(()=>{
-    if(data.productName!=='' && data.productCategory!=='' && data.productPrice!=='' && data.productTax!=='' && data.length!=='' && data.breadth!=='' && data.height!==''){
-        setDisabled(false)
-    }else{
-        setDisabled(true)
+  useEffect(() => {
+    if (
+      data.productName !== "" &&
+      data.productCategory !== "" &&
+      data.productPrice !== "" &&
+      data.productTax !== "" &&
+      data.length !== "" &&
+      data.breadth !== "" &&
+      data.height !== ""
+    ) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
     }
-    
-  },[data])
+  }, [data]);
 
   const handleData = (e: any) => {
     e.preventDefault();
@@ -81,7 +88,12 @@ const AddComboProduct = () => {
       </div>
       <div className="hidden lg:flex lg:justify-between flex-row gap-x-1 mb-5 items-center ml-5">
         <div className="flex">
-          <img src={BackArrow} alt="" className="cursor-pointer" onClick={()=>navigate(-1)}/>
+          <img
+            src={BackArrow}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => navigate(-1)}
+          />
           <p className="font-bold text-[28px] text-[#1C1C1C]">Add Product</p>
         </div>
         <div className="flex">
@@ -110,36 +122,36 @@ const AddComboProduct = () => {
         </div>
       </div>
       {products ? (
-          <div className="mb-12">
-            {productsArray.map((each: any, index: any) => {
-              return (
-                <div className="w-[272px] h-[76px] ml-5 mb-10">
-                  <h1 className="text-[22px] font-semibold mt-4 text-[#004EFF]">
-                    Product {index + 1}
-                  </h1>
-                  <div className="flex gap-x-3 border-2 border-[#E8E8E8] p-3 rounded-lg mt-3">
-                    <img src={ItemIcon} alt="" />
-                    <div>
-                      {
-                        <p className="text-[14px] font-medium">
-                          {each.productName}
-                        </p>
-                      }
-                      <div className="flex">
-                        <p>5 kg | </p>
-                        {<p className="ml-1">{`${each.length} x`}</p>}
-                        {<p className="ml-1">{`${each.breadth} x`}</p>}
-                        {<p className="ml-1">{`${each.height} cm`}</p>}
-                      </div>
+        <div className="mb-12">
+          {productsArray.map((each: any, index: any) => {
+            return (
+              <div className="w-[272px] h-[76px] ml-5 mb-10">
+                <h1 className="text-[22px] font-semibold mt-4 text-[#004EFF]">
+                  Product {index + 1}
+                </h1>
+                <div className="flex gap-x-3 border-2 border-[#E8E8E8] p-3 rounded-lg mt-3">
+                  <img src={ItemIcon} alt="" />
+                  <div>
+                    {
+                      <p className="text-[14px] font-medium">
+                        {each.productName}
+                      </p>
+                    }
+                    <div className="flex">
+                      <p>5 kg | </p>
+                      {<p className="ml-1">{`${each.length} x`}</p>}
+                      {<p className="ml-1">{`${each.breadth} x`}</p>}
+                      {<p className="ml-1">{`${each.height} cm`}</p>}
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          ""
-        )}
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        ""
+      )}
       <div className="mx-5">
         <div className="w-[221px] h-[55px]">
           <h1 className="font-semibold text-[#004EFF] text-[22px]">
@@ -269,9 +281,13 @@ const AddComboProduct = () => {
           text="BACK"
           className="bg-[#FFFFFF] text-[#1C1C1C] lg:px-[37px]"
         />
-       <ServiceButton
+        <ServiceButton
           text="SAVE COMBO"
-          className= {`${ disabled===true ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#1C1C1C]'}  text-[#FFFFFF] lg:px-[37px]`}
+          className={`${
+            disabled === true
+              ? "bg-gray-200 cursor-not-allowed"
+              : "bg-[#1C1C1C]"
+          }  text-[#FFFFFF] lg:px-[37px]`}
         />
       </div>
     </div>

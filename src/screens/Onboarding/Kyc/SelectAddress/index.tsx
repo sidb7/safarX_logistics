@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import CompanyLogo from "../../../../assets/Navbar/ShipyaariLogos.svg";
+import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate, useLocation } from "react-router-dom";
 import PlusIcon from "../../../../assets/plusIcon.svg";
@@ -37,7 +37,7 @@ const BusinessType = (props: ITypeProps) => {
       // console.log("response", response);
       setDefaultAddress(response?.data);
 
-      toast.success(response?.message);
+      // toast.success(response?.message);
       //Navigate Url's go here
     } else {
       toast.error(response?.message);
@@ -61,7 +61,8 @@ const BusinessType = (props: ITypeProps) => {
     };
     const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (response?.success) {
-      toast.success(response?.message);
+      // toast.success(response?.message);
+      // console.log("defaultAddressSelect", defaultAddressSelect);
 
       const payload = { addressId: defaultAddressSelect, isDefault: true };
       const { data: responses } = await POST(
@@ -69,7 +70,7 @@ const BusinessType = (props: ITypeProps) => {
         payload
       );
       if (responses?.success) {
-        toast.success(responses?.message);
+        // toast.success(responses?.message);
         //Navigate Url's go here
       } else {
         toast.error(responses?.message);
@@ -100,7 +101,7 @@ const BusinessType = (props: ITypeProps) => {
         magicpayload
       );
       if (response?.success) {
-        toast.success(response?.message);
+        // toast.success(response?.message);
         navigate("/onboarding/select-address-billing");
       } else {
         toast.error(responses?.message);
@@ -121,7 +122,7 @@ const BusinessType = (props: ITypeProps) => {
       },
     });
     if (response?.success) {
-      toast.success(response?.message);
+      // toast.success(response?.message);
       //Navigate Url's go here
     } else {
       toast.error("Failed To Upload!");
@@ -130,11 +131,12 @@ const BusinessType = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div className="px-5 h-screen lg:h-full lg:px-0 ">
-        <div className=" hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div className="">
+        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[58px]"
           title="Welcome to Shipyaari"
           content="Tell us more about your company"
         />
@@ -142,8 +144,8 @@ const BusinessType = (props: ITypeProps) => {
         <div>
           <div className="flex flex-col justify-center items-center  lg:px-5 ">
             <div className="flex items-center justify-between w-full  mt-2 mb-4  lg:!w-[320px] ">
-              <p className="font-Open  font-semibold text-sm text-[#1C1C1C]  ">
-                Default
+              <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#1C1C1C]  ">
+                Address
               </p>
 
               {/* <AddButton

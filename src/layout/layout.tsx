@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import SearchIcon from "../assets/Search.svg";
 import PowerBoosterlogo from "../assets/powerbooster.svg";
-import ProfileLogo from "../assets/Navbar/Essential.svg";
-import NavBar from "./NavBar";
+import ProfileLogo from "../assets/Navbar/essential.svg";
+import NavBar from "./Old_NavBar";
 import Sidebar from "./hoverSideBar";
 import { clearLocalStorage } from "../utils/utility";
 import InputWithImage from "../components/InputWithImage/InputWithImage";
@@ -728,6 +728,7 @@ export const CommonLayout = (props: Props) => {
                             <button
                               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
+                              onClick={() => navigate("/profile")}
                             >
                               Your Profile
                             </button>

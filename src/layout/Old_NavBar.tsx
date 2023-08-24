@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import ShipyaariLogo from "../assets/webshipyaarilogo.svg";
 import CompanyLogo from "../assets/ShipyaariLogos.svg";
-import HamburgerLogo from "../assets/Navbar/menu.svg";
+import HamburgerLogo from "../assets/Navbar/hamMenu.svg";
 import SearchLogo from "../assets/Navbar/search.svg";
-import ProfileLogo from "../assets/Navbar/Essential.svg";
+import ProfileLogo from "../assets/Navbar/essential.svg";
 import "../styles/navBar.css";
 import Sidebar from "./hoverSideBar";
 import { useOutsideTriggered } from "../hooks";
@@ -116,6 +116,7 @@ const NavBar = (props: IpropTypes) => {
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
+                      onClick={() => navigate("/profile")}
                     >
                       Your Profile
                     </button>
@@ -143,7 +144,7 @@ const NavBar = (props: IpropTypes) => {
         </div>
       </nav>
 
-      <div className=" min-h-screen">
+      <div className={open ? "min-w-[100px] min-h-screen" : "hidden"}>
         <ToastContainer />
 
         <div

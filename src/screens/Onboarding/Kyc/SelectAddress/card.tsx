@@ -26,14 +26,15 @@ const card = (props: ITypesProps) => {
   return (
     <>
       <div
-        className={` ${cardClassName} border-[1px] rounded p-4   border-[#E8E8E8] w-full  lg:!w-[320px]`}
+        className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow border-[#E8E8E8] w-full lg:!w-[320px]`}
         onClick={onClick}
       >
         <div className="flex items-center   gap-x-3 ">
           <CustomRadioButton
             name={name}
             value={value}
-            // onChange={(e) => console.log("e :", e.target.checked)}
+            style={{ accentColor: "black" }}
+            inputClassName="cursor-pointer"
           />
 
           {isSubContent && (

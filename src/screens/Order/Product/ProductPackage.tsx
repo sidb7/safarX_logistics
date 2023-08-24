@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import DeleteIcon from "../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
@@ -22,16 +22,23 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
+import { POST } from "../../../utils/webService";
+import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
+import { useNavigate } from "react-router-dom";
 
 interface IPackageProps {}
 
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
+  const navigate = useNavigate();
   const isLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
 
   const [combo, setCombo] = useState(false);
   const [insurance, setInsurance] = useState(false);
+  const [products, setProducts] = useState([]);
+
+  console.log("products------>check", products);
 
   const steps = [
     {
@@ -66,6 +73,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     },
   ];
 
+  useEffect(() => {
+    (async () => {
+      const res: any = await getOrderProductDetails();
+      if (res) {
+        console.log("ok", res);
+      }
+    })();
+  }, []);
+
   const insuranceFun = (e: any) => {
     console.log("setCombo inside fun:", combo);
 
@@ -73,6 +89,20 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     setInsurance(true);
   };
   console.log("setCombo:", combo);
+
+  const getOrderProductDetails = async () => {
+    try {
+      const { data } = await POST(GET_LATEST_ORDER);
+      console.log("data", data?.data?.products);
+      if (data?.success) {
+        setProducts(data?.data?.products);
+      } else {
+        throw new Error(data?.message);
+      }
+    } catch (error) {
+      console.log("getOrderProductDetails", error);
+    }
+  };
 
   return (
     <div>
@@ -122,18 +152,27 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
         </div>
 
-        <ProductBox
-          image={SampleProduct}
-          productName="Mac book air"
-          weight="5"
-          dimension="12 x 12 x 12"
-          className="p-3 lg:max-w-[272px]"
-        />
+        <div className="flex  gap-x-3">
+          {products.length > 0 &&
+            products.map((e: any, index: number) => {
+              return (
+                <ProductBox
+                  image={SampleProduct}
+                  productName={e.name}
+                  weight={e.weight}
+                  dimension={e.dimension}
+                  className="p-3 lg:max-w-[272px]"
+                />
+              );
+            })}
+        </div>
 
         <div className="mt-6">
           <AddButton
             text="ADD PRODUCT"
-            onClick={() => {}}
+            onClick={() => {
+              navigate("/newOrder/addnewproduct");
+            }}
             showIcon={true}
             icon={ButtonIcon}
             alt="Add Product"
@@ -166,6 +205,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <RightSideModal
             isOpen={insurance}
             onClose={() => setInsurance(false)}
+            className="!w-[600px]"
           >
             <AddInsuranceModal
               insurance={insurance}
@@ -176,7 +216,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
 
       <div>
-        <BottomLayout />
+        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
       </div>
     </div>
   );

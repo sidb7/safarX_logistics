@@ -40,7 +40,7 @@ const initialState: OnboardingState = {
   panNumber: "",
   aadharNumber: 0,
   otp: 0,
-  onOtpClientId: "gst_otp_qmefuaqpocskbwibegOZ",
+  onOtpClientId: "",
   otpFormBtnStatus: false,
   acceptTnCStatus: false,
   verifyForOtpBtn: {
