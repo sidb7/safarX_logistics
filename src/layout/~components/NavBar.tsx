@@ -578,7 +578,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
               return (
                 <>
-                  <div className="w-full flex-col px-6 py-4">
+                  <div className="w-full flex-col px-6 py-4" key={index}>
                     <div
                       className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
                       onClick={() => {
@@ -609,6 +609,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                         {e.menu.map((child: any, childIndex: number) => {
                           return (
                             <div
+                              key={childIndex}
                               className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
                               onClick={() =>
                                 setIsActivePath(index, childIndex, child.path)

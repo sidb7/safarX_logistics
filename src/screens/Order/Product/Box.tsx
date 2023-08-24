@@ -3,7 +3,6 @@ import ProductIcon from "../../../assets/Product/Product.svg";
 import PackageBox from "./PackageBox";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import "../../../styles/packageStyle.css";
-import BoxDetails from "./BoxDetails";
 import AddButton from "../../../components/Button/addButton";
 import { UploadInput } from "../../../components/UploadInput";
 
