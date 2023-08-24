@@ -8,8 +8,10 @@ import BoxCatalogue from "./BoxCatalogue";
 import CustomButton from "../../../components/Button";
 import addIcon from "../../../assets/Catalogue/add.svg";
 import AddOrder from "../../../assets/Catalogue/add_order.svg";
+import { useNavigate } from "react-router-dom";
 
 const Catalogue = () => {
+  const navigate = useNavigate();
   const [tabName, setTabName] = useState([
     {
       statusName: "Channel Integration",
@@ -55,7 +57,7 @@ const Catalogue = () => {
           showIcon={true}
           text={"ADD ADDRESS"}
           className="!p-3"
-          onClick={() => {}}
+          onClick={() => navigate("/catalogue/add-address")}
         />
       );
     } else if (activeTabName?.statusName === "Product Catalogue") {

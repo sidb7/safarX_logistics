@@ -1,6 +1,7 @@
 import EditImageWithBlack from "../../../../assets/Catalogue/edit.svg";
 import PhoneIcon from "../../../../assets/ReturningUser/phoneIcon.svg";
 import ProfileImage from "../../../../assets/Catalogue/profileIcon.svg";
+import { useNavigate } from "react-router-dom";
 
 interface IPickUpData {
   cardData: {
@@ -16,6 +17,7 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
   cardData: { addressLabel, address, name, phoneNumber },
   key,
 }) => {
+  const navigate = useNavigate();
   return (
     <div
       className="p-[16px] shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF] w-[372px]"
@@ -23,7 +25,11 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
     >
       <div className="flex justify-between">
         <p className="text-[#004EFF] text-[16px] font-medium">{addressLabel}</p>
-        <img src={EditImageWithBlack} alt="" />
+        <img
+          src={EditImageWithBlack}
+          alt=""
+          onClick={() => navigate("/catalogue/edit-address")}
+        />
       </div>
       <p className="text-[16px] font-medium mt-2 w-[250px]">{address}</p>
 
