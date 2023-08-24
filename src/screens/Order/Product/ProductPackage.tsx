@@ -27,6 +27,8 @@ import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
 import PackageBox from "./PackageBox";
+import BoxDetails from "./BoxDetails";
+import { UploadInput } from "../../../components/UploadInput";
 
 interface IPackageProps {}
 
@@ -220,6 +222,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
 
           <Box />
+          <BoxDetails products={products} />
+          <UploadInput />
+
+          <div className="mb-8">
+            <AddButton
+              text="ADD PACKAGE"
+              onClick={() => {}}
+              showIcon={true}
+              icon={ButtonIcon}
+              alt="Add Product"
+            />
+          </div>
         </div>
         {combo && (
           <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
