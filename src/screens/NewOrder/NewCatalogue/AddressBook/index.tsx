@@ -44,6 +44,7 @@ const AddressBook = () => {
         setAddress(allAddressData.data);
       } else {
         toast.error(allAddressData?.message);
+        setAddress([]);
       }
     })();
   }, [filterId]);
