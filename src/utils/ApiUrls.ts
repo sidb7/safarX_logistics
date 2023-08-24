@@ -73,6 +73,8 @@ const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
+const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
+const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -108,4 +110,6 @@ export {
   GET_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
   GET_LATEST_ORDER,
+  GET_PRODUCT_URL,
+  GET_COMBO_PRODUCT_URL,
 };
