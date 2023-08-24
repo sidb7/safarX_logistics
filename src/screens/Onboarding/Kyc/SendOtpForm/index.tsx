@@ -84,7 +84,7 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
-        toast.success(response?.message);
+        // toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -115,6 +115,7 @@ const Index = (props: ITypeProps) => {
             gstVerifyNavigate: true,
           })
         );
+        dispatch(setOnOtpClientId(response.data[0].data.client_id));
       } else {
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -122,30 +123,6 @@ const Index = (props: ITypeProps) => {
           })
         );
         toast.error("GST Verification Failed!");
-      }
-    } catch (error) {
-      return error;
-    }
-  };
-
-  const verifyPAN = async (value: any) => {
-    try {
-      const payload = { pan_no: value };
-      const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
-
-      if (response?.success) {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            panVerifyNavigate: true,
-          })
-        );
-      } else {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            panVerifyNavigate: false,
-          })
-        );
-        toast.error("PAN Verification Failed!");
       }
     } catch (error) {
       return error;
@@ -164,10 +141,6 @@ const Index = (props: ITypeProps) => {
         if (panNumber === "") {
           dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         }
-        verifyPAN(panNumber);
-        if (aadharVerifyNavigate === true && panVerifyNavigate === true) {
-          //Navigate Urls go here
-        }
 
         if (businessType === "soleProprietor") {
           navigate("/onboarding/kyc-mobile-verify", {
@@ -178,19 +151,15 @@ const Index = (props: ITypeProps) => {
         }
       }
       //Proprietor,Company
-      if (businessType !== "individual") {
+      if (businessType === "soleProprietor" || businessType === "company") {
         if (gstNumber === "") {
           dispatch(setErrorDetails({ gstError: "Enter GST Number" }));
         }
         verifyGST(gstNumber);
-        if (panNumber === "") {
-          dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
-        }
-        verifyPAN(panNumber);
+        // if (panNumber === "") {
+        //   dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
+        // }
 
-        if (gstVerifyNavigate === true && panVerifyNavigate === true) {
-          //Navigate Urls go here
-        }
         if (businessType === "soleProprietor") {
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },

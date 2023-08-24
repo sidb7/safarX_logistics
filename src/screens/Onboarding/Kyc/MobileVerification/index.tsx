@@ -8,9 +8,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CustomInputBox from "../../../../components/Input";
 import { useSelector, useDispatch } from "react-redux";
-import { setOTPNumber } from "../../../../redux/reducers/onboarding";
+import {
+  setNavigateOnOtpFormVerify,
+  setOTPNumber,
+} from "../../../../redux/reducers/onboarding";
 import { POST } from "../../../../utils/webService";
-import { POST_VERIFY_AADHAR_OTP_URL } from "../../../../utils/ApiUrls";
+import {
+  POST_VERIFY_AADHAR_OTP_URL,
+  POST_VERIFY_GST_OTP,
+  POST_VERIFY_PAN_URL,
+} from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 interface ITypeProps {}
@@ -22,6 +29,8 @@ const Index = (props: ITypeProps) => {
   console.log("BT", businessType);
   const clientId = useSelector((state: any) => state?.onboarding.onOtpClientId);
   const otp = useSelector((state: any) => state?.onboarding.otp);
+  const panCard = useSelector((state: any) => state?.onboarding.panNumber);
+  const gstNo = useSelector((state: any) => state?.onboarding.gstNumber);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -32,30 +41,80 @@ const Index = (props: ITypeProps) => {
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
+  const verifyPAN = async (value: any) => {
+    try {
+      const payload = { pan_no: value };
+      const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
+
+      if (response?.success) {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            panVerifyNavigate: true,
+          })
+        );
+      } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            panVerifyNavigate: false,
+          })
+        );
+        toast.error("PAN Verification Failed!");
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
   const onVerifyOtp = async (e: any) => {
     try {
       e.preventDefault();
 
-      const payload = { client_id: clientId, otp: otp };
-      const { data: response } = await POST(
-        POST_VERIFY_AADHAR_OTP_URL,
-        payload
-      );
-      if (response?.success) {
-        toast.success(response?.message);
-        //Navigate Url's go here
-      } else {
-        toast.error("OTP Verification Failed!");
-      }
-
       if (businessType === "individual") {
+        const payload = { client_id: clientId, otp: otp };
+        const { data: response } = await POST(
+          POST_VERIFY_AADHAR_OTP_URL,
+          payload
+        );
+        if (response?.success) {
+          verifyPAN(panCard);
+          // toast.success(response?.message);
+          //Navigate Url's go here
+        } else {
+          toast.error("OTP Verification Failed!");
+        }
+
         navigate("/onboarding/kyc-terms/GSTComponent");
       } else if (businessType === "soleProprietor") {
-        if (location.state.path === "otp-form") {
-          navigate("/onboarding/kyc-aadhar-form");
-        }
         if (location.state.path === "aadhar-form") {
-          navigate("/onboarding/kyc-terms/ServiceComponent");
+          const payload = { client_id: clientId, otp: otp };
+          const { data: response } = await POST(
+            POST_VERIFY_AADHAR_OTP_URL,
+            payload
+          );
+          if (response?.success) {
+            verifyPAN(panCard);
+            navigate("/onboarding/kyc-terms/ServiceComponent");
+            // toast.success(response?.message);
+            //Navigate Url's go here
+          } else {
+            toast.error("OTP Verification Failed!");
+          }
+        }
+        // const payload = { gstIn: gstNo, client_id: clientId, otp: otp };
+        else {
+          const payload = {
+            gstIn: "27AALCA5307N1ZC",
+            client_id: "gst_otp_qmefuaqpocskbwibegOZ",
+            otp: otp,
+          };
+          const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+          if (response?.success) {
+            if (location.state.path === "otp-form") {
+              navigate("/onboarding/kyc-aadhar-form");
+            }
+          } else {
+            toast.error("OTP Verification Failed!");
+          }
         }
       } else {
         navigate("/onboarding/kyc-terms/ServiceComponent");
@@ -90,7 +149,8 @@ const Index = (props: ITypeProps) => {
               <div className="!w-full mb-2 lg:mb-2">
                 <CustomInputBox
                   label="Enter OTP"
-                  inputType="number"
+                  inputType="text"
+                  inputMode="numeric"
                   containerStyle="lg:!w-auto"
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"

@@ -14,7 +14,7 @@ const Card = (props: ITypesProps) => {
 
   async function fetchPdf() {
     try {
-      const payload = { fileName: "test" };
+      const payload = { fileName: "SHIPYAARI_AGREEMENT" };
       const { data: response } = await POST(POST_GET_SINGLE_FILE, payload);
 
       setPdfUrl(response.data[0]);

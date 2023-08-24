@@ -42,6 +42,7 @@ import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup"
 
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
+import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
 import ReturningUserPickup from "../screens/NewOrder/ReturningUser/PickUp";
@@ -99,6 +100,8 @@ import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/ad
 import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 
 import CommonLayout from "../layout";
+import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddress";
+import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -220,6 +223,16 @@ const MyRoutes: React.FC = () => {
             element={<KycAadharForm />}
           />
 
+          <Route
+            path="onboarding/walletrecharge"
+            element={<OnBoundingWalletRecharge />}
+          />
+
+          <Route
+            path="onboarding/rechargepayment"
+            element={<RechargePayment />}
+          />
+
           <Route path="transaction" element={<TransactionLayout />}></Route>
           <Route
             path="transaction/filter"
@@ -265,15 +278,14 @@ const MyRoutes: React.FC = () => {
             />
 
             {/* Catalogue */}
-            <Route path="/neworder/catalogue" element={<Catalogue />} />
+            <Route path="catalogue" element={<Catalogue />} />
+            <Route path="catalogue/add-combo" element={<AddComboScreen />} />
             <Route
-              path="/neworder/catalogue/add-combo"
-              element={<AddComboScreen />}
-            />
-            <Route
-              path="/neworder/catalogue/add-product"
+              path="catalogue/add-product"
               element={<AddProductScreen />}
             />
+            <Route path="catalogue/edit-address" element={<EditAddress />} />
+            <Route path="catalogue/add-address" element={<AddAddress />} />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
