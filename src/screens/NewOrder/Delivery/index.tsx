@@ -277,7 +277,7 @@ const Index = () => {
         <Stepper steps={steps} />
       </div>
       <div className="grid grid-cols-1 gap-y-4 ">
-        <div className=" h-[54px] bg-[#F5BE6D] p-2 flex items-center  lg:mx-5 lg:mt-11 lg:mb-4 lg:col-span-3">
+        {/* <div className=" h-[54px] bg-[#F5BE6D] p-2 flex items-center  lg:mx-5 lg:mt-11 lg:mb-4 lg:col-span-3">
           <div className="text-sm mx-5 lg:mx-4 text-[#1C1C1C] lg:flex lg:items-center lg:gap-x-2 ">
             <div className="flex">
               <img src={weather} alt="" className="lg:mr-[6px]" />
@@ -290,7 +290,7 @@ const Index = () => {
               Expect delay in pickup due to weather
             </p>
           </div>
-        </div>
+        </div> */}
         <div className="mx-5  lg:grid lg:grid-cols-3 lg:gap-x-6">
           <div className="relative z-1 mt-5 lg:mb-5  border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 ">
             <div className="grid grid-cols-2 gap-3 ">
