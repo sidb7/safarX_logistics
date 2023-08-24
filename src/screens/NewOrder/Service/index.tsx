@@ -196,20 +196,18 @@ const Index: React.FC = () => {
         getServiceDetailsPayload
       );
 
-      if (response?.success) {
-        // const recommended = response.filter(
-        //   (item: any) => item?.isRecommendation
-        // );
-        // const filter = response.filter((item: any) => !item?.isRecommendation);
-
+      if (response?.status) {
+        console.log("responseeee", response);
         setResponse(response);
-        // setFilterData(filter);
       } else {
         setResponse([]);
-        // toast.error(response?.message);
+
+        if (response?.message) {
+          toast.error(response.message);
+        }
       }
     } catch (error) {
-      return error;
+      console.error("Error in API call:", error);
     }
   };
 
@@ -221,7 +219,29 @@ const Index: React.FC = () => {
     setSelectedService(serviceDetails);
   };
 
-  const postServiceDetailsPayload = {};
+  // const postServiceDetailsPayload = dataArray.map((eachArray: any) => {
+  //   eachArray.map((each: any) => {
+  //     console.log("eachforpayload", each);
+  //     mode: each.mode,
+  //     companyServiceId: each.companyServiceId,
+  //   companyServiceName: each.companyServiceId,
+  //   baseWeight:each.companyServiceName,
+  //   partnerServiceId: each.partnerServiceId,
+  //   partnerServiceName: each.partnerServiceId,
+  //   price: each.partnerServiceId,
+
+  //   });
+  // });
+
+  const postServiceDetailsPayload = {
+    mode: "SURFACE",
+    companyServiceId: "12",
+    companyServiceName: "ECONOMY",
+    baseWeight: 0.5,
+    partnerServiceId: "123",
+    partnerServiceName: "DART PLUS",
+    price: 168,
+  };
   const postServiceDetails = async (payload: any) => {
     try {
       const { data: response } = await POST("", postServiceDetailsPayload);
@@ -239,11 +259,28 @@ const Index: React.FC = () => {
     }
   };
 
-  const selectedServiceData = dataArray?.find(
-    (service: any) => service.serviceId === selectedService
-  );
+  const selectedServiceData = dataArray?.map((eachArray: any) => {
+    console.log("eachArray for selectedData", eachArray);
+    return eachArray.find((service: any) => {
+      return service.companyServiceId === selectedService;
+    });
+  });
 
   console.log("selectedServiceEntireObject", selectedServiceData);
+
+  const payload = {
+    mode: selectedServiceData[0]?.mode,
+    companyServiceId: selectedServiceData[0]?.companyServiceId,
+    companyServiceName: selectedServiceData[0]?.companyServiceName,
+    baseWeight: parseFloat(
+      selectedServiceData[0].companyServiceName?.split(" ")[1]
+    ),
+    partnerServiceId: selectedServiceData[0]?.partnerServiceId,
+    partnerServiceName: selectedServiceData[0]?.partnerServiceName,
+    price: selectedServiceData[0]?.totalPayment,
+  };
+
+  console.log("Payload:", payload);
 
   const steps = [
     {
@@ -318,11 +355,13 @@ const Index: React.FC = () => {
             />
           );
         })} */}
-        {dataArray?.map((each: any) => {
-          console.log("eachhh", each);
-          return (
+        {/* key={each.companyServiceId + index} */}
+
+        {dataArray?.map((eachArray: any) => {
+          console.log("eachArray", eachArray);
+          return eachArray.map((each: any, index: number) => (
             <ServiceCard
-              key={each.value}
+              key={each.companyServiceId}
               isRecommendation={each.isRecommendation}
               recommendation={each.recommendation}
               courierPartner={each.partnerServiceName}
@@ -330,14 +369,14 @@ const Index: React.FC = () => {
               minimumServiceWeight={each.minimumServiceWeight}
               totalPrice={each.totalPayment}
               savePrice={each.savePrice}
-              etaDate={each.EDT}
-              name={each.accountName}
-              value={each.serviceId}
+              etaDate={each?.EDT}
+              name={"shipyaari"}
+              value={each?.companyServiceId}
               onSelectService={handleServiceSelection}
-              serviceId={each.serviceId}
+              // serviceId={each.serviceId}
               serviceData={each}
             />
-          );
+          ));
         })}
       </div>
 

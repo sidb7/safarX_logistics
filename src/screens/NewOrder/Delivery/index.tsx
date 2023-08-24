@@ -98,7 +98,7 @@ const Index = () => {
     country: "",
     addressType: "warehouse",
     gstNo: "",
-    orderType: "",
+    orderType: "B2B",
   });
 
   const [contact, setContact] = useState({
@@ -184,7 +184,7 @@ const Index = () => {
       city: deliveryLocation.city,
       state: deliveryLocation.state,
       country: deliveryLocation.country,
-      gstNo: deliveryLocation.gstNo,
+      gstNumber: deliveryLocation.gstNo,
       addressType: deliveryLocation.addressType,
       contact: {
         name: contact.name,
@@ -481,7 +481,27 @@ const Index = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-5 lg:mb-6 lg:hidden">
+          <div className="mb-4 lg:mb-6 ">
+            <CustomInputBox
+              label="State"
+              value={deliveryLocation.state}
+              onChange={(e) =>
+                handleDeliveryLocationChange("state", e.target.value)
+              }
+            />
+          </div>
+
+          <div className="mb-4 lg:mb-6">
+            <CustomInputBox
+              label="Country"
+              value={deliveryLocation.country}
+              onChange={(e) =>
+                handleDeliveryLocationChange("country", e.target.value)
+              }
+            />
+          </div>
+
+          {/* <div className="grid grid-cols-2 gap-3 mb-5 lg:mb-6 lg:hidden">
             <div>
               <CustomInputBox
                 label="State"
@@ -500,14 +520,14 @@ const Index = () => {
                 }
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="hidden lg:block lg:mb-6">
+          {/* <div className="hidden lg:block lg:mb-6">
             <CustomInputBox label="State" />
           </div>
           <div className="hidden lg:block lg:mb-6">
             <CustomInputBox label="Country" />
-          </div>
+          </div> */}
 
           <div className="mb-5 lg:mb-6">
             <AudioInputBox

@@ -45,6 +45,9 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
 
   // console.log("serviceDetails", serviceDetails);
   console.log("serviceData", props.serviceData);
+
+  console.log("name", name);
+  console.log("value", value);
   return (
     <div
       className={`${
@@ -65,8 +68,8 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
             />
           </div>
           {!isStandardService && <div>{courierPartner}</div>}
-          <div>{serviceType}</div>
-          {!isStandardService && <div>{`${minimumServiceWeight} Kg`}</div>}
+          <div>{serviceType} Kg</div>
+          {/* {!isStandardService && <div>{`${minimumServiceWeight} Kg`}</div>} */}
         </div>
         <div className="flex items-center gap-x-2 mb-2  lg:ml-5">
           <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} `}</div>

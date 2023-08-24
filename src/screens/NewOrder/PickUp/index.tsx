@@ -110,7 +110,7 @@ const Index = () => {
     mobileNo: "",
     alternateMobileNo: "",
     emailId: "",
-    type: "",
+    type: "warehouse associate",
   });
 
   const [customBranding, setCustomBranding] = useState({
