@@ -79,7 +79,8 @@ const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProd
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
-
+const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
+const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -109,6 +110,8 @@ export {
   FILE_UPLOAD,
   GET_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  GET_SELLER_BOX_DETAILS,
+  GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
   GET_PRODUCT_URL,
   GET_COMBO_PRODUCT_URL,
