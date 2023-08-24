@@ -96,6 +96,7 @@ import ProductPackage from "../screens/Order/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
 import Catalogue from "../screens/NewOrder/NewCatalogue";
 import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addCombo";
+import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 
 import CommonLayout from "../layout";
 
@@ -268,6 +269,10 @@ const MyRoutes: React.FC = () => {
             <Route
               path="/neworder/catalogue/add-combo"
               element={<AddComboScreen />}
+            />
+            <Route
+              path="/neworder/catalogue/add-product"
+              element={<AddProductScreen />}
             />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
