@@ -1,17 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import DeleteIcon from "../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
-import EditIcon from "../../../assets/Product/Edit.svg";
-import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import InputBox from "../../../components/InputBox/index";
-import CustomDropDown from "../../../components/DropDown";
-import CustomButton from "../../../components/Button";
-import Upload from "../../../components/Upload";
 import ProductBox from "../Product/productBox";
 import "../../../styles/productStyle.css";
-import AddButton from "../../../components/Button/addButton";
 import { useMediaQuery } from "react-responsive";
 import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
 import SampleProduct from "../../../assets/SampleProduct.svg";
@@ -21,98 +15,40 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
 import { POST } from "../../../utils/webService";
-import { FILE_UPLOAD, POST_PRODUCT_URL } from "../../../utils/ApiUrls";
+import {
+  FILE_UPLOAD,
+  GET_LATEST_ORDER,
+  POST_PRODUCT_URL,
+} from "../../../utils/ApiUrls";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface IProductFilledProps {}
 
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
-  const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
-  const [addedProductData, setAddedProductData] = useState<any>([]);
-  const refImage = useRef();
-  console.log("checkthestate", addedProductTotal);
-
-  const [uploadedFile, setUploadFile]: any = useState(null);
-  const [addButton, setAddButton]: any = useState(false);
-  const [disabled, setDisabled]: any = useState(true);
-  const [successProduct, setSuccessProduct] = useState(false);
-  console.log("successornot", successProduct);
-
+  const navigate = useNavigate();
   const initialUserData = {
-    productName: "",
-    productCategory: "",
-    productPrice: "",
-    productTax: "",
-    productUnits: "",
-    productLength: "",
-    productBreadth: "",
-    productHeight: "",
-    productImage: "",
+    name: "",
+    category: "",
+    price: "",
+    tax: "",
+    length: "",
+    breadth: "",
+    height: "",
+    image: "",
   };
 
+  const [productPayload, setProductPayload]: any = useState([]);
+  const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
+  const [addedProductData, setAddedProductData] = useState<any>([]);
   const [productState, setProductState]: any = useState<any>(initialUserData);
-  console.log("initialUserData", initialUserData);
-  console.log("productState=>", productState);
-  const AddProduct = async (e: any) => {
-    e.preventDefault();
-    console.log("productstate=>", productState);
-    const payload = {
-      productName: productState.productName,
-      description: "This is an example product for demonstration purposes.",
-      category: [productState.productCategory],
-      tags: ["electronics", "smartphone", "android"],
-      price: productState.productPrice,
-      currency: "INR",
-      discountAmount: 0,
-      sale_price: 0,
-      gst: productState.productTax,
-      stock: 0,
-      dimensions: {
-        length: productState.productLength,
-        width: productState.productBreadth,
-        height: productState.productHeight,
-        unit: productState.productUnits,
-      },
-      weight: {
-        deadWeight: 12,
-        deadWeightUnit: "kg",
-        volumetricWeight: 0,
-        volumetricWeightUnit: "kg",
-        catalogueWeight: {
-          from: 1,
-          to: 2,
-          unit: "kg",
-        },
-      },
-      available: true,
-      attributes: {
-        color: "Black",
-        size: "Medium",
-        brand: "ABC Electronics",
-      },
-      features: [
-        "6.5-inch AMOLED display",
-        "Quad-camera system",
-        "128GB storage",
-      ],
-      images: [
-        {
-          url: productState.productImage,
-          alt: "Front View",
-        },
-        {
-          url: "https://example.com/images/product123_back.jpg",
-          alt: "Back View",
-        },
-      ],
-      ratings: {
-        average: 0,
-        count: 0,
-      },
-      reviews: [],
-    };
-    const { data: response } = await POST(POST_PRODUCT_URL, payload);
+  const [successProduct, setSuccessProduct] = useState(false);
+
+  const addProductInfo = async () => {
+    const { data: response } = await POST(POST_PRODUCT_URL, {
+      product: productPayload,
+    });
     let fileName = window.document.getElementById(
       "fileName"
     ) as HTMLInputElement;
@@ -121,22 +57,59 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       toast.success(response?.message);
       setSuccessProduct(true);
       setAddedProductData((prevState: any) => [...prevState, productState]);
+
       const clearUserData = () => {
         setProductState(initialUserData);
       };
       clearUserData();
-
       console.log("initialUserDataafterAPICall", initialUserData);
-
-      //Navigate Url's go here
     } else {
       toast.error("Failed To Upload!");
     }
   };
+
+  useEffect(() => {}, []);
+
+  const AddProductInfoData = () => {
+    console.log("productstate=>", productState);
+    const payload = {
+      currency: "INR",
+      weight: productState.width,
+      available: true,
+      images: [
+        {
+          url: productState.image,
+          alt: "",
+        },
+      ],
+    };
+    setProductPayload([...productPayload, { ...payload, ...productState }]);
+  };
+
   const resetProductState = () => {
     setProductState(initialUserData);
   };
-
+  useEffect(() => {
+    (async () => {
+      const res: any = await getOrderProductDetails();
+      if (res) {
+        console.log("ok", res);
+      }
+    })();
+  }, []);
+  const getOrderProductDetails = async () => {
+    try {
+      const { data } = await POST(GET_LATEST_ORDER);
+      console.log("data", data?.data?.products);
+      if (data?.success) {
+        setProductPayload(data?.data?.products);
+      } else {
+        throw new Error(data?.message);
+      }
+    } catch (error) {
+      console.log("getOrderProductDetails", error);
+    }
+  };
   const steps = [
     {
       label: "Pickup",
@@ -231,169 +204,140 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
           <h1 className="font-bold leading-6 text-lg font-Lato">Product</h1>
         </div>
         <div className="flex gap-x-6 my-5">
-          {addedProductData.map((product: any, i: number) => {
-            return (
-              <>
-                {successProduct && (
-                  <div key={i}>
-                    <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-                      <div className="">
-                        <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
-                          Product {i + 1}
-                        </h2>
+          {productPayload.length > 0 &&
+            productPayload.map((product: any, i: number) => {
+              return (
+                <>
+                  {
+                    <div key={i}>
+                      <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
+                        <div className="">
+                          <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
+                            Product {i + 1}
+                          </h2>
+                        </div>
+                        <div className="flex ">
+                          <img
+                            src={BookmarkIcon}
+                            alt="Bookmark Product"
+                            className="mr-2"
+                          />
+                          <img
+                            src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+                            alt="Delete Product"
+                            className="w-5 h-5"
+                          />
+                        </div>
                       </div>
-                      <div className="flex ">
-                        <img
-                          src={BookmarkIcon}
-                          alt="Bookmark Product"
-                          className="mr-2"
-                        />
-                        <img
-                          src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
-                          alt="Delete Product"
-                          className="w-5 h-5"
-                        />
-                      </div>
+                      <ProductBox
+                        image={SampleProduct}
+                        productName={product.name}
+                        weight={product.weight}
+                        length={product.length}
+                        height={product.height}
+                        className="p-3 lg:max-w-[272px]"
+                      />
                     </div>
-                    <ProductBox
-                      image={SampleProduct}
-                      productName={product.productName}
-                      weight={product.productLength}
-                      dimension={product.productBreadth}
-                      height={product.productLength}
-                      className="p-3 lg:max-w-[272px]"
-                    />
-                  </div>
-                )}
-              </>
-            );
-          })}
+                  }
+                </>
+              );
+            })}
         </div>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log(productState);
-            setAddedProductData((prevState: any) => [
-              ...prevState,
-              productState,
-            ]);
+        <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
+          <div className="">
+            <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
+              Product {addedProductData.length + 1}
+            </h2>
+          </div>
+          <div className="flex">
+            <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
 
-            setAddedProductTotal(addedProductTotal + 1);
-          }}
-        >
-          <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-            <div className="">
-              <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
-                Product {addedProductData.length + 1}
-              </h2>
+            <img
+              src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+              alt="Delete Product"
+              className="w-5 h-5"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
+          <InputBox
+            label="Product name"
+            name="name"
+            value={productState.name}
+            onChange={handleProductInputChange}
+          />
+          <InputBox
+            label="Product category"
+            name="category"
+            value={productState.category}
+            onChange={handleProductInputChange}
+          />
+          <InputBox
+            label="Product price"
+            name="price"
+            value={productState.price}
+            onChange={handleProductInputChange}
+          />
+          <InputBox
+            label="Product tax"
+            name="tax"
+            value={productState.tax}
+            onChange={handleProductInputChange}
+          />
+          <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
+            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+              <InputBox
+                className=""
+                label="Length"
+                name="length"
+                value={productState.length}
+                onChange={handleProductInputChange}
+              />
             </div>
-            <div className="flex">
-              <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
-
-              <img
-                src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
-                alt="Delete Product"
-                className="w-5 h-5"
+            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+              <InputBox
+                className=""
+                label="Breadth"
+                name="breadth"
+                value={productState.breadth}
+                onChange={handleProductInputChange}
+              />
+              <InputBox
+                label="Height"
+                name="height"
+                value={productState.height}
+                onChange={handleProductInputChange}
               />
             </div>
           </div>
 
-          <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
-            <InputBox
-              label="Product name"
-              name="productName"
-              value={productState.productName}
-              onChange={handleProductInputChange}
-            />
-            <InputBox
-              label="Product category"
-              name="productCategory"
-              value={productState.productCategory}
-              onChange={handleProductInputChange}
-            />
-            <InputBox
-              label="Product price"
-              name="productPrice"
-              value={productState.productPrice}
-              onChange={handleProductInputChange}
-            />
-            <InputBox
-              label="Product tax"
-              name="productTax"
-              value={productState.productTax}
-              onChange={handleProductInputChange}
-            />
-            <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
-              <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-                <CustomDropDown
-                  // value={productState.productUnits}
-                  value={productState.productUnits}
-                  options={[
-                    {
-                      label: "",
-                      value: "",
-                    },
-                    {
-                      label: "CM",
-                      value: "CM",
-                    },
-                    {
-                      label: "MM",
-                      value: "KM",
-                    },
-                  ]}
-                  selectClassName="rounded-md bg-[#FEFEFE]"
-                  name="productUnits"
-                  onChange={handleProductInputChange}
-                />
+          <InputWithFileUpload
+            type="file"
+            onChange={(e) => uploadedInputFile(e)}
+          />
+        </div>
+        <div className="text-gray-400	text-xs	mt-3 lg:hidden">
+          <p>Volumetric weight includes dimensions of the product</p>
+        </div>
 
-                <InputBox
-                  className=""
-                  label="Length"
-                  name="productLength"
-                  value={productState.productLength}
-                  onChange={handleProductInputChange}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-                <InputBox
-                  className=""
-                  label="Breadth"
-                  name="productBreadth"
-                  value={productState.productBreadth}
-                  onChange={handleProductInputChange}
-                />
-                <InputBox
-                  label="Height"
-                  name="productHeight"
-                  value={productState.productHeight}
-                  onChange={handleProductInputChange}
-                />
-              </div>
-            </div>
+        <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
+          <img src={ButtonIcon} alt="Add Product" width="16px" />
 
-            <InputWithFileUpload
-              type="file"
-              onChange={(e) => uploadedInputFile(e)}
-            />
-          </div>
-          <div className="text-gray-400	text-xs	mt-3 lg:hidden">
-            <p>Volumetric weight includes dimensions of the product</p>
-          </div>
-
-          <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
-            <img src={ButtonIcon} alt="Add Product" width="16px" />
-
-            <button
-              className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
-              type="submit"
-              onClick={(e) => AddProduct(e)}
-            >
-              ADD PRODUCT
-            </button>
-          </div>
-        </form>
+          <button
+            className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
+            onClick={() => AddProductInfoData()}
+          >
+            ADD PRODUCT
+          </button>
+          <button
+            className="pl-8 text-[#004EFF]  text-sm font-semibold leading-5 font-Open"
+            onClick={() => addProductInfo()}
+          >
+            API CALL
+          </button>
+        </div>
       </div>
       <div>
         <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
