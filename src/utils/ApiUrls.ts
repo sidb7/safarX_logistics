@@ -85,6 +85,7 @@ const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
+const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -134,4 +135,5 @@ export {
   GET_LATEST_ORDER,
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
+  GET_SELLER_COMPANY_BOX,
 };

@@ -22,9 +22,11 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
-import { POST } from "../../../utils/webService";
+import { POST, GET } from "../../../utils/webService";
 import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
+import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
+import PackageBox from "./PackageBox";
 
 interface IPackageProps {}
 
@@ -37,8 +39,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [combo, setCombo] = useState(false);
   const [insurance, setInsurance] = useState(false);
   const [products, setProducts] = useState([]);
+  const [box, setBox] = useState([]);
 
-  console.log("products------>check", products);
+  console.log("boxState", box);
 
   const steps = [
     {
@@ -93,11 +96,17 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
-      console.log("data", data?.data?.products);
+      const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
         setProducts(data?.data?.products);
       } else {
         throw new Error(data?.message);
+      }
+
+      if (boxData?.success) {
+        setBox(boxData?.data);
+      } else {
+        throw new Error(boxData?.message);
       }
     } catch (error) {
       console.log("getOrderProductDetails", error);
@@ -190,6 +199,26 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
         </div>
         <div className="mt-7">
+          <div className="flex pb-5 pr-5 gap-2">
+            <img src={ProductIcon} alt="Package Icon" className="" />
+            <h1 className="font-bold text-lg leading-6">Box Type</h1>
+          </div>
+          <div className="flex">
+            {box.map((newpackage: any, index) => {
+              return (
+                <PackageBox
+                  packageType={newpackage?.name}
+                  weight={newpackage?.weight}
+                  height={newpackage.height}
+                  breadth={newpackage.breadth}
+                  length={newpackage.length}
+                  boxType={newpackage?.color}
+                  recommended={true}
+                />
+              );
+            })}
+          </div>
+
           <Box />
         </div>
         {combo && (
