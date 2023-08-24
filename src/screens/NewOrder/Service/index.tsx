@@ -14,6 +14,7 @@ import { POST } from "../../../utils/webService";
 import {
   GET_COURIER_PARTNER_SERVICE,
   GET_LATEST_ORDER,
+  SET_PARTNER_SERVICE_INFO,
 } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
@@ -141,6 +142,16 @@ const Index: React.FC = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [response, setResponse] = useState([]);
   const [latestOrder, setLatestOrder] = useState([]);
+  // const [payload, setPayload] = useState({
+  //   mode: null,
+  //   companyServiceId: null,
+  //   companyServiceName: null,
+  //   baseWeight: null,
+  //   partnerServiceId: null,
+  //   partnerServiceName: null,
+  //   price: null,
+  // });
+
   const navigate = useNavigate();
 
   console.log("selectedService", selectedService);
@@ -233,54 +244,73 @@ const Index: React.FC = () => {
   //   });
   // });
 
-  const postServiceDetailsPayload = {
-    mode: "SURFACE",
-    companyServiceId: "12",
-    companyServiceName: "ECONOMY",
-    baseWeight: 0.5,
-    partnerServiceId: "123",
-    partnerServiceName: "DART PLUS",
-    price: 168,
-  };
-  const postServiceDetails = async (payload: any) => {
-    try {
-      const { data: response } = await POST("", postServiceDetailsPayload);
-
-      if (response?.success) {
-        toast.success(response?.message);
-        navigate("/neworder/payment");
-      } else {
-        console.error("Serviceerror");
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      console.log("Error in  ServicePostAPI, error");
-      return error;
-    }
-  };
+  /* Static service payload data */
+  // const postServiceDetailsPayload = {
+  //   mode: "SURFACE",
+  //   companyServiceId: "12",
+  //   companyServiceName: "ECONOMY",
+  //   baseWeight: 0.5,
+  //   partnerServiceId: "123",
+  //   partnerServiceName: "DART PLUS",
+  //   price: 168,
+  // };
 
   const selectedServiceData = dataArray?.map((eachArray: any) => {
     console.log("eachArray for selectedData", eachArray);
-    return eachArray.find((service: any) => {
+    return eachArray?.find((service: any) => {
       return service.companyServiceId === selectedService;
     });
   });
 
   console.log("selectedServiceEntireObject", selectedServiceData);
 
-  const payload = {
-    mode: selectedServiceData[0]?.mode,
-    companyServiceId: selectedServiceData[0]?.companyServiceId,
-    companyServiceName: selectedServiceData[0]?.companyServiceName,
-    baseWeight: parseFloat(
-      selectedServiceData[0].companyServiceName?.split(" ")[1]
-    ),
-    partnerServiceId: selectedServiceData[0]?.partnerServiceId,
-    partnerServiceName: selectedServiceData[0]?.partnerServiceName,
-    price: selectedServiceData[0]?.totalPayment,
-  };
+  let payloadData: any = "";
+  if (
+    selectedServiceData &&
+    selectedServiceData.length > 0 &&
+    selectedServiceData[0]
+  ) {
+    payloadData = {
+      mode: selectedServiceData[0]?.mode,
+      companyServiceId: selectedServiceData[0]?.companyServiceId,
+      companyServiceName: selectedServiceData[0]?.companyServiceName,
+      baseWeight: parseFloat(
+        selectedServiceData[0].companyServiceName?.split(" ")[1]
+      ),
+      partnerServiceId: selectedServiceData[0]?.partnerServiceId,
+      partnerServiceName: selectedServiceData[0]?.partnerServiceName,
+      price: selectedServiceData[0]?.totalPayment,
+    };
+    // setPayload(payloadData);
+    // console.log("PayloadData:", payloadData);
+  } else {
+    console.log("No matching service found.");
+  }
+  console.log("Payload:", payloadData);
+  const postServiceDetails = async (payload: any) => {
+    try {
+      if (payload.mode !== "") {
+        // Check if the mode is not an empty string
+        const { data: response } = await POST(
+          SET_PARTNER_SERVICE_INFO,
+          payload
+        );
 
-  console.log("Payload:", payload);
+        if (response?.success) {
+          toast.success(response?.message);
+          navigate("/neworder/payment");
+        } else {
+          console.error("Service error");
+          toast.error(response?.message);
+        }
+      } else {
+        console.error("Payload is empty.");
+      }
+    } catch (error) {
+      console.log("Error in ServicePostAPI:", error);
+      return error;
+    }
+  };
 
   const steps = [
     {
@@ -405,7 +435,11 @@ const Index: React.FC = () => {
           );
         })}
       </div> */}
-      <BottomLayout callApi={() => {}} />
+      <BottomLayout
+        callApi={() => {
+          postServiceDetails(payloadData);
+        }}
+      />
     </div>
   );
 };
