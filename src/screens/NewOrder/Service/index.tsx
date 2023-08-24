@@ -152,30 +152,30 @@ const Index: React.FC = () => {
   console.log("dataArray", dataArray);
 
   //endpoint to maintain order state
-  const getLatestOrderDetails = async () => {
-    try {
-      const { data: response } = await POST(GET_LATEST_ORDER);
+  // const getLatestOrderDetails = async () => {
+  //   try {
+  //     const { data: response } = await POST(GET_LATEST_ORDER);
 
-      if (response?.success) {
-        // const recommended = response.filter(
-        //   (item: any) => item?.isRecommendation
-        // );
-        // const filter = response.filter((item: any) => !item?.isRecommendation);
+  //     if (response?.success) {
+  //       // const recommended = response.filter(
+  //       //   (item: any) => item?.isRecommendation
+  //       // );
+  //       // const filter = response.filter((item: any) => !item?.isRecommendation);
 
-        setLatestOrder(response);
-        // setFilterData(filter);
-      } else {
-        setLatestOrder([]);
-        // toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  //       setLatestOrder(response);
+  //       // setFilterData(filter);
+  //     } else {
+  //       setLatestOrder([]);
+  //       // toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  useEffect(() => {
-    getLatestOrderDetails();
-  }, []);
+  // useEffect(() => {
+  //   getLatestOrderDetails();
+  // }, []);
 
   const pincodePayload = {};
 
@@ -184,13 +184,9 @@ const Index: React.FC = () => {
 
   //getserviceAPI
   const getServiceDetailsPayload = {
-    zone: "zone 1",
-    accountType: "B2C",
-    weight: 1.5,
-    invoiceValue: 50000,
     paymentType: "COD",
-    pincodeFrom: 400012,
-    pincodeTo: 400099,
+    codCollectAmount: 123,
+    invoiceValue: 1234,
   };
 
   const getCourierPartnerService = async () => {
@@ -329,12 +325,12 @@ const Index: React.FC = () => {
               key={each.value}
               isRecommendation={each.isRecommendation}
               recommendation={each.recommendation}
-              courierPartner={each.partnerName}
-              serviceType={each.serviceMode}
+              courierPartner={each.partnerServiceName}
+              serviceType={each.companyServiceName}
               minimumServiceWeight={each.minimumServiceWeight}
-              totalPrice={each.totalPrice}
+              totalPrice={each.totalPayment}
               savePrice={each.savePrice}
-              etaDate={each.etaDate}
+              etaDate={each.EDT}
               name={each.accountName}
               value={each.serviceId}
               onSelectService={handleServiceSelection}

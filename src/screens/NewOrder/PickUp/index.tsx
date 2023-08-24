@@ -342,7 +342,7 @@ const Index = () => {
   ];
 
   return (
-    <div>
+    <div className="w-full">
       {/* <header className="fixed top-0 z-50 w-full ">
         <NavBar />
       </header> */}
@@ -538,7 +538,27 @@ const Index = () => {
           />
         </div>
 
-        <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Country"
+            value={pickupLocation.country}
+            onChange={(e) =>
+              handlePickupLocationChange("country", e.target.value)
+            }
+          />
+        </div>
+
+        {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="State"
             value={pickupLocation.state}
@@ -555,15 +575,15 @@ const Index = () => {
               }
             />
           </div>
-        </div>
+        </div> */}
 
-        <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+        {/* <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="State" />
         </div>
 
         <div className="hidden lg:block mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox label="Country" />
-        </div>
+        </div> */}
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <AudioInputBox
@@ -818,7 +838,7 @@ const Index = () => {
               </div>
             </div>
             {toggleStatus && (
-              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2">
+              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-20">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
                   <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name and Logo
