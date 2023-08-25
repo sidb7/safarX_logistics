@@ -290,7 +290,6 @@ const Index: React.FC = () => {
   const postServiceDetails = async (payload: any) => {
     try {
       if (payload.mode !== "") {
-        // Check if the mode is not an empty string
         const { data: response } = await POST(
           SET_PARTNER_SERVICE_INFO,
           payload
