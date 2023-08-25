@@ -7,6 +7,7 @@ interface OnboardingState {
   panNumber?: string;
   aadharNumber?: number;
   onOtpClientId?: string;
+  acceptTnCStatus?: boolean;
   otp?: number;
   verifyForOtpBtn?: {
     aadharVerify?: boolean;
@@ -41,6 +42,7 @@ const initialState: OnboardingState = {
   otp: 0,
   onOtpClientId: "",
   otpFormBtnStatus: false,
+  acceptTnCStatus: false,
   verifyForOtpBtn: {
     aadharVerify: false,
     gstVerify: false,
@@ -89,6 +91,9 @@ export const onboardingSlice = createSlice({
     },
     setOtpFormBtnStatus: (state, action) => {
       state.otpFormBtnStatus = action.payload;
+    },
+    setAcceptTnCStatus: (state, action) => {
+      state.acceptTnCStatus = action.payload;
     },
     setErrorDetails: (
       state,
@@ -161,6 +166,7 @@ export const {
   setVerifyDetailsForOtpBtn,
   setNavigateOnOtpFormVerify,
   setAadharNumberProprietor,
+  setAcceptTnCStatus,
 } = onboardingSlice.actions;
 
 export default onboardingSlice.reducer;

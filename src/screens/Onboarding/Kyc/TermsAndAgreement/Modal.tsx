@@ -43,6 +43,10 @@ const Modal = (props: ITypesProps) => {
               onClick={() => {
                 if (businessType === "individual") {
                   navigate("/onboarding/select-address");
+                } else if (businessType === "company") {
+                  navigate("/onboarding/select-address", {
+                    state: { path: "company-form" },
+                  });
                 } else {
                   navigate("/onboarding/select-address-billing");
                 }

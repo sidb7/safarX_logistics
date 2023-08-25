@@ -9,6 +9,7 @@ interface IRadioButtonProps {
   id?: string;
   label?: string;
   style?: any;
+  checked?: boolean;
 }
 
 const index = (props: IRadioButtonProps) => {
@@ -21,20 +22,22 @@ const index = (props: IRadioButtonProps) => {
     id,
     labelClassName,
     style,
+    checked,
   } = props;
 
   return (
-    <div className="flex items-center ">
+    <div className="flex items-center cursor-pointer ">
       <input
         type="radio"
         name={name}
         value={value}
         onChange={onChange}
-        className={`  ${inputClassName} `}
+        className={`  ${inputClassName} cursor-pointer`}
         id={id}
         style={style}
+        checked={checked}
       />
-      <label htmlFor={id} className={`${labelClassName}`}>
+      <label htmlFor={id} className={`${labelClassName} cursor-pointer  `}>
         {label}
       </label>
     </div>

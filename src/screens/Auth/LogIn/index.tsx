@@ -32,7 +32,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/newOrder/pickup");
+      navigate("/order");
     } else {
       toast.error(response?.message);
     }

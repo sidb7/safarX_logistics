@@ -22,7 +22,7 @@ export const EditProfile = () => {
     });
     if (data.success) {
       setProfileData(data?.data);
-      toast.success(data.message);
+      // toast.success(data.message);
     } else {
       toast.error(data.message);
     }

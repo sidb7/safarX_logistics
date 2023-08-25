@@ -42,6 +42,7 @@ import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup"
 
 import TransactionLayout from "../layout/TransactionLayout";
 import WalletRecharge from "../screens/NewOrder/WalletRecharge";
+import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
 import ReturningUserPickup from "../screens/NewOrder/ReturningUser/PickUp";
@@ -220,6 +221,16 @@ const MyRoutes: React.FC = () => {
           <Route
             path="onboarding/kyc-aadhar-form"
             element={<KycAadharForm />}
+          />
+
+          <Route
+            path="onboarding/walletrecharge"
+            element={<OnBoundingWalletRecharge />}
+          />
+
+          <Route
+            path="onboarding/rechargepayment"
+            element={<RechargePayment />}
           />
 
           <Route path="transaction" element={<TransactionLayout />}></Route>

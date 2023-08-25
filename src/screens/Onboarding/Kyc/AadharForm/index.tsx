@@ -45,7 +45,7 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
-        toast.success(response?.message);
+        // toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         //Navigate Urls go here
       } else {
@@ -77,7 +77,7 @@ const Index = (props: ITypeProps) => {
               <CustomInputBox
                 containerStyle={`lg:!w-auto`}
                 label="Aadhar Number"
-                inputType="number"
+                inputType="text"
                 className={`  ${
                   aadharError !== "" && "!border-[#F35838]"
                 }  lg:!w-[320px] !font-Open`}
@@ -142,7 +142,7 @@ const Index = (props: ITypeProps) => {
 
   return (
     <div>
-      {!isBigScreen && aadharFormComponent()}
+      {/* {!isBigScreen && aadharFormComponent()} */}
 
       {isBigScreen && (
         <CustomBottomModal

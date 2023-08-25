@@ -3,6 +3,7 @@ import NavBar from "./~components/NavBar";
 import TopBar from "./~components/TopBar";
 import { Outlet } from "react-router-dom";
 import { ResponsiveState } from "../utils/responsiveState";
+// import BottomBar from "./~components/BottomBar";
 
 interface ICommonLayoutProps {}
 
@@ -21,8 +22,9 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           openMobileSideBar={openMobileSideBar}
           setMobileSideBar={setMobileSideBar}
         />
-        <main className=" lg:ml-16 lg:pl-2 !h-[calc(100vh-74px)] overflow-auto">
+        <main className="lg:ml-16 lg:pl-2 !h-[calc(100vh-74px)] overflow-auto">
           <Outlet />
+          {/* <BottomBar  /> */}
         </main>
       </main>
     </>
