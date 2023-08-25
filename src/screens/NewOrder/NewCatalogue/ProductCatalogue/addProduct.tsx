@@ -13,18 +13,61 @@ import FileUploadWithText from "../../../../components/FileUploadWithText/fileUp
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import { Breadcum } from "../../../../components/Layout/breadcum";
 // import AddOrder from "../../../../assets/Catalogue/add_order.svg";
+import { POST } from "../../../../utils/webService";
+import { POST_ADD_PRODUCT } from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
 interface IAddProductProps {}
 
 const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [pastedData, setPastedData] = useState("");
-  const handleClick = () => {
-    // inputRef.current?.focus();
-  };
-  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    const pastedData = event.clipboardData.getData("text");
-    setPastedData(pastedData);
+  const navigate = useNavigate();
+
+  const [products, setProducts] = useState<any>({
+    productId: uuidv4(),
+    productName: "",
+    description: "",
+    category: [],
+    tags: [],
+    price: 0,
+    currency: "INR",
+    gst: 0,
+    dimensions: {
+      length: 0,
+      width: 0,
+      height: 0,
+      unit: "",
+    },
+    weight: {
+      deadWeight: 12,
+      deadWeightUnit: "kg",
+      volumetricWeight: 0,
+      volumetricWeightUnit: "kg",
+      catalogueWeight: {
+        from: 0,
+        to: 0,
+        unit: "kg",
+      },
+    },
+    available: true,
+    attributes: {},
+    features: [],
+    images: [],
+    ratings: {
+      average: 0,
+      count: 0,
+    },
+    reviews: [],
+  });
+  const addProduct = async () => {
+    const { data } = await POST(POST_ADD_PRODUCT, products);
+    if (data.success) {
+      toast.success(data.message);
+      navigate(-1);
+    } else {
+      toast.error(data.message);
+    }
   };
   return (
     <div className="h-full">
@@ -56,7 +99,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
 
       <div className="mx-5">
         <div className="">
-          <div className="mt-3 pb-[25px]">
+          <div className="mt-4 pb-[25px]">
             <h1 className="font-semibold font-Lato leading-7 capitalize text-[#004EFF] text-[22px]">
               Product
             </h1>
@@ -73,25 +116,18 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
               </div>
             </div>
             <div className="relative h-[75px] ">
-              <div className="w-full max-w-xs mx-auto">
-                <div
-                  onClick={handleClick}
-                  className="w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none bg-transparent border-none cursor-text"
-                >
-                  {pastedData || "Click here to paste..."}
-                </div>
+              <div className="w-full">
                 <input
-                  ref={inputRef}
                   type="text"
-                  value={pastedData}
-                  onPaste={handlePaste}
-                  onChange={() => {}}
-                  style={{ position: "absolute", left: "-9999px" }}
-                  title="inputWithImage"
+                  className="h-[65px] border-black border-[2px] rounded-b-md overflow-hidden"
+                  placeholder="Add description of the product"
+                  onChange={(e) =>
+                    setProducts({ ...products, description: e.target.value })
+                  }
                 />
               </div>
             </div>
-            <div className="absolute right-[5%] top-[70%] transform -translate-y-1/2">
+            <div className="absolute right-[2%] top-[72%] transform -translate-y-1/2">
               <img src={ForwardArrowIcon} alt="Arrow" />
             </div>
           </div>
@@ -99,32 +135,52 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
           <div className="flex flex-col justify-between gap-y-4 mt-6 lg:gap-x-6 lg:grid grid-cols-3">
             <InputBox
               label="Product name"
-              value=""
-              // onChange={(e) => setData({ ...data, productName: e.target.value })}
+              value={products.productName}
+              onChange={(e) =>
+                setProducts({ ...products, productName: e.target.value })
+              }
             />
             <InputBox
               label="Product category"
-              value=""
-              // onChange={(e) =>
-              //   setData({ ...data, productCategory: e.target.value })
-              // }
+              value={products?.category[0] || ""}
+              onChange={(e) => {
+                setProducts({ ...products, category: [e.target.value] });
+              }}
             />
             <InputBox
               label="Product price"
-              value=""
-              // onChange={(e) => setData({ ...data, productPrice: e.target.value })}
+              value={products?.price || ""}
+              inputMode="numeric"
+              onChange={(e) =>
+                setProducts({ ...products, price: +e.target.value })
+              }
             />
             <InputBox
               label="Product tax"
-              value=""
-              // onChange={(e) => setData({ ...data, productTax: e.target.value })}
+              value={products?.gst || ""}
+              inputMode="numeric"
+              onChange={(e) =>
+                setProducts({ ...products, gst: +e.target.value })
+              }
             />
             <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
               <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                 <CustomDropDown
-                  value=""
-                  onChange={() => {}}
+                  value={products.dimensions.unit}
+                  onChange={(e) =>
+                    setProducts({
+                      ...products,
+                      dimensions: {
+                        ...products.dimensions,
+                        unit: e.target.value,
+                      },
+                    })
+                  }
                   options={[
+                    {
+                      label: "",
+                      value: "",
+                    },
                     {
                       label: "CM",
                       value: "CM",
@@ -144,25 +200,52 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                 <InputBox
                   className=""
                   label="Length"
-                  value=""
-                  // onChange={(e) => setData({ ...data, length: e.target.value })}
+                  value={products?.dimensions?.length || ""}
+                  inputMode="numeric"
+                  onChange={(e) =>
+                    setProducts({
+                      ...products,
+                      dimensions: {
+                        ...products.dimensions,
+                        length: +e.target.value,
+                      },
+                    })
+                  }
                 />
               </div>
               <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                 <InputBox
                   className=""
                   label="Breadth"
-                  value=""
-                  // onChange={(e) => setData({ ...data, breadth: e.target.value })}
+                  value={products?.dimensions?.width || ""}
+                  inputMode="numeric"
+                  onChange={(e) =>
+                    setProducts({
+                      ...products,
+                      dimensions: {
+                        ...products.dimensions,
+                        width: +e.target.value,
+                      },
+                    })
+                  }
                 />
                 <InputBox
                   label="Height"
-                  value=""
-                  // onChange={(e) => setData({ ...data, height: e.target.value })}
+                  value={products?.dimensions?.height || ""}
+                  inputMode="numeric"
+                  onChange={(e) =>
+                    setProducts({
+                      ...products,
+                      dimensions: {
+                        ...products.dimensions,
+                        height: +e.target.value,
+                      },
+                    })
+                  }
                 />
               </div>
             </div>
-            <div className="mt-4">
+            <div className="">
               <FileUploadWithText
                 icon={UploadImg}
                 placeholder="Upload Product Image"
@@ -172,7 +255,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex mt-6 p-[8px] bg-[#F2F6FF] w-[174px]">
+          {/* <div className="flex mt-6 rounded-md p-[8px] bg-[#F2F6FF] w-[174px]">
             <img
               src={ButtonIcon}
               className="ml-[25px]"
@@ -181,17 +264,17 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
             />
             <span
               className="ml-2 text-[#004EFF] text-[14px] font-semibold leading-5 font-Open"
-              // onClick={handleData}
+              onClick={() => addProduct()}
             >
               Add Product
             </span>
-          </div>
+          </div> */}
         </div>
         <div>
           <BottomLayout backButtonText="BACK" nextButtonText="SAVE" />
         </div>
       </div>
-      <BottomLayout callApi={() => {}} />
+      <BottomLayout callApi={addProduct} />
     </div>
   );
 };

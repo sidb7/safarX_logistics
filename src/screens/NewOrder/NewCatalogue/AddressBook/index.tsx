@@ -17,6 +17,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
 }) => {
   const [filterId, setFilterId] = useState(0);
   const [address, setAddress]: any = useState();
+  const [activeTab, setActiveTab] = useState("pickup");
 
   const [filterData, setFilterData] = useState([
     { label: "Pickup Address", isActive: false },
@@ -77,8 +78,10 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
                   setFilterId(index);
                   if (index === 0) {
                     setAddressTab("pickup");
+                    setActiveTab("pickup");
                   } else if (index === 1) {
                     setAddressTab("delivery");
+                    setActiveTab("delivery");
                   }
                 }}
               >
@@ -111,7 +114,14 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
       {/* Display Address */}
       <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
         {address?.map((data: any, index: any) => {
-          return <AddressCard cardData={cardData(data)} key={index} />;
+          return (
+            <AddressCard
+              cardData={cardData(data)}
+              key={index}
+              addressData={data}
+              activeTab={activeTab}
+            />
+          );
         })}
       </div>
     </div>

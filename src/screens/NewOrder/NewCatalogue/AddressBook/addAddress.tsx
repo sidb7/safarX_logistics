@@ -16,6 +16,7 @@ interface IAddAddressProps {}
 const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   const navigate = useNavigate();
   const { activeTab } = useLocation().state;
+  console.log("🚀 ~ file: addAddress.tsx:19 ~ activeTab:", activeTab);
   const [addAddress, setAddAddress] = useState<any>({
     flatNo: "",
     address: "",

@@ -88,7 +88,10 @@ const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
+const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
+const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
+const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -100,7 +103,9 @@ const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
 const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
+const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -137,12 +142,17 @@ export {
   SET_PARTNER_SERVICE_INFO,
   GET_PICKUP_ADDRESS,
   ADD_PICKUP_ADDRESS,
+  UPDATE_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
   ADD_DELIVERY_ADDRESS,
+  UPDATE_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
+  GET_PRODUCT_URL,
+  GET_COMBO_PRODUCT_URL,
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
+  POST_ADD_PRODUCT,
 };
