@@ -79,6 +79,7 @@ const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
+const ADD_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -107,6 +108,7 @@ export {
   POST_PRODUCT_URL,
   FILE_UPLOAD,
   GET_PICKUP_ADDRESS,
+  ADD_ADDRESS,
   GET_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
