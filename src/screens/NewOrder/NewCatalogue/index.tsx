@@ -72,7 +72,7 @@ const Catalogue = () => {
             showIcon={true}
             text={"ADD PRODUCT"}
             className="!p-3"
-            onClick={() => {}}
+            onClick={() => navigate("/catalogue/add-product")}
           />
         );
       } else if (productCatalogueTab === "comboProduct") {

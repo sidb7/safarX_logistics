@@ -18,8 +18,7 @@ import { Breadcum } from "../../../../components/Layout/breadcum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import PaginationComponent from "../../../../components/Pagination";
 import { POST } from "../../../../utils/webService";
-import { GET_COMBO_PRODUCT_URL } from "../../../../utils/ApiUrls";
-import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
+import { GET_PRODUCT_URL } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 interface IAddcomboProps {}
@@ -36,7 +35,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await POST(GET_COMBO_PRODUCT_URL, {
+      const { data } = await POST(GET_PRODUCT_URL, {
         skip: 0,
         limit: 10,
         pageNo: 1,
@@ -149,10 +148,12 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                     // onClick={() => setViewed(index)}
                   >
                     <ProductBox
-                      image={StackLogo}
-                      productName={data?.comboProductName}
-                      weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
-                      dimension={`${data?.totalPrice}`}
+                      image={
+                        (data?.images?.length > 0 && data?.images[0].url) || ""
+                      }
+                      productName={data?.productName}
+                      weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
+                      dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
                       className={`cursor-pointer p-[16px] ${
                         viewed === index
                           ? "border-2 border-solid border-[#004EFF]"

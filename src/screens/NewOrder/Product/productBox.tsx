@@ -19,7 +19,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
 }) => {
   return (
     <div
-      className={` ${className} text-[#1C1C1C] product-box flex items-center border-2 rounded-md h-[70px] mt-3 relative`}
+      className={` ${className} text-[#1C1C1C] product-box flex items-center border-2 rounded-md h-[70px] relative`}
     >
       <span className="bg-[#6695FF] text-white absolute -top-4 ml-2 rounded-md w-[91px] flex justify-center ">
         {label}

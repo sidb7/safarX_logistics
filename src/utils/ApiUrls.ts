@@ -85,6 +85,7 @@ const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
+const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -139,4 +140,5 @@ export {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
+  POST_ADD_PRODUCT,
 };
