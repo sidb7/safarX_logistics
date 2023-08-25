@@ -80,16 +80,10 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
-const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
-const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
-const GET_COURIER_PARTNER_SERVICE= `${SELLER_BASE_URL}/order/getAvailableService`;
-const SET_PARTNER_SERVICE_INFO= `${SELLER_BASE_URL}/order/setServiceInfo`;
-
-
-
-
-
-
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
+const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
@@ -105,7 +99,8 @@ const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
-const ADD_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -141,8 +136,9 @@ export {
   FILE_UPLOAD,
   SET_PARTNER_SERVICE_INFO,
   GET_PICKUP_ADDRESS,
-  ADD_ADDRESS,
+  ADD_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, SetStateAction } from "react";
 import AddressCard from "./addressCard";
 import CustomDropDown from "../../../../components/DropDown";
 import { POST } from "../../../../utils/webService";
@@ -8,7 +8,13 @@ import {
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
-const AddressBook = () => {
+interface IAddressBookProps {
+  setAddressTab: React.Dispatch<SetStateAction<string>>;
+}
+
+const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
+  setAddressTab,
+}) => {
   const [filterId, setFilterId] = useState(0);
   const [address, setAddress]: any = useState();
 
@@ -67,7 +73,14 @@ const AddressBook = () => {
                       } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
                     : ""
                 }`}
-                onClick={() => setFilterId(index)}
+                onClick={() => {
+                  setFilterId(index);
+                  if (index === 0) {
+                    setAddressTab("pickup");
+                  } else if (index === 1) {
+                    setAddressTab("delivery");
+                  }
+                }}
               >
                 {singleData.label}
               </span>

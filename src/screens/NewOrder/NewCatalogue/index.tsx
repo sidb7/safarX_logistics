@@ -30,6 +30,7 @@ const Catalogue = () => {
       active: false,
     },
   ]);
+  const [addressTab, setAddressTab] = useState("pickup");
 
   const renderComponent = () => {
     const activeTabName = tabName.find((singleTab) => {
@@ -38,7 +39,7 @@ const Catalogue = () => {
     if (activeTabName?.statusName === "Channel Integration") {
       return <ChannelIntegration />;
     } else if (activeTabName?.statusName === "Address Book") {
-      return <AddressBook />;
+      return <AddressBook setAddressTab={setAddressTab} />;
     } else if (activeTabName?.statusName === "Product Catalogue") {
       return <ProductCatalogue />;
     } else if (activeTabName?.statusName === "Box Catalogue") {
@@ -57,7 +58,11 @@ const Catalogue = () => {
           showIcon={true}
           text={"ADD ADDRESS"}
           className="!p-3"
-          onClick={() => navigate("/catalogue/add-address")}
+          onClick={() =>
+            navigate("/catalogue/add-address", {
+              state: { activeTab: addressTab },
+            })
+          }
         />
       );
     } else if (activeTabName?.statusName === "Product Catalogue") {
