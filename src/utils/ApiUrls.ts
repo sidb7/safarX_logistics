@@ -89,9 +89,12 @@ const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
-const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
+
+//Combo Product URL
+const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
+const ADD_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/addNewComboProduct`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -105,8 +108,6 @@ const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
-
-
 
 export {
   SELLER_URL,
@@ -154,4 +155,5 @@ export {
   GET_SELLER_COMPANY_BOX,
   GET_SERVICABLE_PINCODE,
   POST_ADD_PRODUCT,
+  ADD_COMBO_PRODUCT_URL,
 };

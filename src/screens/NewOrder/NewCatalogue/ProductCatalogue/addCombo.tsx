@@ -18,20 +18,69 @@ import { Breadcum } from "../../../../components/Layout/breadcum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import PaginationComponent from "../../../../components/Pagination";
 import { POST } from "../../../../utils/webService";
-import { GET_PRODUCT_URL } from "../../../../utils/ApiUrls";
+import {
+  ADD_COMBO_PRODUCT_URL,
+  GET_PRODUCT_URL,
+} from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import CustomInputBox from "../../../../components/Input";
 
 interface IAddcomboProps {}
 
 const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
+  const navigate = useNavigate();
   const [productData, setProductData] = useState([]);
+  const [selectedProducts, setSelectedProduct] = useState<any>({
+    description: "",
+    comboProductName: "",
+    category: [],
+    tags: [],
+    productArrray: [],
+  });
+  const [selectedCatagories, setSelectedCatagories] = useState<any>({
+    Fashion: false,
+    Electronics: false,
+    LifeStyle: false,
+    Sports: false,
+    Fitness: false,
+    Gift: false,
+  });
+  const [selectedProductId, setSelectedProductId] = useState<any>({});
   const [totalItemCount, setTotalItemCount] = useState(10);
-  const [viewed, setViewed] = useState(-1);
   //on page change index
   const onPageIndexChange = () => {};
 
   // on per page item change
   const onPerPageItemChange = () => {};
+
+  const addCombo = async () => {
+    const selectedcat = [];
+    for (let key in selectedCatagories) {
+      if (selectedCatagories[key]) {
+        selectedcat.push(key);
+      }
+    }
+
+    const selectedproduct = [];
+    for (let key in selectedProductId) {
+      if (selectedProductId[key]) {
+        selectedproduct.push(key);
+      }
+    }
+
+    const { data } = await POST(ADD_COMBO_PRODUCT_URL, {
+      ...selectedProducts,
+      category: selectedcat,
+      productArrray: selectedProductId,
+    });
+    if (data.success) {
+      toast.success(data.message);
+      navigate(-1);
+    } else {
+      toast.error(data.message);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -86,52 +135,100 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
 
               <div className="flex gap-x-3">
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.Fashion && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={ProductIcon}
                   productName="Fashion"
+                  onClick={() => {
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      Fashion: !selectedCatagories.Fashion,
+                    });
+                  }}
                 />
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.Electronics && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={CategoryLogo}
                   productName="Electronics"
+                  onClick={() =>
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      Electronics: !selectedCatagories.Electronics,
+                    })
+                  }
                 />
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.LifeStyle && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={Categorylogo2}
                   productName="LifeStyle"
+                  onClick={() =>
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      LifeStyle: !selectedCatagories.LifeStyle,
+                    })
+                  }
                 />
+
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
-                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-                  image={Categorylogo2}
-                  productName="LifeStyle"
-                />
-                <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.Sports && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={SportsLogo}
                   productName="Sports"
+                  onClick={() =>
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      Sports: !selectedCatagories.Sports,
+                    })
+                  }
                 />
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.Fitness && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={FitnessCategoryLogo}
                   productName="Fitness"
+                  onClick={() =>
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      Fitness: !selectedCatagories.Fitness,
+                    })
+                  }
                 />
                 <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
+                  className={`!border-2 !border-[#1C1C1C] ${
+                    selectedCatagories.Gift && "bg-gray-200"
+                  }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={GiftLogo}
                   productName="Gift"
+                  onClick={() =>
+                    setSelectedCatagories({
+                      ...selectedCatagories,
+                      Gift: !selectedCatagories.Gift,
+                    })
+                  }
                 />
-                <ProductCategoryBox
-                  className="!border-2 !border-[#1C1C1C]"
-                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-                  image={FitnessCategoryLogo}
-                  productName="Fitness"
+              </div>
+              <div className="mt-4 w-[300px]">
+                <CustomInputBox
+                  label="Combo Name"
+                  onChange={(e) =>
+                    setSelectedProduct({
+                      ...selectedProducts,
+                      comboProductName: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -145,7 +242,19 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 {productData.map((data: any, index: number) => (
                   <div
                     className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
+                    onClick={() => {
+                      if (selectedProductId[data.productId]) {
+                        setSelectedProductId({
+                          ...selectedProductId,
+                          [data.productId]: false,
+                        });
+                      } else {
+                        setSelectedProductId({
+                          ...selectedProductId,
+                          [data.productId]: true,
+                        });
+                      }
+                    }}
                   >
                     <ProductBox
                       image={
@@ -155,9 +264,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                       weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
                       dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
                       className={`cursor-pointer p-[16px] ${
-                        viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
+                        selectedProductId[data?.productId] && "bg-gray-200"
                       }`}
                     />
                   </div>
@@ -177,7 +284,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
           />
         )}
       </div>
-      <BottomLayout callApi={() => {}} />
+      <BottomLayout callApi={addCombo} />
     </div>
   );
 };
