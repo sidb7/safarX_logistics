@@ -5,6 +5,7 @@ import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import InputBox from "../../../components/InputBox/index";
 import ProductBox from "../Product/productBox";
+import { v4 as uuidv4 } from "uuid";
 import "../../../styles/productStyle.css";
 import { useMediaQuery } from "react-responsive";
 import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
@@ -73,17 +74,73 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const AddProductInfoData = () => {
     console.log("productstate=>", productState);
     const payload = {
+      productId: uuidv4(),
+      productName: productState.productName,
+      description: "This is an example product for demonstration purposes.",
+      category: [productState.category],
+      tags: ["electronics", "smartphone", "android"],
+      price: productState.price,
       currency: "INR",
-      weight: productState.width,
+      discountAmount: 10,
+      sale_price: 539.99,
+      gst: productState.tax,
+      stock: 0,
+      dimensions: {
+        length: productState.length,
+        breadth: productState.breadth || 0,
+        height: productState.height,
+        unit: "cm",
+      },
+      weight: {
+        deadWeight: productState.weight || 0,
+        deadWeightUnit: "kg",
+        volumetricWeight: 0,
+        volumetricWeightUnit: "kg",
+        catalogueWeight: {
+          from: 1,
+          to: 2,
+          unit: "kg",
+        },
+      },
       available: true,
+      attributes: {
+        color: "Black",
+        size: "Medium",
+        brand: "ABC Electronics",
+      },
+      features: [
+        "6.5-inch AMOLED display",
+        "Quad-camera system",
+        "128GB storage",
+      ],
       images: [
         {
-          url: productState.image,
-          alt: "",
+          url: "https://example.com/images/product123_front.jpg",
+          alt: "Front View",
+        },
+        {
+          url: "https://example.com/images/product123_back.jpg",
+          alt: "Back View",
+        },
+      ],
+      ratings: {
+        average: 4.7,
+        count: 102,
+      },
+      reviews: [
+        {
+          username: "user123",
+          rating: 5,
+          comment: "Great product! Highly recommended.",
+        },
+        {
+          username: "user456",
+          rating: 4,
+          comment: "Good quality, fast shipping.",
         },
       ],
     };
-    setProductPayload([...productPayload, { ...payload, ...productState }]);
+    setProductPayload([...productPayload, payload]);
   };
 
   const resetProductState = () => {
@@ -231,10 +288,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       </div>
                       <ProductBox
                         image={SampleProduct}
-                        productName={product.name}
-                        weight={product.weight}
-                        length={product.length}
-                        height={product.height}
+                        weight={product?.weight?.deadWeight || 0}
+                        productName={product?.productName || 0}
+                        breadth={product?.dimensions?.breadth || 0}
+                        length={product?.dimensions?.length || 0}
+                        height={product?.dimensions?.height || 0}
                         className="p-3 lg:max-w-[272px]"
                       />
                     </div>
@@ -264,8 +322,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
           <InputBox
             label="Product name"
-            name="name"
-            value={productState.name}
+            name="productName"
+            value={productState.productName}
             onChange={handleProductInputChange}
           />
           <InputBox
@@ -282,12 +340,19 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
           />
           <InputBox
             label="Product tax"
-            name="tax"
-            value={productState.tax}
+            name="gst"
+            value={productState.gst}
             onChange={handleProductInputChange}
           />
           <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
             <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+              <InputBox
+                className=""
+                label="Weight"
+                name="weight"
+                value={productState.weight}
+                onChange={handleProductInputChange}
+              />
               <InputBox
                 className=""
                 label="Length"
