@@ -1,13 +1,14 @@
 interface IPackageBoxProps {
   image?: any;
   productName: string;
-  weight: string;
+  weight?: string;
   dimension?: string;
   className?: string;
   dimensionClassName?: string;
   label?: any;
   length?: any;
   height?: any;
+  breadth?: any;
 }
 
 const productBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -15,6 +16,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   productName = "",
   weight = "",
   height = "",
+  breadth = "",
   length = "",
   dimension = "",
   className = "",
@@ -36,7 +38,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
         <span>
           {`${weight} Kg `}
           <span className={`${dimensionClassName}`}>
-            | {`${length} x ${weight} x ${height} cm`}
+            | {`${length} x ${breadth} x ${height} cm`}
           </span>
         </span>
       </div>

@@ -247,6 +247,9 @@ const Index = () => {
       statusData[index].value
     );
 
+    if (!orderList) return;
+    if (statusList && !statusList.length) return;
+
     statusData.forEach((e: any) => {
       statusList.forEach((e1: any) => {
         if (e.orderNumber === e1.count) return;
@@ -258,8 +261,6 @@ const Index = () => {
         }
       });
     });
-
-    if (!orderList) return;
 
     switch (tabs[index].value) {
       case "newOrder":
@@ -340,7 +341,7 @@ const Index = () => {
 
       {isLgScreen && (
         <div className="overflow-x-auto">
-          <CustomTable data={orders} columns={columnHelper} />
+          <CustomTable data={orders} columns={columnHelper || []} />
         </div>
       )}
     </div>

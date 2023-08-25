@@ -6,10 +6,22 @@ import subtractIcon from "../../../assets/Product/subtract-circle.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
+import { useEffect, useState } from "react";
 // import { POST } from "../../../utils/webService";
 // import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 
-const BoxDetails = () => {
+interface IBoxdetails {
+  products?: any;
+}
+
+const BoxDetails = (props: IBoxdetails) => {
+  const { products } = props;
+  const [allProducust, setAllProducts]: any = useState([]);
+  useEffect(() => {
+    setAllProducts(products);
+  }, [products]);
+
+  console.log("allProducust => ", allProducust);
   return (
     <div className="lg:border-0 w-full   bg-[#FEFEFE] border-2 border-solid border-[#E8E8E8] rounded-lg my-4">
       <div className="hidden lg:flex justify-between mb-4">
@@ -23,8 +35,8 @@ const BoxDetails = () => {
         </div>
       </div>
 
-      <div className="px-2 lg:grid grid-cols-2 lg:gap-x-6">
-        <div className="lg:border-2 border-[#E8E8E8] lg:p-5 lg:rounded-lg">
+      <div className="px-2 lg:grid grid-cols-2 lg:gap-x-6 ">
+        <div className="h-56 overflow-scroll lg:border-2 border-[#E8E8E8] lg:p-5 lg:rounded-lg">
           <div className="flex justify-between p-2 lg:hidden">
             <p className="font-Open text-[14px] font-semibold">Box Details</p>
             <div className="flex gap-x-2">
@@ -32,7 +44,34 @@ const BoxDetails = () => {
               <img src={EditIcon} alt="" />
             </div>
           </div>
-          <div className="flex justify-between">
+          {allProducust.map((e: any, index: number) => {
+            console.log(e);
+            return (
+              <div className="flex justify-between">
+                <ProductBox
+                  image={ItemIcon}
+                  productName={e.name}
+                  breadth={e.breadth}
+                  height={e.height}
+                  length={e.length}
+                  dimensionClassName="!font-light"
+                  className="!border-none !shadow-none"
+                />
+                <div className="flex items-center p-2 mt-7 h-[40px] gap-2  border-2 border-solid border-[#E8E8E8] rounded-lg">
+                  <div>
+                    <img src={subtractIcon} alt="" />
+                  </div>
+                  <div>
+                    <p>1</p>
+                  </div>
+                  <div>
+                    <img src={addIcon} alt="" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {/* <div className="flex justify-between">
             <ProductBox
               image={ItemIcon}
               productName="Mac book air"
@@ -52,28 +91,7 @@ const BoxDetails = () => {
                 <img src={addIcon} alt="" />
               </div>
             </div>
-          </div>
-          <div className="flex justify-between">
-            <ProductBox
-              image={ItemIcon}
-              productName="Mac book air"
-              weight="5"
-              dimension="12 x 12 x 12"
-              dimensionClassName="!font-light"
-              className="!border-none !shadow-none"
-            />
-            <div className="flex items-center p-2 mt-7 h-[40px] gap-2  border-2 border-solid border-[#E8E8E8] rounded-lg">
-              <div>
-                <img src={subtractIcon} alt="" />
-              </div>
-              <div>
-                <p>1</p>
-              </div>
-              <div>
-                <img src={addIcon} alt="" />
-              </div>
-            </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col lg:gap-y-2 lg:rounded-lg lg:p-5 lg:mt-0 mt-4 lg:border-2 border-[#E8E8E8]">
           <div className="flex justify-between">
