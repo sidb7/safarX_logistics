@@ -9,19 +9,74 @@ import contactIcon from "../../../assets/serv/contact.svg";
 import locationIcon from "../../../assets/serv/location.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
+import TickLogo from "../../../assets/common/Tick.svg";
 
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import copySuccess from "../../../assets/serv/copy-success.svg";
+import { useNavigate } from "react-router-dom";
 
 import { HighRiskPincodeModal } from "./whatsappModal";
+import { Breadcum } from "../../../components/Layout/breadcum";
+import Stepper from "../../../components/Stepper";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 type Props = {};
 
 const Summary = (props: Props) => {
   const [ishighRisk, setIsHighRisk] = useState(false);
 
+  const steps = [
+    {
+      label: "Pickup",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Delivery",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Product",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Service",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Summary",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Payment",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+  ];
+
   return (
     <div>
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
+        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+        <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
+          Order
+        </span>
+      </div>
+      <Breadcum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
       <div className="grid grid-cols-1 gap-y-5 p-5   ">
         <div className="flex flex-row gap-2">
           <img src={SummaryIcon} alt="Summary Icon" />
@@ -118,6 +173,10 @@ const Summary = (props: Props) => {
           <SummaryService />
         </div>
       </div>
+      <BottomLayout
+        // callApi={() => postPickupOrderDetails(payload)}
+        Button2Name={true}
+      />
     </div>
   );
 };

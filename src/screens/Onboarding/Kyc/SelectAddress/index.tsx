@@ -70,6 +70,7 @@ const BusinessType = (props: ITypeProps) => {
         payload
       );
       if (responses?.success) {
+        navigate("/onboarding/walletrecharge");
         // toast.success(responses?.message);
         //Navigate Url's go here
       } else {
