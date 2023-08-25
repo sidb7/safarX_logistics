@@ -7,33 +7,47 @@ interface IServiceCardProps {
   recommendation?: string;
   courierPartner?: string;
   serviceType?: string;
-  weight?: number;
+  minimumServiceWeight?: any;
   totalPrice?: number;
+  serviceId?: number;
   savePrice?: number;
   etaDate?: string;
   name?: string;
   value?: string;
   isStandardService?: boolean;
+  onSelectService: (serviceDetails: any) => void;
 }
 
-const ServiceCard = (props: IServiceCardProps) => {
+const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
   const {
     isRecommendation,
     recommendation,
     courierPartner,
     serviceType,
-    weight,
+    minimumServiceWeight,
     totalPrice,
-
+    serviceId,
     savePrice,
     etaDate,
     name,
     value,
     isStandardService = false,
+    onSelectService,
   } = props;
+
+  interface IRadioButtonProps {
+    name: string;
+    value: string;
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  }
 
   const [serviceDetails, setServiceDetails] = useState("");
 
+  // console.log("serviceDetails", serviceDetails);
+  console.log("serviceData", props.serviceData);
+
+  console.log("name", name);
+  console.log("value", value);
   return (
     <div
       className={`${
@@ -46,19 +60,23 @@ const ServiceCard = (props: IServiceCardProps) => {
             <CustomRadioButton
               name={name}
               value={value}
-              onChange={(e: any) => setServiceDetails(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                // setServiceDetails(e.target.value);
+                onSelectService(e.target.value);
+                // onSelectService(props.serviceData);
+              }}
             />
           </div>
           {!isStandardService && <div>{courierPartner}</div>}
-          <div>{serviceType}</div>
-          {!isStandardService && <div>{`${weight} Kg`}</div>}
+          <div>{serviceType} Kg</div>
+          {/* {!isStandardService && <div>{`${minimumServiceWeight} Kg`}</div>} */}
         </div>
         <div className="flex items-center gap-x-2 mb-2  lg:ml-5">
-          <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} Kg`}</div>
-          <div className="text-[14px] text-[#1C1C1C]">|</div>
+          <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} `}</div>
+          {/* <div className="text-[14px] text-[#1C1C1C]">|</div>
           <div className="text-[12px] text-[#004EFF]   ">
             {`Save ₹ ${savePrice} using this service`}
-          </div>
+          </div> */}
         </div>
         <div className="flex  items-center lg:ml-5 ">
           <div className="text-[#004EFF] text-[14px] font-semibold lg:font-bold">

@@ -50,7 +50,6 @@ const InputWithFileUpload = (props: propTypes) => {
           title="inputBox"
           onChange={onChange}
           id="fileName"
-          // value={value}
         />
         <label
           className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4  custom-label ${labelClassName}`}

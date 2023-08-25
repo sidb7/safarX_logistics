@@ -98,7 +98,7 @@ const Index = () => {
     country: "",
     addressType: "warehouse",
     gstNo: "",
-    orderType: "",
+    orderType: "B2B",
   });
 
   const [contact, setContact] = useState({
@@ -184,7 +184,7 @@ const Index = () => {
       city: deliveryLocation.city,
       state: deliveryLocation.state,
       country: deliveryLocation.country,
-      gstNo: deliveryLocation.gstNo,
+      gstNumber: deliveryLocation.gstNo,
       addressType: deliveryLocation.addressType,
       contact: {
         name: contact.name,
@@ -248,7 +248,7 @@ const Index = () => {
     },
   ];
   return (
-    <div className="h-full">
+    <div>
       {/* <div>
         <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
           <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
@@ -266,7 +266,7 @@ const Index = () => {
         </div>
       </div> */}
 
-      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
+      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
         <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
         <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
         <span className="font-Open text-[14px] text-[#1C1C1C]">Order</span>
@@ -276,8 +276,8 @@ const Index = () => {
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="grid grid-cols-1   gap-y-4 ">
-        <div className=" h-[54px] bg-[#F5BE6D] p-2 flex items-center  lg:mx-5 lg:mt-11 lg:mb-4 lg:col-span-3">
+      <div className="grid grid-cols-1 gap-y-4 ">
+        {/* <div className=" h-[54px] bg-[#F5BE6D] p-2 flex items-center  lg:mx-5 lg:mt-11 lg:mb-4 lg:col-span-3">
           <div className="text-sm mx-5 lg:mx-4 text-[#1C1C1C] lg:flex lg:items-center lg:gap-x-2 ">
             <div className="flex">
               <img src={weather} alt="" className="lg:mr-[6px]" />
@@ -290,7 +290,7 @@ const Index = () => {
               Expect delay in pickup due to weather
             </p>
           </div>
-        </div>
+        </div> */}
         <div className="mx-5  lg:grid lg:grid-cols-3 lg:gap-x-6">
           <div className="relative z-1 mt-5 lg:mb-5  border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 ">
             <div className="grid grid-cols-2 gap-3 ">
@@ -444,7 +444,8 @@ const Index = () => {
             />
           </div>
 
-          <div className="mb-5 lg:mb-6">
+          {/* Landmark with dropdown commented */}
+          {/* <div className="mb-5 lg:mb-6">
             <CustomDropDown
               value={selectedOption}
               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -458,7 +459,18 @@ const Index = () => {
               }}
               options={dummyPickupDropdownData}
             />
+          </div> */}
+
+          <div className="mb-4 lg:mb-6 ">
+            <CustomInputBox
+              label="Landmark"
+              value={deliveryLocation.landmark}
+              onChange={(e) =>
+                handleDeliveryLocationChange("landmark", e.target.value)
+              }
+            />
           </div>
+
           <div className="mb-5 lg:mb-6">
             <CustomInputBox
               label="Pincode"
@@ -481,7 +493,27 @@ const Index = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-5 lg:mb-6 lg:hidden">
+          <div className="mb-4 lg:mb-6 ">
+            <CustomInputBox
+              label="State"
+              value={deliveryLocation.state}
+              onChange={(e) =>
+                handleDeliveryLocationChange("state", e.target.value)
+              }
+            />
+          </div>
+
+          <div className="mb-4 lg:mb-6">
+            <CustomInputBox
+              label="Country"
+              value={deliveryLocation.country}
+              onChange={(e) =>
+                handleDeliveryLocationChange("country", e.target.value)
+              }
+            />
+          </div>
+
+          {/* <div className="grid grid-cols-2 gap-3 mb-5 lg:mb-6 lg:hidden">
             <div>
               <CustomInputBox
                 label="State"
@@ -500,14 +532,14 @@ const Index = () => {
                 }
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="hidden lg:block lg:mb-6">
+          {/* <div className="hidden lg:block lg:mb-6">
             <CustomInputBox label="State" />
           </div>
           <div className="hidden lg:block lg:mb-6">
             <CustomInputBox label="Country" />
-          </div>
+          </div> */}
 
           <div className="mb-5 lg:mb-6">
             <AudioInputBox
@@ -701,7 +733,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block mb-7">
+          <div className="hidden lg:block mb-7 pb-24">
             <CustomInputWithImage
               placeholder="Delivery Date"
               imgSrc={CalenderIcon}
@@ -796,7 +828,6 @@ const Index = () => {
         </RightSideModal>
       </div>
       <BottomLayout callApi={() => postDeliveryOrderDetails(payload)} />
-
       {/* <div
         className={`  ${
           isItLgScreen ? "flex justify-end " : " grid grid-cols-2"
