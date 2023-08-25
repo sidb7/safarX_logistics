@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import CustomRadioButton from "../../../components/RadioButton";
+import CustomSquaredRadioButton from "../../../components/RadioButton";
 
 interface IServiceCardProps {
   isRecommendation?: boolean;
@@ -42,6 +43,12 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
   }
 
   const [serviceDetails, setServiceDetails] = useState("");
+  const [selected, setSelected] = useState(false);
+
+  const handleRadioChange = () => {
+    setSelected(!selected);
+    onSelectService(value);
+  };
 
   // console.log("serviceDetails", serviceDetails);
   console.log("serviceData", props.serviceData);
@@ -54,17 +61,20 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
         isRecommendation && "relative z-1"
       } border-[1px] rounded-lg  bg-[#FFFFFF] drop-shadow-lg lg:min-w-[300px] `}
     >
-      <div className="flex flex-col  px-3 pb-2 ">
-        <div className="flex  items-center  text-[16px] font-semibold text-[#1C1C1C] gap-x-2 ">
+      <div
+        className="flex flex-col  px-3 pb-2 cursor-pointer  "
+        onClick={handleRadioChange}
+      >
+        <div
+          className="flex  items-center  text-[16px] font-semibold font-Open text-[#1C1C1C] gap-x-2 cursor-pointer"
+          onClick={handleRadioChange}
+        >
           <div>
             <CustomRadioButton
               name={name}
               value={value}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                // setServiceDetails(e.target.value);
-                onSelectService(e.target.value);
-                // onSelectService(props.serviceData);
-              }}
+              onChange={handleRadioChange}
+              checked={selected}
             />
           </div>
           {!isStandardService && <div>{courierPartner}</div>}
@@ -72,14 +82,14 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
           {/* {!isStandardService && <div>{`${minimumServiceWeight} Kg`}</div>} */}
         </div>
         <div className="flex items-center gap-x-2 mb-2  lg:ml-5">
-          <div className="text-[14px] text-[#1C1C1C] font-semibold">{`₹ ${totalPrice} `}</div>
+          <div className="text-[14px] text-[#1C1C1C] font-semibold font-Open">{`₹ ${totalPrice} `}</div>
           {/* <div className="text-[14px] text-[#1C1C1C]">|</div>
           <div className="text-[12px] text-[#004EFF]   ">
             {`Save ₹ ${savePrice} using this service`}
           </div> */}
         </div>
         <div className="flex  items-center lg:ml-5 ">
-          <div className="text-[#004EFF] text-[14px] font-semibold lg:font-bold">
+          <div className="text-[#004EFF] text-[14px] font-semibold font-Open lg:font-bold">
             {`ETA: ${etaDate}`}
           </div>
         </div>

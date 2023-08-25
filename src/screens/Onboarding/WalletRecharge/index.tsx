@@ -140,7 +140,10 @@ const OnBoundingWalletRecharge = () => {
               />
             </div>
 
-            <div className="flex justify-center mt-4 cursor-pointer">
+            <div
+              className="flex justify-center mt-4 cursor-pointer"
+              onClick={() => navigate("/order")}
+            >
               <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
                 SKIP FOR NOW{" "}
               </p>
@@ -259,6 +262,7 @@ const OnBoundingWalletRecharge = () => {
       setIsLoading(false);
       toast.success("Payment success");
       clearInterval(myInterval);
+      navigate("/order");
     }
   };
 
