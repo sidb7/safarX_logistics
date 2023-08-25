@@ -30,6 +30,8 @@ const Catalogue = () => {
       active: false,
     },
   ]);
+  const [productCatalogueTab, setProductCatalogueTab] =
+    useState("singleProduct");
 
   const renderComponent = () => {
     const activeTabName = tabName.find((singleTab) => {
@@ -40,7 +42,9 @@ const Catalogue = () => {
     } else if (activeTabName?.statusName === "Address Book") {
       return <AddressBook />;
     } else if (activeTabName?.statusName === "Product Catalogue") {
-      return <ProductCatalogue />;
+      return (
+        <ProductCatalogue setProductCatalogueTab={setProductCatalogueTab} />
+      );
     } else if (activeTabName?.statusName === "Box Catalogue") {
       return <BoxCatalogue />;
     }
@@ -61,15 +65,27 @@ const Catalogue = () => {
         />
       );
     } else if (activeTabName?.statusName === "Product Catalogue") {
-      return (
-        <CustomButton
-          icon={addIcon}
-          showIcon={true}
-          text={"ADD PRODUCT"}
-          className="!p-3"
-          onClick={() => {}}
-        />
-      );
+      if (productCatalogueTab === "singleProduct") {
+        return (
+          <CustomButton
+            icon={addIcon}
+            showIcon={true}
+            text={"ADD PRODUCT"}
+            className="!p-3"
+            onClick={() => navigate("/catalogue/add-product")}
+          />
+        );
+      } else if (productCatalogueTab === "comboProduct") {
+        return (
+          <CustomButton
+            icon={addIcon}
+            showIcon={true}
+            text={"ADD COMBO"}
+            className="!p-3"
+            onClick={() => navigate("/catalogue/add-combo")}
+          />
+        );
+      }
     } else if (activeTabName?.statusName === "Box Catalogue") {
       return (
         <CustomButton
