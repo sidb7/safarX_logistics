@@ -46,7 +46,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
     Fitness: false,
     Gift: false,
   });
-  const [selectedProductId, setSelectedProductId] = useState<any>([]);
+  const [selectedProductId, setSelectedProductId] = useState<any>({});
   const [totalItemCount, setTotalItemCount] = useState(10);
   //on page change index
   const onPageIndexChange = () => {};
@@ -59,6 +59,13 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
     for (let key in selectedCatagories) {
       if (selectedCatagories[key]) {
         selectedcat.push(key);
+      }
+    }
+
+    const selectedproduct = [];
+    for (let key in selectedProductId) {
+      if (selectedProductId[key]) {
+        selectedproduct.push(key);
       }
     }
 
@@ -235,12 +242,19 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 {productData.map((data: any, index: number) => (
                   <div
                     className="w-[272px] h-[76px]"
-                    onClick={() =>
-                      setSelectedProductId([
-                        ...selectedProductId,
-                        data.productId,
-                      ])
-                    }
+                    onClick={() => {
+                      if (selectedProductId[data.productId]) {
+                        setSelectedProductId({
+                          ...selectedProductId,
+                          [data.productId]: false,
+                        });
+                      } else {
+                        setSelectedProductId({
+                          ...selectedProductId,
+                          [data.productId]: true,
+                        });
+                      }
+                    }}
                   >
                     <ProductBox
                       image={
@@ -250,8 +264,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                       weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
                       dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
                       className={`cursor-pointer p-[16px] ${
-                        selectedProductId.includes(data?.productId) &&
-                        "bg-gray-200"
+                        selectedProductId[data?.productId] && "bg-gray-200"
                       }`}
                     />
                   </div>
