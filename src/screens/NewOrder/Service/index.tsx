@@ -162,47 +162,48 @@ const Index: React.FC = () => {
   const dataArray = (response as any).data;
   console.log("dataArray", dataArray);
 
-  //endpoint to maintain order state
-  // const getLatestOrderDetails = async () => {
-  //   try {
-  //     const { data: response } = await POST(GET_LATEST_ORDER);
+  // endpoint to maintain order state
+  const getLatestOrderDetails = async () => {
+    try {
+      const { data: response } = await POST(GET_LATEST_ORDER);
 
-  //     if (response?.success) {
-  //       // const recommended = response.filter(
-  //       //   (item: any) => item?.isRecommendation
-  //       // );
-  //       // const filter = response.filter((item: any) => !item?.isRecommendation);
+      if (response?.success) {
+        // const recommended = response.filter(
+        //   (item: any) => item?.isRecommendation
+        // );
+        // const filter = response.filter((item: any) => !item?.isRecommendation);
 
-  //       setLatestOrder(response);
-  //       // setFilterData(filter);
-  //     } else {
-  //       setLatestOrder([]);
-  //       // toast.error(response?.message);
-  //     }
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getLatestOrderDetails();
-  // }, []);
-
-  // const getServicePayload = latestOrder?.data?.codInfo;
-  // console.log("getServicepayload", getServicePayload);
-
-  //getserviceAPI Static Payload
-  const getServiceDetailsPayload = {
-    paymentType: "COD",
-    codCollectAmount: 123,
-    invoiceValue: 1234,
+        setLatestOrder(response);
+        // setFilterData(filter);
+      } else {
+        setLatestOrder([]);
+        // toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
   };
+
+  useEffect(() => {
+    getLatestOrderDetails();
+  }, []);
+
+  const getServicePayload = latestOrder?.data?.codInfo;
+  console.log("getServicepayload", getServicePayload);
+
+  /* getserviceAPI Static Payload */
+
+  // const getServiceDetailsPayload = {
+  //   paymentType: "COD",
+  //   codCollectAmount: 123,
+  //   invoiceValue: 1234,
+  // };
 
   const getCourierPartnerService = async () => {
     try {
       const { data: response } = await POST(
         GET_COURIER_PARTNER_SERVICE,
-        getServiceDetailsPayload
+        getServicePayload
       );
 
       if (response?.status) {

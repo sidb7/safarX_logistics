@@ -133,7 +133,7 @@ const Summary = (props: Props) => {
       <div className="grid grid-cols-1 gap-y-5 p-5   ">
         <div className="flex flex-row gap-2">
           <img src={SummaryIcon} alt="Summary Icon" />
-          <p className="text-[18px] text-[#202427] font-semibold lg:font-normal lg:text-2xl ">
+          <p className="text-[18px] text-[#202427] font-semibold lg:font-normal font:lato lg:text-2xl ">
             Summary
           </p>
         </div>
