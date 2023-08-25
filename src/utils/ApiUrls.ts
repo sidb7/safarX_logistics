@@ -102,6 +102,12 @@ const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
+
+//servicable-pincode
+const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
+
+
+
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -146,5 +152,6 @@ export {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
+  GET_SERVICABLE_PINCODE,
   POST_ADD_PRODUCT,
 };
