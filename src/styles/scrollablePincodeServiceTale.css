@@ -1,0 +1,28 @@
+.table-container {
+    max-height: 300px;
+    /* Adjust as needed */
+    overflow-y: auto;
+    overflow-x: auto;
+    margin: 0 20px;
+    /* Added margin for left and right */
+    border: 1px solid #ccc;
+    /* Add a border for visual clarity */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /* border: 1px solid #ccc; */
+    /* Removed border here, as it's in .table-container */
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+th {
+    background-color: #f2f2f2;
+}

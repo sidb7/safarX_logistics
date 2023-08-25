@@ -191,9 +191,6 @@ const Index: React.FC = () => {
   // const getServicePayload = latestOrder?.data?.codInfo;
   // console.log("getServicepayload", getServicePayload);
 
-  //zoneAPI to be hit on Partner
-  //payload for zoneAPI
-
   //getserviceAPI Static Payload
   const getServiceDetailsPayload = {
     paymentType: "COD",

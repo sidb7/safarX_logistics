@@ -7,6 +7,9 @@ import HamMenu from "../../assets/Navbar/hamMenu.svg";
 import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
 import SearchIcon from "../../assets/Search.svg";
 import CustomButton from "../../components/Button/index";
+import locationImage from "../../assets/serv/location.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import ServicabilityPincode from "./ServicabilityPincode";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -15,6 +18,7 @@ interface ITopBarProps {
 
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>();
@@ -55,6 +59,13 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             placeholder="Search"
           />
 
+          <img
+            src={locationImage}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
+          />
+
           <CustomButton
             icon={PowerBoosterlogo}
             showIcon={true}
@@ -84,6 +95,20 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 text={""}
                 onClick={() => {}}
               />
+
+              {isModalOpen && (
+                <CenterModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                >
+                  <ServicabilityPincode
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                  />
+                </CenterModal>
+              )}
+
               {/* <img src={ProfileLogo} alt="" /> */}
               {isOpen && (
                 <div
