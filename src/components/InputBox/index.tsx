@@ -6,6 +6,7 @@ interface IInputBoxProps {
   className?: string;
   name?: string;
   value?: string | number;
+  inputMode?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -15,6 +16,7 @@ const Index: React.FunctionComponent<IInputBoxProps> = ({
   type = "text",
   name,
   value,
+  inputMode = "",
   onChange,
 }) => {
   return (
@@ -23,6 +25,7 @@ const Index: React.FunctionComponent<IInputBoxProps> = ({
         <input
           placeholder=" "
           type={type}
+          inputMode={inputMode}
           title="inputBox"
           name={name}
           value={value}

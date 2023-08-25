@@ -102,7 +102,7 @@ import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/
 import CommonLayout from "../layout";
 import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddress";
 import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
-
+import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -286,6 +286,10 @@ const MyRoutes: React.FC = () => {
             />
             <Route path="catalogue/edit-address" element={<EditAddress />} />
             <Route path="catalogue/add-address" element={<AddAddress />} />
+            <Route
+              path="catalogue/add-product"
+              element={<CatalogueAddProduct />}
+            />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
