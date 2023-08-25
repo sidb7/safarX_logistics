@@ -10,12 +10,16 @@ interface IPickUpData {
     name: any;
     phoneNumber: string;
   };
+  addressData: object;
   key: string;
+  activeTab: string;
 }
 
 const AddressCard: React.FunctionComponent<IPickUpData> = ({
   cardData: { addressLabel, address, name, phoneNumber },
+  addressData,
   key,
+  activeTab,
 }) => {
   const navigate = useNavigate();
   return (
@@ -24,11 +28,17 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
       key={key}
     >
       <div className="flex justify-between">
-        <p className="text-[#004EFF] text-[16px] font-medium">{addressLabel}</p>
+        <p className="text-[#004EFF] text-[16px] font-medium cursor-pointer">
+          {addressLabel}
+        </p>
         <img
           src={EditImageWithBlack}
           alt=""
-          onClick={() => navigate("/catalogue/edit-address")}
+          onClick={() =>
+            navigate("/catalogue/edit-address", {
+              state: { addressData, activeTab },
+            })
+          }
         />
       </div>
       <p className="text-[16px] font-medium mt-2 w-[250px]">{address}</p>

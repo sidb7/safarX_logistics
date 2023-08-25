@@ -3,76 +3,194 @@ import { Breadcum } from "../../../../components/Layout/breadcum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
 import { useLocation } from "react-router-dom";
+import { POST } from "../../../../utils/webService";
+import {
+  UPDATE_PICKUP_ADDRESS,
+  UPDATE_DELIVERY_ADDRESS,
+} from "../../../../utils/ApiUrls";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface IEditAddressProps {}
 
 const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
-  // const {
-  //   addressName,
-  //   plotNo,
-  //   locality,
-  //   landmark,
-  //   pincode,
-  //   city,
-  //   state,
-  //   country,
-  //   contactName,
-  //   contactNo,
-  // } = useLocation().state;
-  const addressName = "";
-  const plotNo = "";
-  const locality = "";  
-  const landmark = "";
-  const pincode = "";
-  const city = "";
-  const state = "";
-  const country = "";
-  const contactName = "";
-  const contactNo = "";
+  const navigate = useNavigate();
+  const {
+    activeTab,
+    addressData: {
+      addressId,
+      addressType,
+      flatNo,
+      sector,
+      landmark,
+      pincode,
+      city,
+      state,
+      country,
+      contactName,
+      mobileNo,
+    },
+  } = useLocation().state;
+  console.log("🚀 ~ file: editAddress.tsx:19 ~ activeTab:", activeTab);
 
+  const [updateAddress, setUpdateAddress] = useState<any>({
+    flatNo: flatNo,
+    address: "",
+    sector: sector,
+    landmark: landmark,
+    pincode: pincode,
+    city: city,
+    state: state,
+    country: country,
+    addressType: addressType,
+    contactName: contactName,
+    mobileNo: mobileNo,
+    alternateMobileNo: 0,
+    emailId: "",
+    contactType: "",
+    pickupDate: 0,
+    customBranding: {
+      name: "",
+      logo: "",
+      address: "",
+      contactName: "",
+      contactNumber: 0,
+    },
+  });
+  const payload = {
+    addressId: addressId,
+    updateObject: {
+      updateAddress,
+    },
+  };
+
+  const addressUpdation = async (e: any) => {
+    let url = "";
+    if (activeTab === "pickup") {
+      url = UPDATE_PICKUP_ADDRESS;
+    } else if (activeTab === "delivery") {
+      url = UPDATE_DELIVERY_ADDRESS;
+    }
+    const { data: updateAddressBook }: any = await POST(url, payload);
+    if (updateAddressBook?.success) {
+      navigate(-1);
+    } else {
+      toast.error(updateAddressBook?.message);
+    }
+  };
   return (
     <div className="h-full">
       <Breadcum label="Edit Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
-        <div className="grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <CustomInputBox
             label="Address Name"
-            value={addressName}
-            onChange={() => {}}
+            value={updateAddress.addressType}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                addressType: e.target.value,
+              })
+            }
           />
           <CustomInputBox
             label="Plot no, Building Name"
-            value={plotNo}
-            onChange={() => {}}
+            value={updateAddress.flatNo}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                flatNo: e.target.value,
+              })
+            }
           />
           <CustomInputBox
             label="Locality"
-            value={locality}
-            onChange={() => {}}
+            value={updateAddress.sector}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                sector: e.target.value,
+              })
+            }
           />
           <CustomInputBox
             label="Landmark"
-            value={landmark}
-            onChange={() => {}}
+            value={updateAddress.landmark}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                landmark: e.target.value,
+              })
+            }
           />
-          <CustomInputBox label="Pincode" value={pincode} onChange={() => {}} />
-          <CustomInputBox label="City" value={city} onChange={() => {}} />
-          <CustomInputBox label="State" value={state} onChange={() => {}} />
-          <CustomInputBox label="Country" value={country} onChange={() => {}} />
+          <CustomInputBox
+            label="Pincode"
+            value={updateAddress.pincode || ""}
+            inputType="text"
+            inputMode="numeric"
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                pincode: +e.target.value,
+              })
+            }
+          />
+          <CustomInputBox
+            label="City"
+            value={updateAddress.city}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                city: e.target.value,
+              })
+            }
+          />
+          <CustomInputBox
+            label="State"
+            value={updateAddress.state}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                state: e.target.value,
+              })
+            }
+          />
+          <CustomInputBox
+            label="Country"
+            value={updateAddress.country}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                country: e.target.value,
+              })
+            }
+          />
           <CustomInputBox
             label="Contact Name"
-            value={contactName}
-            onChange={() => {}}
+            value={updateAddress.contactName}
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                contactName: e.target.value,
+              })
+            }
           />
           <CustomInputBox
             label="Contact Number"
-            value={contactNo}
-            onChange={() => {}}
+            value={updateAddress.mobileNo || ""}
+            inputType="text"
+            inputMode="numeric"
+            onChange={(e: any) =>
+              setUpdateAddress({
+                ...updateAddress,
+                mobileNo: +e.target.value,
+              })
+            }
           />
         </div>
       </div>
 
-      <BottomLayout callApi={() => {}} />
+      <BottomLayout callApi={addressUpdation} />
     </div>
   );
 };

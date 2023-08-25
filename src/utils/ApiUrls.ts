@@ -105,6 +105,10 @@ const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
+const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
+const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
+const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
@@ -144,7 +148,11 @@ export {
   FILE_UPLOAD,
   SET_PARTNER_SERVICE_INFO,
   GET_PICKUP_ADDRESS,
+  ADD_PICKUP_ADDRESS,
+  UPDATE_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_ADDRESS,
+  UPDATE_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
