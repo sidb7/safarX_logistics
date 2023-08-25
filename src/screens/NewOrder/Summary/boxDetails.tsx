@@ -1,7 +1,10 @@
 import deliveryIcon from "../../../assets/serv/delivery.svg";
 import editIcon from "../../../assets/serv/edit.svg";
+import { useNavigate } from "react-router-dom";
 
 const BoxDetails = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="p-[12px] gap-[8px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#FFFFFF] lg:w-[385px]">
       <div className="flex flex-col  ">
@@ -12,7 +15,12 @@ const BoxDetails = () => {
               Box Details
             </p>
           </div>
-          <div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              navigate("/neworder/product");
+            }}
+          >
             <img src={editIcon} alt="Edit Icon" />
           </div>
         </div>

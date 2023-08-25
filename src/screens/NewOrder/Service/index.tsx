@@ -141,7 +141,7 @@ const Index: React.FC = () => {
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [response, setResponse] = useState([]);
-  const [latestOrder, setLatestOrder] = useState([]);
+  const [latestOrder, setLatestOrder] = useState<any>([]);
   // const [payload, setPayload] = useState({
   //   mode: null,
   //   companyServiceId: null,
@@ -188,12 +188,13 @@ const Index: React.FC = () => {
   //   getLatestOrderDetails();
   // }, []);
 
-  const pincodePayload = {};
+  // const getServicePayload = latestOrder?.data?.codInfo;
+  // console.log("getServicepayload", getServicePayload);
 
   //zoneAPI to be hit on Partner
   //payload for zoneAPI
 
-  //getserviceAPI
+  //getserviceAPI Static Payload
   const getServiceDetailsPayload = {
     paymentType: "COD",
     codCollectAmount: 123,
@@ -334,6 +335,12 @@ const Index: React.FC = () => {
       label: "Service",
       isCompleted: false,
       isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Summary",
+      isCompleted: false,
+      isActive: false,
       imgSrc: TickLogo,
     },
     {
