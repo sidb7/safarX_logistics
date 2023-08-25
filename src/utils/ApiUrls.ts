@@ -109,8 +109,6 @@ const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
-
-
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
