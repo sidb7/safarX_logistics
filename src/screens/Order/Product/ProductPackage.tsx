@@ -42,6 +42,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [insurance, setInsurance] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
+  const [selectedBox, setSelectedBox]: any = useState({});
+  const [productFinalPayload, setProductFinalPayload] = useState<any>();
 
   console.log("boxState", box);
 
@@ -95,18 +97,37 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
   console.log("setCombo:", combo);
 
+  const setPayloadForProduct = (productsInfo: any) => {
+    const payload = {
+      ...productFinalPayload,
+      boxInfo: [
+        {
+          ...selectedBox,
+          productsInfo: productsInfo,
+        },
+      ],
+    };
+    setProductFinalPayload({ ...payload });
+  };
+
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
       const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
+        console.log("getOrderProductDetails", data);
         setProducts(data?.data?.products);
+        setProductFinalPayload({
+          ...productFinalPayload,
+          tempOrderId: data.data.tempOrderId,
+        });
       } else {
         throw new Error(data?.message);
       }
 
       if (boxData?.success) {
         setBox(boxData?.data);
+        // setSelectedBox(box &&box[0]);
       } else {
         throw new Error(boxData?.message);
       }
@@ -169,9 +190,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               return (
                 <ProductBox
                   image={SampleProduct}
-                  productName={e.name}
-                  weight={e.weight}
-                  dimension={e.dimension}
+                  productName={e?.productName || 0}
+                  breadth={e?.dimensions?.breadth || 0}
+                  length={e?.dimensions?.length || 0}
+                  height={e?.dimensions?.height || 0}
                   className="p-3 lg:max-w-[272px]"
                 />
               );
@@ -205,24 +227,38 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <img src={ProductIcon} alt="Package Icon" className="" />
             <h1 className="font-bold text-lg leading-6">Box Type</h1>
           </div>
-          <div className="flex">
+          <div className="flex gap-3">
             {box.map((newpackage: any, index) => {
               return (
-                <PackageBox
-                  packageType={newpackage?.name}
-                  weight={newpackage?.weight}
-                  height={newpackage.height}
-                  breadth={newpackage.breadth}
-                  length={newpackage.length}
-                  boxType={newpackage?.color}
-                  recommended={true}
-                />
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSelectedBox(newpackage);
+                  }}
+                >
+                  <PackageBox
+                    packageType={newpackage?.productName}
+                    weight={newpackage?.weight}
+                    height={newpackage.height}
+                    breadth={newpackage.breadth}
+                    length={newpackage.length}
+                    selected={
+                      selectedBox.boxId === newpackage.boxId ? true : false
+                    }
+                    boxType={newpackage?.color}
+                    recommended={index === 1 ? true : false}
+                  />
+                </div>
               );
             })}
           </div>
 
-          <Box />
-          <BoxDetails products={products} />
+          {/* <Box /> */}
+          <BoxDetails
+            products={products}
+            selectedBox={selectedBox}
+            setProductFinalPayload={setPayloadForProduct}
+          />
           <UploadInput />
 
           <div className="mb-8">
