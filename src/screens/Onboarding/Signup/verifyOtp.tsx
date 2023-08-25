@@ -34,7 +34,7 @@ const Index = () => {
           "891f5e6d-b3b3-4c16-929d-b06c3895e38d",
           response?.data[0].token
         );
-        navigate("/onboarding/offers");
+        navigate("/onboarding/getStarted");
       } else {
         toast.error(response?.message);
       }

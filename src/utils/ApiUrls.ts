@@ -14,25 +14,26 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
     break;
+
   case "test":
     SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
+    PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     break;
-  case "test":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
-    PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
-    FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
-    break;
+
   case "production":
     SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
+    PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     break;
+
   default:
     SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
+    PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     break;
 }
 

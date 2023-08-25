@@ -241,6 +241,12 @@ const Index = () => {
       imgSrc: TickLogo,
     },
     {
+      label: "Summary",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
       label: "Payment",
       isCompleted: false,
       isActive: false,

@@ -27,6 +27,7 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
 import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ArrowNavigator = () => {
   return (
@@ -42,6 +43,8 @@ const ArrowNavigator = () => {
 };
 
 const Buttons = (className?: string) => {
+  const navigate = useNavigate();
+
   return (
     <div
       className={
@@ -54,7 +57,7 @@ const Buttons = (className?: string) => {
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
           text="ADD ORDER"
-          onClick={() => {}}
+          onClick={() => navigate("/newOrder/pickup")}
           showIcon={true}
           icon={AddOrderIcon}
         />
@@ -131,6 +134,7 @@ const Index = () => {
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
   const [orders, setOrders]: any = useState([]);
+
   const [tempOrders, setTempOrders]: any = useState([]);
   const [columnHelper, setColumnhelper]: any = useState(columnHelpersForRest);
   const [sellerOverview, setSellerOverview]: any = useState([
