@@ -1,4 +1,4 @@
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";

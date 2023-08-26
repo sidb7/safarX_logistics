@@ -11,7 +11,7 @@ import InputBox from "../../../../components/InputBox/index";
 import CustomDropDown from "../../../../components/DropDown";
 import FileUploadWithText from "../../../../components/FileUploadWithText/fileUploadWithText";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../../components/Layout/breadcum";
+import { Breadcum } from "../../../../components/Layout/breadcrum";
 // import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 import { POST } from "../../../../utils/webService";
 import { POST_ADD_PRODUCT } from "../../../../utils/ApiUrls";

@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 

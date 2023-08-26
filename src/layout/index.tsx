@@ -22,7 +22,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           openMobileSideBar={openMobileSideBar}
           setMobileSideBar={setMobileSideBar}
         />
-        <main className="lg:ml-16 lg:pl-2 !h-[calc(100vh-74px)] overflow-auto">
+        <main className="lg:ml-16  lg:pl-5 !h-[calc(100vh-74px)] overflow-auto">
           <Outlet />
           {/* <BottomBar  /> */}
         </main>

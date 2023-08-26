@@ -30,6 +30,7 @@ import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { UploadInput } from "../../../components/UploadInput";
 import { toast } from "react-toastify";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
@@ -183,143 +184,137 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   return (
     <div>
-      <div className="mx-4 mb-28">
-        <div className="mx-5">
-          <CustomBreadcrumb />
-        </div>
-        <div className="flex gap-x-2 items-center">
-          <img src={backArrow} alt="" className="w-6 h-6" />
-          <p className="text-2xl font-Lato font-semibold">Add New Order</p>
-        </div>
-        <div>
+      <div className="">
+        <Breadcum label="Add New Order" />
+        <div className="lg:mb-8">
           <Stepper steps={steps} />
         </div>
-        <div className="flex justify-between ">
-          <div className="flex items-center gap-2">
-            <img src={ProductIcon} alt="Product Icon" className="" />
-            <h1 className="font-bold leading-6 text-lg ">Product</h1>
-          </div>
-          <div className="hidden  lg:flex whitespace-nowrap gap-x-32 bg-[#FFFFFF] shadow-sm p-2  ">
-            <p>Handle with care</p>
-            <div className="border-2 border-[#F35838] bg-[#F35838] flex  items-center rounded-md gap-x-3 px-2">
-              <img src={toggle} alt="toggle" />
-              <p className="text-[14px] text-white">DEACTIVATE</p>
+        <div className="px-5 py-2">
+          <div className="flex justify-between ">
+            <div className="flex items-center gap-2">
+              <img src={ProductIcon} alt="Product Icon" className="" />
+              <h1 className="font-bold leading-6 text-lg ">Product</h1>
+            </div>
+            <div className="hidden  lg:flex whitespace-nowrap gap-x-32 bg-[#FFFFFF] shadow-sm p-2  ">
+              <p>Handle with care</p>
+              <div className="border-2 border-[#F35838] bg-[#F35838] flex  items-center rounded-md gap-x-3 px-2">
+                <img src={toggle} alt="toggle" />
+                <p className="text-[14px] text-white">DEACTIVATE</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-4">
-          <div className="">
-            <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
-              Package 1
-            </h2>
-          </div>
-          <div className="flex items-center">
-            <img
-              src={EditIcon}
-              alt="Edit Product"
-              className="cursor-pointer mr-2"
-            />
-            <img
-              src={BookmarkIcon}
-              alt="Bookmark Product"
-              className="mr-2 cursor-pointer"
-              onClick={() => setCombo(true)}
-            />
-            <img
-              src={isLgScreen ? DeleteIconForLg : DeleteIcon}
-              alt="Delete Product"
-              className="mr-2 w-4 h-4"
-            />
-          </div>
-        </div>
-
-        <div className="flex  gap-x-3">
-          {products.length > 0 &&
-            products.map((e: any, index: number) => {
-              return (
-                <ProductBox
-                  key={index}
-                  image={SampleProduct}
-                  productName={e?.productName || 0}
-                  breadth={e?.dimensions?.breadth || 0}
-                  length={e?.dimensions?.length || 0}
-                  height={e?.dimensions?.height || 0}
-                  className="p-3 lg:max-w-[272px]"
-                />
-              );
-            })}
-        </div>
-
-        <div className="mt-6">
-          <AddButton
-            text="ADD PRODUCT"
-            onClick={() => {
-              navigate("/newOrder/addnewproduct");
-            }}
-            showIcon={true}
-            icon={ButtonIcon}
-            alt="Add Product"
-          />
-        </div>
-        <div className="flex justify-between mt-5 whitespace-nowrap  bg-[#FFFFFF] shadow-sm p-2  lg:hidden ">
-          <div>
-            <p>Handle with care</p>
+          <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-4">
+            <div className="">
+              <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
+                Package 1
+              </h2>
+            </div>
+            <div className="flex items-center">
+              <img
+                src={EditIcon}
+                alt="Edit Product"
+                className="cursor-pointer mr-2"
+              />
+              <img
+                src={BookmarkIcon}
+                alt="Bookmark Product"
+                className="mr-2 cursor-pointer"
+                onClick={() => setCombo(true)}
+              />
+              <img
+                src={isLgScreen ? DeleteIconForLg : DeleteIcon}
+                alt="Delete Product"
+                className="mr-2 w-4 h-4"
+              />
+            </div>
           </div>
 
-          <div className="bg-[white] flex  items-center rounded-md gap-x-3 px-2">
-            <img src={toggleBlack} alt="toggle" />
-
-            <p className="text-[14px] text-[#F35838]">DEACTIVATE</p>
-          </div>
-        </div>
-        <div className="mt-7">
-          <div className="flex pb-5 pr-5 gap-2">
-            <img src={ProductIcon} alt="Package Icon" className="" />
-            <h1 className="font-bold text-lg leading-6">Box Type</h1>
-          </div>
-          <div className="flex gap-3">
-            {box?.map((newpackage: any, index) => {
-              return (
-                <div
-                  className="cursor-pointer"
-                  key={index}
-                  onClick={() => {
-                    setSelectedBox(newpackage);
-                  }}
-                >
-                  <PackageBox
-                    packageType={newpackage?.productName}
-                    weight={newpackage?.weight}
-                    height={newpackage.height}
-                    breadth={newpackage.breadth}
-                    length={newpackage.length}
-                    selected={
-                      selectedBox.boxId === newpackage.boxId ? true : false
-                    }
-                    boxType={newpackage?.color}
-                    recommended={index === 1 ? true : false}
+          <div className="flex  gap-x-3">
+            {products.length > 0 &&
+              products.map((e: any, index: number) => {
+                return (
+                  <ProductBox
+                    image={SampleProduct}
+                    productName={e?.productName || 0}
+                    breadth={e?.dimensions?.breadth || 0}
+                    length={e?.dimensions?.length || 0}
+                    height={e?.dimensions?.height || 0}
+                    className="p-3 lg:max-w-[272px]"
                   />
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
 
-          {/* <Box /> */}
-          <BoxDetails
-            products={products}
-            selectedBox={selectedBox}
-            setProductFinalPayload={setPayloadForProduct}
-          />
-          <UploadInput />
-
-          <div className="mb-8">
+          <div className="mt-6">
             <AddButton
-              text="ADD PACKAGE"
-              onClick={() => {}}
+              text="ADD PRODUCT"
+              onClick={() => {
+                navigate("/newOrder/addnewproduct");
+              }}
               showIcon={true}
               icon={ButtonIcon}
               alt="Add Product"
             />
+          </div>
+          <div className="flex justify-between mt-5 whitespace-nowrap  bg-[#FFFFFF] shadow-sm p-2  lg:hidden ">
+            <div>
+              <p>Handle with care</p>
+            </div>
+
+            <div className="bg-[white] flex  items-center rounded-md gap-x-3 px-2">
+              <img src={toggleBlack} alt="toggle" />
+
+              <p className="text-[14px] text-[#F35838]">DEACTIVATE</p>
+            </div>
+          </div>
+          <div className="mt-7">
+            <div className="flex pb-5 pr-5 gap-2">
+              <img src={ProductIcon} alt="Package Icon" className="" />
+              <h1 className="font-bold text-lg leading-6">Box Type</h1>
+            </div>
+            <div className="flex gap-3">
+              {box.map((newpackage: any, index) => {
+                return (
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      setSelectedBox(newpackage);
+                    }}
+                  >
+                    <PackageBox
+                      packageType={newpackage?.productName}
+                      weight={newpackage?.weight}
+                      height={newpackage.height}
+                      breadth={newpackage.breadth}
+                      length={newpackage.length}
+                      selected={
+                        selectedBox.boxId === newpackage.boxId ? true : false
+                      }
+                      boxType={newpackage?.color}
+                      recommended={index === 1 ? true : false}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* <Box /> */}
+            <BoxDetails
+              products={products}
+              selectedBox={selectedBox}
+              setProductFinalPayload={setPayloadForProduct}
+            />
+            <UploadInput />
+
+            <div className="mb-8">
+              <AddButton
+                text="ADD PACKAGE"
+                onClick={() => {}}
+                showIcon={true}
+                icon={ButtonIcon}
+                alt="Add Product"
+              />
+            </div>
           </div>
         </div>
         <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>

@@ -24,7 +24,7 @@ import {
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 
 interface IProductFilledProps {}
 
@@ -333,25 +333,13 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   };
 
   return (
-    <div>
-      <div className="mx-4">
-        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
-          <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
-          <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
-          <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
-            Order
-          </span>
-        </div>
-        <Breadcum label="Add New Order" />
-        <div className="lg:mb-8">
-          <Stepper steps={steps} />
-        </div>
-
-        <div className="flex gap-2 my-5">
-          <img src={ProductIcon} alt="Product Icon" className="" />
-          <h1 className="font-bold leading-6 text-lg font-Lato">Product</h1>
-        </div>
-        <div className="flex gap-x-6 my-5">
+    <>
+      <Breadcum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
+      <div className="px-5">
+        <div className="flex gap-x-6 ">
           {productPayload.length > 0 &&
             productPayload.map((product: any, i: number) => {
               return (
@@ -493,7 +481,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         {/* <BottomLayout backButtonText="BACK" nextButtonText="NEXT" /> */}
         <BottomLayout callApi={() => addProductInfo()} />
       </div>
-    </div>
+    </>
   );
 };
 

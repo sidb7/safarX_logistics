@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InfoCircle from "../../../../assets/info-circle.svg";
-import { Breadcum } from "../../../../components/Layout/breadcum";
+import { Breadcum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
 import { POST } from "../../../../utils/webService";

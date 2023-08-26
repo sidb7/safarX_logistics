@@ -5,7 +5,7 @@ import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 
 const options = [
   { value: "Saving", label: "Saving" },

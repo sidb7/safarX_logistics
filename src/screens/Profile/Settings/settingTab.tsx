@@ -6,7 +6,7 @@ import PassModal from "./PassModal";
 import ProfileModal from "./ProfileModal";
 import DeleteModal from "../../../components/CustomModal/DeleteModal";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import { DELETE_SELLER } from "../../../utils/ApiUrls";
 
 export const SettingTab = () => {
