@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PaginationComponent from "../../../../components/Pagination";
-import ProductBox from "../../Product/productBox";
+import ProductBox from "../../Product/ProductBox";
 import ProductCategoryBox from "../../ReturningUser/SearchFilterProduct/ProductCategoryBox";
 import DeliceryIcon from "../../../../assets/Delivery Icon.svg";
 import DeliveryIcon from "../../../../assets/Product/Delivery (1).svg";

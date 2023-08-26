@@ -2,7 +2,7 @@ import ProductIcon from "../../../../assets/Product/Product.svg";
 import PackageBox from "../PackageType/packageBox";
 import ButtonIcon from "../../../../assets/Product/Button.svg";
 import "../../../../styles/packageStyle.css";
-import ProductDetails from "../productDetails";
+// import ProductDetails from "../productDetails";
 import AddButton from "../../../../components/Button/addButton";
 import { UploadInput } from "../../../../components/UploadInput";
 
@@ -42,9 +42,7 @@ const Index = () => {
         />
       </div>
 
-      
-
-      <ProductDetails />
+      {/* <ProductDetails /> */}
       <UploadInput />
 
       <div className="mb-8">
