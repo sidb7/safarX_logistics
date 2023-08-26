@@ -55,16 +55,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             </div>
           </div>
 
-          <InputWithImage
+          {/* <InputWithImage
             imgSrc={SearchIcon}
-            inputClassName="hidden lg:!w-80 lg:flex"
+            inputClassName="hidden lg:!w-80 lg:flex !p-0"
             placeholder="Search"
-          />
+          /> */}
 
           <img
             src={locationImage}
+            width={"22px"}
+            height={"22px"}
             alt=""
-            className="cursor-pointer"
+            className="cursor-pointer hidden"
             onClick={() => setIsModalOpen(true)}
           />
 

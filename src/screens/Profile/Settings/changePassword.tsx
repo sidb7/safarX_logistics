@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";

@@ -28,6 +28,7 @@ import { POST } from "../../utils/webService";
 import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Breadcum } from "../../components/Layout/breadcrum";
 
 const ArrowNavigator = () => {
   return (
@@ -285,66 +286,16 @@ const Index = () => {
   };
 
   return (
-    <div className="mx-4">
-      <div className="flex flex-col">
-        <div className="flex lg:justify-between">
-          {ArrowNavigator()}
-          {Buttons()}
-        </div>
-        <div className="w-full flex gap-5 pt-2">
-          {sellerOverview.map((e: any) => {
-            return (
-              <OrderCard
-                gif={e.gif}
-                showGif={true}
-                label={e.label}
-                number={e.number}
-              />
-            );
-          })}
-        </div>
-        {Buttons(
-          "lg:hidden grid grid-cols-4 gap-x-2 mt-4 h-[54px] items-center"
-        )}
-      </div>
-      <OrderStatus
-        filterId={filterId}
-        setFilterId={handleFilter}
-        handleTabChange={handleTabChanges}
-        statusData={statusData}
-      />
-      {/* for mobile view       */}
-      {/* {filterId === -1 && (
-        <>
-          <OrderDetails />
-          <OrderDetails />
-          <OrderDetails />
-          <ErrorFile props={insufficientBalance} />
-        </>
-      )}
-      {filterId === 0 && (
-        <>
-          <OrderDetails />
-          <OrderDetails />
-          <OrderDetails />
-          <ErrorFile props={insufficientBalance} />
-        </>
-      )}
-      {filterId === 1 && (
-        <>
-          <OrderDetails />
-          <OrderDetails />
-          <OrderDetails />
-        </>
-      )}
-      {filterId === 2 && (
-        <>
-          <ErrorFile props={insufficientBalance} />
-        </>
-      )} */}
-
+    <div>
+      <Breadcum label="Orders" component={Buttons()} />
       {isLgScreen && (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto pl-5">
+          <OrderStatus
+            filterId={filterId}
+            setFilterId={handleFilter}
+            handleTabChange={handleTabChanges}
+            statusData={statusData}
+          />
           <CustomTable data={orders} columns={columnHelper || []} />
         </div>
       )}

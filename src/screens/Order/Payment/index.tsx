@@ -28,7 +28,7 @@ import CustomCenterModal from "../../../components/CustomModal/customCenterModal
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import GiftIcon from "../../../assets/Gift.svg";

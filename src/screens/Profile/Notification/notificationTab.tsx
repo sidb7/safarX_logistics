@@ -10,7 +10,7 @@ import {
   UPDATE_PROFILE_NOTIFICATION,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import { toast } from "react-toastify";
 import downArrowIcon from "../../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../../assets/Filter/upArrow.svg";

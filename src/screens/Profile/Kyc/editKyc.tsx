@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import { CustomUploadInput } from "../../../components/UploadInput/customUploadInput";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";

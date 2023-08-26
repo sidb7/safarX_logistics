@@ -14,7 +14,7 @@ import SportsLogo from "../../../../assets/Product/sports.svg";
 import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
 import ProductBox from "../../Product/ProductBox";
-import { Breadcum } from "../../../../components/Layout/breadcum";
+import { Breadcum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import PaginationComponent from "../../../../components/Pagination";
 import { POST } from "../../../../utils/webService";

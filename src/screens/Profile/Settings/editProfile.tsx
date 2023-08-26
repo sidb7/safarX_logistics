@@ -2,7 +2,7 @@ import CustomInputBox from "../../../components/Input";
 import { useEffect, useState } from "react";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
