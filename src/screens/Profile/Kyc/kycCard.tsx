@@ -30,7 +30,7 @@ export const ProfileKycCard = (props: KYCProps) => {
           <img
             src={EditIcon}
             alt=""
-            className="mr-4"
+            className="mr-4 cursor-pointer"
             onClick={() => navigate("/profile/profileEdit-kyc")}
           />
         </div>
