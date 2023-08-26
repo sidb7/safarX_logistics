@@ -4,8 +4,10 @@ import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { Breadcum } from "../../../components/Layout/breadcum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 export const EditProfile = () => {
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState<any>({});
   const [name, setName] = useState("");
   const changeHandler = (key: string, event: any) => {
@@ -22,7 +24,8 @@ export const EditProfile = () => {
     });
     if (data.success) {
       setProfileData(data?.data);
-      // toast.success(data.message);
+      navigate(-1);
+      toast.success("Profile Edited Successfully");
     } else {
       toast.error(data.message);
     }
@@ -43,7 +46,7 @@ export const EditProfile = () => {
   return (
     <div className="h-full">
       <Breadcum label="Edit Profile" />
-      <div className="flex flex-col mx-4 mt-4 gap-y-4">
+      <div className=" grid grid-cols-1 mx-4 mt-4 gap-y-4">
         <div className="flex flex-col justify-center items-center mb-4">
           <div
             style={{
@@ -72,11 +75,14 @@ export const EditProfile = () => {
         </div>
         <CustomInputBox
           label="Seller ID"
+          // placeholder="seller ID"
           value={profileData?.sellerId}
           isDisabled={true}
         />
+
         <CustomInputBox
           label="Name"
+          placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -86,11 +92,13 @@ export const EditProfile = () => {
           inputMode="numeric"
           maxLength={10}
           label="Contact Number"
+          placeholder="Contact Number"
           value={profileData?.contactNumber}
           onChange={(e) => changeHandler("contactNumber", e)}
         />
         <CustomInputBox
           label="Brand Website"
+          // placeholder="Brand Website"
           value={profileData?.privateCompany?.brandWebsite}
           onChange={(e) =>
             setProfileData({

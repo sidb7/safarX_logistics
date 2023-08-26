@@ -83,7 +83,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <img
                 src={BlackEditIcon}
                 alt=""
-                className="pr-4"
+                className="pr-4 cursor-pointer"
                 onClick={() =>
                   navigate("/profile/profile-setting-edit-profile")
                 }
@@ -163,7 +163,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <span className="text-[20px] font-semibold font-[#1C1C1C]">
                 {activePlan}
               </span>
-              <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded">
+              <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded cursor-pointer">
                 CHANGE
               </span>
             </div>
