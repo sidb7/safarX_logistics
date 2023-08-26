@@ -80,16 +80,10 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
-const ADD_PICKUP_LOCATION= `${SELLER_BASE_URL}/order/addPickupLocation`;
-const ADD_DELIVERY_LOCATION= `${SELLER_BASE_URL}/order/addDeliveryLocation`;
-const GET_COURIER_PARTNER_SERVICE= `${SELLER_BASE_URL}/order/getAvailableService`;
-const SET_PARTNER_SERVICE_INFO= `${SELLER_BASE_URL}/order/setServiceInfo`;
-
-
-
-
-
-
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
+const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
@@ -102,9 +96,17 @@ const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
 //paytm
 const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initialRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
+const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
+
+// Wallet
+const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
+
+// Validate Token
+const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
+
 export {
   SELLER_URL,
   GET_SELLER_ORDER,
@@ -147,4 +149,7 @@ export {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
+  GET_CURRENT_WALLET,
+  VALIDATE_USER_TOKEN,
+  POST_ADD_BANK_DETAILS,
 };

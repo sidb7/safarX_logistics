@@ -4,7 +4,7 @@ import CustomButton from "../../../components/Button";
 import BannerPagination from "../../../assets/Banner pagination.svg";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
@@ -16,7 +16,12 @@ import upiIcon from "../../../assets/Payment/upiIcon.svg";
 import cardPayment from "../../../assets/Payment/cardPaymentIcon.svg";
 import bankTransfer from "../../../assets/Payment/bankTransferIcon.svg";
 import netBanking from "../../../assets/Payment/netBankingIcon.svg";
-import { INITIAL_RECHARGE, RECHARGE_STATUS } from "../../../utils/ApiUrls";
+import {
+  GET_CURRENT_WALLET,
+  INITIAL_RECHARGE,
+  POST_ADD_BANK_DETAILS,
+  RECHARGE_STATUS,
+} from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 // import { PaytmButton } from "../../../utils/payPaytm";
@@ -27,13 +32,18 @@ const OnBoundingWalletRecharge = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [isRechargeModalOpen, setIsRechargeModalOpen] = useState(false);
   const [walletRechargeModalOpen, setWalletRechargeModalOpen] = useState(false);
-  const [dropdownMenu, setdropdownMenu] = useState("");
-  const [money, setMoney] = useState<any>();
+  const [money, setMoney] = useState<any>(2000);
   const [isEdit, setIsedit] = useState<any>();
   const [upiValue, setUpiValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [upiText, setUpiText] = useState<boolean>();
-  const [intervalId, setIntervalId] = useState<any>();
+  const [accountName, setAccountName] = useState<any>();
+  const [bankName, setBankName] = useState<any>();
+  const [branchName, setBranchName] = useState<any>();
+  const [ifscCode, setIfscCode] = useState<any>();
+  const [accountType, setAccountType] = useState<any>();
+  const [currentWalletValue, setCurrentWalletValue] = useState<any>();
+
   let myInterval: number | any;
 
   const modalTitle = () => {
@@ -61,6 +71,10 @@ const OnBoundingWalletRecharge = () => {
 
   const dropdownArr = [
     {
+      label: "Choose Account Type",
+      value: "",
+    },
+    {
       label: "Saving",
       value: "Saving",
     },
@@ -68,11 +82,36 @@ const OnBoundingWalletRecharge = () => {
       label: "Current",
       value: "Current",
     },
-    {
-      label: "Current12",
-      value: "Current12",
-    },
   ];
+
+  const fetchCurrentWallet = async () => {
+    const { data } = await POST(GET_CURRENT_WALLET, {});
+    if (data?.status) {
+      setCurrentWalletValue(data.data[0][0]?.balance);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentWallet();
+  }, []);
+
+  const postAccountDetails = async () => {
+    const payload = {
+      bankName: bankName,
+      branchName: branchName,
+      bankAccountHolderName: "",
+      ifscCode: ifscCode,
+      accountType: accountType,
+      bankAccountNumber: accountName,
+    };
+    const datas = await POST(POST_ADD_BANK_DETAILS, payload);
+    console.log("response", datas);
+    if (datas?.data?.success) {
+      setWalletRechargeModalOpen(true);
+    } else {
+      toast.error(datas?.data?.message);
+    }
+  };
 
   const walletRecharge = () => {
     return (
@@ -184,8 +223,9 @@ const OnBoundingWalletRecharge = () => {
             <CustomInputBox
               containerStyle={`lg:!w-auto`}
               inputType="text"
-              label="Title"
+              label="Account Number"
               className="!w-[20rem]"
+              onChange={(e) => setAccountName(e.target.value)}
             />
           </div>
           <div>
@@ -194,6 +234,7 @@ const OnBoundingWalletRecharge = () => {
               containerStyle={`lg:!w-auto mt-4`}
               inputType="text"
               className="!w-[20rem]"
+              onChange={(e) => setBankName(e.target.value)}
             />
           </div>
           <div>
@@ -202,6 +243,7 @@ const OnBoundingWalletRecharge = () => {
               containerStyle={`lg:!w-auto mt-4`}
               inputType="text"
               className="!w-[20rem]"
+              onChange={(e) => setBranchName(e.target.value)}
             />
           </div>
           <div>
@@ -210,21 +252,21 @@ const OnBoundingWalletRecharge = () => {
               containerStyle={`lg:!w-auto mt-4`}
               inputType="text"
               className="!w-[20rem]"
+              onChange={(e) => setIfscCode(e.target.value)}
             />
           </div>
           <div>
             <CustomDropDown
-              value={dropdownMenu}
+              value={accountType}
               options={dropdownArr}
-              onChange={(e) => setdropdownMenu(e.target.value)}
+              onChange={(e) => setAccountType(e.target.value)}
               wrapperClass="!w-[20rem] mt-4 m-auto"
-              // onChange={(e) => console.log(e.target.value)}
             />
           </div>
           <div className="!w-[20rem] m-auto mt-[84px] lg:mt-4">
             <CustomButton
               text={"RECHARGE NOW"}
-              onClick={() => setWalletRechargeModalOpen(true)}
+              onClick={() => postAccountDetails()}
             />
           </div>
         </div>
@@ -253,7 +295,7 @@ const OnBoundingWalletRecharge = () => {
 
   const rechargeStatusCheck = async (orderId: number) => {
     const payload = {
-      walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
+      // walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
       orderId: orderId,
     };
     const datas = await POST(RECHARGE_STATUS, payload);
@@ -263,15 +305,22 @@ const OnBoundingWalletRecharge = () => {
       toast.success("Payment success");
       clearInterval(myInterval);
       navigate("/order");
+    } else if (
+      datas?.data?.message ===
+      "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
+    ) {
+      setIsLoading(false);
+      toast.error("Decline Payment By User!!");
+      clearInterval(myInterval);
     }
   };
 
   const paynow = async () => {
     const payload = {
-      walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
+      // walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
       paymentObject: {
         upiId: upiValue,
-        amount: "1",
+        amount: String(money),
         callbackUrl: "http://helloWorld",
       },
     };
@@ -322,7 +371,7 @@ const OnBoundingWalletRecharge = () => {
               Your wallet balance
             </p>
             <p className="lg:text-[18px] lg:font-semibold lg:text-[#1C1C1C]">
-              ₹0
+              ₹{currentWalletValue}
             </p>
           </div>
           <p className="text-[12px] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
@@ -330,11 +379,12 @@ const OnBoundingWalletRecharge = () => {
           </p>
           <p
             onClick={() => convertToEdit()}
-            className="text-[16px] flex my-2 lg:font-semibold cursor-pointer lg:text-[#1C1C1C]"
+            className="text-[16px] flex items-center my-2 lg:font-semibold cursor-pointer lg:text-[#1C1C1C]"
           >
+            <span>₹</span>
             <input
               type={`${isEdit ? "text" : ""}`}
-              className="text-lg border-none"
+              className="text-lg p-1 border-none"
               value={money}
               onChange={(e) => setMoney(e.target.value)}
             />
@@ -465,7 +515,11 @@ const OnBoundingWalletRecharge = () => {
           className="!h-[37.265rem] !w-[31.25rem]"
         >
           {isLoading ? (
-            <img src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif" />
+            <img
+              src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
+              className="flex m-auto"
+              alt=""
+            />
           ) : (
             walletRechargeDetails()
           )}
