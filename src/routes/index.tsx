@@ -2,16 +2,18 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PickUpScreen from "../screens/NewOrder/PickUp";
 import DeliveryScreen from "../screens/NewOrder/Delivery";
-import ProductScreen from "../screens/NewOrder/Product";
+// import ProductScreen from "../screens/NewOrder/Product";
+import AddProductOrder from "../screens/NewOrder/Product/AddProduct";
+import ProductPackage from "../screens/NewOrder/Product/ProductPackage";
 import ServiceScreen from "../screens/NewOrder/Service";
 import PaymentScreen from "../screens/NewOrder/Payment";
 import SummaryScreen from "../screens/NewOrder/Summary";
 import StandardServiceScreen from "../screens/NewOrder/Service/StandardService";
 import InsuranceScreen from "../screens/NewOrder/Insurance";
 import PostPaymentScreen from "../screens/NewOrder/Payment/postPayment";
-import ProductPage from "../screens/NewOrder/Product/productPage";
-import ProductFilled from "../screens/NewOrder/Product/ProductFilled";
-import Package from "../screens/NewOrder/Product/package";
+// import ProductPage from "../screens/NewOrder/Product/productPage";
+// import ProductFilled from "../screens/NewOrder/Product/ProductFilled";
+// import Package from "../screens/NewOrder/Product/package";
 import Map from "../screens/NewOrder/Map/index";
 import LabelScreen from "../screens/NewOrder/Label";
 import BulkOrder from "../screens/NewOrder/BulkOrder";
@@ -92,8 +94,8 @@ import Payment from "../screens/Order/Payment";
 // import Layout from "../layout";
 // import { CommonLayout } from "../layout/layout";
 
-import AddNewProduct from "../screens/Order/Product/AddProduct";
-import ProductPackage from "../screens/Order/Product/ProductPackage";
+import AddNewProduct from "../screens/NewOrder/Product/AddProduct";
+// import ProductPackage from "../screens/NewOrder/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
 import Catalogue from "../screens/NewOrder/NewCatalogue";
 import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addCombo";
@@ -157,10 +159,18 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="product"
+              path="add-product"
               element={
                 <ProtectedRoute>
-                  <ProductScreen />
+                  <AddProductOrder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="product-package"
+              element={
+                <ProtectedRoute>
+                  <AddProductOrder />
                 </ProtectedRoute>
               }
             />
@@ -181,6 +191,20 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+          </Route>
+          {/* <Route path="/auth/signUp" element={<SignUpScreen />} /> */}
+          {/* <Route path="/auth/sendOtp" element={<SendOTPScreen />} />
+          <Route path="/auth/verifyOtp" element={<VerifyOTPScreen />} />
+          <Route path="/auth/offers" element={<OffersScreen />} />
+          <Route path="/auth/getStarted" element={<GetStartedScreen />} /> */}
+          <Route path="/neworder" element={<CommonLayout />}>
+            <Route path="pickup" element={<PickUpScreen />} />
+            <Route path="delivery" element={<DeliveryScreen />} />
+            <Route path="add-product" element={<AddProductOrder />} />
+            <Route path="product-package" element={<ProductPackage />} />
+            <Route path="service" element={<ServiceScreen />} />
+            {/* <Route path="payment" element={<PaymentScreen />} /> */}
+            <Route path="summary" element={<SummaryScreen />} />
             <Route
               path="standard-service"
               element={
@@ -205,7 +229,7 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="productpage"
               element={
                 <ProtectedRoute>
@@ -228,7 +252,7 @@ const MyRoutes: React.FC = () => {
                   <Package />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route
               path="map"
               element={
@@ -253,6 +277,14 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="insurance" element={<InsuranceScreen />} />
+            <Route path="post-payment" element={<PostPaymentScreen />} />
+            {/* <Route path="productpage" element={<ProductPage />} />
+            <Route path="productfilled" element={<ProductFilled />} /> */}
+            {/* <Route path="package" element={<Package />} /> */}
+            <Route path="map" element={<Map />} />
+            <Route path="label" element={<LabelScreen />} />
+            <Route path="filter" element={<FilterScreen />} />
             <Route
               path="returninguserpickup"
               element={
@@ -606,6 +638,14 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="/order/service" element={<Service />} />
+            <Route path="/order/summary" element={<Summary />} />
+            <Route path="/order/payment" element={<Payment />} />
+            {/* <Route path="newOrder/addnewproduct" element={<AddNewProduct />} /> */}
+            {/* <Route
+              path="newOrder/productpackage"
+              element={<ProductPackage />}
+            /> */}
 
             {/* Catalogue */}
             <Route
