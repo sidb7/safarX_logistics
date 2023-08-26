@@ -292,14 +292,7 @@ const MyRoutes: React.FC = () => {
 
           <Route path="onboarding/signup" element={<SignUpScreen />} />
           <Route path="onboarding/sendotp" element={<SendOTPScreen />} />
-          <Route
-            path="onboarding/verifyotp"
-            element={
-              <ProtectedRoute>
-                <VerifyOTPScreen />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="onboarding/verifyotp" element={<VerifyOTPScreen />} />
           <Route
             path="onboarding/offers"
             element={

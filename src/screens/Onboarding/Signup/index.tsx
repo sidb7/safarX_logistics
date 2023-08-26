@@ -146,7 +146,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={logInOnClick}
-                  className="text-[#004EFF] font-normal text-xs leading-4 font-Open"
+                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open"
                 >
                   Log In
                 </button>

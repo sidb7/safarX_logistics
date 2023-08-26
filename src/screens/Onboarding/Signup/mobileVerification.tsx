@@ -35,6 +35,7 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
+        localStorage.setItem("mobile", value.mobileNo);
         navigate("/onboarding/verifyOtp");
       } else {
         toast.error(response?.message);
@@ -88,7 +89,8 @@ const Index = () => {
               </div>
 
               <CustomInputBox
-                inputType="number"
+                inputMode={"number"}
+                inputType="text"
                 label="Enter Your Mobile Number"
                 onChange={(e) => {
                   setMobileNumber({

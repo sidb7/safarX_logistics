@@ -10,6 +10,7 @@ import CustomButton from "../../components/Button/index";
 import locationImage from "../../assets/serv/location.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import ServicabilityPincode from "./ServicabilityPincode";
+import { useNavigate } from "react-router-dom";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -17,6 +18,7 @@ interface ITopBarProps {
 }
 
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
+  const navigate = useNavigate();
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -135,6 +137,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       role="menuitem"
                       onClick={() => {
                         clearLocalStorage();
+                        navigate("/auth/login");
                       }}
                     >
                       Sign out
