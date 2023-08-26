@@ -95,6 +95,8 @@ const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 const ADD_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/addNewComboProduct`;
+const POST_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/getAvailableService`;
+const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -164,4 +166,6 @@ export {
   GET_SERVICABLE_PINCODE,
   POST_ADD_PRODUCT,
   ADD_COMBO_PRODUCT_URL,
+  POST_PACKAGE_INSURANCE,
+  GET_PACKAGE_INSURANCE,
 };
