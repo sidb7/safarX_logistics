@@ -39,6 +39,7 @@ import {
   ADD_PICKUP_LOCATION,
   GET_CURRENT_WALLET,
   INITIAL_RECHARGE,
+  PLACE_ORDER,
   RECHARGE_STATUS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
@@ -207,6 +208,17 @@ const Payment = () => {
       setIsLoading(false);
       toast.error("Decline Payment By User!!");
       clearInterval(myInterval);
+    }
+  };
+
+  const placeOrderApi = async () => {
+    const { data } = await POST(PLACE_ORDER, {});
+    console.log("data", data);
+
+    if (data?.success) {
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
     }
   };
 
@@ -641,7 +653,8 @@ const Payment = () => {
             BACK
           </button>
           <button
-            onClick={() => setIsLabelRightModal(true)}
+            // onClick={() => setIsLabelRightModal(true)}
+            onClick={() => placeOrderApi()}
             className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
           >
             {" "}

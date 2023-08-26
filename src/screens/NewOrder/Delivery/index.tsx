@@ -205,7 +205,7 @@ const Index = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/neworder/product");
+        navigate("/orders/add-order/add-product");
       } else {
         console.error("DeliveryDataerror");
         toast.error(response?.message);

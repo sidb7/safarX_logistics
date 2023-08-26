@@ -85,17 +85,20 @@ const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
+const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
+
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
+const ADD_BOX_INFO = `${SELLER_URL}/api/v1/orderBoxInfo/addBoxInfo`;
 
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
 const ADD_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/addNewComboProduct`;
-const POST_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/getAvailableService`;
+const ADD_COD_INFO = `${SELLER_URL}/api/v1/order/addCodInfo`;
 const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
@@ -124,7 +127,9 @@ const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
 export {
   SELLER_URL,
+  ADD_BOX_INFO,
   GET_SELLER_ORDER,
+  ADD_COD_INFO,
   POST_SIGN_IN_URL,
   POST_SIGN_UP_URL,
   POST_SEND_OTP_URL,
@@ -176,6 +181,6 @@ export {
   GET_SERVICABLE_PINCODE,
   POST_ADD_PRODUCT,
   ADD_COMBO_PRODUCT_URL,
-  POST_PACKAGE_INSURANCE,
   GET_PACKAGE_INSURANCE,
+  PLACE_ORDER,
 };

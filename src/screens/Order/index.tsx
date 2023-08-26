@@ -57,7 +57,7 @@ const Buttons = (className?: string) => {
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
           text="ADD ORDER"
-          onClick={() => navigate("/newOrder/pickup")}
+          onClick={() => navigate("/orders/add-order/pickup")}
           showIcon={true}
           icon={AddOrderIcon}
         />

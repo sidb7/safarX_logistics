@@ -154,13 +154,13 @@ const Index: React.FC = () => {
 
   const navigate = useNavigate();
 
-  console.log("selectedService", selectedService);
+  //console.log("selectedService", selectedService);
 
-  console.log("recommendedData", recommendedData);
+  //console.log("recommendedData", recommendedData);
 
-  console.log("responsefromAPicall", response);
+  //console.log("responsefromAPicall", response);
   const dataArray = (response as any).data;
-  console.log("dataArray", dataArray);
+  //console.log("dataArray", dataArray);
 
   // endpoint to maintain order state
   const getLatestOrderDetails = async () => {
@@ -189,7 +189,7 @@ const Index: React.FC = () => {
   }, []);
 
   const getServicePayload = latestOrder?.data?.codInfo;
-  console.log("getServicepayload", getServicePayload);
+  //console.log("getServicepayload", getServicePayload);
 
   /* getserviceAPI Static Payload */
 
@@ -206,7 +206,7 @@ const Index: React.FC = () => {
         getServicePayload
       );
 
-      if (response?.status) {
+      if (response?.success) {
         console.log("responseeee", response);
         setResponse(response);
       } else {
@@ -231,7 +231,7 @@ const Index: React.FC = () => {
 
   // const postServiceDetailsPayload = dataArray.map((eachArray: any) => {
   //   eachArray.map((each: any) => {
-  //     console.log("eachforpayload", each);
+  //     //console.log("eachforpayload", each);
   //     mode: each.mode,
   //     companyServiceId: each.companyServiceId,
   //   companyServiceName: each.companyServiceId,
@@ -255,13 +255,13 @@ const Index: React.FC = () => {
   // };
 
   const selectedServiceData = dataArray?.map((eachArray: any) => {
-    console.log("eachArray for selectedData", eachArray);
+    //console.log("eachArray for selectedData", eachArray);
     return eachArray?.find((service: any) => {
       return service.companyServiceId === selectedService;
     });
   });
 
-  console.log("selectedServiceEntireObject", selectedServiceData);
+  //console.log("selectedServiceEntireObject", selectedServiceData);
 
   let payloadData: any = "";
   if (
@@ -281,11 +281,11 @@ const Index: React.FC = () => {
       price: selectedServiceData[0]?.totalPayment,
     };
     // setPayload(payloadData);
-    // console.log("PayloadData:", payloadData);
+    // //console.log("PayloadData:", payloadData);
   } else {
-    console.log("No matching service found.");
+    //console.log("No matching service found.");
   }
-  console.log("Payload:", payloadData);
+  //console.log("Payload:", payloadData);
   const postServiceDetails = async (payload: any) => {
     try {
       if (payload.mode !== "") {
@@ -296,7 +296,7 @@ const Index: React.FC = () => {
 
         if (response?.success) {
           toast.success(response?.message);
-          navigate("/neworder/payment");
+          navigate("/orders/add-order/payment");
         } else {
           console.error("Service error");
           toast.error(response?.message);
@@ -305,7 +305,7 @@ const Index: React.FC = () => {
         console.error("Payload is empty.");
       }
     } catch (error) {
-      console.log("Error in ServicePostAPI:", error);
+      //console.log("Error in ServicePostAPI:", error);
       return error;
     }
   };
@@ -370,7 +370,7 @@ const Index: React.FC = () => {
       </div>
       <div className="flex flex-col lg:flex-row gap-y-[22px] mx-5 mb-5 lg:gap-6 lg:mb-9">
         {/* {RecommendedServiceData.map((each) => {
-          console.log("eachhh", each);
+          //console.log("eachhh", each);
           return (
             <ServiceCard
               key={each.value}
@@ -392,7 +392,7 @@ const Index: React.FC = () => {
         {/* key={each.companyServiceId + index} */}
 
         {dataArray?.map((eachArray: any) => {
-          console.log("eachArray", eachArray);
+          //console.log("eachArray", eachArray);
           return eachArray.map((each: any, index: number) => (
             <ServiceCard
               key={each.companyServiceId}

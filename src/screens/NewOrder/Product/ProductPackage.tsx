@@ -23,12 +23,13 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
 import { POST } from "../../../utils/webService";
-import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
+import { ADD_BOX_INFO, GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { UploadInput } from "../../../components/UploadInput";
+import { toast } from "react-toastify";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
@@ -45,7 +46,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [box, setBox] = useState([]);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
-  console.log("productFinalPayload", productFinalPayload);
+
   const [codData1, setCodData] = useState<any>({
     isCOD: false,
   });
@@ -65,7 +66,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   //     if (data?.success) {
   //       if (data?.data?.codInfo) {
-  //         console.log("data?.data?.codInfo ==========>", data?.data?.codInfo);
+  //
   //         setCodData({
   //           ...codData1,
   //           codAmount: data?.data?.codAmount,
@@ -113,7 +114,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     (async () => {
       const res: any = await getOrderProductDetails();
       if (res) {
-        console.log("ok", res);
       }
     })();
   }, []);
@@ -137,33 +137,47 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const getOrderProductDetails = async () => {
-    try {
-      const { data } = await POST(GET_LATEST_ORDER);
-      const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
-      if (data?.success) {
-        const { codInfo } = data.data;
-        console.log("getOrderProductDetails", data);
-        setProducts(data?.data?.products);
-        setProductFinalPayload({
-          ...productFinalPayload,
-          tempOrderId: data.data.tempOrderId,
-        });
-        setCodData({
-          isCOD: codInfo.isCOD ? true : false,
-          codAmount: codInfo.codAmount,
-          invoiceValue: codInfo.invoiceValue,
-        });
-      } else {
-        throw new Error(data?.message);
-      }
+    const { data } = await POST(GET_LATEST_ORDER);
 
-      if (boxData?.success) {
-        setBox(boxData?.data);
-      } else {
-        throw new Error(boxData?.message);
-      }
-    } catch (error) {
-      console.log("getOrderProductDetails", error);
+    const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
+    if (data?.success) {
+      const codInfo = data?.data?.codInfo;
+
+      setProducts(data?.data?.products);
+      setProductFinalPayload({
+        ...productFinalPayload,
+        tempOrderId: data.data.tempOrderId,
+      });
+      setCodData({
+        isCOD: codInfo?.isCOD ? true : false,
+        codAmount: codInfo?.codAmount,
+        invoiceValue: codInfo?.invoiceValue,
+      });
+    }
+
+    if (boxData?.success) {
+      setBox(boxData?.data);
+    }
+  };
+
+  const handleCallbackFromInsurance = (codInfo: any) => {
+    setInsurance(false);
+    // setCombo(false);
+    setPayloadForProduct({
+      ...productFinalPayload,
+      codInfo: codInfo,
+    });
+  };
+
+  const addBoxInfo = async () => {
+    const { data } = await POST(ADD_BOX_INFO, productFinalPayload);
+    if (data?.success) {
+      toast.success(data?.message);
+      navigate("/orders/add-order/service");
+    } else {
+      toast.error(data?.message);
+
+      // throw new Error(data?.message);
     }
   };
 
@@ -224,6 +238,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             products.map((e: any, index: number) => {
               return (
                 <ProductBox
+                  key={index}
                   image={SampleProduct}
                   productName={e?.productName || 0}
                   breadth={e?.dimensions?.breadth || 0}
@@ -263,10 +278,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <h1 className="font-bold text-lg leading-6">Box Type</h1>
           </div>
           <div className="flex gap-3">
-            {box.map((newpackage: any, index) => {
+            {box?.map((newpackage: any, index) => {
               return (
                 <div
                   className="cursor-pointer"
+                  key={index}
                   onClick={() => {
                     setSelectedBox(newpackage);
                   }}
@@ -320,9 +336,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         >
           <AddInsuranceModal
             insurance={insurance}
-            setInsurance={(codInfo: any) =>
-              setPayloadForProduct({ ...productFinalPayload, codInfo: codInfo })
-            }
+            setInsurance={(codInfo: any) => {
+              handleCallbackFromInsurance(codInfo);
+            }}
             codData1={codData1}
           />
         </RightSideModal>
@@ -330,6 +346,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
       <div>
         <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
+        <BottomLayout callApi={() => addBoxInfo()} />
       </div>
     </div>
   );
