@@ -122,6 +122,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         setProductState(initialUserData);
       };
       clearUserData();
+      navigate("/orders/add-order/product-package");
       console.log("initialUserDataafterAPICall", initialUserData);
     } else {
       toast.error("Failed To Upload!");
@@ -192,6 +193,48 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     };
     setProductPayload([...productPayload, payload]);
   };
+
+  // const payload = {
+  //   deliveryLocation: {
+  //     recipientType: deliveryLocation.recipientType,
+  //     flatNo: deliveryLocation.flatNo,
+  //     address: locateAddress,
+  //     sector: deliveryLocation.sector,
+  //     landmark: deliveryLocation.landmark,
+  //     pincode: deliveryLocation.pincode,
+  //     city: deliveryLocation.city,
+  //     state: deliveryLocation.state,
+  //     country: deliveryLocation.country,
+  //     gstNumber: deliveryLocation.gstNo,
+  //     addressType: deliveryLocation.addressType,
+  //     contact: {
+  //       name: contact.name,
+  //       mobileNo: contact.mobileNo,
+  //       alternateMobileNo: contact.alternateMobileNo,
+  //       emailId: contact.emailId,
+  //       type: contact.type,
+  //     },
+
+  //     deliveryDate: epochDeliveryDate,
+  //   },
+  //   orderType: deliveryLocation.orderType,
+  // };
+  // console.log("payload", payload);
+  // const postDeliveryOrderDetails = async (payload: any) => {
+  //   try {
+  //     const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
+
+  //     if (response?.success) {
+  //       toast.success(response?.message);
+  //       navigate("/orders/add-order/add-product");
+  //     } else {
+  //       console.error("DeliveryDataerror");
+  //       toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     console.log("Error in ADD_PICKUP_LOCATION_API", error);
+  //   }
+  // };
 
   const resetProductState = () => {
     setProductState(initialUserData);
@@ -444,16 +487,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
           >
             ADD PRODUCT
           </button>
-          <button
-            className="pl-8 text-[#004EFF]  text-sm font-semibold leading-5 font-Open"
-            onClick={() => addProductInfo()}
-          >
-            API CALL
-          </button>
         </div>
       </div>
       <div>
-        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
+        {/* <BottomLayout backButtonText="BACK" nextButtonText="NEXT" /> */}
+        <BottomLayout callApi={() => addProductInfo()} />
       </div>
     </div>
   );

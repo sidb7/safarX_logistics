@@ -8,16 +8,13 @@ import CustomInputBox from "../../../components/Input";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { POST } from "../../../utils/webService";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
-import {
-  POST_PACKAGE_INSURANCE,
-  GET_LATEST_ORDER,
-} from "../../../utils/ApiUrls";
+import { GET_LATEST_ORDER, ADD_COD_INFO } from "../../../utils/ApiUrls";
 import Switch from "react-switch";
 import { useEffect, useState } from "react";
 
 interface IProps {
   insurance: any;
-  setInsurance: any;
+  setInsurance: Function;
   codData1?: any;
 }
 
@@ -38,8 +35,7 @@ const AddInsuranceModal = (props: IProps) => {
   }, [codData1]);
 
   const postCodDetails = async () => {
-    console.log("postCodDetails", toggleStatus);
-    if (!toggleStatus) return;
+    // console.log("postCodDetails", toggleStatus);
 
     const payload = {
       paymentType: "COD",
@@ -47,7 +43,7 @@ const AddInsuranceModal = (props: IProps) => {
       invoiceValue: codData.invoiceValue,
     };
 
-    const { data } = await POST(POST_PACKAGE_INSURANCE, payload);
+    const { data } = await POST(ADD_COD_INFO, payload);
 
     if (data?.success) {
       setInsurance({
@@ -88,7 +84,7 @@ const AddInsuranceModal = (props: IProps) => {
           <img src={shieldTick} alt="" className="w-6 h-6" />
           <p className="font-Lato text-2xl">Add Insurance</p>
         </div>
-        <div onClick={() => setInsurance(false)}>
+        <div onClick={() => setInsurance()}>
           <img src={Cross} alt="" className="w-6 h-6" />
         </div>
       </div>

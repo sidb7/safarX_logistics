@@ -5,7 +5,7 @@ import DeliveryScreen from "../screens/NewOrder/Delivery";
 // import ProductScreen from "../screens/NewOrder/Product";
 import AddProductOrder from "../screens/NewOrder/Product/AddProduct";
 import ProductPackage from "../screens/NewOrder/Product/ProductPackage";
-import ServiceScreen from "../screens/NewOrder/Service";
+import ServiceScreen from "../screens/NewOrder/Service/index";
 import PaymentScreen from "../screens/NewOrder/Payment";
 import SummaryScreen from "../screens/NewOrder/Summary";
 import StandardServiceScreen from "../screens/NewOrder/Service/StandardService";
@@ -107,6 +107,7 @@ import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress"
 import ProtectedRoute from "../components/ProtectedRoutes";
 
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
+import Overview from "../screens/Home/Overview/Overview";
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -150,30 +151,7 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="delivery"
-              element={
-                <ProtectedRoute>
-                  <DeliveryScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="add-product"
-              element={
-                <ProtectedRoute>
-                  <AddProductOrder />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="product-package"
-              element={
-                <ProtectedRoute>
-                  <AddProductOrder />
-                </ProtectedRoute>
-              }
-            />
+
             <Route
               path="service"
               element={
@@ -523,7 +501,7 @@ const MyRoutes: React.FC = () => {
           ></Route>
           <Route path="/" element={<CommonLayout />}>
             <Route
-              path="order"
+              path="orders/view-orders"
               element={
                 <ProtectedRoute>
                   <Order />
@@ -532,6 +510,14 @@ const MyRoutes: React.FC = () => {
             >
               <Route path="order-details" />
             </Route>
+            <Route
+              path="home/overview"
+              element={
+                <ProtectedRoute>
+                  <Overview />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route
               path="profile/profile-notification"
               element={
@@ -589,25 +575,47 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/neworder/pickup"
+              path="/orders/add-order/pickup"
               element={
                 <ProtectedRoute>
                   <PickUpScreen />
                 </ProtectedRoute>
               }
             />
-            <Route path="/neworder/pickup" />
-            {/* order/service - suresh */}
             <Route
-              path="/neworder/service"
+              path="/orders/add-order/delivery"
               element={
                 <ProtectedRoute>
-                  <Service />
+                  <DeliveryScreen />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/neworder/summary"
+              path="/orders/add-order/add-product"
+              element={
+                <ProtectedRoute>
+                  <AddProductOrder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/product-package"
+              element={
+                <ProtectedRoute>
+                  <ProductPackage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/service"
+              element={
+                <ProtectedRoute>
+                  <ServiceScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/summary"
               element={
                 <ProtectedRoute>
                   <Summary />
@@ -615,32 +623,33 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/neworder/payment"
+              path="/orders/add-order/payment"
               element={
                 <ProtectedRoute>
                   <Payment />
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="newOrder/addnewproduct"
+
+            {/* <Route
+              path="add-product"
               element={
                 <ProtectedRoute>
-                  <AddNewProduct />
+                  <AddProductOrder />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="newOrder/productpackage"
+              path="product-package"
               element={
                 <ProtectedRoute>
-                  <ProductPackage />
+                  <AddProductOrder />
                 </ProtectedRoute>
               }
-            />
-            <Route path="/order/service" element={<Service />} />
+            /> */}
+            {/* <Route path="/orders/add-order/service" element={<Service />} />
             <Route path="/order/summary" element={<Summary />} />
-            <Route path="/order/payment" element={<Payment />} />
+            <Route path="/order/payment" element={<Payment />} /> */}
             {/* <Route path="newOrder/addnewproduct" element={<AddNewProduct />} /> */}
             {/* <Route
               path="newOrder/productpackage"
@@ -712,7 +721,7 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/neworder/returningLabel"
             element={
               <ProtectedRoute>
@@ -759,8 +768,8 @@ const MyRoutes: React.FC = () => {
                 <AddressBook />
               </ProtectedRoute>
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/neworder/productcatalogueaddcambo"
             element={
               <ProtectedRoute>
@@ -823,7 +832,7 @@ const MyRoutes: React.FC = () => {
                 <RechargePayment />
               </ProtectedRoute>
             }
-          />
+          /> */}
           {/* <Route
             path="/neworder/channel-integration"
             element={<ProtectedRoute><CatalogueChannelIntegrationScreen /></ProtectedRoute> }

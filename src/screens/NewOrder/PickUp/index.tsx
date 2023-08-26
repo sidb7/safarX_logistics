@@ -303,7 +303,7 @@ const Index = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/neworder/delivery");
+        navigate("/orders/add-order/delivery");
       } else {
         console.error("PickupDataerror");
         toast.error(response?.message);

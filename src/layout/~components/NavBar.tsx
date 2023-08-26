@@ -23,7 +23,7 @@ const data = [
         id: "2",
         name: "Overview",
         isActive: false,
-        path: "/overview",
+        path: "/home/overview",
         menu: [],
         pages: [
           {
@@ -152,7 +152,7 @@ const data = [
         id: "11",
         name: "View Orders",
         isActive: false,
-        path: "/order",
+        path: "/orders/view-orders",
         menu: [],
         pages: [
           {
@@ -182,7 +182,7 @@ const data = [
         id: "12",
         name: "Add Order",
         isActive: false,
-        path: "/newOrder/pickup",
+        path: "/orders/add-order",
         menu: [],
         pages: [
           {

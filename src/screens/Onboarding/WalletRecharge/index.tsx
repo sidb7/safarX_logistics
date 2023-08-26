@@ -181,7 +181,7 @@ const OnBoundingWalletRecharge = () => {
 
             <div
               className="flex justify-center mt-4 cursor-pointer"
-              onClick={() => navigate("/order")}
+              onClick={() => navigate("/home/overview")}
             >
               <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
                 SKIP FOR NOW{" "}
@@ -304,7 +304,7 @@ const OnBoundingWalletRecharge = () => {
       setIsLoading(false);
       toast.success("Payment success");
       clearInterval(myInterval);
-      navigate("/order");
+      navigate("/home/overview");
     } else if (
       datas?.data?.message ===
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
