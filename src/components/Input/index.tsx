@@ -48,7 +48,6 @@ const CustomInputBox = (props: propTypes) => {
           disabled={isDisabled}
           inputMode={inputMode}
           maxLength={maxLength}
-          pattern="[0-9]+"
         />
         <label
           className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4 font-Open custom-label ${labelClassName}`}
