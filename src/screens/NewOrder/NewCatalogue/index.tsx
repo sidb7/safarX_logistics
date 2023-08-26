@@ -12,7 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 const Catalogue = () => {
   const navigate = useNavigate();
-  const [tabName, setTabName] = useState([
+  const [tabName, setTabName] = useState(
+    sessionStorage.getItem("catalogueTab") || "Channel Integration"
+  );
+  const listTab = [
     {
       statusName: "Channel Integration",
       active: true,
@@ -29,33 +32,27 @@ const Catalogue = () => {
       statusName: "Box Catalogue",
       active: false,
     },
-  ]);
+  ];
   const [addressTab, setAddressTab] = useState("pickup");
   const [productCatalogueTab, setProductCatalogueTab] =
     useState("singleProduct");
 
   const renderComponent = () => {
-    const activeTabName = tabName.find((singleTab) => {
-      return singleTab.active === true;
-    });
-    if (activeTabName?.statusName === "Channel Integration") {
+    if (tabName === "Channel Integration") {
       return <ChannelIntegration />;
-    } else if (activeTabName?.statusName === "Address Book") {
+    } else if (tabName === "Address Book") {
       return <AddressBook setAddressTab={setAddressTab} />;
-    } else if (activeTabName?.statusName === "Product Catalogue") {
+    } else if (tabName === "Product Catalogue") {
       return (
         <ProductCatalogue setProductCatalogueTab={setProductCatalogueTab} />
       );
-    } else if (activeTabName?.statusName === "Box Catalogue") {
+    } else if (tabName === "Box Catalogue") {
       return <BoxCatalogue />;
     }
   };
 
   const renderHeaderComponent = () => {
-    const activeTabName = tabName.find((singleTab) => {
-      return singleTab.active === true;
-    });
-    if (activeTabName?.statusName === "Address Book") {
+    if (tabName === "Address Book") {
       return (
         <CustomButton
           icon={addIcon}
@@ -69,7 +66,7 @@ const Catalogue = () => {
           }
         />
       );
-    } else if (activeTabName?.statusName === "Product Catalogue") {
+    } else if (tabName === "Product Catalogue") {
       if (productCatalogueTab === "singleProduct") {
         return (
           <CustomButton
@@ -91,7 +88,7 @@ const Catalogue = () => {
           />
         );
       }
-    } else if (activeTabName?.statusName === "Box Catalogue") {
+    } else if (tabName === "Box Catalogue") {
       return (
         <CustomButton
           icon={AddOrder}
@@ -109,31 +106,23 @@ const Catalogue = () => {
       <Breadcum label="Catalogue" component={renderHeaderComponent()} />
       <div className="mt-4 mx-6">
         <div className="flex flex-row overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
-          {tabName.map(({ statusName, active }, index) => {
+          {listTab.map(({ statusName }, index) => {
             return (
               <div
                 className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 
-                  ${active && "!border-[#004EFF]"}
+                  ${tabName === statusName && "!border-[#004EFF]"}
                   `}
                 onClick={() => {
-                  const updatedTab = tabName.map((singleTab, updateIndex) => {
-                    const singleObject = {
-                      statusName: singleTab.statusName,
-                      active: false,
-                    };
-                    if (index === updateIndex) {
-                      singleObject.active = true;
-                    }
-                    return singleObject;
-                  });
-                  setTabName(updatedTab);
+                  sessionStorage.setItem("catalogueTab", statusName);
+                  setTabName(statusName);
                 }}
                 key={index}
               >
                 <span
                   className={`text-[#777777] text-[14px] lg:text-[18px]
-                    ${active && "!text-[#004EFF] lg:text-[18px]"}
-                    `}
+                    ${
+                      tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
+                    }`}
                 >
                   {statusName}
                 </span>
