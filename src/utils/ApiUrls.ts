@@ -104,9 +104,16 @@ const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
 //paytm
 const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initialRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
+const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
+
+// Wallet
+const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
+
+// Validate Token
+const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
 const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
 const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
@@ -163,6 +170,9 @@ export {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
+  GET_CURRENT_WALLET,
+  VALIDATE_USER_TOKEN,
+  POST_ADD_BANK_DETAILS,
   GET_SERVICABLE_PINCODE,
   POST_ADD_PRODUCT,
   ADD_COMBO_PRODUCT_URL,

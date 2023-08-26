@@ -13,7 +13,7 @@ import Categorylogo2 from "../../../../assets/Product/watch.svg";
 import SportsLogo from "../../../../assets/Product/sports.svg";
 import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
-import ProductBox from "../../Product/productBox";
+import ProductBox from "../../Product/ProductBox";
 import { Breadcum } from "../../../../components/Layout/breadcum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import PaginationComponent from "../../../../components/Pagination";

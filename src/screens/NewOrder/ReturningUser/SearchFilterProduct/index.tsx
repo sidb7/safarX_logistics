@@ -11,7 +11,7 @@ import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
 import InputBox from "../../../../components/InputBox/index";
 import ProductCategoryBox from "./ProductCategoryBox";
-import ProductBox from "../../Product/productBox";
+import ProductBox from "../../Product/ProductBox";
 import "../../../../styles/searchFilter.css";
 import ProductCardQuantity from "../Product/productCardQuantity";
 import {productCardQuantity} from "../../../../utils/dummyData"

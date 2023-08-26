@@ -55,8 +55,8 @@ const steps = [
   },
   {
     label: "Service",
-    isCompleted: false,
-    isActive: true,
+    isCompleted: true,
+    isActive: false,
     imgSrc: TickLogo,
   },
   {

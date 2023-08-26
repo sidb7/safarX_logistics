@@ -6,7 +6,7 @@ import EditIcon from "../../../assets/Product/Edit.svg";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import Box from "./Box";
-import ProductBox from "../Product/productBox";
+import ProductBox from "./ProductBox";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import toggle from "../../../assets/toggle-off-circle.svg";
 import toggleBlack from "../../../assets/toggleBlack.svg";
@@ -45,14 +45,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [box, setBox] = useState([]);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
-
+  console.log("productFinalPayload", productFinalPayload);
   const [codData1, setCodData] = useState<any>({
     isCOD: false,
-    // codAmount: 0,
-    // invoiceValue: 0,
   });
-  console.log("codData1 from Product Package", codData1);
-  console.log("boxState", box);
 
   // useEffect(() => {
   //   (async () => {
@@ -122,15 +118,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     })();
   }, []);
 
-  // useEffect(() => {}, []);
-
   const insuranceFun = (e: any) => {
-    console.log("setCombo inside fun:", combo);
-
     setCombo(false);
     setInsurance(true);
   };
-  console.log("setCombo:", combo);
 
   const setPayloadForProduct = (productsInfo: any) => {
     const payload = {
@@ -150,7 +141,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const { data } = await POST(GET_LATEST_ORDER);
       const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
-        const { codInfo } = data;
+        const { codInfo } = data.data;
         console.log("getOrderProductDetails", data);
         setProducts(data?.data?.products);
         setProductFinalPayload({
@@ -168,7 +159,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
       if (boxData?.success) {
         setBox(boxData?.data);
-        // setSelectedBox(box &&box[0]);
       } else {
         throw new Error(boxData?.message);
       }
@@ -330,7 +320,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         >
           <AddInsuranceModal
             insurance={insurance}
-            setInsurance={setInsurance}
+            setInsurance={(codInfo: any) =>
+              setPayloadForProduct({ ...productFinalPayload, codInfo: codInfo })
+            }
             codData1={codData1}
           />
         </RightSideModal>

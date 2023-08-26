@@ -137,7 +137,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={signUpOnClick}
-                  className="text-[#004EFF]"
+                  className="text-[#004EFF] ml-1"
                 >
                   Sign Up
                 </button>

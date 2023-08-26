@@ -6,7 +6,7 @@ import { useState } from "react";
 import { productCatalogueData } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";
 import DynamicBtnWithScroll from "../../../../components/DynamicButtonScrollForDay/index";
-import ProductBox from "../../Product/productBox";
+import ProductBox from "../../Product/ProductBox";
 import ProductIcon from "../../../../assets/Catalogue/Product.svg";
 import ItemIcon from "../../../../assets/Product/Item.svg";
 import { useSelector, useDispatch } from "react-redux";
