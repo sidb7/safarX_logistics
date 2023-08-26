@@ -22,13 +22,14 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
-import { POST, GET } from "../../../utils/webService";
+import { POST } from "../../../utils/webService";
 import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { UploadInput } from "../../../components/UploadInput";
+// import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
 
@@ -42,8 +43,42 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [insurance, setInsurance] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
+  const [selectedBox, setSelectedBox]: any = useState({});
+  const [productFinalPayload, setProductFinalPayload] = useState<any>();
 
+  const [codData1, setCodData] = useState<any>({
+    isCOD: false,
+    // codAmount: 0,
+    // invoiceValue: 0,
+  });
+  console.log("codData1 from Product Package", codData1);
   console.log("boxState", box);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await POST(GET_LATEST_ORDER);
+  //     const payload = {
+  //       status: true,
+  //       collectableAmount: 120,
+  //       totalAmount: 220,
+  //     };
+  //     const { data: insruanceInfo } = await POST(
+  //       GET_PACKAGE_INSURANCE,
+  //       payload
+  //     );
+
+  //     if (data?.success) {
+  //       if (data?.data?.codInfo) {
+  //         console.log("data?.data?.codInfo ==========>", data?.data?.codInfo);
+  //         setCodData({
+  //           ...codData1,
+  //           codAmount: data?.data?.codAmount,
+  //           invoiceValue: data?.data?.invoiceValue,
+  //         });
+  //       }
+  //     }
+  //   })();
+  // }, []);
 
   const steps = [
     {
@@ -87,6 +122,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     })();
   }, []);
 
+  // useEffect(() => {}, []);
+
   const insuranceFun = (e: any) => {
     console.log("setCombo inside fun:", combo);
 
@@ -95,18 +132,43 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
   console.log("setCombo:", combo);
 
+  const setPayloadForProduct = (productsInfo: any) => {
+    const payload = {
+      ...productFinalPayload,
+      boxInfo: [
+        {
+          ...selectedBox,
+          productsInfo: productsInfo,
+        },
+      ],
+    };
+    setProductFinalPayload({ ...payload });
+  };
+
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
       const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
+        const { codInfo } = data;
+        console.log("getOrderProductDetails", data);
         setProducts(data?.data?.products);
+        setProductFinalPayload({
+          ...productFinalPayload,
+          tempOrderId: data.data.tempOrderId,
+        });
+        setCodData({
+          isCOD: codInfo.isCOD ? true : false,
+          codAmount: codInfo.codAmount,
+          invoiceValue: codInfo.invoiceValue,
+        });
       } else {
         throw new Error(data?.message);
       }
 
       if (boxData?.success) {
         setBox(boxData?.data);
+        // setSelectedBox(box &&box[0]);
       } else {
         throw new Error(boxData?.message);
       }
@@ -152,9 +214,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               src={EditIcon}
               alt="Edit Product"
               className="cursor-pointer mr-2"
+            />
+            <img
+              src={BookmarkIcon}
+              alt="Bookmark Product"
+              className="mr-2 cursor-pointer"
               onClick={() => setCombo(true)}
             />
-            <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
             <img
               src={isLgScreen ? DeleteIconForLg : DeleteIcon}
               alt="Delete Product"
@@ -169,9 +235,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               return (
                 <ProductBox
                   image={SampleProduct}
-                  productName={e.name}
-                  weight={e.weight}
-                  dimension={e.dimension}
+                  productName={e?.productName || 0}
+                  breadth={e?.dimensions?.breadth || 0}
+                  length={e?.dimensions?.length || 0}
+                  height={e?.dimensions?.height || 0}
                   className="p-3 lg:max-w-[272px]"
                 />
               );
@@ -205,24 +272,38 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <img src={ProductIcon} alt="Package Icon" className="" />
             <h1 className="font-bold text-lg leading-6">Box Type</h1>
           </div>
-          <div className="flex">
+          <div className="flex gap-3">
             {box.map((newpackage: any, index) => {
               return (
-                <PackageBox
-                  packageType={newpackage?.name}
-                  weight={newpackage?.weight}
-                  height={newpackage.height}
-                  breadth={newpackage.breadth}
-                  length={newpackage.length}
-                  boxType={newpackage?.color}
-                  recommended={true}
-                />
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSelectedBox(newpackage);
+                  }}
+                >
+                  <PackageBox
+                    packageType={newpackage?.productName}
+                    weight={newpackage?.weight}
+                    height={newpackage.height}
+                    breadth={newpackage.breadth}
+                    length={newpackage.length}
+                    selected={
+                      selectedBox.boxId === newpackage.boxId ? true : false
+                    }
+                    boxType={newpackage?.color}
+                    recommended={index === 1 ? true : false}
+                  />
+                </div>
               );
             })}
           </div>
 
-          <Box />
-          <BoxDetails products={products} />
+          {/* <Box /> */}
+          <BoxDetails
+            products={products}
+            selectedBox={selectedBox}
+            setProductFinalPayload={setPayloadForProduct}
+          />
           <UploadInput />
 
           <div className="mb-8">
@@ -235,27 +316,24 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             />
           </div>
         </div>
-        {combo && (
-          <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
-            <AddComboModal
-              combo={combo}
-              setCombo={setCombo}
-              insuranceModal={insuranceFun}
-            />
-          </RightSideModal>
-        )}
-        {insurance && (
-          <RightSideModal
-            isOpen={insurance}
-            onClose={() => setInsurance(false)}
-            className="!w-[600px]"
-          >
-            <AddInsuranceModal
-              insurance={insurance}
-              setInsurance={setInsurance}
-            />
-          </RightSideModal>
-        )}
+        <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
+          <AddComboModal
+            combo={combo}
+            setCombo={setCombo}
+            insuranceModal={insuranceFun}
+          />
+        </RightSideModal>
+        <RightSideModal
+          isOpen={insurance}
+          onClose={() => setInsurance(false)}
+          className="!w-[600px]"
+        >
+          <AddInsuranceModal
+            insurance={insurance}
+            setInsurance={setInsurance}
+            codData1={codData1}
+          />
+        </RightSideModal>
       </div>
 
       <div>

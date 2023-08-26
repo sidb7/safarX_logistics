@@ -104,6 +104,7 @@ import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddres
 import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
 import ProtectedRoute from "../components/ProtectedRoutes";
 
+import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -653,6 +654,12 @@ const MyRoutes: React.FC = () => {
                   <AddAddress />
                 </ProtectedRoute>
               }
+            />
+            <Route path="catalogue/edit-address" element={<EditAddress />} />
+            <Route path="catalogue/add-address" element={<AddAddress />} />
+            <Route
+              path="catalogue/add-product"
+              element={<CatalogueAddProduct />}
             />
           </Route>
           {/* <Route path="/neworder/payment" element={<ProtectedRoute><PaymentScreen /></ProtectedRoute> } /> */}

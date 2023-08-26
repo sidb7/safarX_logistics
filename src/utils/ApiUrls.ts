@@ -88,7 +88,15 @@ const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
+const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
+const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
+
+//Combo Product URL
+const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
+const ADD_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/addNewComboProduct`;
+const POST_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/getAvailableService`;
+const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
@@ -106,6 +114,13 @@ const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 
 // Validate Token
 const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
+const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
+const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
+const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
+
+//servicable-pincode
+const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
 export {
   SELLER_URL,
@@ -142,14 +157,25 @@ export {
   FILE_UPLOAD,
   SET_PARTNER_SERVICE_INFO,
   GET_PICKUP_ADDRESS,
+  ADD_PICKUP_ADDRESS,
+  UPDATE_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_ADDRESS,
+  UPDATE_DELIVERY_ADDRESS,
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,
   GET_LATEST_ORDER,
+  GET_PRODUCT_URL,
+  GET_COMBO_PRODUCT_URL,
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
   GET_SELLER_COMPANY_BOX,
   GET_CURRENT_WALLET,
   VALIDATE_USER_TOKEN,
   POST_ADD_BANK_DETAILS,
+  GET_SERVICABLE_PINCODE,
+  POST_ADD_PRODUCT,
+  ADD_COMBO_PRODUCT_URL,
+  POST_PACKAGE_INSURANCE,
+  GET_PACKAGE_INSURANCE,
 };
