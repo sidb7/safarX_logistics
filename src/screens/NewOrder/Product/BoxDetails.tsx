@@ -1,6 +1,6 @@
 import plusIcon from "../../../assets/Product/plusIcon.svg";
 import upwardArrow from "../../../assets/Product/arrow-up.png";
-import ProductBox from "./productBox";
+import ProductBox from "./ProductBox";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import subtractIcon from "../../../assets/Product/subtract-circle.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
@@ -65,8 +65,7 @@ const BoxDetails = (props: IBoxdetails) => {
           <img src={ProductIcon} alt="Package Icon" className="" />
           <p>Box Details</p>
         </div>
-        <div className="flex gap-x-2">
-        </div>
+        <div className="flex gap-x-2"></div>
       </div>
 
       <div className="px-2 lg:grid grid-cols-2 lg:gap-x-6 ">

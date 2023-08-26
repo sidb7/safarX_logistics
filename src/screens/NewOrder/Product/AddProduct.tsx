@@ -4,7 +4,7 @@ import DeleteIcon from "../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import InputBox from "../../../components/InputBox/index";
-import ProductBox from "../Product/productBox";
+import ProductBox from "./ProductBox";
 import { v4 as uuidv4 } from "uuid";
 import "../../../styles/productStyle.css";
 import { useMediaQuery } from "react-responsive";
@@ -24,27 +24,86 @@ import {
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Breadcum } from "../../../components/Layout/breadcum";
 
 interface IProductFilledProps {}
 
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
   const initialUserData = {
-    name: "",
-    category: "",
-    price: "",
-    tax: "",
-    length: "",
-    breadth: "",
-    height: "",
-    image: "",
+    productId: "",
+    productName: "",
+    description: "",
+    category: [],
+    tags: ["electronics", "smartphone", "android"],
+    price: 0,
+    currency: "INR",
+    discountAmount: 10,
+    sale_price: 539.99,
+    gst: 0,
+    stock: 0,
+    dimensions: {
+      length: 0,
+      breadth: 0,
+      height: 0,
+      unit: "cm",
+    },
+    weight: {
+      deadWeight: 0,
+      deadWeightUnit: "kg",
+      volumetricWeight: 0,
+      volumetricWeightUnit: "kg",
+      catalogueWeight: {
+        from: 1,
+        to: 2,
+        unit: "kg",
+      },
+    },
+    available: true,
+    attributes: {
+      color: "Black",
+      size: "Medium",
+      brand: "ABC Electronics",
+    },
+    features: [
+      "6.5-inch AMOLED display",
+      "Quad-camera system",
+      "128GB storage",
+    ],
+    images: [
+      {
+        url: "",
+        alt: "",
+      },
+    ],
+    ratings: {
+      average: 4.7,
+      count: 102,
+    },
+    reviews: [
+      {
+        username: "user123",
+        rating: 5,
+        comment: "Great product! Highly recommended.",
+      },
+      {
+        username: "user456",
+        rating: 4,
+        comment: "Good quality, fast shipping.",
+      },
+    ],
   };
 
   const [productPayload, setProductPayload]: any = useState([]);
+  console.log("setProductPayload", productPayload);
   const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
   const [addedProductData, setAddedProductData] = useState<any>([]);
   const [productState, setProductState]: any = useState<any>(initialUserData);
   const [successProduct, setSuccessProduct] = useState(false);
+  const [commonUUID, setCommonUUID] = useState<any>("");
+
+  console.log("productState", productState);
+  console.log("commonUUID upper", commonUUID);
 
   const addProductInfo = async () => {
     const { data: response } = await POST(POST_PRODUCT_URL, {
@@ -113,16 +172,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         "Quad-camera system",
         "128GB storage",
       ],
-      images: [
-        {
-          url: "https://example.com/images/product123_front.jpg",
-          alt: "Front View",
-        },
-        {
-          url: "https://example.com/images/product123_back.jpg",
-          alt: "Back View",
-        },
-      ],
+      images: productState.images,
       ratings: {
         average: 4.7,
         count: 102,
@@ -215,19 +265,16 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const uploadedInputFile = async (e: any) => {
     console.log("uploadedInputFile", e.target.files[0]);
 
-    const payload = {
-      file: e.target.files[0].name,
-      fileName: productState.productImage,
-    };
-    // setProductState.productImage(e.target.files[0].name);
-    setProductState((prevState: any) => ({
-      ...prevState,
-      productImage: e.target?.files[0].name,
-    }));
+    let uuid = uuidv4();
+    setProductState({
+      ...productState,
+      images: [{ url: `${uuid}`, alt: "" }],
+    });
 
     let formData = new FormData();
+
     formData.append("file", e.target.files[0]);
-    formData.append("fileName", productState.productImage);
+    formData.append("fileName", productState.images[0].url);
     const { data: response } = await POST(FILE_UPLOAD, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -245,14 +292,15 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   return (
     <div>
       <div className="mx-4">
-        <div className="mx-5 ">
-          <CustomBreadcrumb />
+        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
+          <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
+          <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
+          <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
+            Order
+          </span>
         </div>
-        <div className="flex gap-x-2 items-center">
-          <img src={backArrow} alt="" className="w-6 h-6" />
-          <p className="text-2xl font-Lato font-semibold">Add New Order</p>
-        </div>
-        <div className="my-8 ">
+        <Breadcum label="Add New Order" />
+        <div className="lg:mb-8">
           <Stepper steps={steps} />
         </div>
 
@@ -350,7 +398,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                 className=""
                 label="Weight"
                 name="weight"
-                value={productState.weight}
+                value={productState.weight.deadWeight}
                 onChange={handleProductInputChange}
               />
               <InputBox

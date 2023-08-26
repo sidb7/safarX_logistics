@@ -50,6 +50,9 @@ const AddInsuranceModal = (props: IProps) => {
     const { data } = await POST(POST_PACKAGE_INSURANCE, payload);
 
     if (data?.success) {
+      setInsurance({
+        codInfo: codData,
+      });
       console.log("POST_PACKAGE", data);
     }
   };
