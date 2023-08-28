@@ -59,7 +59,9 @@ const Summary = (props: Props) => {
       <div className="grid grid-cols-1 gap-y-5 p-5   ">
         <div className="flex flex-row gap-2">
           <img src={SummaryIcon} alt="Summary Icon" />
-          <p className="text-[24px] text-[#202427] font-normal ">Summary</p>
+          <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
+            Summary
+          </p>
         </div>
         <div className="flex flex-row justify-between items-center h-[48px] rounded  p-[10px] border-[1px] border-[#A4A4A4] lg:w-1/4  ">
           <p className="text-[12px] text-[#1C1C1C] font-normal lg:text-[#777777]">

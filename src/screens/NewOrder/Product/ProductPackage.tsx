@@ -199,7 +199,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" className="" />
-              <h1 className="font-bold leading-6 text-lg ">Product</h1>
+              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
+                Product
+              </h1>
             </div>
             <div className="hidden  lg:flex whitespace-nowrap gap-x-32 bg-[#FFFFFF] shadow-sm p-2  ">
               <p>Handle with care</p>

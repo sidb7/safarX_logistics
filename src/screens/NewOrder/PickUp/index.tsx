@@ -409,7 +409,7 @@ const Index = () => {
 
         <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
-        <p className="text-lg font-semibold font-Lato text-center text-gray-900 lg:font-normal lg:text-[28px] lg:text-[#1C1C1C]  ">
+        <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Pickup location
         </p>
       </div>
