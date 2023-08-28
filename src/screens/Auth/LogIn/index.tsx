@@ -1,6 +1,8 @@
 import { GoogleLogin } from "@react-oauth/google";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import "../../../styles/signupPages.css";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +10,16 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useEffect, useState } from "react";
-import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
+import { POST_SIGN_IN_URL, VALIDATE_USER_TOKEN } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
-import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  tokenKey,
+} from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -21,7 +27,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [showBootScreen, setShowBootScreen] = useState(true);
-
+  const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
     password: "",
@@ -45,10 +51,17 @@ const Index = () => {
   const responseMessage = (response: any) => {
     console.log("GoogleLogin Response Message :", response);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
+    (async () => {
+      const { data } = await POST(VALIDATE_USER_TOKEN);
+      if (data?.success) {
+        navigate("/home/overview");
+      }
+    })();
   }, []);
 
   const modalTitle = () => {
@@ -104,8 +117,12 @@ const Index = () => {
                 }}
               />
               <CustomInputBox
-                inputType="password"
+                inputType={viewPassWord ? "text" : "password"}
                 label="Password"
+                isRightIcon={true}
+                visibility={viewPassWord}
+                rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                setVisibility={setViewPassWord}
                 onChange={(e) =>
                   setLoginCredentials({
                     ...loginCredentials,

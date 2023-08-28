@@ -33,18 +33,22 @@ export const EditProfileKyc = () => {
     const { data } = await POST(UPDATE_SELLER, {
       data: { kycDetails },
     });
-    if (data.success) {
+    if (data?.success) {
       setKycDetails(data?.data?.kycDetails);
       // toast.success(data.message);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
-      setKycDetails(data.data[0]?.kycDetails);
+      if (data?.success) {
+        setKycDetails(data.data[0]?.kycDetails);
+      } else {
+        toast.error(data?.message);
+      }
     })();
   }, []);
 

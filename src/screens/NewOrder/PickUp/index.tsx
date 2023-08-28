@@ -12,6 +12,8 @@ import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
 import EditIcon from "../../../assets/PickUp/Edit.svg";
 import CustomDropDown from "../../../components/DropDown";
+import AiIcon from "../../../assets/Buttons.svg";
+
 // import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
 import CustomDatePicker from "../../../components/Datepicker";
 import CustomInputBox from "../../../components/Input";
@@ -29,7 +31,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
-import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
+import { ADD_PICKUP_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
 
 import {
   dummyPickupDropdownData,
@@ -139,15 +141,11 @@ const Index = () => {
     setIsModalOpen(false);
   };
 
-  useEffect(() => {
-    console.log("mapAddress", address);
-    setLocateAddress(address);
-  }, [address]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
 
+  console.log("pastedData", pastedData);
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -314,6 +312,53 @@ const Index = () => {
     }
   };
 
+  const verifyAddressPayload = {
+    data: pastedData,
+  };
+
+  console.log("verifyAddressPayload", verifyAddressPayload);
+
+  const getVerifyAddress = async (verifyAddressPayload: any) => {
+    try {
+      console.log("payload", verifyAddressPayload);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayload
+      );
+
+      console.log("responsee", verifyAddressResponse);
+      const parsedData = verifyAddressResponse?.data?.message;
+      console.log("parsedData", parsedData);
+
+      setPickupLocation({
+        flatNo: parsedData.house_number || "",
+        address: parsedData.full_address || "",
+        sector: parsedData.locality_name || "",
+        landmark: parsedData.building_name || "",
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: pickupLocation.addressType || "warehouse",
+      });
+    } catch (error) {
+      console.log("Error in  VerifyAddress", error);
+      return error;
+    }
+  };
+
+  // useEffect(() => {
+  //   const verifyAddressMapPayload = {
+  //     data: address,
+  //   };
+  //   console.log("mapAddress", verifyAddressMapPayload);
+  //   setLocateAddress(address);
+  //   return () => {
+  //     setLocateAddress("");
+  //   };
+  // }, [address]);
+
   const steps = [
     {
       label: "Pickup",
@@ -421,7 +466,7 @@ const Index = () => {
                 ref={inputRef}
                 type="text"
                 value={pastedData}
-                onPaste={handlePaste}
+                // onPaste={handlePaste}
                 onChange={handleChange}
                 className="magicAddressInput"
                 // className="custom-input"
@@ -439,8 +484,11 @@ const Index = () => {
                 title=""
               />
 
-              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
-                <img src={ForwardArrowIcon} alt="Arrow" />
+              <div
+                className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
+                onClick={() => getVerifyAddress(verifyAddressPayload)}
+              >
+                <img src={AiIcon} alt="Arrow" />
               </div>
             </div>
           </div>

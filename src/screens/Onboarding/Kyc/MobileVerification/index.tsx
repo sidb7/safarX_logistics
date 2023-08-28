@@ -52,6 +52,12 @@ const Index = (props: ITypeProps) => {
             panVerifyNavigate: true,
           })
         );
+        if (businessType === "sole_Proprietor"){
+          navigate("/onboarding/kyc-terms/GSTComponent");
+        }else if(businessType==="company"){
+          navigate("/onboarding/kyc-terms/ServiceComponent");
+        }
+          
       } else {
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -77,14 +83,13 @@ const Index = (props: ITypeProps) => {
         );
         if (response?.success) {
           verifyPAN(panCard);
+
           // toast.success(response?.message);
           //Navigate Url's go here
         } else {
           toast.error("OTP Verification Failed!");
         }
-
-        navigate("/onboarding/kyc-terms/GSTComponent");
-      } else if (businessType === "soleProprietor") {
+      } else if (businessType === "sole_Proprietor") {
         if (location.state.path === "aadhar-form") {
           const payload = { client_id: clientId, otp: otp };
           const { data: response } = await POST(
@@ -103,8 +108,8 @@ const Index = (props: ITypeProps) => {
         // const payload = { gstIn: gstNo, client_id: clientId, otp: otp };
         else {
           const payload = {
-            gstIn: "27AALCA5307N1ZC",
-            client_id: "gst_otp_qmefuaqpocskbwibegOZ",
+            gstIn: gstNo,
+            client_id: clientId,
             otp: otp,
           };
           const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
@@ -117,7 +122,8 @@ const Index = (props: ITypeProps) => {
           }
         }
       } else {
-        navigate("/onboarding/kyc-terms/ServiceComponent");
+        verifyPAN(panCard);
+        
       }
     } catch (error) {
       return error;
@@ -133,7 +139,7 @@ const Index = (props: ITypeProps) => {
         <WelcomeHeader
           className="!mt-[78px]"
           title="Mobile Verification"
-          content="Enter the OTP sent to +91-8976500001"
+          content=""
         />
 
         <form onSubmit={onVerifyOtp}>

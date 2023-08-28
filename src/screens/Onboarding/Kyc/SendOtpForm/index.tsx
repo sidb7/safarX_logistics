@@ -142,7 +142,7 @@ const Index = (props: ITypeProps) => {
           dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         }
 
-        if (businessType === "soleProprietor") {
+        if (businessType === "sole_Proprietor") {
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });
@@ -151,7 +151,7 @@ const Index = (props: ITypeProps) => {
         }
       }
       //Proprietor,Company
-      if (businessType === "soleProprietor" || businessType === "company") {
+      if (businessType === "sole_Proprietor" || businessType === "company") {
         if (gstNumber === "") {
           dispatch(setErrorDetails({ gstError: "Enter GST Number" }));
         }
@@ -160,7 +160,7 @@ const Index = (props: ITypeProps) => {
         //   dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         // }
 
-        if (businessType === "soleProprietor") {
+        if (businessType === "sole_Proprietor") {
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });

@@ -23,10 +23,10 @@ export const ChangePassword = () => {
       newPassword: password?.newPassword,
     });
 
-    if (data.success) {
-      toast.success(data.message);
+    if (data?.success) {
+      toast.success(data?.message);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
   return (

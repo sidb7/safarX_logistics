@@ -41,7 +41,7 @@ switch (Enviornment) {
 const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;
 const POST_VERIFY_AADHAR_URL = `${SELLER_URL}/api/v1/seller/sendAadhaarCard`;
 const POST_VERIFY_AADHAR_OTP_URL = `${SELLER_URL}/api/v1/seller/verifyAadhaarCard`;
-const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardLite`;
+const POST_VERIFY_PAN_URL = `${SELLER_URL}/api/v1/seller/verifyPanCardDesc`;
 const POST_VERIFY_GST_URL = `${SELLER_URL}/api/v1/seller/verifyGSTINBySendOtp`;
 const POST_VERIFY_GST_OTP = `${SELLER_URL}/api/v1/seller/verifyGSTINBySubmitOtp`;
 const POST_UPDATE_COMPANY_URL = `${SELLER_URL}/api/v1/seller/updateCompany`;
@@ -80,6 +80,8 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
+const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
+
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
@@ -111,6 +113,7 @@ const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
 
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
+const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
@@ -186,5 +189,10 @@ export {
   ADD_COMBO_PRODUCT_URL,
   GET_PACKAGE_INSURANCE,
   PLACE_ORDER,
+<<<<<<< HEAD
   GET_PLAN_URL,
+=======
+  VERIFY_ADDRESS,
+  GET_WALLET_TRANSACTION,
+>>>>>>> 9cf62bdbb37c33530e5934a61e8e9a01ceaf26cb
 };

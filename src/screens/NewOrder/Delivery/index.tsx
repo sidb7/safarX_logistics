@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MagicLocationIcon from "../../../assets/Delivery/magicLocation.svg";
 import ForwardArrowIcon from "../../../assets/Delivery/forwardArrow.svg";
+import AiIcon from "../../../assets/Buttons.svg";
 import microphone from "../../../assets/Delivery/microphone.svg";
 import OfficeIcon from "../../../assets/Delivery/Office.svg";
 import Warehouse from "../../../assets/Delivery/Warehouse.svg";
@@ -42,7 +43,7 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import Stepper from "../../../components/Stepper";
 import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
-import { ADD_DELIVERY_LOCATION } from "../../../utils/ApiUrls";
+import { ADD_DELIVERY_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcum } from "../../../components/Layout/breadcrum";
@@ -219,7 +220,7 @@ const Index = () => {
     {
       label: "Pickup",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
@@ -253,6 +254,57 @@ const Index = () => {
       imgSrc: TickLogo,
     },
   ];
+  const verifyAddressPayload = {
+    data: pastedData,
+  };
+
+  console.log("verifyAddressPayload", verifyAddressPayload);
+
+  const getVerifyAddress = async (verifyAddressPayload: any) => {
+    try {
+      console.log("payload", verifyAddressPayload);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayload
+      );
+
+      console.log("responsee", verifyAddressResponse);
+      const parsedData = verifyAddressResponse?.data?.message;
+      console.log("parsedData", parsedData);
+
+      setDeliveryLocation({
+        recipientType: deliveryLocation?.recipientType,
+        flatNo: parsedData.house_number || "",
+        address: parsedData.full_address || "",
+        sector: parsedData.locality_name || "",
+        landmark: parsedData.building_name || "",
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: deliveryLocation.addressType || "warehouse",
+        gstNo: "",
+        orderType: deliveryLocation.orderType,
+      });
+    } catch (error) {
+      console.log("Error in  VerifyAddress", error);
+      return error;
+    }
+  };
+
+  // useEffect(() => {
+  //   const verifyAddressMapPayload = {
+  //     data: address,
+  //   };
+  //   console.log("mapAddress", verifyAddressMapPayload);
+  //   setLocateAddress(address);
+  //   getVerifyAddress(verifyAddressMapPayload);
+  //   return () => {
+  //     setLocateAddress("");
+  //   };
+  // }, [address]);
+
   return (
     <div>
       <Breadcum label="Add New Order" />
@@ -367,7 +419,7 @@ const Index = () => {
                   ref={inputRef}
                   type="text"
                   value={pastedData}
-                  onPaste={handlePaste}
+                  // onPaste={handlePaste}
                   onChange={handleChange}
                   className="magicAddressInput"
                   style={{
@@ -384,8 +436,11 @@ const Index = () => {
                   title=""
                 />
 
-                <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
-                  <img src={ForwardArrowIcon} alt="Arrow" />
+                <div
+                  className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => getVerifyAddress(verifyAddressPayload)}
+                >
+                  <img src={AiIcon} alt="Arrow" />
                 </div>
               </div>
             </div>
@@ -671,7 +726,7 @@ const Index = () => {
               Save your contact as
             </p>
           </div>
-          <div className="lg:col-span-3 mb-5 lg:mb-7">
+          <div className="lg:col-span-3 mb-[90px]">
             <div className="flex flex-nowrap  overflow-x-scroll space-x-4">
               <div
                 className={`flex flex-row justify-center whitespace-nowrap text-[16px] h-[35px] items-center gap-[8px]  border-[0.5px]   px-8 rounded bg-[#FEFEFE] cursor-pointer ${
@@ -716,7 +771,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block mb-7 pb-24">
+          {/* <div className="hidden lg:block mb-7 pb-24">
             <CustomInputWithImage
               placeholder="Delivery Date"
               imgSrc={CalenderIcon}
@@ -724,7 +779,7 @@ const Index = () => {
               onClick={() => setIsDateRightModal(true)}
               onChange={(e) => setDeliveryDate(e.target.value)}
             />
-          </div>
+          </div> */}
         </div>
 
         <CommonBottomModal

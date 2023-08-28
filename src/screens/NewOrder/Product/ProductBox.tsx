@@ -37,7 +37,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       <div className="flex flex-col ml-4">
         <span>{productName}</span>
         <span>
-          {`${weight} Kg `}
+          {`${weight} `}
           <span className={`${dimensionClassName}`}>
             | {`${length} x ${breadth} x ${height} cm`}
           </span>

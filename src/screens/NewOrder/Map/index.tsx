@@ -29,10 +29,8 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     lng: 78.9629,
   });
   const [zoom, setZoom] = useState(5);
-  const [address, setAddress] = useState(
-    "Shipyaari HQ, 12A, 3rd Floor, Techniplex - II, off Veer Savarkar Flyover, Malad, Liliya Nagar, Goregaon West, Mumbai, Maharashtra 400062, India."
-  );
-  const [shortAddress, setshortAddress] = useState("Goregaon West");
+  const [address, setAddress] = useState("");
+  const [shortAddress, setshortAddress] = useState("");
   console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
     console.log("latitude", e.latLng.lat());
@@ -140,7 +138,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
     if (onClick) {
       onClick();
     }
-    navigate("/neworder/pickup", { state: { address: address } });
+    navigate("/orders/add-order/pickup", { state: { address: address } });
   };
 
   return (

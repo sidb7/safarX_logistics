@@ -56,7 +56,7 @@ const CustomBreadcrumb = () => {
             key={index}
           >
             <p
-              className={`!mb-0 font-semibold font-Open text-sm lg:text-xl md:text-lg text-[#1C1C1C] cursor-pointer `}
+              className={`!mb-0 font-semibold font-Open text-sm lg:text-xl md:text-lg text-[#1C1C1C] cursor-pointer`}
               onClick={() => {
                 handleClick(index, el);
               }}
