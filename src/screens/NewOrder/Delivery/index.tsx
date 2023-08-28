@@ -178,7 +178,7 @@ const Index = () => {
     deliveryLocation: {
       recipientType: deliveryLocation.recipientType,
       flatNo: deliveryLocation.flatNo,
-      address: locateAddress,
+      address: pastedData,
       sector: deliveryLocation.sector,
       landmark: deliveryLocation.landmark,
       pincode: deliveryLocation.pincode,
