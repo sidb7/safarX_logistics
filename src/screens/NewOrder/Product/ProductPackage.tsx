@@ -47,7 +47,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [box, setBox] = useState([]);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
-
+  console.log("productFinalPayload", productFinalPayload);
   const [codData1, setCodData] = useState<any>({
     isCOD: false,
   });
@@ -243,6 +243,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 return (
                   <ProductBox
                     image={SampleProduct}
+                    weight={e?.weight?.deadWeight || 0}
                     productName={e?.productName || 0}
                     breadth={e?.dimensions?.breadth || 0}
                     length={e?.dimensions?.length || 0}
