@@ -42,12 +42,11 @@ const BoxDetails = ({
             Combo Product 3
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
-            Box Name
             {productName}
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
-            Box Weight | Box Dimension
-            {/* {productWeight} | {productDimension?.length} {productDimension?.breadth} {productDimension?.height} */}
+            {productWeight} Kg| Box Dimension
+            {/* {productWeight} Kg | {productDimension?.length} {productDimension?.breadth} {productDimension?.height} */}
           </p>
         </div>
       </div>

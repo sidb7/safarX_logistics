@@ -117,8 +117,8 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.service;
   console.log("serviceDetails", serviceDetails);
 
-  const productDetails = latestOrder?.data?.packageType;
-  console.log("productDetails", productDetails);
+  const productDetails = latestOrder?.data?.products;
+  // console.log("productDetails", productDetails?.dimension);
   return (
     <div>
       <Breadcum label="Add New Order" />
@@ -233,9 +233,9 @@ const Summary = (props: Props) => {
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
           <BoxDetails
-            productName={productDetails?.name}
-            productWeight={productDetails?.weight}
-            productDimension={productDetails?.dimension}
+            productName={productDetails[0]?.productName}
+            productWeight={productDetails[0]?.weight?.deadWeight}
+            productDimension={productDetails[0]?.dimension}
           />
 
           {/*Service */}
@@ -247,7 +247,7 @@ const Summary = (props: Props) => {
             price={serviceDetails?.price}
             partnerServiceId={""}
             partnerServiceName={serviceDetails?.partnerServiceName}
-            dimension={productDetails?.dimension}
+            // dimension={productDetails?.dimension}
           />
         </div>
       </div>
