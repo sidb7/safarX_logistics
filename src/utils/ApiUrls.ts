@@ -80,6 +80,8 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
+const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
+
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
@@ -183,4 +185,5 @@ export {
   ADD_COMBO_PRODUCT_URL,
   GET_PACKAGE_INSURANCE,
   PLACE_ORDER,
+  VERIFY_ADDRESS
 };
