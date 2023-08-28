@@ -111,6 +111,8 @@ import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
+import PlanDetails from "../screens/Plan/planDetails";
+import NewUserPlanScreen from "../screens/Plan";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -501,6 +503,11 @@ const MyRoutes: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
+            </Route>
+
+            <Route>
+              <Route path="/plans" element={<NewUserPlanScreen />} />
+              <Route path="/plan-details" element={<PlanDetails />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

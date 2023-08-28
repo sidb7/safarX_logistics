@@ -106,6 +106,10 @@ import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddres
 import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
 import ProtectedRoute from "../components/ProtectedRoutes";
 
+//Plan Screens
+import NewUserPlanScreen from "../screens/Plan";
+import PlanDetails from "../screens/Plan/planDetails";
+
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
@@ -702,6 +706,11 @@ const MyRoutes: React.FC = () => {
             />
             <Route path="catalogue/edit-address" element={<EditAddress />} />
             <Route path="catalogue/add-address" element={<AddAddress />} />
+
+            {/* Plan */}
+
+            <Route path="/plan" element={<NewUserPlanScreen />} />
+            <Route path="/plan-details" element={<PlanDetails />} />
             <Route
               path="catalogue/add-product"
               element={<CatalogueAddProduct />}
@@ -875,6 +884,9 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
+          {/* <Route path="/" element={<CommonLayout />}>
+            <Route path="/plan" element={<NewUserPlanScreen />} />
+          </Route> */}
 
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -9,10 +9,12 @@ import "../../styles/tableStyle.css";
 interface ITablePropTypes {
   data: any;
   columns: any;
+  tdclassName?: any;
+  thclassName?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
-  const { data, columns } = props;
+  const { data, columns, tdclassName, thclassName } = props;
 
   const table = useReactTable({
     data,
@@ -29,7 +31,7 @@ export const CustomTable = (props: ITablePropTypes) => {
               {headerGroup.headers.map((header: any) => (
                 <th
                   key={header.id}
-                  className=" px-4 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8]  "
+                  className={`px-4 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8] ${thclassName} `}
                 >
                   {header.isPlaceholder
                     ? null
@@ -49,7 +51,7 @@ export const CustomTable = (props: ITablePropTypes) => {
               className=" shadow-md rounded-lg	hover:bg-slate-100	"
             >
               {row.getVisibleCells().map((cell: any) => (
-                <td key={cell.id} className="px-4 text-left">
+                <td key={cell.id} className={`px-4 text-left ${tdclassName}`}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
