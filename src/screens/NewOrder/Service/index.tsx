@@ -296,7 +296,7 @@ const Index: React.FC = () => {
 
         if (response?.success) {
           toast.success(response?.message);
-          navigate("/orders/add-order/payment");
+          navigate("/orders/add-order/summary");
         } else {
           console.error("Service error");
           toast.error(response?.message);
