@@ -484,22 +484,16 @@ const MyRoutes: React.FC = () => {
               />
             </Route>
 
-            <Route
-              path="/transaction/filter"
-              element={
-                <ProtectedRoute>
-                  <TransactionFilterScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/profile"
-              element={
-                <ProtectedRoute>
-                  <ProfileLayout />
-                </ProtectedRoute>
-              }
-            />
+            <Route>
+              <Route
+                path="wallet/transactions"
+                element={
+                  <ProtectedRoute>
+                    <Transaction />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Route>
