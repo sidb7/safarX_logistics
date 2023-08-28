@@ -34,7 +34,7 @@ const Index = (props: any) => {
       </div>
       <div className=" flex flex-col mx-20 mb-16 gap-y-6">
         <img className="h-[180px]" src={MobileIcon} alt="" />
-        <CustomInputBox inputType="number" label="Mobile Number" />
+        <CustomInputBox inputType="text" label="Mobile Number" />
         <CustomButton
           onClick={sendOtpOnClick}
           text="SEND OTP"

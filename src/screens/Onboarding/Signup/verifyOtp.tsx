@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { setLocalStorage, tokenKey } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -35,10 +36,7 @@ const Index = () => {
       };
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
-        localStorage.setItem(
-          "891f5e6d-b3b3-4c16-929d-b06c3895e38d",
-          response?.data[0].token
-        );
+        setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onboarding/getStarted");
       } else {
         toast.error(response?.message);
