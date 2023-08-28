@@ -6,12 +6,14 @@ import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import ShareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import filterIconTable from "../../../assets/Transaction/filtericon.svg";
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Collapsible from "react-collapsible";
-import { Cancelled } from "../StatusComponents";
+import { Cancelled, Approved, Returned, Booked } from "../StatusComponents";
 import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
+import { POST } from "../../../utils/webService";
+import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
 
 interface IPassbookProps {
   data: {
@@ -26,15 +28,48 @@ interface IPassbookProps {
     redeemPoint: string;
   };
 }
+
 const columnsHelper = createColumnHelper<any>();
+
 export const PassbookColumns = () => {
+  const renderStatusComponent = (status: string) => {
+    console.log(
+      "🚀 ~ file: passbookHistory.tsx:50 ~ renderStatusComponent ~ status:",
+      status
+    );
+    if (status === "APPROVED")
+      return (
+        <div>
+          <Approved />
+        </div>
+      );
+    else if (status === "COMPLETED")
+      return (
+        <div>
+          <Booked />
+        </div>
+      );
+    else if (status === "RETURNED")
+      return (
+        <div>
+          <Returned />
+        </div>
+      );
+    else if (status === "CANCELLED")
+      return (
+        <div>
+          <Cancelled />
+        </div>
+      );
+  };
+
   return [
-    columnsHelper.accessor("roleId", {
+    columnsHelper.accessor("createdAt", {
       header: () => {
         return (
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-sm font-semibold leading-5 ">Date</h1>
+              <h1 className="text-sm font-semibold leading-5">Date</h1>
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
@@ -45,14 +80,16 @@ export const PassbookColumns = () => {
       },
       cell: (info: any) => {
         return (
-          <div className="whitespace-nowrap my-4 space-y-2">23 may 2023 </div>
+          <div className="whitespace-nowrap my-4 space-y-2">
+            {date_DD_MMM_YYY(info.getValue())}
+          </div>
         );
       },
     }),
-    columnsHelper.accessor("roleName", {
+    columnsHelper.accessor("sellerId", {
       header: () => {
         return (
-          <div className="flex justify-between items-center ">
+          <div className="flex whitespace-nowrap justify-between items-center ">
             <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
             <img src={sortIconTable} alt="" />
           </div>
@@ -61,14 +98,12 @@ export const PassbookColumns = () => {
       cell: (info: any) => {
         return (
           <div className="flex  whitespace-nowrap">
-            <p className="uppercase ">
-              shipyaari - <span>5118971</span>
-            </p>
+            {`SHIPYAARI-${info.getValue()}`}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("amount", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[142px]">
@@ -83,14 +118,17 @@ export const PassbookColumns = () => {
         );
       },
       cell: (info: any) => {
+        console.log("info ", info);
         return (
           <div className="flex whitespace-nowrap ">
-            <p>₹ 500</p>
+            {info.row.original.type === "credit"
+              ? `₹ ${info.getValue()}`
+              : "₹ 0"}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("amount", {
       header: () => {
         return (
           <div className="flex justify-between items-center  min-w-[142px]">
@@ -107,12 +145,14 @@ export const PassbookColumns = () => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap ">
-            <p>₹ 0</p>
+            {info.row.original.type === "debit"
+              ? `₹ ${info.getValue()}`
+              : "₹ 0"}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("balance", {
       header: () => {
         return (
           <div className="flex justify-between items-center  min-w-[142px]">
@@ -124,29 +164,13 @@ export const PassbookColumns = () => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap ">
-            <p>₹ 500</p>
+            {`₹ ${(info.getValue() && info.getValue()) || 0}`}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
-      header: () => {
-        return (
-          <div className="flex justify-between items-center  min-w-[162px]">
-            <h1>Redeem Amount</h1>
-            <img src={sortIconTable} alt="" />
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex whitespace-nowrap ">
-            <p>₹ 0</p>
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("userCount", {
+
+    columnsHelper.accessor("status", {
       header: () => {
         return (
           <div className="flex justify-between items-center">
@@ -161,11 +185,7 @@ export const PassbookColumns = () => {
         );
       },
       cell: (info: any) => {
-        return (
-          <div>
-            <Cancelled />
-          </div>
-        );
+        return renderStatusComponent(info.getValue());
       },
     }),
     columnsHelper.accessor("userCount", {
