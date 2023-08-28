@@ -2,6 +2,8 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CustomButton from "../../../components/Button/index";
 import { GoogleLogin } from "@react-oauth/google";
 import CustomInputBox from "../../../components/Input";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
@@ -17,7 +19,7 @@ const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-
+  const [viewPassWord, setViewPassWord] = useState(false);
   const dispatch = useDispatch();
 
   const [sellerData, setsellerData] = useState({
@@ -104,8 +106,12 @@ const Index = () => {
                 }}
               />
               <CustomInputBox
-                inputType="password"
+                inputType={viewPassWord ? "text" : "password"}
                 label="Password"
+                isRightIcon={true}
+                visibility={viewPassWord}
+                rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                setVisibility={setViewPassWord}
                 onChange={(e) => {
                   setsellerData({
                     ...sellerData,
