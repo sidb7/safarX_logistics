@@ -395,7 +395,7 @@ const Index = () => {
             <div className="inline-flex space-x-2 items-center justify-start mt-5  lg:mt-6">
               <img src={LocationIcon} alt="" className="lg:hidden" />
               <img src={WebLocationIcon} alt="" className="hidden lg:block" />
-              <p className="text-lg font-semibold text-center text-gray-900 lg:font-Lato lg:text-2xl lg:text-[#323232]">
+              <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
                 Delivery location
               </p>
             </div>
