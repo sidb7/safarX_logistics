@@ -59,7 +59,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         {filterData.map((singleData, index) => {
           return (
             <span
-              className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
+              className={`flex items-center py-[8px] px-[16px] border-[1px] cursor-pointer border-[#A4A4A4] ${
                 filterId === index
                   ? "rounded-l-md bg-[#D2D2D2] font-medium text-[#1C1C1C]"
                   : ""
