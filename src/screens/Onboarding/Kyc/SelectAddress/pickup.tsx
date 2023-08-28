@@ -10,6 +10,7 @@ import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
 import {
   GET_DEFAULT_ADDRESS,
+  POST_UPDATE_COMPANY_URL,
   POST_UPDATE_DEFAULT_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
@@ -47,13 +48,10 @@ const PickUp = (props: ITypeProps) => {
 
   const onSubmit = async () => {
     const payload = { addressId: defaultAddressSelect, isDefault: true };
-    const { data: responses } = await POST(
-      POST_UPDATE_DEFAULT_ADDRESS,
-      payload
-    );
+    const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (responses?.success) {
       // toast.success(responses?.message);
-      // navigate("/account/kyc-photo");
+      navigate("/onboarding/walletrecharge");
       //Navigate Url's go here
     } else {
       toast.error(responses?.message);
