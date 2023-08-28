@@ -473,62 +473,11 @@ const PlanDetails = (props: ITypeProps) => {
     }),
   ];
 
-  const planDetails = [
-    {
-      title: "Plan Name",
-      info: "",
-    },
-    {
-      title: "Purchase Date",
-      info: "02 Jan 23",
-    },
-    {
-      title: "Expiry Date",
-      info: "02 Dec 23",
-    },
-    {
-      title: "Subscription Amount",
-      info: "₹5000",
-    },
-    { title: "Subscription Period", info: "Yearly" },
-  ];
-
-  let plan = planData.map((eachPlan: any, index: number) => {
-    return [
-      {
-        title: "Plan Name",
-        info: eachPlan.planName,
-      },
-      {
-        title: "Purchase Date",
-        info: eachPlan.createdAt,
-      },
-      {
-        title: "Expiry Date",
-        info: eachPlan.expiryDate,
-      },
-      {
-        title: "Subscription Amount",
-        info: eachPlan.price,
-      },
-      { title: "Subscription Period", info: eachPlan.validity },
-    ];
-  });
-
-  console.log("Plan Data..", plan);
-
   useEffect(() => {
     (async () => {
       const { data: response }: any = await POST(GET_PLAN_URL);
-      console.log("Response", response);
-      console.log("Response Data", response.data);
+
       setPlanData(response.data);
-      // if (allAddressData?.success) {
-      //   setAddress(allAddressData.data);
-      // } else {
-      //   toast.error(allAddressData?.message);
-      //   setAddress([]);
-      // }
     })();
   }, []);
 
@@ -597,7 +546,7 @@ const PlanDetails = (props: ITypeProps) => {
 
         {/*Active Recommended */}
 
-        <div className="flex items-center justify-end  mb-[21px] ml-[30px] ">
+        <div className="flex items-center justify-end  gap-x-4 mb-[21px] ml-[30px] ">
           <div className="rounded py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 ">
             Active
           </div>
