@@ -1,6 +1,8 @@
 import { GoogleLogin } from "@react-oauth/google";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import "../../../styles/signupPages.css";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import CustomButton from "../../../components/Button/index";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +27,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [showBootScreen, setShowBootScreen] = useState(true);
-
+  const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
     password: "",
@@ -115,8 +117,12 @@ const Index = () => {
                 }}
               />
               <CustomInputBox
-                inputType="password"
+                inputType={viewPassWord ? "text" : "password"}
                 label="Password"
+                isRightIcon={true}
+                visibility={viewPassWord}
+                rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                setVisibility={setViewPassWord}
                 onChange={(e) =>
                   setLoginCredentials({
                     ...loginCredentials,
