@@ -1,7 +1,4 @@
-import React from "react";
 import PlanDetailsIcon from "../../assets/common/task-square.svg";
-import LabelContainer from "../../components/LabelContainer";
-import { useMediaQuery } from "react-responsive";
 import { date_DD_MMM_YYY } from "../../utils/dateFormater";
 
 interface ITypeProps {
@@ -10,7 +7,7 @@ interface ITypeProps {
 
 const PlanDetailsCard = (props: ITypeProps) => {
   const { planDetails } = props;
-  console.log("PLan Details Card ", planDetails);
+
   return (
     <div>
       <div
@@ -31,6 +28,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
           {planDetails.map((eachPlan: any, index: any) => {
             return (
               <div className="grid grid-cols-5 py-4  h-[70px]">
+                {/*Plan Name*/}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                   <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
                     {"Plan Name"}
@@ -39,6 +37,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {eachPlan.planName}
                   </span>
                 </div>
+                {/*Purchase Date */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                   <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
                     {"Purchase Date"}
@@ -47,14 +46,16 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {date_DD_MMM_YYY(eachPlan.createdAt)}
                   </span>
                 </div>
+                {/*Expiry Date */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                   <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
                     {"Expiry Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan.expiryDate}
+                    {date_DD_MMM_YYY(eachPlan.expiryDate)}
                   </span>
                 </div>
+                {/*Subscription Amount */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                   <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
                     {"Subscription Amount"}
@@ -63,6 +64,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {eachPlan.price}
                   </span>
                 </div>
+                {/* Subscription Period */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                   <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
                     {"Subscription Period"}

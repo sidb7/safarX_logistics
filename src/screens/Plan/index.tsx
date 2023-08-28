@@ -2,7 +2,7 @@ import React from "react";
 import PlanCard from "./planCard";
 import { CustomTable } from "../../components/Table";
 import { Breadcum } from "../../components/Layout/breadcrum";
-import { dummyPlanData } from "../../utils/dummyData";
+
 import "../../styles/plan.css";
 
 import { createColumnHelper } from "@tanstack/react-table";

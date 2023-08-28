@@ -1,7 +1,6 @@
 import React from "react";
 import CargoRatingGif from "../../assets/common/CargoRating.gif";
 import AddButton from "../../components/Button/addButton";
-import ServiceButton from "../../components/Button/ServiceButton";
 
 interface ITypeProps {
   isMostPopular?: boolean;

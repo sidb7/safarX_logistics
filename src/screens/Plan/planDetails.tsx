@@ -3,7 +3,6 @@ import { Breadcum } from "../../components/Layout/breadcrum";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import Checkbox from "../../components/CheckBox";
-import CargoRatingGif from "../../assets/common/CargoRating.gif";
 import ServiceButton from "../../components/Button/ServiceButton";
 import PlanDetailsCard from "./planDetailsCard";
 import InfoCards from "./infoCards";
@@ -16,6 +15,7 @@ import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import { GET_PLAN_URL } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
+import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 
 interface ITypeProps {}
 
@@ -85,150 +85,6 @@ const PlanDetails = (props: ITypeProps) => {
       gold: "₹ 10",
       platinum: "₹ 10",
     },
-  ];
-
-  const RateCardData = [
-    {
-      zone: "Zone 1",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 2",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-
-    {
-      zone: "Zone 3",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 4",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 5",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-  ];
-
-  const RateCardDataColumns = [
-    columnsHelper.accessor("zone", {
-      header: () => {
-        return (
-          <p
-            className={`font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap lg:w-[642px] `}
-          >
-            Zones
-          </p>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className="flex items-center justify-start  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.zone}
-          </p>
-        );
-      },
-    }),
-
-    columnsHelper.accessor("bronze", {
-      header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap "
-          >
-            Bronze
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.bronze}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("silver", {
-      header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap"
-          >
-            Silver
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-start first-letter:justify-center font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.silver}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("gold", {
-      header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap"
-          >
-            Gold
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.gold}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("platinum", {
-      header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap "
-          >
-            Platinum
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.platinum}
-          </div>
-        );
-      },
-    }),
   ];
 
   if (isRateCardPresent === false) {
@@ -400,8 +256,6 @@ const PlanDetails = (props: ITypeProps) => {
     },
   ];
 
-  //Table Columns
-
   const FeaturesColumns = [
     columnsHelper.accessor("overview", {
       header: () => {
@@ -473,6 +327,150 @@ const PlanDetails = (props: ITypeProps) => {
     }),
   ];
 
+  const RateCardData = [
+    {
+      zone: "Zone 1",
+      bronze: "₹ 10",
+      silver: "₹ 10",
+      gold: "₹ 10",
+      platinum: "₹ 10",
+    },
+    {
+      zone: "Zone 2",
+      bronze: "₹ 10",
+      silver: "₹ 10",
+      gold: "₹ 10",
+      platinum: "₹ 10",
+    },
+
+    {
+      zone: "Zone 3",
+      bronze: "₹ 10",
+      silver: "₹ 10",
+      gold: "₹ 10",
+      platinum: "₹ 10",
+    },
+    {
+      zone: "Zone 4",
+      bronze: "₹ 10",
+      silver: "₹ 10",
+      gold: "₹ 10",
+      platinum: "₹ 10",
+    },
+    {
+      zone: "Zone 5",
+      bronze: "₹ 10",
+      silver: "₹ 10",
+      gold: "₹ 10",
+      platinum: "₹ 10",
+    },
+  ];
+
+  const RateCardDataColumns = [
+    columnsHelper.accessor("zone", {
+      header: () => {
+        return (
+          <p
+            className={`font-Open  
+               text-sm leading-5 text-[#1C1C1C]
+             font-semibold   text-start  whitespace-nowrap lg:w-[642px] `}
+          >
+            Zones
+          </p>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className="flex items-center justify-start  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.zone}
+          </p>
+        );
+      },
+    }),
+
+    columnsHelper.accessor("bronze", {
+      header: () => {
+        return (
+          <p
+            className="font-Open  
+               text-sm leading-5 text-[#1C1C1C]
+             font-semibold   text-start  whitespace-nowrap "
+          >
+            Bronze
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
+            {info.row.original.bronze}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("silver", {
+      header: () => {
+        return (
+          <p
+            className="font-Open  
+               text-sm leading-5 text-[#1C1C1C]
+             font-semibold   text-start  whitespace-nowrap"
+          >
+            Silver
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-start first-letter:justify-center font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
+            {info.row.original.silver}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("gold", {
+      header: () => {
+        return (
+          <p
+            className="font-Open  
+               text-sm leading-5 text-[#1C1C1C]
+             font-semibold   text-start  whitespace-nowrap"
+          >
+            Gold
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
+            {info.row.original.gold}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("platinum", {
+      header: () => {
+        return (
+          <p
+            className="font-Open  
+               text-sm leading-5 text-[#1C1C1C]
+             font-semibold   text-start  whitespace-nowrap "
+          >
+            Platinum
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
+            {info.row.original.platinum}
+          </div>
+        );
+      },
+    }),
+  ];
+
   useEffect(() => {
     (async () => {
       const { data: response }: any = await POST(GET_PLAN_URL);
@@ -492,7 +490,7 @@ const PlanDetails = (props: ITypeProps) => {
         <div className="flex items-center   rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
           <div className="flex items-center">
             <img
-              src={CargoRatingGif}
+              src={PlanDetailsGif}
               alt=""
               height={124}
               width={124}
@@ -581,6 +579,7 @@ const PlanDetails = (props: ITypeProps) => {
             thclassName={"bg-white"}
           />
         </div>
+        {/* Change Buttons */}
 
         <div className="grid grid-cols-12 gap-x-4 ml-[30px] mr-6 ">
           <div className="col-span-7"></div>
@@ -623,6 +622,7 @@ const PlanDetails = (props: ITypeProps) => {
             onClick={() => {}}
           />
         </div>
+        {/* Rate Card  */}
         {isRateCardPresent && (
           <div className="ml-[30px] mb-6">
             <CustomAccordianWithTable
@@ -635,6 +635,7 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div>
         )}
+        {/* Terms & Conditions */}
         <div className="ml-[30px]">
           <CustomAccordianWithTable
             dummyDatas={DummyData}
