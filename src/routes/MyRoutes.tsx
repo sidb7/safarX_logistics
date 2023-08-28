@@ -506,7 +506,7 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             <Route>
-              <Route path="/plan" element={<NewUserPlanScreen />} />
+              <Route path="/plans" element={<NewUserPlanScreen />} />
               <Route path="/plan-details" element={<PlanDetails />} />
             </Route>
 
