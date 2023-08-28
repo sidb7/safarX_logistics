@@ -30,7 +30,7 @@ const Index: React.FunctionComponent<IPropsTypes> = (props: IPropsTypes) => {
   });
   const [zoom, setZoom] = useState(5);
   const [address, setAddress] = useState("");
-  const [shortAddress, setshortAddress] = useState("Goregaon West");
+  const [shortAddress, setshortAddress] = useState("");
   console.log("addressoonMapScreen", address);
   const onMapClick = async (e: any) => {
     console.log("latitude", e.latLng.lat());

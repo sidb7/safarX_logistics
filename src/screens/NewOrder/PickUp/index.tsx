@@ -12,6 +12,8 @@ import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
 import EditIcon from "../../../assets/PickUp/Edit.svg";
 import CustomDropDown from "../../../components/DropDown";
+import AiIcon from "../../../assets/Buttons.svg";
+
 // import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
 import CustomDatePicker from "../../../components/Datepicker";
 import CustomInputBox from "../../../components/Input";
@@ -338,7 +340,7 @@ const Index = () => {
         city: parsedData.city_name || "",
         state: parsedData.state_name || "",
         country: parsedData.country_name || "India",
-        addressType: "warehouse",
+        addressType: pickupLocation.addressType || "warehouse",
       });
     } catch (error) {
       console.log("Error in  VerifyAddress", error);
@@ -346,17 +348,16 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    const verifyAddressMapPayload = {
-      data: address,
-    };
-    console.log("mapAddress", verifyAddressMapPayload);
-    setLocateAddress(address);
-    getVerifyAddress(verifyAddressMapPayload);
-    return () => {
-      setLocateAddress("");
-    };
-  }, [address]);
+  // useEffect(() => {
+  //   const verifyAddressMapPayload = {
+  //     data: address,
+  //   };
+  //   console.log("mapAddress", verifyAddressMapPayload);
+  //   setLocateAddress(address);
+  //   return () => {
+  //     setLocateAddress("");
+  //   };
+  // }, [address]);
 
   const steps = [
     {
@@ -487,7 +488,7 @@ const Index = () => {
                 className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
                 onClick={() => getVerifyAddress(verifyAddressPayload)}
               >
-                <img src={ForwardArrowIcon} alt="Arrow" />
+                <img src={AiIcon} alt="Arrow" />
               </div>
             </div>
           </div>
@@ -499,7 +500,7 @@ const Index = () => {
           <CustomInputWithImage
             placeholder="Choose location (optional)"
             imgSrc={ChooseLocationIcon}
-            value={pickupLocation.address}
+            value={locateAddress}
             onChange={(e) => {
               setLocateAddress(e.target.value);
               handlePickupLocationChange("address", e.target.value);
