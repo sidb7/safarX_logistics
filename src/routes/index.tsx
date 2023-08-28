@@ -108,7 +108,9 @@ import ProtectedRoute from "../components/ProtectedRoutes";
 
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 import Overview from "../screens/Home/Overview/Overview";
+import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
+
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -181,6 +183,14 @@ const MyRoutes: React.FC = () => {
             <Route path="delivery" element={<DeliveryScreen />} />
             <Route path="add-product" element={<AddProductOrder />} />
             <Route path="product-package" element={<ProductPackage />} />
+            {/* <Route
+              path="transaction"
+              element={
+                <ProtectedRoute>
+                  <TransactionLayout />
+                </ProtectedRoute>
+              }
+            ></Route> */}
             <Route path="service" element={<ServiceScreen />} />
             {/* <Route path="payment" element={<PaymentScreen />} /> */}
             <Route path="summary" element={<SummaryScreen />} />
@@ -477,14 +487,6 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route
-            path="transaction"
-            element={
-              <ProtectedRoute>
-                <TransactionLayout />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
             path="transaction/filter"
             element={
               <ProtectedRoute>
@@ -704,6 +706,16 @@ const MyRoutes: React.FC = () => {
               path="catalogue/add-product"
               element={<CatalogueAddProduct />}
             />
+
+            {/*Removed transactionlayout and added direct transaction file*/}
+            <Route
+              path="/wallet/transactions"
+              element={
+                <ProtectedRoute>
+                  <Transaction />
+                </ProtectedRoute>
+              }
+            ></Route>
           </Route>
           {/* <Route path="/neworder/payment" element={<ProtectedRoute><PaymentScreen /></ProtectedRoute> } /> */}
           <Route
@@ -722,6 +734,7 @@ const MyRoutes: React.FC = () => {
               </ProtectedRoute>
             }
           />
+
           {/* <Route
             path="/neworder/returningLabel"
             element={
