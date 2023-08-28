@@ -246,7 +246,7 @@ const Summary = (props: Props) => {
         </div>
       </div>
       <BottomLayout
-        callApi={() => navigate("/neworder/payment")}
+        callApi={() => navigate("/orders/add-order/payment")}
         Button2Name={true}
       />
     </div>
