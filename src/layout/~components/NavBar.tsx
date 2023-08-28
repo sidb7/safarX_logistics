@@ -358,6 +358,45 @@ const data = [
     ],
     icon: "Wallet",
   },
+  {
+    id: "49",
+    name: "Plans",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "50",
+        name: "Plans",
+        isActive: false,
+        path: "/plans",
+        menu: [],
+        pages: [
+          {
+            id: "51",
+            name: "Plan List",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
+    ],
+    icon: "Plans",
+  },
 ];
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;

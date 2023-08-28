@@ -109,6 +109,7 @@ import ProtectedRoute from "../components/ProtectedRoutes";
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
 import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
+import NotFound from "../components/404NotFound/NotFound";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -875,16 +876,7 @@ const MyRoutes: React.FC = () => {
             }
           />
 
-          <Route
-            path="*"
-            element={
-              <>
-                <div>
-                  <h1>Not Found</h1>
-                </div>
-              </>
-            }
-          />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
