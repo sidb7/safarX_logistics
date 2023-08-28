@@ -1,11 +1,13 @@
 import Routes from "./routes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import MyRoutes from "./routes/MyRoutes";
 
 const App = (props: any) => {
   return (
     <div>
-      <Routes />
+      {/* <Routes /> */}
+      <MyRoutes />
       <ToastContainer
         position="top-right"
         autoClose={5000}
