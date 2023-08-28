@@ -52,12 +52,13 @@ const Index = (props: ITypeProps) => {
             panVerifyNavigate: true,
           })
         );
-        if (businessType === "sole_Proprietor"){
+        if (businessType === "sole_Proprietor") {
           navigate("/onboarding/kyc-terms/GSTComponent");
-        }else if(businessType==="company"){
+        } else if (businessType === "company") {
           navigate("/onboarding/kyc-terms/ServiceComponent");
+        } else if (businessType === "individual") {
+          navigate("/onboarding/kyc-terms/GSTComponent");
         }
-          
       } else {
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -123,7 +124,6 @@ const Index = (props: ITypeProps) => {
         }
       } else {
         verifyPAN(panCard);
-        
       }
     } catch (error) {
       return error;
