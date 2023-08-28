@@ -361,7 +361,7 @@ const MyRoutes: React.FC = () => {
                 path="/orders/add-order/summary"
                 element={
                   <ProtectedRoute>
-                    <Summary />
+                    <SummaryScreen />
                   </ProtectedRoute>
                 }
               />
