@@ -45,7 +45,7 @@ import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import { ADD_DELIVERY_LOCATION } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 
 const Index = () => {
@@ -205,7 +205,7 @@ const Index = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/neworder/product");
+        navigate("/orders/add-order/add-product");
       } else {
         console.error("DeliveryDataerror");
         toast.error(response?.message);
@@ -241,6 +241,12 @@ const Index = () => {
       imgSrc: TickLogo,
     },
     {
+      label: "Summary",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
       label: "Payment",
       isCompleted: false,
       isActive: false,
@@ -249,29 +255,6 @@ const Index = () => {
   ];
   return (
     <div>
-      {/* <div>
-        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
-          <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
-          <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
-          <span className="font-Open text-[14px] text-[#1C1C1C]">Order</span>
-        </div>
-
-        <div className="inline-flex space-x-2 items-center justify-start px-5 lg:mb-8 ">
-          <img src={BackArrowIcon} alt="" className="lg:hidden" />
-          <img src={WebBackArrowIcon} alt="" className="hidden lg:block" />
-
-          <p className="text-lg font-semibold font-Lato text-center text-gray-900 lg:text-[28px]">
-            Add new order
-          </p>
-        </div>
-      </div> */}
-
-      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
-        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
-        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
-        <span className="font-Open text-[14px] text-[#1C1C1C]">Order</span>
-      </div>
-
       <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />

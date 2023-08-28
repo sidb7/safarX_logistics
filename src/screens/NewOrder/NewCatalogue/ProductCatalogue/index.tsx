@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PaginationComponent from "../../../../components/Pagination";
-import ProductBox from "../../Product/productBox";
-import { productCatalogueData } from "../../../../utils/dummyData";
+import ProductBox from "../../Product/ProductBox";
 import ProductCategoryBox from "../../ReturningUser/SearchFilterProduct/ProductCategoryBox";
 import DeliceryIcon from "../../../../assets/Delivery Icon.svg";
 import DeliveryIcon from "../../../../assets/Product/Delivery (1).svg";
 import ProductIcon from "../../../../assets/Product/Product (3).svg";
-import ItemIcon from "../../../../assets/Product/Item.svg";
 import CategoryLogo from "../../../../assets/Product/Item.svg";
 import Categorylogo2 from "../../../../assets/Product/watch.svg";
 import SportsLogo from "../../../../assets/Product/sports.svg";
 import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
+import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
+import { POST } from "../../../../utils/webService";
+import {
+  GET_COMBO_PRODUCT_URL,
+  GET_PRODUCT_URL,
+} from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
-const ProductCatalogue = () => {
+interface IProductCatalogue {
+  setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
+  setProductCatalogueTab,
+}) => {
+  const [productData, setProductData] = useState([]);
   const [filterId, setFilterId] = useState(0);
-  const [totalItemCount, setTotalItemCount] = useState(10);
+  const [totalItemCount, setTotalItemCount] = useState(0);
   const [viewed, setViewed] = useState(-1);
 
   const [filterData, setFilterData] = useState([
@@ -28,6 +40,26 @@ const ProductCatalogue = () => {
 
   // on per page item change
   const onPerPageItemChange = () => {};
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(
+        filterId === 0 ? GET_PRODUCT_URL : GET_COMBO_PRODUCT_URL,
+        {
+          skip: 0,
+          limit: 10,
+          pageNo: 1,
+        }
+      );
+      if (data.success) {
+        setProductData(data.data);
+        // setTotalItemCount()
+      } else {
+        setProductData([]);
+        toast.error(data?.message);
+      }
+    })();
+  }, [filterId]);
 
   const filterComponent = (className?: string) => {
     return (
@@ -46,7 +78,14 @@ const ProductCatalogue = () => {
                     } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
                   : ""
               }`}
-              onClick={() => setFilterId(index)}
+              onClick={() => {
+                setFilterId(index);
+                if (index === 0) {
+                  setProductCatalogueTab("singleProduct");
+                } else if (index === 1) {
+                  setProductCatalogueTab("comboProduct");
+                }
+              }}
             >
               {singleData.label}
             </span>
@@ -125,24 +164,50 @@ const ProductCatalogue = () => {
             Most Viewed
           </h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
-            {productCatalogueData.map((item: any, index: number) => (
-              <div
-                className="w-[272px] h-[76px]"
-                onClick={() => setViewed(index)}
-              >
-                <ProductBox
-                  image={ItemIcon}
-                  productName="Mac book air"
-                  weight="5"
-                  dimension="12 x 12 x 12"
-                  className={`cursor-pointer p-[16px] ${
-                    viewed === index
-                      ? "border-2 border-solid border-[#004EFF]"
-                      : ""
-                  }`}
-                />
-              </div>
-            ))}
+            {productData.map((data: any, index: number) => {
+              if (filterId === 0) {
+                return (
+                  <div
+                    className="w-[272px] h-[76px]"
+                    // onClick={() => setViewed(index)}
+                  >
+                    <ProductBox
+                      image={
+                        (data?.images?.length > 0 && data?.images[0].url) || ""
+                      }
+                      productName={data?.productName}
+                      weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
+                      dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
+                      className={`cursor-pointer p-[16px] ${
+                        viewed === index
+                          ? "border-2 border-solid border-[#004EFF]"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                );
+              } else if (filterId === 1) {
+                return (
+                  <div
+                    className="w-[272px] h-[76px]"
+                    // onClick={() => setViewed(index)}
+                  >
+                    <ProductBox
+                      image={StackLogo}
+                      productName={data?.comboProductName}
+                      weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
+                      dimension={`${data?.totalPrice}`}
+                      className={`cursor-pointer p-[16px] ${
+                        viewed === index
+                          ? "border-2 border-solid border-[#004EFF]"
+                          : ""
+                      }`}
+                      label={`Product: ${data?.productCount || 4}`}
+                    />
+                  </div>
+                );
+              }
+            })}
           </div>
         </div>
       </div>

@@ -1,7 +1,26 @@
 import editIcon from "../../../assets/serv/edit.svg";
 import serviceIcon from "../../../assets/serv/service.svg";
+import { useNavigate } from "react-router-dom";
 
-const SummaryService = () => {
+interface ISummaryData {
+  companyServiceName?: string;
+  companyServiceId?: any;
+  baseWeight?: any;
+  price?: any;
+  partnerServiceId?: any;
+  partnerServiceName?: string;
+  dimension?: any;
+}
+const SummaryService: React.FunctionComponent<ISummaryData> = ({
+  companyServiceName = "",
+  companyServiceId = "",
+  baseWeight = "",
+  price = "",
+  partnerServiceId = "",
+  partnerServiceName = "",
+  dimension = "",
+}) => {
+  const navigate = useNavigate();
   return (
     <div className="p-[12px] gap-[8px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#FFFFFF] lg:w-[385px]">
       <div className="flex flex-col ">
@@ -12,23 +31,28 @@ const SummaryService = () => {
               Service Details
             </p>
           </div>
-          <div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              navigate("/neworder/service");
+            }}
+          >
             <img src={editIcon} alt="Edit Icon" />
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
           <p className="text-[12px] font-medium  text-[#004EFF]  lg:text-[16px] lg:font-semibold">
-            Service Name
+            {companyServiceName}
           </p>
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
-            Partner Name
+            {partnerServiceName}
           </p>
 
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
-            Price
+            {price}
           </p>
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
-            Weight | Dimension
+            {baseWeight} | Dimension
           </p>
         </div>
       </div>

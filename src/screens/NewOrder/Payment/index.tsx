@@ -33,6 +33,7 @@ import CustomCenterModal from "../../../components/CustomModal/customCenterModal
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 
 const steps = [
   {
@@ -55,8 +56,8 @@ const steps = [
   },
   {
     label: "Service",
-    isCompleted: false,
-    isActive: true,
+    isCompleted: true,
+    isActive: false,
     imgSrc: TickLogo,
   },
   {
@@ -156,27 +157,7 @@ const Index = () => {
 
   return (
     <div>
-      <header className="fixed top-0 z-50 w-full ">
-        <NavBar />
-      </header>
-      <div>
-        <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1 mt-20">
-          <p className="font-normal text-[14px] text-[#777777] mr-1">Home</p>
-          <span className="font-normal text-[14px] text-[#777777] mr-1">/</span>
-          <span className="font-semibold text-[14px] text-[#1C1C1C]">
-            Partner list
-          </span>
-        </div>
-
-        <div className="inline-flex space-x-2 items-center justify-start px-5 lg:mb-8 ">
-          <img src={BackArrowIcon} alt="" className="lg:hidden" />
-          <img src={WebBackArrowIcon} alt="" className="hidden lg:block" />
-
-          <p className="text-lg font-semibold text-center text-gray-900 lg:text-[28px]">
-            Add new order
-          </p>
-        </div>
-      </div>
+      <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

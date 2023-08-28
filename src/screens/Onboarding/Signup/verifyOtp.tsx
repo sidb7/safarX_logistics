@@ -2,7 +2,7 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import CustomButton from "../../../components/Button/index";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../../styles/otpStyle.css";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -11,16 +11,22 @@ import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { setLocalStorage, tokenKey } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [mobileNo, setMobileNo] = useState<any>();
   const [otp, setOtp] = useState({
     loginOtp: "",
   });
 
   const signUpUser = useSelector((state: any) => state.signup);
+
+  useEffect(() => {
+    setMobileNo(localStorage.getItem("mobile"));
+  }, []);
 
   const onClickVerifyOtp = async () => {
     try {
@@ -30,11 +36,8 @@ const Index = () => {
       };
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
-        localStorage.setItem(
-          "891f5e6d-b3b3-4c16-929d-b06c3895e38d",
-          response?.data[0].token
-        );
-        navigate("/onboarding/offers");
+        setLocalStorage(tokenKey, response?.data[0]?.token);
+        navigate("/onboarding/getStarted");
       } else {
         toast.error(response?.message);
       }
@@ -83,7 +86,7 @@ const Index = () => {
               <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] ">
                 Enter The OTP Sent To{" "}
                 <span className="text-[#494949] font-Open text-base font-semibold leading-[22px]">
-                  +91 89765 00001{" "}
+                  +91 {mobileNo}{" "}
                 </span>
               </p>
             </div>

@@ -23,7 +23,7 @@ export const CustomTable = (props: ITablePropTypes) => {
   });
 
   return (
-    <div className="p-2">
+    <div className="py-2">
       <table className="w-full  bg-white tableContainerStyle	">
         <thead className="border-b border-[#E8E8E8]">
           {table.getHeaderGroups().map((headerGroup: any) => (

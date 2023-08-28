@@ -7,6 +7,10 @@ import HamMenu from "../../assets/Navbar/hamMenu.svg";
 import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
 import SearchIcon from "../../assets/Search.svg";
 import CustomButton from "../../components/Button/index";
+import locationImage from "../../assets/serv/location.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import ServicabilityPincode from "./ServicabilityPincode";
+import { useNavigate } from "react-router-dom";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -14,7 +18,9 @@ interface ITopBarProps {
 }
 
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
+  const navigate = useNavigate();
   const { openMobileSideBar, setMobileSideBar } = props;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<any>();
@@ -49,10 +55,19 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             </div>
           </div>
 
-          <InputWithImage
+          {/* <InputWithImage
             imgSrc={SearchIcon}
-            inputClassName="hidden lg:!w-80 lg:flex"
+            inputClassName="hidden lg:!w-80 lg:flex !p-0"
             placeholder="Search"
+          /> */}
+
+          <img
+            src={locationImage}
+            width={"22px"}
+            height={"22px"}
+            alt=""
+            className="cursor-pointer hidden"
+            onClick={() => setIsModalOpen(true)}
           />
 
           <CustomButton
@@ -84,10 +99,24 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 text={""}
                 onClick={() => {}}
               />
+
+              {isModalOpen && (
+                <CenterModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                >
+                  <ServicabilityPincode
+                    onClick={() => {
+                      setIsModalOpen(false);
+                    }}
+                  />
+                </CenterModal>
+              )}
+
               {/* <img src={ProfileLogo} alt="" /> */}
               {isOpen && (
                 <div
-                  className="origin-top-right absolute right-4 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                  className="origin-top-right z-10 absolute right-4 mt-2 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
@@ -110,6 +139,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       role="menuitem"
                       onClick={() => {
                         clearLocalStorage();
+                        navigate("/auth/login");
                       }}
                     >
                       Sign out

@@ -24,7 +24,7 @@ export const Profile = () => {
       <div className="lg:grid lg:grid-cols-2 gap-4">
         <ProfileNotification />
         <ProfileReferEarn />
-        <ProfileSetting />
+        <ProfileSetting ProfileDetails={profileData} />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 export const ReferTab = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",

@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import RightArrowIcon from "../../../assets/Profile/RightArrowIcon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import PassModal from "./PassModal";
 import ProfileModal from "./ProfileModal";
 import DeleteModal from "../../../components/CustomModal/DeleteModal";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import { DELETE_SELLER } from "../../../utils/ApiUrls";
 
 export const SettingTab = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const state = location.state?.data || {};
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
@@ -113,6 +116,7 @@ export const SettingTab = () => {
         />
 
         <ProfileModal
+          state={state}
           isProfileModalOpen={isProfileModalOpen}
           setIsProfileModalOpen={setIsProfileModalOpen}
         />

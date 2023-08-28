@@ -1,15 +1,20 @@
 import { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import { CustomUploadInput } from "../../../components/UploadInput/customUploadInput";
-import { Breadcum } from "../../../components/Layout/breadcum";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import VerifyDocument from "./verifyDocument";
 
 export const EditProfileKyc = () => {
   const [kycDetails, setKycDetails] = useState<any>({});
-
+  const [openModal, setOpenModal] = useState(false);
+  const [verifyDocument, setVerifyDocument] = useState({
+    documentName: "",
+    label: "",
+  });
   const changeHandler = (key: string, event: any) => {
     setKycDetails({ ...kycDetails, [key]: event.target.value });
   };
@@ -69,30 +74,59 @@ export const EditProfileKyc = () => {
           onChange={(e) => changeHandler("lastName", e)}
         />
 
-        <CustomInputBox
-          containerStyle={"self-end"}
-          label="GST Number"
-          className="!font-normal"
-          value={kycDetails?.gstNumber}
-          onChange={(e) => changeHandler("gstNumber", e)}
-        />
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "gst",
+              label: "GST Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            containerStyle={"self-end"}
+            label="GST Number"
+            className="!font-normal"
+            value={kycDetails?.gstNumber}
+          />
+        </div>
         <CustomUploadInput label="Upload GST file" id="gstFile" />
 
-        <CustomInputBox
-          label="PAN Number"
-          className="!font-normal"
-          value={kycDetails?.panNumber}
-          onChange={(e) => changeHandler("panNumber", e)}
-        />
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "pan",
+              label: "PAN Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            label="PAN Number"
+            className="!font-normal"
+            value={kycDetails?.panNumber}
+            onChange={(e) => changeHandler("panNumber", e)}
+          />
+        </div>
         <CustomUploadInput label="Upload PAN file" id="panFile" />
 
-        <CustomInputBox
-          containerStyle={"self-end"}
-          label="Aadhar Number"
-          className="!font-normal"
-          value={kycDetails?.aadharNumber}
-          onChange={(e) => changeHandler("aadharNumber", e)}
-        />
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "aadhar",
+              label: "Aadhar Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            containerStyle={"self-end"}
+            label="Aadhar Number"
+            className="!font-normal"
+            value={kycDetails?.aadharNumber}
+            onChange={(e) => changeHandler("aadharNumber", e)}
+          />
+        </div>
         <CustomUploadInput label="Upload Aadhar file" id="aadharFile" />
 
         <CustomInputBox
@@ -142,6 +176,11 @@ export const EditProfileKyc = () => {
           onChange={(e) => changeAddressHandler("country", e)}
         />
       </div>
+      <VerifyDocument
+        props={verifyDocument}
+        openModal={openModal}
+        closeModal={() => setOpenModal(false)}
+      />
       <BottomLayout callApi={updateKycDetails} />
     </div>
   );

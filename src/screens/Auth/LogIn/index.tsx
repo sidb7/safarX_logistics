@@ -32,7 +32,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/newOrder/pickup");
+      navigate("/home/overview");
     } else {
       toast.error(response?.message);
     }
@@ -137,7 +137,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={signUpOnClick}
-                  className="text-[#004EFF]"
+                  className="text-[#004EFF] ml-1"
                 >
                   Sign Up
                 </button>
