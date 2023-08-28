@@ -117,6 +117,8 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.service;
   console.log("serviceDetails", serviceDetails);
 
+  const productDetails = latestOrder?.data;
+  console.log("productDetails", productDetails);
   return (
     <div>
       <Breadcum label="Add New Order" />
@@ -177,7 +179,7 @@ const Summary = (props: Props) => {
           <div
             className="hidden lg:block cursor-pointer"
             onClick={() => {
-              navigate("/neworder/pickup");
+              navigate("/orders/add-order/pickup");
             }}
           >
             <img src={editIcon} alt="" />
@@ -222,7 +224,7 @@ const Summary = (props: Props) => {
           <div
             className="hidden lg:block cursor-pointer"
             onClick={() => {
-              navigate("/neworder/delivery");
+              navigate("/orders/add-order/add-product");
             }}
           >
             <img src={editIcon} alt="" />
@@ -230,7 +232,11 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          <BoxDetails />
+          <BoxDetails
+            productName={productDetails?.productName}
+            productWeight={productDetails?.productWeight}
+            productDimension={productDetails?.productDimension}
+          />
 
           {/*Service */}
 

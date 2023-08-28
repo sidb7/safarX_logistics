@@ -2,7 +2,17 @@ import deliveryIcon from "../../../assets/serv/delivery.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import { useNavigate } from "react-router-dom";
 
-const BoxDetails = () => {
+interface ISummaryData {
+  productName?: any;
+  productWeight?: any;
+  productDimension?: any;
+}
+
+const BoxDetails = ({
+  productName = "",
+  productWeight = "",
+  productDimension = "",
+}) => {
   const navigate = useNavigate();
 
   return (
