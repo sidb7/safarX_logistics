@@ -2,7 +2,17 @@ import deliveryIcon from "../../../assets/serv/delivery.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import { useNavigate } from "react-router-dom";
 
-const BoxDetails = () => {
+interface ISummaryData {
+  productName?: any;
+  productWeight?: any;
+  productDimension?: any;
+}
+
+const BoxDetails = ({
+  productName = "",
+  productWeight = "",
+  productDimension = "",
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -18,7 +28,7 @@ const BoxDetails = () => {
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/neworder/product");
+              navigate("/orders/add-order/add-product");
             }}
           >
             <img src={editIcon} alt="Edit Icon" />
@@ -32,10 +42,11 @@ const BoxDetails = () => {
             Combo Product 3
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
-            Box Name
+            {productName}
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
-            Box Weight | Box Dimension
+            {productWeight} Kg| Box Dimension
+            {/* {productWeight} Kg | {productDimension?.length} {productDimension?.breadth} {productDimension?.height} */}
           </p>
         </div>
       </div>

@@ -117,6 +117,8 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.service;
   console.log("serviceDetails", serviceDetails);
 
+  const productDetails = latestOrder?.data?.products;
+  // console.log("productDetails", productDetails?.dimension);
   return (
     <div>
       <Breadcum label="Add New Order" />
@@ -177,7 +179,7 @@ const Summary = (props: Props) => {
           <div
             className="hidden lg:block cursor-pointer"
             onClick={() => {
-              navigate("/neworder/pickup");
+              navigate("/orders/add-order/pickup");
             }}
           >
             <img src={editIcon} alt="" />
@@ -222,7 +224,7 @@ const Summary = (props: Props) => {
           <div
             className="hidden lg:block cursor-pointer"
             onClick={() => {
-              navigate("/neworder/delivery");
+              navigate("/orders/add-order/add-product");
             }}
           >
             <img src={editIcon} alt="" />
@@ -230,7 +232,11 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          <BoxDetails />
+          <BoxDetails
+            productName={productDetails[0]?.productName}
+            productWeight={productDetails[0]?.weight?.deadWeight}
+            productDimension={productDetails[0]?.dimension}
+          />
 
           {/*Service */}
 
@@ -241,7 +247,7 @@ const Summary = (props: Props) => {
             price={serviceDetails?.price}
             partnerServiceId={""}
             partnerServiceName={serviceDetails?.partnerServiceName}
-            dimension={""}
+            // dimension={productDetails?.dimension}
           />
         </div>
       </div>
