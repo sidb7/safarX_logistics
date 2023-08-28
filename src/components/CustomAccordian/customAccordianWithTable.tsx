@@ -15,7 +15,7 @@ interface ICustomAccordianWithProps {
   columns?: any;
 }
 
-const CustomAccordianWithProps: React.FunctionComponent<
+const CustomAccordianWithTable: React.FunctionComponent<
   ICustomAccordianWithProps
 > = (props) => {
   const { dummyDatas, cardClassName, isIcon, icon, title, data, columns } =
@@ -23,7 +23,6 @@ const CustomAccordianWithProps: React.FunctionComponent<
 
   const [isCollapse, setIsCollapse] = useState(false);
 
-  const [filterData, setFilterData] = useState(dummyDatas);
   return (
     <div className={`flex flex-col   mb-3   cursor-pointer ${cardClassName}`}>
       <div
@@ -45,20 +44,22 @@ const CustomAccordianWithProps: React.FunctionComponent<
         <img
           src={isCollapse ? upArrowIcon : downArrowIcon}
           alt="downArrowIcon"
-          // className={`transform transition-transform duration-400 ${
-          //   isCollapse ? "rotate-180" : ""
-          // }`}
         />
       </div>
       {isCollapse && (
         <div
-          className={`flex flex-col border-[1px] rounded-bl-lg rounded-br-lg  py-0 transition-all duration-400 ease-in-out `}
+          className={`flex flex-col border-[1px] rounded-bl-lg rounded-br-lg  py-0 px-2 `}
         >
-          <CustomTable data={data} columns={columns} tdclassName={"def"} />
+          <CustomTable
+            data={data}
+            columns={columns}
+            tdclassName={"def"}
+            thclassName={"bg-white"}
+          />
         </div>
       )}
     </div>
   );
 };
 
-export default CustomAccordianWithProps;
+export default CustomAccordianWithTable;

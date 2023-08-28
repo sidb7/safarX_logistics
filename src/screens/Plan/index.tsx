@@ -1,7 +1,7 @@
 import React from "react";
-import { Breadcum } from "../../components/Layout/breadcum";
 import PlanCard from "./planCard";
 import { CustomTable } from "../../components/Table";
+import { Breadcum } from "../../components/Layout/breadcrum";
 import { dummyPlanData } from "../../utils/dummyData";
 import "../../styles/plan.css";
 
@@ -105,7 +105,7 @@ const Index = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 h-[48px]">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
             {info.row.original.overview}
           </p>
         );
@@ -121,7 +121,7 @@ const Index = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center h-[48px]">
+          <div className="flex items-center justify-center ">
             <Checkbox checked={info.row.original.bronze} />
           </div>
         );
@@ -137,7 +137,7 @@ const Index = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center h-[48px]">
+          <div className="flex items-center justify-center ">
             <Checkbox
               checkboxClassName="!text-black"
               checked={info.row.original.silver}
@@ -156,7 +156,7 @@ const Index = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center h-[48px]">
+          <div className="flex items-center justify-center ">
             <Checkbox checked={info.row.original.gold} />
           </div>
         );
@@ -172,7 +172,7 @@ const Index = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center h-[48px]">
+          <div className="flex items-center justify-center ">
             <Checkbox checked={info.row.original.platinum} />
           </div>
         );
@@ -180,81 +180,9 @@ const Index = (props: ITypeProps) => {
     }),
   ];
 
-  // const setCheckBox = (planInfo: any, planName: any) => {
-  //   if (planName === "Bronze") {
-  //     let keys = Object.keys(planInfo);
-
-  //     keys.map((item) => {
-  //       data.map((item2) => {
-  //         if (
-  //           item.toUpperCase() ===
-  //           item2.overview.split(" ").join("").toUpperCase()
-  //         ) {
-  //           item2.bronze = planInfo.item;
-  //         }
-  //       });
-  //     });
-  //   }
-  //   if (planName === "Silver") {
-  //     let keys = Object.keys(planInfo);
-  //     keys.map((item) => {
-  //       data.map((item2) => {
-  //         if (
-  //           item.toUpperCase() ===
-  //           item2.overview.split(" ").join("").toUpperCase()
-  //         ) {
-  //           item2.gold = planInfo.item;
-  //         }
-  //       });
-  //     });
-  //   }
-
-  //   if (planName === "Gold") {
-  //     let keys = Object.keys(planInfo);
-  //     keys.map((item) => {
-  //       data.map((item2) => {
-  //         if (
-  //           item.toUpperCase() ===
-  //           item2.overview.split(" ").join("").toUpperCase()
-  //         ) {
-  //           item2.silver = planInfo.item;
-  //         }
-  //       });
-  //     });
-  //   }
-
-  //   if (planName === "Platinum") {
-  //     let keys = Object.keys(planInfo);
-  //     keys.map((item) => {
-  //       data.map((item2) => {
-  //         if (
-  //           item.toUpperCase() ===
-  //           item2.overview.split(" ").join("").toUpperCase()
-  //         ) {
-  //           item2.platinum = planInfo.item;
-  //         }
-  //       });
-  //     });
-  //   }
-  // };
-  // dummyPlanData.map((item1) => {
-  //   setCheckBox(item1.planInfo, item1.planName);
-  // });
-
   return (
     <>
       <div className=" mt-5 mr-6">
-        <div className=" flex items-center gap-x-1 ml-12">
-          <span className="font-Open text-sm leading-5 font-normal text-[#777777]">
-            Home
-          </span>
-          <span className="font-Open text-sm leading-5 font-normal text-[#777777]">
-            /
-          </span>
-          <span className="font-Open font-semibold text-sm leading-[18px] text-[#1C1C1C]">
-            Plans
-          </span>
-        </div>
         <div className="mb-6">
           <Breadcum label="Plans" />
         </div>
@@ -289,7 +217,12 @@ const Index = (props: ITypeProps) => {
         </div>
         {/* Table */}
         <div className="ml-5 ">
-          <CustomTable columns={columns} data={data} tdclassName={"def"} />
+          <CustomTable
+            columns={columns}
+            data={data}
+            tdclassName={"def"}
+            thclassName={"bg-white"}
+          />
         </div>
       </div>
     </>

@@ -9,6 +9,7 @@ interface ITypeProps {
 
 const PlanDetailsCard = (props: ITypeProps) => {
   const { planDetails } = props;
+  console.log("PLan Details Card ", planDetails);
   return (
     <div>
       <div
@@ -25,16 +26,50 @@ const PlanDetailsCard = (props: ITypeProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-5 py-4  h-[70px]  ">
+        <div className="  ">
           {planDetails.map((eachPlan: any, index: any) => {
             return (
-              <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
-                  {eachPlan.title}
-                </span>
-                <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                  {eachPlan.info}
-                </span>
+              <div className="grid grid-cols-5 py-4  h-[70px]">
+                <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                    {"Plan Name"}
+                  </span>
+                  <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
+                    {eachPlan.planName}
+                  </span>
+                </div>
+                <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                    {"Purchase Date"}
+                  </span>
+                  <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
+                    {eachPlan.createdAt}
+                  </span>
+                </div>
+                <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                    {"Expiry Date"}
+                  </span>
+                  <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
+                    {eachPlan.expiryDate}
+                  </span>
+                </div>
+                <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                    {"Subscription Amount"}
+                  </span>
+                  <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
+                    {eachPlan.price}
+                  </span>
+                </div>
+                <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                    {"Subscription Period"}
+                  </span>
+                  <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
+                    {eachPlan.validity}
+                  </span>
+                </div>
               </div>
             );
           })}

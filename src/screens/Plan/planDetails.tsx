@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Breadcum } from "../../components/Layout/breadcum";
+import React, { useState, useEffect } from "react";
+import { Breadcum } from "../../components/Layout/breadcrum";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import Checkbox from "../../components/CheckBox";
@@ -8,18 +8,21 @@ import ServiceButton from "../../components/Button/ServiceButton";
 import PlanDetailsCard from "./planDetailsCard";
 import InfoCards from "./infoCards";
 import DummyData from "../../screens/NewOrder/Filter/dummyFile.json";
-import CustomAccordianWithProps from "../../components/CustomAccordian/customAccordianWithProps";
+import CustomAccordianWithTable from "../../components/CustomAccordian/customAccordianWithTable";
 import RateCardIcon from "../../assets/Plan/Essential.svg";
 import TermsAndConditionsIcon from "../../assets/Plan/document.svg";
 import "../../styles/plan.css";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
+import { GET_PLAN_URL } from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
 
 interface ITypeProps {}
 
 const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
   const [isRateCardPresent, setIsRateCardPresent] = useState(true);
+  const [planData, setPlanData]: any = useState([]);
   let pricingData = [
     {
       pricing: "Subscription Amount",
@@ -45,7 +48,7 @@ const PlanDetails = (props: ITypeProps) => {
     },
   ];
 
-  const RateCardData = [
+  const pricingDataOnRateCardFalse = [
     {
       pricing: "Zone 1",
       bronze: "Free",
@@ -84,7 +87,7 @@ const PlanDetails = (props: ITypeProps) => {
     },
   ];
 
-  const RateCardDataTwo = [
+  const RateCardData = [
     {
       zone: "Zone 1",
       bronze: "₹ 10",
@@ -123,14 +126,14 @@ const PlanDetails = (props: ITypeProps) => {
     },
   ];
 
-  const RateCardDataTwoColumns = [
+  const RateCardDataColumns = [
     columnsHelper.accessor("zone", {
       header: () => {
         return (
           <p
             className={`font-Open  
                text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap `}
+             font-semibold   text-start  whitespace-nowrap lg:w-[642px] `}
           >
             Zones
           </p>
@@ -139,7 +142,7 @@ const PlanDetails = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className="flex items-center justify-start  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 h-[48px]">
+          <p className="flex items-center justify-start  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
             {info.row.original.zone}
           </p>
         );
@@ -229,10 +232,32 @@ const PlanDetails = (props: ITypeProps) => {
   ];
 
   if (isRateCardPresent === false) {
-    pricingData = [...pricingData, ...RateCardData];
+    pricingData = [...pricingData, ...pricingDataOnRateCardFalse];
   }
 
-  const commonColumnsForPricingAndRateCard = [
+  const PricingColumns = [
+    columnsHelper.accessor("pricing", {
+      header: () => {
+        return (
+          <p
+            className={`font-Open  
+               text-base leading-[22px] text-[#004EFF]
+             font-semibold   text-start  whitespace-nowrap  lg:w-[642px] `}
+          >
+            Pricing
+          </p>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className="flex items-center  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.pricing}
+          </p>
+        );
+      },
+    }),
+
     columnsHelper.accessor("bronze", {
       header: () => {
         return (
@@ -297,58 +322,6 @@ const PlanDetails = (props: ITypeProps) => {
         );
       },
     }),
-  ];
-
-  const PricingColumns = [
-    columnsHelper.accessor("pricing", {
-      header: () => {
-        return (
-          <p
-            className={`font-Open  
-               text-base leading-[22px] text-[#004EFF]
-             font-semibold   text-start  whitespace-nowrap `}
-          >
-            Pricing
-          </p>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className="flex items-center  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 h-[48px]">
-            {info.row.original.pricing}
-          </p>
-        );
-      },
-    }),
-
-    ...commonColumnsForPricingAndRateCard,
-  ];
-
-  const RateCardColumns = [
-    columnsHelper.accessor("pricing", {
-      header: () => {
-        return (
-          <p
-            className={`font-Open  
-               text-base leading-[22px] text-[#004EFF]
-             font-semibold   text-start   whitespace-nowrap `}
-          >
-            Zones
-          </p>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className="flex items-center  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 h-[48px]">
-            {info.row.original.pricing}
-          </p>
-        );
-      },
-    }),
-
-    ...commonColumnsForPricingAndRateCard,
   ];
 
   const FeaturesData = [
@@ -433,7 +406,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("overview", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap lg:w-[642px] ">
             Features
           </p>
         );
@@ -441,7 +414,7 @@ const PlanDetails = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 h-[48px]">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
             {info.row.original.overview}
           </p>
         );
@@ -465,7 +438,7 @@ const PlanDetails = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center ">
             <Checkbox
               checkboxClassName="!text-black"
               checked={info.row.original.silver}
@@ -480,7 +453,7 @@ const PlanDetails = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center ">
             <Checkbox checked={info.row.original.gold} />
           </div>
         );
@@ -492,7 +465,7 @@ const PlanDetails = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center ">
             <Checkbox checked={info.row.original.platinum} />
           </div>
         );
@@ -503,7 +476,7 @@ const PlanDetails = (props: ITypeProps) => {
   const planDetails = [
     {
       title: "Plan Name",
-      info: "GOLD",
+      info: "",
     },
     {
       title: "Purchase Date",
@@ -520,20 +493,48 @@ const PlanDetails = (props: ITypeProps) => {
     { title: "Subscription Period", info: "Yearly" },
   ];
 
+  let plan = planData.map((eachPlan: any, index: number) => {
+    return [
+      {
+        title: "Plan Name",
+        info: eachPlan.planName,
+      },
+      {
+        title: "Purchase Date",
+        info: eachPlan.createdAt,
+      },
+      {
+        title: "Expiry Date",
+        info: eachPlan.expiryDate,
+      },
+      {
+        title: "Subscription Amount",
+        info: eachPlan.price,
+      },
+      { title: "Subscription Period", info: eachPlan.validity },
+    ];
+  });
+
+  console.log("Plan Data..", plan);
+
+  useEffect(() => {
+    (async () => {
+      const { data: response }: any = await POST(GET_PLAN_URL);
+      console.log("Response", response);
+      console.log("Response Data", response.data);
+      setPlanData(response.data);
+      // if (allAddressData?.success) {
+      //   setAddress(allAddressData.data);
+      // } else {
+      //   toast.error(allAddressData?.message);
+      //   setAddress([]);
+      // }
+    })();
+  }, []);
+
   return (
     <>
       <div className="mt-5 mr-4">
-        <div className=" flex items-center gap-x-1 ml-12">
-          <span className="font-Open text-sm leading-5 font-normal text-[#777777]">
-            Home
-          </span>
-          <span className="font-Open text-sm leading-5 font-normal text-[#777777]">
-            /
-          </span>
-          <span className="font-Open font-semibold text-sm leading-[18px] text-[#1C1C1C]">
-            Plans
-          </span>
-        </div>
         <div className="mb-5">
           <Breadcum label="Plans" />
         </div>
@@ -571,7 +572,7 @@ const PlanDetails = (props: ITypeProps) => {
         {/* Plan Details */}
 
         <div className="ml-[30px] mb-9">
-          <PlanDetailsCard planDetails={planDetails} />
+          <PlanDetailsCard planDetails={planData} />
         </div>
 
         {/* Info Cards */}
@@ -628,6 +629,7 @@ const PlanDetails = (props: ITypeProps) => {
             columns={PricingColumns}
             data={pricingData}
             tdclassName={"def"}
+            thclassName={"bg-white"}
           />
         </div>
 
@@ -658,7 +660,7 @@ const PlanDetails = (props: ITypeProps) => {
             columns={FeaturesColumns}
             data={FeaturesData}
             tdclassName={"def"}
-            thclassName={"border-none"}
+            thclassName={"border-none bg-white"}
           />
         </div>
 
@@ -674,18 +676,18 @@ const PlanDetails = (props: ITypeProps) => {
         </div>
         {isRateCardPresent && (
           <div className="ml-[30px] mb-6">
-            <CustomAccordianWithProps
+            <CustomAccordianWithTable
               dummyDatas={DummyData}
               title="Rate Card"
               isIcon={true}
               icon={RateCardIcon}
-              data={RateCardDataTwo}
-              columns={RateCardDataTwoColumns}
+              data={RateCardData}
+              columns={RateCardDataColumns}
             />
           </div>
         )}
         <div className="ml-[30px]">
-          <CustomAccordianWithProps
+          <CustomAccordianWithTable
             dummyDatas={DummyData}
             title="Terms & Conditions"
             isIcon={true}

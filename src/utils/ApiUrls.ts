@@ -125,6 +125,9 @@ const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocat
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
+//Plan
+const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -183,4 +186,5 @@ export {
   ADD_COMBO_PRODUCT_URL,
   GET_PACKAGE_INSURANCE,
   PLACE_ORDER,
+  GET_PLAN_URL,
 };
