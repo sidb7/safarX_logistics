@@ -266,7 +266,7 @@ const Index = () => {
   const payload = {
     pickupLocation: {
       flatNo: pickupLocation.flatNo,
-      address: locateAddress,
+      address: pastedData,
       sector: pickupLocation.sector,
       landmark: pickupLocation.landmark,
       pincode: pickupLocation.pincode,
@@ -349,14 +349,14 @@ const Index = () => {
   };
 
   // useEffect(() => {
-  //   const verifyAddressMapPayload = {
-  //     data: address,
-  //   };
-  //   console.log("mapAddress", verifyAddressMapPayload);
+  //   // const verifyAddressMapPayload = {
+  //   //   data: address,
+  //   // };
+  //   // console.log("mapAddress", verifyAddressMapPayload);
   //   setLocateAddress(address);
-  //   return () => {
-  //     setLocateAddress("");
-  //   };
+  //   // return () => {
+  //   //   setLocateAddress("");
+  //   // };
   // }, [address]);
 
   const steps = [
