@@ -134,7 +134,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     console.log("obj", obj);
     let payload = { ...obj, productId: uuidv4() };
 
-    console.log("payload", payload);
+    console.log("payload", payload);  
     setProductPayload([...productPayload, payload]);
     setProductInputState([...productInputState, initialUserData]);
     console.log("data check =====>", productPayload);
@@ -257,12 +257,12 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   });
 
   const handleProductInputChange = (e: any, index: number) => {
-    const { name, value } = e.target;
+    const { name, value } = e;
     let arr = productInputState;
     let name2: any = [];
     name2 = name?.split(".");
     if (name2.length > 1) {
-      arr[index][name2[0]][name2[1]] = +value;
+      arr[index][name2[0]][name2[1]] = value;
     } else {
       arr[index][name] = value;
     }
@@ -376,25 +376,45 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     label="Product name"
                     name="productName"
                     value={productInputState[index].productName}
-                    onChange={(e) => handleProductInputChange(e, index)}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: e.target.value },
+                        index
+                      )
+                    }
                   />
                   <InputBox
                     label="Product category"
                     name="category"
                     value={productInputState[index].category}
-                    onChange={(e) => handleProductInputChange(e, index)}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: e.target.value },
+                        index
+                      )
+                    }
                   />
                   <InputBox
                     label="Product price"
                     name="price"
                     value={productInputState[index].price}
-                    onChange={(e) => handleProductInputChange(e, index)}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: +e.target.value },
+                        index
+                      )
+                    }
                   />
                   <InputBox
                     label="Product tax"
                     name="gst"
                     value={productInputState[index].gst}
-                    onChange={(e) => handleProductInputChange(e, index)}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: +e.target.value },
+                        index
+                      )
+                    }
                   />
                   <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
@@ -403,29 +423,49 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         label="Weight"
                         name="weight.deadWeight"
                         value={productInputState[index]?.weight?.deadWeight}
-                        onChange={(e) => handleProductInputChange(e, index)}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
                       />
                       <InputBox
                         className=""
                         label="Length"
-                        name="length"
-                        value={productInputState[index]?.length}
-                        onChange={(e) => handleProductInputChange(e, index)}
-                      />
+                        name="dimensions.length"
+                        value={productInputState[index]?.dimensions.length}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
+                      />  
                     </div>
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox
                         className=""
                         label="Breadth"
-                        name="breadth"
-                        value={productInputState[index].breadth}
-                        onChange={(e) => handleProductInputChange(e, index)}
+                        name="dimensions.breadth"
+                        value={productInputState[index].dimensions.breadth}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
                       />
                       <InputBox
                         label="Height"
-                        name="height"
-                        value={productInputState[index].height}
-                        onChange={(e) => handleProductInputChange(e, index)}
+                        name="dimensions.height"
+                        value={productInputState[index].dimensions.height}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
                       />
                     </div>
                   </div>
