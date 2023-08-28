@@ -182,7 +182,7 @@ const data = [
         id: "12",
         name: "Add Order",
         isActive: false,
-        path: "/orders/add-order",
+        path: "/orders/add-order/pickup",
         menu: [],
         pages: [
           {
@@ -252,15 +252,45 @@ const data = [
   },
   {
     id: "41",
-    name: "Catalogue",
+    name: "Catalogues",
     pages: [],
     isActive: false,
     menu: [
       {
         id: "42",
+        name: "Catalogue",
+        isActive: false,
+        path: "/catalogues/catalogue",
+        menu: [],
+        pages: [
+          {
+            id: "43",
+            name: "Catalogue",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
+      {
+        id: "42",
         name: "Channel Integration",
         isActive: false,
-        path: "/channel-integration",
+        path: "/catalogues/channel-integration",
         menu: [],
         pages: [
           {
@@ -305,6 +335,36 @@ const data = [
           {
             id: "50",
             name: "Client List",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
+      {
+        id: "51",
+        name: "Transactions",
+        isActive: false,
+        path: "/wallet/transactions",
+        menu: [],
+        pages: [
+          {
+            id: "52",
+            name: "Transactions",
             isActive: false,
             permissions: {
               create: true,

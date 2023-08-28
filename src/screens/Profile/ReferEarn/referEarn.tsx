@@ -17,7 +17,7 @@ export const ProfileReferEarn = () => {
     query: "(min-width: 1024px)",
   });
   const navigateTo = () => {
-    if (!isItLgScreen) navigate("/profile/profile-refer-earn");
+    if (!isItLgScreen) navigate("/profile/refer-earn");
     else setIsOpen(true);
   };
   return (

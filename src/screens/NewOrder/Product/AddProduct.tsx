@@ -95,7 +95,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   };
 
   const [productPayload, setProductPayload]: any = useState([]);
-  console.log("setProductPayload", productPayload);
+  const [productInputState, setProductInputState]: any = useState([]);
   const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
   const [addedProductData, setAddedProductData] = useState<any>([]);
   const [productState, setProductState]: any = useState<any>(initialUserData);
@@ -129,69 +129,15 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     }
   };
 
-  useEffect(() => {}, []);
+  const AddProductInfoData = (index: number) => {
+    let obj = productInputState[index];
+    console.log("obj", obj);
+    let payload = { ...obj, productId: uuidv4() };
 
-  const AddProductInfoData = () => {
-    console.log("productstate=>", productState);
-    const payload = {
-      productId: uuidv4(),
-      productName: productState.productName,
-      description: "This is an example product for demonstration purposes.",
-      category: [productState.category],
-      tags: ["electronics", "smartphone", "android"],
-      price: productState.price,
-      currency: "INR",
-      discountAmount: 10,
-      sale_price: 539.99,
-      gst: productState.tax,
-      stock: 0,
-      dimensions: {
-        length: productState.length,
-        breadth: productState.breadth || 0,
-        height: productState.height,
-        unit: "cm",
-      },
-      weight: {
-        deadWeight: productState.weight || 0,
-        deadWeightUnit: "kg",
-        volumetricWeight: 0,
-        volumetricWeightUnit: "kg",
-        catalogueWeight: {
-          from: 1,
-          to: 2,
-          unit: "kg",
-        },
-      },
-      available: true,
-      attributes: {
-        color: "Black",
-        size: "Medium",
-        brand: "ABC Electronics",
-      },
-      features: [
-        "6.5-inch AMOLED display",
-        "Quad-camera system",
-        "128GB storage",
-      ],
-      images: productState.images,
-      ratings: {
-        average: 4.7,
-        count: 102,
-      },
-      reviews: [
-        {
-          username: "user123",
-          rating: 5,
-          comment: "Great product! Highly recommended.",
-        },
-        {
-          username: "user456",
-          rating: 4,
-          comment: "Good quality, fast shipping.",
-        },
-      ],
-    };
+    console.log("payload", payload);  
     setProductPayload([...productPayload, payload]);
+    setProductInputState([...productInputState, initialUserData]);
+    console.log("data check =====>", productPayload);
   };
 
   // const payload = {
@@ -236,9 +182,19 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   //   }
   // };
 
-  const resetProductState = () => {
-    setProductState(initialUserData);
+  const deleteProduct = (index: number) => {
+    let tempArr = productInputState;
+    tempArr.splice(index, 1);
+    setProductInputState([...tempArr]);
+
+    let tempPayloadObj = productPayload;
+    tempPayloadObj.splice(index, 1);
+    setProductPayload([...tempPayloadObj]);
+
+    console.log("productInputState", productPayload);
+    console.log("productInputState", productInputState);
   };
+
   useEffect(() => {
     (async () => {
       const res: any = await getOrderProductDetails();
@@ -253,6 +209,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       console.log("data", data?.data?.products);
       if (data?.success) {
         setProductPayload(data?.data?.products);
+        setProductInputState([...data?.data?.products, initialUserData]);
+        console.log("productInputState", productInputState);
+        // setProductInputState([...productInputState, initialUserData]);
       } else {
         throw new Error(data?.message);
       }
@@ -297,14 +256,19 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     query: "(min-width: 1024px)",
   });
 
-  const handleProductInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setProductState((prevState: any) => ({ ...prevState, [name]: value }));
+  const handleProductInputChange = (e: any, index: number) => {
+    const { name, value } = e;
+    let arr = productInputState;
+    let name2: any = [];
+    name2 = name?.split(".");
+    if (name2.length > 1) {
+      arr[index][name2[0]][name2[1]] = value;
+    } else {
+      arr[index][name] = value;
+    }
+    setProductInputState([...arr]);
   };
 
-  console.log("productImage", productState.productImage);
   const uploadedInputFile = async (e: any) => {
     console.log("uploadedInputFile", e.target.files[0]);
 
@@ -338,8 +302,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="px-5">
-        <div className="flex gap-x-6 ">
+      <div className="px-5 mb-20">
+        {/* <div className="flex gap-x-6 ">
           {productPayload.length > 0 &&
             productPayload.map((product: any, i: number) => {
               return (
@@ -379,102 +343,163 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                 </>
               );
             })}
-        </div>
+        </div> */}
 
-        <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-          <div className="">
-            <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
-              Product {addedProductData.length + 1}
-            </h2>
-          </div>
-          <div className="flex">
-            <img src={BookmarkIcon} alt="Bookmark Product" className="mr-2" />
+        <div>
+          {productInputState.map((e: any, index: number) => {
+            return (
+              <div className="py-4" key={index}>
+                <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
+                  <div className="">
+                    <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
+                      Product {index + 1}
+                    </h2>
+                  </div>
+                  <div className="flex">
+                    {/* <img
+                      src={BookmarkIcon}
+                      alt="Bookmark Product"
+                      className="mr-2"
+                    /> */}
 
-            <img
-              src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
-              alt="Delete Product"
-              className="w-5 h-5"
-            />
-          </div>
-        </div>
+                    <img
+                      src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+                      alt="Delete Product"
+                      onClick={(e: any) => deleteProduct(index)}
+                      className="w-5 h-5"
+                    />
+                  </div>
+                </div>
 
-        <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
-          <InputBox
-            label="Product name"
-            name="productName"
-            value={productState.productName}
-            onChange={handleProductInputChange}
-          />
-          <InputBox
-            label="Product category"
-            name="category"
-            value={productState.category}
-            onChange={handleProductInputChange}
-          />
-          <InputBox
-            label="Product price"
-            name="price"
-            value={productState.price}
-            onChange={handleProductInputChange}
-          />
-          <InputBox
-            label="Product tax"
-            name="gst"
-            value={productState.gst}
-            onChange={handleProductInputChange}
-          />
-          <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
-            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-              <InputBox
-                className=""
-                label="Weight"
-                name="weight"
-                value={productState.weight.deadWeight}
-                onChange={handleProductInputChange}
-              />
-              <InputBox
-                className=""
-                label="Length"
-                name="length"
-                value={productState.length}
-                onChange={handleProductInputChange}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-              <InputBox
-                className=""
-                label="Breadth"
-                name="breadth"
-                value={productState.breadth}
-                onChange={handleProductInputChange}
-              />
-              <InputBox
-                label="Height"
-                name="height"
-                value={productState.height}
-                onChange={handleProductInputChange}
-              />
-            </div>
-          </div>
+                <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
+                  <InputBox
+                    label="Product name"
+                    name="productName"
+                    value={productInputState[index].productName}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: e.target.value },
+                        index
+                      )
+                    }
+                  />
+                  <InputBox
+                    label="Product category"
+                    name="category"
+                    value={productInputState[index].category}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: e.target.value },
+                        index
+                      )
+                    }
+                  />
+                  <InputBox
+                    label="Product price"
+                    name="price"
+                    value={productInputState[index].price}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: +e.target.value },
+                        index
+                      )
+                    }
+                  />
+                  <InputBox
+                    label="Product tax"
+                    name="gst"
+                    value={productInputState[index].gst}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: +e.target.value },
+                        index
+                      )
+                    }
+                  />
+                  <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
+                    <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+                      <InputBox
+                        className=""
+                        label="Weight"
+                        name="weight.deadWeight"
+                        value={productInputState[index]?.weight?.deadWeight}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
+                      />
+                      <InputBox
+                        className=""
+                        label="Length"
+                        name="dimensions.length"
+                        value={productInputState[index]?.dimensions.length}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
+                      />  
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
+                      <InputBox
+                        className=""
+                        label="Breadth"
+                        name="dimensions.breadth"
+                        value={productInputState[index].dimensions.breadth}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
+                      />
+                      <InputBox
+                        label="Height"
+                        name="dimensions.height"
+                        value={productInputState[index].dimensions.height}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: +e.target.value },
+                            index
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
 
-          <InputWithFileUpload
-            type="file"
-            onChange={(e) => uploadedInputFile(e)}
-          />
-        </div>
-        <div className="text-gray-400	text-xs	mt-3 lg:hidden">
-          <p>Volumetric weight includes dimensions of the product</p>
-        </div>
+                  <InputWithFileUpload
+                    type="file"
+                    onChange={(e) => uploadedInputFile(e)}
+                  />
+                </div>
+                <>
+                  {productInputState.length - 1 === index && (
+                    <>
+                      <div className="text-gray-400	text-xs	mt-3 lg:hidden">
+                        <p>
+                          Volumetric weight includes dimensions of the product
+                        </p>
+                      </div>
 
-        <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
-          <img src={ButtonIcon} alt="Add Product" width="16px" />
+                      <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
+                        <img src={ButtonIcon} alt="Add Product" width="16px" />
 
-          <button
-            className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
-            onClick={() => AddProductInfoData()}
-          >
-            ADD PRODUCT
-          </button>
+                        <button
+                          className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
+                          onClick={() => AddProductInfoData(index)}
+                        >
+                          ADD PRODUCT
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </>
+              </div>
+            );
+          })}
         </div>
       </div>
       <div>

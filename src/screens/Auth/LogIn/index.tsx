@@ -8,12 +8,16 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useEffect, useState } from "react";
-import { POST_SIGN_IN_URL } from "../../../utils/ApiUrls";
+import { POST_SIGN_IN_URL, VALIDATE_USER_TOKEN } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
-import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  tokenKey,
+} from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -45,10 +49,17 @@ const Index = () => {
   const responseMessage = (response: any) => {
     console.log("GoogleLogin Response Message :", response);
   };
+
   useEffect(() => {
     setTimeout(() => {
       setShowBootScreen(false);
     }, 2000);
+    (async () => {
+      const { data } = await POST(VALIDATE_USER_TOKEN);
+      if (data?.success) {
+        navigate("/home/overview");
+      }
+    })();
   }, []);
 
   const modalTitle = () => {

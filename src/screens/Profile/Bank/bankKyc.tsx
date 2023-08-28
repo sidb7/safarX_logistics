@@ -33,7 +33,11 @@ export const EditProfileBank = () => {
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
-      setEditBankDetails(data.data[0]?.bankDetails);
+      if (data?.success) {
+        setEditBankDetails(data?.data?.[0]?.bankDetails);
+      } else {
+        toast.error(data?.message);
+      }
     })();
   }, []);
 

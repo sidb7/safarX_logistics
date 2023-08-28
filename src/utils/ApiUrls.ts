@@ -80,6 +80,8 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 
 //NewOrder URLs
+const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
+
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
@@ -111,6 +113,7 @@ const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
 
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
+const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWalletTransaction`;
 
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
@@ -183,4 +186,6 @@ export {
   ADD_COMBO_PRODUCT_URL,
   GET_PACKAGE_INSURANCE,
   PLACE_ORDER,
+  VERIFY_ADDRESS,
+  GET_WALLET_TRANSACTION,
 };

@@ -84,9 +84,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
                 src={BlackEditIcon}
                 alt=""
                 className="pr-4 cursor-pointer"
-                onClick={() =>
-                  navigate("/profile/profile-setting-edit-profile")
-                }
+                onClick={() => navigate("/profile/edit-profile")}
               />
             </span>
             <span className="flex">

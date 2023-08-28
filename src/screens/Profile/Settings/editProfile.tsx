@@ -22,23 +22,22 @@ export const EditProfile = () => {
     const { data } = await POST(UPDATE_SELLER, {
       data: { ...profileData, firstName: firstName, lastName: lastName },
     });
-    if (data.success) {
+    if (data?.success) {
       setProfileData(data?.data);
-      navigate(-1);
       toast.success("Profile Edited Successfully");
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
-      if (data.success) {
-        setProfileData(data.data[0]);
-        setName(`${data.data[0]?.firstName} ${data.data[0]?.lastName}`);
+      if (data?.success) {
+        setProfileData(data?.data?.[0]);
+        setName(`${data?.data?.[0]?.firstName} ${data?.data?.[0]?.lastName}`);
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     })();
   }, []);
