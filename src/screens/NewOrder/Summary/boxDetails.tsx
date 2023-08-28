@@ -28,7 +28,7 @@ const BoxDetails = ({
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/neworder/product");
+              navigate("/orders/add-order/add-product");
             }}
           >
             <img src={editIcon} alt="Edit Icon" />
@@ -43,9 +43,11 @@ const BoxDetails = ({
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
             Box Name
+            {productName}
           </p>
           <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
             Box Weight | Box Dimension
+            {/* {productWeight} | {productDimension?.length} {productDimension?.breadth} {productDimension?.height} */}
           </p>
         </div>
       </div>

@@ -117,7 +117,7 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.service;
   console.log("serviceDetails", serviceDetails);
 
-  const productDetails = latestOrder?.data;
+  const productDetails = latestOrder?.data?.packageType;
   console.log("productDetails", productDetails);
   return (
     <div>
@@ -233,9 +233,9 @@ const Summary = (props: Props) => {
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
           <BoxDetails
-            productName={productDetails?.productName}
-            productWeight={productDetails?.productWeight}
-            productDimension={productDetails?.productDimension}
+            productName={productDetails?.name}
+            productWeight={productDetails?.weight}
+            productDimension={productDetails?.dimension}
           />
 
           {/*Service */}
@@ -247,7 +247,7 @@ const Summary = (props: Props) => {
             price={serviceDetails?.price}
             partnerServiceId={""}
             partnerServiceName={serviceDetails?.partnerServiceName}
-            dimension={""}
+            dimension={productDetails?.dimension}
           />
         </div>
       </div>
