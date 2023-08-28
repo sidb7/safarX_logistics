@@ -138,14 +138,14 @@ const AddInsuranceModal = (props: IProps) => {
             label={"COD amount to collect from buyer"}
             // isDisabled={toggleStatus}
             value={codData?.codAmount}
-            inputType="number"
+            inputType="text"
             onChange={(e) => {
               setCodData({ ...codData, codAmount: e.target.value });
               console.log(codData);
             }}
           />
           <CustomInputBox
-            inputType="number"
+            inputType="text"
             label={"Total invoice value"}
             // isDisabled={toggleStatus}
             value={codData?.invoiceValue}
