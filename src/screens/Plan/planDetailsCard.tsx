@@ -2,6 +2,7 @@ import React from "react";
 import PlanDetailsIcon from "../../assets/common/task-square.svg";
 import LabelContainer from "../../components/LabelContainer";
 import { useMediaQuery } from "react-responsive";
+import { date_DD_MMM_YYY } from "../../utils/dateFormater";
 
 interface ITypeProps {
   planDetails: any;
@@ -43,7 +44,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Purchase Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan.createdAt}
+                    {date_DD_MMM_YYY(eachPlan.createdAt)}
                   </span>
                 </div>
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
