@@ -1086,3 +1086,64 @@ export const dummyPickupDropdownData = [
     value: "other",
   },
 ];
+
+export const dummyPlanData = [
+  {
+    planName: "Bronze",
+    planInfo: {
+      sharedSupportTeam: true,
+      accountManager: true,
+      multipleCarrierPartner: true,
+      channelIntegration: true,
+      labelCustomization: true,
+      domesticAndInternationalShipping: true,
+      complementaryNDRSupport: true,
+      exceptionManagementSupport: true,
+      customizedReportingAndAnalyticalSolution: true,
+    },
+  },
+
+  {
+    planName: "Silver",
+
+    planInfo: {
+      sharedSupportTeam: true,
+      accountManager: true,
+      multipleCarrierPartner: true,
+      channelIntegration: true,
+      labelCustomization: true,
+      domesticAndInternationalShipping: true,
+      complementaryNDRSupport: true,
+      exceptionManagementSupport: true,
+      customizedReportingAndAnalyticalSolution: true,
+    },
+  },
+  {
+    planName: "Gold",
+    planInfo: {
+      sharedSupportTeam: true,
+      accountManager: true,
+      multipleCarrierPartner: true,
+      channelIntegration: true,
+      labelCustomization: true,
+      domesticAndInternationalShipping: true,
+      complementaryNDRSupport: true,
+      exceptionManagementSupport: true,
+      customizedReportingAndAnalyticalSolution: true,
+    },
+  },
+  {
+    planName: "Platinum",
+    planInfo: {
+      sharedSupportTeam: true,
+      accountManager: true,
+      multipleCarrierPartner: true,
+      channelIntegration: true,
+      labelCustomization: true,
+      domesticAndInternationalShipping: true,
+      complementaryNDRSupport: true,
+      exceptionManagementSupport: true,
+      customizedReportingAndAnalyticalSolution: true,
+    },
+  },
+];

@@ -103,6 +103,10 @@ import CommonLayout from "../layout";
 import EditAddress from "../screens/NewOrder/NewCatalogue/AddressBook/editAddress";
 import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress";
 
+//Plan Screens
+import NewUserPlanScreen from "../screens/Plan";
+import PlanDetails from "../screens/Plan/planDetails";
+
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -286,6 +290,11 @@ const MyRoutes: React.FC = () => {
             />
             <Route path="catalogue/edit-address" element={<EditAddress />} />
             <Route path="catalogue/add-address" element={<AddAddress />} />
+
+            {/* Plan */}
+
+            <Route path="/plan" element={<NewUserPlanScreen />} />
+            <Route path="/plan-details" element={<PlanDetails />} />
           </Route>
           <Route path="/neworder/payment" element={<PaymentScreen />} />
           <Route path="/neworder/bulkorder" element={<BulkOrder />} />
@@ -351,6 +360,9 @@ const MyRoutes: React.FC = () => {
             path="/neworder/box-catalogue"
             element={<CatalogueBoxCatalogueScreen />}
           />
+          {/* <Route path="/" element={<CommonLayout />}>
+            <Route path="/plan" element={<NewUserPlanScreen />} />
+          </Route> */}
 
           <Route
             path="*"
