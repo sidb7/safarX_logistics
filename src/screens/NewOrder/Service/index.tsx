@@ -314,19 +314,19 @@ const Index: React.FC = () => {
     {
       label: "Pickup",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
       label: "Delivery",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
       label: "Product",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {

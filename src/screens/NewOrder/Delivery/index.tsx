@@ -220,7 +220,7 @@ const Index = () => {
     {
       label: "Pickup",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
@@ -254,7 +254,6 @@ const Index = () => {
       imgSrc: TickLogo,
     },
   ];
-
   const verifyAddressPayload = {
     data: pastedData,
   };

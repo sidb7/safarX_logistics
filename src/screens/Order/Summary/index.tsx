@@ -5,14 +5,57 @@ import contactIcon from "../../../assets/serv/contact.svg";
 import locationIcon from "../../../assets/serv/location.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
-
+import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
-
+import { Breadcum } from "../../../components/Layout/breadcrum";
+import Stepper from "../../../components/Stepper";
+const steps = [
+  {
+    label: "Pickup",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Delivery",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Product",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Service",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Summary",
+    isCompleted: false,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Payment",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+];
 type Props = {};
 
 const Summary = (props: Props) => {
   return (
     <div>
+      <Breadcum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
+      </div>
       <div className="grid grid-cols-1 gap-y-5 p-5   ">
         <div className="flex flex-row gap-2">
           <img src={SummaryIcon} alt="Summary Icon" />
