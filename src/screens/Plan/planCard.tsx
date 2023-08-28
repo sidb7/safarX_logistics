@@ -37,7 +37,7 @@ const PlanCard = (props: ITypeProps) => {
       <div
         className={`flex flex-col  items-center  ${
           isMostPopular ? "rounded-t-none" : "rounded-lg"
-        } py-5 px-4 border-[1px] border-t-[0px] border-[#E8E8E8] bg-[#FFFFFF]  h-[433px] w-[273px]`}
+        } py-5 px-4 shadow-sm border-[1px] border-t-[0px] border-[#E8E8E8] bg-[#FFFFFF]  h-[433px] w-[273px]`}
       >
         <img
           src={CargoRatingGif}

@@ -34,7 +34,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Plan Name"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan.planName}
+                    {eachPlan?.planName}
                   </span>
                 </div>
                 {/*Purchase Date */}
@@ -43,7 +43,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Purchase Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {date_DD_MMM_YYY(eachPlan.createdAt)}
+                    {date_DD_MMM_YYY(eachPlan?.planStartDate)}
                   </span>
                 </div>
                 {/*Expiry Date */}
@@ -52,7 +52,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Expiry Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {date_DD_MMM_YYY(eachPlan.expiryDate)}
+                    {date_DD_MMM_YYY(eachPlan?.planEndDate)}
                   </span>
                 </div>
                 {/*Subscription Amount */}
@@ -61,7 +61,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Subscription Amount"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan.price}
+                    {eachPlan?.price}
                   </span>
                 </div>
                 {/* Subscription Period */}
@@ -70,7 +70,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                     {"Subscription Period"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan.validity}
+                    {eachPlan?.validity}
                   </span>
                 </div>
               </div>

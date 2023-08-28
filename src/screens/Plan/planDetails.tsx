@@ -473,9 +473,16 @@ const PlanDetails = (props: ITypeProps) => {
 
   useEffect(() => {
     (async () => {
-      const { data: response }: any = await POST(GET_PLAN_URL);
+      try {
+        const { data: response }: any = await POST(GET_PLAN_URL);
 
-      setPlanData(response.data);
+        if (response?.success) {
+          setPlanData(response.data);
+        }
+      } catch (error) {
+        console.log("GET PLAN API ERROR", error);
+        return error;
+      }
     })();
   }, []);
 
