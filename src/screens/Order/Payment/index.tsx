@@ -272,7 +272,7 @@ const Payment = () => {
       </div>
       <div className="inline-flex space-x-2 items-center px-5">
         <img src={Moneylogo} alt="" />
-        <p className="text-lg text-[#202427] font-normal text-[1.5rem] ">
+        <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Payment
         </p>
       </div>

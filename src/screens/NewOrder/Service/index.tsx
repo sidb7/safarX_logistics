@@ -357,7 +357,7 @@ const Index: React.FC = () => {
       <div className="flex flex-row gap-x-2 mb-5 lg:mb-[38px] px-5">
         <img src={TruckIcon} alt="Truck Icon" className="lg:hidden" />
         <img src={WebTruckIcon} alt="" className="hidden lg:block" />
-        <p className="text-[18px] text-[#202427] font-semibold font-Lato lg:font-normal lg:text-2xl lg:text-[#323232] ">
+        <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Service
         </p>
       </div>
