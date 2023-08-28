@@ -15,6 +15,9 @@ interface propTypes {
   isRequired?: boolean;
   maxLength?: number;
   isRightIcon?: boolean;
+  rightIcon?: string;
+  setVisibility?: any;
+  visibility?: any;
 }
 
 const CustomInputBox = (props: propTypes) => {
@@ -29,12 +32,16 @@ const CustomInputBox = (props: propTypes) => {
     inputClassName,
     labelClassName,
     name,
+    visibility,
     isDisabled,
+    rightIcon,
     inputType = "text",
     isRequired = false,
     isRightIcon = false,
+    setVisibility,
     maxLength,
   } = props;
+
   return (
     <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>
@@ -54,6 +61,17 @@ const CustomInputBox = (props: propTypes) => {
         >
           {label}
         </label>
+
+        {isRightIcon && (
+          <img
+            src={rightIcon}
+            alt=""
+            className={`absolute z-20  right-5 top-[30%] cursor-pointer w-[20px] h-[20px]`}
+            onClick={() => {
+              setVisibility(!visibility);
+            }}
+          />
+        )}
       </div>
     </div>
   );
