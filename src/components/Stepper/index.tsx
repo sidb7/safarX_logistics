@@ -30,7 +30,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
                   <div className="w-full bg-gray-200 rounded items-center align-middle align-center flex-1">
                     <div
                       className={`w-0 py-[2px] rounded ${
-                        step.isCompleted || step.isActive ? "bg-[#A4A4A4]" : ""
+                        step.isActive || step.isCompleted ? "bg-[#A4A4A4]" : ""
                       }`}
                       style={{ width: "100%" }}
                     ></div>
@@ -48,7 +48,7 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
               </div>
             </div>
             <div
-              className={`text-xs text-center md:text-base ${
+              className={`text-xs text-center font-Lato font-semibold md:text-base ${
                 step.isActive || step.isCompleted ? "" : "text-[#A4A4A4]"
               }`}
             >

@@ -134,7 +134,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     console.log("obj", obj);
     let payload = { ...obj, productId: uuidv4() };
 
-    console.log("payload", payload);  
+    console.log("payload", payload);
     setProductPayload([...productPayload, payload]);
     setProductInputState([...productInputState, initialUserData]);
     console.log("data check =====>", productPayload);
@@ -223,31 +223,37 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     {
       label: "Pickup",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
       label: "Delivery",
       isCompleted: true,
-      isActive: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
       label: "Product",
-      isCompleted: true,
-      isActive: false,
+      isCompleted: false,
+      isActive: true,
       imgSrc: TickLogo,
     },
     {
       label: "Service",
       isCompleted: false,
-      isActive: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Summary",
+      isCompleted: false,
+      isActive: false,
       imgSrc: TickLogo,
     },
     {
       label: "Payment",
       isCompleted: false,
-      isActive: true,
+      isActive: false,
       imgSrc: TickLogo,
     },
   ];
@@ -441,7 +447,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                             index
                           )
                         }
-                      />  
+                      />
                     </div>
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox

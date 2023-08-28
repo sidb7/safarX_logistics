@@ -4,51 +4,51 @@ interface IScrollNavProps {
   arrayData: { label: string; number?: string }[];
   showNumber: boolean;
   setScrollIndex?: any;
+  defaultIndexValue?: any;
 }
-
 export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
   arrayData,
   showNumber = true,
   setScrollIndex,
+  defaultIndexValue,
 }) => {
-  const [selectedId, setSelectedId] = useState(0);
-
+  const [selectedId, setSelectedId] = useState(+defaultIndexValue || 0);
   const setValue = (id: number) => {
     setSelectedId(id);
     setScrollIndex(id);
   };
-
   return (
     <div>
-      <div className="flex gap-x-2 overflow-x-scroll whitespace-nowrap mt-2 h-[34px]">
-        {arrayData.map((singleData, index) => {
-          return (
-            <div
-              className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
-                selectedId === index ? "!border-[#004EFF]" : ""
+      <div
+        className={`flex  overflow-x-scroll lg:overflow-auto  whitespace-nowrap mt-2 h-[34px] cursor-pointer`}
+      >
+        {arrayData?.map((singleData, index) => (
+          <div
+            key={index}
+            className={`flex justify-center items-center  border-[#777777] px-6 ${
+              selectedId === index ? "!border-[#004EFF]" : ""
+            }`}
+            style={{ borderBottom: "3px solid #777777" }}
+            onClick={() => setValue(index)}
+          >
+            <span
+              className={`text-[#777777] text-[18px] font-Lato font-semibold  ${
+                selectedId === index ? "!text-[#004EFF] " : ""
               }`}
-              // onClick={() => setSelectedId(index)}
-              onClick={() => setValue(index)}
             >
+              {singleData.label}
+            </span>
+            {showNumber && (
               <span
-                className={`text-[#777777] text-[14px] ${
-                  selectedId === index ? "!text-[#004EFF]" : ""
+                className={`flex justify-center items-center rounded-full ml-2 text-[8px] text-white bg-[#777777] h-[16px] w-[16px] ${
+                  selectedId === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
-                {singleData.label}
+                {singleData.number}
               </span>
-              {showNumber && (
-                <span
-                  className={`flex justify-center items-center rounded-full ml-2 text-[8px] text-white bg-[#777777] h-[16px] w-[16px] ${
-                    selectedId === index ? "!bg-[#004EFF]" : ""
-                  }`}
-                >
-                  {singleData.number}
-                </span>
-              )}
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );

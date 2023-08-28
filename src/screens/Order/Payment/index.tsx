@@ -195,7 +195,7 @@ const Payment = () => {
       orderId: orderId,
     };
     const datas = await POST(RECHARGE_STATUS, payload);
-    console.log("response", datas);
+
     if (datas?.data?.success) {
       setIsLoading(false);
       toast.success("Payment success");
@@ -231,7 +231,6 @@ const Payment = () => {
       },
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-    console.log("data", data);
 
     if (data.success) {
       setIsLoading(true);
@@ -240,7 +239,7 @@ const Payment = () => {
         orderId: data?.data?.orderId,
       };
       const datas = await POST(RECHARGE_STATUS, payload);
-      console.log("response", datas);
+
       myInterval = setInterval(function () {
         rechargeStatusCheck(data?.data?.orderId);
       }, 500);
@@ -258,24 +257,15 @@ const Payment = () => {
         toast.success(response?.message);
         navigate("/neworder/delivery");
       } else {
-        console.error("PickupDataerror");
         toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
       return error;
     }
   };
 
   return (
     <div className="w-full">
-      <div className="hidden lg:flex lg:items-center px-5 ml-6 mb-1">
-        <p className="font-Open text-[14px] text-[#777777] mr-1">Home</p>
-        <span className="font-Open text-[14px] text-[#777777] mr-1">/</span>
-        <span className="font-Open font-semibold text-[14px] text-[#1C1C1C]">
-          Partner List
-        </span>
-      </div>
       <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
