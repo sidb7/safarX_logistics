@@ -7,7 +7,7 @@ export const ProfileNotification = () => {
   return (
     <div
       className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
-      onClick={() => navigate("/profile/profile-notification")}
+      onClick={() => navigate("/profile/notification")}
     >
       <div className={`flex justify-between items-center h-[44px]`}>
         <div className="flex">

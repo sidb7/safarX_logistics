@@ -40,27 +40,27 @@ export const ProfileNotificationTab = () => {
   const updateHandler = async () => {
     const { data } = await POST(UPDATE_PROFILE_NOTIFICATION, {
       notificationUpdate: {
-        accountDetails: notificationData.accountDetails,
-        operationDetails: notificationData.operationDetails,
+        accountDetails: notificationData?.accountDetails,
+        operationDetails: notificationData?.operationDetails,
       },
     });
     if (data.success) {
       // toast.success(data.message);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_NOTIFICATION, {});
-      if (data.success) {
+      if (data?.success) {
         setNotificationData({
-          accountDetails: data.data[0].accountDetails,
-          operationDetails: data.data[0].operationDetails,
+          accountDetails: data?.data?.[0]?.accountDetails,
+          operationDetails: data?.data?.[0]?.operationDetails,
         });
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     })();
   }, []);

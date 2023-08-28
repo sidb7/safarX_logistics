@@ -7,13 +7,18 @@ import { ProfileReferEarn } from "./ReferEarn/referEarn";
 import { ProfileSetting } from "./Settings/setting";
 import { POST } from "../../utils/webService";
 import { GET_PROFILE_URL } from "../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 export const Profile = () => {
   const [profileData, setProfileData]: any = useState([]);
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
-      setProfileData(data.data[0]);
+      if (data?.success) {
+        setProfileData(data?.data?.[0]);
+      } else {
+        toast.error(data?.message);
+      }
     })();
   }, []);
   return (

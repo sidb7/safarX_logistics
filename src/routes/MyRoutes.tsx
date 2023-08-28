@@ -110,6 +110,7 @@ import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalog
 import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
+import { Profile } from "../screens/Profile";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -375,9 +376,17 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             {/* User Profile Routes */}
-            <Route path="/profile">
+            <Route>
               <Route
-                path="/profile-notification"
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/notification"
                 element={
                   <ProtectedRoute>
                     <ProfileNotificationTab />
@@ -385,7 +394,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profileEdit-bank"
+                path="/profile/edit-bank"
                 element={
                   <ProtectedRoute>
                     <EditProfileBank />
@@ -393,7 +402,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profileEdit-kyc"
+                path="/profile/edit-kyc"
                 element={
                   <ProtectedRoute>
                     <EditProfileKyc />
@@ -401,7 +410,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile-setting-edit-profile"
+                path="/profile/edit-profile"
                 element={
                   <ProtectedRoute>
                     <EditProfile />
@@ -409,7 +418,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile-setting"
+                path="/profile/settings"
                 element={
                   <ProtectedRoute>
                     <SettingTab />
@@ -417,7 +426,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile-refer-earn"
+                path="/profile/refer-earn"
                 element={
                   <ProtectedRoute>
                     <ReferTab />
@@ -425,7 +434,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile-setting-change-password"
+                path="/profile/change-password"
                 element={
                   <ProtectedRoute>
                     <ChangePassword />
@@ -437,7 +446,7 @@ const MyRoutes: React.FC = () => {
             {/* Catalogue Routes */}
             <Route>
               <Route
-                path="/catalogue"
+                path="/catalogues/catalogue"
                 element={
                   <ProtectedRoute>
                     <Catalogue />
@@ -445,7 +454,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/catalogue/add-combo"
+                path="/catalogues/catalogue/add-combo"
                 element={
                   <ProtectedRoute>
                     <AddComboScreen />
@@ -453,7 +462,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/catalogue/add-product"
+                path="/catalogues/catalogue/add-product"
                 element={
                   <ProtectedRoute>
                     <AddProductScreen />
@@ -461,7 +470,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/catalogue/edit-address"
+                path="/catalogues/catalogue/edit-address"
                 element={
                   <ProtectedRoute>
                     <EditAddress />
@@ -469,21 +478,20 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/catalogue/add-address"
+                path="/catalogues/catalogue/add-address"
                 element={
                   <ProtectedRoute>
                     <AddAddress />
                   </ProtectedRoute>
                 }
               />
-              <Route path="/catalogue/edit-address" element={<EditAddress />} />
-              <Route path="/catalogue/add-address" element={<AddAddress />} />
               <Route
-                path="/catalogue/add-product"
+                path="/catalogues/catalogue/add-product"
                 element={<CatalogueAddProduct />}
               />
             </Route>
 
+            {/* Wallet Routes */}
             <Route>
               <Route
                 path="wallet/transactions"

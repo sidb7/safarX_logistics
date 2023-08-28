@@ -32,7 +32,7 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             src={EditIcon}
             alt=""
             className="mr-4 cursor-pointer"
-            onClick={() => navigate("/profile/profileEdit-bank")}
+            onClick={() => navigate("/profile/edit-bank")}
           />
         </div>
       </div>

@@ -11,7 +11,7 @@ export const ProfileSetting = (props: IProfileData) => {
   return (
     <div
       className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 lg:mt-0`}
-      onClick={() => navigate("/profile/profile-setting", { state: { data } })}
+      onClick={() => navigate("/profile/settings", { state: { data } })}
     >
       <div className={`flex justify-between items-center h-[44px]`}>
         <div className="flex">
