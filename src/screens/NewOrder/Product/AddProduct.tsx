@@ -40,18 +40,18 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     currency: "INR",
     discountAmount: 10,
     sale_price: 539.99,
-    gst: 0,
-    stock: 0,
+    gst: "0",
+    stock: "0",
     dimensions: {
-      length: 0,
-      breadth: 0,
-      height: 0,
+      length: "0",
+      breadth: "0",
+      height: "0",
       unit: "cm",
     },
     weight: {
-      deadWeight: 0,
+      deadWeight: "0",
       deadWeightUnit: "kg",
-      volumetricWeight: 0,
+      volumetricWeight: "0",
       volumetricWeightUnit: "kg",
       catalogueWeight: {
         from: 1,
@@ -130,57 +130,15 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   };
 
   const AddProductInfoData = (index: number) => {
-    let obj = productInputState[index];
-    console.log("obj", obj);
-    let payload = { ...obj, productId: uuidv4() };
+    // let obj = productInputState[index];
+    // console.log("obj", obj);
+    // let payload = { ...obj, productId: uuidv4() };
 
-    console.log("payload", payload);
-    setProductPayload([...productPayload, payload]);
+    // console.log("payload", payload);
+    // setProductPayload([...productPayload, payload]);
     setProductInputState([...productInputState, initialUserData]);
     console.log("data check =====>", productPayload);
   };
-
-  // const payload = {
-  //   deliveryLocation: {
-  //     recipientType: deliveryLocation.recipientType,
-  //     flatNo: deliveryLocation.flatNo,
-  //     address: locateAddress,
-  //     sector: deliveryLocation.sector,
-  //     landmark: deliveryLocation.landmark,
-  //     pincode: deliveryLocation.pincode,
-  //     city: deliveryLocation.city,
-  //     state: deliveryLocation.state,
-  //     country: deliveryLocation.country,
-  //     gstNumber: deliveryLocation.gstNo,
-  //     addressType: deliveryLocation.addressType,
-  //     contact: {
-  //       name: contact.name,
-  //       mobileNo: contact.mobileNo,
-  //       alternateMobileNo: contact.alternateMobileNo,
-  //       emailId: contact.emailId,
-  //       type: contact.type,
-  //     },
-
-  //     deliveryDate: epochDeliveryDate,
-  //   },
-  //   orderType: deliveryLocation.orderType,
-  // };
-  // console.log("payload", payload);
-  // const postDeliveryOrderDetails = async (payload: any) => {
-  //   try {
-  //     const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
-
-  //     if (response?.success) {
-  //       toast.success(response?.message);
-  //       navigate("/orders/add-order/add-product");
-  //     } else {
-  //       console.error("DeliveryDataerror");
-  //       toast.error(response?.message);
-  //     }
-  //   } catch (error) {
-  //     console.log("Error in ADD_PICKUP_LOCATION_API", error);
-  //   }
-  // };
 
   const deleteProduct = (index: number) => {
     let tempArr = productInputState;
@@ -272,7 +230,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     } else {
       arr[index][name] = value;
     }
+    arr[index]["productId"] = uuidv4();
     setProductInputState([...arr]);
+    setProductPayload([...arr]);
   };
 
   const uploadedInputFile = async (e: any) => {
@@ -426,24 +386,24 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox
                         className=""
-                        label="Weight"
+                        label="Weight KG"
                         name="weight.deadWeight"
                         value={productInputState[index]?.weight?.deadWeight}
                         onChange={(e: any) =>
                           handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
+                            { name: e.target.name, value: e.target.value },
                             index
                           )
                         }
                       />
                       <InputBox
                         className=""
-                        label="Length"
+                        label="Length CM"
                         name="dimensions.length"
                         value={productInputState[index]?.dimensions.length}
                         onChange={(e: any) =>
                           handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
+                            { name: e.target.name, value: e.target.value },
                             index
                           )
                         }
@@ -452,23 +412,23 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox
                         className=""
-                        label="Breadth"
+                        label="Breadth CM"
                         name="dimensions.breadth"
                         value={productInputState[index].dimensions.breadth}
                         onChange={(e: any) =>
                           handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
+                            { name: e.target.name, value: e.target.value },
                             index
                           )
                         }
                       />
                       <InputBox
-                        label="Height"
+                        label="Height CM"
                         name="dimensions.height"
                         value={productInputState[index].dimensions.height}
                         onChange={(e: any) =>
                           handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
+                            { name: e.target.name, value: e.target.value },
                             index
                           )
                         }
