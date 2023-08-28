@@ -73,7 +73,7 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
+              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -112,7 +112,7 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
+              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -137,7 +137,7 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
+              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -179,7 +179,7 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
+              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
