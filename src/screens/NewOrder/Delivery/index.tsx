@@ -727,7 +727,7 @@ const Index = () => {
               Save your contact as
             </p>
           </div>
-          <div className="lg:col-span-3 mb-5 lg:mb-7">
+          <div className="lg:col-span-3 mb-[90px]">
             <div className="flex flex-nowrap  overflow-x-scroll space-x-4">
               <div
                 className={`flex flex-row justify-center whitespace-nowrap text-[16px] h-[35px] items-center gap-[8px]  border-[0.5px]   px-8 rounded bg-[#FEFEFE] cursor-pointer ${
@@ -772,7 +772,7 @@ const Index = () => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block mb-7 pb-24">
+          {/* <div className="hidden lg:block mb-7 pb-24">
             <CustomInputWithImage
               placeholder="Delivery Date"
               imgSrc={CalenderIcon}
@@ -780,7 +780,7 @@ const Index = () => {
               onClick={() => setIsDateRightModal(true)}
               onChange={(e) => setDeliveryDate(e.target.value)}
             />
-          </div>
+          </div> */}
         </div>
 
         <CommonBottomModal
