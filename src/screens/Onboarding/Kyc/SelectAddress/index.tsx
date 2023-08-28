@@ -86,15 +86,15 @@ const BusinessType = (props: ITypeProps) => {
     const payload = { data: defaultAddressSelect };
     const { data: responses } = await POST(MAGIC_ADDRESS, payload);
     if (responses?.success) {
-      console.log("responses", responses);
-      let combineAdd = `${responses?.data?.response?.message?.house_number} ${responses?.data?.response?.message?.floor} ${responses?.data?.response?.message?.building_name} ${responses?.data?.response?.message?.locality_name} ${responses?.data?.response?.message?.subcity_name}`;
+      let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
       const magicpayload = {
         companyInfo: {
           address: combineAdd,
-          pincode: responses?.data?.response?.message?.pincode,
-          city: responses?.data?.response?.message?.city_name,
-          state: responses?.data?.response?.message?.state_name,
+          pincode: responses?.data?.message?.pincode,
+          city: responses?.data?.message?.city_name,
+          state: responses?.data?.message?.state_name,
         },
+        isDefault: true,
       };
 
       const { data: response } = await POST(
@@ -123,7 +123,7 @@ const BusinessType = (props: ITypeProps) => {
       },
     });
     if (response?.success) {
-      // toast.success(response?.message);
+      toast.success(response?.message);
       //Navigate Url's go here
     } else {
       toast.error("Failed To Upload!");
