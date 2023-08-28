@@ -568,7 +568,7 @@ const Payment = () => {
             </div>
           </div>
           {/* Payment Gateway */}
-          <div className="lg:grid grid-cols-2">
+          <div className="lg:grid grid-cols-2 mb-[130px]">
             <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
               <div className="flex  gap-x-2 text-[14px]">
                 <img src={rechargeIcon} alt="" className="object-contain" />
