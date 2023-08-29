@@ -38,7 +38,7 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row items-center gap-x-2 mb-4 ">
           <img src={locationImage} alt="" />
-          <p className="text-[14px] font-medium font-Open lg:text-[18px]">
+          <p className="text-[14px] font-medium font-Open font-semibold lg:text-[18px]">
             {summaryTitle}
           </p>
         </div>

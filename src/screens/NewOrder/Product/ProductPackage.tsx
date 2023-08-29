@@ -6,6 +6,7 @@ import EditIcon from "../../../assets/Product/Edit.svg";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import Box from "./Box";
+import CodIcon from "../../../assets/codIcon.svg";
 import ProductBox from "./ProductBox";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import toggle from "../../../assets/toggle-off-circle.svg";
@@ -23,14 +24,20 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import CustomBreadcrumb from "../../../components/BreadCrumbs";
 import backArrow from "../../../assets/backArrow.svg";
 import { POST } from "../../../utils/webService";
-import { ADD_BOX_INFO, GET_LATEST_ORDER } from "../../../utils/ApiUrls";
+import {
+  ADD_BOX_INFO,
+  ADD_COD_INFO,
+  GET_LATEST_ORDER,
+} from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
+import Switch from "react-switch";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { UploadInput } from "../../../components/UploadInput";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
+import CustomInputBox from "../../../components/Input";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
@@ -45,12 +52,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [insurance, setInsurance] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
+  const [codData, setCodData] = useState<any>({});
+  const [toggleStatus, setToggleStatus] = useState(false);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
   console.log("productFinalPayload", productFinalPayload);
-  const [codData1, setCodData] = useState<any>({
-    isCOD: false,
-  });
+  // const [codData1, setCodData] = useState<any>({
+  //   isCOD: false,
+  // });
 
   // useEffect(() => {
   //   (async () => {
@@ -117,6 +126,24 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     },
   ];
 
+  const postCodDetails = async () => {
+    // console.log("postCodDetails", toggleStatus);
+
+    const payload = {
+      paymentType: toggleStatus ? "COD" : "PREPAID",
+      codCollectAmount: toggleStatus ? codData.codAmount : 0,
+      invoiceValue: codData.invoiceValue,
+    };
+
+    const { data } = await POST(ADD_COD_INFO, payload);
+
+    if (data?.success) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const res: any = await getOrderProductDetails();
@@ -160,6 +187,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         codAmount: codInfo?.codAmount,
         invoiceValue: codInfo?.invoiceValue,
       });
+      setToggleStatus(codInfo?.isCOD ? true : false);
     }
 
     if (boxData?.success) {
@@ -177,14 +205,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const addBoxInfo = async () => {
+    let res = postCodDetails();
+    if (!res) return;
     const { data } = await POST(ADD_BOX_INFO, productFinalPayload);
     if (data?.success) {
       toast.success(data?.message);
       navigate("/orders/add-order/service");
     } else {
       toast.error(data?.message);
-
-      // throw new Error(data?.message);
     }
   };
 
@@ -282,7 +310,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               <h1 className="font-bold text-lg leading-6">Box Type</h1>
             </div>
             <div className="flex gap-3">
-              {box.map((newpackage: any, index) => {
+              {box?.map((newpackage: any, index) => {
                 return (
                   <div
                     className="cursor-pointer"
@@ -314,6 +342,65 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               setProductFinalPayload={setPayloadForProduct}
             />
             <UploadInput />
+            <div className="">
+              <div className="w-full flex justify-between py-6">
+                <div>
+                  <div className="flex gap-x-2 items-center">
+                    <img src={CodIcon} alt="" />
+                    <p className="whitespace-nowrap text-2xl">Add COD</p>
+                  </div>
+                </div>
+                <button
+                  className={`${
+                    toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
+                  } flex justify-center items-center gap-x-2 rounded w-[140px] h-[30px] `}
+                >
+                  <Switch
+                    onChange={() => {
+                      postCodDetails();
+                      setToggleStatus(!toggleStatus);
+                    }}
+                    checked={toggleStatus}
+                    onColor="#FFFFF"
+                    onHandleColor="#7CCA62"
+                    offColor="#FFFFF"
+                    offHandleColor="#F35838"
+                    handleDiameter={4}
+                    uncheckedIcon={false}
+                    checkedIcon={false}
+                    height={18}
+                    width={24}
+                  />
+                  <p className="text-[#FFFFFF] flex justify-center font-semibold font-Open text-[14px]  ">
+                    {toggleStatus ? "ACTIVATE" : "DEACTIVATE"}
+                  </p>
+                </button>
+              </div>
+
+              <div className="py-4">
+                <div className="flex flex-col gap-y-4">
+                  <CustomInputBox
+                    label={"COD amount to collect from buyer"}
+                    isDisabled={!toggleStatus}
+                    value={codData?.codAmount}
+                    inputType="text"
+                    onChange={(e) => {
+                      setCodData({ ...codData, codAmount: e.target.value });
+                      console.log(codData);
+                    }}
+                  />
+                  <CustomInputBox
+                    inputType="text"
+                    label={"Total invoice value"}
+                    // isDisabled={toggleStatus}
+                    value={codData?.invoiceValue}
+                    onChange={(e) =>
+                      setCodData({ ...codData, invoiceValue: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
 
             <div className="mb-8">
               <AddButton
@@ -338,13 +425,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           onClose={() => setInsurance(false)}
           className="!w-[600px]"
         >
-          <AddInsuranceModal
+          {/* <AddInsuranceModal
             insurance={insurance}
             setInsurance={(codInfo: any) => {
               handleCallbackFromInsurance(codInfo);
             }}
             codData1={codData1}
-          />
+          /> */}
         </RightSideModal>
       </div>
 
