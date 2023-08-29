@@ -117,7 +117,14 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.service;
   console.log("serviceDetails", serviceDetails);
 
-  const productDetails = latestOrder?.data?.products;
+  latestOrder?.data?.products.forEach((product: any) => {
+    const productName = product.productName;
+    console.log("productName", productName);
+    const productWeight = product.weight.deadWeightUnit;
+    console.log("productWeight", productWeight);
+    const productDimension = product.dimensions.length;
+    console.log("productDimension", productDimension);
+  });
   // console.log("productDetails", productDetails?.dimension);
   return (
     <div>
@@ -182,7 +189,7 @@ const Summary = (props: Props) => {
               navigate("/orders/add-order/pickup");
             }}
           >
-            <img src={editIcon} alt="" />
+            <img src={editIcon} alt="" className="w-6 h-6" />
           </div>
         </div>
 
@@ -227,28 +234,42 @@ const Summary = (props: Props) => {
               navigate("/orders/add-order/add-product");
             }}
           >
-            <img src={editIcon} alt="" />
+            <img src={editIcon} alt="" className="w-10 h-10" />
           </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          <BoxDetails
-            productName={productDetails[0]?.productName}
-            productWeight={productDetails[0]?.weight?.deadWeight}
-            productDimension={productDetails[0]?.dimension}
-          />
+          {latestOrder?.data?.products.map((product: any) => (
+            <BoxDetails
+              key={product.productId}
+              productName={product.productName}
+              productWeight={product.weight?.deadWeight}
+              productWeightUnit={product.weight?.deadWeightUnit}
+              productDimensionLength={product.dimensions.length}
+              productDimensionBreadth={product.dimensions.breadth}
+              productDimensionHeight={product.dimensions.height}
+              productDimensionUnit={product.dimensions.unit}
+            />
+          ))}
 
           {/*Service */}
+          {latestOrder?.data?.products.map((product: any) => (
+            <SummaryService
+              companyServiceName={serviceDetails?.companyServiceName}
+              // companyServiceId={serviceDetails?.companyServiceId}
 
-          <SummaryService
-            companyServiceName={serviceDetails?.companyServiceName}
-            // companyServiceId={serviceDetails?.companyServiceId}
-            baseWeight={serviceDetails?.baseWeight}
-            price={serviceDetails?.price}
-            partnerServiceId={""}
-            partnerServiceName={serviceDetails?.partnerServiceName}
-            // dimension={productDetails?.dimension}
-          />
+              price={serviceDetails?.price}
+              partnerServiceId={""}
+              partnerServiceName={serviceDetails?.partnerServiceName}
+              baseWeight={product.weight?.deadWeight}
+              productWeightUnit={product.weight?.deadWeightUnit}
+              productDimensionLength={product.dimensions.length}
+              productDimensionBreadth={product.dimensions.breadth}
+              productDimensionHeight={product.dimensions.height}
+              productDimensionUnit={product.dimensions.unit}
+              // dimension={productDetails?.dimension}
+            />
+          ))}
         </div>
       </div>
       <BottomLayout
