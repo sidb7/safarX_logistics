@@ -212,15 +212,15 @@ const Payment = () => {
   };
 
   const placeOrderApi = async () => {
-    setIsLabelRightModal(true);
-    // const { data } = await POST(PLACE_ORDER, {});
+    const { data } = await POST(PLACE_ORDER, {});
 
-    // if (data?.success) {
-    //   // toast.success(data?.message);
-    //   navigate("/orders/add-order/level");
-    // } else {
-    //   toast.error(data?.message);
-    // }
+    if (data?.success) {
+      // toast.success(data?.message);
+      setIsLabelRightModal(true);
+      // navigate("/orders/add-order/level");
+    } else {
+      toast.error(data?.message);
+    }
   };
 
   const paynow = async () => {
