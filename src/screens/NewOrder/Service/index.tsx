@@ -19,6 +19,7 @@ import {
 import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "../../../components/Spinner";
 
 export const RecommendedServiceData = [
   {
@@ -142,6 +143,8 @@ const Index: React.FC = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [response, setResponse] = useState([]);
   const [latestOrder, setLatestOrder] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
+
   // const [payload, setPayload] = useState({
   //   mode: null,
   //   companyServiceId: null,
@@ -165,6 +168,7 @@ const Index: React.FC = () => {
   // endpoint to maintain order state
   const getLatestOrderDetails = async () => {
     try {
+      setLoading(true);
       const { data: response } = await POST(GET_LATEST_ORDER);
 
       if (response?.success) {
@@ -174,6 +178,7 @@ const Index: React.FC = () => {
         // const filter = response.filter((item: any) => !item?.isRecommendation);
 
         setLatestOrder(response);
+        setLoading(false);
         // setFilterData(filter);
       } else {
         setLatestOrder([]);
@@ -361,51 +366,37 @@ const Index: React.FC = () => {
           Service
         </p>
       </div>
-      <div className="flex flex-col lg:flex-row gap-y-[22px] px-5 mb-5 lg:gap-6 lg:mb-9">
-        {/* {RecommendedServiceData.map((each) => {
-          //console.log("eachhh", each);
-          return (
-            <ServiceCard
-              key={each.value}
-              isRecommendation={each.isRecommendation}
-              recommendation={each.recommendation}
-              courierPartner={each.courierPartner}
-              serviceType={each.serviceType}
-              weight={each.weight}
-              totalPrice={each.totalPrice}
-              savePrice={each.savePrice}
-              etaDate={each.etaDate}
-              name={each.name}
-              value={each.value}
-              onSelectService={handleServiceSelection}
-              serviceData={each}
-            />
-          );
-        })} */}
-        {/* key={each.companyServiceId + index} */}
 
-        {dataArray?.map((eachArray: any) => {
-          //console.log("eachArray", eachArray);
-          return eachArray.map((each: any, index: number) => (
-            <ServiceCard
-              key={each.companyServiceId}
-              isRecommendation={each.isRecommendation}
-              recommendation={each.recommendation}
-              courierPartner={each.partnerServiceName}
-              serviceType={each.companyServiceName}
-              minimumServiceWeight={each.minimumServiceWeight}
-              totalPrice={each.totalPayment}
-              savePrice={each.savePrice}
-              etaDate={each?.EDT}
-              name={"shipyaari"}
-              value={each?.companyServiceId}
-              onSelectService={handleServiceSelection}
-              // serviceId={each.serviceId}
-              serviceData={each}
-            />
-          ));
-        })}
-      </div>
+      {/* key={each.companyServiceId + index} */}
+
+      {loading ? (
+        <Spinner />
+      ) : (
+        <div className="flex flex-col lg:flex-row gap-y-[22px] px-5 mb-5 lg:gap-6 lg:mb-9">
+          {dataArray?.map((eachArray: any) => {
+            //console.log("eachArray", eachArray);
+
+            return eachArray.map((each: any, index: number) => (
+              <ServiceCard
+                key={each.companyServiceId}
+                isRecommendation={each.isRecommendation}
+                recommendation={each.recommendation}
+                courierPartner={each.partnerServiceName}
+                serviceType={each.companyServiceName}
+                minimumServiceWeight={each.minimumServiceWeight}
+                totalPrice={each.totalPayment}
+                savePrice={each.savePrice}
+                etaDate={each?.EDT}
+                name={"shipyaari"}
+                value={each?.companyServiceId}
+                onSelectService={handleServiceSelection}
+                // serviceId={each.serviceId}
+                serviceData={each}
+              />
+            ));
+          })}
+        </div>
+      )}
 
       {/* <div className="mx-5  mb-5 lg:mb-6">
         <FilterBy />
