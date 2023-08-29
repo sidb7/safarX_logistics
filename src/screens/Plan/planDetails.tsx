@@ -488,13 +488,13 @@ const PlanDetails = (props: ITypeProps) => {
 
   return (
     <>
-      <div className="mt-5 mr-4">
+      <div className="mr-4">
         <div className="mb-5">
           <Breadcum label="Plans" />
         </div>
         {/* Plan Upgradation */}
 
-        <div className="flex items-center   rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
+        <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
           <div className="flex items-center">
             <img
               src={PlanDetailsGif}
@@ -503,7 +503,7 @@ const PlanDetails = (props: ITypeProps) => {
               width={124}
               className="lg:mr-8"
             />
-            <div className="flex flex-col justify-center gap-y-2  h-[120px]  lg:min-w-[838px] lg:mr-5">
+            <div className="flex flex-col justify-center gap-y-2  h-[120px]  lg:w-[838px] lg:mr-5">
               <p className="font-Lato text-[#004EFF] font-semibold text-[22px] leading-7  ">
                 PLATINUM PLAN
               </p>
@@ -530,7 +530,7 @@ const PlanDetails = (props: ITypeProps) => {
         </div>
 
         {/* Info Cards */}
-        <div className="flex items-center gap-x-6  ml-[30px] mb-9 xl:justify-between ">
+        <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-9 xl:justify-between ">
           <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
           <InfoCards
             title="Total Shipments"

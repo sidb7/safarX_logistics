@@ -182,13 +182,13 @@ const Index = (props: ITypeProps) => {
 
   return (
     <>
-      <div className=" mt-5 mr-6">
+      <div className="mr-6">
         <div className="mb-6">
           <Breadcum label="Plans" />
         </div>
 
         {/* Plan Cards */}
-        <div className="flex items-end gap-x-6 ml-5 xl:justify-evenly  mb-[60px] ">
+        <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly  mb-[60px] ">
           <PlanCard
             planName="BRONZE"
             pricePerMonth="Free"
