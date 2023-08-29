@@ -10,7 +10,11 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { useEffect, useState } from "react";
-import { POST_SIGN_IN_URL, VALIDATE_USER_TOKEN } from "../../../utils/ApiUrls";
+import {
+  POST_SIGN_IN_URL,
+  POST_SIGN_IN_WITH_GOOGLE_URL,
+  VALIDATE_USER_TOKEN,
+} from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -48,8 +52,22 @@ const Index = () => {
     navigate("/onboarding/signup");
   };
 
-  const responseMessage = (response: any) => {
-    console.log("GoogleLogin Response Message :", response);
+  const signInWithGoogle = async (googleData: any) => {
+    const payload = {
+      clientId: googleData?.clientId,
+      credential: googleData?.credential,
+    };
+    const { data: response } = await POST(
+      POST_SIGN_IN_WITH_GOOGLE_URL,
+      payload
+    );
+    dispatch(signInUser(loginCredentials));
+    if (response?.success) {
+      setLocalStorage(tokenKey, response?.data[0]?.token);
+      navigate("/home/overview");
+    } else {
+      toast.error(response?.message);
+    }
   };
 
   useEffect(() => {
@@ -140,7 +158,7 @@ const Index = () => {
               </div>
               <div className="flex justify-center">
                 <GoogleLogin
-                  onSuccess={responseMessage}
+                  onSuccess={(googleData) => signInWithGoogle(googleData)}
                   onError={() => {
                     console.log("Google Login Failed");
                   }}
