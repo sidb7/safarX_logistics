@@ -22,6 +22,7 @@ import Switch from "react-switch";
 import { useAppSelector } from "../../../redux/hooks";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
+import { Spinner } from "../../../components/Spinner";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
 import SelectDateModalContent from "./selectDateModal";
 import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
@@ -80,7 +81,7 @@ const Index = () => {
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
   // const [pickupDate, setPickupDate] = useState("");
-
+  const [apiCallMade, setApiCallMade] = useState(false);
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
 
@@ -95,6 +96,8 @@ const Index = () => {
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [prevPastedData, setPrevPastedData] = useState("");
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -320,6 +323,7 @@ const Index = () => {
 
   const getVerifyAddress = async (verifyAddressPayload: any) => {
     try {
+      setLoading(true);
       console.log("payload", verifyAddressPayload);
 
       const { data: verifyAddressResponse } = await POST(
@@ -342,9 +346,19 @@ const Index = () => {
         country: parsedData.country_name || "India",
         addressType: pickupLocation.addressType || "warehouse",
       });
+      setLoading(false);
+      setApiCallMade(true);
     } catch (error) {
       console.log("Error in  VerifyAddress", error);
+      setLoading(false);
       return error;
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (!loading && pastedData && pastedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(pastedData); // Update the previous pastedData
     }
   };
 
@@ -483,12 +497,14 @@ const Index = () => {
                 placeholder="Paste Address for the Magic"
                 title=""
               />
-
-              <div
-                className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
-                onClick={() => getVerifyAddress(verifyAddressPayload)}
-              >
-                <img src={AiIcon} alt="Arrow" />
+              <div>
+                <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <img src={AiIcon} alt="Arrow" onClick={handleButtonClick} />
+                  )}
+                </div>
               </div>
             </div>
           </div>
