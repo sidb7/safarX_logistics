@@ -328,7 +328,9 @@ const Index = () => {
       console.log("parsedData", parsedData);
 
       setPickupLocation({
-        flatNo: parsedData.house_number || "",
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
         address: parsedData.full_address || "",
         sector: parsedData.locality_name || "",
         landmark: parsedData.building_name || "",
@@ -524,9 +526,10 @@ const Index = () => {
           <CustomInputBox
             label="Plot no., floor, building name"
             value={pickupLocation.flatNo}
-            onChange={(e) =>
-              handlePickupLocationChange("flatNo", e.target.value)
-            }
+            onChange={(e) => {
+              console.log("flatNOooo>>", e.target.value);
+              handlePickupLocationChange("flatNo", e.target.value);
+            }}
           />
         </div>
 
@@ -836,7 +839,7 @@ const Index = () => {
 
         {/* <div className="hidden lg:block mb-7"></div> */}
 
-        <div className="mb-7 lg:col-span-3 pb-32 ">
+        <div className="mb-7 lg:col-span-3 pb-16  ">
           <div className="flex flex-col  w-[372px] h-[134px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
