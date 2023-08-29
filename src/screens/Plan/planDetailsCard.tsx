@@ -27,10 +27,10 @@ const PlanDetailsCard = (props: ITypeProps) => {
         <div className="  ">
           {planDetails.map((eachPlan: any, index: any) => {
             return (
-              <div className="grid grid-cols-5 py-4  h-[70px]">
+              <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-5 py-4  lg:h-[70px]">
                 {/*Plan Name*/}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                     {"Plan Name"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
@@ -39,7 +39,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                 </div>
                 {/*Purchase Date */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                     {"Purchase Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
@@ -48,7 +48,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                 </div>
                 {/*Expiry Date */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                     {"Expiry Date"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
@@ -57,16 +57,16 @@ const PlanDetailsCard = (props: ITypeProps) => {
                 </div>
                 {/*Subscription Amount */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                     {"Subscription Amount"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                    {eachPlan?.price}
+                    {`₹${eachPlan?.price}`}
                   </span>
                 </div>
                 {/* Subscription Period */}
                 <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
-                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px]">
+                  <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                     {"Subscription Period"}
                   </span>
                   <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">

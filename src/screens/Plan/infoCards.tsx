@@ -11,7 +11,7 @@ const InfoCards = (props: ITypeProps) => {
   const { title, numerator, denominator, isShipments = false } = props;
 
   return (
-    <div className="w-[272px] h-[96px] rounded-lg border-[1px] border-[#A4A4A4] p-4 bg-[#E5EDFF]">
+    <div className="lg:w-[272px] h-[96px] rounded-lg border-[1px] border-[#A4A4A4] p-4 bg-[#E5EDFF]">
       <div className="flex flex-col">
         <p className="font-Open font-normal text-base leading-[22px] text-[#1C1C1C] mb-3 whitespace-nowrap">
           {title}
