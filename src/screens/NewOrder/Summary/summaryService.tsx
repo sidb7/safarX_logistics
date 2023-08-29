@@ -35,7 +35,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
         <div className="flex flex-row justify-between items-center mb-4">
           <div className="flex flex-row items-center gap-x-2">
             <img src={serviceIcon} alt="Location Icon" />
-            <p className="text-[14px] font-medium lg:text-[18px]">
+            <p className="text-[14px] font-medium font-Open font-semibold lg:text-[18px]">
               Service Details
             </p>
           </div>
@@ -49,17 +49,17 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
-          <p className="text-[12px] font-medium  text-[#004EFF]  lg:text-[16px] lg:font-semibold">
+          <p className=" pb-16 text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold">
             {companyServiceName}
           </p>
-          <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {partnerServiceName}
           </p>
 
-          <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {`\u20B9`} {price}
           </p>
-          <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {baseWeight} {productWeightUnit} | {productDimensionLength} x{" "}
             {productDimensionBreadth} x {productDimensionHeight}{" "}
             {productDimensionUnit}
