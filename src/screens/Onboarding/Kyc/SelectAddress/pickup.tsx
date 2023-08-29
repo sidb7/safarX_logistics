@@ -51,7 +51,7 @@ const PickUp = (props: ITypeProps) => {
     const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (responses?.success) {
       // toast.success(responses?.message);
-      navigate("/onboarding/walletrecharge");
+      navigate("/onboarding/wallet-recharge");
       //Navigate Url's go here
     } else {
       toast.error(responses?.message);
