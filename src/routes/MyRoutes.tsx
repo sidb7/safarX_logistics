@@ -143,7 +143,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/getStarted"
+              path="/onboarding/get-started"
               element={
                 <ProtectedRoute>
                   <GetStartedScreen />
@@ -208,7 +208,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/onboarding/kyc-otp-form"
+              path="/onboarding/kyc-form"
               element={
                 <ProtectedRoute>
                   <KycSendOtpFormScreen />
@@ -240,7 +240,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/kyc-terms/GSTComponent"
+              path="/onboarding/kyc-terms/gst-agreement"
               element={
                 <ProtectedRoute>
                   <GSTComponent />
@@ -248,7 +248,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/kyc-terms/ServiceComponent"
+              path="/onboarding/kyc-terms/service-agreement"
               element={
                 <ProtectedRoute>
                   <ServiceComponent />
@@ -257,7 +257,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/onboarding/kyc-modal"
+              path="/onboarding/kyc"
               element={
                 <ProtectedRoute>
                   <KycModalScreen />
@@ -281,7 +281,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/walletrecharge"
+              path="/onboarding/wallet-recharge"
               element={
                 <ProtectedRoute>
                   <OnBoundingWalletRecharge />
@@ -289,7 +289,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/rechargepayment"
+              path="/onboarding/recharge-payment"
               element={
                 <ProtectedRoute>
                   <RechargePayment />

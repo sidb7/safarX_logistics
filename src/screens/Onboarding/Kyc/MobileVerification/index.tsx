@@ -53,11 +53,11 @@ const Index = (props: ITypeProps) => {
           })
         );
         if (businessType === "sole_Proprietor") {
-          navigate("/onboarding/kyc-terms/GSTComponent");
+          navigate("/onboarding/kyc-terms/gst-agreement");
         } else if (businessType === "company") {
-          navigate("/onboarding/kyc-terms/ServiceComponent");
+          navigate("/onboarding/kyc-terms/service-agreement");
         } else if (businessType === "individual") {
-          navigate("/onboarding/kyc-terms/GSTComponent");
+          navigate("/onboarding/kyc-terms/gst-agreement");
         }
       } else {
         dispatch(
@@ -99,7 +99,7 @@ const Index = (props: ITypeProps) => {
           );
           if (response?.success) {
             verifyPAN(panCard);
-            navigate("/onboarding/kyc-terms/ServiceComponent");
+            navigate("/onboarding/kyc-terms/service-agreement");
             // toast.success(response?.message);
             //Navigate Url's go here
           } else {
