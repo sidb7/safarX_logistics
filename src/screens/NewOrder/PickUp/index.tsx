@@ -10,29 +10,23 @@ import CalenderIcon from "../../../assets/calendar.svg";
 import ContactIcon from "../../../assets/PickUp/Contact.svg";
 import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
-import EditIcon from "../../../assets/PickUp/Edit.svg";
-import CustomDropDown from "../../../components/DropDown";
 import AiIcon from "../../../assets/Buttons.svg";
-
-// import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
 import CustomDatePicker from "../../../components/Datepicker";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import Switch from "react-switch";
-import { useAppSelector } from "../../../redux/hooks";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
 import { Spinner } from "../../../components/Spinner";
-import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
 import SelectDateModalContent from "./selectDateModal";
 import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
-import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { ADD_PICKUP_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
+import editIcon from "../../../assets/serv/edit.svg";
 
 import {
   dummyPickupDropdownData,
@@ -80,14 +74,11 @@ const Index = () => {
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
-  // const [pickupDate, setPickupDate] = useState("");
-  const [apiCallMade, setApiCallMade] = useState(false);
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
-  const [footer, setFooter] = useState(true);
   const [customLandmark, setCustomLandmark] = useState("");
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -357,7 +348,7 @@ const Index = () => {
   const handleButtonClick = () => {
     if (!loading && pastedData && pastedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
-      setPrevPastedData(pastedData); // Update the previous pastedData
+      setPrevPastedData(pastedData);
     }
   };
 
@@ -842,9 +833,9 @@ const Index = () => {
           />
         </div>
 
-        <div className="hidden lg:block mb-7"></div>
+        {/* <div className="hidden lg:block mb-7"></div> */}
 
-        <div className="mb-7  flex justify-end ">
+        <div className="mb-7 lg:col-span-3 pb-32 ">
           <div className="flex flex-col  w-[372px] h-[134px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
@@ -857,7 +848,11 @@ const Index = () => {
                 Custom Branding
               </h1>
 
-              <div className="flex justify-end items-center gap-x-1 ">
+              <div
+                className={`flex ${
+                  toggleStatus ? "justify-start" : "justify-end"
+                } items-center gap-x-1`}
+              >
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
@@ -886,20 +881,14 @@ const Index = () => {
                     {toggleStatus ? "ACTIVE" : "DEACTIVE"}
                   </p>
                 </button>
-                {/* <p
-                  className={`${
-                    toggleStatus ? "text-[#7CCA62]" : "text-[#F35838]"
-                  } font-semibold text-[14px] `}
-                >
-                  {toggleStatus ? "ACTIVE" : "DEACTIVE"}
-                </p> */}
+                {toggleStatus && <img src={editIcon} alt="" className="ml-2" />}
               </div>
             </div>
             {toggleStatus && (
               <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-20">
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Brand Name and Logo
+                    Brand Name
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C] ">
                     User Detail
@@ -908,7 +897,7 @@ const Index = () => {
 
                 <div className="flex flex-col">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Contact Name
+                    Brand Address
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
@@ -917,7 +906,7 @@ const Index = () => {
 
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8]">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Brand Address
+                    Brand Logo
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
@@ -926,7 +915,7 @@ const Index = () => {
 
                 <div className="flex flex-col">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Contact Number
+                    Brand Contact
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
