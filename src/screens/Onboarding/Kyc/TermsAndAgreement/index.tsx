@@ -34,7 +34,7 @@ export const ServiceComponent = (props: ITypeProps) => {
       };
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
-        navigate("/onboarding/kyc-modal");
+        navigate("/onboarding/kyc");
       }
     } catch (error) {
       return error;

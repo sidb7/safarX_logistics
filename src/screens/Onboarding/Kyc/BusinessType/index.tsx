@@ -34,7 +34,7 @@ const BusinessType = (props: ITypeProps) => {
       if (response?.success) {
         // toast.success(response.message);
         // navigate("/onboarding/kyc-photo"); // temparory hide
-        navigate("/onboarding/kyc-otp-form");
+        navigate("/onboarding/kyc-form");
         // toast.success(response.message);
         //Navigate Url' go here
       } else {
@@ -96,7 +96,7 @@ const BusinessType = (props: ITypeProps) => {
           <ServiceButton
             text="SKIP FOR NOW"
             className="!text-[#004EFF] !font-Open  underline !border-none"
-            onClick={() => navigate("/onboarding/walletrecharge")}
+            onClick={() => navigate("/onboarding/wallet-recharge")}
           />
         </div>
       </div>
