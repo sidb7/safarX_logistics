@@ -244,6 +244,7 @@ const Index = () => {
   };
 
   useEffect(() => {
+    console.log("Orers", orders);
     handleTabChanges();
   }, []);
 
@@ -284,6 +285,8 @@ const Index = () => {
 
     setOrders(orderList ?? []);
   };
+
+  console.log("Orders", orders);
 
   return (
     <div>
