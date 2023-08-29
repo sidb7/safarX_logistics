@@ -6,6 +6,7 @@ interface UserState {
   name: string | null;
   email: string | null;
   loggedIn: boolean;
+  isReturningUser: boolean;
 }
 
 // Define the initial state using that type
@@ -14,6 +15,7 @@ const initialState: UserState = {
   name: null,
   email: null,
   loggedIn: false,
+  isReturningUser: true,
 };
 
 export const userSlice = createSlice({
@@ -41,4 +43,3 @@ export const userSlice = createSlice({
 
 export const { login, logout } = userSlice.actions;
 export default userSlice.reducer;
-

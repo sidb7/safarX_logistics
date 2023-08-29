@@ -181,7 +181,7 @@ const Payment = () => {
         <div className="flex justify-center items-center mt-10">
           <ServiceButton
             text="GO TO ORDER"
-            onClick={() => navigate("/order")}
+            onClick={() => navigate("/orders/view-orders")}
             className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
           />
         </div>
@@ -212,13 +212,15 @@ const Payment = () => {
   };
 
   const placeOrderApi = async () => {
-    const { data } = await POST(PLACE_ORDER, {});
+    setIsLabelRightModal(true);
+    // const { data } = await POST(PLACE_ORDER, {});
 
-    if (data?.success) {
-      toast.success(data?.message);
-    } else {
-      toast.error(data?.message);
-    }
+    // if (data?.success) {
+    //   // toast.success(data?.message);
+    //   navigate("/orders/add-order/level");
+    // } else {
+    //   toast.error(data?.message);
+    // }
   };
 
   const paynow = async () => {
@@ -642,7 +644,6 @@ const Payment = () => {
             BACK
           </button>
           <button
-            // onClick={() => setIsLabelRightModal(true)}
             onClick={() => placeOrderApi()}
             className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
           >
