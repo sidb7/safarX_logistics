@@ -9,7 +9,11 @@ interface ISummaryData {
   price?: any;
   partnerServiceId?: any;
   partnerServiceName?: string;
-  dimension?: any;
+  productWeightUnit?: any;
+  productDimensionLength?: any;
+  productDimensionBreadth?: any;
+  productDimensionHeight?: any;
+  productDimensionUnit?: any;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -18,7 +22,11 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   price = "",
   partnerServiceId = "",
   partnerServiceName = "",
-  dimension = "",
+  productWeightUnit = "",
+  productDimensionLength = "",
+  productDimensionBreadth = "",
+  productDimensionHeight = "",
+  productDimensionUnit = "",
 }) => {
   const navigate = useNavigate();
   return (
@@ -34,7 +42,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/neworder/service");
+              navigate("/orders/add-order/pickup");
             }}
           >
             <img src={editIcon} alt="Edit Icon" />
@@ -49,10 +57,12 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </p>
 
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
-            {price}
+            {`\u20B9`} {price}
           </p>
           <p className="text-[12px] font-medium lg:text-[16px] lg:font-semibold">
-            {baseWeight} | Dimension
+            {baseWeight} {productWeightUnit} | {productDimensionLength} x{" "}
+            {productDimensionBreadth} x {productDimensionHeight}{" "}
+            {productDimensionUnit}
           </p>
         </div>
       </div>

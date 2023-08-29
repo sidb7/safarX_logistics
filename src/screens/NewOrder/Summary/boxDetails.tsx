@@ -3,15 +3,25 @@ import editIcon from "../../../assets/serv/edit.svg";
 import { useNavigate } from "react-router-dom";
 
 interface ISummaryData {
+  key?: any;
   productName?: any;
   productWeight?: any;
-  productDimension?: any;
+  productWeightUnit?: any;
+  productDimensionLength?: any;
+  productDimensionBreadth?: any;
+  productDimensionHeight?: any;
+  productDimensionUnit?: any;
 }
 
 const BoxDetails = ({
+  key = "",
   productName = "",
   productWeight = "",
-  productDimension = "",
+  productWeightUnit = "",
+  productDimensionLength = "",
+  productDimensionBreadth = "",
+  productDimensionHeight = "",
+  productDimensionUnit = "",
 }) => {
   const navigate = useNavigate();
 
@@ -41,12 +51,13 @@ const BoxDetails = ({
           <p className="text-[12px] font-medium ml-[25px] font-Open text-[#004EFF] lg:text-[16px] lg:font-semibold ">
             Combo Product 3
           </p>
-          <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium  ml-[25px] lg:text-[16px] lg:font-semibold">
             {productName}
           </p>
-          <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
-            {productWeight} Kg| Box Dimension
-            {/* {productWeight} Kg | {productDimension?.length} {productDimension?.breadth} {productDimension?.height} */}
+          <p className="text-[12px] font-medium  ml-[25px] lg:text-[16px] lg:font-semibold">
+            {productWeight} {productWeightUnit} | {productDimensionLength} x{" "}
+            {productDimensionBreadth} x {productDimensionHeight}{" "}
+            {productDimensionUnit}
           </p>
         </div>
       </div>
