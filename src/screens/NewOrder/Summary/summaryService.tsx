@@ -49,7 +49,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
-          <p className=" pb-16 text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold">
+          <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold">
             {companyServiceName}
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
