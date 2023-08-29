@@ -347,7 +347,6 @@ const Index = () => {
         addressType: pickupLocation.addressType || "warehouse",
       });
       setLoading(false);
-      setApiCallMade(true);
     } catch (error) {
       console.log("Error in  VerifyAddress", error);
       setLoading(false);
