@@ -27,6 +27,7 @@ import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { ADD_PICKUP_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
 import editIcon from "../../../assets/serv/edit.svg";
+import AccordionUp from "../../../assets/AccordionUp.svg";
 
 import {
   dummyPickupDropdownData,
@@ -882,6 +883,9 @@ const Index = () => {
                   </p>
                 </button>
                 {toggleStatus && <img src={editIcon} alt="" className="ml-2" />}
+                {toggleStatus && (
+                  <img src={AccordionUp} alt="" className="ml-2" />
+                )}
               </div>
             </div>
             {toggleStatus && (
