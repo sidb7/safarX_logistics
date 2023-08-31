@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
 import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 interface ITypeProps {}
 
@@ -34,7 +35,10 @@ export const ServiceComponent = (props: ITypeProps) => {
       };
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
+        toast.success(response?.message);
         navigate("/onboarding/kyc");
+      } else {
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;

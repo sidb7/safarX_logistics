@@ -45,13 +45,14 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
-        // toast.success(response?.message);
+        toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         navigate("/onboarding/kyc-mobile-verify", {
           state: { path: "aadhar-form" },
         });
         //Navigate Urls go here
       } else {
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;

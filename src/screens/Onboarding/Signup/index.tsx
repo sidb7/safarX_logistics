@@ -60,8 +60,8 @@ const Index = () => {
         POST_SIGN_UP_WITH_GOOGLE_URL,
         payload
       );
-      dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        dispatch(signUpUser(response.data[0]));
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
@@ -77,7 +77,7 @@ const Index = () => {
 
   const signUp = () => {
     return (
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full pb-6 overflow-y-auto hide-scrollbar">
         {isLgScreen && modalTitle()}
         <div className="lg:mx-24 lg:mt-[84px]">
           <div className="flex flex-col xl:gap-y-9 lg:gap-y-4">
@@ -101,6 +101,7 @@ const Index = () => {
               <div className="flex gap-x-5">
                 <CustomInputBox
                   containerStyle=""
+                  // placeholder=""
                   label="First Name"
                   onChange={(e) => {
                     setsellerData({
@@ -112,6 +113,7 @@ const Index = () => {
                 <CustomInputBox
                   containerStyle=""
                   label="Last Name"
+                  // placeholder=""
                   onChange={(e) => {
                     setsellerData({
                       ...sellerData,
@@ -122,6 +124,7 @@ const Index = () => {
               </div>
               <CustomInputBox
                 label="Email"
+                // placeholder=""
                 onChange={(e) => {
                   setsellerData({
                     ...sellerData,
@@ -145,6 +148,7 @@ const Index = () => {
               />
               <CustomInputBox
                 label="Referal Code"
+                // placeholder=""
                 onChange={(e) => {
                   setsellerData({
                     ...sellerData,
@@ -176,7 +180,7 @@ const Index = () => {
                 <button
                   type="button"
                   onClick={logInOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open"
+                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
                 >
                   Log In
                 </button>

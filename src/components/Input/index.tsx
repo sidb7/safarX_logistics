@@ -18,6 +18,7 @@ interface propTypes {
   rightIcon?: string;
   setVisibility?: any;
   visibility?: any;
+  onClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomInputBox = (props: propTypes) => {

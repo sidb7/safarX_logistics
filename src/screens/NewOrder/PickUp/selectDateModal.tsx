@@ -4,7 +4,7 @@ import CancelIcon from "../../../assets/common/cancel.svg";
 import DynamicButtonScrollComponentForDay from "../../../components/DynamicButtonScrollForDay";
 import DynamicButtonScrollComponentForTime from "../../../components/DynamicButtonScrollForTime";
 
-import { dummyDayData, dummyTimeData } from "../../../utils/dummyData";
+import { dummyDayData } from "../../../utils/dummyData";
 import Button from "../../../components/Button";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import CustomDatePicker from "../../../components/Datepicker";
@@ -13,6 +13,23 @@ interface ITypeProps {
   onClick?: any;
   onPickupTimeSelected: (pickupTime: string) => void;
 }
+
+export const dummyTimeData = [
+  {
+    label: "11:00 AM - 14:00 PM",
+    value: "11:00 AM - 14:00 PM",
+  },
+  {
+    label: "14:00 PM - 17:00 PM",
+    value: "14:00 PM - 17:00 PM",
+  },
+  {
+    label: "17:00 PM - 20:00 PM",
+    value: "17:00 PM - 20:00 PM",
+  },
+];
+
+const currentTime = new Date();
 
 const SelectDateModalContent = (props: ITypeProps) => {
   const { onClick, onPickupTimeSelected } = props;
@@ -45,8 +62,6 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const handleScheduleDateTimeChange = (selectedDate: Date) => {
     setSelectedScheduleDateTime(selectedDate);
   };
-
-  console.log("selectedScheduleDateTime", selectedScheduleDateTime);
 
   const formatDate = (date: Date) => {
     const day = String(date.getDate()).padStart(2, "0");
@@ -93,11 +108,34 @@ const SelectDateModalContent = (props: ITypeProps) => {
     }
   })();
 
-  console.log("selectedPickupTime", selectedPickupTime);
-
   if (selectedTime || selectedScheduleDateTime) {
     onPickupTimeSelected(selectedPickupTime);
   }
+
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+
+  const filteredTimeData = dummyTimeData.filter((timeSlot) => {
+    const [startTime, endTime] = timeSlot.label.split(" - ");
+
+    const [startHour, startMinute] = startTime
+      .split(":")
+      .map((value) => parseInt(value));
+    const [endHour, endMinute] = endTime
+      .split(":")
+      .map((value) => parseInt(value));
+
+    if (currentHour > startHour && currentHour < endHour) {
+      return true; // If the current hour is between startHour and endHour
+    } else if (currentHour === startHour && currentMinute >= startMinute) {
+      return true;
+    } else if (currentHour === endHour && currentMinute <= endMinute) {
+      return true;
+    }
+
+    return false;
+  });
 
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
@@ -135,7 +173,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
         <div className="flex flex-col lg:px-5">
           <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
           <DynamicButtonScrollComponentForTime
-            items={dummyTimeData}
+            items={filteredTimeData}
             selectedTime={selectedTime}
             selectedDay={selectedDay}
             onClick={handleTimeSlotClick}

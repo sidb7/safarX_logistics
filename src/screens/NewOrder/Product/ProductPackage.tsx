@@ -38,9 +38,48 @@ import { UploadInput } from "../../../components/UploadInput";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
+import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
+const steps = [
+  {
+    label: "Pickup",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Delivery",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Product",
+    isCompleted: false,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Service",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Summary",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Payment",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+];
 
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const navigate = useNavigate();
@@ -56,82 +95,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [toggleStatus, setToggleStatus] = useState(false);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
+  const [paymentMode, setPaymentMode] = useState<any>("cod");
+  console.log("paymentMode", paymentMode);
   console.log("productFinalPayload", productFinalPayload);
-  // const [codData1, setCodData] = useState<any>({
-  //   isCOD: false,
-  // });
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const { data } = await POST(GET_LATEST_ORDER);
-  //     const payload = {
-  //       status: true,
-  //       collectableAmount: 120,
-  //       totalAmount: 220,
-  //     };
-  //     const { data: insruanceInfo } = await POST(
-  //       GET_PACKAGE_INSURANCE,
-  //       payload
-  //     );
-
-  //     if (data?.success) {
-  //       if (data?.data?.codInfo) {
-  //
-  //         setCodData({
-  //           ...codData1,
-  //           codAmount: data?.data?.codAmount,
-  //           invoiceValue: data?.data?.invoiceValue,
-  //         });
-  //       }
-  //     }
-  //   })();
-  // }, []);
-
-  const steps = [
-    {
-      label: "Pickup",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Delivery",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Product",
-      isCompleted: false,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Service",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Summary",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Payment",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-  ];
 
   const postCodDetails = async () => {
-    // console.log("postCodDetails", toggleStatus);
-
     const payload = {
-      paymentType: toggleStatus ? "COD" : "PREPAID",
-      codCollectAmount: toggleStatus ? codData.codAmount : 0,
+      paymentType: paymentMode === "cod" ? "COD" : "PREPAID",
+      codCollectAmount: paymentMode === "cod" ? +codData.codAmount : 0,
       invoiceValue: codData.invoiceValue,
     };
 
@@ -158,6 +129,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const setPayloadForProduct = (productsInfo: any) => {
+    setCodData({ ...codData, invoiceValue: getInvoiceValue(productsInfo) });
     const payload = {
       ...productFinalPayload,
       boxInfo: [
@@ -178,20 +150,26 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const codInfo = data?.data?.codInfo;
 
       setProducts(data?.data?.products);
+      console.log("setProducts", data?.data?.products);
+
       setProductFinalPayload({
         ...productFinalPayload,
         tempOrderId: data.data.tempOrderId,
       });
+
       setCodData({
         isCOD: codInfo?.isCOD ? true : false,
         codAmount: codInfo?.codAmount,
-        invoiceValue: codInfo?.invoiceValue,
+        invoiceValue: getInvoiceValue(data?.data?.products),
       });
+
+      console.log("invoiceValue");
       setToggleStatus(codInfo?.isCOD ? true : false);
     }
 
     if (boxData?.success) {
       setBox(boxData?.data);
+      setSelectedBox(boxData?.data[0]);
     }
   };
 
@@ -214,6 +192,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     } else {
       toast.error(data?.message);
     }
+  };
+
+  const getInvoiceValue = (arr: any = []) => {
+    return (
+      arr.reduce((accumulator: any, product: any) => {
+        const totalProductPrice = product.price * product.stock;
+        return accumulator + totalProductPrice;
+      }, 0) || 0
+    );
   };
 
   return (
@@ -239,29 +226,27 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-4">
-            <div className="">
-              <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
-                Package 1
-              </h2>
+          <div className="flex justify-between py-4 lg:justify-start lg:gap-x-4">
+            <div className="text-[#004EFF] text-lg font-semibold font-Lato ">
+              Package 1
             </div>
             <div className="flex items-center">
-              <img
+              {/* <img
                 src={EditIcon}
                 alt="Edit Product"
                 className="cursor-pointer mr-2"
-              />
+              /> */}
               <img
                 src={BookmarkIcon}
                 alt="Bookmark Product"
                 className="mr-2 cursor-pointer"
                 onClick={() => setCombo(true)}
               />
-              <img
+              {/* <img
                 src={isLgScreen ? DeleteIconForLg : DeleteIcon}
                 alt="Delete Product"
                 className="mr-2 w-4 h-4"
-              />
+              /> */}
             </div>
           </div>
 
@@ -271,7 +256,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 return (
                   <ProductBox
                     image={SampleProduct}
-                    weight={e?.weight?.deadWeight || 0}
+                    weight={`${e?.weight?.deadWeight} Kg`}
                     productName={e?.productName || 0}
                     breadth={e?.dimensions?.breadth || 0}
                     length={e?.dimensions?.length || 0}
@@ -290,6 +275,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               }}
               showIcon={true}
               icon={ButtonIcon}
+              className="rounded"
               alt="Add Product"
             />
           </div>
@@ -305,12 +291,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
           <div className="mt-7">
-            <div className="flex pb-5 pr-5 gap-2">
+            <div className="flex py-5 gap-2">
               <img src={ProductIcon} alt="Package Icon" className="" />
-              <h1 className="font-bold text-lg leading-6">Box Type</h1>
+              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                Box Type
+              </h1>
             </div>
             <div className="flex gap-3">
               {box?.map((newpackage: any, index) => {
+                console.log("newpackage", newpackage);
                 return (
                   <div
                     className="cursor-pointer"
@@ -319,7 +308,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     }}
                   >
                     <PackageBox
-                      packageType={newpackage?.productName}
+                      packageType={newpackage?.name}
                       weight={newpackage?.weight}
                       height={newpackage.height}
                       breadth={newpackage.breadth}
@@ -341,58 +330,55 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               selectedBox={selectedBox}
               setProductFinalPayload={setPayloadForProduct}
             />
-            <UploadInput />
+            {/* <UploadInput /> */}
             <div className="">
-              <div className="w-full flex justify-between py-6">
+              <div className="w-full flex justify-between pt-6 ">
                 <div>
                   <div className="flex gap-x-2 items-center">
                     <img src={CodIcon} alt="" />
-                    <p className="whitespace-nowrap text-2xl">Add COD</p>
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Payment Mode
+                    </h1>
                   </div>
                 </div>
-                <button
-                  className={`${
-                    toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-center items-center gap-x-2 rounded w-[140px] h-[30px] `}
-                >
-                  <Switch
-                    onChange={() => {
-                      postCodDetails();
-                      setToggleStatus(!toggleStatus);
-                    }}
-                    checked={toggleStatus}
-                    onColor="#FFFFF"
-                    onHandleColor="#7CCA62"
-                    offColor="#FFFFF"
-                    offHandleColor="#F35838"
-                    handleDiameter={4}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    height={18}
-                    width={24}
-                  />
-                  <p className="text-[#FFFFFF] flex justify-center font-semibold font-Open text-[14px]  ">
-                    {toggleStatus ? "ACTIVATE" : "DEACTIVATE"}
-                  </p>
-                </button>
               </div>
 
-              <div className="py-4">
-                <div className="flex flex-col gap-y-4">
-                  <CustomInputBox
-                    label={"COD amount to collect from buyer"}
-                    isDisabled={!toggleStatus}
-                    value={codData?.codAmount}
-                    inputType="text"
-                    onChange={(e) => {
-                      setCodData({ ...codData, codAmount: e.target.value });
-                      console.log(codData);
-                    }}
+              <div className="">
+                <div className="flex py-5 ">
+                  <GroupRadioButtons
+                    options={[
+                      { text: "Prepaid", value: "prepaid" },
+                      { text: "COD", value: "cod" },
+                    ]}
+                    value={paymentMode}
+                    selectedValue={setPaymentMode}
                   />
+                </div>
+
+                <div className="flex w-fit gap-x-8 py-2 pb-8">
+                  {paymentMode === "cod" && (
+                    <CustomInputBox
+                      label={"COD Amount to Collect From Buyer"}
+                      value={codData?.codAmount}
+                      inputType="text"
+                      className="!w-60"
+                      onChange={(e) => {
+                        setCodData({
+                          ...codData,
+                          codAmount:
+                            e.target.value > codData.invoiceValue
+                              ? codData.invoiceValue
+                              : e.target.value,
+                        });
+                        console.log(codData);
+                      }}
+                    />
+                  )}
                   <CustomInputBox
                     inputType="text"
                     label={"Total invoice value"}
-                    // isDisabled={toggleStatus}
+                    isDisabled={true}
+                    className="!w-56 text-base font-bold"
                     value={codData?.invoiceValue}
                     onChange={(e) =>
                       setCodData({ ...codData, invoiceValue: e.target.value })
@@ -436,7 +422,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
 
       <div>
-        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
+        {/* <BottomLayout backButtonText="BACK" nextButtonText="NEXT" /> */}
         <BottomLayout callApi={() => addBoxInfo()} />
       </div>
     </div>

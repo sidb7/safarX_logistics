@@ -105,27 +105,17 @@ const Summary = (props: Props) => {
     getLatestOrderDetails();
   }, []);
 
-  console.log("latest order details", latestOrder);
-
   const pickupLocationDetails = latestOrder?.data?.pickupLocation;
 
-  console.log("pickupLocationDetails", pickupLocationDetails);
-
   const deliveryLocationDetails = latestOrder?.data?.deliveryLocation;
-  console.log("deliveryLocationDetails", deliveryLocationDetails);
 
   const serviceDetails = latestOrder?.data?.service;
-  console.log("serviceDetails", serviceDetails);
 
-  latestOrder?.data?.products.forEach((product: any) => {
-    const productName = product.productName;
-    console.log("productName", productName);
-    const productWeight = product.weight.deadWeightUnit;
-    console.log("productWeight", productWeight);
-    const productDimension = product.dimensions.length;
-    console.log("productDimension", productDimension);
-  });
-  // console.log("productDetails", productDetails?.dimension);
+  // latestOrder?.data?.products.forEach((product: any) => {
+  //   const productName = product.productName;
+  //   const productWeight = product.weight.deadWeightUnit;
+  //   const productDimension = product.dimensions.length;
+  // });
   return (
     <div>
       <Breadcum label="Add New Order" />

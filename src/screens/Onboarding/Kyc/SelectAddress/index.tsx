@@ -35,7 +35,6 @@ const BusinessType = (props: ITypeProps) => {
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
-      // console.log("response", response);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
@@ -71,8 +70,9 @@ const BusinessType = (props: ITypeProps) => {
         payload
       );
       if (responses?.success) {
+        toast.success(responses?.message);
+
         navigate("/onboarding/wallet-recharge");
-        // toast.success(responses?.message);
         //Navigate Url's go here
       } else {
         toast.error(responses?.message);
@@ -103,7 +103,7 @@ const BusinessType = (props: ITypeProps) => {
         magicpayload
       );
       if (response?.success) {
-        // toast.success(response?.message);
+        toast.success(response?.message);
         navigate("/onboarding/select-address-billing");
       } else {
         toast.error(responses?.message);
@@ -127,7 +127,7 @@ const BusinessType = (props: ITypeProps) => {
       toast.success(response?.message);
       //Navigate Url's go here
     } else {
-      toast.error("Failed To Upload!");
+      toast.error(response?.message);
     }
   };
 

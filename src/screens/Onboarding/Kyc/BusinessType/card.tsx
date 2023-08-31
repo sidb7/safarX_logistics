@@ -1,4 +1,4 @@
-import CustomRadioButton from "../../../../components/RadioButton";
+import CustomRadioButton from "../../../../components/RadioButton/Index";
 import { useDispatch } from "react-redux";
 import { setBusinessType } from "../../../../redux/reducers/onboarding";
 

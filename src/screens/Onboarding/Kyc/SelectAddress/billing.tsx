@@ -50,7 +50,7 @@ const Billing = (props: ITypeProps) => {
     const payload = { addressId: defaultAddressSelect, isBilling: true };
     const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (responses?.success) {
-      // toast.success(responses?.message);
+      toast.success(responses?.message);
       navigate("/onboarding/select-address-pickup");
       //Navigate Url's go here
     } else {

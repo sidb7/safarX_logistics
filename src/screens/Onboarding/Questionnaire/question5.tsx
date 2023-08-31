@@ -62,7 +62,7 @@ export const QuestionComponent5: React.FunctionComponent = () => {
         toast.error(response?.message);
       }
     } catch (error) {
-      toast.error("Failed to submit question bank!!!");
+      toast.error("Failed to submit the question bank!");
       return error;
     }
   }
@@ -91,6 +91,8 @@ export const QuestionComponent5: React.FunctionComponent = () => {
                 {questionsData[4]?.options.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      disabled={true}
+                      checked={true}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}
