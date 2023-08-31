@@ -19,7 +19,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const [mobileNumber, setMobileNumber] = useState({
-    mobileNo: "",
+    mobileNo: 0,
   });
 
   const signUpUser = useSelector((state: any) => state.signup);
@@ -87,13 +87,14 @@ const Index = () => {
               </div>
 
               <CustomInputBox
-                inputMode={"number"}
-                inputType="text"
+                value={mobileNumber?.mobileNo || ""}
+                inputMode="numeric"
                 label="Enter Your Mobile Number"
+                maxLength={10}
                 onChange={(e) => {
                   setMobileNumber({
                     ...mobileNumber,
-                    mobileNo: e.target.value,
+                    mobileNo: +e.target.value,
                   });
                 }}
               />
