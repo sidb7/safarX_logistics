@@ -1,8 +1,25 @@
 import { useState, useEffect } from "react";
 import { CheckoutProvider, Checkout } from "paytm-blink-checkout-react";
 import { POST } from "../utils/webService";
+import { INITIAL_RECHARGE, RECHARGE_STATUS } from "../utils/ApiUrls";
+import { toast } from "react-toastify";
 
-function Paytm({ text }) {
+function Paytm({ text, amt }) {
+  console.log('text :',text)
+
+  const rechargeStatus=async(paytmStatus)=>{
+    const { data } = await POST(
+        RECHARGE_STATUS,
+        {
+          orderId : paytmStatus?.ORDERID,
+          paymentGateway: "PAYTM"
+        }
+      );
+      if (data?.success) {
+        // setShowCheckout(false);
+        toast.success('Successfully Done');
+        }
+  }
   const CONFIG = {
     root: "",
     style: {
@@ -47,11 +64,18 @@ function Paytm({ text }) {
     merchant: {
       mid: "Shipya54880889423475",
       name: "AVN BUSINESS SOLUTIONS",
-      redirect: true,
+      redirect: false,
     },
     handler: {
       transactionStatus: function transactionStatus(paymentStatus) {
         console.log("Transaction Status", paymentStatus);
+        if(paymentStatus?.STATUS==="TXN_SUCCESS"){
+          rechargeStatus(paymentStatus)
+          setMConfig(null)
+          // setShowCheckout(false);
+          document.getElementById('paytm-checkoutjs').style.display = "none"
+        }
+
       },
       notifyMerchant: function notifyMerchant(eventName, data) {
         console.log("Event : ", eventName, data);
@@ -61,6 +85,30 @@ function Paytm({ text }) {
   const [mConfig, setMConfig] = useState(CONFIG);
   const [showCheckout, setShowCheckout] = useState(false);
   const [checkoutJsInstance, setCheckoutJsInstance] = useState(null);
+
+  const initialPaytm =async()=>{
+    const { data } = await POST(
+        INITIAL_RECHARGE,
+        {
+          paymentObject: {
+            amount: String(amt),
+            callbackUrl: "/orders/add-order/payment",
+          },
+          paymentGateway: 'PAYTM'
+        }
+      );
+      if (data?.success) {
+        setMConfig({
+          ...mConfig,
+          data: {
+            ...mConfig.data,
+            token: data?.data?.txnToken,
+            orderId: data?.data?.orderId,
+            amount: data?.data?.amount,
+          },
+        });
+      }
+  }
 
   const loadCheckoutScript = () => {
     const url = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
@@ -76,6 +124,7 @@ function Paytm({ text }) {
         checkoutJsInstance.onLoad(() => {
           setCheckoutJsInstance(checkoutJsInstance);
           setShowCheckout(true);
+          initialPaytm()
         });
       } else {
         console.error("onload not available!");
@@ -96,36 +145,37 @@ function Paytm({ text }) {
 
     return null;
   };
-  useEffect(() => {
-    (async () => {
-      const { data } = await POST(
-        "http://localhost:8003/api/v1/paytm/firstStep",
-        {
-          paymentObject: {
-            amount: 1,
-            callbackUrl: "http://localhost:3000/TEST",
-          },
-        }
-      );
-      if (data?.success) {
-        setMConfig({
-          ...mConfig,
-          data: {
-            ...mConfig.data,
-            token: data?.data?.data?.body?.txnToken,
-            orderId: data?.data?.orderId,
-            amount: data?.data?.amount,
-          },
-        });
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await POST(
+  //       INITIAL_RECHARGE,
+  //       {
+  //         paymentObject: {
+  //           amount: String(amt),
+  //           callbackUrl: "/orders/add-order/payment",
+  //         },
+  //         paymentGateway: 'PAYTM'
+  //       }
+  //     );
+  //     if (data?.success) {
+  //       setMConfig({
+  //         ...mConfig,
+  //         data: {
+  //           ...mConfig.data,
+  //           token: data?.data?.txnToken,
+  //           orderId: data?.data?.orderId,
+  //           amount: data?.data?.amount,
+  //         },
+  //       });
+  //     }
+  //   })();
+  // }, []);
 
   return (
     <button
       type="button"
       className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-      onClick={() => loadCheckoutScript}
+      onClick={loadCheckoutScript}
     >
       <p className="buttonClassName lg:text-[14px] whitespace-nowrap">{text}</p>
       <CheckoutProvider

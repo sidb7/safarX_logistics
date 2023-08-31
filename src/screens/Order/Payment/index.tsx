@@ -43,6 +43,7 @@ import {
   RECHARGE_STATUS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import Paytm from "../../../paytm/Paytm";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -122,14 +123,6 @@ const Payment = () => {
   const handleUpiPayment: any = () => {
     if (payment === true) {
       setPayment(false);
-    }
-  };
-
-  const handleUpi = () => {
-    if (modal === true) {
-      setModal(false);
-    } else {
-      setModal(true);
     }
   };
 
@@ -582,19 +575,12 @@ const Payment = () => {
               </div>
 
               <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
-                <div
-                  className="flex flex-col items-center gap-y-2"
-                  onClick={handleUpi}
-                >
-                  <img
-                    src={upiIcon}
-                    onClick={() => setUpiText(true)}
-                    alt=""
-                    className="ml-0 object-contain"
-                  />
-                  <p className="text-[12px]">UPI</p>
-                </div>
                 <div className="flex flex-col items-center gap-y-2">
+                  <img src={upiIcon} alt="" className="ml-0 object-contain" />
+                  <Paytm text={"Paytm"} amt={walletValue} />
+                  {/* <p className="text-[12px]">UPI</p> */}
+                </div>
+                {/* <div className="flex flex-col items-center gap-y-2">
                   <img src={cardPayment} alt="" className="object-contain" />
                   <p className="text-[12px]">Cardpayment</p>
                 </div>
@@ -605,7 +591,7 @@ const Payment = () => {
                 <div className="flex flex-col items-center gap-y-2">
                   <img src={netBanking} alt="" className="object-contain" />
                   <p className="text-[12px]">Netbanking</p>
-                </div>
+                </div> */}
               </div>
               {upiText && (
                 <div className="flex items-center mt-4">
