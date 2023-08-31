@@ -109,7 +109,7 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
 //paytm
-const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initialRecharge`;
+const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
 
@@ -195,5 +195,5 @@ export {
   VERIFY_ADDRESS,
   GET_WALLET_TRANSACTION,
   POST_SIGN_UP_WITH_GOOGLE_URL,
-  POST_SIGN_IN_WITH_GOOGLE_URL
+  POST_SIGN_IN_WITH_GOOGLE_URL,
 };
