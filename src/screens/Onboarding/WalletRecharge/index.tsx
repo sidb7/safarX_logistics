@@ -25,6 +25,7 @@ import {
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 // import { PaytmButton } from "../../../utils/payPaytm";
+import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 
 const OnBoundingWalletRecharge = () => {
   const navigate = useNavigate();
@@ -106,6 +107,7 @@ const OnBoundingWalletRecharge = () => {
     };
     const datas = await POST(POST_ADD_BANK_DETAILS, payload);
     console.log("response", datas);
+
     if (datas?.data?.success) {
       setWalletRechargeModalOpen(true);
     } else {
@@ -129,13 +131,17 @@ const OnBoundingWalletRecharge = () => {
               <h1 className="text-[22px] font-semibold leading-7 text-center">
                 Welcome to Shipyaari
               </h1>
-              <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
+              {/* Temporary Comment */}
+              {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
                 Recharge your wallet with minimum of
                 <span className="text-[#323232] font-medium lg:block">
                   {" "}
                   ₹100
                 </span>
-              </p>
+              </p> */}
+              <div className="flex justify-center items-center">
+                <img src={YaariPointsIcon} alt="" />
+              </div>
               {isLgScreen && note("text-left")}
             </div>
           </div>

@@ -85,7 +85,7 @@ const Index = (props: ITypeProps) => {
         if (response?.success) {
           verifyPAN(panCard);
 
-          // toast.success(response?.message);
+          toast.success(response?.message);
           //Navigate Url's go here
         } else {
           toast.error("OTP verification failed!");
