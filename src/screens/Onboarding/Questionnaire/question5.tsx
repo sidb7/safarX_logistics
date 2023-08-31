@@ -62,7 +62,7 @@ export const QuestionComponent5: React.FunctionComponent = () => {
         toast.error(response?.message);
       }
     } catch (error) {
-      toast.error("Failed to submit question bank!!!");
+      toast.error("Failed to submit the question bank!");
       return error;
     }
   }

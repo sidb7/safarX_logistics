@@ -49,7 +49,7 @@ const Index = () => {
   };
 
   const responseMessage = (response: any) => {
-    console.log("GoogleLogin Response Message :", response);
+    console.log("Google Login Response Message :", response);
   };
 
   useEffect(() => {

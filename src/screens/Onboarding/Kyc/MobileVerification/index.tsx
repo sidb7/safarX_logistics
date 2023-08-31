@@ -65,7 +65,7 @@ const Index = (props: ITypeProps) => {
             panVerifyNavigate: false,
           })
         );
-        toast.error("PAN Verification Failed!");
+        toast.error("PAN verification failed!");
       }
     } catch (error) {
       return error;
@@ -88,7 +88,7 @@ const Index = (props: ITypeProps) => {
           // toast.success(response?.message);
           //Navigate Url's go here
         } else {
-          toast.error("OTP Verification Failed!");
+          toast.error("OTP verification failed!");
         }
       } else if (businessType === "sole_Proprietor") {
         if (location.state.path === "aadhar-form") {
@@ -103,7 +103,7 @@ const Index = (props: ITypeProps) => {
             // toast.success(response?.message);
             //Navigate Url's go here
           } else {
-            toast.error("OTP Verification Failed!");
+            toast.error("OTP verification failed!");
           }
         }
         // const payload = { gstIn: gstNo, client_id: clientId, otp: otp };
@@ -119,7 +119,7 @@ const Index = (props: ITypeProps) => {
               navigate("/onboarding/kyc-aadhar-form");
             }
           } else {
-            toast.error("OTP Verification Failed!");
+            toast.error("OTP verification failed!");
           }
         }
       } else {

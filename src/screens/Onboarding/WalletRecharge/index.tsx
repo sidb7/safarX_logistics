@@ -302,7 +302,7 @@ const OnBoundingWalletRecharge = () => {
     console.log("response", datas);
     if (datas?.data?.success) {
       setIsLoading(false);
-      toast.success("Payment success");
+      toast.success("Payment is successful!");
       clearInterval(myInterval);
       navigate("/home/overview");
     } else if (
@@ -310,7 +310,7 @@ const OnBoundingWalletRecharge = () => {
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
     ) {
       setIsLoading(false);
-      toast.error("Decline Payment By User!!");
+      toast.error(datas?.data?.message);
       clearInterval(myInterval);
     }
   };
