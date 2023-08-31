@@ -228,6 +228,7 @@ const OnBoundingWalletRecharge = () => {
               onChange={(e) => setAccountName(e.target.value)}
             />
           </div>
+
           <div>
             <CustomInputBox
               label="Bank Name"

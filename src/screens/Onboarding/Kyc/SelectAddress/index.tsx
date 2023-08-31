@@ -28,6 +28,7 @@ const BusinessType = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
+  console.log("defaultAddress", defaultAddress?.doctype);
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -144,7 +145,7 @@ const BusinessType = (props: ITypeProps) => {
 
         <div>
           <div className="flex flex-col justify-center items-center  lg:px-5 ">
-            <div className="flex items-center justify-between w-full  mt-2 mb-4  lg:!w-[320px] ">
+            <div className="flex items-center justify-between w-full  mt-1   lg:!w-[320px] ">
               <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#1C1C1C]  ">
                 Address
               </p>
@@ -168,6 +169,7 @@ const BusinessType = (props: ITypeProps) => {
                         name="address"
                         value={el?.fullAddress}
                         title={el?.fullAddress}
+                        doctype={el?.doctype}
                         titleClassName="!font-normal !text-[12px]"
                       />
                     );
@@ -184,16 +186,24 @@ const BusinessType = (props: ITypeProps) => {
               </>
             ) : (
               <>
-                <div className="mb-4 h-[200px] overflow-auto">
+                <div className="mb-4 h-[200px]  overflow-auto">
                   {defaultAddress?.map((el: any, i: number) => {
                     return (
-                      <Card
-                        onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                        name="address"
-                        value={el?.addressId}
-                        title={el?.fullAddress}
-                        titleClassName="!font-normal !text-[12px]"
-                      />
+                      <>
+                        {el?.fullAddress != "" && (
+                          <Card
+                            onClick={(e) =>
+                              setDefaultAddressSelect(e.target.value)
+                            }
+                            name="address"
+                            value={el?.addressId}
+                            title={el?.fullAddress}
+                            doctype={el?.doctype}
+                            titleClassName="!font-normal !text-[12px]"
+                            cardClassName="!mt-6"
+                          />
+                        )}
+                      </>
                     );
                   })}
                 </div>

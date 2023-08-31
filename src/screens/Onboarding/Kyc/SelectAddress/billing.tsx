@@ -72,7 +72,7 @@ const Billing = (props: ITypeProps) => {
           />
 
           <div className="w-full lg:flex lg:justify-center">
-            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0 mt-2 mb-4  lg:w-[320px] ">
+            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0 mt-1 mb-6  lg:w-[320px] ">
               <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p>
@@ -96,9 +96,10 @@ const Billing = (props: ITypeProps) => {
                     <Card
                       onClick={(e) => setDefaultAddressSelect(e.target.value)}
                       name="address"
-                      cardClassName="!mb-3"
+                      cardClassName="!mt-6"
                       value={el?.addressId}
                       title={el?.fullAddress}
+                      doctype={el?.doctype}
                       titleClassName="!font-normal !text-[12px]"
                     />
                   );

@@ -97,7 +97,9 @@ const PickUp = (props: ITypeProps) => {
                     name="address"
                     value={el?.addressId}
                     title={el?.fullAddress}
+                    doctype={el?.doctype}
                     titleClassName="!font-normal !text-[12px]"
+                    cardClassName="!mt-6"
                   />
                 );
               })}

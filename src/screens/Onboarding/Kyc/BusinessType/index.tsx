@@ -72,8 +72,8 @@ const BusinessType = (props: ITypeProps) => {
 
           <Card
             name="business"
-            value="sole_Proprietor"
-            title="Sole Proprietor"
+            value="business"
+            title="Business"
             subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
           />
 

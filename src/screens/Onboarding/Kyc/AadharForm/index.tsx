@@ -47,13 +47,12 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         // toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
+        navigate("/onboarding/kyc-mobile-verify", {
+          state: { path: "aadhar-form" },
+        });
         //Navigate Urls go here
       } else {
       }
-
-      navigate("/onboarding/kyc-mobile-verify", {
-        state: { path: "aadhar-form" },
-      });
     } catch (error) {
       return error;
     }
