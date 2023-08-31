@@ -191,7 +191,7 @@ const Payment = () => {
 
     if (datas?.data?.success) {
       setIsLoading(false);
-      toast.success("Payment is successful!");
+      toast.success(datas?.data?.message);
       clearInterval(myInterval);
       navigate("/order");
     } else if (

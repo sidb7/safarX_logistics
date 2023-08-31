@@ -98,7 +98,8 @@ const Index = (props: ITypeProps) => {
             aadharVerifyNavigate: false,
           })
         );
-        toast.error("Aadhar verification failed!");
+
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;
@@ -123,7 +124,7 @@ const Index = (props: ITypeProps) => {
             gstVerifyNavigate: false,
           })
         );
-        toast.error("GST verification failed!");
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;

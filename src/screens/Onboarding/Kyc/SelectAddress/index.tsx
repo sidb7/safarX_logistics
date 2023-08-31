@@ -126,7 +126,7 @@ const BusinessType = (props: ITypeProps) => {
       toast.success(response?.message);
       //Navigate Url's go here
     } else {
-      toast.error("Failed to upload the file!");
+      toast.error(response?.message);
     }
   };
 
