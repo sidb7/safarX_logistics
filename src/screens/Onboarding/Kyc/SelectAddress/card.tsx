@@ -1,4 +1,4 @@
-import CustomRadioButton from "../../../../components/RadioButton";
+import CustomRadioButton from "../../../../components/RadioButton/Index";
 interface ITypesProps {
   name: string;
   value: string;
