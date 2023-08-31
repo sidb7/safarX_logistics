@@ -20,7 +20,7 @@
 .select-dropdown {
   background-color: white;
   padding: 10px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 0.25rem;
   width: 100%;
   transition: border-color 0.2s ease-out;
@@ -30,7 +30,7 @@
 }
 
 .select-dropdown:focus {
-  border-color: #4a90e2;
+  border-color: #004EFF;
 }
 
 .setLabel {

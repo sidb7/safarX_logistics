@@ -24,7 +24,7 @@ export const EditProfile = () => {
     });
     if (data?.success) {
       setProfileData(data?.data);
-      toast.success("Profile Edited Successfully");
+      toast.success(data?.message);
     } else {
       toast.error(data?.message);
     }

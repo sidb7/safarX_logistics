@@ -15,7 +15,7 @@ export const ChangePassword = () => {
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
       return toast.error(
-        "Please enter New Password and Re-enter Password same !"
+        "Please enter a new password and re-enter the same password !"
       );
     }
     const { data }: any = await POST(UPDATE_PASSWORD, {

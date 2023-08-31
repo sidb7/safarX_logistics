@@ -11,7 +11,6 @@ import customerReward from "../../../assets/Payment/Customer Reward 1.svg";
 import CustomInputBox from "../../../components/Input";
 import discountIcon from "../../../assets/Payment/discount-shape.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
-import UpiPayment from "./upiPayment";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,7 +21,6 @@ import CustomBottomModal from "../../../components/CustomModal/customBottomModal
 import { paymentState } from "../../../redux/reducers/paymentReducer";
 import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 import { useMediaQuery } from "react-responsive";
-import Label from "./label";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import CustomCenterModal from "../../../components/CustomModal/customCenterModal";
 import { Link } from "react-router-dom";
@@ -45,7 +43,7 @@ import {
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 
-const Payment = () => {
+const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [payment, setPayment] = useState(false);
@@ -81,52 +79,6 @@ const Payment = () => {
     fetchCurrentWallet();
   }, []);
 
-  const steps = [
-    {
-      label: "Pickup",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Delivery",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Product",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Service",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Summary",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Payment",
-      isCompleted: false,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-  ];
-
-  const handleUpiPayment: any = () => {
-    if (payment === true) {
-      setPayment(false);
-    }
-  };
-
-  const checkBoolean = useSelector((state: any) => state.payment.payNow);
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
   );
@@ -150,38 +102,6 @@ const Payment = () => {
     setIsedit(true);
   };
 
-  const ModalContent = () => {
-    return (
-      <div className="flex flex-col  w-full h-full p-5">
-        <div className="flex justify-end">
-          <img
-            src={WebCrossIcon}
-            alt=""
-            className="cursor-pointer"
-            onClick={() => setIsPostPaymentModal(false)}
-          />
-        </div>
-        <div className="flex flex-col  mt-4">
-          <div className="flex justify-center items-center mt-7   ">
-            <img src={DoneIcon} alt="Done Gif" width={124} height={125} />
-          </div>
-          <div className="flex flex-col items-center mt-4 font-semibold text-[18px]  ">
-            <p>Thank you!</p>
-            <p>Your order has been placed.</p>
-            <p>You can find your orders in order section</p>
-          </div>
-        </div>
-        <div className="flex justify-center items-center mt-10">
-          <ServiceButton
-            text="GO TO ORDER"
-            onClick={() => navigate("/orders/view-orders")}
-            className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
-          />
-        </div>
-      </div>
-    );
-  };
-
   const rechargeStatusCheck = async (orderId: number) => {
     const payload = {
       // walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
@@ -191,7 +111,7 @@ const Payment = () => {
 
     if (datas?.data?.success) {
       setIsLoading(false);
-      toast.success(datas?.data?.message);
+      toast.success("Payment success");
       clearInterval(myInterval);
       navigate("/order");
     } else if (
@@ -199,7 +119,7 @@ const Payment = () => {
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
     ) {
       setIsLoading(false);
-      toast.error(datas?.data?.message);
+      toast.error("Decline Payment By User!!");
       clearInterval(myInterval);
     }
   };
@@ -243,28 +163,9 @@ const Payment = () => {
     }
   };
 
-  const postPickupOrderDetails = async () => {
-    try {
-      const payload = {};
-      const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
-
-      if (response?.success) {
-        toast.success(response?.message);
-        navigate("/neworder/delivery");
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
-
   return (
     <div className="w-full">
-      <Breadcum label="Add New Order" />
-      <div className="lg:mb-8">
-        <Stepper steps={steps} />
-      </div>
+      <Breadcum label="Recharge Wallet" />
       <div className="inline-flex space-x-2 items-center px-5">
         <img src={Moneylogo} alt="" />
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
@@ -578,92 +479,14 @@ const Payment = () => {
                 <div className="flex flex-col items-center gap-y-2">
                   <img src={upiIcon} alt="" className="ml-0 object-contain" />
                   <Paytm text={"Paytm"} amt={walletValue} />
-                  {/* <p className="text-[12px]">UPI</p> */}
                 </div>
-                {/* <div className="flex flex-col items-center gap-y-2">
-                  <img src={cardPayment} alt="" className="object-contain" />
-                  <p className="text-[12px]">Cardpayment</p>
-                </div>
-                <div className="flex flex-col items-center gap-y-2">
-                  <img src={bankTransfer} alt="" className="object-contain" />
-                  <p className="text-[12px]">Bank transfer</p>
-                </div>
-                <div className="flex flex-col items-center gap-y-2">
-                  <img src={netBanking} alt="" className="object-contain" />
-                  <p className="text-[12px]">Netbanking</p>
-                </div> */}
               </div>
-              {upiText && (
-                <div className="flex items-center mt-4">
-                  <div>
-                    <CustomInputBox
-                      containerStyle={`lg:!w-auto`}
-                      inputType="text"
-                      label="Enter UPI"
-                      className="!w-[16rem]  lg:!w-[20rem] !h-[36px]"
-                      value={upiValue}
-                      onChange={(e) => setUpiValue(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="ml-2">
-                    <CustomButton text={"PAY NOW"} onClick={() => paynow()} />
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
       )}
-
-      {/* <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
-        <UpiPayment closeModal={closeModal} />
-      </CustomBottomModal> */}
-
-      <footer className="w-full fixed bottom-0">
-        <div className="grid grid-cols-2 shadow-lg border-[1px] bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
-          <button
-            onClick={() => navigate(-1)}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center lg:w-[100px]"
-          >
-            {" "}
-            BACK
-          </button>
-          <button
-            onClick={() => placeOrderApi()}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
-          >
-            {" "}
-            PLACE ORDER
-          </button>
-        </div>
-      </footer>
-
-      {/* <BottomLayout
-        callApi={() => postPickupOrderDetails()}
-        Button2Name={false}
-        // newButtonName={"Place Order"}
-      /> */}
-
-      <RightSideModal
-        isOpen={isLabelRightModal}
-        onClose={() => setIsLabelRightModal(false)}
-      >
-        <Label
-          onClick={setIsLabelRightModal}
-          setIsPostPaymentModal={setIsPostPaymentModal}
-        />
-      </RightSideModal>
-
-      <CustomCenterModal
-        isOpen={isPostPaymentModal}
-        onClose={() => setIsPostPaymentModal(false)}
-        className="!h-[450px] !w-[580px]"
-      >
-        <ModalContent />
-      </CustomCenterModal>
     </div>
   );
 };
 
-export default Payment;
+export default WalletRecharge;

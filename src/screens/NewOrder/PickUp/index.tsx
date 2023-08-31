@@ -10,28 +10,24 @@ import CalenderIcon from "../../../assets/calendar.svg";
 import ContactIcon from "../../../assets/PickUp/Contact.svg";
 import PersonIcon from "../../../assets/PickUp/PersonIcon.svg";
 import CustomCheckbox from "../../../components/CheckBox";
-import EditIcon from "../../../assets/PickUp/Edit.svg";
-import CustomDropDown from "../../../components/DropDown";
 import AiIcon from "../../../assets/Buttons.svg";
-
-// import CustomDatePicker from "../../../components/Datepicker/customDatePicker";
 import CustomDatePicker from "../../../components/Datepicker";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithImage from "../../../components/InputWithImage/InputWithImage";
 import Switch from "react-switch";
-import { useAppSelector } from "../../../redux/hooks";
 import { CommonBottomModal } from "../../../components/CustomModal/commonBottomModal";
 import AudioInputBox from "../../../components/AudioInput/AudioInputBox";
-import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
+import { Spinner } from "../../../components/Spinner";
 import SelectDateModalContent from "./selectDateModal";
 import WebLocationIcon from "../../../assets/PickUp/WebLocation.svg";
 import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
-import { MdOutlineCancel } from "react-icons/md";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { ADD_PICKUP_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
+import editIcon from "../../../assets/serv/edit.svg";
+import AccordionUp from "../../../assets/AccordionUp.svg";
 
 import {
   dummyPickupDropdownData,
@@ -54,6 +50,20 @@ import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import LandmarkContent from "./landmarkContent";
+import CustomBrandingContent from "./CustomBrandingContent";
+import CustomDropDown from "../../../components/DropDown";
+import CustomInputWithDropDown from "../../../components/LandmarkDropdown/LandmarkDropdown";
+import Checkbox from "../../../components/CheckBox";
+
+type TimingState = {
+  Monday: boolean;
+  Tuesday: boolean;
+  Wednesday: boolean;
+  Thursday: boolean;
+  Friday: boolean;
+  Saturday: boolean;
+  Sunday: boolean;
+};
 
 const Index = () => {
   const navigate = useNavigate();
@@ -70,23 +80,33 @@ const Index = () => {
     warehouse: true,
     other: false,
   });
+  const [timing, setTiming] = useState<TimingState>({
+    Monday: true,
+    Tuesday: true,
+    Wednesday: true,
+    Thursday: true,
+    Friday: true,
+    Saturday: true,
+    Sunday: true,
+  });
 
   const [saveContact, setSaveContact] = useState({
     shopkeeper: false,
 
     warehouse: true,
+    dispatcher: false,
   });
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
-  // const [pickupDate, setPickupDate] = useState("");
-
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+  const [customBrandingModal, setCustomBrandingModal] = useState(false);
+  const [customBrandingRightModal, setCustomBrandingRightModal] =
+    useState(false);
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
-  const [footer, setFooter] = useState(true);
   const [customLandmark, setCustomLandmark] = useState("");
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -95,6 +115,8 @@ const Index = () => {
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [prevPastedData, setPrevPastedData] = useState("");
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -145,7 +167,6 @@ const Index = () => {
     setPastedData(e.target.value);
   };
 
-  console.log("pastedData", pastedData);
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -171,6 +192,12 @@ const Index = () => {
     }));
   };
 
+  const handleTimingChange = (fieldName: keyof TimingState) => {
+    setTiming((prevData) => ({
+      ...prevData,
+      [fieldName]: !prevData[fieldName],
+    }));
+  };
   const handleCustomBrandingChange = (
     fieldName: keyof typeof customBranding,
     value: string
@@ -188,10 +215,8 @@ const Index = () => {
   // const parseAddress = (address: any) => {
   //   const addressParts = address.split(", ");
   //   const [flatNo, addressLine] = addressParts[0].split(", ");
-  //   console.log("addressLine", addressLine);
   //   const sector = addressParts[7];
   //   const landmark = addressParts[5];
-  //   console.log("landmark", landmark);
   //   const [city, state, pincode] = addressParts.slice(-3);
   //   return {
   //     flatNo,
@@ -229,28 +254,16 @@ const Index = () => {
   //   },
   // ];
 
-  console.log("pickupLocation", pickupLocation);
-  console.log("pickupAddress", pickupAddress);
-  console.log("contact", contact);
-  console.log("customBranding", customBranding);
-
-  console.log("locateAddress", locateAddress);
-
   const handlePickupTimeSelected = (pickupTime: string) => {
-    console.log("Selected Pickup Time:", pickupTime);
     setPickupDate(pickupTime);
   };
-  console.log("pickupdate", pickupDate);
 
   const handleLandmarkSelected = (landmark: string) => {
-    console.log("CustomLandmark:", landmark);
     setCustomLandmark(landmark);
   };
-  console.log("CustomLandmark:", customLandmark);
   // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
-  console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
       dateTimeString,
@@ -260,8 +273,6 @@ const Index = () => {
     return Math.floor(parsedDateTime.getTime() / 1000);
   };
   const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
-
-  console.log("epochPickupDate", epochPickupDate);
 
   const payload = {
     pickupLocation: {
@@ -293,7 +304,6 @@ const Index = () => {
       pickupDate: epochPickupDate,
     },
   };
-  console.log("payload", payload);
 
   const postPickupOrderDetails = async (payload: any) => {
     try {
@@ -303,11 +313,9 @@ const Index = () => {
         toast.success(response?.message);
         navigate("/orders/add-order/delivery");
       } else {
-        console.error("PickupDataerror");
         toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
       return error;
     }
   };
@@ -316,23 +324,21 @@ const Index = () => {
     data: pastedData,
   };
 
-  console.log("verifyAddressPayload", verifyAddressPayload);
-
   const getVerifyAddress = async (verifyAddressPayload: any) => {
     try {
-      console.log("payload", verifyAddressPayload);
+      setLoading(true);
 
       const { data: verifyAddressResponse } = await POST(
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
 
-      console.log("responsee", verifyAddressResponse);
       const parsedData = verifyAddressResponse?.data?.message;
-      console.log("parsedData", parsedData);
 
       setPickupLocation({
-        flatNo: parsedData.house_number || "",
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
         address: parsedData.full_address || "",
         sector: parsedData.locality_name || "",
         landmark: parsedData.building_name || "",
@@ -342,9 +348,17 @@ const Index = () => {
         country: parsedData.country_name || "India",
         addressType: pickupLocation.addressType || "warehouse",
       });
+      setLoading(false);
     } catch (error) {
-      console.log("Error in  VerifyAddress", error);
+      setLoading(false);
       return error;
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (!loading && pastedData && pastedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(pastedData);
     }
   };
 
@@ -352,7 +366,6 @@ const Index = () => {
   //   // const verifyAddressMapPayload = {
   //   //   data: address,
   //   // };
-  //   // console.log("mapAddress", verifyAddressMapPayload);
   //   setLocateAddress(address);
   //   // return () => {
   //   //   setLocateAddress("");
@@ -483,12 +496,14 @@ const Index = () => {
                 placeholder="Paste Address for the Magic"
                 title=""
               />
-
-              <div
-                className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
-                onClick={() => getVerifyAddress(verifyAddressPayload)}
-              >
-                <img src={AiIcon} alt="Arrow" />
+              <div>
+                <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <img src={AiIcon} alt="Arrow" onClick={handleButtonClick} />
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -515,11 +530,11 @@ const Index = () => {
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
-            label="Plot no., floor, building name"
+            label="Plot No., Floor, Building Name"
             value={pickupLocation.flatNo}
-            onChange={(e) =>
-              handlePickupLocationChange("flatNo", e.target.value)
-            }
+            onChange={(e) => {
+              handlePickupLocationChange("flatNo", e.target.value);
+            }}
           />
         </div>
 
@@ -534,23 +549,11 @@ const Index = () => {
         </div>
 
         {/* Landmark with dropdown commented */}
-        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomDropDown
-            value={selectedOption}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-              setSelectedOption(event.target.value);
-              handlePickupLocationChange("landmark", event.target.value);
-              if (event.target.value === "other") {
-                isItLgScreen
-                  ? setIsRightLandmarkModal(true)
-                  : setIsLandmarkModal(true);
-              }
-            }}
-            options={dummyPickupDropdownData}
-          />
-        </div> */}
+        <div className="mb-4 lg:mb-6  lg:mr-6 ">
+          <CustomInputWithDropDown />
+        </div>
 
-        <div className="mb-4 lg:mb-6 lg:mr-6">
+        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Landmark"
             value={pickupLocation.landmark}
@@ -558,7 +561,7 @@ const Index = () => {
               handlePickupLocationChange("landmark", e.target.value)
             }
           />
-        </div>
+        </div> */}
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
@@ -582,12 +585,21 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox
+          {/* <CustomInputBox
             label="State"
             value={pickupLocation.state}
             onChange={(e) =>
               handlePickupLocationChange("state", e.target.value)
             }
+          /> */}
+
+          <CustomDropDown
+            value={pickupLocation.state}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              setSelectedOption(event.target.value);
+              handlePickupLocationChange("state", event.target.value);
+            }}
+            options={dummyPickupDropdownData}
           />
         </div>
 
@@ -706,12 +718,200 @@ const Index = () => {
           </div>
         </div>
 
+        <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
+          <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
+            Timing
+          </p>
+        </div>
+
+        <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+          {Object.keys(timing).map((day) => (
+            <div
+              key={day}
+              className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}
+              onClick={() => handleTimingChange(day as keyof TimingState)}
+            >
+              <div className="flex flex-row  items-center  absolute z-2 -top--1 bg-[#FEFEFE] ">
+                <Checkbox checked={timing[day as keyof TimingState]} />
+                <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                  {day}
+                </p>
+              </div>
+            </div>
+          ))}
+
+          {/* <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Tuesday
+            </p>
+          </div>
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Wednesday
+            </p>
+          </div>
+
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Thursday
+            </p>
+          </div>
+
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Friday
+            </p>
+          </div>
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Saturday
+            </p>
+          </div>
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
+              timing.Monday === true
+                ? "!border-[#004EFF] !text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={(e) => {
+              setTiming({
+                Monday: true,
+                Tuesday: true,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false,
+              });
+              handleTimingChange("Monday", "true");
+            }}
+          >
+            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+              Sunday{" "}
+            </p>
+          </div> */}
+        </div>
+
+        <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
+          <div className="mr-2">
+            <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+              Opening Hours:
+            </span>
+          </div>
+          <div className="mr-2">
+            <span className="text-[14px] text-[#202427] lg:text-[16px] lg:text-[#323232]">
+              9am - 9pm
+            </span>
+          </div>
+        </div>
+
         <div className="flex flex-row items-center gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
           <CustomCheckbox />
           <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
             RETURN ADDRESS SAME AS PICKUP
           </p>
         </div>
+
+        {/* <div className="flex flex-row items-center gap-2 lg:col-span-3 mb-5 lg:mb-[23px]">
+          <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+            Timing
+          </p>
+        </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6 flex">
+          <p>Monday</p>
+          <p>Monday</p>
+        </div> */}
 
         <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
           <img src={ContactIcon} alt="Contact" className="lg:hidden" />
@@ -773,6 +973,7 @@ const Index = () => {
                 shopkeeper: true,
 
                 warehouse: false,
+                dispatcher: false,
               });
               handleContactChange("type", "shopkeeper");
             }}
@@ -794,6 +995,7 @@ const Index = () => {
                 shopkeeper: false,
 
                 warehouse: true,
+                dispatcher: false,
               });
               handleContactChange("type", "warehouse associate");
 
@@ -805,6 +1007,32 @@ const Index = () => {
             <img src={Warehouse} alt="Warehouse associate" />
             <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
               Warehouse associate
+            </p>
+          </div>
+
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+              saveContact.dispatcher === true
+                ? "border-[#004EFF] text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={() => {
+              setSaveContact({
+                shopkeeper: false,
+
+                warehouse: false,
+                dispatcher: true,
+              });
+              handleContactChange("type", "dispatcher");
+
+              // isItLgScreen
+              //   ? setIsSaveContactRightModal(true)
+              //   : setIsSaveContactModal(true);
+            }}
+          >
+            <img src={Warehouse} alt="Warehouse associate" />
+            <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+              Dispatcher
             </p>
           </div>
         </div>
@@ -827,9 +1055,9 @@ const Index = () => {
           />
         </div>
 
-        <div className="hidden lg:block mb-7"></div>
+        {/* <div className="hidden lg:block mb-7"></div> */}
 
-        <div className="mb-7  flex justify-end ">
+        <div className="mb-7 lg:col-span-3 pb-16  ">
           <div className="flex flex-col  w-[372px] h-[134px] ">
             <div
               className={`grid grid-cols-2 p-2 ${
@@ -842,7 +1070,11 @@ const Index = () => {
                 Custom Branding
               </h1>
 
-              <div className="flex justify-end items-center gap-x-1 ">
+              <div
+                className={`flex ${
+                  toggleStatus ? "justify-start" : "justify-end"
+                } items-center gap-x-1`}
+              >
                 <button
                   className={`${
                     toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
@@ -871,20 +1103,28 @@ const Index = () => {
                     {toggleStatus ? "ACTIVE" : "DEACTIVE"}
                   </p>
                 </button>
-                {/* <p
-                  className={`${
-                    toggleStatus ? "text-[#7CCA62]" : "text-[#F35838]"
-                  } font-semibold text-[14px] `}
-                >
-                  {toggleStatus ? "ACTIVE" : "DEACTIVE"}
-                </p> */}
+                {toggleStatus && <img src={editIcon} alt="" className="ml-2" />}
+                {toggleStatus && (
+                  <img src={AccordionUp} alt="" className="ml-2" />
+                )}
               </div>
             </div>
             {toggleStatus && (
-              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-20">
-                <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
+              <div className=" border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-8">
+                <div
+                  className="flex cursor-pointer "
+                  onClick={() => {
+                    isItLgScreen
+                      ? setCustomBrandingRightModal(true)
+                      : setCustomBrandingModal(true);
+                  }}
+                >
+                  <img src={editIcon} alt="" className="ml-2 mr-2" />
+                  <p> Add Branding</p>
+                </div>
+                {/* <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Brand Name and Logo
+                    Brand Name
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C] ">
                     User Detail
@@ -893,7 +1133,7 @@ const Index = () => {
 
                 <div className="flex flex-col">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Contact Name
+                    Brand Address
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
@@ -902,7 +1142,7 @@ const Index = () => {
 
                 <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8]">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Brand Address
+                    Brand Logo
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
@@ -911,12 +1151,12 @@ const Index = () => {
 
                 <div className="flex flex-col">
                   <p className="text-[10px] text-[#777777] font-Open">
-                    Contact Number
+                    Brand Contact
                   </p>
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
@@ -1010,6 +1250,21 @@ const Index = () => {
           buttonText="SAVE"
           inputLabel="Warehouse Associate"
           onClick={() => setIsSaveContactRightModal(false)}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={customBrandingRightModal}
+        onClose={() => setCustomBrandingRightModal(false)}
+        className="!w-[389px]"
+      >
+        <CustomBrandingContent
+          title="Custom Branding"
+          titleIcon={MapIcon}
+          buttonText="UPDATE"
+          inputLabel="Brand Name"
+          onClick={() => setCustomBrandingRightModal(false)}
+          // onCustomLandmarkSelection={handleLandmarkSelected}
         />
       </RightSideModal>
 

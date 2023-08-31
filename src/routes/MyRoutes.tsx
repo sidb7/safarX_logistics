@@ -43,7 +43,7 @@ import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billin
 import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
 
 import TransactionLayout from "../layout/TransactionLayout";
-import WalletRecharge from "../screens/NewOrder/WalletRecharge";
+// import WalletRecharge from "../screens/NewOrder/WalletRecharge";
 import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
@@ -91,6 +91,7 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
+import WalletRecharge from "../screens/Order/WalletRecharge";
 // import Layout from "../layout";
 // import { CommonLayout } from "../layout/layout";
 
@@ -143,7 +144,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/getStarted"
+              path="/onboarding/get-started"
               element={
                 <ProtectedRoute>
                   <GetStartedScreen />
@@ -208,7 +209,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/onboarding/kyc-otp-form"
+              path="/onboarding/kyc-form"
               element={
                 <ProtectedRoute>
                   <KycSendOtpFormScreen />
@@ -240,7 +241,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/kyc-terms/GSTComponent"
+              path="/onboarding/kyc-terms/gst-agreement"
               element={
                 <ProtectedRoute>
                   <GSTComponent />
@@ -248,7 +249,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/kyc-terms/ServiceComponent"
+              path="/onboarding/kyc-terms/service-agreement"
               element={
                 <ProtectedRoute>
                   <ServiceComponent />
@@ -257,7 +258,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/onboarding/kyc-modal"
+              path="/onboarding/kyc"
               element={
                 <ProtectedRoute>
                   <KycModalScreen />
@@ -281,7 +282,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/walletrecharge"
+              path="/onboarding/wallet-recharge"
               element={
                 <ProtectedRoute>
                   <OnBoundingWalletRecharge />
@@ -289,7 +290,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/rechargepayment"
+              path="/onboarding/recharge-payment"
               element={
                 <ProtectedRoute>
                   <RechargePayment />
@@ -372,6 +373,14 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Payment />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wallet/recharge-wallet"
+                element={
+                  <ProtectedRoute>
+                    <WalletRecharge />
                   </ProtectedRoute>
                 }
               />

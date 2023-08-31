@@ -9,7 +9,10 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
-import { POST_SIGN_UP_URL } from "../../../utils/ApiUrls";
+import {
+  POST_SIGN_UP_URL,
+  POST_SIGN_UP_WITH_GOOGLE_URL,
+} from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -38,6 +41,27 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        navigate("/onboarding/sendotp");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const signUpWithGoogle = async (googleData: any) => {
+    try {
+      const payload = {
+        clientId: googleData?.clientId,
+        credential: googleData?.credential,
+      };
+      const { data: response } = await POST(
+        POST_SIGN_UP_WITH_GOOGLE_URL,
+        payload
+      );
+      if (response?.success === true) {
+        dispatch(signUpUser(response.data[0]));
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
@@ -145,7 +169,7 @@ const Index = () => {
               <div className="flex justify-center">
                 <GoogleLogin
                   text="continue_with"
-                  onSuccess={() => {}}
+                  onSuccess={(googleData) => signUpWithGoogle(googleData)}
                   onError={() => {}}
                 />
               </div>
