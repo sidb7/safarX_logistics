@@ -16,6 +16,7 @@ import upiIcon from "../../../assets/Payment/upiIcon.svg";
 import cardPayment from "../../../assets/Payment/cardPaymentIcon.svg";
 import bankTransfer from "../../../assets/Payment/bankTransferIcon.svg";
 import netBanking from "../../../assets/Payment/netBankingIcon.svg";
+import Paytm from "../../../paytm/Paytm";
 import {
   GET_CURRENT_WALLET,
   INITIAL_RECHARGE,
@@ -105,7 +106,6 @@ const OnBoundingWalletRecharge = () => {
       bankAccountNumber: accountName,
     };
     const datas = await POST(POST_ADD_BANK_DETAILS, payload);
-    console.log("response", datas);
     if (datas?.data?.success) {
       setWalletRechargeModalOpen(true);
     } else {
@@ -315,34 +315,6 @@ const OnBoundingWalletRecharge = () => {
     }
   };
 
-  const paynow = async () => {
-    const payload = {
-      // walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
-      paymentObject: {
-        upiId: upiValue,
-        amount: String(money),
-        callbackUrl: "http://helloWorld",
-      },
-    };
-    const { data } = await POST(INITIAL_RECHARGE, payload);
-    console.log("data", data);
-
-    if (data.success) {
-      setIsLoading(true);
-      const payload = {
-        walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
-        orderId: data?.data?.orderId,
-      };
-      const datas = await POST(RECHARGE_STATUS, payload);
-      console.log("response", datas);
-      myInterval = setInterval(function () {
-        rechargeStatusCheck(data?.data?.orderId);
-      }, 500);
-    } else {
-      toast.error(data?.message);
-    }
-  };
-
   const walletRechargeDetails = () => {
     return (
       <div className="h-full w-full">
@@ -431,13 +403,15 @@ const OnBoundingWalletRecharge = () => {
               >
                 <img
                   src={upiIcon}
-                  onClick={() => setUpiText(true)}
+                  // onClick={() => setUpiText(true)}
+                  // onClick={() => paytmHandler()}
                   alt=""
                   className="ml-0 object-contain"
                 />
-                <p className="text-[12px]">UPI</p>
+                <Paytm text={"Paytm"} amt={money} />
+                {/* <p className="text-[12px]">UPI</p> */}
               </div>
-              <div className="flex flex-col items-center gap-y-2">
+              {/* <div className="flex flex-col items-center gap-y-2">
                 <img src={cardPayment} alt="" className="object-contain" />
                 <p className="text-[12px]">Cardpayment</p>
               </div>
@@ -448,9 +422,9 @@ const OnBoundingWalletRecharge = () => {
               <div className="flex flex-col items-center gap-y-2">
                 <img src={netBanking} alt="" className="object-contain" />
                 <p className="text-[12px]">Netbanking</p>
-              </div>
+              </div> */}
             </div>
-            {upiText && (
+            {/* {upiText && (
               <div className="flex items-center mt-4">
                 <div>
                   <CustomInputBox
@@ -467,7 +441,7 @@ const OnBoundingWalletRecharge = () => {
                   <CustomButton text={"PAY NOW"} onClick={() => paynow()} />
                 </div>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
