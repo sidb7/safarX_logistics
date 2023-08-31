@@ -91,6 +91,8 @@ export const QuestionComponent5: React.FunctionComponent = () => {
                 {questionsData[4]?.options.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      disabled={true}
+                      checked={true}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}

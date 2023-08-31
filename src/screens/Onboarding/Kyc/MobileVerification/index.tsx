@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -11,12 +11,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setNavigateOnOtpFormVerify,
   setOTPNumber,
+  setOnOtpClientId,
 } from "../../../../redux/reducers/onboarding";
 import { POST } from "../../../../utils/webService";
 import {
   POST_VERIFY_AADHAR_OTP_URL,
   POST_VERIFY_GST_OTP,
   POST_VERIFY_PAN_URL,
+  POST_VERIFY_AADHAR_URL,
+  POST_VERIFY_GST_URL,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 
@@ -31,15 +34,115 @@ const Index = (props: ITypeProps) => {
   const otp = useSelector((state: any) => state?.onboarding.otp);
   const panCard = useSelector((state: any) => state?.onboarding.panNumber);
   const gstNo = useSelector((state: any) => state?.onboarding.gstNumber);
+  const aadharNo = useSelector((state: any) => state?.onboarding?.aadharNumber);
 
   const location = useLocation();
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(30);
   const closeModal = () => setOpenModal(true);
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  const resendOtpTimer = () => {
+    const minute = minutes < 10 ? `0${minutes}` : minutes;
+    const second = seconds < 10 ? `0${seconds}` : seconds;
+
+    if (seconds > 0 || minutes > 0) {
+      return (
+        <>
+          {minute} : {second} sec
+        </>
+      );
+    }
+  };
+
+  const resentAadharOtp = async () => {
+    try {
+      const payload = { adhaar_no: aadharNo };
+
+      const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
+
+      if (response?.success) {
+        setMinutes(0);
+        setSeconds(30);
+        dispatch(setOnOtpClientId(response.data.data.client_id));
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            aadharVerifyNavigate: true,
+          })
+        );
+        toast.success("Aadhar OTP resent Successfully");
+      } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            aadharVerifyNavigate: false,
+          })
+        );
+        toast.error("Aadhar OTP resent Failed!");
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const resentGstOtp = async () => {
+    try {
+      const payload = { gstIn: gstNo };
+      const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
+
+      if (response?.success) {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            gstVerifyNavigate: true,
+          })
+        );
+        dispatch(setOnOtpClientId(response.data[0].data.client_id));
+        toast.success("GST OTP resent Successfully");
+      } else {
+        dispatch(
+          setNavigateOnOtpFormVerify({
+            gstVerifyNavigate: false,
+          })
+        );
+        toast.error("GST Verification Failed!");
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const resendOtp = async () => {
+    if (businessType === "individual") {
+      resentAadharOtp();
+    } else {
+      resentGstOtp();
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(interval);
+        } else {
+          setSeconds(30);
+          setMinutes(minutes - 1);
+        }
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [seconds]);
 
   const verifyPAN = async (value: any) => {
     try {
@@ -84,9 +187,6 @@ const Index = (props: ITypeProps) => {
         );
         if (response?.success) {
           verifyPAN(panCard);
-
-          // toast.success(response?.message);
-          //Navigate Url's go here
         } else {
           toast.error("OTP Verification Failed!");
         }
@@ -100,14 +200,10 @@ const Index = (props: ITypeProps) => {
           if (response?.success) {
             verifyPAN(panCard);
             navigate("/onboarding/kyc-terms/ServiceComponent");
-            // toast.success(response?.message);
-            //Navigate Url's go here
           } else {
             toast.error("OTP Verification Failed!");
           }
-        }
-        // const payload = { gstIn: gstNo, client_id: clientId, otp: otp };
-        else {
+        } else {
           const payload = {
             gstIn: gstNo,
             client_id: clientId,
@@ -166,21 +262,31 @@ const Index = (props: ITypeProps) => {
                 />
               </div>
               <p className="font-semibold font-Open text-[12px] text-[#494949] mb-4 self-center">
-                00:30 sec
+                {resendOtpTimer()}
               </p>
               <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 lg:mb-0 self-center">
-                <p className="text-[#494949] font-Open lg:font-normal">
-                  Don't receive code ?
-                </p>
-                <p className="text-[#004EFF] font-Open lg:font-semibold">
-                  Resend
+                <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+                  Didn't Receive Code ?
+                  <span
+                    className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
+                      (seconds > 0 || (seconds > 0 && minutes === 0)) &&
+                      "text-[#494949]"
+                    }`}
+                    onClick={() => {
+                      if (seconds === 0 && minutes === 0) {
+                        resendOtp();
+                      }
+                    }}
+                  >
+                    Resend
+                  </span>
                 </p>
               </div>
             </div>
           </div>
           <div className="flex flex-col lg:justify-center px-4 lg:items-center">
             <ServiceButton
-              text="DONE"
+              text="SUBMIT"
               className="bg-[#1C1C1C] !h-[36px] !font-Open text-white lg:!w-[320px] mb-5"
               btnType="submit"
             />

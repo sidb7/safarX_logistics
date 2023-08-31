@@ -29,14 +29,12 @@ const Index = () => {
     firstName: signUpUser.firstName,
     mobileNo: mobileNumber.mobileNo,
   };
-  console.log(body);
 
   const sendOtpOnClick = async (value: any) => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
-        localStorage.setItem("mobile", value.mobileNo);
-        navigate("/onboarding/verifyOtp");
+        navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
       }
