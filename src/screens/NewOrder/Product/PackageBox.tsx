@@ -25,9 +25,9 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   return (
     <div className={recommended ? "relative py-2" : "py-2"}>
       <div
-        className={`flex flex-col  py-2 justify-center   ${
+        className={`flex flex-col  py-2 justify-center !w-64  ${
           selected ? "border-3 border-black" : ""
-        } h-[94px] w-[248px] lg:w-full border-2 rounded-md px-4 package-box`}
+        }  lg:w-full border-2 rounded-md px-4 package-box`}
       >
         {recommended ? (
           <span
@@ -38,12 +38,16 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
         ) : (
           ""
         )}
-        <span className="font-medium mt-2">{packageType}</span>
+        <span className="font-bold leading-6 py-1 font-Open">
+          {packageType}
+        </span>
         <div className="flex">
-          <span className="font-medium">{weight}</span>
-          <span className="pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
+          <span className="leading-6  font-Open">{`${
+            weight.split("kg")[0]
+          } Kg`}</span>
+          <span className="leading-6  font-Open pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
         </div>
-        <span className="text-gray-400">{boxType}</span>
+        <div className="text-gray-400">{boxType}</div>
       </div>
     </div>
   );

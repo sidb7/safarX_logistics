@@ -19,6 +19,11 @@ const Index: React.FunctionComponent<IInputBoxProps> = ({
   inputMode = "",
   onChange,
 }) => {
+  function camelCaseToWords(s: string = "") {
+    const result = s.replace(/([A-Z])/g, " $1");
+    return result.charAt(0).toUpperCase() + result.slice(1);
+  }
+
   return (
     <div className={`container ${className}`}>
       <div className="textfield">
@@ -26,7 +31,7 @@ const Index: React.FunctionComponent<IInputBoxProps> = ({
           placeholder=" "
           type={type}
           inputMode={inputMode}
-          title="inputBox"
+          title={camelCaseToWords(name) || "inputBox"}
           name={name}
           value={value}
           onChange={onChange}
