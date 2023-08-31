@@ -329,7 +329,7 @@ const data = [
         id: "49",
         name: "Recharge Wallet",
         isActive: false,
-        path: "recharge-wallet",
+        path: "/wallet/recharge-wallet",
         menu: [],
         pages: [
           {
