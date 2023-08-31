@@ -43,7 +43,7 @@ import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billin
 import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
 
 import TransactionLayout from "../layout/TransactionLayout";
-import WalletRecharge from "../screens/NewOrder/WalletRecharge";
+// import WalletRecharge from "../screens/NewOrder/WalletRecharge";
 import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
@@ -91,6 +91,7 @@ import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question
 import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
+import WalletRecharge from "../screens/Order/WalletRecharge";
 // import Layout from "../layout";
 // import { CommonLayout } from "../layout/layout";
 
@@ -372,6 +373,14 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Payment />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/wallet/recharge-wallet"
+                element={
+                  <ProtectedRoute>
+                    <WalletRecharge />
                   </ProtectedRoute>
                 }
               />
