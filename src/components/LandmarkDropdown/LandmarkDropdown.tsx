@@ -29,6 +29,7 @@ const CustomInputWithDropDown: React.FC = () => {
         onChange={(e) => {
           setSelected(e.target.value);
         }}
+        className="downarrowImage"
       />
 
       {isDropdownOpen && (
@@ -40,7 +41,6 @@ const CustomInputWithDropDown: React.FC = () => {
               onClick={() => setSelected(ele.title)}
             >
               <p className="text-[12px] text-[#777777] leading-4 font-Open ">
-                <p>Hi</p>
                 {/* {ele?.title} */}
               </p>
             </div>
