@@ -48,6 +48,7 @@ import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { Spinner } from "../../../components/Spinner";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -86,7 +87,8 @@ const Index = () => {
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [prevPastedData, setPrevPastedData] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState({
     recipientType: "business",
     flatNo: "",
@@ -262,6 +264,7 @@ const Index = () => {
 
   const getVerifyAddress = async (verifyAddressPayload: any) => {
     try {
+      setLoading(true);
       console.log("payload", verifyAddressPayload);
 
       const { data: verifyAddressResponse } = await POST(
@@ -287,9 +290,17 @@ const Index = () => {
         gstNo: "",
         orderType: deliveryLocation.orderType,
       });
+      setLoading(false);
     } catch (error) {
       console.log("Error in  VerifyAddress", error);
       return error;
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (!loading && pastedData && pastedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(pastedData);
     }
   };
 
@@ -436,11 +447,18 @@ const Index = () => {
                   title=""
                 />
 
-                <div
-                  className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
-                  onClick={() => getVerifyAddress(verifyAddressPayload)}
-                >
-                  <img src={AiIcon} alt="Arrow" />
+                <div>
+                  <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                    {loading ? (
+                      <Spinner />
+                    ) : (
+                      <img
+                        src={AiIcon}
+                        alt="Arrow"
+                        onClick={handleButtonClick}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
