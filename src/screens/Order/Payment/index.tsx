@@ -191,7 +191,7 @@ const Payment = () => {
 
     if (datas?.data?.success) {
       setIsLoading(false);
-      toast.success("Payment success");
+      toast.success(datas?.data?.message);
       clearInterval(myInterval);
       navigate("/order");
     } else if (
@@ -199,7 +199,7 @@ const Payment = () => {
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
     ) {
       setIsLoading(false);
-      toast.error("Decline Payment By User!!");
+      toast.error(datas?.data?.message);
       clearInterval(myInterval);
     }
   };

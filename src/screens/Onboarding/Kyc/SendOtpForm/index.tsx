@@ -82,9 +82,10 @@ const Index = (props: ITypeProps) => {
     try {
       const payload = { adhaar_no: value };
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
+      console.log("Response", response);
 
       if (response?.success) {
-        // toast.success(response?.message);
+        toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -97,7 +98,8 @@ const Index = (props: ITypeProps) => {
             aadharVerifyNavigate: false,
           })
         );
-        toast.error("Aadhar Verification Failed!");
+
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;
@@ -122,7 +124,7 @@ const Index = (props: ITypeProps) => {
             gstVerifyNavigate: false,
           })
         );
-        toast.error("GST Verification Failed!");
+        toast.error(response?.message);
       }
     } catch (error) {
       return error;

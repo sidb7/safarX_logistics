@@ -50,7 +50,7 @@ const PickUp = (props: ITypeProps) => {
     const payload = { addressId: defaultAddressSelect, isDefault: true };
     const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (responses?.success) {
-      // toast.success(responses?.message);
+      toast.success(responses?.message);
       navigate("/onboarding/wallet-recharge");
       //Navigate Url's go here
     } else {

@@ -36,8 +36,9 @@ function ProfileModal(props: PassModalProps) {
     });
     if (data.success) {
       setProfileData(data?.data);
+      console.log("profile data", data);
 
-      toast.success("Profile Edited Successfully");
+      toast.success(data?.message);
     } else {
       toast.error(data.message);
     }
