@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/locationStyle.css";
 
 interface ITypeProps {
-  onSelect: (selectedDate: Date) => void; // Change the prop name
+  onSelect: (selectedDate: Date) => void;
 }
 
 const CustomDatePicker = (props: ITypeProps) => {
@@ -18,15 +18,15 @@ const CustomDatePicker = (props: ITypeProps) => {
         selected={selectedDate}
         onChange={(date: Date) => {
           setSelectedDate(date);
-          onSelect(date); // Notify parent component of the selected date
+          onSelect(date);
         }}
         showTimeSelect
         timeFormat="h:mm aa"
-        timeIntervals={60}
+        timeIntervals={180}
         timeCaption="Time"
         dateFormat="MMMM d, yyyy h:mm aa"
-        popperPlacement="bottom-start" // Open the picker directly without input
-        inline // Display the picker inline
+        popperPlacement="bottom-start"
+        inline
       />
     </div>
   );
