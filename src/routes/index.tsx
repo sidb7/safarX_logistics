@@ -424,7 +424,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="onboarding/kyc-terms/GSTComponent"
+            path="onboarding/kyc-terms/gst-agreement"
             element={
               <ProtectedRoute>
                 <GSTComponent />
@@ -432,7 +432,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="onboarding/kyc-terms/ServiceComponent"
+            path="onboarding/kyc-terms/service-agreement"
             element={
               <ProtectedRoute>
                 <ServiceComponent />
@@ -448,7 +448,7 @@ const MyRoutes: React.FC = () => {
           /> */}
 
           <Route
-            path="onboarding/kyc-modal"
+            path="onboarding/kyc"
             element={
               <ProtectedRoute>
                 <KycModalScreen />

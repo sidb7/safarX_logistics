@@ -27,7 +27,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
         toast.error(response?.message);
       }
     } catch {
-      toast.error("Failed to fetch question bank!!!");
+      toast.error("Failed to fetch the question bank!");
       return;
     }
   }

@@ -75,7 +75,12 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                 })}
               </div>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex gap-x-4">
+              <CustomButton
+                className="!bg-[#E8E8E8] !text-black"
+                text="BACK"
+                onClick={() => navigate(-1)}
+              />
               <CustomButton
                 text="NEXT"
                 onClick={() =>
@@ -85,6 +90,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                 }
               />
             </div>
+            <div className="mt-3"></div>
           </div>
         </div>
       </div>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import downArrowIcon from "../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../assets/Filter/upArrow.svg";
 
-import RadioButton from "../RadioButton";
+import RadioButton from "../RadioButton/Index";
 
 interface IPropTypes {
   cardClassName?: string;

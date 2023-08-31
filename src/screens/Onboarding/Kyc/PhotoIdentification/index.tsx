@@ -117,7 +117,7 @@ const Index = (props: ITypeProps) => {
             onClick={() => {
               getSnapshot();
               // getCameraPermission();
-              navigate("/onboarding/kyc-otp-form");
+              navigate("/onboarding/kyc-form");
             }}
           />
         </div>

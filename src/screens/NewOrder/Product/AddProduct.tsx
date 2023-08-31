@@ -27,6 +27,44 @@ import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 
 interface IProductFilledProps {}
+const steps = [
+  {
+    label: "Pickup",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Delivery",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Product",
+    isCompleted: false,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Service",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Summary",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Payment",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+];
 
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
@@ -35,21 +73,21 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     productName: "",
     description: "",
     category: [],
-    tags: ["electronics", "smartphone", "android"],
-    price: 0,
+    tags: [],
+    price: "",
     currency: "INR",
-    discountAmount: 10,
-    sale_price: 539.99,
-    gst: "0",
-    stock: "0",
+    discountAmount: 0,
+    sale_price: 0,
+    gst: "",
+    stock: 1,
     dimensions: {
-      length: "0",
-      breadth: "0",
-      height: "0",
+      length: "",
+      breadth: "",
+      height: "",
       unit: "cm",
     },
     weight: {
-      deadWeight: "0",
+      deadWeight: "",
       deadWeightUnit: "kg",
       volumetricWeight: "0",
       volumetricWeightUnit: "kg",
@@ -60,38 +98,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       },
     },
     available: true,
-    attributes: {
-      color: "Black",
-      size: "Medium",
-      brand: "ABC Electronics",
-    },
-    features: [
-      "6.5-inch AMOLED display",
-      "Quad-camera system",
-      "128GB storage",
-    ],
-    images: [
-      {
-        url: "",
-        alt: "",
-      },
-    ],
-    ratings: {
-      average: 4.7,
-      count: 102,
-    },
-    reviews: [
-      {
-        username: "user123",
-        rating: 5,
-        comment: "Great product! Highly recommended.",
-      },
-      {
-        username: "user456",
-        rating: 4,
-        comment: "Good quality, fast shipping.",
-      },
-    ],
+    attributes: {},
+    features: [],
+    images: [],
+    ratings: {},
+    reviews: [],
   };
 
   const [productPayload, setProductPayload]: any = useState([]);
@@ -177,44 +188,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       console.log("getOrderProductDetails", error);
     }
   };
-  const steps = [
-    {
-      label: "Pickup",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Delivery",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Product",
-      isCompleted: false,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Service",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Summary",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Payment",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-  ];
 
   const isLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
@@ -235,19 +208,22 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     setProductPayload([...arr]);
   };
 
-  const uploadedInputFile = async (e: any) => {
+  const uploadedInputFile = async (e: any, index: number) => {
     console.log("uploadedInputFile", e.target.files[0]);
 
     let uuid = uuidv4();
-    setProductState({
-      ...productState,
-      images: [{ url: `${uuid}`, alt: "" }],
-    });
-
+    let tempArr = productInputState[index]?.images;
+    console.log("tempArr images", tempArr);
+    let obj = {
+      url: `${uuid}`,
+      alt: "",
+    };
+    tempArr.push(obj);
+    let productInputStateTempArr = productInputState;
+    productInputStateTempArr[index].images = tempArr;
     let formData = new FormData();
-
     formData.append("file", e.target.files[0]);
-    formData.append("fileName", productState.images[0].url);
+    formData.append("fileName", obj.url);
     const { data: response } = await POST(FILE_UPLOAD, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -255,7 +231,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     });
     if (response?.success) {
       toast.success(response?.message);
-
+      setProductInputState([...productInputStateTempArr]);
+      setProductPayload([...productInputStateTempArr]);
       //Navigate Url's go here
     } else {
       toast.error("Failed To Upload!");
@@ -269,48 +246,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         <Stepper steps={steps} />
       </div>
       <div className="px-5 mb-20">
-        {/* <div className="flex gap-x-6 ">
-          {productPayload.length > 0 &&
-            productPayload.map((product: any, i: number) => {
-              return (
-                <>
-                  {
-                    <div key={i}>
-                      <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-                        <div className="">
-                          <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
-                            Product {i + 1}
-                          </h2>
-                        </div>
-                        <div className="flex ">
-                          <img
-                            src={BookmarkIcon}
-                            alt="Bookmark Product"
-                            className="mr-2"
-                          />
-                          <img
-                            src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
-                            alt="Delete Product"
-                            className="w-5 h-5"
-                          />
-                        </div>
-                      </div>
-                      <ProductBox
-                        image={SampleProduct}
-                        weight={product?.weight?.deadWeight || 0}
-                        productName={product?.productName || 0}
-                        breadth={product?.dimensions?.breadth || 0}
-                        length={product?.dimensions?.length || 0}
-                        height={product?.dimensions?.height || 0}
-                        className="p-3 lg:max-w-[272px]"
-                      />
-                    </div>
-                  }
-                </>
-              );
-            })}
-        </div> */}
-
         <div>
           {productInputState.map((e: any, index: number) => {
             return (
@@ -349,6 +284,22 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
+                  {/* <CustomDropDown
+                    onChange={() => {}}
+                    value={""}
+                    options={[
+                      { label: "Electronics", value: "Electronics" },
+                      { label: "Clothing", value: "Clothing" },
+                      {
+                        label: "Personal Care and Beauty",
+                        value: "Personal Care and Beauty",
+                      },
+                      {
+                        label: "Furniture and Decor",
+                        value: "Furniture and Decor",
+                      },
+                    ]}
+                  /> */}
                   <InputBox
                     label="Product category"
                     name="category"
@@ -386,7 +337,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox
                         className=""
-                        label="Weight KG"
+                        label="Weight (Kg)"
                         name="weight.deadWeight"
                         value={productInputState[index]?.weight?.deadWeight}
                         onChange={(e: any) =>
@@ -398,7 +349,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       />
                       <InputBox
                         className=""
-                        label="Length CM"
+                        label="Length (CM)"
                         name="dimensions.length"
                         value={productInputState[index]?.dimensions.length}
                         onChange={(e: any) =>
@@ -412,7 +363,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                       <InputBox
                         className=""
-                        label="Breadth CM"
+                        label="Breadth (CM)"
                         name="dimensions.breadth"
                         value={productInputState[index].dimensions.breadth}
                         onChange={(e: any) =>
@@ -423,7 +374,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         }
                       />
                       <InputBox
-                        label="Height CM"
+                        label="Height (CM)"
                         name="dimensions.height"
                         value={productInputState[index].dimensions.height}
                         onChange={(e: any) =>
@@ -438,7 +389,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
                   <InputWithFileUpload
                     type="file"
-                    onChange={(e) => uploadedInputFile(e)}
+                    onChange={(e) => uploadedInputFile(e, index)}
                   />
                 </div>
                 <>

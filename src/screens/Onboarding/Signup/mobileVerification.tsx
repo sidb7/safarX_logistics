@@ -19,7 +19,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const [mobileNumber, setMobileNumber] = useState({
-    mobileNo: "",
+    mobileNo: 0,
   });
 
   const signUpUser = useSelector((state: any) => state.signup);
@@ -29,14 +29,12 @@ const Index = () => {
     firstName: signUpUser.firstName,
     mobileNo: mobileNumber.mobileNo,
   };
-  console.log(body);
 
   const sendOtpOnClick = async (value: any) => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
-        localStorage.setItem("mobile", value.mobileNo);
-        navigate("/onboarding/verifyOtp");
+        navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
       }
@@ -89,13 +87,14 @@ const Index = () => {
               </div>
 
               <CustomInputBox
-                inputMode={"number"}
-                inputType="text"
+                value={mobileNumber?.mobileNo || ""}
+                inputMode="numeric"
                 label="Enter Your Mobile Number"
+                maxLength={10}
                 onChange={(e) => {
                   setMobileNumber({
                     ...mobileNumber,
-                    mobileNo: e.target.value,
+                    mobileNo: +e.target.value,
                   });
                 }}
               />

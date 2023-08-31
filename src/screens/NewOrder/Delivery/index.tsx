@@ -48,6 +48,7 @@ import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { Spinner } from "../../../components/Spinner";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -86,7 +87,8 @@ const Index = () => {
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
-
+  const [loading, setLoading] = useState(false);
+  const [prevPastedData, setPrevPastedData] = useState("");
   const [deliveryLocation, setDeliveryLocation] = useState({
     recipientType: "business",
     flatNo: "",
@@ -113,7 +115,6 @@ const Index = () => {
   const [deliveryDate, setDeliveryDate] = useState("");
 
   useEffect(() => {
-    console.log("mapAddress", address);
     setLocateAddress(address);
   }, [address]);
 
@@ -149,19 +150,13 @@ const Index = () => {
     // inputRef.current?.focus();
   };
 
-  console.log("deliveryLocation", deliveryLocation);
-  console.log("contact", contact);
-
   const handlePickupTimeSelected = (deliveryTime: string) => {
-    console.log("Selected Pickup Time:", deliveryTime);
     setDeliveryDate(deliveryTime);
   };
-  console.log("deliveryDate", deliveryDate);
 
   const deliveryDateForEpoch = "18/08/2023 11:00 AM";
 
   const editeddeliveryDateForEpoch = deliveryDate.substring(0, 20);
-  console.log("editedDeliveryDateForEpoch", editeddeliveryDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
       dateTimeString,
@@ -171,8 +166,6 @@ const Index = () => {
     return Math.floor(parsedDateTime.getTime() / 1000);
   };
   const epochDeliveryDate = convertToEpoch(editeddeliveryDateForEpoch);
-
-  console.log("epochDeliveryDate", epochDeliveryDate);
 
   const payload = {
     deliveryLocation: {
@@ -199,7 +192,6 @@ const Index = () => {
     },
     orderType: deliveryLocation.orderType,
   };
-  console.log("payload", payload);
   const postDeliveryOrderDetails = async (payload: any) => {
     try {
       const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
@@ -208,12 +200,9 @@ const Index = () => {
         toast.success(response?.message);
         navigate("/orders/add-order/add-product");
       } else {
-        console.error("DeliveryDataerror");
         toast.error(response?.message);
       }
-    } catch (error) {
-      console.log("Error in ADD_PICKUP_LOCATION_API", error);
-    }
+    } catch (error) {}
   };
 
   const steps = [
@@ -258,24 +247,22 @@ const Index = () => {
     data: pastedData,
   };
 
-  console.log("verifyAddressPayload", verifyAddressPayload);
-
   const getVerifyAddress = async (verifyAddressPayload: any) => {
     try {
-      console.log("payload", verifyAddressPayload);
+      setLoading(true);
 
       const { data: verifyAddressResponse } = await POST(
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
 
-      console.log("responsee", verifyAddressResponse);
       const parsedData = verifyAddressResponse?.data?.message;
-      console.log("parsedData", parsedData);
 
       setDeliveryLocation({
         recipientType: deliveryLocation?.recipientType,
-        flatNo: parsedData.house_number || "",
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
         address: parsedData.full_address || "",
         sector: parsedData.locality_name || "",
         landmark: parsedData.building_name || "",
@@ -287,9 +274,16 @@ const Index = () => {
         gstNo: "",
         orderType: deliveryLocation.orderType,
       });
+      setLoading(false);
     } catch (error) {
-      console.log("Error in  VerifyAddress", error);
       return error;
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (!loading && pastedData && pastedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(pastedData);
     }
   };
 
@@ -297,7 +291,6 @@ const Index = () => {
   //   const verifyAddressMapPayload = {
   //     data: address,
   //   };
-  //   console.log("mapAddress", verifyAddressMapPayload);
   //   setLocateAddress(address);
   //   getVerifyAddress(verifyAddressMapPayload);
   //   return () => {
@@ -436,11 +429,18 @@ const Index = () => {
                   title=""
                 />
 
-                <div
-                  className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer"
-                  onClick={() => getVerifyAddress(verifyAddressPayload)}
-                >
-                  <img src={AiIcon} alt="Arrow" />
+                <div>
+                  <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                    {loading ? (
+                      <Spinner />
+                    ) : (
+                      <img
+                        src={AiIcon}
+                        alt="Arrow"
+                        onClick={handleButtonClick}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -465,7 +465,7 @@ const Index = () => {
 
           <div className="relative mb-5 lg:mb-6">
             <CustomInputBox
-              label="Plot no., floor, building name"
+              label="Plot No., Floor, Building Name"
               value={deliveryLocation.flatNo}
               onChange={(e) =>
                 handleDeliveryLocationChange("flatNo", e.target.value)
@@ -588,15 +588,17 @@ const Index = () => {
             />
           </div>
 
-          <div className="mb-5 lg:mb-6">
-            <CustomInputBox
-              label="GST no."
-              value={deliveryLocation.gstNo}
-              onChange={(e) =>
-                handleDeliveryLocationChange("gstNo", e.target.value)
-              }
-            />
-          </div>
+          {deliveryLocation.recipientType === "business" && (
+            <div className="mb-5 lg:mb-6">
+              <CustomInputBox
+                label="GST no."
+                value={deliveryLocation.gstNo}
+                onChange={(e) =>
+                  handleDeliveryLocationChange("gstNo", e.target.value)
+                }
+              />
+            </div>
+          )}
 
           <div className="mb-5 lg:mb-[18px] lg:col-span-3 ">
             <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
