@@ -63,8 +63,8 @@ const POST_SIGN_IN_URL = `${SELLER_BASE_URL}/seller/signIn`;
 const POST_SIGN_UP_URL = `${SELLER_BASE_URL}/seller/createNewSeller?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SEND_OTP_URL = `${SELLER_BASE_URL}/seller/sendSignUpOtp`;
 const POST_VERIFY_OTP = `${SELLER_BASE_URL}/seller/verifySignUpOtp`;
-const POST_SIGN_UP_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/api/v1/seller/signUpWithGoogle?companyName=${process.env.REACT_APP_COMPANY}`;
-const POST_SIGN_IN_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/api/v1/seller/signInWithGoogle?companyName=${process.env.REACT_APP_COMPANY}`;
+const POST_SIGN_UP_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/seller/signUpWithGoogle?companyName=${process.env.REACT_APP_COMPANY}`;
+const POST_SIGN_IN_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/seller/signInWithGoogle?companyName=${process.env.REACT_APP_COMPANY}`;
 
 // Questionair URLs
 const GET_QUESTIONNAIRE = `${SELLER_BASE_URL}/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;

@@ -60,8 +60,8 @@ const Index = () => {
         POST_SIGN_UP_WITH_GOOGLE_URL,
         payload
       );
-      dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        dispatch(signUpUser(response.data[0]));
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
