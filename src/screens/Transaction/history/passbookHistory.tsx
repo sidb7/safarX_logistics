@@ -4,16 +4,15 @@ import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import ShareIcon from "../../../assets/Transaction/ShareIcon.svg";
-import filterIconTable from "../../../assets/Transaction/filtericon.svg";
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 import { useEffect, useState } from "react";
 import Collapsible from "react-collapsible";
-import { Cancelled, Approved, Returned, Booked } from "../StatusComponents";
 import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
-import { POST } from "../../../utils/webService";
 import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
+import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
+import cancelledicon from "../../../assets/Transaction/cancelledIcon.svg";
 
 interface IPassbookProps {
   data: {
@@ -33,34 +32,33 @@ const columnsHelper = createColumnHelper<any>();
 
 export const PassbookColumns = () => {
   const renderStatusComponent = (status: string) => {
-    console.log(
-      "🚀 ~ file: passbookHistory.tsx:50 ~ renderStatusComponent ~ status:",
-      status
+    return (
+      <div>
+        <div
+          className={`inline-flex justify-center gap-x-1 ${
+            status.toUpperCase() === "SUCCESS" ? "bg-[#F2FAEF]" : "bg-[#FEEEEB]"
+          }  rounded-sm border-[0.5px]${
+            status === "SUCCESS" ? " border-[#7CCA62]" : "border-[#F35838]"
+          } px-3 py-[6px]`}
+        >
+          <img
+            src={`${
+              status.toUpperCase() === "SUCCESS" ? bookedIcon : cancelledicon
+            }`}
+            alt=""
+          />
+          <span
+            className={`text-xs font-semibold ${
+              status.toUpperCase() === "SUCCESS"
+                ? "text-[#7CCA62]"
+                : "text-[#F35838]"
+            }  items-center`}
+          >
+            {status.toUpperCase()}
+          </span>
+        </div>
+      </div>
     );
-    if (status === "APPROVED")
-      return (
-        <div>
-          <Approved />
-        </div>
-      );
-    else if (status === "COMPLETED")
-      return (
-        <div>
-          <Booked />
-        </div>
-      );
-    else if (status === "RETURNED")
-      return (
-        <div>
-          <Returned />
-        </div>
-      );
-    else if (status === "CANCELLED")
-      return (
-        <div>
-          <Cancelled />
-        </div>
-      );
   };
 
   return [
@@ -73,7 +71,6 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -86,11 +83,11 @@ export const PassbookColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("sellerId", {
+    columnsHelper.accessor("transactionId", {
       header: () => {
         return (
           <div className="flex whitespace-nowrap justify-between items-center ">
-            <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
+            <h1 className="text-sm font-semibold leading-5 ">Transaction ID</h1>
             <img src={sortIconTable} alt="" />
           </div>
         );
@@ -98,12 +95,12 @@ export const PassbookColumns = () => {
       cell: (info: any) => {
         return (
           <div className="flex  whitespace-nowrap">
-            {`SHIPYAARI-${info.getValue()}`}
+            {info.row.original.transactionId}
           </div>
         );
       },
     }),
-    columnsHelper.accessor("amount", {
+    columnsHelper.accessor("amount_credit", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[142px]">
@@ -112,17 +109,15 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
       },
       cell: (info: any) => {
-        console.log("info ", info);
         return (
           <div className="flex whitespace-nowrap ">
             {info.row.original.type === "credit"
-              ? `₹ ${info.getValue()}`
+              ? `₹ ${info.row?.original?.amount}`
               : "₹ 0"}
           </div>
         );
@@ -137,7 +132,6 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -146,7 +140,7 @@ export const PassbookColumns = () => {
         return (
           <div className="flex whitespace-nowrap ">
             {info.row.original.type === "debit"
-              ? `₹ ${info.getValue()}`
+              ? `₹ ${info.row?.original?.amount}`
               : "₹ 0"}
           </div>
         );
@@ -179,7 +173,6 @@ export const PassbookColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              {/* <img src={filterIconTable} alt="" /> */}
             </div>
           </div>
         );
@@ -188,6 +181,31 @@ export const PassbookColumns = () => {
         return renderStatusComponent(info.getValue());
       },
     }),
+
+    columnsHelper.accessor("description", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-sm font-semibold leading-5">Description</h1>
+            </div>
+            <div className="flex">
+              <img src={sortIconTable} alt="" />
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div>
+            <span className="font-Open font-normal text-sm leading-5 ">
+              {info.row?.original?.description}
+            </span>
+          </div>
+        );
+      },
+    }),
+
     columnsHelper.accessor("userCount", {
       header: () => {
         return (
@@ -203,7 +221,6 @@ export const PassbookColumns = () => {
             <img src={shareIcon} alt="" />
           </div>
         );
-        // <span>Actions</span>;
       },
     }),
   ];

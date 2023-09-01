@@ -327,7 +327,7 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
-            path="onboarding/getStarted"
+            path="onBoarding/get-started"
             element={
               <ProtectedRoute>
                 <GetStartedScreen />

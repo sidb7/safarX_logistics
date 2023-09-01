@@ -28,7 +28,12 @@ export const Profile = () => {
       <ProfileBankCard BankDetails={profileData?.bankDetails} />
       <div className="lg:grid lg:grid-cols-2 gap-4">
         <ProfileNotification />
-        <ProfileReferEarn />
+        <ProfileReferEarn
+          ReferData={{
+            referCode: profileData?.refferalCode,
+            referImage: profileData?.refferalCodeImageUrl,
+          }}
+        />
         <ProfileSetting ProfileDetails={profileData} />
       </div>
     </div>

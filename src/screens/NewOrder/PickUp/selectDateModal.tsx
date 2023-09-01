@@ -8,6 +8,7 @@ import { dummyDayData } from "../../../utils/dummyData";
 import Button from "../../../components/Button";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import CustomDatePicker from "../../../components/Datepicker";
+import { start } from "repl";
 
 interface ITypeProps {
   onClick?: any;
@@ -15,17 +16,17 @@ interface ITypeProps {
 }
 
 export const dummyTimeData = [
+  // {
+  //   label: "12:00 PM - 03:00 PM",
+  //   value: "12:00 PM - 15:00 PM",
+  // },
   {
-    label: "11:00 AM - 14:00 PM",
-    value: "11:00 AM - 14:00 PM",
+    label: "3:00 PM - 06:00 PM",
+    value: "15:00 PM - 18:00 PM",
   },
   {
-    label: "14:00 PM - 17:00 PM",
-    value: "14:00 PM - 17:00 PM",
-  },
-  {
-    label: "17:00 PM - 20:00 PM",
-    value: "17:00 PM - 20:00 PM",
+    label: "6:00 PM - 09:00 PM",
+    value: "18:00 PM - 21:00 PM",
   },
 ];
 
@@ -117,7 +118,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const currentMinute = currentTime.getMinutes();
 
   const filteredTimeData = dummyTimeData.filter((timeSlot) => {
-    const [startTime, endTime] = timeSlot.label.split(" - ");
+    const [startTime, endTime] = timeSlot.value.split(" - ");
 
     const [startHour, startMinute] = startTime
       .split(":")
@@ -125,16 +126,12 @@ const SelectDateModalContent = (props: ITypeProps) => {
     const [endHour, endMinute] = endTime
       .split(":")
       .map((value) => parseInt(value));
-
+    console.log("startHour", startHour);
+    console.log("currentHour", currentHour);
+    console.log("endHour", endHour);
     if (currentHour > startHour && currentHour < endHour) {
-      return true; // If the current hour is between startHour and endHour
-    } else if (currentHour === startHour && currentMinute >= startMinute) {
-      return true;
-    } else if (currentHour === endHour && currentMinute <= endMinute) {
       return true;
     }
-
-    return false;
   });
 
   return (
@@ -173,7 +170,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
         <div className="flex flex-col lg:px-5">
           <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
           <DynamicButtonScrollComponentForTime
-            items={filteredTimeData}
+            items={dummyTimeData}
             selectedTime={selectedTime}
             selectedDay={selectedDay}
             onClick={handleTimeSlotClick}

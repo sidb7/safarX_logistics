@@ -179,7 +179,7 @@ const OnBoundingWalletRecharge = () => {
             </div>
             <div className="mx-5 mt-[84px] lg:mt-4">
               <CustomButton
-                text={"RECHARGE NOW"}
+                text={"VERIFY BANK"}
                 // onClick={() => navigate("/order/payment")}
                 onClick={() => handleRechargeNow()}
               />
@@ -234,6 +234,7 @@ const OnBoundingWalletRecharge = () => {
               onChange={(e) => setAccountName(e.target.value)}
             />
           </div>
+
           <div>
             <CustomInputBox
               label="Bank Name"
@@ -271,7 +272,7 @@ const OnBoundingWalletRecharge = () => {
           </div>
           <div className="!w-[20rem] m-auto mt-[84px] lg:mt-4">
             <CustomButton
-              text={"RECHARGE NOW"}
+              text={"VERIFY BANK"}
               onClick={() => postAccountDetails()}
             />
           </div>

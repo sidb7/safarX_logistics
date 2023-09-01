@@ -6,10 +6,13 @@ import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
+
 export const EditProfile = () => {
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<any>({});
   const [name, setName] = useState("");
+
   const changeHandler = (key: string, event: any) => {
     setProfileData({ ...profileData, [key]: event.target.value });
   };
@@ -62,8 +65,12 @@ export const EditProfile = () => {
                 objectFit: "cover",
                 mask: "radial-gradient(circle, transparent 50%, black 50%)",
               }}
-              // src={ProfileIcon}
-              src={profileData?.profileImageUrl}
+              src={`${
+                profileData?.profileImageUrl &&
+                profileData?.profileImageUrl !== "N/A"
+                  ? profileData?.profileImageUrl
+                  : ProfileIcon
+              }`}
               alt="Profile"
               className="w-[82px]"
             />

@@ -55,7 +55,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
                 } `}
                 key={index}
               >
-                <p
+                <div
                   className={`${
                     index === 0
                       ? "cursor-not-allowed text-[#777777]"
@@ -76,7 +76,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
                   >
                     {el.charAt(0).toUpperCase() + el.slice(1)}
                   </div>
-                </p>
+                </div>
                 <div>
                   {index !== data?.length - 1 && (
                     <span className="text-base">/</span>
