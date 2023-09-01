@@ -1,7 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import { useState } from "react";
 import CrossIcon from "../../../assets/CloseIcon.svg";
-import ReferCode from "../../../assets/Profile/Refer/ReferCode.svg";
 import CustomButton from "../../../components/Button";
 import RightArrowIcon from "../../../assets/Profile/RightArrowIcon.svg";
 import ReferEarn from "../../../assets/Profile/ReferEarn.svg";
@@ -10,7 +9,7 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ShareIcon from "../../../assets/Label/share.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
-export const ProfileReferEarn = () => {
+export const ProfileReferEarn = ({ ReferData }: any) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const isItLgScreen = useMediaQuery({
@@ -57,12 +56,12 @@ export const ProfileReferEarn = () => {
           </div>
           <div className="flex flex-col mt-8 gap-y-4 w-ful justify-center items-center">
             <img
-              src={ReferCode}
+              src={ReferData?.referImage}
               alt="Referral Code"
               className="w-[156px] mt-[10rem]"
             />
             <p className="p-3 mt-4 text-[16px] font-semibold whitespace-nowrap">
-              Referral Code - QYHR78171JEY
+              Referral Code - {ReferData?.referCode}
             </p>
           </div>
         </div>
