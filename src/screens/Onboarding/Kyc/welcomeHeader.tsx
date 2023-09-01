@@ -11,7 +11,7 @@ const WelcomeHeader = (props: ITypesProps) => {
 
   return (
     <div
-      className={` flex flex-col items-center gap-y-3 mb-11 lg:mt-[104px] lg:my-6  ${className}`}
+      className={` flex flex-col items-center gap-y-3 mb-11 lg:my-6  ${className}`}
     >
       <p className=" font-Lato font-bold text-[22px] text-center leading-7 text-[#323232] lg:mb-0">
         {title}
