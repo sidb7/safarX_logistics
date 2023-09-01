@@ -32,8 +32,6 @@ const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
   } = props;
 
   const [radioValue, setRadioValue] = useState<any>(value || "");
-  console.log("isSelected", radioValue);
-  // const options = ["18-34", "35-49", "50+", "Mix all ages"];
 
   const handleOnChange = (e: any) => {
     setRadioValue(e);
@@ -58,7 +56,6 @@ const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
           </div>
         </div>
       ))}
-      {/* <pre>Selected option: {radioValue}</pre> */}
     </div>
   );
 };
