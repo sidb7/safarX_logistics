@@ -10,14 +10,29 @@
 .custom-input {
   transition: 0.1s ease-out;
   width: 100%;
+   
 }
+
+/* .input:focus {
+  border-color: #004EFF !important;
+} */
+.custom-input:focus {
+  border-color: #004EFF !important;
+}
+
+.custom-input:focus~.custom-label {
+  color: #004EFF;
+}
+
 
 .custom-input:focus + label {
+  /* border-color: #004EFF !important; */
   top: 0;
-
   transform: translateY(-50%) scale(0.9);
+
 }
 .custom-input:not(:placeholder-shown) + label {
+  
   top: 0;
   transform: translateY(-50%) scale(0.9);
 }

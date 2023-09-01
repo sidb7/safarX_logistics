@@ -77,7 +77,12 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                 })}
               </div>
             </div>
-            <div className="mt-6">
+            <div className="mt-6 flex gap-x-4">
+              <CustomButton
+                className="!bg-[#E8E8E8] !text-black"
+                text="BACK"
+                onClick={() => navigate(-1)}
+              />
               <CustomButton
                 text="NEXT"
                 onClick={() =>

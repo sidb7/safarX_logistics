@@ -24,6 +24,7 @@ export const GSTComponent = (props: ITypeProps) => {
 
   const acceptStatus = () => {
     dispatch(setAcceptTnCStatus(true));
+
     navigate("/onboarding/kyc-terms/service-agreement");
   };
 

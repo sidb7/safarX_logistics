@@ -12,7 +12,7 @@ interface IRadioButtonProps {
   checked?: boolean;
 }
 
-const index = (props: IRadioButtonProps) => {
+const Index = (props: IRadioButtonProps) => {
   const {
     name,
     value,
@@ -44,4 +44,4 @@ const index = (props: IRadioButtonProps) => {
   );
 };
 
-export default index;
+export default Index;

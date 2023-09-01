@@ -32,7 +32,7 @@ const BusinessType = (props: ITypeProps) => {
       const payload = { businessType: value };
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
-        // toast.success(response.message);
+        toast.success(response?.message);
         // navigate("/onboarding/kyc-photo"); // temparory hide
         navigate("/onboarding/kyc-form");
         // toast.success(response.message);
