@@ -362,9 +362,11 @@ const Index = () => {
   };
 
   const handleButtonClick = () => {
-    if (!loading && pastedData && pastedData !== prevPastedData) {
+    const trimmedData = pastedData.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
-      setPrevPastedData(pastedData);
+      setPrevPastedData(trimmedData);
     }
   };
 
@@ -520,9 +522,8 @@ const Index = () => {
           />
         </div>
 
-        {/* Landmark with dropdown commented */}
-        <div className="mb-4 lg:mb-6  lg:mr-6 ">
-          <CustomInputWithDropDown />
+        <div className="mb-4 lg:mb-6 lg:mr-6 ">
+          <CustomInputWithDropDown pastedData={pastedData} />
         </div>
 
         {/* <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -837,7 +838,7 @@ const Index = () => {
 
             {/* Landmark with dropdown commented */}
             <div className="mb-4 lg:mb-6  lg:mr-6 ">
-              <CustomInputWithDropDown />
+              <CustomInputWithDropDown pastedData={pastedData} />
             </div>
 
             {/* <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -1088,7 +1089,7 @@ const Index = () => {
           <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
 
           <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-            Contact
+            Pickup Address Contact
           </p>
         </div>
 

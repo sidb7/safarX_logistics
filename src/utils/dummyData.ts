@@ -1090,120 +1090,121 @@ export const dummyPickupDropdownData = [
 export const dummyStateDropdownData = [
   {
     label: "Select State",
-    value: "select",
+    value: "Select State",
   },
   {
     label: "Andhra Pradesh",
-    value: "andhraPradesh",
+    value: "Andhra Pradesh",
   },
   {
     label: "Arunachal Pradesh",
-    value: "arunachalPradesh",
+    value: "Arunachal Pradesh",
   },
   {
     label: "Assam",
-    value: "assam",
+    value: "Assam",
   },
   {
     label: "Bihar",
-    value: "bihar",
+    value: "Bihar",
   },
   {
     label: "Chhattisgarh",
-    value: "chhattisgarh",
+    value: "Chhattisgarh",
   },
   {
     label: "Goa",
-    value: "goa",
+    value: "Goa",
   },
   {
     label: "Gujarat",
-    value: "gujarat",
+    value: "Gujarat",
   },
   {
     label: "Haryana",
-    value: "haryana",
+    value: "Haryana",
   },
   {
     label: "Himachal Pradesh",
-    value: "himachalPradesh",
+    value: "Himachal Pradesh",
   },
   {
     label: "Jharkhand",
-    value: "jharkhand",
+    value: "Jharkhand",
   },
   {
     label: "Karnataka",
-    value: "karnataka",
+    value: "Karnataka",
   },
   {
     label: "Kerala",
-    value: "kerala",
+    value: "Kerala",
   },
   {
     label: "Madhya Pradesh",
-    value: "madhyaPradesh",
+    value: "Madhya Pradesh",
   },
   {
     label: "Maharashtra",
-    value: "maharashtra",
+    value: "Maharashtra",
   },
   {
     label: "Manipur",
-    value: "manipur",
+    value: "Manipur",
   },
   {
     label: "Meghalaya",
-    value: "meghalaya",
+    value: "Meghalaya",
   },
   {
     label: "Mizoram",
-    value: "mizoram",
+    value: "Mizoram",
   },
   {
     label: "Nagaland",
-    value: "nagaland",
+    value: "Nagaland",
   },
   {
     label: "Odisha",
-    value: "odisha",
+    value: "Odisha",
   },
   {
     label: "Punjab",
-    value: "punjab",
+    value: "Punjab",
   },
   {
     label: "Rajasthan",
-    value: "rajasthan",
+    value: "Rajasthan",
   },
   {
     label: "Sikkim",
-    value: "sikkim",
+    value: "Sikkim",
   },
   {
     label: "Tamil Nadu",
-    value: "tamilNadu",
+    value: "Tamil Nadu",
   },
   {
     label: "Telangana",
-    value: "telangana",
+    value: "Telangana",
   },
   {
     label: "Tripura",
-    value: "tripura",
+    value: "Tripura",
   },
   {
     label: "Uttar Pradesh",
-    value: "uttarPradesh",
+    value: "Uttar Pradesh",
   },
   {
     label: "Uttarakhand",
-    value: "uttarakhand",
+    value: "Uttarakhand",
   },
   {
     label: "West Bengal",
-    value: "westBengal",
+    value: "West Bengal",
   },
-  
+ 
 ];
+
 
