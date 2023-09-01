@@ -35,6 +35,7 @@ export const Transaction = () => {
     if (renderingComponents === 0) {
       (async () => {
         const { data } = await POST(GET_WALLET_TRANSACTION);
+
         if (data?.success) {
           setData(data.data[0]);
         } else {

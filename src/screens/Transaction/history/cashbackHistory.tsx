@@ -24,7 +24,7 @@ interface ICashbackProps {
 const columnsHelper = createColumnHelper<any>();
 export const cashbackDetailsColumns = () => {
   return [
-    columnsHelper.accessor("roleId", {
+    columnsHelper.accessor("createdAt", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[208px]">
@@ -44,7 +44,7 @@ export const cashbackDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("roleName", {
+    columnsHelper.accessor("received", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[254px] ">
@@ -61,7 +61,7 @@ export const cashbackDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("amount", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[220px]">
@@ -79,7 +79,7 @@ export const cashbackDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("description", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[371px] ">
@@ -102,7 +102,7 @@ export const cashbackDetailsColumns = () => {
       },
     }),
 
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("actions", {
       header: () => {
         return (
           <div className="flex justify-between">
@@ -117,7 +117,6 @@ export const cashbackDetailsColumns = () => {
             <img src={shareIcon} alt="" />
           </div>
         );
-        // <span>Actions</span>;
       },
     }),
   ];

@@ -52,7 +52,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
     <div className="flex flex-col">
       <div className="md:grid md:grid-cols-2">
         <div className="grid grid-cols-3 border-[1px] border-[#E8E8E8] rounded-md mt-4">
-          <div className="flex flex-col col-span-1 items-center py-4">
+          <div className="flex flex-col col-span-1 items-center py-4 ">
             <div
               style={{
                 width: "82px",
@@ -68,9 +68,13 @@ export const ProfileCard = (props: ProfileCardProps) => {
                   objectFit: "cover",
                   mask: "radial-gradient(circle, transparent 50%, black 50%)",
                 }}
-                src={profileImageUrl || ProfileIcon}
+                src={`${
+                  profileImageUrl && profileImageUrl !== "N/A"
+                    ? profileImageUrl
+                    : ProfileIcon
+                }`}
                 alt="Profile"
-                className="w-[82px]"
+                className="w-[82px] "
               />
             </div>
             <span className="text-[12px] text-[#1C1C1C]">
