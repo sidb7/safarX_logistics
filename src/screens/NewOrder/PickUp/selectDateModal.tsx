@@ -4,15 +4,33 @@ import CancelIcon from "../../../assets/common/cancel.svg";
 import DynamicButtonScrollComponentForDay from "../../../components/DynamicButtonScrollForDay";
 import DynamicButtonScrollComponentForTime from "../../../components/DynamicButtonScrollForTime";
 
-import { dummyDayData, dummyTimeData } from "../../../utils/dummyData";
+import { dummyDayData } from "../../../utils/dummyData";
 import Button from "../../../components/Button";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import CustomDatePicker from "../../../components/Datepicker";
+import { start } from "repl";
 
 interface ITypeProps {
   onClick?: any;
   onPickupTimeSelected: (pickupTime: string) => void;
 }
+
+export const dummyTimeData = [
+  // {
+  //   label: "12:00 PM - 03:00 PM",
+  //   value: "12:00 PM - 15:00 PM",
+  // },
+  {
+    label: "3:00 PM - 06:00 PM",
+    value: "15:00 PM - 18:00 PM",
+  },
+  {
+    label: "6:00 PM - 09:00 PM",
+    value: "18:00 PM - 21:00 PM",
+  },
+];
+
+const currentTime = new Date();
 
 const SelectDateModalContent = (props: ITypeProps) => {
   const { onClick, onPickupTimeSelected } = props;
@@ -45,8 +63,6 @@ const SelectDateModalContent = (props: ITypeProps) => {
   const handleScheduleDateTimeChange = (selectedDate: Date) => {
     setSelectedScheduleDateTime(selectedDate);
   };
-
-  console.log("selectedScheduleDateTime", selectedScheduleDateTime);
 
   const formatDate = (date: Date) => {
     const day = String(date.getDate()).padStart(2, "0");
@@ -93,11 +109,30 @@ const SelectDateModalContent = (props: ITypeProps) => {
     }
   })();
 
-  console.log("selectedPickupTime", selectedPickupTime);
-
   if (selectedTime || selectedScheduleDateTime) {
     onPickupTimeSelected(selectedPickupTime);
   }
+
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+
+  const filteredTimeData = dummyTimeData.filter((timeSlot) => {
+    const [startTime, endTime] = timeSlot.value.split(" - ");
+
+    const [startHour, startMinute] = startTime
+      .split(":")
+      .map((value) => parseInt(value));
+    const [endHour, endMinute] = endTime
+      .split(":")
+      .map((value) => parseInt(value));
+    console.log("startHour", startHour);
+    console.log("currentHour", currentHour);
+    console.log("endHour", endHour);
+    if (currentHour > startHour && currentHour < endHour) {
+      return true;
+    }
+  });
 
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">

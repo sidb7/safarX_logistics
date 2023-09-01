@@ -3,7 +3,7 @@ import CrossIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
 import RightSideModal from "../.././../components/CustomModal/customRightModal";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import EditProfileIcon from "../../../assets/Profile/Setting/EditProfileIcon.svg";
+import EditProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
@@ -36,8 +36,9 @@ function ProfileModal(props: PassModalProps) {
     });
     if (data.success) {
       setProfileData(data?.data);
+      console.log("profile data", data);
 
-      toast.success("Profile Edited Successfully");
+      toast.success(data?.message);
     } else {
       toast.error(data.message);
     }
@@ -79,7 +80,12 @@ function ProfileModal(props: PassModalProps) {
                   objectFit: "cover",
                   mask: "radial-gradient(circle, transparent 50%, black 50%)",
                 }}
-                src={profileData.profileImageUrl || EditProfileIcon}
+                src={
+                  profileData?.profileImageUrl &&
+                  profileData?.profileImageUrl !== "N/A"
+                    ? profileData?.profileImageUrl
+                    : EditProfileIcon
+                }
                 alt="Edit Profile"
               />
             </div>

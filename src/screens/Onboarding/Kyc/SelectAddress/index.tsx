@@ -19,6 +19,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
+
 interface ITypeProps {}
 
 const BusinessType = (props: ITypeProps) => {
@@ -28,13 +29,13 @@ const BusinessType = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
+  console.log("defaultAddress", defaultAddress?.doctype);
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
-      // console.log("response", response);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
@@ -61,7 +62,7 @@ const BusinessType = (props: ITypeProps) => {
     };
     const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (response?.success) {
-      // toast.success(response?.message);
+      toast.success(response?.message);
       // console.log("defaultAddressSelect", defaultAddressSelect);
 
       const payload = { addressId: defaultAddressSelect, isDefault: true };
@@ -70,8 +71,10 @@ const BusinessType = (props: ITypeProps) => {
         payload
       );
       if (responses?.success) {
+        toast.success(responses?.message);
+
         navigate("/onboarding/wallet-recharge");
-        // toast.success(responses?.message);
+        // navigate("/onboarding/select-address-billing");
         //Navigate Url's go here
       } else {
         toast.error(responses?.message);
@@ -102,7 +105,7 @@ const BusinessType = (props: ITypeProps) => {
         magicpayload
       );
       if (response?.success) {
-        // toast.success(response?.message);
+        toast.success(response?.message);
         navigate("/onboarding/select-address-billing");
       } else {
         toast.error(responses?.message);
@@ -126,7 +129,7 @@ const BusinessType = (props: ITypeProps) => {
       toast.success(response?.message);
       //Navigate Url's go here
     } else {
-      toast.error("Failed To Upload!");
+      toast.error(response?.message);
     }
   };
 
@@ -144,10 +147,14 @@ const BusinessType = (props: ITypeProps) => {
 
         <div>
           <div className="flex flex-col justify-center items-center  lg:px-5 ">
-            <div className="flex items-center justify-between w-full  mt-2 mb-4  lg:!w-[320px] ">
-              <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#1C1C1C]  ">
-                Address
-              </p>
+            <div className="flex items-center justify-between w-full  mt-1   lg:!w-[320px] ">
+              <p>Default</p>
+              <div className="flex gap-x-2">
+                <img src={PlusIcon} alt="" />
+                <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#004EFF]  ">
+                  ADD ADDRESS
+                </p>
+              </div>
 
               {/* <AddButton
                 onClick={() => {}}
@@ -168,6 +175,7 @@ const BusinessType = (props: ITypeProps) => {
                         name="address"
                         value={el?.fullAddress}
                         title={el?.fullAddress}
+                        doctype={el?.doctype}
                         titleClassName="!font-normal !text-[12px]"
                       />
                     );
@@ -184,16 +192,24 @@ const BusinessType = (props: ITypeProps) => {
               </>
             ) : (
               <>
-                <div className="mb-4 h-[200px] overflow-auto">
+                <div className="mb-4 h-[200px]  overflow-auto">
                   {defaultAddress?.map((el: any, i: number) => {
                     return (
-                      <Card
-                        onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                        name="address"
-                        value={el?.addressId}
-                        title={el?.fullAddress}
-                        titleClassName="!font-normal !text-[12px]"
-                      />
+                      <>
+                        {el?.fullAddress != "" && (
+                          <Card
+                            onClick={(e) =>
+                              setDefaultAddressSelect(e.target.value)
+                            }
+                            name="address"
+                            value={el?.addressId}
+                            title={el?.fullAddress}
+                            doctype={el?.doctype}
+                            titleClassName="!font-normal !text-[12px]"
+                            cardClassName="!mt-6"
+                          />
+                        )}
+                      </>
                     );
                   })}
                 </div>

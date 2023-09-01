@@ -31,6 +31,7 @@ import AccordionUp from "../../../assets/AccordionUp.svg";
 
 import {
   dummyPickupDropdownData,
+  dummyStateDropdownData,
   pickupAddress,
 } from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
@@ -50,6 +51,20 @@ import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import LandmarkContent from "./landmarkContent";
+import CustomBrandingContent from "./CustomBrandingContent";
+import CustomDropDown from "../../../components/DropDown";
+import CustomInputWithDropDown from "../../../components/LandmarkDropdown/LandmarkDropdown";
+import Checkbox from "../../../components/CheckBox";
+
+type TimingState = {
+  Monday: boolean;
+  Tuesday: boolean;
+  Wednesday: boolean;
+  Thursday: boolean;
+  Friday: boolean;
+  Saturday: boolean;
+  Sunday: boolean;
+};
 
 const Index = () => {
   const navigate = useNavigate();
@@ -59,6 +74,8 @@ const Index = () => {
     query: "(min-width: 1024px)",
   });
   const [pastedData, setPastedData] = useState("");
+  const [pastedDataReturnAddress, setPastedDataReturnAddress] = useState("");
+
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [saveAddress, setSaveAddress] = useState({
@@ -66,17 +83,30 @@ const Index = () => {
     warehouse: true,
     other: false,
   });
+  const [timing, setTiming] = useState<TimingState>({
+    Monday: true,
+    Tuesday: true,
+    Wednesday: true,
+    Thursday: true,
+    Friday: true,
+    Saturday: true,
+    Sunday: true,
+  });
 
   const [saveContact, setSaveContact] = useState({
     shopkeeper: false,
 
     warehouse: true,
+    dispatcher: false,
   });
 
   const [toggleStatus, setToggleStatus] = useState(false);
   const [locateAddress, setLocateAddress] = useState("");
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+  const [customBrandingModal, setCustomBrandingModal] = useState(false);
+  const [customBrandingRightModal, setCustomBrandingRightModal] =
+    useState(false);
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
@@ -90,6 +120,7 @@ const Index = () => {
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
+  const [isChecked, setIsChecked] = useState(true);
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -103,7 +134,27 @@ const Index = () => {
     addressType: "warehouse",
   });
 
+  const [returnAddress, setReturnAddress] = useState({
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "warehouse",
+  });
+
   const [contact, setContact] = useState({
+    name: "",
+    mobileNo: "",
+    alternateMobileNo: "",
+    emailId: "",
+    type: "warehouse associate",
+  });
+
+  const [returnAddressContact, setReturnAddressContacts] = useState({
     name: "",
     mobileNo: "",
     alternateMobileNo: "",
@@ -140,7 +191,12 @@ const Index = () => {
     setPastedData(e.target.value);
   };
 
-  console.log("pastedData", pastedData);
+  const handleChangeReturnAddress = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPastedDataReturnAddress(e.target.value);
+  };
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -156,6 +212,16 @@ const Index = () => {
     }));
   };
 
+  const handleReturnAddressChange = (
+    fieldName: keyof typeof returnAddress,
+    value: string
+  ) => {
+    setReturnAddress((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
   const handleContactChange = (
     fieldName: keyof typeof contact,
     value: string
@@ -166,6 +232,12 @@ const Index = () => {
     }));
   };
 
+  const handleTimingChange = (fieldName: keyof TimingState) => {
+    setTiming((prevData) => ({
+      ...prevData,
+      [fieldName]: !prevData[fieldName],
+    }));
+  };
   const handleCustomBrandingChange = (
     fieldName: keyof typeof customBranding,
     value: string
@@ -183,10 +255,8 @@ const Index = () => {
   // const parseAddress = (address: any) => {
   //   const addressParts = address.split(", ");
   //   const [flatNo, addressLine] = addressParts[0].split(", ");
-  //   console.log("addressLine", addressLine);
   //   const sector = addressParts[7];
   //   const landmark = addressParts[5];
-  //   console.log("landmark", landmark);
   //   const [city, state, pincode] = addressParts.slice(-3);
   //   return {
   //     flatNo,
@@ -224,28 +294,20 @@ const Index = () => {
   //   },
   // ];
 
-  console.log("pickupLocation", pickupLocation);
-  console.log("pickupAddress", pickupAddress);
-  console.log("contact", contact);
-  console.log("customBranding", customBranding);
-
-  console.log("locateAddress", locateAddress);
-
   const handlePickupTimeSelected = (pickupTime: string) => {
-    console.log("Selected Pickup Time:", pickupTime);
     setPickupDate(pickupTime);
   };
-  console.log("pickupdate", pickupDate);
 
   const handleLandmarkSelected = (landmark: string) => {
-    console.log("CustomLandmark:", landmark);
     setCustomLandmark(landmark);
   };
-  console.log("CustomLandmark:", customLandmark);
   // const pickupDateForEpoch = "18/08/2023 11:00 AM";
 
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
-  console.log("editedPickupDateForEpoch", editedPickupDateForEpoch);
   const convertToEpoch = (dateTimeString: any) => {
     const parsedDateTime = parse(
       dateTimeString,
@@ -255,8 +317,6 @@ const Index = () => {
     return Math.floor(parsedDateTime.getTime() / 1000);
   };
   const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
-
-  console.log("epochPickupDate", epochPickupDate);
 
   const payload = {
     pickupLocation: {
@@ -288,7 +348,6 @@ const Index = () => {
       pickupDate: epochPickupDate,
     },
   };
-  console.log("payload", payload);
 
   const postPickupOrderDetails = async (payload: any) => {
     try {
@@ -298,11 +357,9 @@ const Index = () => {
         toast.success(response?.message);
         navigate("/orders/add-order/delivery");
       } else {
-        console.error("PickupDataerror");
         toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
       return error;
     }
   };
@@ -311,21 +368,16 @@ const Index = () => {
     data: pastedData,
   };
 
-  console.log("verifyAddressPayload", verifyAddressPayload);
-
   const getVerifyAddress = async (verifyAddressPayload: any) => {
     try {
       setLoading(true);
-      console.log("payload", verifyAddressPayload);
 
       const { data: verifyAddressResponse } = await POST(
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
 
-      console.log("responsee", verifyAddressResponse);
       const parsedData = verifyAddressResponse?.data?.message;
-      console.log("parsedData", parsedData);
 
       setPickupLocation({
         flatNo:
@@ -342,16 +394,30 @@ const Index = () => {
       });
       setLoading(false);
     } catch (error) {
-      console.log("Error in  VerifyAddress", error);
       setLoading(false);
       return error;
     }
   };
 
   const handleButtonClick = () => {
-    if (!loading && pastedData && pastedData !== prevPastedData) {
+    const trimmedData = pastedData.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
-      setPrevPastedData(pastedData);
+      setPrevPastedData(trimmedData);
+    }
+  };
+
+  const returnAddressPayload = {
+    data: pastedDataReturnAddress,
+  };
+
+  const handleButtonClickReturnAddress = () => {
+    const trimmedData = pastedDataReturnAddress.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddress(returnAddressPayload);
+      setPrevPastedData(trimmedData);
     }
   };
 
@@ -359,7 +425,6 @@ const Index = () => {
   //   // const verifyAddressMapPayload = {
   //   //   data: address,
   //   // };
-  //   // console.log("mapAddress", verifyAddressMapPayload);
   //   setLocateAddress(address);
   //   // return () => {
   //   //   setLocateAddress("");
@@ -434,40 +499,6 @@ const Index = () => {
               </div>
             </div>
 
-            {/* <div className="relative h-[75px]">
-              <div className="w-full max-w-xs">
-                <div onClick={handleClick}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "1px",
-                      height: "75px",
-                      zIndex: 1, // Ensure the text is displayed above the input
-                    }}
-                  >
-                    {pastedData || "Paste Address for the Magic"}
-                  </div>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={pastedData}
-                    onPaste={handlePaste}
-                    onChange={() => {}}
-                    style={{
-                      position: "absolute",
-                      left: "1px",
-                      height: "75px",
-                      zIndex: 2, // Ensure the input is displayed above the text
-                    }}
-                    title="inputBox"
-                  />
-                </div>
-              </div>
-              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
-                <img src={ForwardArrowIcon} alt="Arrow" />
-              </div>
-            </div> */}
-
             <div className="relative h-[75px]  ">
               <input
                 ref={inputRef}
@@ -524,10 +555,9 @@ const Index = () => {
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
-            label="Plot no., floor, building name"
+            label="Plot No., Floor, Building Name"
             value={pickupLocation.flatNo}
             onChange={(e) => {
-              console.log("flatNOooo>>", e.target.value);
               handlePickupLocationChange("flatNo", e.target.value);
             }}
           />
@@ -543,24 +573,11 @@ const Index = () => {
           />
         </div>
 
-        {/* Landmark with dropdown commented */}
-        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomDropDown
-            value={selectedOption}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-              setSelectedOption(event.target.value);
-              handlePickupLocationChange("landmark", event.target.value);
-              if (event.target.value === "other") {
-                isItLgScreen
-                  ? setIsRightLandmarkModal(true)
-                  : setIsLandmarkModal(true);
-              }
-            }}
-            options={dummyPickupDropdownData}
-          />
-        </div> */}
+        <div className="mb-4 lg:mb-6 lg:mr-6 ">
+          <CustomInputWithDropDown pastedData={pastedData} />
+        </div>
 
-        <div className="mb-4 lg:mb-6 lg:mr-6">
+        {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Landmark"
             value={pickupLocation.landmark}
@@ -568,7 +585,7 @@ const Index = () => {
               handlePickupLocationChange("landmark", e.target.value)
             }
           />
-        </div>
+        </div> */}
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
@@ -592,12 +609,21 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
-          <CustomInputBox
+          {/* <CustomInputBox
             label="State"
             value={pickupLocation.state}
             onChange={(e) =>
               handlePickupLocationChange("state", e.target.value)
             }
+          /> */}
+
+          <CustomDropDown
+            value={pickupLocation.state}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              setSelectedOption(event.target.value);
+              handlePickupLocationChange("state", event.target.value);
+            }}
+            options={dummyStateDropdownData}
           />
         </div>
 
@@ -716,19 +742,405 @@ const Index = () => {
           </div>
         </div>
 
+        <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
+          <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
+            Timing
+          </p>
+        </div>
+
+        <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+          {Object.keys(timing).map((day) => (
+            <div
+              key={day}
+              className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}
+              onClick={() => handleTimingChange(day as keyof TimingState)}
+            >
+              <div className="flex flex-row  items-center  absolute z-2 -top--1 bg-[#FEFEFE] ">
+                <Checkbox checked={timing[day as keyof TimingState]} />
+                <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                  {day}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
+          <div className="mr-2">
+            <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+              Opening Hours:
+            </span>
+          </div>
+          <div className="mr-2">
+            <span className="text-[14px] text-[#202427] lg:text-[16px] lg:text-[#323232]">
+              9am - 9pm
+            </span>
+          </div>
+        </div>
+
         <div className="flex flex-row items-center gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
-          <CustomCheckbox />
+          <CustomCheckbox checked={isChecked} onChange={handleCheckboxChange} />
           <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
             RETURN ADDRESS SAME AS PICKUP
           </p>
         </div>
+
+        {!isChecked ? (
+          <>
+            <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+              <img src={LocationIcon} alt="" className="lg:hidden" />
+
+              <img src={WebLocationIcon} alt="" className="hidden lg:block" />
+
+              <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                Return Address
+              </p>
+            </div>
+            <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
+              <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+                <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                  <img
+                    src={MagicLocationIcon}
+                    alt="Magic Location Icon"
+                    className=""
+                  />
+                  <div className="text-white text-[12px] font-Open">
+                    Magic Address
+                  </div>
+                </div>
+
+                <div className="relative h-[75px]  ">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={pastedDataReturnAddress}
+                    // onPaste={handlePaste}
+                    onChange={handleChangeReturnAddress}
+                    className="magicAddressInput"
+                    // className="custom-input"
+                    style={{
+                      position: "absolute",
+                      border: "none",
+                      // left: "10px",
+                      // background: "black",
+                      // width: "10px",
+                      // height: "25px",
+
+                      // top: "-10px",
+                    }}
+                    placeholder="Paste Address for the Magic"
+                    title=""
+                  />
+                  <div>
+                    <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <img
+                          src={AiIcon}
+                          alt="Arrow"
+                          onClick={handleButtonClickReturnAddress}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden lg:block col-span-1 "></div>
+
+            <div className=" mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputWithImage
+                placeholder="Choose location (optional)"
+                imgSrc={ChooseLocationIcon}
+                value={locateAddress}
+                onChange={(e) => {
+                  setLocateAddress(e.target.value);
+                  // handlePickupLocationChange("address", e.target.value);
+                }}
+                onClick={() => {
+                  isItLgScreen
+                    ? setIsLocationRightModal(true)
+                    : navigate("/neworder/map");
+                }}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Plot No., Floor, Building Name"
+                value={returnAddress.flatNo}
+                onChange={(e) => {
+                  handleReturnAddressChange("flatNo", e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Locality"
+                value={returnAddress.sector}
+                onChange={(e) =>
+                  handleReturnAddressChange("sector", e.target.value)
+                }
+              />
+            </div>
+
+            {/* Landmark with dropdown commented */}
+            <div className="mb-4 lg:mb-6  lg:mr-6 ">
+              <CustomInputWithDropDown pastedData={pastedDataReturnAddress} />
+            </div>
+
+            {/* <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Landmark"
+            value={pickupLocation.landmark}
+            onChange={(e) =>
+              handlePickupLocationChange("landmark", e.target.value)
+            }
+          />
+        </div> */}
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Pincode"
+                value={returnAddress.pincode}
+                // onChange={(e) =>
+                //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+                // }
+                onChange={(e) =>
+                  handleReturnAddressChange("pincode", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="City"
+                value={returnAddress.city}
+                onChange={(e) =>
+                  handleReturnAddressChange("city", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              {/* <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          /> */}
+
+              <CustomDropDown
+                value={returnAddress.state}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setSelectedOption(event.target.value);
+                  handleReturnAddressChange("state", event.target.value);
+                }}
+                options={dummyStateDropdownData}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Country"
+                value={returnAddress.country}
+                onChange={(e) =>
+                  handleReturnAddressChange("country", e.target.value)
+                }
+              />
+            </div>
+
+            {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          />
+          <div>
+            <CustomInputBox
+              label="Country"
+              value={pickupLocation.country}
+              onChange={(e) =>
+                handlePickupLocationChange("country", e.target.value)
+              }
+            />
+          </div>
+        </div> */}
+
+            {/* <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="State" />
+        </div>
+
+        <div className="hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="Country" />
+        </div> */}
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <AudioInputBox
+                label="Add directions(optional)"
+                audio={directionAudio}
+                setAudio={setDirectionAudio}
+                onClick={() => !directionAudio && setIsAudioModal(true)}
+              />
+            </div>
+
+            <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+              <img src={ContactIcon} alt="Contact" className="lg:hidden" />
+              <img
+                src={WebContactIcon}
+                alt="Contact"
+                className="hidden lg:block"
+              />
+
+              <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                Return Address Contact
+              </p>
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Name of the contact person"
+                value={contact.name}
+                onChange={(e) => handleContactChange("name", e.target.value)}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Mobile Number"
+                value={contact.mobileNo}
+                onChange={(e) =>
+                  handleContactChange("mobileNo", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Email ID(optional)"
+                value={contact.emailId}
+                onChange={(e) => handleContactChange("emailId", e.target.value)}
+              />
+            </div>
+            <div className="mb-7 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Alternate mobile number(optional)"
+                value={contact.alternateMobileNo}
+                onChange={(e) =>
+                  handleContactChange("alternateMobileNo", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
+              <p className="text-[#202427] text-[18px] font-Lato lg:font-Lato lg:text-[20px] lg:text-[#323232] ">
+                Save your contact as
+              </p>
+            </div>
+
+            <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
+                  saveContact.shopkeeper === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={(e) => {
+                  setSaveContact({
+                    shopkeeper: true,
+
+                    warehouse: false,
+                    dispatcher: false,
+                  });
+                  handleContactChange("type", "shopkeeper");
+                }}
+              >
+                <img src={OfficeIcon} alt="ShopKeeper" />
+                <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+                  Shopkeeper
+                </p>
+              </div>
+
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                  saveContact.warehouse === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={() => {
+                  setSaveContact({
+                    shopkeeper: false,
+
+                    warehouse: true,
+                    dispatcher: false,
+                  });
+                  handleContactChange("type", "warehouse associate");
+
+                  // isItLgScreen
+                  //   ? setIsSaveContactRightModal(true)
+                  //   : setIsSaveContactModal(true);
+                }}
+              >
+                <img src={Warehouse} alt="Warehouse associate" />
+                <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                  Warehouse associate
+                </p>
+              </div>
+
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                  saveContact.dispatcher === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={() => {
+                  setSaveContact({
+                    shopkeeper: false,
+
+                    warehouse: false,
+                    dispatcher: true,
+                  });
+                  handleContactChange("type", "dispatcher");
+
+                  // isItLgScreen
+                  //   ? setIsSaveContactRightModal(true)
+                  //   : setIsSaveContactModal(true);
+                }}
+              >
+                <img src={Warehouse} alt="Warehouse associate" />
+                <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                  Dispatcher
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
+
+        {/* <div className="flex flex-row items-center gap-2 lg:col-span-3 mb-5 lg:mb-[23px]">
+          <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+            Timing
+          </p>
+        </div>
+
+        <div className="mb-4 lg:mb-6 lg:mr-6 flex">
+          <p>Monday</p>
+          <p>Monday</p>
+        </div> */}
 
         <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
           <img src={ContactIcon} alt="Contact" className="lg:hidden" />
           <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
 
           <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-            Contact
+            Pickup Address Contact
           </p>
         </div>
 
@@ -783,6 +1195,7 @@ const Index = () => {
                 shopkeeper: true,
 
                 warehouse: false,
+                dispatcher: false,
               });
               handleContactChange("type", "shopkeeper");
             }}
@@ -804,6 +1217,7 @@ const Index = () => {
                 shopkeeper: false,
 
                 warehouse: true,
+                dispatcher: false,
               });
               handleContactChange("type", "warehouse associate");
 
@@ -815,6 +1229,32 @@ const Index = () => {
             <img src={Warehouse} alt="Warehouse associate" />
             <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
               Warehouse associate
+            </p>
+          </div>
+
+          <div
+            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+              saveContact.dispatcher === true
+                ? "border-[#004EFF] text-[#004EFF] "
+                : "border-gray-300 text-[#1C1C1C]"
+            }`}
+            onClick={() => {
+              setSaveContact({
+                shopkeeper: false,
+
+                warehouse: false,
+                dispatcher: true,
+              });
+              handleContactChange("type", "dispatcher");
+
+              // isItLgScreen
+              //   ? setIsSaveContactRightModal(true)
+              //   : setIsSaveContactModal(true);
+            }}
+          >
+            <img src={Warehouse} alt="Warehouse associate" />
+            <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+              Dispatcher
             </p>
           </div>
         </div>
@@ -892,8 +1332,19 @@ const Index = () => {
               </div>
             </div>
             {toggleStatus && (
-              <div className="grid grid-cols-2 grid-rows-2 gap-2 border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-20">
-                <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
+              <div className=" border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-8">
+                <div
+                  className="flex cursor-pointer "
+                  onClick={() => {
+                    isItLgScreen
+                      ? setCustomBrandingRightModal(true)
+                      : setCustomBrandingModal(true);
+                  }}
+                >
+                  <img src={editIcon} alt="" className="ml-2 mr-2" />
+                  <p> Add Branding</p>
+                </div>
+                {/* <div className="flex flex-col border-r-[2px] border-r-[#E8E8E8] ">
                   <p className="text-[10px] text-[#777777] font-Open">
                     Brand Name
                   </p>
@@ -927,7 +1378,7 @@ const Index = () => {
                   <h1 className="font-semibold font-Open text-[12px] text-[#1C1C1C]">
                     User Detail
                   </h1>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
@@ -1021,6 +1472,21 @@ const Index = () => {
           buttonText="SAVE"
           inputLabel="Warehouse Associate"
           onClick={() => setIsSaveContactRightModal(false)}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={customBrandingRightModal}
+        onClose={() => setCustomBrandingRightModal(false)}
+        className="!w-[389px]"
+      >
+        <CustomBrandingContent
+          title="Custom Branding"
+          titleIcon={MapIcon}
+          buttonText="UPDATE"
+          inputLabel="Brand Name"
+          onClick={() => setCustomBrandingRightModal(false)}
+          // onCustomLandmarkSelection={handleLandmarkSelected}
         />
       </RightSideModal>
 

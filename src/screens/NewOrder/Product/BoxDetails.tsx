@@ -33,9 +33,9 @@ const BoxDetails = (props: IBoxdetails) => {
     return result / 5000;
   };
 
-  const calcAllTotalProductWeight = (arr: any) => {
+  const calcAllTotalProductWeight: any = () => {
     let totalWeight = 0;
-    arr.forEach((e: any) => {
+    allProducts.forEach((e: any) => {
       const { weight } = e;
       totalWeight += +weight.deadWeight * +e.stock || 0;
     });
@@ -54,22 +54,43 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const removeUnit = (index: number) => {
     let arr = allProducts;
-    arr[index].stock === 0 ? (arr[index].stock = 0) : arr[index].stock--;
+    arr[index].stock = +arr[index].stock;
+    arr[index].stock === 1 ? (arr[index].stock = 1) : arr[index].stock--;
     setAllProducts([...arr]);
+  };
+
+  const calcBillableWeight = () => {
+    let billableWeight = calcAllTotalProductWeight();
+
+
+    return (
+      billableWeight > +selectedBox.weight.split("kg")[0]
+        ? calcAllTotalProductWeight()
+        : +selectedBox.weight.split("kg")[0]
+    ).toFixed(2);
   };
 
   return (
     <div className="lg:border-0 w-full bg-[#FEFEFE] border-2 border-solid border-[#E8E8E8] rounded-lg my-4">
       <div className="hidden lg:flex justify-between mb-4">
-        <div className="flex gap-x-2">
+        <div className="flex py-5 gap-x-2">
           <img src={ProductIcon} alt="Package Icon" className="" />
-          <p>Box Details</p>
+          <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+            Box Details
+          </h1>
         </div>
         <div className="flex gap-x-2"></div>
       </div>
 
-      <div className="px-2 lg:grid grid-cols-2 lg:gap-x-6 ">
-        <div className="h-56 overflow-scroll lg:border-2 border-[#E8E8E8] lg:p-5 lg:rounded-lg">
+      <div className="lg:grid grid-cols-2 lg:gap-x-6 ">
+        <div
+          className="h-56 overflow-scroll  lg:p-5 lg:rounded-lg"
+          style={{
+            boxShadow:
+              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+            border: "1px solid #E8E8E8",
+          }}
+        >
           <div className="flex justify-between p-2 lg:hidden">
             <p className="font-Open text-[14px] font-semibold">Box Details</p>
             <div className="flex gap-x-2">
@@ -79,10 +100,10 @@ const BoxDetails = (props: IBoxdetails) => {
           </div>
           {allProducts.map((e: any, index: number) => {
             return (
-              <div className="flex justify-between">
+              <div className="flex justify-between" key={index}>
                 <ProductBox
                   image={ItemIcon}
-                  weight={e?.weight.deadWeight || 0}
+                  weight={`${e?.weight.deadWeight} Kg`}
                   productName={e?.productName || 0}
                   breadth={e?.dimensions?.breadth || 0}
                   length={e?.dimensions?.length || 0}
@@ -115,7 +136,14 @@ const BoxDetails = (props: IBoxdetails) => {
             );
           })}
         </div>
-        <div className="flex flex-col lg:gap-y-2 lg:rounded-lg lg:p-5 lg:mt-0 mt-4 lg:border-2 border-[#E8E8E8]">
+        <div
+          className="flex flex-col lg:gap-y-2 lg:rounded-lg lg:p-5 lg:mt-0 mt-4"
+          style={{
+            boxShadow:
+              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+            border: "1px solid #E8E8E8",
+          }}
+        >
           {Object.keys(selectedBox).length > 0 ? (
             <>
               <div className="flex justify-between">
@@ -125,59 +153,51 @@ const BoxDetails = (props: IBoxdetails) => {
                 {/* <img src={plusIcon} alt="Add product" /> */}
               </div>
               <span className="text-base text-slate-600 mt-2 pl-4">
-                Products dead weight {calcAllTotalProductWeight(allProducts)} Kg
+                Products dead weight is {calcAllTotalProductWeight().toFixed(2)}{" "}
+                Kg
               </span>
               <div className="relative">
                 <div className="h-[6px] bg-[#CBEAC0] mt-2 ml-4 mr-12">
                   <div
                     className={`h-[6px] ${
-                      calcAllTotalProductWeight(allProducts) >
+                      calcAllTotalProductWeight() >
                       +selectedBox.weight.split("kg")[0]
                         ? "bg-[red]"
                         : "bg-[#7CCA62]"
                     } p-0 m-0 transition-all duration-700 ease-in-out`}
                     style={{
                       width: `${percentage(
-                        calcAllTotalProductWeight(allProducts) || 0,
+                        calcAllTotalProductWeight() || 0,
                         +selectedBox.weight.split("kg")[0] || 0
                       )}%`,
                     }}
                   ></div>
                   <div className="absolute top-1 right-0">
-                    <p className="text-xs font-semibold leading-4 text-[#494949]">
+                    <p className="text-base font-semibold leading-4 text-[#494949]">
                       {/* {weight is length x width x height (cm) / 5000.} */}
                       {selectedBox.weight.split("kg")} Kg
                     </p>
                   </div>
                 </div>
+                {}
               </div>
               {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
-              {calcAllTotalProductWeight(allProducts) >
+              {calcAllTotalProductWeight() >
               +selectedBox.weight.split("kg")[0] ? (
-                <span className="text-xs text-slate-600 font-semibold mt-4 pl-4">
-                  {` Your billable weight is  ${
-                    calcAllTotalProductWeight(allProducts) -
+                <span className="text-base text-slate-600  mt-4 pl-4">
+                  {` Your billable weight is  ${calcBillableWeight()} KG. ( You are ${(
+                    calcAllTotalProductWeight() -
                     +selectedBox.weight.split("kg")[0]
-                  } KG. (You are ${
-                    calcAllTotalProductWeight(allProducts) -
-                    +selectedBox.weight.split("kg")[0]
-                  } KG over your box capacity/volumetric weight)`}
-                  {/* {calcAllTotalProductWeight(allProducts) -
-                    +selectedBox.weight.split("kg")[0]}{" "}
-                  Kg */}
+                  ).toFixed(2)} KG over your box capacity/volumetric weight )`}
                 </span>
               ) : (
-                <span className="text-xs text-slate-600 font-semibold mt-4 pl-4">
-                  {`Your billable weight is ${
+                <span className="text-base text-slate-600  mt-4 pl-4">
+                  {`Your billable weight is ${calcBillableWeight()} KG. You can add more products up to ${(
                     +selectedBox.weight.split("kg")[0] -
-                    calcAllTotalProductWeight(allProducts)
-                  } KG. You can more products up to ${
-                    +selectedBox.weight.split("kg")[0] -
-                    calcAllTotalProductWeight(allProducts)
-                  } KG`}
+                    calcAllTotalProductWeight()
+                  ).toFixed(2)} KG`}
                 </span>
               )}
-              {/* </span> */}
             </>
           ) : (
             <div className="flex justify-center items-center h-full">

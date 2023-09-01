@@ -8,11 +8,13 @@ import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
 import { setAcceptTnCStatus } from "../../../../redux/reducers/onboarding";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 interface ITypeProps {}
 
 export const GSTComponent = (props: ITypeProps) => {
+  const singUpState = useSelector((state: any) => state?.signup);
+
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
@@ -22,6 +24,7 @@ export const GSTComponent = (props: ITypeProps) => {
 
   const acceptStatus = () => {
     dispatch(setAcceptTnCStatus(true));
+
     navigate("/onboarding/kyc-terms/service-agreement");
   };
 
@@ -56,7 +59,7 @@ export const GSTComponent = (props: ITypeProps) => {
   const gstCommonComponent = () => {
     return (
       <div className="lg:px-0 ">
-        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
 
@@ -65,10 +68,102 @@ export const GSTComponent = (props: ITypeProps) => {
           content="Terms & Agreement"
         />
         <div className=" px-5 mb-4 lg:mb-1 lg:mx-5">
-          <Card
+          {/* <Card
             title="DECLARATION OF GST NON-ENROLMENT"
             subTitleOne="Sub: Declaration of"
-          />
+          /> */}
+          <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-[27px]">
+            <div className="px-8 flex flex-col gap-y-2">
+              <div className="h-[370px] overflow-y-scroll">
+                {/* <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe> */}
+                <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                  <h2>(to be printed on Letterhead of the business entity)</h2>
+                </div>
+
+                <div style={{ textAlign: "center" }}>
+                  <p>DECLARATION OF GST NON-ENROLMENT</p>
+                  <p>To AVN Business Solutions Pvt. Ltd.</p>
+                  <p>12A, 3rd Floor, Techniplex - II,</p>
+                  <p>Techniplex Complex, S.V.Road,</p>
+                  <p>Off Veer Savarkar Flyover, Goregaon West,</p>
+                  <p>Mumbai, Maharashtra 400062</p>
+                </div>
+
+                <div style={{ marginTop: "20px" }}>
+                  <p>Dear Sir/Madam,</p>
+                  <p>Sub: Declaration of:</p>
+                  <ol>
+                    <li>
+                      Non-requirement of registration under the
+                      Central/State/UT/Integrated Goods and Services Tax Act,
+                      2017
+                    </li>
+                    <li>Non-applicability of e-way bill</li>
+                    <li>Non applicability of e-invoicing</li>
+                    <li>Goods having no commercial value</li>
+                  </ol>
+
+                  <p>
+                    I/We{" "}
+                    <b className="uppercase">{`${singUpState?.firstName} ${singUpState?.lastName}`}</b>{" "}
+                    (Name of the service provider/business entity), do hereby
+                    declare that:
+                  </p>
+                  <ul>
+                    <li>
+                      I/we am/are not registered under the Goods and Services
+                      Tax Act, 2017 as (select and fill below for the relevant
+                      reason)
+                    </li>
+                    <ul>
+                      <li>
+                        - I/We deal in/supply the category of goods or services
+                        <b> LOGISTICS </b> (Describe the nature of the
+                        services/goods) which are exempted under the Goods and
+                        Service Tax Act, 2017.
+                      </li>
+                      <li>
+                        - I/We have the annual aggregate turnover below the
+                        taxable limit as specified under the Goods and Services
+                        Tax Act, 2017.
+                      </li>
+                      <li>
+                        - I/We are yet to register ourselves under the Goods and
+                        Services Tax Act, 2017.
+                      </li>
+                    </ul>
+                    <li>
+                      I/We hereby also confirm that if anytime during any
+                      financial year I/we decide or require or become liable to
+                      register under the GST, I/we undertake to provide all the
+                      requisite documents and information.
+                    </li>
+                    <li>
+                      I/We request you to consider this communication as a
+                      declaration for not requiring to be registered under the
+                      Goods and Service Tax Act, 2017 and comply with
+                      e-invoicing or e-way bill requirement.
+                    </li>
+                    <li>
+                      I/We hereby also confirm that AVN Business Solutions Pvt
+                      Ltd or the carrier of the shipment/consignment shall not
+                      be liable for any loss accrued to me/us, due to any
+                      registration /e-way bill/e-invoice default with the GST or
+                      under any other law prevailing.
+                    </li>
+                  </ul>
+                </div>
+
+                <div style={{ marginTop: "40px" }}>
+                  <p>Signature of Authorised Signatory</p>
+                  <p>Name of the Authorised Signatory:</p>
+                  <p>Name of Business:</p>
+                  <p>Date:</p>
+                  <p>Stamp/Seal of the business entity:</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         {BottomButton()}
       </div>

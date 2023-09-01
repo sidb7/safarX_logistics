@@ -53,7 +53,7 @@ const data = [
         id: "4",
         name: "Orders",
         isActive: false,
-        path: "/orders",
+        path: "/order",
         menu: [],
         pages: [
           {
@@ -329,7 +329,7 @@ const data = [
         id: "49",
         name: "Recharge Wallet",
         isActive: false,
-        path: "recharge-wallet",
+        path: "/wallet/recharge-wallet",
         menu: [],
         pages: [
           {
@@ -495,16 +495,23 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("location", location);
     let tempArr = sideBarMenus;
+
+    const { pathname } = location;
+
+    const paths = pathname.split("/");
+
     tempArr.forEach((e: any) => {
       if (e.menu) {
         if (e.isActivePath) e.isActivePath = !e.isActivePath;
         e.menu.forEach((e1: any) => {
           if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
-          if (location.pathname === e1.path) {
-            e1.isActivePath = true;
+          if (paths[1] === e1.path.split("/")[1]) {
             e.isActivePath = true;
+          }
+
+          if (paths[2] === e1.path.split("/")[2]) {
+            e1.isActivePath = true;
           }
           if (e1.menu.menu) {
             e1.menu.menu.foEach((e2: any) => {
@@ -570,6 +577,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   return (
     <>
       <nav
+        key="1"
         onMouseEnter={handleOpner}
         onMouseLeave={handleClose}
         className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-50 rounded-r-lg overflow-scroll`}
@@ -587,14 +595,14 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             <img src={CompanyLogo} alt="" />
           )}
         </div>
-        {sideBarMenus.map((e: any, index: number) => {
+        {sideBarMenus?.map((e: any, index: number) => {
           let iconName = e.icon.toLowerCase();
           const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
           return (
-            <div className="w-full flex-col">
+            <div className="w-full flex-col" key={index}>
               <div
-                className={`h-10 flex items-center  rounded-lg ${
-                  isHover ? "px-2 justify-start" : "justify-center"
+                key={`${e.name + index}`}
+                className={`h-10 flex items-center  rounded-lg px-2
                 } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
                 onClick={() => {
                   opneAndCloseChild(index, e.isChild);
@@ -602,7 +610,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               >
                 <img
                   src={iconPath}
-                  className={`${e.isActivePath ? " invert" : ""}`}
+                  className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
                   alt=""
                 />
                 {isHover ? (
@@ -622,7 +630,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                         e.isActivePath ? "text-white" : ""
                       } flex items-center gap-2`}
                     >
-                      {`(${e.menu.length})` || 0}
                       <CustomButton
                         icon={downArrow}
                         showIcon={true}
@@ -644,6 +651,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   {e.menu.map((child: any, childIndex: number) => {
                     return (
                       <div
+                        key={childIndex}
                         className={`py-2 pl-10 rounded-lg ${
                           child.isActivePath ? "bg-[#E8E8E8]" : ""
                         }`}
@@ -701,63 +709,61 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               onClick={() => setMobileSideBar(false)}
             />
           </div>
-          <div>
-            {sideBarMenus.map((e: any, index: number) => {
-              let iconName = e.icon.toLowerCase();
-              const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
-              return (
-                <>
-                  <div className="w-full flex-col px-6 py-4" key={index}>
-                    <div
-                      className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
-                      onClick={() => {
-                        opneAndCloseChild(index, e.isChild);
-                      }}
-                    >
-                      <img src={iconPath} alt="" />
-                      <div
-                        className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
-                      >
-                        <p className={` whitespace-nowrap`}>{e.name}</p>
+          {sideBarMenus.map((e: any, index: number) => {
+            let iconName = e.icon.toLowerCase();
+            const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
+            return (
+              <div
+                className="w-full flex-col px-6 py-4"
+                key={`${e.name + index}`}
+              >
+                <div
+                  className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
+                  onClick={() => {
+                    opneAndCloseChild(index, e.isChild);
+                  }}
+                >
+                  <img src={iconPath} alt="" />
+                  <div
+                    className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                  >
+                    <p className={` whitespace-nowrap`}>{e.name}</p>
 
-                        <div className={` flex items-center gap-2`}>
-                          <CustomButton
-                            icon={downArrow}
-                            showIcon={true}
-                            onlyIcon={true}
-                            className={`
+                    <div className={` flex items-center gap-2`}>
+                      <CustomButton
+                        icon={downArrow}
+                        showIcon={true}
+                        onlyIcon={true}
+                        className={`
                             bg-white w-fit !p-0 !h-fit`}
-                            text={""}
-                            onClick={() => {}}
-                          />
-                        </div>
-                      </div>
+                        text={""}
+                        onClick={() => {}}
+                      />
                     </div>
-                    {e.isChild ? (
-                      <div className="flex flex-col overflow-hidden ">
-                        {e.menu.map((child: any, childIndex: number) => {
-                          return (
-                            <div
-                              key={childIndex}
-                              className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
-                              onClick={() =>
-                                setIsActivePath(index, childIndex, child.path)
-                              }
-                            >
-                              {child.name}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    ) : (
-                      ""
-                    )}
                   </div>
-                  <hr />
-                </>
-              );
-            })}
-          </div>
+                </div>
+                {e.isChild ? (
+                  <div className="flex flex-col overflow-hidden ">
+                    {e.menu.map((child: any, childIndex: number) => {
+                      return (
+                        <div
+                          key={`${child.path + childIndex}`}
+                          className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
+                          onClick={() =>
+                            setIsActivePath(index, childIndex, child.path)
+                          }
+                        >
+                          {child.name}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            );
+          })}
         </nav>
       </>
     </>

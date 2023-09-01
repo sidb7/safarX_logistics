@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import CustomRadioButton from "../../../components/RadioButton";
+import CustomRadioButton from "../../../components/RadioButton/Index";
 
 interface IServiceCardProps {
   isRecommendation?: boolean;

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
-import DeleteIcon from "../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
-import Box from "./Box";
 import CodIcon from "../../../assets/codIcon.svg";
 import ProductBox from "./ProductBox";
 import SampleProduct from "../../../assets/SampleProduct.svg";
@@ -21,8 +19,11 @@ import AddInsuranceModal from "./AddInsuranceModal";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import CustomBreadcrumb from "../../../components/BreadCrumbs";
-import backArrow from "../../../assets/backArrow.svg";
+import Cross from "../../../assets/cross.svg";
+import shieldTick from "../../../assets/shield-tick.svg";
+import shieldcross from "../../../assets/shieldcross.svg";
+import Checkbox from "../../../components/CheckBox";
+// import CodIcon from "../../../assets/codIcon.svg";
 import { POST } from "../../../utils/webService";
 import {
   ADD_BOX_INFO,
@@ -31,16 +32,53 @@ import {
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
-import Switch from "react-switch";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
-import { UploadInput } from "../../../components/UploadInput";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
+import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
 // import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
+const steps = [
+  {
+    label: "Pickup",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Delivery",
+    isCompleted: true,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Product",
+    isCompleted: false,
+    isActive: true,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Service",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Summary",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+  {
+    label: "Payment",
+    isCompleted: false,
+    isActive: false,
+    imgSrc: TickLogo,
+  },
+];
 
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const navigate = useNavigate();
@@ -56,82 +94,16 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [toggleStatus, setToggleStatus] = useState(false);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>();
-  console.log("productFinalPayload", productFinalPayload);
-  // const [codData1, setCodData] = useState<any>({
-  //   isCOD: false,
-  // });
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const { data } = await POST(GET_LATEST_ORDER);
-  //     const payload = {
-  //       status: true,
-  //       collectableAmount: 120,
-  //       totalAmount: 220,
-  //     };
-  //     const { data: insruanceInfo } = await POST(
-  //       GET_PACKAGE_INSURANCE,
-  //       payload
-  //     );
-
-  //     if (data?.success) {
-  //       if (data?.data?.codInfo) {
-  //
-  //         setCodData({
-  //           ...codData1,
-  //           codAmount: data?.data?.codAmount,
-  //           invoiceValue: data?.data?.invoiceValue,
-  //         });
-  //       }
-  //     }
-  //   })();
-  // }, []);
-
-  const steps = [
-    {
-      label: "Pickup",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Delivery",
-      isCompleted: true,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Product",
-      isCompleted: false,
-      isActive: true,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Service",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Summary",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-    {
-      label: "Payment",
-      isCompleted: false,
-      isActive: false,
-      imgSrc: TickLogo,
-    },
-  ];
+  const [paymentMode, setPaymentMode] = useState<any>("cod");
+  const [selectRecipient, setSelectRecipient] = useState({
+    isInsurance: true,
+    iwillTakeRisk: false,
+  });
 
   const postCodDetails = async () => {
-    // console.log("postCodDetails", toggleStatus);
-
     const payload = {
-      paymentType: toggleStatus ? "COD" : "PREPAID",
-      codCollectAmount: toggleStatus ? codData.codAmount : 0,
+      paymentType: paymentMode === "cod" ? "COD" : "PREPAID",
+      codCollectAmount: paymentMode === "cod" ? +codData.codAmount : 0,
       invoiceValue: codData.invoiceValue,
     };
 
@@ -158,6 +130,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const setPayloadForProduct = (productsInfo: any) => {
+    setCodData({ ...codData, invoiceValue: getInvoiceValue(productsInfo) });
     const payload = {
       ...productFinalPayload,
       boxInfo: [
@@ -178,20 +151,24 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const codInfo = data?.data?.codInfo;
 
       setProducts(data?.data?.products);
+
       setProductFinalPayload({
         ...productFinalPayload,
         tempOrderId: data.data.tempOrderId,
       });
+
       setCodData({
         isCOD: codInfo?.isCOD ? true : false,
         codAmount: codInfo?.codAmount,
-        invoiceValue: codInfo?.invoiceValue,
+        invoiceValue: getInvoiceValue(data?.data?.products),
       });
+
       setToggleStatus(codInfo?.isCOD ? true : false);
     }
 
     if (boxData?.success) {
       setBox(boxData?.data);
+      setSelectedBox(boxData?.data[0]);
     }
   };
 
@@ -214,6 +191,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     } else {
       toast.error(data?.message);
     }
+  };
+
+  const getInvoiceValue = (arr: any = []) => {
+    return (
+      arr.reduce((accumulator: any, product: any) => {
+        const totalProductPrice = product.price * product.stock;
+        return accumulator + totalProductPrice;
+      }, 0) || 0
+    );
   };
 
   return (
@@ -239,29 +225,27 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           </div>
-          <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-4">
-            <div className="">
-              <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
-                Package 1
-              </h2>
+          <div className="flex justify-between py-4 lg:justify-start lg:gap-x-4">
+            <div className="text-[#004EFF] text-lg font-semibold font-Lato ">
+              Package 1
             </div>
             <div className="flex items-center">
-              <img
+              {/* <img
                 src={EditIcon}
                 alt="Edit Product"
                 className="cursor-pointer mr-2"
-              />
+              /> */}
               <img
                 src={BookmarkIcon}
                 alt="Bookmark Product"
                 className="mr-2 cursor-pointer"
                 onClick={() => setCombo(true)}
               />
-              <img
+              {/* <img
                 src={isLgScreen ? DeleteIconForLg : DeleteIcon}
                 alt="Delete Product"
                 className="mr-2 w-4 h-4"
-              />
+              /> */}
             </div>
           </div>
 
@@ -270,13 +254,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               products.map((e: any, index: number) => {
                 return (
                   <ProductBox
+                    key={index}
                     image={SampleProduct}
-                    weight={e?.weight?.deadWeight || 0}
+                    weight={`${e?.weight?.deadWeight} Kg`}
                     productName={e?.productName || 0}
                     breadth={e?.dimensions?.breadth || 0}
                     length={e?.dimensions?.length || 0}
                     height={e?.dimensions?.height || 0}
-                    className="p-3 lg:max-w-[272px]"
+                    className=""
                   />
                 );
               })}
@@ -286,10 +271,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD PRODUCT"
               onClick={() => {
-                navigate("/newOrder/addnewproduct");
+                navigate("/orders/add-order/add-product");
               }}
               showIcon={true}
               icon={ButtonIcon}
+              className="rounded"
               alt="Add Product"
             />
           </div>
@@ -305,21 +291,24 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
           <div className="mt-7">
-            <div className="flex pb-5 pr-5 gap-2">
+            <div className="flex py-5 gap-2">
               <img src={ProductIcon} alt="Package Icon" className="" />
-              <h1 className="font-bold text-lg leading-6">Box Type</h1>
+              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                Box Type
+              </h1>
             </div>
             <div className="flex gap-3">
               {box?.map((newpackage: any, index) => {
                 return (
                   <div
+                    key={index}
                     className="cursor-pointer"
                     onClick={() => {
                       setSelectedBox(newpackage);
                     }}
                   >
                     <PackageBox
-                      packageType={newpackage?.productName}
+                      packageType={newpackage?.name}
                       weight={newpackage?.weight}
                       height={newpackage.height}
                       breadth={newpackage.breadth}
@@ -341,58 +330,120 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               selectedBox={selectedBox}
               setProductFinalPayload={setPayloadForProduct}
             />
-            <UploadInput />
-            <div className="">
-              <div className="w-full flex justify-between py-6">
-                <div>
-                  <div className="flex gap-x-2 items-center">
-                    <img src={CodIcon} alt="" />
-                    <p className="whitespace-nowrap text-2xl">Add COD</p>
+            {/* <UploadInput /> */}
+            <div>
+              <div className="w-full flex justify-between py-6 ">
+                <div className="flex gap-x-2 items-center ">
+                  <img src={shieldTick} alt="" />
+                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                    Add Insurance
+                  </h1>
+                </div>
+              </div>
+              <div className="flex gap-x-3  ">
+                <div
+                  className={`relative border-[1px] p-16 rounded ${
+                    selectRecipient.isInsurance === true
+                      ? "border-[#1C1C1C]"
+                      : "border-[#EAEAEA]"
+                  } bg-[#FEFEFE]  cursor-pointer`}
+                  onClick={() => {
+                    setSelectRecipient({
+                      isInsurance: true,
+                      iwillTakeRisk: false,
+                    });
+                  }}
+                >
+                  <img src={shieldTick} alt="" className="w-16 h-12" />
+                  <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
+                    {selectRecipient.isInsurance && (
+                      <Checkbox
+                        onChange={() => {}}
+                        checked={
+                          selectRecipient?.isInsurance === true ? true : false
+                        }
+                      />
+                    )}
+                    <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                      I want insurance
+                    </p>
                   </div>
                 </div>
-                <button
-                  className={`${
-                    toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
-                  } flex justify-center items-center gap-x-2 rounded w-[140px] h-[30px] `}
+                <div
+                  className={`relative z-1  p-16   border-[1px] rounded ${
+                    selectRecipient.iwillTakeRisk === true
+                      ? "border-[#1C1C1C]"
+                      : "border-[#EAEAEA]"
+                  } bg-[#FEFEFE] cursor-pointer`}
+                  onClick={() => {
+                    setSelectRecipient({
+                      iwillTakeRisk: true,
+                      isInsurance: false,
+                    });
+                  }}
                 >
-                  <Switch
-                    onChange={() => {
-                      postCodDetails();
-                      setToggleStatus(!toggleStatus);
-                    }}
-                    checked={toggleStatus}
-                    onColor="#FFFFF"
-                    onHandleColor="#7CCA62"
-                    offColor="#FFFFF"
-                    offHandleColor="#F35838"
-                    handleDiameter={4}
-                    uncheckedIcon={false}
-                    checkedIcon={false}
-                    height={18}
-                    width={24}
-                  />
-                  <p className="text-[#FFFFFF] flex justify-center font-semibold font-Open text-[14px]  ">
-                    {toggleStatus ? "ACTIVATE" : "DEACTIVATE"}
-                  </p>
-                </button>
+                  <img src={shieldcross} alt="" className="w-16 h-12" />
+                  <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
+                    {selectRecipient.iwillTakeRisk && (
+                      <Checkbox
+                        onChange={() => {}}
+                        checked={
+                          selectRecipient.iwillTakeRisk === true ? true : false
+                        }
+                      />
+                    )}
+                    <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                      I'll take risk
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="">
+              <div className="w-full flex justify-between pt-6 ">
+                <div className="flex gap-x-2 items-center">
+                  <img src={CodIcon} alt="" />
+                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                    Payment Mode
+                  </h1>
+                </div>
               </div>
 
-              <div className="py-4">
-                <div className="flex flex-col gap-y-4">
-                  <CustomInputBox
-                    label={"COD amount to collect from buyer"}
-                    isDisabled={!toggleStatus}
-                    value={codData?.codAmount}
-                    inputType="text"
-                    onChange={(e) => {
-                      setCodData({ ...codData, codAmount: e.target.value });
-                      console.log(codData);
-                    }}
+              <div className="">
+                <div className="flex py-5 ">
+                  <GroupRadioButtons
+                    options={[
+                      { text: "Prepaid", value: "prepaid" },
+                      { text: "COD", value: "cod" },
+                    ]}
+                    value={paymentMode}
+                    selectedValue={setPaymentMode}
                   />
+                </div>
+
+                <div className="flex w-fit gap-x-8 py-2 pb-8">
+                  {paymentMode === "cod" && (
+                    <CustomInputBox
+                      label={"COD Amount to Collect From Buyer"}
+                      value={codData?.codAmount}
+                      inputType="text"
+                      className="!w-60"
+                      onChange={(e) => {
+                        setCodData({
+                          ...codData,
+                          codAmount:
+                            e.target.value > codData.invoiceValue
+                              ? codData.invoiceValue
+                              : e.target.value,
+                        });
+                      }}
+                    />
+                  )}
                   <CustomInputBox
                     inputType="text"
                     label={"Total invoice value"}
-                    // isDisabled={toggleStatus}
+                    isDisabled={true}
+                    className="!w-56 text-base font-bold"
                     value={codData?.invoiceValue}
                     onChange={(e) =>
                       setCodData({ ...codData, invoiceValue: e.target.value })
@@ -417,26 +468,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <AddComboModal
             combo={combo}
             setCombo={setCombo}
-            insuranceModal={insuranceFun}
+            insuranceModal={() => {}}
           />
-        </RightSideModal>
-        <RightSideModal
-          isOpen={insurance}
-          onClose={() => setInsurance(false)}
-          className="!w-[600px]"
-        >
-          {/* <AddInsuranceModal
-            insurance={insurance}
-            setInsurance={(codInfo: any) => {
-              handleCallbackFromInsurance(codInfo);
-            }}
-            codData1={codData1}
-          /> */}
         </RightSideModal>
       </div>
 
       <div>
-        <BottomLayout backButtonText="BACK" nextButtonText="NEXT" />
         <BottomLayout callApi={() => addBoxInfo()} />
       </div>
     </div>

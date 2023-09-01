@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { POST_VERIFY_AADHAR_URL } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { aadharRegex } from "../../../../utils/regexCheck";
 
 interface ITypeProps {}
 
@@ -29,7 +30,7 @@ const Index = (props: ITypeProps) => {
   );
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-  const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
+  // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
 
   const onSendOtp = async (e: any) => {
     try {
@@ -45,15 +46,15 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
-        // toast.success(response?.message);
+        toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
+        navigate("/onboarding/kyc-mobile-verify", {
+          state: { path: "aadhar-form" },
+        });
         //Navigate Urls go here
       } else {
+        toast.error(response?.message);
       }
-
-      navigate("/onboarding/kyc-mobile-verify", {
-        state: { path: "aadhar-form" },
-      });
     } catch (error) {
       return error;
     }

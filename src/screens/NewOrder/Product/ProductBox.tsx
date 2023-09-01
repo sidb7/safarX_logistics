@@ -26,21 +26,22 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
 }) => {
   return (
     <div
-      className={` ${className} product-box flex items-center border-2 rounded-md h-[70px] mt-3 relative`}
+      className={` ${className} product-box flex items-center border-2  rounded-md h-20 relative`}
     >
-      <span className="bg-[#6695FF] text-white absolute -top-4 ml-2 rounded-md w-[91px] flex justify-center ">
+      <span
+        className={`${
+          label !== "" ? "" : "hidden"
+        } bg-[#6695FF] text-white absolute -top-4 ml-2 rounded-md w-[91px] flex justify-center `}
+      >
         {label}
       </span>
-      <div className="ml-2">
-        <img src={image} alt="" className="mr-2" />
+      <div className="px-4">
+        <img src={image} alt="" className="" />
       </div>
-      <div className="flex flex-col ml-4">
-        <span>{productName}</span>
-        <span>
-          {`${weight} `}
-          <span className={`${dimensionClassName}`}>
-            | {`${length} x ${breadth} x ${height} cm`}
-          </span>
+      <div className="flex flex-col  pr-4">
+        <span className="">{productName}</span>
+        <span className="flex ">
+          {`${weight} | ${length} x ${breadth} x ${height} cm`}
         </span>
       </div>
     </div>

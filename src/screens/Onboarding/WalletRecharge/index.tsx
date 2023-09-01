@@ -26,6 +26,7 @@ import {
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 // import { PaytmButton } from "../../../utils/payPaytm";
+import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 
 const OnBoundingWalletRecharge = () => {
   const navigate = useNavigate();
@@ -106,6 +107,7 @@ const OnBoundingWalletRecharge = () => {
       bankAccountNumber: accountName,
     };
     const datas = await POST(POST_ADD_BANK_DETAILS, payload);
+
     if (datas?.data?.success) {
       setWalletRechargeModalOpen(true);
     } else {
@@ -129,13 +131,17 @@ const OnBoundingWalletRecharge = () => {
               <h1 className="text-[22px] font-semibold leading-7 text-center">
                 Welcome to Shipyaari
               </h1>
-              <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
+              {/* Temporary Comment */}
+              {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
                 Recharge your wallet with minimum of
                 <span className="text-[#323232] font-medium lg:block">
                   {" "}
                   ₹100
                 </span>
-              </p>
+              </p> */}
+              <div className="flex justify-center items-center">
+                <img src={YaariPointsIcon} alt="" />
+              </div>
               {isLgScreen && note("text-left")}
             </div>
           </div>
@@ -173,7 +179,7 @@ const OnBoundingWalletRecharge = () => {
             </div>
             <div className="mx-5 mt-[84px] lg:mt-4">
               <CustomButton
-                text={"RECHARGE NOW"}
+                text={"VERIFY BANK"}
                 // onClick={() => navigate("/order/payment")}
                 onClick={() => handleRechargeNow()}
               />
@@ -228,6 +234,7 @@ const OnBoundingWalletRecharge = () => {
               onChange={(e) => setAccountName(e.target.value)}
             />
           </div>
+
           <div>
             <CustomInputBox
               label="Bank Name"
@@ -265,7 +272,7 @@ const OnBoundingWalletRecharge = () => {
           </div>
           <div className="!w-[20rem] m-auto mt-[84px] lg:mt-4">
             <CustomButton
-              text={"RECHARGE NOW"}
+              text={"VERIFY BANK"}
               onClick={() => postAccountDetails()}
             />
           </div>
@@ -302,7 +309,7 @@ const OnBoundingWalletRecharge = () => {
     console.log("response", datas);
     if (datas?.data?.success) {
       setIsLoading(false);
-      toast.success("Payment success");
+      toast.success(datas?.data?.message);
       clearInterval(myInterval);
       navigate("/home/overview");
     } else if (
@@ -310,7 +317,7 @@ const OnBoundingWalletRecharge = () => {
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
     ) {
       setIsLoading(false);
-      toast.error("Decline Payment By User!!");
+      toast.error(datas?.data?.message);
       clearInterval(myInterval);
     }
   };
