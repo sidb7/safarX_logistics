@@ -74,6 +74,8 @@ const Index = () => {
     query: "(min-width: 1024px)",
   });
   const [pastedData, setPastedData] = useState("");
+  const [pastedDataReturnAddress, setPastedDataReturnAddress] = useState("");
+
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [saveAddress, setSaveAddress] = useState({
@@ -132,7 +134,27 @@ const Index = () => {
     addressType: "warehouse",
   });
 
+  const [returnAddress, setReturnAddress] = useState({
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "warehouse",
+  });
+
   const [contact, setContact] = useState({
+    name: "",
+    mobileNo: "",
+    alternateMobileNo: "",
+    emailId: "",
+    type: "warehouse associate",
+  });
+
+  const [returnAddressContact, setReturnAddressContacts] = useState({
     name: "",
     mobileNo: "",
     alternateMobileNo: "",
@@ -169,6 +191,12 @@ const Index = () => {
     setPastedData(e.target.value);
   };
 
+  const handleChangeReturnAddress = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPastedDataReturnAddress(e.target.value);
+  };
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -179,6 +207,16 @@ const Index = () => {
     value: string
   ) => {
     setPickupLocation((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleReturnAddressChange = (
+    fieldName: keyof typeof returnAddress,
+    value: string
+  ) => {
+    setReturnAddress((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -366,6 +404,19 @@ const Index = () => {
 
     if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(trimmedData);
+    }
+  };
+
+  const returnAddressPayload = {
+    data: pastedDataReturnAddress,
+  };
+
+  const handleButtonClickReturnAddress = () => {
+    const trimmedData = pastedDataReturnAddress.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddress(returnAddressPayload);
       setPrevPastedData(trimmedData);
     }
   };
@@ -762,9 +813,9 @@ const Index = () => {
                   <input
                     ref={inputRef}
                     type="text"
-                    value={pastedData}
+                    value={pastedDataReturnAddress}
                     // onPaste={handlePaste}
-                    onChange={handleChange}
+                    onChange={handleChangeReturnAddress}
                     className="magicAddressInput"
                     // className="custom-input"
                     style={{
@@ -788,7 +839,7 @@ const Index = () => {
                         <img
                           src={AiIcon}
                           alt="Arrow"
-                          onClick={handleButtonClick}
+                          onClick={handleButtonClickReturnAddress}
                         />
                       )}
                     </div>
@@ -806,7 +857,7 @@ const Index = () => {
                 value={locateAddress}
                 onChange={(e) => {
                   setLocateAddress(e.target.value);
-                  handlePickupLocationChange("address", e.target.value);
+                  // handlePickupLocationChange("address", e.target.value);
                 }}
                 onClick={() => {
                   isItLgScreen
@@ -819,9 +870,9 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Plot No., Floor, Building Name"
-                value={pickupLocation.flatNo}
+                value={returnAddress.flatNo}
                 onChange={(e) => {
-                  handlePickupLocationChange("flatNo", e.target.value);
+                  handleReturnAddressChange("flatNo", e.target.value);
                 }}
               />
             </div>
@@ -829,16 +880,16 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Locality"
-                value={pickupLocation.sector}
+                value={returnAddress.sector}
                 onChange={(e) =>
-                  handlePickupLocationChange("sector", e.target.value)
+                  handleReturnAddressChange("sector", e.target.value)
                 }
               />
             </div>
 
             {/* Landmark with dropdown commented */}
             <div className="mb-4 lg:mb-6  lg:mr-6 ">
-              <CustomInputWithDropDown pastedData={pastedData} />
+              <CustomInputWithDropDown pastedData={pastedDataReturnAddress} />
             </div>
 
             {/* <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -854,12 +905,12 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Pincode"
-                value={pickupLocation.pincode}
+                value={returnAddress.pincode}
                 // onChange={(e) =>
                 //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
                 // }
                 onChange={(e) =>
-                  handlePickupLocationChange("pincode", e.target.value)
+                  handleReturnAddressChange("pincode", e.target.value)
                 }
               />
             </div>
@@ -867,9 +918,9 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="City"
-                value={pickupLocation.city}
+                value={returnAddress.city}
                 onChange={(e) =>
-                  handlePickupLocationChange("city", e.target.value)
+                  handleReturnAddressChange("city", e.target.value)
                 }
               />
             </div>
@@ -884,10 +935,10 @@ const Index = () => {
           /> */}
 
               <CustomDropDown
-                value={pickupLocation.state}
+                value={returnAddress.state}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   setSelectedOption(event.target.value);
-                  handlePickupLocationChange("state", event.target.value);
+                  handleReturnAddressChange("state", event.target.value);
                 }}
                 options={dummyStateDropdownData}
               />
@@ -896,9 +947,9 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Country"
-                value={pickupLocation.country}
+                value={returnAddress.country}
                 onChange={(e) =>
-                  handlePickupLocationChange("country", e.target.value)
+                  handleReturnAddressChange("country", e.target.value)
                 }
               />
             </div>
