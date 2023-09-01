@@ -180,6 +180,7 @@ const Index = (props: ITypeProps) => {
         navigate("/onboarding/kyc-mobile-verify", {
           state: { path: "otp-form" },
         });
+        verifyGST(gstNumber);
       } else {
         toast.error("Something Went Wrong!!");
       }

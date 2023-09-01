@@ -93,15 +93,21 @@ const Billing = (props: ITypeProps) => {
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4">
                 {defaultAddress?.map((el: any, i: number) => {
                   return (
-                    <Card
-                      onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                      name="address"
-                      cardClassName="!mt-6"
-                      value={el?.addressId}
-                      title={el?.fullAddress}
-                      doctype={el?.doctype}
-                      titleClassName="!font-normal !text-[12px]"
-                    />
+                    <>
+                      {el?.fullAddress != "" && (
+                        <Card
+                          onClick={(e) =>
+                            setDefaultAddressSelect(e.target.value)
+                          }
+                          name="address"
+                          cardClassName="!mt-6"
+                          value={el?.addressId}
+                          title={el?.fullAddress}
+                          doctype={el?.doctype}
+                          titleClassName="!font-normal !text-[12px]"
+                        />
+                      )}
+                    </>
                   );
                 })}
               </div>

@@ -92,15 +92,19 @@ const PickUp = (props: ITypeProps) => {
             <div className="  space-y-3 mb-6 ">
               {defaultAddress?.map((el: any, i: number) => {
                 return (
-                  <Card
-                    onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                    name="address"
-                    value={el?.addressId}
-                    title={el?.fullAddress}
-                    doctype={el?.doctype}
-                    titleClassName="!font-normal !text-[12px]"
-                    cardClassName="!mt-6"
-                  />
+                  <>
+                    {el?.fullAddress != "" && (
+                      <Card
+                        onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                        name="address"
+                        value={el?.addressId}
+                        title={el?.fullAddress}
+                        doctype={el?.doctype}
+                        titleClassName="!font-normal !text-[12px]"
+                        cardClassName="!mt-6"
+                      />
+                    )}
+                  </>
                 );
               })}
             </div>

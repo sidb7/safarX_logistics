@@ -49,7 +49,10 @@ const Index = (props: ITypeProps) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   useEffect(() => {
-    if (location?.state?.path === "aadhaar-verification") {
+    if (
+      location?.state?.path === "aadhaar-verification" ||
+      location?.state?.path === "aadhar-form"
+    ) {
       setHeading("Aadhaar Verification");
     } else {
       setHeading("GST Verification");
@@ -199,7 +202,7 @@ const Index = (props: ITypeProps) => {
 
           toast.success(response?.message);
           //Navigate Url's go here
-          // navigate("/onboarding/kyc-terms/service-agreement");
+          // navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           console.log("Response OTP!", response?.message);
           toast.error(response?.message);
@@ -213,9 +216,9 @@ const Index = (props: ITypeProps) => {
           );
           if (response?.success) {
             verifyPAN(panCard);
-
             // toast.success(response?.message);
             //Navigate Url's go here
+            // navigate("/onboarding/kyc-terms/service-agreement");
           } else {
             toast.error(response?.message);
           }
@@ -235,7 +238,7 @@ const Index = (props: ITypeProps) => {
           }
         }
       } else if (businessType === "company") {
-        navigate("/onboarding/kyc-terms/service-agreement");
+        // navigate("/onboarding/kyc-terms/service-agreement");
         const payload = {
           gstIn: gstNo,
           client_id: clientId,

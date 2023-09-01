@@ -38,6 +38,11 @@ const card = (props: ITypesProps) => {
             style={{ accentColor: "black" }}
             inputClassName="cursor-pointer"
           />
+          {doctype && (
+            <p className="text-[10px] font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md">
+              {doctype}
+            </p>
+          )}
 
           {isSubContent && (
             <div className="border-[1px] rounded px-1 border-[#E8E8E8]  ">
@@ -52,11 +57,6 @@ const card = (props: ITypesProps) => {
           >
             {title}
           </p>
-          {doctype && (
-            <p className="absolute -top-3 right-2 text-[10px] font-semibold bg-[#1C1C1C] text-white px-2 py-1 rounded-md">
-              {doctype}
-            </p>
-          )}
         </div>
       </div>
     </>

@@ -19,6 +19,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
+
 interface ITypeProps {}
 
 const BusinessType = (props: ITypeProps) => {
@@ -61,7 +62,7 @@ const BusinessType = (props: ITypeProps) => {
     };
     const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (response?.success) {
-      // toast.success(response?.message);
+      toast.success(response?.message);
       // console.log("defaultAddressSelect", defaultAddressSelect);
 
       const payload = { addressId: defaultAddressSelect, isDefault: true };
@@ -73,6 +74,7 @@ const BusinessType = (props: ITypeProps) => {
         toast.success(responses?.message);
 
         navigate("/onboarding/wallet-recharge");
+        // navigate("/onboarding/select-address-billing");
         //Navigate Url's go here
       } else {
         toast.error(responses?.message);
@@ -146,9 +148,13 @@ const BusinessType = (props: ITypeProps) => {
         <div>
           <div className="flex flex-col justify-center items-center  lg:px-5 ">
             <div className="flex items-center justify-between w-full  mt-1   lg:!w-[320px] ">
-              <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#1C1C1C]  ">
-                Address
-              </p>
+              <p>Default</p>
+              <div className="flex gap-x-2">
+                <img src={PlusIcon} alt="" />
+                <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm text-[#004EFF]  ">
+                  ADD ADDRESS
+                </p>
+              </div>
 
               {/* <AddButton
                 onClick={() => {}}
