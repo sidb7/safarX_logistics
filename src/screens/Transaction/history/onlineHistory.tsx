@@ -10,7 +10,6 @@ import { Cancelled } from "../StatusComponents";
 import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
 import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
-import filterIconTable from "../../../assets/Transaction/filtericon.svg";
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 
 interface IOnlineProps {
@@ -28,7 +27,7 @@ interface IOnlineProps {
 const columnsHelper = createColumnHelper<any>();
 export const OnlineDetailsColumns = () => {
   return [
-    columnsHelper.accessor("roleId", {
+    columnsHelper.accessor("transactionId", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[156px]">
@@ -49,7 +48,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("roleName", {
+    columnsHelper.accessor("amount", {
       header: () => {
         return (
           <div className="flex justify-between items-center ">
@@ -66,7 +65,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("description", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[236px]">
@@ -87,7 +86,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("requestDate", {
       header: () => {
         return (
           <div className="flex justify-between items-center min-w-[146px] ">
@@ -105,7 +104,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("approveDate", {
       header: () => {
         return (
           <div className="flex justify-between items-center  min-w-[142px]">
@@ -122,7 +121,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("remark", {
       header: () => {
         return (
           <div className="flex justify-between items-center  min-w-[147px]">
@@ -139,7 +138,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("status", {
       header: () => {
         return (
           <div className="flex justify-between items-center">
@@ -148,7 +147,6 @@ export const OnlineDetailsColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
             </div>
           </div>
         );
@@ -161,7 +159,7 @@ export const OnlineDetailsColumns = () => {
         );
       },
     }),
-    columnsHelper.accessor("userCount", {
+    columnsHelper.accessor("actions", {
       header: () => {
         return (
           <div className="flex justify-between">
@@ -176,7 +174,6 @@ export const OnlineDetailsColumns = () => {
             <img src={shareIcon} alt="" />
           </div>
         );
-        // <span>Actions</span>;
       },
     }),
   ];
