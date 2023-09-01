@@ -25,6 +25,7 @@ import RightModalContent from "../../../screens/NewOrder/PickUp/RightModalConten
 import SelectDateModalContent from "../PickUp/selectDateModal";
 import {
   dummyPickupDropdownData,
+  dummyStateDropdownData,
   pickupAddress,
 } from "../../../utils/dummyData";
 import { POST } from "../../../utils/webService";
@@ -49,6 +50,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Spinner } from "../../../components/Spinner";
+import CustomInputWithDropDown from "../../../components/LandmarkDropdown/LandmarkDropdown";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -500,13 +502,7 @@ const Index = () => {
           </div> */}
 
           <div className="mb-4 lg:mb-6 ">
-            <CustomInputBox
-              label="Landmark"
-              value={deliveryLocation.landmark}
-              onChange={(e) =>
-                handleDeliveryLocationChange("landmark", e.target.value)
-              }
-            />
+            <CustomInputWithDropDown pastedData={pastedData} />
           </div>
 
           <div className="mb-5 lg:mb-6">
@@ -532,12 +528,13 @@ const Index = () => {
           </div>
 
           <div className="mb-4 lg:mb-6 ">
-            <CustomInputBox
-              label="State"
+            <CustomDropDown
               value={deliveryLocation.state}
-              onChange={(e) =>
-                handleDeliveryLocationChange("state", e.target.value)
-              }
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                setSelectedOption(event.target.value);
+                handleDeliveryLocationChange("state", event.target.value);
+              }}
+              options={dummyStateDropdownData}
             />
           </div>
 

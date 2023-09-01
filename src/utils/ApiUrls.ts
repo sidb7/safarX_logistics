@@ -90,6 +90,7 @@ const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableServic
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
+const LANDMARK_API= `${SELLER_BASE_URL}/landmark/landmark`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
