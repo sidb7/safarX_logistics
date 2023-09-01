@@ -202,7 +202,6 @@ const Index = (props: ITypeProps) => {
 
           toast.success(response?.message);
           //Navigate Url's go here
-          // navigate("/onboarding/kyc-terms/gst-agreement");
         } else {
           console.log("Response OTP!", response?.message);
           toast.error(response?.message);
@@ -218,7 +217,6 @@ const Index = (props: ITypeProps) => {
             verifyPAN(panCard);
             // toast.success(response?.message);
             //Navigate Url's go here
-            // navigate("/onboarding/kyc-terms/service-agreement");
           } else {
             toast.error(response?.message);
           }
@@ -238,7 +236,6 @@ const Index = (props: ITypeProps) => {
           }
         }
       } else if (businessType === "company") {
-        // navigate("/onboarding/kyc-terms/service-agreement");
         const payload = {
           gstIn: gstNo,
           client_id: clientId,
@@ -323,7 +320,6 @@ const Index = (props: ITypeProps) => {
               text="SUBMIT"
               className="bg-[#1C1C1C] !h-[36px] !font-Open text-white lg:!w-[320px] mb-5"
               btnType="submit"
-              // onClick={navigate("/onboarding/kyc-terms/service-agreement")}
             />
           </div>
         </form>

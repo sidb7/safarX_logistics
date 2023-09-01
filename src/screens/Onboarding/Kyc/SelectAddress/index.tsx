@@ -74,7 +74,7 @@ const BusinessType = (props: ITypeProps) => {
         toast.success(responses?.message);
 
         navigate("/onboarding/wallet-recharge");
-        // navigate("/onboarding/select-address-billing");
+
         //Navigate Url's go here
       } else {
         toast.error(responses?.message);
@@ -116,7 +116,6 @@ const BusinessType = (props: ITypeProps) => {
   };
 
   const uploadFile = async (e: any) => {
-    // const payload = { file: e.target.files[0].name, fileName: "brandLogo" };
     let formData = new FormData();
     formData.append("file", e.target.files[0]);
     formData.append("fileName", "brandLogo");
