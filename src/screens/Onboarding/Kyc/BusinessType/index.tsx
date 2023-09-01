@@ -54,7 +54,7 @@ const BusinessType = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
-          className="mt-[58px]"
+          className="!mt-[100px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
@@ -72,8 +72,8 @@ const BusinessType = (props: ITypeProps) => {
 
           <Card
             name="business"
-            value="sole_Proprietor"
-            title="Sole Proprietor"
+            value="business"
+            title="Business"
             subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
           />
 

@@ -8,6 +8,7 @@ interface ITypesProps {
   subContent?: string;
   isSubContent?: boolean;
   cardClassName?: string;
+  doctype?: string;
   onClick?: (e: any) => void;
 }
 
@@ -20,13 +21,14 @@ const card = (props: ITypesProps) => {
     subContent,
     isSubContent,
     cardClassName,
+    doctype,
     onClick,
   } = props;
 
   return (
     <>
       <div
-        className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow border-[#E8E8E8] w-full lg:!w-[320px]`}
+        className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow border-[#E8E8E8] w-full lg:!w-[320px] relative`}
         onClick={onClick}
       >
         <div className="flex items-center   gap-x-3 ">
@@ -36,6 +38,11 @@ const card = (props: ITypesProps) => {
             style={{ accentColor: "black" }}
             inputClassName="cursor-pointer"
           />
+          {doctype && (
+            <p className="text-[10px] font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md">
+              {doctype}
+            </p>
+          )}
 
           {isSubContent && (
             <div className="border-[1px] rounded px-1 border-[#E8E8E8]  ">
