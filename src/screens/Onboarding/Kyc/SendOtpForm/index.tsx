@@ -22,6 +22,7 @@ import {
   POST_VERIFY_GST_URL,
   POST_VERIFY_PAN_URL,
 } from "../../../../utils/ApiUrls";
+import { aadharRegex, panRegex, gstRegex } from "../../../../utils/regexCheck";
 import { setOnOtpClientId } from "../../../../redux/reducers/onboarding";
 import { toast } from "react-toastify";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
@@ -31,10 +32,9 @@ interface ITypeProps {}
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
-  const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/gm;
-  const gstRegex =
-    /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/gm;
+  // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
+  // const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/gm;
+  // const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/gm;
 
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
@@ -92,6 +92,11 @@ const Index = (props: ITypeProps) => {
             aadharVerifyNavigate: true,
           })
         );
+        if (businessType === "individual") {
+          navigate("/onboarding/kyc-mobile-verify", {
+            state: { path: "aadhaar-verification" },
+          });
+        }
       } else {
         dispatch(
           setNavigateOnOtpFormVerify({
@@ -117,6 +122,13 @@ const Index = (props: ITypeProps) => {
             gstVerifyNavigate: true,
           })
         );
+        if (businessType === "business" || businessType === "company") {
+          navigate("/onboarding/kyc-mobile-verify", {
+            state: { path: "otp-form" },
+          });
+        } else {
+          navigate("/onboarding/kyc-mobile-verify");
+        }
         dispatch(setOnOtpClientId(response.data[0].data.client_id));
       } else {
         dispatch(
@@ -144,31 +156,33 @@ const Index = (props: ITypeProps) => {
           dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         }
 
-        if (businessType === "sole_Proprietor") {
+        if (businessType === "business") {
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });
-        } else {
-          navigate("/onboarding/kyc-mobile-verify");
+        } else if (businessType === "company") {
+          navigate("/onboarding/kyc-mobile-verify", {
+            state: { path: "gst-verification" },
+          });
         }
       }
       //Proprietor,Company
-      if (businessType === "sole_Proprietor" || businessType === "company") {
+      else if (businessType === "business") {
         if (gstNumber === "") {
           dispatch(setErrorDetails({ gstError: "Enter GST Number" }));
         }
         verifyGST(gstNumber);
+
         // if (panNumber === "") {
         //   dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
         // }
-
-        if (businessType === "sole_Proprietor") {
-          navigate("/onboarding/kyc-mobile-verify", {
-            state: { path: "otp-form" },
-          });
-        } else {
-          navigate("/onboarding/kyc-mobile-verify");
-        }
+      } else if (businessType === "company") {
+        navigate("/onboarding/kyc-mobile-verify", {
+          state: { path: "otp-form" },
+        });
+        verifyGST(gstNumber);
+      } else {
+        toast.error("Something Went Wrong!!");
       }
     } catch (error) {}
   };
@@ -244,6 +258,7 @@ const Index = (props: ITypeProps) => {
                 <CustomInputBox
                   containerStyle="lg:!w-auto"
                   label="GST Number"
+                  maxLength={15}
                   className={` ${
                     gstError !== "" && "border-[#F35838]"
                   }  lg:!w-[320px]   !font-Open`}
@@ -287,7 +302,8 @@ const Index = (props: ITypeProps) => {
             <div className={`${!isBigScreen ? "w-full" : ""}`}>
               <CustomInputBox
                 containerStyle="lg:!w-auto"
-                label=" Pan Number"
+                label="PAN Number"
+                maxLength={10}
                 className={`${
                   panError !== "" && "border-[#F35838]"
                 }   lg:!w-[320px] !font-Open`}
