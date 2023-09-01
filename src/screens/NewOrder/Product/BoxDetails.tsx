@@ -62,7 +62,6 @@ const BoxDetails = (props: IBoxdetails) => {
   const calcBillableWeight = () => {
     let billableWeight = calcAllTotalProductWeight();
 
-    console.log("calcBillableWeight", billableWeight);
 
     return (
       billableWeight > +selectedBox.weight.split("kg")[0]
@@ -101,7 +100,7 @@ const BoxDetails = (props: IBoxdetails) => {
           </div>
           {allProducts.map((e: any, index: number) => {
             return (
-              <div className="flex justify-between">
+              <div className="flex justify-between" key={index}>
                 <ProductBox
                   image={ItemIcon}
                   weight={`${e?.weight.deadWeight} Kg`}
@@ -154,7 +153,8 @@ const BoxDetails = (props: IBoxdetails) => {
                 {/* <img src={plusIcon} alt="Add product" /> */}
               </div>
               <span className="text-base text-slate-600 mt-2 pl-4">
-                Products dead weight is {calcAllTotalProductWeight().toFixed(2)} Kg
+                Products dead weight is {calcAllTotalProductWeight().toFixed(2)}{" "}
+                Kg
               </span>
               <div className="relative">
                 <div className="h-[6px] bg-[#CBEAC0] mt-2 ml-4 mr-12">
