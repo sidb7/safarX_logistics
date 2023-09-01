@@ -9,6 +9,9 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import { useNavigate } from "react-router-dom";
 import { setAcceptTnCStatus } from "../../../../redux/reducers/onboarding";
 import { useSelector, useDispatch } from "react-redux";
+import { POST } from "../../../../utils/webService";
+import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 interface ITypeProps {}
 
@@ -22,10 +25,17 @@ export const GSTComponent = (props: ITypeProps) => {
   const [checkbox, setCheckbox] = useState();
   const dispatch = useDispatch();
 
-  const acceptStatus = () => {
+  const acceptStatus = async () => {
     dispatch(setAcceptTnCStatus(true));
-
-    navigate("/onboarding/kyc-terms/service-agreement");
+    let name = singUpState?.firstName + " " + singUpState?.lastName;
+    const payload = { entityName: name, businessType: "logistics" };
+    const { data: responses } = await POST(GST_AGREEMENTS, payload);
+    if (responses?.success) {
+      navigate("/onboarding/kyc-terms/service-agreement");
+    } else {
+      // toast.error(responses?.message);
+      navigate("/onboarding/kyc-terms/service-agreement");
+    }
   };
 
   const BottomButton = () => {
