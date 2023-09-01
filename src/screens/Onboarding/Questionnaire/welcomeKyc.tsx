@@ -11,7 +11,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../utils/webService";
 import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 
-export const QuestionComponent5: React.FunctionComponent = () => {
+export const WelcomeKyc: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const state = location.state || {};
@@ -19,6 +19,7 @@ export const QuestionComponent5: React.FunctionComponent = () => {
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const questionsData = state?.questionsData;
+
   const question = questionsData[4]?.question;
 
   const modalTitle = () => {
@@ -29,12 +30,6 @@ export const QuestionComponent5: React.FunctionComponent = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        {/* <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        /> */}
       </div>
     );
   };
@@ -49,22 +44,6 @@ export const QuestionComponent5: React.FunctionComponent = () => {
 
   function handleCheckBox(element: any, index: any) {
     questionsData[4].options[index].isChecked = element;
-  }
-
-  let payload = { answerBody: questionsData };
-
-  async function submitAnswer(payload: any) {
-    try {
-      const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
-      if (response?.success === true) {
-        navigate("/onboarding/kyc-type");
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      toast.error("Failed to submit the question bank!");
-      return error;
-    }
   }
 
   const question5 = () => {
@@ -107,13 +86,16 @@ export const QuestionComponent5: React.FunctionComponent = () => {
             <div className="mt-6">
               <CustomButton
                 text="PROCEED FOR KYC"
-                onClick={() => submitAnswer(payload)}
+                onClick={() => navigate("/onboarding/kyc-type")}
               />
             </div>
 
-            {/* <div className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4">
+            <div
+              className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4 cursor-pointer"
+              onClick={() => navigate("/home/overview")}
+            >
               SKIP FOR NOW
-            </div> */}
+            </div>
             {!isLgScreen && note()}
           </div>
         </div>

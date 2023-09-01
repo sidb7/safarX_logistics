@@ -31,6 +31,7 @@ import AccordionUp from "../../../assets/AccordionUp.svg";
 
 import {
   dummyPickupDropdownData,
+  dummyStateDropdownData,
   pickupAddress,
 } from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
@@ -73,6 +74,8 @@ const Index = () => {
     query: "(min-width: 1024px)",
   });
   const [pastedData, setPastedData] = useState("");
+  const [pastedDataReturnAddress, setPastedDataReturnAddress] = useState("");
+
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [saveAddress, setSaveAddress] = useState({
@@ -117,6 +120,7 @@ const Index = () => {
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
+  const [isChecked, setIsChecked] = useState(true);
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -130,7 +134,27 @@ const Index = () => {
     addressType: "warehouse",
   });
 
+  const [returnAddress, setReturnAddress] = useState({
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "warehouse",
+  });
+
   const [contact, setContact] = useState({
+    name: "",
+    mobileNo: "",
+    alternateMobileNo: "",
+    emailId: "",
+    type: "warehouse associate",
+  });
+
+  const [returnAddressContact, setReturnAddressContacts] = useState({
     name: "",
     mobileNo: "",
     alternateMobileNo: "",
@@ -167,6 +191,12 @@ const Index = () => {
     setPastedData(e.target.value);
   };
 
+  const handleChangeReturnAddress = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPastedDataReturnAddress(e.target.value);
+  };
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
@@ -177,6 +207,16 @@ const Index = () => {
     value: string
   ) => {
     setPickupLocation((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleReturnAddressChange = (
+    fieldName: keyof typeof returnAddress,
+    value: string
+  ) => {
+    setReturnAddress((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -262,6 +302,10 @@ const Index = () => {
     setCustomLandmark(landmark);
   };
   // const pickupDateForEpoch = "18/08/2023 11:00 AM";
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
   const convertToEpoch = (dateTimeString: any) => {
@@ -356,9 +400,24 @@ const Index = () => {
   };
 
   const handleButtonClick = () => {
-    if (!loading && pastedData && pastedData !== prevPastedData) {
+    const trimmedData = pastedData.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
-      setPrevPastedData(pastedData);
+      setPrevPastedData(trimmedData);
+    }
+  };
+
+  const returnAddressPayload = {
+    data: pastedDataReturnAddress,
+  };
+
+  const handleButtonClickReturnAddress = () => {
+    const trimmedData = pastedDataReturnAddress.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddress(returnAddressPayload);
+      setPrevPastedData(trimmedData);
     }
   };
 
@@ -440,40 +499,6 @@ const Index = () => {
               </div>
             </div>
 
-            {/* <div className="relative h-[75px]">
-              <div className="w-full max-w-xs">
-                <div onClick={handleClick}>
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "1px",
-                      height: "75px",
-                      zIndex: 1, // Ensure the text is displayed above the input
-                    }}
-                  >
-                    {pastedData || "Paste Address for the Magic"}
-                  </div>
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={pastedData}
-                    onPaste={handlePaste}
-                    onChange={() => {}}
-                    style={{
-                      position: "absolute",
-                      left: "1px",
-                      height: "75px",
-                      zIndex: 2, // Ensure the input is displayed above the text
-                    }}
-                    title="inputBox"
-                  />
-                </div>
-              </div>
-              <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2">
-                <img src={ForwardArrowIcon} alt="Arrow" />
-              </div>
-            </div> */}
-
             <div className="relative h-[75px]  ">
               <input
                 ref={inputRef}
@@ -548,9 +573,8 @@ const Index = () => {
           />
         </div>
 
-        {/* Landmark with dropdown commented */}
-        <div className="mb-4 lg:mb-6  lg:mr-6 ">
-          <CustomInputWithDropDown />
+        <div className="mb-4 lg:mb-6 lg:mr-6 ">
+          <CustomInputWithDropDown pastedData={pastedData} />
         </div>
 
         {/* <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -599,7 +623,7 @@ const Index = () => {
               setSelectedOption(event.target.value);
               handlePickupLocationChange("state", event.target.value);
             }}
-            options={dummyPickupDropdownData}
+            options={dummyStateDropdownData}
           />
         </div>
 
@@ -739,147 +763,6 @@ const Index = () => {
               </div>
             </div>
           ))}
-
-          {/* <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Tuesday
-            </p>
-          </div>
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Wednesday
-            </p>
-          </div>
-
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Thursday
-            </p>
-          </div>
-
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Friday
-            </p>
-          </div>
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Saturday
-            </p>
-          </div>
-          <div
-            className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-              timing.Monday === true
-                ? "!border-[#004EFF] !text-[#004EFF] "
-                : "border-gray-300 text-[#1C1C1C]"
-            }`}
-            onClick={(e) => {
-              setTiming({
-                Monday: true,
-                Tuesday: true,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false,
-              });
-              handleTimingChange("Monday", "true");
-            }}
-          >
-            <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
-              Sunday{" "}
-            </p>
-          </div> */}
         </div>
 
         <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
@@ -896,11 +779,350 @@ const Index = () => {
         </div>
 
         <div className="flex flex-row items-center gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
-          <CustomCheckbox />
+          <CustomCheckbox checked={isChecked} onChange={handleCheckboxChange} />
           <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
             RETURN ADDRESS SAME AS PICKUP
           </p>
         </div>
+
+        {!isChecked ? (
+          <>
+            <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+              <img src={LocationIcon} alt="" className="lg:hidden" />
+
+              <img src={WebLocationIcon} alt="" className="hidden lg:block" />
+
+              <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                Return Address
+              </p>
+            </div>
+            <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
+              <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+                <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                  <img
+                    src={MagicLocationIcon}
+                    alt="Magic Location Icon"
+                    className=""
+                  />
+                  <div className="text-white text-[12px] font-Open">
+                    Magic Address
+                  </div>
+                </div>
+
+                <div className="relative h-[75px]  ">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={pastedDataReturnAddress}
+                    // onPaste={handlePaste}
+                    onChange={handleChangeReturnAddress}
+                    className="magicAddressInput"
+                    // className="custom-input"
+                    style={{
+                      position: "absolute",
+                      border: "none",
+                      // left: "10px",
+                      // background: "black",
+                      // width: "10px",
+                      // height: "25px",
+
+                      // top: "-10px",
+                    }}
+                    placeholder="Paste Address for the Magic"
+                    title=""
+                  />
+                  <div>
+                    <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <img
+                          src={AiIcon}
+                          alt="Arrow"
+                          onClick={handleButtonClickReturnAddress}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="hidden lg:block col-span-1 "></div>
+
+            <div className=" mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputWithImage
+                placeholder="Choose location (optional)"
+                imgSrc={ChooseLocationIcon}
+                value={locateAddress}
+                onChange={(e) => {
+                  setLocateAddress(e.target.value);
+                  // handlePickupLocationChange("address", e.target.value);
+                }}
+                onClick={() => {
+                  isItLgScreen
+                    ? setIsLocationRightModal(true)
+                    : navigate("/neworder/map");
+                }}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Plot No., Floor, Building Name"
+                value={returnAddress.flatNo}
+                onChange={(e) => {
+                  handleReturnAddressChange("flatNo", e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Locality"
+                value={returnAddress.sector}
+                onChange={(e) =>
+                  handleReturnAddressChange("sector", e.target.value)
+                }
+              />
+            </div>
+
+            {/* Landmark with dropdown commented */}
+            <div className="mb-4 lg:mb-6  lg:mr-6 ">
+              <CustomInputWithDropDown pastedData={pastedDataReturnAddress} />
+            </div>
+
+            {/* <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Landmark"
+            value={pickupLocation.landmark}
+            onChange={(e) =>
+              handlePickupLocationChange("landmark", e.target.value)
+            }
+          />
+        </div> */}
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Pincode"
+                value={returnAddress.pincode}
+                // onChange={(e) =>
+                //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+                // }
+                onChange={(e) =>
+                  handleReturnAddressChange("pincode", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="City"
+                value={returnAddress.city}
+                onChange={(e) =>
+                  handleReturnAddressChange("city", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              {/* <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          /> */}
+
+              <CustomDropDown
+                value={returnAddress.state}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setSelectedOption(event.target.value);
+                  handleReturnAddressChange("state", event.target.value);
+                }}
+                options={dummyStateDropdownData}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Country"
+                value={returnAddress.country}
+                onChange={(e) =>
+                  handleReturnAddressChange("country", e.target.value)
+                }
+              />
+            </div>
+
+            {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="State"
+            value={pickupLocation.state}
+            onChange={(e) =>
+              handlePickupLocationChange("state", e.target.value)
+            }
+          />
+          <div>
+            <CustomInputBox
+              label="Country"
+              value={pickupLocation.country}
+              onChange={(e) =>
+                handlePickupLocationChange("country", e.target.value)
+              }
+            />
+          </div>
+        </div> */}
+
+            {/* <div className=" hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="State" />
+        </div>
+
+        <div className="hidden lg:block mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox label="Country" />
+        </div> */}
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <AudioInputBox
+                label="Add directions(optional)"
+                audio={directionAudio}
+                setAudio={setDirectionAudio}
+                onClick={() => !directionAudio && setIsAudioModal(true)}
+              />
+            </div>
+
+            <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+              <img src={ContactIcon} alt="Contact" className="lg:hidden" />
+              <img
+                src={WebContactIcon}
+                alt="Contact"
+                className="hidden lg:block"
+              />
+
+              <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                Return Address Contact
+              </p>
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Name of the contact person"
+                value={contact.name}
+                onChange={(e) => handleContactChange("name", e.target.value)}
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Mobile Number"
+                value={contact.mobileNo}
+                onChange={(e) =>
+                  handleContactChange("mobileNo", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Email ID(optional)"
+                value={contact.emailId}
+                onChange={(e) => handleContactChange("emailId", e.target.value)}
+              />
+            </div>
+            <div className="mb-7 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Alternate mobile number(optional)"
+                value={contact.alternateMobileNo}
+                onChange={(e) =>
+                  handleContactChange("alternateMobileNo", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
+              <p className="text-[#202427] text-[18px] font-Lato lg:font-Lato lg:text-[20px] lg:text-[#323232] ">
+                Save your contact as
+              </p>
+            </div>
+
+            <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
+                  saveContact.shopkeeper === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={(e) => {
+                  setSaveContact({
+                    shopkeeper: true,
+
+                    warehouse: false,
+                    dispatcher: false,
+                  });
+                  handleContactChange("type", "shopkeeper");
+                }}
+              >
+                <img src={OfficeIcon} alt="ShopKeeper" />
+                <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+                  Shopkeeper
+                </p>
+              </div>
+
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                  saveContact.warehouse === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={() => {
+                  setSaveContact({
+                    shopkeeper: false,
+
+                    warehouse: true,
+                    dispatcher: false,
+                  });
+                  handleContactChange("type", "warehouse associate");
+
+                  // isItLgScreen
+                  //   ? setIsSaveContactRightModal(true)
+                  //   : setIsSaveContactModal(true);
+                }}
+              >
+                <img src={Warehouse} alt="Warehouse associate" />
+                <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                  Warehouse associate
+                </p>
+              </div>
+
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                  saveContact.dispatcher === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={() => {
+                  setSaveContact({
+                    shopkeeper: false,
+
+                    warehouse: false,
+                    dispatcher: true,
+                  });
+                  handleContactChange("type", "dispatcher");
+
+                  // isItLgScreen
+                  //   ? setIsSaveContactRightModal(true)
+                  //   : setIsSaveContactModal(true);
+                }}
+              >
+                <img src={Warehouse} alt="Warehouse associate" />
+                <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                  Dispatcher
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
 
         {/* <div className="flex flex-row items-center gap-2 lg:col-span-3 mb-5 lg:mb-[23px]">
           <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
@@ -918,7 +1140,7 @@ const Index = () => {
           <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
 
           <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-            Contact
+            Pickup Address Contact
           </p>
         </div>
 

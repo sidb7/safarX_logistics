@@ -85,7 +85,7 @@ import { QuestionComponent1 } from "../screens/Onboarding/Questionnaire/question
 import { QuestionComponent2 } from "../screens/Onboarding/Questionnaire/question2";
 import { QuestionComponent3 } from "../screens/Onboarding/Questionnaire/question3";
 import { QuestionComponent4 } from "../screens/Onboarding/Questionnaire/question4";
-import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question5";
+import { WelcomeKyc } from "../screens/Onboarding/Questionnaire/welcomeKyc";
 
 //order/service - suresh
 import Service from "../screens/Order/Service";
@@ -184,10 +184,10 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/onboarding/questionnaire/question5"
+              path="/onboarding/kyc-welcome"
               element={
                 <ProtectedRoute>
-                  <QuestionComponent5 />
+                  <WelcomeKyc />
                 </ProtectedRoute>
               }
             />
