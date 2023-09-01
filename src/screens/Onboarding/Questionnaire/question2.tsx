@@ -16,7 +16,8 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
 
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const questionsData = state?.questionsData;
+  let data = state?.questionsData;
+  const [questionsData, setQuestionsData] = useState(data || []);
 
   const modalTitle = () => {
     return (
@@ -26,18 +27,14 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        {/* <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        /> */}
       </div>
     );
   };
 
   function handleCheckBox(element: any, index: any) {
-    questionsData[1].options[index].isChecked = element;
+    let tempArr = questionsData;
+    tempArr[1].options[index].isChecked = element;
+    setQuestionsData([...tempArr]);
   }
 
   const question = questionsData[1]?.question;
@@ -64,6 +61,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                 {questionsData[1]?.options.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      checked={element?.isChecked}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}
@@ -79,7 +77,13 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
               <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
-                onClick={() => navigate(-1)}
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question1", {
+                    state: {
+                      questionsData,
+                    },
+                  })
+                }
               />
               <CustomButton
                 text="NEXT"

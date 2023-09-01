@@ -134,6 +134,9 @@ const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 
+//Gst Agreement
+const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -197,4 +200,5 @@ export {
   GET_WALLET_TRANSACTION,
   POST_SIGN_UP_WITH_GOOGLE_URL,
   POST_SIGN_IN_WITH_GOOGLE_URL,
+  GST_AGREEMENTS,
 };

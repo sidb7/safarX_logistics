@@ -13,9 +13,6 @@
    
 }
 
-/* .input:focus {
-  border-color: #004EFF !important;
-} */
 .custom-input:focus {
   border-color: #004EFF !important;
 }

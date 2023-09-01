@@ -174,7 +174,7 @@ const Index = () => {
                 />
               </div>
               <div className="flex justify-center">
-                <p className="text-[#777777] font-normal text-xs leading-4 font-Open">
+                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                   Already Have An Account ?{" "}
                 </p>
                 <button
