@@ -2,7 +2,7 @@ import Checkbox from "../../../components/CheckBox";
 import WarehouseTruckGif from "../../../assets/AccountQuestions/WarehouseTruck.gif";
 import CustomButton from "../../../components/Button";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -18,11 +18,17 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [questionsData, setQuestionsData] = useState<any>([]);
 
+  const location = useLocation();
+  const state = location.state || {};
+
   async function getQuestions() {
     try {
       const { data: response } = await POST(GET_QUESTIONNAIRE);
       if (response?.success === true) {
         setQuestionsData(response?.data?.questionBank);
+        if (Object.keys(state).length > 0 && state?.questionsData) {
+          setQuestionsData(state.questionsData);
+        }
       } else {
         toast.error(response?.message);
       }
@@ -39,7 +45,9 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   }, []);
 
   function handleCheckBox(element: any, index: any) {
-    questionsData[0].options[index].isChecked = element;
+    let tempArr = questionsData;
+    tempArr[0].options[index].isChecked = element;
+    setQuestionsData([...tempArr]);
   }
 
   const modalTitle = () => {
@@ -50,12 +58,6 @@ export const QuestionComponent1: React.FunctionComponent = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        {/* <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        /> */}
       </div>
     );
   };
@@ -82,6 +84,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                 {questionsData[0]?.options.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      checked={element.isChecked || false}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}

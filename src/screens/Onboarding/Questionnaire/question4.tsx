@@ -8,6 +8,9 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { POST } from "../../../utils/webService";
+import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 export const QuestionComponent4: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -17,7 +20,8 @@ export const QuestionComponent4: React.FunctionComponent = () => {
 
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-  const questionsData = state?.questionsData;
+  const data = state?.questionsData;
+  const [questionsData, setQuestionsData] = useState(data || []);
 
   const modalTitle = () => {
     return (
@@ -38,10 +42,31 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   };
 
   function handleCheckBox(element: any, index: any) {
-    questionsData[3].options[index].isChecked = element;
+    let tempArr = questionsData;
+    tempArr[3].options[index].isChecked = element;
+    setQuestionsData([...tempArr]);
   }
 
   const question = questionsData[3]?.question;
+
+  let payload = { answerBody: questionsData };
+
+  async function submitAnswer(payload: any) {
+    try {
+      const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
+      if (response?.success === true) {
+        toast.success(response?.message);
+        navigate("/onboarding/kyc-welcome", {
+          state: { questionsData },
+        });
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      toast.error("Failed to submit the question bank!");
+      return error;
+    }
+  }
 
   const question4 = () => {
     return (
@@ -68,6 +93,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}
+                      checked={element.isChecked}
                       label={element.value}
                       className="text-base  font-Open font-normal leading-[22px]"
                       style={{ accentColor: "black" }}
@@ -80,16 +106,15 @@ export const QuestionComponent4: React.FunctionComponent = () => {
               <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
-                onClick={() => navigate(-1)}
-              />
-              <CustomButton
-                text="NEXT"
                 onClick={() =>
-                  navigate("/onboarding/questionnaire/question5", {
-                    state: { questionsData },
+                  navigate("/onboarding/questionnaire/question3", {
+                    state: {
+                      questionsData,
+                    },
                   })
                 }
               />
+              <CustomButton text="NEXT" onClick={() => submitAnswer(payload)} />
             </div>
           </div>
         </div>
