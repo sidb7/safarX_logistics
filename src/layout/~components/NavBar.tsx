@@ -495,7 +495,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    // console.log("location", location);
     let tempArr = sideBarMenus;
 
     const { pathname } = location;
@@ -507,7 +506,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         if (e.isActivePath) e.isActivePath = !e.isActivePath;
         e.menu.forEach((e1: any) => {
           if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
-          console.log("check this ======>", e1.path.split("/")[1]);
           if (paths[1] === e1.path.split("/")[1]) {
             e.isActivePath = true;
           }
@@ -603,27 +601,23 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           return (
             <div className="w-full flex-col" key={index}>
               <div
-                key={index}
-                className={`h-10 flex items-center  rounded-lg ${
-                  isHover ? "px-2 justify-start" : "justify-center"
+                key={`${e.name + index}`}
+                className={`h-10 flex items-center  rounded-lg px-2
                 } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
                 onClick={() => {
                   opneAndCloseChild(index, e.isChild);
                 }}
               >
                 <img
-                  key={index}
                   src={iconPath}
-                  className={`${e.isActivePath ? " invert" : ""}`}
+                  className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
                   alt=""
                 />
                 {isHover ? (
                   <div
-                    key={index}
                     className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize overflow-hidden`}
                   >
                     <p
-                      key={index}
                       className={`px-2 whitespace-nowrap ${
                         e.isActivePath ? " invert" : ""
                       }`}
@@ -632,13 +626,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                     </p>
 
                     <div
-                      key={index}
                       className={`${
                         e.isActivePath ? "text-white" : ""
                       } flex items-center gap-2`}
                     >
                       <CustomButton
-                        key={index}
                         icon={downArrow}
                         showIcon={true}
                         onlyIcon={true}
@@ -655,7 +647,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                 )}
               </div>
               {e.isChild ? (
-                <div className="flex flex-col  overflow-hidden" key={index}>
+                <div className="flex flex-col  overflow-hidden">
                   {e.menu.map((child: any, childIndex: number) => {
                     return (
                       <div
@@ -698,7 +690,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       {/* Mobile Nav Bar */}
       <>
         <nav
-          key="2"
           className={`lg:hidden absolute  h-full font-Open bg-white z-50 overflow-scroll`}
           style={{
             boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
@@ -722,9 +713,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             let iconName = e.icon.toLowerCase();
             const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
             return (
-              <div className="w-full flex-col px-6 py-4" key={index}>
+              <div
+                className="w-full flex-col px-6 py-4"
+                key={`${e.name + index}`}
+              >
                 <div
-                  key={index}
                   className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
                   onClick={() => {
                     opneAndCloseChild(index, e.isChild);
@@ -732,15 +725,13 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                 >
                   <img src={iconPath} alt="" />
                   <div
-                    key={index}
                     className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
                   >
                     <p className={` whitespace-nowrap`}>{e.name}</p>
 
-                    <div key={index} className={` flex items-center gap-2`}>
+                    <div className={` flex items-center gap-2`}>
                       <CustomButton
                         icon={downArrow}
-                        key={index}
                         showIcon={true}
                         onlyIcon={true}
                         className={`
@@ -752,11 +743,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   </div>
                 </div>
                 {e.isChild ? (
-                  <div className="flex flex-col overflow-hidden " key={index}>
+                  <div className="flex flex-col overflow-hidden ">
                     {e.menu.map((child: any, childIndex: number) => {
                       return (
                         <div
-                          key={childIndex}
+                          key={`${child.path + childIndex}`}
                           className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
                           onClick={() =>
                             setIsActivePath(index, childIndex, child.path)
