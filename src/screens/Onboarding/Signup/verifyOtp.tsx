@@ -61,7 +61,7 @@ const Index = () => {
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
         setLocalStorage(tokenKey, response?.data[0]?.token);
-        navigate("/onboarding/getStarted");
+        navigate("/onboarding/get-started");
       } else {
         toast.error(response?.message);
       }

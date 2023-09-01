@@ -17,8 +17,8 @@ export const QuestionComponent3: React.FunctionComponent = () => {
 
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
-
-  const questionsData = state?.questionsData;
+  const data = state?.questionsData;
+  const [questionsData, setQuestionsData] = useState(data || []);
 
   const modalTitle = () => {
     return (
@@ -39,7 +39,13 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   };
 
   function handleCheckBox(element: any, index: any) {
-    questionsData[2].options[index].isChecked = element;
+    let tempArr = questionsData;
+
+    tempArr[2]?.options.forEach((e: any, index2: number) => {
+      e.isChecked = false;
+    });
+    tempArr[2].options[index].isChecked = element;
+    setQuestionsData([...tempArr]);
   }
 
   const question = questionsData[2]?.question;
@@ -69,6 +75,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}
+                      checked={element.isChecked}
                       label={element.value}
                       className="text-base font-Open font-normal leading-[22px]"
                       style={{ accentColor: "black" }}
@@ -81,7 +88,11 @@ export const QuestionComponent3: React.FunctionComponent = () => {
               <CustomButton
                 className="!bg-[#E8E8E8] !text-black"
                 text="BACK"
-                onClick={() => navigate(-1)}
+                onClick={() =>
+                  navigate("/onboarding/questionnaire/question2", {
+                    state: { questionsData },
+                  })
+                }
               />
               <CustomButton
                 text="NEXT"

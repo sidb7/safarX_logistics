@@ -9,6 +9,7 @@ interface IProps {
   value?: string;
   style?: any;
   disabled?: any;
+  required?: boolean;
 
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -23,10 +24,12 @@ const Checkbox: React.FC<IProps> = ({
   name,
   value,
   style,
+  required,
 }) => {
   return (
     <div className="flex items-center justify-start p-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap">
       <input
+        required={required}
         type="checkbox"
         disabled={disabled}
         name={name}
