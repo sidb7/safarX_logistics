@@ -6,10 +6,12 @@ import { constants } from "buffer";
 
 interface CustomInputWithDropDownProps {
   pastedData: any;
+  handlePickupLocationChange: (field: any, value: any) => void;
 }
 
 const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   pastedData,
+  handlePickupLocationChange,
 }) => {
   const [arrayValue, setArrayValue] = useState<string[]>([]);
   const [selected, setSelected] = useState("");
@@ -81,6 +83,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         value={selected}
         onChange={(e) => {
           setSelected(e.target.value);
+          handlePickupLocationChange("landmark", e.target.value);
         }}
         className="downarrowImage"
       />

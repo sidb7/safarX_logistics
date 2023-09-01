@@ -502,7 +502,10 @@ const Index = () => {
           </div> */}
 
           <div className="mb-4 lg:mb-6 ">
-            <CustomInputWithDropDown pastedData={pastedData} />
+            <CustomInputWithDropDown
+              pastedData={pastedData}
+              handlePickupLocationChange={handleDeliveryLocationChange}
+            />
           </div>
 
           <div className="mb-5 lg:mb-6">

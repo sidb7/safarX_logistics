@@ -574,7 +574,10 @@ const Index = () => {
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6 ">
-          <CustomInputWithDropDown pastedData={pastedData} />
+          <CustomInputWithDropDown
+            pastedData={pastedData}
+            handlePickupLocationChange={handlePickupLocationChange}
+          />
         </div>
 
         {/* <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -887,9 +890,11 @@ const Index = () => {
               />
             </div>
 
-            {/* Landmark with dropdown commented */}
             <div className="mb-4 lg:mb-6  lg:mr-6 ">
-              <CustomInputWithDropDown pastedData={pastedDataReturnAddress} />
+              <CustomInputWithDropDown
+                pastedData={pastedDataReturnAddress}
+                handlePickupLocationChange={handleReturnAddressChange}
+              />
             </div>
 
             {/* <div className="mb-4 lg:mb-6 lg:mr-6">
