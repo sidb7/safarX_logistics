@@ -1,24 +1,38 @@
-import { useMediaQuery } from "react-responsive";
-import ReferCode from "../../../assets/Profile/Refer/ReferCode.svg";
 import ShareIcon from "../../../assets/Label/share.svg";
 import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcum } from "../../../components/Layout/breadcrum";
+import { POST } from "../../../utils/webService";
+import { GET_PROFILE_URL } from "../../../utils/ApiUrls";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 export const ReferTab = () => {
-  const isItLgScreen = useMediaQuery({
-    query: "(min-width: 1024px)",
-  });
+  const [profileData, setProfileData]: any = useState([]);
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_PROFILE_URL, {});
+      if (data?.success) {
+        setProfileData(data?.data?.[0]);
+      } else {
+        toast.error(data?.message);
+      }
+    })();
+  }, []);
   return (
     <div className="h-full">
       <Breadcum label="Refer and Earn" />
       <div className="mt-[77px]">
         <div className="flex justify-center items-center">
-          <img src={ReferCode} alt="" />
+          <img
+            src={profileData?.refferalCodeImageUrl}
+            alt="Refer Code"
+            className="w-[156px]"
+          />
         </div>
         <div className="flex justify-center mt-[48px] p-3 text-[16px] font-semibold whitespace-nowrap">
-          Referral Code - QYHR78171JEY
+          Referral Code - {profileData?.refferalCode}
         </div>
         <div className="flex justify-center mt-[40px]">
           <div className="p-2">
