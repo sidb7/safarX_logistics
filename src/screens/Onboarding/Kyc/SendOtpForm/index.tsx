@@ -312,7 +312,7 @@ const Index = (props: ITypeProps) => {
                 labelClassName="!font-Open"
                 onChange={(e) => {
                   dispatch(setPANNumber(e.target.value.toUpperCase()));
-                  if (!panRegex.test(e.target.value)) {
+                  if (!panRegex.test(e.target.value.toUpperCase())) {
                     dispatch(
                       setErrorDetails({
                         panError: "Enter Valid PAN Number",

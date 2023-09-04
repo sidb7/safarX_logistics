@@ -15,7 +15,7 @@ const Card = (props: ITypesProps) => {
 
   return (
     <>
-      <div className=" border-[1px] rounded-lg p-4 mb-2 border-[#E8E8E8] shadow w-full">
+      <div className=" border-[1px] rounded-lg p-4 mb-2 border-[#E8E8E8] shadow w-full cursor-pointer">
         <div className="flex flex-col">
           <div className="flex items-center h-6 gap-x-2 ">
             <CustomRadioButton
