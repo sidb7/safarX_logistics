@@ -133,6 +133,10 @@ const SelectDateModalContent = (props: ITypeProps) => {
       return false;
     }
 
+    if (selectedDay === "tomorrow") {
+      return true;
+    }
+
     return true;
   });
 

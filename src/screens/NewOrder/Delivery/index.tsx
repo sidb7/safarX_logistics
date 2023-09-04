@@ -26,7 +26,6 @@ import SelectDateModalContent from "../PickUp/selectDateModal";
 import {
   dummyPickupDropdownData,
   dummyStateDropdownData,
-  pickupAddress,
 } from "../../../utils/dummyData";
 import { POST } from "../../../utils/webService";
 
@@ -75,6 +74,7 @@ const Index = () => {
 
     warehouse: true,
   });
+  const [customLandmark, setCustomLandmark] = useState("");
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
 
@@ -150,6 +150,9 @@ const Index = () => {
 
   const handleClick = () => {
     // inputRef.current?.focus();
+  };
+  const handleLandmarkSelected = (landmark: string) => {
+    setCustomLandmark(landmark);
   };
 
   const handlePickupTimeSelected = (deliveryTime: string) => {
@@ -504,7 +507,8 @@ const Index = () => {
           <div className="mb-4 lg:mb-6 ">
             <CustomInputWithDropDown
               pastedData={pastedData}
-              handlePickupLocationChange={handleDeliveryLocationChange}
+              handlePickupAddressChange={handleDeliveryLocationChange}
+              handleLandmarkSelected={handleLandmarkSelected}
             />
           </div>
 
