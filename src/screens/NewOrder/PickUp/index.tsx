@@ -32,7 +32,6 @@ import AccordionUp from "../../../assets/AccordionUp.svg";
 import {
   dummyPickupDropdownData,
   dummyStateDropdownData,
-  pickupAddress,
 } from "../../../utils/dummyData";
 import RightModalContent from "./RightModalContent";
 import MapIcon from "../../../assets/PickUp/MapIcon.svg";
@@ -74,7 +73,8 @@ const Index = () => {
     query: "(min-width: 1024px)",
   });
   const [pastedData, setPastedData] = useState("");
-  const [pastedDataReturnAddress, setPastedDataReturnAddress] = useState("");
+  const [pastedDataReturnAddress, setPastedDataReturnAddress] =
+    useState(pastedData);
 
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -122,9 +122,10 @@ const Index = () => {
   const [prevPastedData, setPrevPastedData] = useState("");
   const [isChecked, setIsChecked] = useState(true);
 
-  const [pickupLocation, setPickupLocation] = useState({
+  const [pickupAddress, setPickupAddress] = useState({
     flatNo: "",
-    address: "",
+    locality: "",
+    fullAddress: "",
     sector: "",
     landmark: "",
     pincode: "",
@@ -136,7 +137,8 @@ const Index = () => {
 
   const [returnAddress, setReturnAddress] = useState({
     flatNo: "",
-    address: "",
+    locality: "",
+    fullAddress: "",
     sector: "",
     landmark: "",
     pincode: "",
@@ -155,10 +157,10 @@ const Index = () => {
   });
 
   const [returnAddressContact, setReturnAddressContacts] = useState({
-    name: "",
-    mobileNo: "",
-    alternateMobileNo: "",
-    emailId: "",
+    name: contact.name,
+    mobileNo: contact.mobileNo,
+    alternateMobileNo: contact.alternateMobileNo,
+    emailId: contact.emailId,
     type: "warehouse associate",
   });
 
@@ -202,11 +204,11 @@ const Index = () => {
     setPastedData(pastedData);
   };
 
-  const handlePickupLocationChange = (
-    fieldName: keyof typeof pickupLocation,
+  const handlePickupAddressChange = (
+    fieldName: keyof typeof pickupAddress,
     value: string
   ) => {
-    setPickupLocation((prevData) => ({
+    setPickupAddress((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -227,6 +229,16 @@ const Index = () => {
     value: string
   ) => {
     setContact((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleReturnAddressContactChange = (
+    fieldName: keyof typeof contact,
+    value: string
+  ) => {
+    setReturnAddressContacts((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
@@ -272,13 +284,13 @@ const Index = () => {
 
   // useEffect(() => {
   //   const parsedAddress = parseAddress(locateAddress);
-  //   setPickupLocation((prevData) => ({
+  //   setPickupAddress((prevData) => ({
   //     ...prevData,
   //     ...parsedAddress,
   //   }));
   // }, [locateAddress]);
 
-  // const parsedLandmarks = pickupLocation.landmark?.split(", ");
+  // const parsedLandmarks = pickupAddress.landmark?.split(", ");
   // const addressDropdownOptions = [
   //   {
   //     label: "Select/ type exact landmark",
@@ -305,6 +317,25 @@ const Index = () => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
+    // setReturnAddress({
+    //   flatNo: "",
+    //   locality: "",
+    //   fullAddress: "",
+    //   sector: "",
+    //   landmark: "",
+    //   pincode: "",
+    //   city: "",
+    //   state: "",
+    //   country: "",
+    //   addressType: "warehouse",
+    // });
+    // setReturnAddressContacts({
+    //   name: "",
+    //   mobileNo: "",
+    //   alternateMobileNo: "",
+    //   emailId: "",
+    //   type: "warehouse associate",
+    // });
   };
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
@@ -319,16 +350,27 @@ const Index = () => {
   const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
 
   const payload = {
-    pickupLocation: {
-      flatNo: pickupLocation.flatNo,
-      address: pastedData,
-      sector: pickupLocation.sector,
-      landmark: pickupLocation.landmark,
-      pincode: pickupLocation.pincode,
-      city: pickupLocation.city,
-      state: pickupLocation.state,
-      country: pickupLocation.country,
-      addressType: pickupLocation.addressType,
+    pickupAddress: {
+      flatNo: pickupAddress.flatNo,
+      fullAddress: pickupAddress.fullAddress,
+      sector: pickupAddress.sector,
+      locality: pickupAddress.locality,
+      landmark: pickupAddress.landmark,
+      pincode: pickupAddress.pincode,
+      city: pickupAddress.city,
+      state: pickupAddress.state,
+      country: pickupAddress.country,
+      addressType: pickupAddress.addressType,
+      workingDays: {
+        monday: timing.Monday,
+        tuesday: timing.Tuesday,
+        wednesday: timing.Wednesday,
+        thursday: timing.Thursday,
+        friday: timing.Friday,
+        saturday: timing.Saturday,
+        sunday: timing.Sunday,
+      },
+      workingHours: "0900-1900",
       contact: {
         name: contact.name,
         mobileNo: contact.mobileNo,
@@ -336,18 +378,48 @@ const Index = () => {
         emailId: contact.emailId,
         type: contact.type,
       },
-      customBranding: {
-        name: customBranding.name,
-        logo: customBranding.logo,
-        address: customBranding.address,
-        contact: {
-          name: customBranding.contact.name,
-          mobileNo: customBranding.contact.mobileNo,
-        },
-      },
       pickupDate: epochPickupDate,
     },
+    returnAddress: {
+      flatNo: returnAddress.flatNo,
+      fullAddress: returnAddress.fullAddress,
+      sector: returnAddress.sector,
+      landmark: returnAddress.landmark,
+      pincode: returnAddress.pincode,
+      city: returnAddress.city,
+      state: returnAddress.state,
+      country: returnAddress.country,
+      addressType: returnAddress.addressType,
+      contact: {
+        name: returnAddressContact.name,
+        mobileNo: returnAddressContact.mobileNo,
+        alternateMobileNo: returnAddressContact.alternateMobileNo,
+        emailId: returnAddressContact.emailId,
+        type: returnAddressContact.type,
+      },
+      // customBranding: {
+      //   name: customBranding.name,
+      //   logo: customBranding.logo,
+      //   address: customBranding.address,
+      //   contact: {
+      //     name: customBranding.contact.name,
+      //     mobileNo: customBranding.contact.mobileNo,
+      //   },
+      // },
+      // pickupDate: epochPickupDate,
+    },
+    branding: {
+      name: customBranding.name,
+      logo: customBranding.logo,
+      address: customBranding.address,
+      contact: {
+        name: customBranding.contact.name,
+        mobileNo: customBranding.contact.mobileNo,
+      },
+    },
   };
+
+  console.log("payload", payload);
 
   const postPickupOrderDetails = async (payload: any) => {
     try {
@@ -379,18 +451,34 @@ const Index = () => {
 
       const parsedData = verifyAddressResponse?.data?.message;
 
-      setPickupLocation({
+      setPickupAddress({
         flatNo:
           `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
           "",
-        address: parsedData.full_address || "",
+        fullAddress: parsedData.full_address || "",
+        locality: parsedData.locality_name || "",
         sector: parsedData.locality_name || "",
-        landmark: parsedData.building_name || "",
+        landmark: "",
         pincode: parsedData.pincode || "",
         city: parsedData.city_name || "",
         state: parsedData.state_name || "",
         country: parsedData.country_name || "India",
-        addressType: pickupLocation.addressType || "warehouse",
+        addressType: pickupAddress.addressType || "warehouse",
+      });
+
+      setReturnAddress({
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
+        fullAddress: parsedData.full_address || "",
+        locality: parsedData.locality_name || "",
+        sector: parsedData.locality_name || "",
+        landmark: pickupAddress.landmark,
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: pickupAddress.addressType || "warehouse",
       });
       setLoading(false);
     } catch (error) {
@@ -408,15 +496,64 @@ const Index = () => {
     }
   };
 
-  const returnAddressPayload = {
+  const verifyAddressPayloadForReturnAddress = {
     data: pastedDataReturnAddress,
+  };
+
+  const getVerifyAddressReturnAddress = async (
+    verifyAddressPayloadForReturnAddress: any
+  ) => {
+    try {
+      setLoading(true);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayloadForReturnAddress
+      );
+
+      const parsedData = verifyAddressResponse?.data?.message;
+
+      // setPickupAddress({
+      //   flatNo:
+      //     `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+      //     "",
+      //   fullAddress: parsedData.full_address || "",
+      //   locality: parsedData.locality_name || "",
+      //   sector: parsedData.locality_name || "",
+      //   landmark: parsedData.building_name || "",
+      //   pincode: parsedData.pincode || "",
+      //   city: parsedData.city_name || "",
+      //   state: parsedData.state_name || "",
+      //   country: parsedData.country_name || "India",
+      //   addressType: pickupAddress.addressType || "warehouse",
+      // });
+
+      setReturnAddress({
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
+        fullAddress: parsedData.full_address || "",
+        locality: parsedData.locality_name || "",
+        sector: parsedData.locality_name || "",
+        landmark: parsedData.building_name || "",
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: pickupAddress.addressType || "warehouse",
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      return error;
+    }
   };
 
   const handleButtonClickReturnAddress = () => {
     const trimmedData = pastedDataReturnAddress.trim();
 
     if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
-      getVerifyAddress(returnAddressPayload);
+      getVerifyAddressReturnAddress(verifyAddressPayloadForReturnAddress);
       setPrevPastedData(trimmedData);
     }
   };
@@ -482,7 +619,7 @@ const Index = () => {
         <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-          Pickup location
+          Pickup Address
         </p>
       </div>
       <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
@@ -543,7 +680,7 @@ const Index = () => {
             value={locateAddress}
             onChange={(e) => {
               setLocateAddress(e.target.value);
-              handlePickupLocationChange("address", e.target.value);
+              handlePickupAddressChange("fullAddress", e.target.value);
             }}
             onClick={() => {
               isItLgScreen
@@ -556,9 +693,9 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Plot No., Floor, Building Name"
-            value={pickupLocation.flatNo}
+            value={pickupAddress.flatNo}
             onChange={(e) => {
-              handlePickupLocationChange("flatNo", e.target.value);
+              handlePickupAddressChange("flatNo", e.target.value);
             }}
           />
         </div>
@@ -566,23 +703,28 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Locality"
-            value={pickupLocation.sector}
+            value={pickupAddress.sector}
             onChange={(e) =>
-              handlePickupLocationChange("sector", e.target.value)
+              handlePickupAddressChange("sector", e.target.value)
             }
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6 ">
-          <CustomInputWithDropDown pastedData={pastedData} />
+          <CustomInputWithDropDown
+            pastedData={pastedData}
+            handlePickupAddressChange={handlePickupAddressChange}
+            handleReturnAddressChange={handleReturnAddressChange}
+            handleLandmarkSelected={handleLandmarkSelected}
+          />
         </div>
 
         {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Landmark"
-            value={pickupLocation.landmark}
+            value={pickupAddress.landmark}
             onChange={(e) =>
-              handlePickupLocationChange("landmark", e.target.value)
+              handlePickupAddressChange("landmark", e.target.value)
             }
           />
         </div> */}
@@ -590,12 +732,12 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Pincode"
-            value={pickupLocation.pincode}
+            value={pickupAddress.pincode}
             // onChange={(e) =>
-            //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+            //   setPickupAddress({ ...pickupAddress, pincode: e.target.value })
             // }
             onChange={(e) =>
-              handlePickupLocationChange("pincode", e.target.value)
+              handlePickupAddressChange("pincode", e.target.value)
             }
           />
         </div>
@@ -603,25 +745,25 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="City"
-            value={pickupLocation.city}
-            onChange={(e) => handlePickupLocationChange("city", e.target.value)}
+            value={pickupAddress.city}
+            onChange={(e) => handlePickupAddressChange("city", e.target.value)}
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           {/* <CustomInputBox
             label="State"
-            value={pickupLocation.state}
+            value={pickupAddress.state}
             onChange={(e) =>
-              handlePickupLocationChange("state", e.target.value)
+              handlePickupAddressChange("state", e.target.value)
             }
           /> */}
 
           <CustomDropDown
-            value={pickupLocation.state}
+            value={pickupAddress.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
-              handlePickupLocationChange("state", event.target.value);
+              handlePickupAddressChange("state", event.target.value);
             }}
             options={dummyStateDropdownData}
           />
@@ -630,9 +772,9 @@ const Index = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Country"
-            value={pickupLocation.country}
+            value={pickupAddress.country}
             onChange={(e) =>
-              handlePickupLocationChange("country", e.target.value)
+              handlePickupAddressChange("country", e.target.value)
             }
           />
         </div>
@@ -640,17 +782,17 @@ const Index = () => {
         {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="State"
-            value={pickupLocation.state}
+            value={pickupAddress.state}
             onChange={(e) =>
-              handlePickupLocationChange("state", e.target.value)
+              handlePickupAddressChange("state", e.target.value)
             }
           />
           <div>
             <CustomInputBox
               label="Country"
-              value={pickupLocation.country}
+              value={pickupAddress.country}
               onChange={(e) =>
-                handlePickupLocationChange("country", e.target.value)
+                handlePickupAddressChange("country", e.target.value)
               }
             />
           </div>
@@ -692,7 +834,8 @@ const Index = () => {
                 warehouse: false,
                 other: false,
               });
-              handlePickupLocationChange("addressType", "office");
+              handlePickupAddressChange("addressType", "office");
+              handleReturnAddressChange("addressType", "office");
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
@@ -712,7 +855,8 @@ const Index = () => {
                 warehouse: true,
                 other: false,
               });
-              handlePickupLocationChange("addressType", "warehouse");
+              handlePickupAddressChange("addressType", "warehouse");
+              handleReturnAddressChange("addressType", "warehouse");
             }}
           >
             <img src={LocationIcon} alt="Other" />
@@ -732,7 +876,8 @@ const Index = () => {
                 warehouse: false,
                 other: true,
               });
-              handlePickupLocationChange("addressType", "other");
+              handlePickupAddressChange("addressType", "other");
+              handleReturnAddressChange("addressType", "other");
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
@@ -857,7 +1002,7 @@ const Index = () => {
                 value={locateAddress}
                 onChange={(e) => {
                   setLocateAddress(e.target.value);
-                  // handlePickupLocationChange("address", e.target.value);
+                  // handlePickupAddressChange("address", e.target.value);
                 }}
                 onClick={() => {
                   isItLgScreen
@@ -887,17 +1032,20 @@ const Index = () => {
               />
             </div>
 
-            {/* Landmark with dropdown commented */}
             <div className="mb-4 lg:mb-6  lg:mr-6 ">
-              <CustomInputWithDropDown pastedData={pastedDataReturnAddress} />
+              <CustomInputWithDropDown
+                pastedData={pastedDataReturnAddress}
+                handlePickupAddressChange={handleReturnAddressChange}
+                handleLandmarkSelected={handleLandmarkSelected}
+              />
             </div>
 
             {/* <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Landmark"
-            value={pickupLocation.landmark}
+            value={pickupAddress.landmark}
             onChange={(e) =>
-              handlePickupLocationChange("landmark", e.target.value)
+              handlePickupAddressChange("landmark", e.target.value)
             }
           />
         </div> */}
@@ -907,7 +1055,7 @@ const Index = () => {
                 label="Pincode"
                 value={returnAddress.pincode}
                 // onChange={(e) =>
-                //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
+                //   setPickupAddress({ ...pickupAddress, pincode: e.target.value })
                 // }
                 onChange={(e) =>
                   handleReturnAddressChange("pincode", e.target.value)
@@ -928,9 +1076,9 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               {/* <CustomInputBox
             label="State"
-            value={pickupLocation.state}
+            value={pickupAddress.state}
             onChange={(e) =>
-              handlePickupLocationChange("state", e.target.value)
+              handlePickupAddressChange("state", e.target.value)
             }
           /> */}
 
@@ -957,17 +1105,17 @@ const Index = () => {
             {/* <div className="grid grid-cols-2 gap-x-5 lg:hidden mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="State"
-            value={pickupLocation.state}
+            value={pickupAddress.state}
             onChange={(e) =>
-              handlePickupLocationChange("state", e.target.value)
+              handlePickupAddressChange("state", e.target.value)
             }
           />
           <div>
             <CustomInputBox
               label="Country"
-              value={pickupLocation.country}
+              value={pickupAddress.country}
               onChange={(e) =>
-                handlePickupLocationChange("country", e.target.value)
+                handlePickupAddressChange("country", e.target.value)
               }
             />
           </div>
@@ -1006,34 +1154,41 @@ const Index = () => {
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Name of the contact person"
-                value={contact.name}
-                onChange={(e) => handleContactChange("name", e.target.value)}
-              />
-            </div>
-
-            <div className="mb-4 lg:mb-6 lg:mr-6">
-              <CustomInputBox
-                label="Mobile Number"
-                value={contact.mobileNo}
+                value={returnAddressContact.name}
                 onChange={(e) =>
-                  handleContactChange("mobileNo", e.target.value)
+                  handleReturnAddressContactChange("name", e.target.value)
                 }
               />
             </div>
 
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
-                label="Email ID(optional)"
-                value={contact.emailId}
-                onChange={(e) => handleContactChange("emailId", e.target.value)}
+                label="Mobile Number"
+                value={returnAddressContact.mobileNo}
+                onChange={(e) =>
+                  handleReturnAddressContactChange("mobileNo", e.target.value)
+                }
+              />
+            </div>
+
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="Email Id(optional)"
+                value={returnAddressContact.emailId}
+                onChange={(e) =>
+                  handleReturnAddressContactChange("emailId", e.target.value)
+                }
               />
             </div>
             <div className="mb-7 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="Alternate mobile number(optional)"
-                value={contact.alternateMobileNo}
+                value={returnAddressContact.alternateMobileNo}
                 onChange={(e) =>
-                  handleContactChange("alternateMobileNo", e.target.value)
+                  handleReturnAddressContactChange(
+                    "alternateMobileNo",
+                    e.target.value
+                  )
                 }
               />
             </div>
@@ -1058,7 +1213,7 @@ const Index = () => {
                     warehouse: false,
                     dispatcher: false,
                   });
-                  handleContactChange("type", "shopkeeper");
+                  handleReturnAddressContactChange("type", "shopkeeper");
                 }}
               >
                 <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1080,7 +1235,10 @@ const Index = () => {
                     warehouse: true,
                     dispatcher: false,
                   });
-                  handleContactChange("type", "warehouse associate");
+                  handleReturnAddressContactChange(
+                    "type",
+                    "warehouse associate"
+                  );
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)
@@ -1106,7 +1264,7 @@ const Index = () => {
                     warehouse: false,
                     dispatcher: true,
                   });
-                  handleContactChange("type", "dispatcher");
+                  handleReturnAddressContactChange("type", "dispatcher");
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)
@@ -1148,7 +1306,10 @@ const Index = () => {
           <CustomInputBox
             label="Name of the contact person"
             value={contact.name}
-            onChange={(e) => handleContactChange("name", e.target.value)}
+            onChange={(e) => {
+              handleContactChange("name", e.target.value);
+              handleReturnAddressContactChange("name", e.target.value);
+            }}
           />
         </div>
 
@@ -1156,7 +1317,10 @@ const Index = () => {
           <CustomInputBox
             label="Mobile Number"
             value={contact.mobileNo}
-            onChange={(e) => handleContactChange("mobileNo", e.target.value)}
+            onChange={(e) => {
+              handleContactChange("mobileNo", e.target.value);
+              handleReturnAddressContactChange("mobileNo", e.target.value);
+            }}
           />
         </div>
 
@@ -1164,16 +1328,23 @@ const Index = () => {
           <CustomInputBox
             label="Email ID(optional)"
             value={contact.emailId}
-            onChange={(e) => handleContactChange("emailId", e.target.value)}
+            onChange={(e) => {
+              handleContactChange("emailId", e.target.value);
+              handleReturnAddressContactChange("emailId", e.target.value);
+            }}
           />
         </div>
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number(optional)"
             value={contact.alternateMobileNo}
-            onChange={(e) =>
-              handleContactChange("alternateMobileNo", e.target.value)
-            }
+            onChange={(e) => {
+              handleContactChange("alternateMobileNo", e.target.value);
+              handleReturnAddressContactChange(
+                "alternateMobileNo",
+                e.target.value
+              );
+            }}
           />
         </div>
 
@@ -1198,6 +1369,7 @@ const Index = () => {
                 dispatcher: false,
               });
               handleContactChange("type", "shopkeeper");
+              handleReturnAddressContactChange("type", "shopkeeper");
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1220,6 +1392,7 @@ const Index = () => {
                 dispatcher: false,
               });
               handleContactChange("type", "warehouse associate");
+              handleReturnAddressContactChange("type", "warehouse associate");
 
               // isItLgScreen
               //   ? setIsSaveContactRightModal(true)
@@ -1246,6 +1419,7 @@ const Index = () => {
                 dispatcher: true,
               });
               handleContactChange("type", "dispatcher");
+              handleReturnAddressContactChange("type", "dispatcher");
 
               // isItLgScreen
               //   ? setIsSaveContactRightModal(true)

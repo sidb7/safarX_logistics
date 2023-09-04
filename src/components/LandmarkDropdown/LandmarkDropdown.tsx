@@ -6,10 +6,17 @@ import { constants } from "buffer";
 
 interface CustomInputWithDropDownProps {
   pastedData: any;
+  handlePickupAddressChange: (field: any, value: any) => any;
+  handleReturnAddressChange?: (field: any, value: any) => any;
+
+  handleLandmarkSelected: (landmark: string) => any;
 }
 
 const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   pastedData,
+  handlePickupAddressChange,
+  handleLandmarkSelected,
+  handleReturnAddressChange,
 }) => {
   const [arrayValue, setArrayValue] = useState<string[]>([]);
   const [selected, setSelected] = useState("");
@@ -28,6 +35,8 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       window.removeEventListener("click", closeDropdown);
     };
   }, []);
+
+  console.log("selectedLandmark", selected);
 
   useEffect(() => {
     (async () => {
@@ -81,6 +90,15 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         value={selected}
         onChange={(e) => {
           setSelected(e.target.value);
+          handlePickupAddressChange("landmark", e.target.value);
+          if (handleReturnAddressChange) {
+            handleReturnAddressChange("landmark", e.target.value);
+          }
+          handleLandmarkSelected(e.target.value);
+          console.log(
+            "selectedLandmarkhandler",
+            handlePickupAddressChange("landmark", e.target.value)
+          );
         }}
         className="downarrowImage"
       />
@@ -95,9 +113,14 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
             <div
               className="cursor-pointer py-2 px-3 hover:bg-slate-100"
               key={index}
-              onClick={() => {
+              onClick={(e: any) => {
                 setSelected(name);
                 setIsDropdownOpen(false);
+                handlePickupAddressChange("landmark", name);
+                if (handleReturnAddressChange) {
+                  handleReturnAddressChange("landmark", name);
+                }
+                handleLandmarkSelected(e.target.value);
               }}
             >
               <p className="text-[12px] text-[#777777] leading-4 font-Open">

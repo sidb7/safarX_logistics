@@ -18,6 +18,8 @@ interface IBoxdetails {
 
 const BoxDetails = (props: IBoxdetails) => {
   const { products, selectedBox = {}, setProductFinalPayload } = props;
+
+
   const [allProducts, setAllProducts]: any = useState([]);
 
   useEffect(() => {
@@ -28,16 +30,20 @@ const BoxDetails = (props: IBoxdetails) => {
     setProductFinalPayload(allProducts);
   }, [allProducts]);
 
-  const calcValumWeight = (l: any, b: any, h: any) => {
-    let result = l * b * h;
-    return result / 5000;
+  const calculateVolumeWeight = (
+    length: number,
+    breadth: number,
+    height: number
+  ): number => {
+    const volume = length * breadth * height;
+    return volume / 5000;
   };
 
   const calcAllTotalProductWeight: any = () => {
     let totalWeight = 0;
     allProducts.forEach((e: any) => {
-      const { weight } = e;
-      totalWeight += +weight.deadWeight * +e.stock || 0;
+      const { deadWeight } = e;
+      totalWeight += +deadWeight * +e.qty || 0;
     });
     return totalWeight;
   };
@@ -48,25 +54,29 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const addUnit = (index: number) => {
     let arr = allProducts;
-    arr[index].stock++;
+    const { length, breadth, height } = allProducts[index];
+    arr[index].qty++;
+    let calacVolu: any = +calculateVolumeWeight(length, breadth, height);
+    arr[index].volumetricWeight = +(calacVolu.toFixed(4) * +arr[index].qty);
     setAllProducts([...arr]);
   };
 
   const removeUnit = (index: number) => {
     let arr = allProducts;
-    arr[index].stock = +arr[index].stock;
-    arr[index].stock === 1 ? (arr[index].stock = 1) : arr[index].stock--;
+    const { length, breadth, height } = allProducts[index];
+    arr[index].qty = +arr[index].qty;
+    arr[index].qty === 1 ? (arr[index].qty = 1) : arr[index].qty--;
+    let calacVolu: any = +calculateVolumeWeight(length, breadth, height);
+    arr[index].volumetricWeight = +(calacVolu.toFixed(4) * +arr[index].qty);
     setAllProducts([...arr]);
   };
 
   const calcBillableWeight = () => {
     let billableWeight = calcAllTotalProductWeight();
-
-
     return (
-      billableWeight > +selectedBox.weight.split("kg")[0]
+      billableWeight > +selectedBox.volumetricWeight
         ? calcAllTotalProductWeight()
-        : +selectedBox.weight.split("kg")[0]
+        : +selectedBox.volumetricWeight
     ).toFixed(2);
   };
 
@@ -103,11 +113,11 @@ const BoxDetails = (props: IBoxdetails) => {
               <div className="flex justify-between" key={index}>
                 <ProductBox
                   image={ItemIcon}
-                  weight={`${e?.weight.deadWeight} Kg`}
-                  productName={e?.productName || 0}
-                  breadth={e?.dimensions?.breadth || 0}
-                  length={e?.dimensions?.length || 0}
-                  height={e?.dimensions?.height || 0}
+                  weight={`${e?.deadWeight} Kg`}
+                  productName={e?.name || 0}
+                  breadth={e?.breadth || 0}
+                  length={e?.length || 0}
+                  height={e?.height || 0}
                   dimensionClassName="!font-light"
                   className="!border-none !shadow-none"
                 />
@@ -121,7 +131,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     />
                   </div>
                   <div>
-                    <p>{e.stock}</p>
+                    <p>{e.qty}</p>
                   </div>
                   <div>
                     <img
@@ -161,40 +171,37 @@ const BoxDetails = (props: IBoxdetails) => {
                   <div
                     className={`h-[6px] ${
                       calcAllTotalProductWeight() >
-                      +selectedBox.weight.split("kg")[0]
+                      +selectedBox.volumetricWeight
                         ? "bg-[red]"
                         : "bg-[#7CCA62]"
                     } p-0 m-0 transition-all duration-700 ease-in-out`}
                     style={{
                       width: `${percentage(
                         calcAllTotalProductWeight() || 0,
-                        +selectedBox.weight.split("kg")[0] || 0
+                        +selectedBox.volumetricWeight || 0
                       )}%`,
                     }}
                   ></div>
                   <div className="absolute top-1 right-0">
                     <p className="text-base font-semibold leading-4 text-[#494949]">
                       {/* {weight is length x width x height (cm) / 5000.} */}
-                      {selectedBox.weight.split("kg")} Kg
+                      {selectedBox.volumetricWeight} Kg
                     </p>
                   </div>
                 </div>
                 {}
               </div>
               {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
-              {calcAllTotalProductWeight() >
-              +selectedBox.weight.split("kg")[0] ? (
+              {calcAllTotalProductWeight() > +selectedBox.volumetricWeight ? (
                 <span className="text-base text-slate-600  mt-4 pl-4">
                   {` Your billable weight is  ${calcBillableWeight()} KG. ( You are ${(
-                    calcAllTotalProductWeight() -
-                    +selectedBox.weight.split("kg")[0]
+                    calcAllTotalProductWeight() - +selectedBox.volumetricWeight
                   ).toFixed(2)} KG over your box capacity/volumetric weight )`}
                 </span>
               ) : (
                 <span className="text-base text-slate-600  mt-4 pl-4">
                   {`Your billable weight is ${calcBillableWeight()} KG. You can add more products up to ${(
-                    +selectedBox.weight.split("kg")[0] -
-                    calcAllTotalProductWeight()
+                    +selectedBox.volumetricWeight - calcAllTotalProductWeight()
                   ).toFixed(2)} KG`}
                 </span>
               )}

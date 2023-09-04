@@ -84,8 +84,8 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 
-const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
-const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
+const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
@@ -96,9 +96,10 @@ const LANDMARK_API= `${SELLER_BASE_URL}/landmark/landmark`;
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
+const GET_SELLER_BOX = `${SELLER_URL}/api/v1/box/getSellerBox`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
-const ADD_BOX_INFO = `${SELLER_URL}/api/v1/orderBoxInfo/addBoxInfo`;
+const ADD_BOX_INFO = `${SELLER_URL}/api/v1/order/setBoxAndCODInfo`;
 
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
@@ -144,6 +145,7 @@ export {
   ADD_COD_INFO,
   POST_SIGN_IN_URL,
   POST_SIGN_UP_URL,
+  GET_SELLER_BOX,
   POST_SEND_OTP_URL,
   GET_PROFILE_URL,
   POST_BUSINESS_TYPE_URL,
