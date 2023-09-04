@@ -42,7 +42,15 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/home/overview");
+
+      // redirect based on qna and kyc done or not
+      if (response?.data?.[0]?.nextStep?.qna === false) {
+        navigate("/onboarding/questionnaire/question1");
+      } else if (response?.data?.[0]?.nextStep?.kyc === false) {
+        navigate("/onboarding/kyc-type");
+      } else {
+        navigate("/home/overview");
+      }
     } else {
       toast.error(response?.message);
     }
@@ -104,7 +112,7 @@ const Index = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[84px]">
+        <div className="lg:mx-24 lg:mt-[110px]">
           <div className="flex flex-col gap-y-8 w-full">
             <div className="product-box flex items-center lg:hidden">
               <img
@@ -115,10 +123,10 @@ const Index = () => {
             </div>
 
             <div className="flex flex-col mt-7 mx-4 gap-y-6">
-              <p className="text-center	 text-2xl font-medium">
+              <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
                 Welcome to Shipyaari
               </p>
-              <p className="text-center	 font-thin">
+              <p className="text-center font-Open font-light text-sm leading-[22px]">
                 Fast and Easy Shipping from your doorstep to your customer's.{" "}
               </p>
             </div>
@@ -152,9 +160,11 @@ const Index = () => {
                 onClick={(e: any) => logInOnClick(loginCredentials)}
                 text="LOG IN"
               />
-              <hr className="mb-[-30px]" />
-              <div className="flex justify-center my-[-7px]">
-                <button className="bg-[#FEFEFE] px-2 font-medium">OR</button>
+              <hr className="mb-[-30px] mt-2" />
+              <div className="flex justify-center my-[-4px]">
+                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
+                  OR
+                </button>
               </div>
               <div className="flex justify-center">
                 <GoogleLogin
@@ -166,13 +176,13 @@ const Index = () => {
               </div>
 
               <div className="flex justify-center">
-                <p className="text-[#777777] font-light">
+                <p className="text-[#777777] font-normal text-xs lg:text-lg leading-4 font-Open">
                   Don't have an account ?
                 </p>
                 <button
                   type="button"
                   onClick={signUpOnClick}
-                  className="text-[#004EFF] ml-1"
+                  className="text-[#004EFF] ml-1 font-normal text-xs lg:text-lg leading-4 font-Open"
                 >
                   Sign Up
                 </button>

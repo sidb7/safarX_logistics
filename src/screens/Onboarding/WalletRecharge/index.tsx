@@ -56,12 +56,12 @@ const OnBoundingWalletRecharge = () => {
           src={CompanyLogo}
           alt="Company Logo"
         />
-        <img
-          className="my-auto mr-6"
-          src={CloseIcon}
-          alt="Close"
-          onClick={() => setIsModalOpen(false)}
-        />
+        {/* <img
+            className="my-auto mr-6"
+            src={CloseIcon}
+            alt="Close"
+            onClick={() => setIsModalOpen(false)}
+          /> */}
       </div>
     );
   };
@@ -128,7 +128,7 @@ const OnBoundingWalletRecharge = () => {
         <div className="lg:grid lg:grid-cols-2">
           <div className="lg:grid">
             <div className="mx-5  mt-[148px] lg:mt-[110px]">
-              <h1 className="text-[22px] font-semibold leading-7 text-center">
+              <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
                 Welcome to Shipyaari
               </h1>
               {/* Temporary Comment */}
@@ -148,29 +148,45 @@ const OnBoundingWalletRecharge = () => {
           <div className="lg:grid">
             <div className="mx-5 mt-24 rounded-lg border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
               <div className="lg:space-y-4">
-                <h1 className="ml-2 text-[20px] font-medium">
+                <h1 className="ml-2 font-Lato font-semibold text-[20px] leading-[26px]">
                   Benefits of shipyaari wallet
                 </h1>
                 <div className="flex mt-[26px]">
-                  <Checkbox checked={true} checkboxClassName="text-black" />
-                  <p className="ml-2 mt-[2px] text-[16px]">
+                  <Checkbox
+                    checked={true}
+                    checkboxClassName="text-black"
+                    style={{ accentColor: "black" }}
+                  />
+                  <p className="ml-2 mt-[2px] text-[16px]font-Open font-normal leading-[22px]">
                     Get Discounts/Offers on Recharge
                   </p>
                 </div>
                 <div className="flex">
-                  <Checkbox checked={true} checkboxClassName="text-black" />
+                  <Checkbox
+                    checked={true}
+                    checkboxClassName="text-black"
+                    style={{ accentColor: "black" }}
+                  />
                   <p className="ml-2 mt-[2px] text-[16px]">
-                    Fater order processing
+                    Faster order processing
                   </p>
                 </div>
                 <div className="flex">
-                  <Checkbox checked={true} checkboxClassName="text-black" />
+                  <Checkbox
+                    checked={true}
+                    checkboxClassName="text-black"
+                    style={{ accentColor: "black" }}
+                  />
                   <p className="ml-2 mt-[2px] text-[16px]">
                     Instant Payment Processing
                   </p>
                 </div>
                 <div className="flex">
-                  <Checkbox checked={true} checkboxClassName="text-black" />
+                  <Checkbox
+                    checked={true}
+                    checkboxClassName="text-black"
+                    style={{ accentColor: "black" }}
+                  />
                   <p className="ml-2 mt-[2px] text-[16px]">
                     Simplified Accounting
                   </p>
@@ -189,7 +205,7 @@ const OnBoundingWalletRecharge = () => {
               className="flex justify-center mt-4 cursor-pointer"
               onClick={() => navigate("/home/overview")}
             >
-              <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
+              <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                 SKIP FOR NOW{" "}
               </p>
             </div>
@@ -209,29 +225,31 @@ const OnBoundingWalletRecharge = () => {
             src={CompanyLogo}
             alt="Company Logo"
           />
-          <img
+          {/* <img
             className="my-auto mr-6"
             src={CloseIcon}
             alt="Close"
             onClick={() => setIsRechargeModalOpen(false)}
-          />
+          /> */}
         </div>
-        <div className="text-center mt-3 mb-4">
-          <h1 className="text-[1.375rem] font-bold leading-7 text-center">
+        <div className="text-center mt-6 mb-4">
+          <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
             Welcome to Shipyaari
           </h1>
           <p className="mt-3 text-[16px] font-light">
             Please fill your bank details
           </p>
         </div>
-        <div className="flex flex-col p-10">
+        <div className="flex flex-col p-5">
           <div>
             <CustomInputBox
               containerStyle={`lg:!w-auto`}
-              inputType="text"
+              value={accountName || ""}
+              inputMode="numeric"
               label="Account Number"
               className="!w-[20rem]"
-              onChange={(e) => setAccountName(e.target.value)}
+              maxLength={50}
+              onChange={(e) => setAccountName(+e.target.value)}
             />
           </div>
 
@@ -331,15 +349,15 @@ const OnBoundingWalletRecharge = () => {
             src={CompanyLogo}
             alt="Company Logo"
           />
-          <img
+          {/* <img
             className="my-auto mr-6"
             src={CloseIcon}
             alt="Close"
             onClick={() => setWalletRechargeModalOpen(false)}
-          />
+          /> */}
         </div>
         <div className="text-center mt-3 mb-4">
-          <h1 className="text-[1.375rem] font-bold leading-7 text-center">
+          <h1 className="text-[22px] font-Lato font-bold leading-7 text-center">
             Welcome to Shipyaari
           </h1>
         </div>
@@ -458,7 +476,9 @@ const OnBoundingWalletRecharge = () => {
   const note = (className = "") => {
     return (
       <>
-        <p className={`${className} mx-5 mt-[26px] text-[#494949] text-[12px]`}>
+        <p
+          className={`${className} mx-5 mt-[26px] text-[#494949] text-[12px] font-Open font-normal leading-4`}
+        >
           NOTE: Recharge is mandatory for shipping orders.
         </p>
         {/* <div className="mt-[26px] flex justify-center">
@@ -471,6 +491,7 @@ const OnBoundingWalletRecharge = () => {
     <>
       {isLgScreen && isModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           className="!h-[490px] !w-[688px]"
@@ -481,6 +502,7 @@ const OnBoundingWalletRecharge = () => {
 
       {isRechargeModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           isOpen={isRechargeModalOpen}
           onClose={() => setIsRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"
@@ -491,6 +513,7 @@ const OnBoundingWalletRecharge = () => {
 
       {walletRechargeModalOpen && (
         <CenterModal
+          shouldCloseOnOverlayClick={false}
           isOpen={walletRechargeModalOpen}
           onClose={() => setWalletRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"

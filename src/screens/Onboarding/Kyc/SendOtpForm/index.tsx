@@ -41,6 +41,7 @@ const Index = (props: ITypeProps) => {
   );
   const gstNumber = useSelector((state: any) => state?.onboarding.gstNumber);
   const panNumber = useSelector((state: any) => state?.onboarding.panNumber);
+
   const aadharNumber = useSelector(
     (state: any) => state?.onboarding.aadharNumber
   );
@@ -303,14 +304,15 @@ const Index = (props: ITypeProps) => {
               <CustomInputBox
                 containerStyle="lg:!w-auto"
                 label="PAN Number"
+                value={panNumber}
                 maxLength={10}
                 className={`${
                   panError !== "" && "border-[#F35838]"
                 }   lg:!w-[320px] !font-Open`}
                 labelClassName="!font-Open"
                 onChange={(e) => {
-                  dispatch(setPANNumber(e.target.value));
-                  if (!panRegex.test(e.target.value)) {
+                  dispatch(setPANNumber(e.target.value.toUpperCase()));
+                  if (!panRegex.test(e.target.value.toUpperCase())) {
                     dispatch(
                       setErrorDetails({
                         panError: "Enter Valid PAN Number",

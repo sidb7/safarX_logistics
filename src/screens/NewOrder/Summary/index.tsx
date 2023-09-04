@@ -20,6 +20,8 @@ import { HighRiskPincodeModal } from "./whatsappModal";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import AddButton from "../../../components/Button/addButton";
+import { generateUniqueCode } from "../../../utils/utility";
 
 type Props = {};
 
@@ -77,6 +79,8 @@ const Summary = (props: Props) => {
       imgSrc: TickLogo,
     },
   ];
+
+  const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
 
   // endpoint to maintain order state
@@ -130,12 +134,26 @@ const Summary = (props: Props) => {
           </p>
         </div>
         <div className="flex flex-row justify-between items-center h-[48px] rounded  p-[10px] border-[1px] border-[#A4A4A4] lg:w-1/4  ">
-          <p className="text-[12px] text-[#1C1C1C] lg:font-normal lg:text-[#777777]">
-            Generate order ID
+          <p
+            className={`text-[12px] text-[#1C1C1C] font-Open leading-4  ${
+              orderId !== ""
+                ? "lg:text-[#1C1C1C] lg:font-semibold text-base"
+                : "lg:text-[#777777] lg:font-normal"
+            }`}
+          >
+            {orderId !== "" ? orderId : "Generate order ID"}
           </p>
-          <p className="text-[#004EFF] text-[14px] font-bold lg:font-semibold">
-            AUTO GENERATE
-          </p>
+
+          <div>
+            <AddButton
+              onClick={() => {
+                const orderId = generateUniqueCode(8, 12);
+                setOrderId(orderId);
+              }}
+              text={"AUTO GENERATE"}
+              className="!bg-transparent !border-none !font-Open !font-semibold !text-sm !leading-5 !shadow-none"
+            />
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 lg:w-[770px]">
@@ -229,7 +247,7 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          {latestOrder?.data?.products.map((product: any) => (
+          {latestOrder?.data?.products?.map((product: any) => (
             <BoxDetails
               key={product.productId}
               productName={product.productName}
@@ -243,7 +261,7 @@ const Summary = (props: Props) => {
           ))}
 
           {/*Service */}
-          {latestOrder?.data?.products.map((product: any) => (
+          {latestOrder?.data?.products?.map((product: any) => (
             <SummaryService
               companyServiceName={serviceDetails?.companyServiceName}
               // companyServiceId={serviceDetails?.companyServiceId}
