@@ -1,6 +1,6 @@
 import { useMediaQuery } from "react-responsive";
 import EditIcon from "../../../assets/Profile/EditIcon.svg";
-import DummyImage from "../../../assets/Profile/DummyImage.svg";
+// import DummyImage from "../../../assets/Profile/DummyImage.svg";
 import { useNavigate } from "react-router-dom";
 import LabelContainer from "../../../components/LabelContainer";
 

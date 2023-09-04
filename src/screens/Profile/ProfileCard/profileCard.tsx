@@ -41,6 +41,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const activePlan = props?.ProfileDetails?.activePlan;
   const yaariPoints = props?.ProfileDetails?.yaariPoints;
   const walletBalance = props?.ProfileDetails?.walletBalance;
+  const companyDisplayName = props?.ProfileDetails?.privateCompany?.name;
 
   const navigate = useNavigate();
 
@@ -101,7 +102,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             </span>
             <span className="flex">
               <img src={WebsiteIcon} alt="Website" className="w-[16px] mr-1" />
-              {companyName}
+              {companyDisplayName}
             </span>
           </div>
         </div>
@@ -110,14 +111,6 @@ export const ProfileCard = (props: ProfileCardProps) => {
       {!isItLgScreen ? (
         <div>
           <div className="flex justify-between mt-4">
-            <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
-              <LabelComponent
-                label="Yaari Points"
-                className={"text-[14px] pl-2 py-2"}
-                info={yaariPoints || "0"}
-                classNameInfo="pl-2 py-2"
-              />
-            </div>
             <div className="flex flex-col drop-shadow-sm rounded-md bg-[#FDF6EA] w-[148px] h-[74px]">
               <LabelComponent
                 label="Wallet Balance"
@@ -126,32 +119,34 @@ export const ProfileCard = (props: ProfileCardProps) => {
                 classNameInfo="pl-2 py-2"
               />
             </div>
+            <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
+              <LabelComponent
+                label="Yaari Points"
+                className={"text-[14px] pl-2 py-2"}
+                info={yaariPoints || "0"}
+                classNameInfo="pl-2 py-2"
+              />
+            </div>
           </div>
 
           <div className="flex flex-col w-full font-semibold border-[1px] border-[#E8E8E8] rounded-md h-[86px] p-2 mt-4">
             <div className="flex justify-between mt-4">
-              <span className="text-[16px] font-[#1C1C1C]">{activePlan}</span>
+              <span className="text-[16px] font-[#1C1C1C]">
+                {activePlan || "Not Assigned Yet"}
+              </span>
               <span className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
-                CHANGE
+                UPGRADE
               </span>
             </div>
             <div className="flex mt-2">
               <span className="text-[14px] text-[#494949]">
-                Activited since Jun 2023
+                {/* Activited since Jun 2023 */}
               </span>
             </div>
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-3 mt-4 gap-4">
-          <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
-            <LabelComponent
-              label="Yaari Points"
-              className={"text-[18px] pl-3"}
-              info={yaariPoints || "0"}
-              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
-            />
-          </div>
           <div className="flex flex-col justify-center rop-shadow-sm rounded-md bg-[#FDF6EA]">
             <LabelComponent
               label="Wallet Balance"
@@ -160,18 +155,26 @@ export const ProfileCard = (props: ProfileCardProps) => {
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>
+          <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
+            <LabelComponent
+              label="Yaari Points"
+              className={"text-[18px] pl-3"}
+              info={yaariPoints || "0"}
+              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
+            />
+          </div>
           <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">
             <div className="flex justify-between">
               <span className="text-[20px] font-semibold font-[#1C1C1C]">
-                {activePlan}
+                {activePlan || "Not Assigned Yet"}
               </span>
               <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded cursor-pointer">
-                CHANGE
+                UPGRADE
               </span>
             </div>
             <div className="flex mt-2">
               <span className="text-[14px] text-[#494949]">
-                Activited since Jun 2023
+                {/* Activited since Jun 2023 */}
               </span>
             </div>
           </div>

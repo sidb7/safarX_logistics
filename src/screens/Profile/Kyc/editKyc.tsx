@@ -10,6 +10,7 @@ import VerifyDocument from "./verifyDocument";
 
 export const EditProfileKyc = () => {
   const [kycDetails, setKycDetails] = useState<any>({});
+
   const [openModal, setOpenModal] = useState(false);
   const [verifyDocument, setVerifyDocument] = useState({
     documentName: "",
