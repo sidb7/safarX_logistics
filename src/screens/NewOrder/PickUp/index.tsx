@@ -135,15 +135,15 @@ const Index = () => {
   });
 
   const [returnAddress, setReturnAddress] = useState({
-    flatNo: "",
-    address: "",
-    sector: "",
-    landmark: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    addressType: "warehouse",
+    flatNo: pickupLocation.flatNo,
+    address: pastedData,
+    sector: pickupLocation.sector,
+    landmark: pickupLocation.landmark,
+    pincode: pickupLocation.pincode,
+    city: pickupLocation.city,
+    state: pickupLocation.state,
+    country: pickupLocation.country,
+    addressType: pickupLocation.addressType,
   });
 
   const [contact, setContact] = useState({
@@ -346,6 +346,34 @@ const Index = () => {
         },
       },
       pickupDate: epochPickupDate,
+    },
+    returnAddress: {
+      flatNo: returnAddress.flatNo,
+      address: pastedData,
+      sector: returnAddress.sector,
+      landmark: returnAddress.landmark,
+      pincode: returnAddress.pincode,
+      city: returnAddress.city,
+      state: returnAddress.state,
+      country: returnAddress.country,
+      addressType: returnAddress.addressType,
+      contact: {
+        name: contact.name,
+        mobileNo: contact.mobileNo,
+        alternateMobileNo: contact.alternateMobileNo,
+        emailId: contact.emailId,
+        type: contact.type,
+      },
+      // customBranding: {
+      //   name: customBranding.name,
+      //   logo: customBranding.logo,
+      //   address: customBranding.address,
+      //   contact: {
+      //     name: customBranding.contact.name,
+      //     mobileNo: customBranding.contact.mobileNo,
+      //   },
+      // },
+      // pickupDate: epochPickupDate,
     },
   };
 
