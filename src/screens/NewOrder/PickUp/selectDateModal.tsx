@@ -16,10 +16,10 @@ interface ITypeProps {
 }
 
 export const dummyTimeData = [
-  // {
-  //   label: "12:00 PM - 03:00 PM",
-  //   value: "12:00 PM - 15:00 PM",
-  // },
+  {
+    label: "12:00 PM - 03:00 PM",
+    value: "12:00 PM - 15:00 PM",
+  },
   {
     label: "3:00 PM - 06:00 PM",
     value: "15:00 PM - 18:00 PM",
@@ -119,19 +119,29 @@ const SelectDateModalContent = (props: ITypeProps) => {
 
   const filteredTimeData = dummyTimeData.filter((timeSlot) => {
     const [startTime, endTime] = timeSlot.value.split(" - ");
-
     const [startHour, startMinute] = startTime
       .split(":")
       .map((value) => parseInt(value));
     const [endHour, endMinute] = endTime
       .split(":")
       .map((value) => parseInt(value));
-    console.log("startHour", startHour);
-    console.log("currentHour", currentHour);
-    console.log("endHour", endHour);
-    if (currentHour > startHour && currentHour < endHour) {
+
+    if (selectedDay === "tomorrow") {
       return true;
     }
+
+    if (
+      currentHour > endHour ||
+      (currentHour === endHour && currentMinute >= endMinute)
+    ) {
+      return false;
+    }
+
+    if (selectedDay === "today" && currentHour >= endHour) {
+      return false;
+    }
+
+    return true;
   });
 
   return (
@@ -170,7 +180,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
         <div className="flex flex-col lg:px-5">
           <p className="lg:font-bold lg:font-Lato lg:text-xl lg:mb-5 ">Time</p>
           <DynamicButtonScrollComponentForTime
-            items={dummyTimeData}
+            items={filteredTimeData}
             selectedTime={selectedTime}
             selectedDay={selectedDay}
             onClick={handleTimeSlotClick}
