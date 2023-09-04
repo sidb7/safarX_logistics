@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";
+import CustomDropDown from "../../../components/DropDown";
 
 export const RecommendedServiceData = [
   {
@@ -141,9 +142,15 @@ const Index: React.FC = () => {
   const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState<any>();
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const [companyServiceId, setCompanyServiceId] = useState<any>();
+  const [companyServiceName, setCompanyServiceName] = useState<any>();
+  const [partnerService, setPartnerService] = useState<any>();
+  const [partnerServiceId, setPartnerServiceId] = useState<any>();
+  const [partnerServiceName, setPartnerServiceName] = useState<any>();
+  const [cardInfo, setCardInfo] = useState<any>();
 
   // const [payload, setPayload] = useState({
   //   mode: null,
@@ -162,36 +169,36 @@ const Index: React.FC = () => {
   //console.log("recommendedData", recommendedData);
 
   //console.log("responsefromAPicall", response);
-  const dataArray = (response as any).data;
+  // const dataArray = (response as any).data;
   //console.log("dataArray", dataArray);
 
   // endpoint to maintain order state
-  const getLatestOrderDetails = async () => {
-    try {
-      setLoading(true);
-      const { data: response } = await POST(GET_LATEST_ORDER);
+  // const getLatestOrderDetails = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const { data: response } = await POST(GET_LATEST_ORDER);
 
-      if (response?.success) {
-        // const recommended = response.filter(
-        //   (item: any) => item?.isRecommendation
-        // );
-        // const filter = response.filter((item: any) => !item?.isRecommendation);
+  //     if (response?.success) {
+  //       // const recommended = response.filter(
+  //       //   (item: any) => item?.isRecommendation
+  //       // );
+  //       // const filter = response.filter((item: any) => !item?.isRecommendation);
 
-        setLatestOrder(response);
-        setLoading(false);
-        // setFilterData(filter);
-      } else {
-        setLatestOrder([]);
-        // toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  //       setLatestOrder(response);
+  //       setLoading(false);
+  //       // setFilterData(filter);
+  //     } else {
+  //       setLatestOrder([]);
+  //       // toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  useEffect(() => {
-    getLatestOrderDetails();
-  }, []);
+  // useEffect(() => {
+  //   getLatestOrderDetails();
+  // }, []);
 
   const getServicePayload = latestOrder?.data?.codInfo;
   //console.log("getServicepayload", getServicePayload);
@@ -212,7 +219,6 @@ const Index: React.FC = () => {
       );
 
       if (response?.success) {
-        console.log("responseeee", response);
         setResponse(response);
       } else {
         setResponse([]);
@@ -230,89 +236,57 @@ const Index: React.FC = () => {
     getCourierPartnerService();
   }, []);
 
-  const handleServiceSelection = (serviceDetails: any) => {
-    setSelectedService(serviceDetails);
-  };
-
-  // const postServiceDetailsPayload = dataArray.map((eachArray: any) => {
-  //   eachArray.map((each: any) => {
-  //     //console.log("eachforpayload", each);
-  //     mode: each.mode,
-  //     companyServiceId: each.companyServiceId,
-  //   companyServiceName: each.companyServiceId,
-  //   baseWeight:each.companyServiceName,
-  //   partnerServiceId: each.partnerServiceId,
-  //   partnerServiceName: each.partnerServiceId,
-  //   price: each.partnerServiceId,
-
-  //   });
-  // });
-
-  /* Static service payload data */
-  // const postServiceDetailsPayload = {
-  //   mode: "SURFACE",
-  //   companyServiceId: "12",
-  //   companyServiceName: "ECONOMY",
-  //   baseWeight: 0.5,
-  //   partnerServiceId: "123",
-  //   partnerServiceName: "DART PLUS",
-  //   price: 168,
-  // };
-
-  const selectedServiceData = dataArray?.map((eachArray: any) => {
-    //console.log("eachArray for selectedData", eachArray);
-    return eachArray?.find((service: any) => {
-      return service.companyServiceId === selectedService;
-    });
-  });
-
-  //console.log("selectedServiceEntireObject", selectedServiceData);
-
-  let payloadData: any = "";
-  if (
-    selectedServiceData &&
-    selectedServiceData.length > 0 &&
-    selectedServiceData[0]
-  ) {
-    payloadData = {
-      mode: selectedServiceData[0]?.mode,
-      companyServiceId: selectedServiceData[0]?.companyServiceId,
-      companyServiceName: selectedServiceData[0]?.companyServiceName,
-      baseWeight: parseFloat(
-        selectedServiceData[0].companyServiceName?.split(" ")[1]
-      ),
-      partnerServiceId: selectedServiceData[0]?.partnerServiceId,
-      partnerServiceName: selectedServiceData[0]?.partnerServiceName,
-      price: selectedServiceData[0]?.totalPayment,
+  const postServiceDetails = async () => {
+    const payload = {
+      partnerServiceId: partnerServiceId,
+      partnerServiceName: partnerServiceName,
+      companyServiceId: companyServiceId,
+      companyServiceName: companyServiceName,
     };
-    // setPayload(payloadData);
-    // //console.log("PayloadData:", payloadData);
-  } else {
-    //console.log("No matching service found.");
-  }
-  //console.log("Payload:", payloadData);
-  const postServiceDetails = async (payload: any) => {
     try {
-      if (payload.mode !== "") {
-        const { data: response } = await POST(
-          SET_PARTNER_SERVICE_INFO,
-          payload
-        );
+      const { data: response } = await POST(SET_PARTNER_SERVICE_INFO, payload);
 
-        if (response?.success) {
-          toast.success(response?.message);
-          navigate("/orders/add-order/summary");
-        } else {
-          console.error("Service error");
-          toast.error(response?.message);
-        }
+      if (response?.success) {
+        toast.success(response?.message);
+        navigate("/orders/add-order/summary");
       } else {
-        console.error("Payload is empty.");
+        console.error("Service error");
+        toast.error(response?.message);
       }
     } catch (error) {
       //console.log("Error in ServicePostAPI:", error);
       return error;
     }
+  };
+
+  const companyName =
+    response &&
+    response?.data?.map((el: any, i: number) => ({
+      label: el?.companyServiceName,
+      value: el?.companyServiceId,
+    }));
+
+  const fetchPartnerServiceName = (e: any) => {
+    setCompanyServiceId(e.target.value);
+    const filtered = response?.data?.filter((resp: any) => {
+      return resp?.companyServiceId === e.target.value;
+    });
+    setCompanyServiceName(filtered[0].companyServiceName);
+
+    const partnerDropdown = filtered?.map((el: any, i: number) => ({
+      label: el?.partnerServiceName,
+      value: el?.partnerServiceId,
+    }));
+    setPartnerService(partnerDropdown);
+  };
+
+  const setCardInfoFunction = (e: any) => {
+    setPartnerServiceId(e.target.value);
+    const CardInfo = response?.data?.filter((resp: any) => {
+      return resp?.partnerServiceId === e.target.value;
+    });
+    setPartnerServiceName(CardInfo[0].partnerServiceName);
+    setCardInfo(CardInfo[0]);
   };
 
   const steps = [
@@ -367,65 +341,102 @@ const Index: React.FC = () => {
         </p>
       </div>
 
-      {/* key={each.companyServiceId + index} */}
+      <div className="flex gap-4 p-2">
+        <div>
+          <h1 className="font-Lato">Select Shipyaari Service</h1>
+          <CustomDropDown
+            value={companyServiceId}
+            options={companyName}
+            onChange={(e) => fetchPartnerServiceName(e)}
+            wrapperClass="!w-[20rem] mt-4"
+            heading="Select Shipyaari Service"
+          />
+        </div>
+        {partnerService && (
+          <div>
+            <h1 className="font-Lato">Select Partner Service</h1>
+            <CustomDropDown
+              value={partnerServiceId}
+              options={partnerService}
+              onChange={(e) => setCardInfoFunction(e)}
+              wrapperClass="!w-[20rem] mt-4"
+              heading="Select Partner Service"
+            />
+          </div>
+        )}
+      </div>
 
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div className="flex flex-col lg:flex-row gap-y-[22px] px-5 mb-5 lg:gap-6 lg:mb-9">
-          {dataArray?.map((eachArray: any) => {
-            //console.log("eachArray", eachArray);
-
-            return eachArray.map((each: any, index: number) => (
-              <ServiceCard
-                key={each.companyServiceId}
-                isRecommendation={each.isRecommendation}
-                recommendation={each.recommendation}
-                courierPartner={each.partnerServiceName}
-                serviceType={each.companyServiceName}
-                minimumServiceWeight={each.minimumServiceWeight}
-                totalPrice={each.totalPayment}
-                savePrice={each.savePrice}
-                etaDate={each?.EDT}
-                name={"shipyaari"}
-                value={each?.companyServiceId}
-                onSelectService={handleServiceSelection}
-                // serviceId={each.serviceId}
-                serviceData={each}
-              />
-            ));
-          })}
+      {cardInfo && (
+        <div className="max-w-2xl rounded shadow-xl">
+          <div className="px-6 py-4">
+            <div className="font-bold text-xl mb-2 underline">
+              Service Information :
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="text-sm">
+                <span className="font-bold font-Lato">
+                  Partner Service Name :
+                </span>{" "}
+                {cardInfo.partnerServiceName}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">
+                  Company Service Name :
+                </span>{" "}
+                {cardInfo.companyServiceName}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">EDT : </span>
+                {cardInfo.EDT}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Add Price : </span>{" "}
+                &#8377; {cardInfo.add}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">
+                  Applied Weight (KG) :{" "}
+                </span>
+                {cardInfo.appliedWeight}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Base Price : </span>
+                &#8377; {cardInfo.base}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">COD Price : </span>
+                &#8377; {cardInfo.cod}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">GST % : </span>
+                &#8377; {cardInfo.gst}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Invoice Value : </span>
+                &#8377; {cardInfo.invoiceValue}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Total : </span>
+                &#8377; {cardInfo.total}
+              </div>
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Variables : </span>
+                &#8377; {cardInfo.variables}
+              </div>
+              {cardInfo?.insurance && (
+                <div className="text-sm">
+                  <span className="font-bold font-Lato">Insurance : </span>
+                  &#8377; {cardInfo?.insurance}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
-      {/* <div className="mx-5  mb-5 lg:mb-6">
-        <FilterBy />
-      </div> */}
-
-      {/* <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] overflow-y-scroll  lg:overflow-x-scroll flex-nowrap   lg:gap-x-6  ">
-        {dataArray?.map((each: any) => {
-          return (
-            <ServiceCard
-              key={each.value}
-              isRecommendation={each.isRecommendation}
-              recommendation={each.recommendation}
-              courierPartner={each.courierPartner}
-              serviceType={each.serviceType}
-              minimumServiceWeight={each?.minimumServiceWeight}
-              totalPrice={each.totalPrice}
-              savePrice={each.savePrice}
-              etaDate={each.etaDate}
-              name={each.name}
-              value={each.value}
-              onSelectService={handleServiceSelection}
-              serviceData={each}
-            />
-          );
-        })}
-      </div> */}
       <BottomLayout
         callApi={() => {
-          postServiceDetails(payloadData);
+          postServiceDetails();
         }}
       />
     </div>
