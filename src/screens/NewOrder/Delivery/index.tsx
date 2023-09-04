@@ -240,25 +240,25 @@ const Index = () => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-    setBillingAddress({
-      flatNo: "",
-      locality: "",
-      fullAddress: "",
-      sector: "",
-      landmark: "",
-      pincode: "",
-      city: "",
-      state: "",
-      country: "",
-      addressType: "warehouse",
-    });
-    setBillingAddressContacts({
-      name: "",
-      mobileNo: "",
-      alternateMobileNo: "",
-      emailId: "",
-      type: "warehouse associate",
-    });
+    // setBillingAddress({
+    //   flatNo: "",
+    //   locality: "",
+    //   fullAddress: "",
+    //   sector: "",
+    //   landmark: "",
+    //   pincode: "",
+    //   city: "",
+    //   state: "",
+    //   country: "",
+    //   addressType: "warehouse",
+    // });
+    // setBillingAddressContacts({
+    //   name: "",
+    //   mobileNo: "",
+    //   alternateMobileNo: "",
+    //   emailId: "",
+    //   type: "warehouse associate",
+    // });
   };
 
   const handlePickupTimeSelected = (deliveryTime: string) => {
