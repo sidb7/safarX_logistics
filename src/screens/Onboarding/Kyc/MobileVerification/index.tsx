@@ -287,7 +287,7 @@ const Index = (props: ITypeProps) => {
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    dispatch(setOTPNumber(e.target.value));
+                    dispatch(setOTPNumber(+e.target.value));
                   }}
                 />
               </div>
