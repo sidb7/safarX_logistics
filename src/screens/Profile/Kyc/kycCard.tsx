@@ -40,17 +40,17 @@ export const ProfileKycCard = (props: KYCProps) => {
         <div>
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <LabelContainer label="First Name" info={KycDetails?.firstName} />
+              <LabelContainer label="Full Name" info={KycDetails?.fullName} />
             </div>
 
-            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+            {/* <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <LabelContainer
                 label="Last Name"
                 className={"ml-3"}
                 classNameInfo="ml-3"
                 info={KycDetails?.lastName}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="grid grid-cols-2 ml-4 mt-2">
@@ -117,24 +117,24 @@ export const ProfileKycCard = (props: KYCProps) => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-5 gap-y-8">
+        <div className="grid grid-cols-4 gap-y-8">
           <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer
               label="First Name"
               className="text-[12px]"
-              info={KycDetails?.firstName}
+              info={KycDetails?.fullName}
               classNameInfo="!text-[14px]"
             />
           </div>
 
-          <div className="flex flex-col mt-5 px-5 border-l-[1px]">
+          {/* <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer
               label="Last Name"
               className="text-[12px]"
               info={KycDetails?.lastName}
               classNameInfo="!text-[14px]"
             />
-          </div>
+          </div> */}
 
           {/* <div className="flex flex-col mt-5 px-5 border-l-[1px]">
             <LabelContainer

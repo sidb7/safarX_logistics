@@ -162,7 +162,7 @@ const Index = () => {
               />
               <hr className="mb-[-30px] mt-2" />
               <div className="flex justify-center my-[-7px]">
-                <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
+                <button className="bg-[#FEFEFE] px-2 font-normal text-xs font-Open leading-4">
                   OR
                 </button>
               </div>
@@ -174,13 +174,13 @@ const Index = () => {
                 />
               </div>
               <div className="flex justify-center">
-                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
+                <p className="text-[#777777] font-normal text-xs lg:text-lg leading-4 font-Open">
                   Already Have An Account ?{" "}
                 </p>
                 <button
                   type="button"
                   onClick={logInOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                  className="text-[#004EFF] ml-1 font-normal text-xs lg:text-lg leading-4 font-Open "
                 >
                   Log In
                 </button>
