@@ -70,7 +70,6 @@ const steps = [
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
   const initialUserData = {
-
     productId: "",
     name: "",
     category: "",
@@ -92,11 +91,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   const [productPayload, setProductPayload]: any = useState([]);
   const [productInputState, setProductInputState]: any = useState([]);
-  const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
-  const [addedProductData, setAddedProductData] = useState<any>([]);
-  const [productState, setProductState]: any = useState<any>(initialUserData);
-  const [successProduct, setSuccessProduct] = useState(false);
-  const [commonUUID, setCommonUUID] = useState<any>("");
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [divisor, setDivisor] = useState<any>(5000);
 
@@ -104,27 +98,15 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     const { data: response } = await POST(POST_PRODUCT_URL, {
       products: productPayload,
     });
-    let fileName = window.document.getElementById(
-      "fileName"
-    ) as HTMLInputElement;
-    fileName.value = "";
     if (response?.success) {
       toast.success(response?.message);
-      setSuccessProduct(true);
-      setAddedProductData((prevState: any) => [...prevState, productState]);
-
-      const clearUserData = () => {
-        setProductState(initialUserData);
-      };
-      clearUserData();
       navigate("/orders/add-order/product-package");
-      console.log("initialUserDataafterAPICall", initialUserData);
     } else {
       toast.error("Failed To Upload!");
     }
   };
 
-  const AddProductInfoData = (index: number) => {
+  const AddProductInfoData = () => {
     setProductInputState([...productInputState, initialUserData]);
   };
 
@@ -136,25 +118,20 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     let tempPayloadObj = productPayload;
     tempPayloadObj.splice(index, 1);
     setProductPayload([...tempPayloadObj]);
-
   };
 
   useEffect(() => {
     (async () => {
-      const res: any = await getOrderProductDetails();
-      if (res) {
-        console.log("ok", res);
-      }
+      await getOrderProductDetails();
     })();
   }, []);
+
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
-      console.log("data", data);
       if (data?.success) {
         setProductPayload(data?.data[0]?.products);
         setProductInputState([...data?.data[0]?.products, initialUserData]);
-        // setProductInputState([...productInputState, initialUserData]);
       } else {
         throw new Error(data?.message);
       }
@@ -236,7 +213,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       toast.success(response?.message);
       setProductInputState([...productInputStateTempArr]);
       setProductPayload([...productInputStateTempArr]);
-      //Navigate Url's go here
     } else {
       toast.error("Failed To Upload!");
     }
@@ -260,12 +236,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     </h2>
                   </div>
                   <div className="flex">
-                    {/* <img
-                      src={BookmarkIcon}
-                      alt="Bookmark Product"
-                      className="mr-2"
-                    /> */}
-
                     <img
                       src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
                       alt="Delete Product"
@@ -389,7 +359,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   <CustomInputBox
                     className=""
                     label="Weight (Kg)"
-                    inputMode="numeric"
+                    inputType="number"
                     name="deadWeight"
                     value={productInputState[index]?.deadWeight || ""}
                     onChange={(e: any) =>
@@ -421,7 +391,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
                         <button
                           className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
-                          onClick={() => AddProductInfoData(index)}
+                          onClick={AddProductInfoData}
                         >
                           ADD PRODUCT
                         </button>

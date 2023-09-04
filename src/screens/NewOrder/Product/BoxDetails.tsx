@@ -7,8 +7,6 @@ import addIcon from "../../../assets/Product/addCircle.svg";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
 import { useEffect, useState } from "react";
-// import { POST } from "../../../utils/webService";
-// import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 
 interface IBoxdetails {
   products?: any;
@@ -18,8 +16,6 @@ interface IBoxdetails {
 
 const BoxDetails = (props: IBoxdetails) => {
   const { products, selectedBox = {}, setProductFinalPayload } = props;
-
-
   const [allProducts, setAllProducts]: any = useState([]);
 
   useEffect(() => {
@@ -189,7 +185,6 @@ const BoxDetails = (props: IBoxdetails) => {
                     </p>
                   </div>
                 </div>
-                {}
               </div>
               {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
               {calcAllTotalProductWeight() > +selectedBox.volumetricWeight ? (
