@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import InputBox from "../../../components/InputBox/index"
 import { useEffect, useState } from "react";
 import {
   POST_SIGN_IN_URL,
@@ -130,7 +131,7 @@ const Index = () => {
                 Fast and Easy Shipping from your doorstep to your customer's.{" "}
               </p>
             </div>
-            <div className=" flex flex-col mx-4 gap-y-6">
+            <div className=" flex flex-col mx-4 gap-y-6" style={{border:'2px solid red'}}>
               <CustomInputBox
                 containerStyle="mt-[17px]"
                 label="Email"
