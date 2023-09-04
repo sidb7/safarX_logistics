@@ -848,6 +848,7 @@ const Index = () => {
                   other: false,
                 });
                 handleDeliveryAddressChange("addressType", "office");
+                handleBillingAddressChange("addressType", "office");
               }}
             >
               <img src={OfficeIcon} alt="Office" />
@@ -868,6 +869,7 @@ const Index = () => {
                   other: false,
                 });
                 handleDeliveryAddressChange("addressType", "warehouse");
+                handleBillingAddressChange("addressType", "warehouse");
               }}
             >
               <img src={Warehouse} alt="Office" />
@@ -888,6 +890,7 @@ const Index = () => {
                   other: true,
                 });
                 handleDeliveryAddressChange("addressType", "other");
+                handleBillingAddressChange("addressType", "other");
               }}
             >
               <img src={LocationIcon} alt="Office" />
@@ -949,7 +952,7 @@ const Index = () => {
                 <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
                 <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-                  Return Address
+                  Billing Address
                 </p>
               </div>
               <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
@@ -1013,7 +1016,8 @@ const Index = () => {
                   value={locateAddress}
                   onChange={(e) => {
                     setLocateAddress(e.target.value);
-                    // handlePickupAddressChange("address", e.target.value);
+                    // handleDeliveryAddressChange("address", e.target.value);
+                    // handleBillingAddressChange("address", e.target.value);
                   }}
                   onClick={() => {
                     isItLgScreen
@@ -1200,7 +1204,8 @@ const Index = () => {
                       warehouse: false,
                       dispatcher: false,
                     });
-                    handleContactChange("type", "shopkeeper");
+                    // handleContactChange("type", "shopkeeper");
+                    handleBillingAddressContactChange("type", "shopkeeper");
                   }}
                 >
                   <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1222,7 +1227,11 @@ const Index = () => {
                       warehouse: true,
                       dispatcher: false,
                     });
-                    handleContactChange("type", "warehouse associate");
+                    // handleContactChange("type", "warehouse associate");
+                    handleBillingAddressContactChange(
+                      "type",
+                      "warehouse associate"
+                    );
 
                     // isItLgScreen
                     //   ? setIsSaveContactRightModal(true)
@@ -1248,7 +1257,8 @@ const Index = () => {
                       warehouse: false,
                       dispatcher: true,
                     });
-                    handleContactChange("type", "dispatcher");
+                    // handleContactChange("type", "dispatcher");
+                    handleBillingAddressContactChange("type", "dispatcher");
 
                     // isItLgScreen
                     //   ? setIsSaveContactRightModal(true)
@@ -1291,7 +1301,10 @@ const Index = () => {
             <CustomInputBox
               label="Name of the contact person"
               value={contact.name}
-              onChange={(e) => handleContactChange("name", e.target.value)}
+              onChange={(e) => {
+                handleContactChange("name", e.target.value);
+                handleBillingAddressContactChange("name", e.target.value);
+              }}
             />
           </div>
 
@@ -1299,7 +1312,10 @@ const Index = () => {
             <CustomInputBox
               label="Mobile Number"
               value={contact.mobileNo}
-              onChange={(e) => handleContactChange("mobileNo", e.target.value)}
+              onChange={(e) => {
+                handleContactChange("mobileNo", e.target.value);
+                handleBillingAddressContactChange("mobileNo", e.target.value);
+              }}
             />
           </div>
 
@@ -1307,7 +1323,10 @@ const Index = () => {
             <CustomInputBox
               label="Email ID(optional)"
               value={contact.emailId}
-              onChange={(e) => handleContactChange("emailId", e.target.value)}
+              onChange={(e) => {
+                handleContactChange("emailId", e.target.value);
+                handleBillingAddressContactChange("emailId", e.target.value);
+              }}
             />
           </div>
           <div className="mb-5 lg:mb-6">
@@ -1340,6 +1359,7 @@ const Index = () => {
                     dispatcher: false,
                   });
                   handleContactChange("type", "shopkeeper");
+                  handleBillingAddressContactChange("type", "shopkeeper");
                 }}
               >
                 <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1359,6 +1379,10 @@ const Index = () => {
                     warehouse: true,
                   });
                   handleContactChange("type", "warehouse associate");
+                  handleBillingAddressContactChange(
+                    "type",
+                    "warehouse associate"
+                  );
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)
@@ -1382,6 +1406,7 @@ const Index = () => {
                     dispatcher: true,
                   });
                   handleContactChange("type", "dispatcher");
+                  handleBillingAddressContactChange("type", "dispatcher");
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)

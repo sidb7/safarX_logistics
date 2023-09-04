@@ -835,6 +835,7 @@ const Index = () => {
                 other: false,
               });
               handlePickupAddressChange("addressType", "office");
+              handleReturnAddressChange("addressType", "office");
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
@@ -855,6 +856,7 @@ const Index = () => {
                 other: false,
               });
               handlePickupAddressChange("addressType", "warehouse");
+              handleReturnAddressChange("addressType", "warehouse");
             }}
           >
             <img src={LocationIcon} alt="Other" />
@@ -875,6 +877,7 @@ const Index = () => {
                 other: true,
               });
               handlePickupAddressChange("addressType", "other");
+              handleReturnAddressChange("addressType", "other");
             }}
           >
             <img src={Warehouse} alt="Warehouse associate" />
@@ -1210,7 +1213,7 @@ const Index = () => {
                     warehouse: false,
                     dispatcher: false,
                   });
-                  handleContactChange("type", "shopkeeper");
+                  handleReturnAddressContactChange("type", "shopkeeper");
                 }}
               >
                 <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1232,7 +1235,10 @@ const Index = () => {
                     warehouse: true,
                     dispatcher: false,
                   });
-                  handleContactChange("type", "warehouse associate");
+                  handleReturnAddressContactChange(
+                    "type",
+                    "warehouse associate"
+                  );
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)
@@ -1258,7 +1264,7 @@ const Index = () => {
                     warehouse: false,
                     dispatcher: true,
                   });
-                  handleContactChange("type", "dispatcher");
+                  handleReturnAddressContactChange("type", "dispatcher");
 
                   // isItLgScreen
                   //   ? setIsSaveContactRightModal(true)
@@ -1363,6 +1369,7 @@ const Index = () => {
                 dispatcher: false,
               });
               handleContactChange("type", "shopkeeper");
+              handleReturnAddressContactChange("type", "shopkeeper");
             }}
           >
             <img src={OfficeIcon} alt="ShopKeeper" />
@@ -1385,6 +1392,7 @@ const Index = () => {
                 dispatcher: false,
               });
               handleContactChange("type", "warehouse associate");
+              handleReturnAddressContactChange("type", "warehouse associate");
 
               // isItLgScreen
               //   ? setIsSaveContactRightModal(true)
@@ -1411,6 +1419,7 @@ const Index = () => {
                 dispatcher: true,
               });
               handleContactChange("type", "dispatcher");
+              handleReturnAddressContactChange("type", "dispatcher");
 
               // isItLgScreen
               //   ? setIsSaveContactRightModal(true)
