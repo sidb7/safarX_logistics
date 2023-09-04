@@ -23,6 +23,9 @@ import WebLocationIcon from "../../../assets/Delivery/WebLocation.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import RightModalContent from "../../../screens/NewOrder/PickUp/RightModalContent";
 import SelectDateModalContent from "../PickUp/selectDateModal";
+import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
+import CustomCheckbox from "../../../components/CheckBox";
+
 import {
   dummyPickupDropdownData,
   dummyStateDropdownData,
@@ -51,6 +54,16 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Spinner } from "../../../components/Spinner";
 import CustomInputWithDropDown from "../../../components/LandmarkDropdown/LandmarkDropdown";
 
+type TimingState = {
+  Monday: boolean;
+  Tuesday: boolean;
+  Wednesday: boolean;
+  Thursday: boolean;
+  Friday: boolean;
+  Saturday: boolean;
+  Sunday: boolean;
+};
+
 const Index = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -73,12 +86,15 @@ const Index = () => {
     shopkeeper: false,
 
     warehouse: true,
+    dispatcher: false,
   });
   const [customLandmark, setCustomLandmark] = useState("");
 
   const [isSaveContactModal, setIsSaveContactModal] = useState(false);
 
   const [pastedData, setPastedData] = useState("");
+  const [pastedDataBillingAddress, setPastedDataBillingAddress] =
+    useState(pastedData);
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [isSaveContactRightModal, setIsSaveContactRightModal] = useState(false);
@@ -91,10 +107,13 @@ const Index = () => {
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
-  const [deliveryLocation, setDeliveryLocation] = useState({
+  const [isChecked, setIsChecked] = useState(true);
+
+  const [deliveryAddress, setdeliveryAddress] = useState({
     recipientType: "business",
+    fullAddress: "",
     flatNo: "",
-    address: "",
+
     sector: "",
     landmark: "",
     pincode: "",
@@ -114,7 +133,37 @@ const Index = () => {
     type: "",
   });
 
+  const [billingAddress, setBillingAddress] = useState({
+    flatNo: "",
+    locality: "",
+    fullAddress: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "warehouse",
+  });
+
   const [deliveryDate, setDeliveryDate] = useState("");
+  const [timing, setTiming] = useState<TimingState>({
+    Monday: true,
+    Tuesday: true,
+    Wednesday: true,
+    Thursday: true,
+    Friday: true,
+    Saturday: true,
+    Sunday: true,
+  });
+
+  const [billingAddressContact, setBillingAddressContacts] = useState({
+    name: contact.name,
+    mobileNo: contact.mobileNo,
+    alternateMobileNo: contact.alternateMobileNo,
+    emailId: contact.emailId,
+    type: "warehouse associate",
+  });
 
   useEffect(() => {
     setLocateAddress(address);
@@ -124,20 +173,37 @@ const Index = () => {
     setPastedData(e.target.value);
   };
 
+  const handleChangeBillingAddress = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPastedDataBillingAddress(e.target.value);
+  };
+
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
     const pastedData = event.clipboardData.getData("text");
     setPastedData(pastedData);
   };
 
-  const handleDeliveryLocationChange = (
-    fieldName: keyof typeof deliveryLocation,
+  const handleDeliveryAddressChange = (
+    fieldName: keyof typeof deliveryAddress,
     value: string
   ) => {
-    setDeliveryLocation((prevData) => ({
+    setdeliveryAddress((prevData) => ({
       ...prevData,
       [fieldName]: value,
     }));
   };
+
+  const handleBillingAddressChange = (
+    fieldName: keyof typeof billingAddress,
+    value: string
+  ) => {
+    setBillingAddress((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
   const handleContactChange = (
     fieldName: keyof typeof contact,
     value: string
@@ -148,11 +214,51 @@ const Index = () => {
     }));
   };
 
+  const handleBillingAddressContactChange = (
+    fieldName: keyof typeof contact,
+    value: string
+  ) => {
+    setBillingAddressContacts((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleTimingChange = (fieldName: keyof TimingState) => {
+    setTiming((prevData) => ({
+      ...prevData,
+      [fieldName]: !prevData[fieldName],
+    }));
+  };
+
   const handleClick = () => {
     // inputRef.current?.focus();
   };
   const handleLandmarkSelected = (landmark: string) => {
     setCustomLandmark(landmark);
+  };
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+    setBillingAddress({
+      flatNo: "",
+      locality: "",
+      fullAddress: "",
+      sector: "",
+      landmark: "",
+      pincode: "",
+      city: "",
+      state: "",
+      country: "",
+      addressType: "warehouse",
+    });
+    setBillingAddressContacts({
+      name: "",
+      mobileNo: "",
+      alternateMobileNo: "",
+      emailId: "",
+      type: "warehouse associate",
+    });
   };
 
   const handlePickupTimeSelected = (deliveryTime: string) => {
@@ -173,18 +279,28 @@ const Index = () => {
   const epochDeliveryDate = convertToEpoch(editeddeliveryDateForEpoch);
 
   const payload = {
-    deliveryLocation: {
-      recipientType: deliveryLocation.recipientType,
-      flatNo: deliveryLocation.flatNo,
-      address: pastedData,
-      sector: deliveryLocation.sector,
-      landmark: deliveryLocation.landmark,
-      pincode: deliveryLocation.pincode,
-      city: deliveryLocation.city,
-      state: deliveryLocation.state,
-      country: deliveryLocation.country,
-      gstNumber: deliveryLocation.gstNo,
-      addressType: deliveryLocation.addressType,
+    deliveryAddress: {
+      recipientType: deliveryAddress.recipientType,
+      flatNo: deliveryAddress.flatNo,
+      fullAddress: deliveryAddress.fullAddress,
+      sector: deliveryAddress.sector,
+      landmark: deliveryAddress.landmark,
+      pincode: deliveryAddress.pincode,
+      city: deliveryAddress.city,
+      state: deliveryAddress.state,
+      country: deliveryAddress.country,
+
+      addressType: deliveryAddress.addressType,
+      workingDays: {
+        monday: timing.Monday,
+        tuesday: timing.Tuesday,
+        wednesday: timing.Wednesday,
+        thursday: timing.Thursday,
+        friday: timing.Friday,
+        saturday: timing.Saturday,
+        sunday: timing.Sunday,
+      },
+      workingHours: "0900-1900",
       contact: {
         name: contact.name,
         mobileNo: contact.mobileNo,
@@ -195,7 +311,36 @@ const Index = () => {
 
       deliveryDate: epochDeliveryDate,
     },
-    orderType: deliveryLocation.orderType,
+    billingAddress: {
+      flatNo: billingAddress.flatNo,
+      fullAddress: billingAddress.fullAddress,
+      sector: billingAddress.sector,
+      landmark: billingAddress.landmark,
+      pincode: billingAddress.pincode,
+      city: billingAddress.city,
+      state: billingAddress.state,
+      country: billingAddress.country,
+      addressType: billingAddress.addressType,
+      contact: {
+        name: billingAddressContact.name,
+        mobileNo: billingAddressContact.mobileNo,
+        alternateMobileNo: billingAddressContact.alternateMobileNo,
+        emailId: billingAddressContact.emailId,
+        type: billingAddressContact.type,
+      },
+      // customBranding: {
+      //   name: customBranding.name,
+      //   logo: customBranding.logo,
+      //   address: customBranding.address,
+      //   contact: {
+      //     name: customBranding.contact.name,
+      //     mobileNo: customBranding.contact.mobileNo,
+      //   },
+      // },
+      // pickupDate: epochPickupDate,
+    },
+    orderType: deliveryAddress.orderType,
+    gstNumber: deliveryAddress.gstNo,
   };
   const postDeliveryOrderDetails = async (payload: any) => {
     try {
@@ -263,21 +408,36 @@ const Index = () => {
 
       const parsedData = verifyAddressResponse?.data?.message;
 
-      setDeliveryLocation({
-        recipientType: deliveryLocation?.recipientType,
+      setdeliveryAddress({
+        recipientType: deliveryAddress?.recipientType,
         flatNo:
           `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
           "",
-        address: parsedData.full_address || "",
+        fullAddress: parsedData.full_address || "",
         sector: parsedData.locality_name || "",
         landmark: parsedData.building_name || "",
         pincode: parsedData.pincode || "",
         city: parsedData.city_name || "",
         state: parsedData.state_name || "",
         country: parsedData.country_name || "India",
-        addressType: deliveryLocation.addressType || "warehouse",
+        addressType: deliveryAddress.addressType || "warehouse",
         gstNo: "",
-        orderType: deliveryLocation.orderType,
+        orderType: deliveryAddress.orderType,
+      });
+
+      setBillingAddress({
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
+        fullAddress: parsedData.full_address || "",
+        locality: parsedData.locality_name || "",
+        sector: parsedData.locality_name || "",
+        landmark: deliveryAddress.landmark,
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: deliveryAddress.addressType || "warehouse",
       });
       setLoading(false);
     } catch (error) {
@@ -289,6 +449,68 @@ const Index = () => {
     if (!loading && pastedData && pastedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
       setPrevPastedData(pastedData);
+    }
+  };
+
+  const verifyAddressPayloadForBillingAddress = {
+    data: pastedDataBillingAddress,
+  };
+
+  const getVerifyAddressBillingAddress = async (
+    verifyAddressPayloadForBillingAddress: any
+  ) => {
+    try {
+      setLoading(true);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayloadForBillingAddress
+      );
+
+      const parsedData = verifyAddressResponse?.data?.message;
+
+      // setPickupAddress({
+      //   flatNo:
+      //     `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+      //     "",
+      //   fullAddress: parsedData.full_address || "",
+      //   locality: parsedData.locality_name || "",
+      //   sector: parsedData.locality_name || "",
+      //   landmark: parsedData.building_name || "",
+      //   pincode: parsedData.pincode || "",
+      //   city: parsedData.city_name || "",
+      //   state: parsedData.state_name || "",
+      //   country: parsedData.country_name || "India",
+      //   addressType: pickupAddress.addressType || "warehouse",
+      // });
+
+      setBillingAddress({
+        flatNo:
+          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+          "",
+        fullAddress: parsedData.full_address || "",
+        locality: parsedData.locality_name || "",
+        sector: parsedData.locality_name || "",
+        landmark: parsedData.building_name || "",
+        pincode: parsedData.pincode || "",
+        city: parsedData.city_name || "",
+        state: parsedData.state_name || "",
+        country: parsedData.country_name || "India",
+        addressType: deliveryAddress.addressType || "warehouse",
+      });
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      return error;
+    }
+  };
+
+  const handleButtonClickbillingAddress = () => {
+    const trimmedData = pastedDataBillingAddress.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddressBillingAddress(verifyAddressPayloadForBillingAddress);
+      setPrevPastedData(trimmedData);
     }
   };
 
@@ -335,8 +557,8 @@ const Index = () => {
                 } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
                 onClick={() => {
                   setSelectRecipient({ business: true, consumer: false });
-                  handleDeliveryLocationChange("recipientType", "business");
-                  handleDeliveryLocationChange("orderType", "B2B");
+                  handleDeliveryAddressChange("recipientType", "business");
+                  handleDeliveryAddressChange("orderType", "B2B");
                 }}
               >
                 <img
@@ -363,8 +585,8 @@ const Index = () => {
                 }  p-5 cursor-pointer`}
                 onClick={() => {
                   setSelectRecipient({ business: false, consumer: true });
-                  handleDeliveryLocationChange("recipientType", "consumer");
-                  handleDeliveryLocationChange("orderType", "B2C");
+                  handleDeliveryAddressChange("recipientType", "consumer");
+                  handleDeliveryAddressChange("orderType", "B2C");
                 }}
               >
                 <img
@@ -457,7 +679,10 @@ const Index = () => {
               placeholder="Choose location (optional)"
               imgSrc={ChooseLocationIcon}
               value={locateAddress}
-              onChange={(e) => setLocateAddress(e.target.value)}
+              onChange={(e) => {
+                setLocateAddress(e.target.value);
+                handleDeliveryAddressChange("fullAddress", e.target.value);
+              }}
               onClick={() => {
                 isItLgScreen
                   ? setIsLocationRightModal(true)
@@ -471,18 +696,18 @@ const Index = () => {
           <div className="relative mb-5 lg:mb-6">
             <CustomInputBox
               label="Plot No., Floor, Building Name"
-              value={deliveryLocation.flatNo}
+              value={deliveryAddress.flatNo}
               onChange={(e) =>
-                handleDeliveryLocationChange("flatNo", e.target.value)
+                handleDeliveryAddressChange("flatNo", e.target.value)
               }
             />
           </div>
           <div className="mb-5 lg:mb-6">
             <CustomInputBox
               label="Locality"
-              value={deliveryLocation.sector}
+              value={deliveryAddress.sector}
               onChange={(e) =>
-                handleDeliveryLocationChange("sector", e.target.value)
+                handleDeliveryAddressChange("sector", e.target.value)
               }
             />
           </div>
@@ -493,7 +718,7 @@ const Index = () => {
               value={selectedOption}
               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                 setSelectedOption(event.target.value);
-                handleDeliveryLocationChange("landmark", event.target.value);
+                handleDeliveryAddressChange("landmark", event.target.value);
                 if (event.target.value === "other") {
                   isItLgScreen
                     ? setIsRightLandmarkModal(true)
@@ -507,7 +732,7 @@ const Index = () => {
           <div className="mb-4 lg:mb-6 ">
             <CustomInputWithDropDown
               pastedData={pastedData}
-              handlePickupAddressChange={handleDeliveryLocationChange}
+              handlePickupAddressChange={handleDeliveryAddressChange}
               handleLandmarkSelected={handleLandmarkSelected}
             />
           </div>
@@ -515,31 +740,31 @@ const Index = () => {
           <div className="mb-5 lg:mb-6">
             <CustomInputBox
               label="Pincode"
-              value={deliveryLocation.pincode}
+              value={deliveryAddress.pincode}
               // onChange={(e) =>
               //   setPickupLocation({ ...pickupLocation, pincode: e.target.value })
               // }
               onChange={(e) =>
-                handleDeliveryLocationChange("pincode", e.target.value)
+                handleDeliveryAddressChange("pincode", e.target.value)
               }
             />
           </div>
           <div className="mb-5 lg:mb-6">
             <CustomInputBox
               label="City"
-              value={deliveryLocation.city}
+              value={deliveryAddress.city}
               onChange={(e) =>
-                handleDeliveryLocationChange("city", e.target.value)
+                handleDeliveryAddressChange("city", e.target.value)
               }
             />
           </div>
 
           <div className="mb-4 lg:mb-6 ">
             <CustomDropDown
-              value={deliveryLocation.state}
+              value={deliveryAddress.state}
               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                 setSelectedOption(event.target.value);
-                handleDeliveryLocationChange("state", event.target.value);
+                handleDeliveryAddressChange("state", event.target.value);
               }}
               options={dummyStateDropdownData}
             />
@@ -548,9 +773,9 @@ const Index = () => {
           <div className="mb-4 lg:mb-6">
             <CustomInputBox
               label="Country"
-              value={deliveryLocation.country}
+              value={deliveryAddress.country}
               onChange={(e) =>
-                handleDeliveryLocationChange("country", e.target.value)
+                handleDeliveryAddressChange("country", e.target.value)
               }
             />
           </div>
@@ -559,18 +784,18 @@ const Index = () => {
             <div>
               <CustomInputBox
                 label="State"
-                value={deliveryLocation.state}
+                value={deliveryAddress.state}
                 onChange={(e) =>
-                  handleDeliveryLocationChange("state", e.target.value)
+                  handleDeliveryAddressChange("state", e.target.value)
                 }
               />
             </div>
             <div>
               <CustomInputBox
                 label="Country"
-                value={deliveryLocation.country}
+                value={deliveryAddress.country}
                 onChange={(e) =>
-                  handleDeliveryLocationChange("country", e.target.value)
+                  handleDeliveryAddressChange("country", e.target.value)
                 }
               />
             </div>
@@ -592,13 +817,13 @@ const Index = () => {
             />
           </div>
 
-          {deliveryLocation.recipientType === "business" && (
+          {deliveryAddress.recipientType === "business" && (
             <div className="mb-5 lg:mb-6">
               <CustomInputBox
                 label="GST no."
-                value={deliveryLocation.gstNo}
+                value={deliveryAddress.gstNo}
                 onChange={(e) =>
-                  handleDeliveryLocationChange("gstNo", e.target.value)
+                  handleDeliveryAddressChange("gstNo", e.target.value)
                 }
               />
             </div>
@@ -622,7 +847,7 @@ const Index = () => {
                   warehouse: false,
                   other: false,
                 });
-                handleDeliveryLocationChange("addressType", "office");
+                handleDeliveryAddressChange("addressType", "office");
               }}
             >
               <img src={OfficeIcon} alt="Office" />
@@ -642,7 +867,7 @@ const Index = () => {
                   warehouse: true,
                   other: false,
                 });
-                handleDeliveryLocationChange("addressType", "warehouse");
+                handleDeliveryAddressChange("addressType", "warehouse");
               }}
             >
               <img src={Warehouse} alt="Office" />
@@ -662,7 +887,7 @@ const Index = () => {
                   warehouse: false,
                   other: true,
                 });
-                handleDeliveryLocationChange("addressType", "other");
+                handleDeliveryAddressChange("addressType", "other");
               }}
             >
               <img src={LocationIcon} alt="Office" />
@@ -670,13 +895,378 @@ const Index = () => {
             </div>
           </div>
 
+          <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
+            <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
+              Timing
+            </p>
+          </div>
+
+          <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+            {Object.keys(timing).map((day) => (
+              <div
+                key={day}
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}
+                onClick={() => handleTimingChange(day as keyof TimingState)}
+              >
+                <div className="flex flex-row  items-center  absolute z-2 -top--1 bg-[#FEFEFE] ">
+                  <Checkbox checked={timing[day as keyof TimingState]} />
+                  <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                    {day}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
+            <div className="mr-2">
+              <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
+                Opening Hours:
+              </span>
+            </div>
+            <div className="mr-2">
+              <span className="text-[14px] text-[#202427] lg:text-[16px] lg:text-[#323232]">
+                9am - 9pm
+              </span>
+            </div>
+          </div>
+
           <div className="flex flex-row items-center  mb-5 lg:mb-6 lg:col-span-3">
-            <Checkbox />
+            <CustomCheckbox
+              checked={isChecked}
+              onChange={handleCheckboxChange}
+            />
             <p className="text-[14px] font-medium uppercase text-[#004EFF] lg:font-semibold lg:font-Open">
               BILLING DETAILS IS SAME AS DELIVERY
             </p>
           </div>
 
+          {!isChecked ? (
+            <>
+              <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+                <img src={LocationIcon} alt="" className="lg:hidden" />
+
+                <img src={WebLocationIcon} alt="" className="hidden lg:block" />
+
+                <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                  Return Address
+                </p>
+              </div>
+              <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
+                <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+                  <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                    <img
+                      src={MagicLocationIcon}
+                      alt="Magic Location Icon"
+                      className=""
+                    />
+                    <div className="text-white text-[12px] font-Open">
+                      Magic Address
+                    </div>
+                  </div>
+
+                  <div className="relative h-[75px]  ">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={pastedDataBillingAddress}
+                      // onPaste={handlePaste}
+                      onChange={handleChangeBillingAddress}
+                      className="magicAddressInput"
+                      // className="custom-input"
+                      style={{
+                        position: "absolute",
+                        border: "none",
+                        // left: "10px",
+                        // background: "black",
+                        // width: "10px",
+                        // height: "25px",
+
+                        // top: "-10px",
+                      }}
+                      placeholder="Paste Address for the Magic"
+                      title=""
+                    />
+                    <div>
+                      <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                        {loading ? (
+                          <Spinner />
+                        ) : (
+                          <img
+                            src={AiIcon}
+                            alt="Arrow"
+                            onClick={handleButtonClickbillingAddress}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="hidden lg:block col-span-1 "></div>
+
+              <div className=" mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputWithImage
+                  placeholder="Choose location (optional)"
+                  imgSrc={ChooseLocationIcon}
+                  value={locateAddress}
+                  onChange={(e) => {
+                    setLocateAddress(e.target.value);
+                    // handlePickupAddressChange("address", e.target.value);
+                  }}
+                  onClick={() => {
+                    isItLgScreen
+                      ? setIsLocationRightModal(true)
+                      : navigate("/neworder/map");
+                  }}
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Plot No., Floor, Building Name"
+                  value={billingAddress.flatNo}
+                  onChange={(e) => {
+                    handleBillingAddressChange("flatNo", e.target.value);
+                  }}
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Locality"
+                  value={billingAddress.sector}
+                  onChange={(e) =>
+                    handleBillingAddressChange("sector", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6  lg:mr-6 ">
+                <CustomInputWithDropDown
+                  pastedData={pastedDataBillingAddress}
+                  handlePickupAddressChange={handleBillingAddressChange}
+                  handleLandmarkSelected={handleLandmarkSelected}
+                />
+              </div>
+
+              {/* <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Landmark"
+            value={pickupAddress.landmark}
+            onChange={(e) =>
+              handlePickupAddressChange("landmark", e.target.value)
+            }
+          />
+        </div> */}
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Pincode"
+                  value={billingAddress.pincode}
+                  // onChange={(e) =>
+                  //   setPickupAddress({ ...pickupAddress, pincode: e.target.value })
+                  // }
+                  onChange={(e) =>
+                    handleBillingAddressChange("pincode", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="City"
+                  value={billingAddress.city}
+                  onChange={(e) =>
+                    handleBillingAddressChange("city", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                {/* <CustomInputBox
+            label="State"
+            value={pickupAddress.state}
+            onChange={(e) =>
+              handlePickupAddressChange("state", e.target.value)
+            }
+          /> */}
+
+                <CustomDropDown
+                  value={billingAddress.state}
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    setSelectedOption(event.target.value);
+                    handleBillingAddressChange("state", event.target.value);
+                  }}
+                  options={dummyStateDropdownData}
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Country"
+                  value={billingAddress.country}
+                  onChange={(e) =>
+                    handleBillingAddressChange("country", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <AudioInputBox
+                  label="Add directions(optional)"
+                  audio={directionAudio}
+                  setAudio={setDirectionAudio}
+                  onClick={() => !directionAudio && setIsAudioModal(true)}
+                />
+              </div>
+
+              <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
+                <img src={ContactIcon} alt="Contact" className="lg:hidden" />
+                <img
+                  src={WebContactIcon}
+                  alt="Contact"
+                  className="hidden lg:block"
+                />
+
+                <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
+                  Return Address Contact
+                </p>
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Name of the contact person"
+                  value={billingAddressContact.name}
+                  onChange={(e) =>
+                    handleBillingAddressContactChange("name", e.target.value)
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Mobile Number"
+                  value={billingAddressContact.mobileNo}
+                  onChange={(e) =>
+                    handleBillingAddressContactChange(
+                      "mobileNo",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+
+              <div className="mb-4 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Email ID(optional)"
+                  value={billingAddressContact.emailId}
+                  onChange={(e) =>
+                    handleBillingAddressContactChange("emailId", e.target.value)
+                  }
+                />
+              </div>
+              <div className="mb-7 lg:mb-6 lg:mr-6">
+                <CustomInputBox
+                  label="Alternate mobile number(optional)"
+                  value={billingAddressContact.alternateMobileNo}
+                  onChange={(e) =>
+                    handleBillingAddressContactChange(
+                      "alternateMobileNo",
+                      e.target.value
+                    )
+                  }
+                />
+              </div>
+
+              <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
+                <p className="text-[#202427] text-[18px] font-Lato lg:font-Lato lg:text-[20px] lg:text-[#323232] ">
+                  Save your contact as
+                </p>
+              </div>
+
+              <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+                <div
+                  className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
+                    saveContact.shopkeeper === true
+                      ? "border-[#004EFF] text-[#004EFF] "
+                      : "border-gray-300 text-[#1C1C1C]"
+                  }`}
+                  onClick={(e) => {
+                    setSaveContact({
+                      shopkeeper: true,
+
+                      warehouse: false,
+                      dispatcher: false,
+                    });
+                    handleContactChange("type", "shopkeeper");
+                  }}
+                >
+                  <img src={OfficeIcon} alt="ShopKeeper" />
+                  <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
+                    Shopkeeper
+                  </p>
+                </div>
+
+                <div
+                  className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                    saveContact.warehouse === true
+                      ? "border-[#004EFF] text-[#004EFF] "
+                      : "border-gray-300 text-[#1C1C1C]"
+                  }`}
+                  onClick={() => {
+                    setSaveContact({
+                      shopkeeper: false,
+
+                      warehouse: true,
+                      dispatcher: false,
+                    });
+                    handleContactChange("type", "warehouse associate");
+
+                    // isItLgScreen
+                    //   ? setIsSaveContactRightModal(true)
+                    //   : setIsSaveContactModal(true);
+                  }}
+                >
+                  <img src={Warehouse} alt="Warehouse associate" />
+                  <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                    Warehouse associate
+                  </p>
+                </div>
+
+                <div
+                  className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                    saveContact.dispatcher === true
+                      ? "border-[#004EFF] text-[#004EFF] "
+                      : "border-gray-300 text-[#1C1C1C]"
+                  }`}
+                  onClick={() => {
+                    setSaveContact({
+                      shopkeeper: false,
+
+                      warehouse: false,
+                      dispatcher: true,
+                    });
+                    handleContactChange("type", "dispatcher");
+
+                    // isItLgScreen
+                    //   ? setIsSaveContactRightModal(true)
+                    //   : setIsSaveContactModal(true);
+                  }}
+                >
+                  <img src={Warehouse} alt="Warehouse associate" />
+                  <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                    Dispatcher
+                  </p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
+
+          {/* 
           <div className="flex flex-row mb-5 lg:mb-[36px] lg:col-span-3">
             <div className="mr-2">
               <span className="text-[14px] font-semibold font-Open text-[#004EFF] lg:text-[16px]">
@@ -688,11 +1278,13 @@ const Index = () => {
                 9am-9pm
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="flex flex-row items-center gap-x-2 mb-5 lg:mb-6 lg:col-span-3">
             <img src={ContactIcon} alt="Contact" />
-            <p className="text-[18px] lg:font-Lato lg:text-2xl">Contact</p>
+            <p className="text-[18px] lg:font-Lato lg:text-2xl">
+              Delivery Address Contact
+            </p>
           </div>
 
           <div className="mb-5 lg:mb-6">
@@ -745,6 +1337,7 @@ const Index = () => {
                     shopkeeper: true,
 
                     warehouse: false,
+                    dispatcher: false,
                   });
                   handleContactChange("type", "shopkeeper");
                 }}
@@ -762,7 +1355,7 @@ const Index = () => {
                 onClick={() => {
                   setSaveContact({
                     shopkeeper: false,
-
+                    dispatcher: false,
                     warehouse: true,
                   });
                   handleContactChange("type", "warehouse associate");
@@ -774,6 +1367,31 @@ const Index = () => {
               >
                 <img src={Warehouse} alt="Warehouse associate" />
                 <p>Warehouse associate</p>
+              </div>
+              <div
+                className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
+                  saveContact.dispatcher === true
+                    ? "border-[#004EFF] text-[#004EFF] "
+                    : "border-gray-300 text-[#1C1C1C]"
+                }`}
+                onClick={() => {
+                  setSaveContact({
+                    shopkeeper: false,
+
+                    warehouse: false,
+                    dispatcher: true,
+                  });
+                  handleContactChange("type", "dispatcher");
+
+                  // isItLgScreen
+                  //   ? setIsSaveContactRightModal(true)
+                  //   : setIsSaveContactModal(true);
+                }}
+              >
+                <img src={Warehouse} alt="Warehouse associate" />
+                <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
+                  Dispatcher
+                </p>
               </div>
             </div>
           </div>

@@ -84,7 +84,7 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 
-const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupLocation`;
+const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryLocation`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;

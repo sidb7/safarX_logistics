@@ -1311,7 +1311,10 @@ const Index = () => {
           <CustomInputBox
             label="Mobile Number"
             value={contact.mobileNo}
-            onChange={(e) => handleContactChange("mobileNo", e.target.value)}
+            onChange={(e) => {
+              handleContactChange("mobileNo", e.target.value);
+              handleReturnAddressContactChange("mobileNo", e.target.value);
+            }}
           />
         </div>
 
@@ -1319,16 +1322,23 @@ const Index = () => {
           <CustomInputBox
             label="Email ID(optional)"
             value={contact.emailId}
-            onChange={(e) => handleContactChange("emailId", e.target.value)}
+            onChange={(e) => {
+              handleContactChange("emailId", e.target.value);
+              handleReturnAddressContactChange("emailId", e.target.value);
+            }}
           />
         </div>
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number(optional)"
             value={contact.alternateMobileNo}
-            onChange={(e) =>
-              handleContactChange("alternateMobileNo", e.target.value)
-            }
+            onChange={(e) => {
+              handleContactChange("alternateMobileNo", e.target.value);
+              handleReturnAddressContactChange(
+                "alternateMobileNo",
+                e.target.value
+              );
+            }}
           />
         </div>
 
