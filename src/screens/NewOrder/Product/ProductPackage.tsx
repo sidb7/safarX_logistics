@@ -73,7 +73,6 @@ const steps = [
 
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const navigate = useNavigate();
-
   const [combo, setCombo] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
@@ -82,7 +81,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     collectableAmount: 0,
     invoiceValue: 0,
   });
-  const [toggleStatus, setToggleStatus] = useState(false);
   const [selectedBox, setSelectedBox]: any = useState({});
   const [productFinalPayload, setProductFinalPayload] = useState<any>({
     boxInfo: [],
@@ -110,43 +108,34 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       boxInfo: [{ ...selectedBox, products: productsInfo }],
     };
     setProductFinalPayload(payload);
-    console.log("productFinalPayload", productFinalPayload);
   };
 
   const getOrderProductDetails = async () => {
-    const { data } = await POST(GET_LATEST_ORDER);
-
-    const { data: boxData } = await POST(GET_SELLER_BOX);
-    if (data?.success) {
-      const { products = [] } = data?.data[0];
-
-      const codInfo = data?.data?.codInfo;
-      setProducts(products);
-
-      setProductFinalPayload({
-        ...productFinalPayload,
-        tempOrderId: data.data.tempOrderId,
-      });
-
-      // setCodData({
-      //   isCOD: codInfo?.isCOD ? true : false,
-      //   collectableAmount: codInfo?.collectableAmount,
-      //   invoiceValue: getInvoiceValue(products),
-      // });
-
-      setToggleStatus(codInfo?.isCOD ? true : false);
-    }
-
-    if (boxData?.success) {
-      setBox(boxData?.data);
-      setSelectedBox(boxData?.data[0]);
+    try {
+      const { data } = await POST(GET_LATEST_ORDER);
+      const { data: boxData } = await POST(GET_SELLER_BOX);
+      if (data?.success) {
+        const { products = [] } = data?.data[0];
+        setProducts(products);
+      }
+      if (boxData?.success) {
+        const { data = [] } = boxData;
+        setBox(data);
+        setSelectedBox(data[0]);
+      }
+    } catch (error) {
+      console.log("getOrderProductDetails", error);
     }
   };
 
   const setBoxAndCODInfo = async () => {
+    let codDataInfo = {
+      ...codData,
+      isCod: paymentMode === "cod" ? true : false,
+    };
     let payload = {
       ...productFinalPayload,
-      codInfo: { ...codData },
+      codInfo: { ...codDataInfo },
       insurance: {
         status: selectInsurance.isInsurance ? true : false,
         amount: 0,
