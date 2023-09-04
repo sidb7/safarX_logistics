@@ -79,7 +79,7 @@ const Index = () => {
     return (
       <div className="relative h-full w-full pb-6 overflow-y-auto hide-scrollbar">
         {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[84px]">
+        <div className="lg:mx-24 lg:mt-[18px]">
           <div className="flex flex-col xl:gap-y-9 lg:gap-y-4">
             <div className="product-box flex items-center lg:hidden">
               <img
@@ -93,7 +93,7 @@ const Index = () => {
               <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                 Welcome to Shipyaari
               </p>
-              <p className="text-center font-Open font-light text-sm leading-[22px]">
+              <p className="text-center font-Open font-light text-sm leading-[22px] mb-3 lg:mb-0">
                 Fast and Easy Shipping from your doorstep to your customer's.{" "}
               </p>
             </div>
@@ -162,7 +162,7 @@ const Index = () => {
               />
               <hr className="mb-[-30px] mt-2" />
               <div className="flex justify-center my-[-7px]">
-                <button className="bg-[#FEFEFE] px-2 font-normal text-xs font-Open leading-4">
+                <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
                   OR
                 </button>
               </div>
@@ -174,13 +174,13 @@ const Index = () => {
                 />
               </div>
               <div className="flex justify-center">
-                <p className="text-[#777777] font-normal text-xs lg:text-lg leading-4 font-Open">
+                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                   Already Have An Account ?{" "}
                 </p>
                 <button
                   type="button"
                   onClick={logInOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs lg:text-lg leading-4 font-Open "
+                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
                 >
                   Log In
                 </button>
@@ -194,7 +194,7 @@ const Index = () => {
 
   const modalTitle = () => {
     return (
-      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
           src={CompanyLogo}
