@@ -51,8 +51,12 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>
         <input
-          placeholder=""
+
+        
+
+          
           name={name}
+
           type={inputType}
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}

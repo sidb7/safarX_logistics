@@ -109,9 +109,13 @@ const Summary = (props: Props) => {
     getLatestOrderDetails();
   }, []);
 
-  const pickupLocationDetails = latestOrder?.data?.pickupLocation;
+  console.log("latestOrder", latestOrder);
 
-  const deliveryLocationDetails = latestOrder?.data?.deliveryLocation;
+  const pickupLocationDetails = latestOrder?.data?.pickupAddress;
+
+  console.log("pickupLocationDetails", pickupLocationDetails);
+
+  const deliveryLocationDetails = latestOrder?.data?.deliveryAddress;
 
   const serviceDetails = latestOrder?.data?.service;
 
