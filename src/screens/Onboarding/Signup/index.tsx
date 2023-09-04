@@ -4,6 +4,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import CustomInputBox from "../../../components/Input";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
+import InfoCircle from "../../../assets/info-circle.svg";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
@@ -17,6 +18,13 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signUpUser } from "../../../redux/reducers/signUpReducer";
+import {
+  emailRegex,
+  strongpasswordRegex,
+  textRegex,
+  referalRegex,
+} from "../../../utils/regexCheck";
+import { text } from "stream/consumers";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -33,6 +41,13 @@ const Index = () => {
     referalCode: "",
   });
 
+  const [signUpError, setSignUpError] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    referalCode: "",
+  });
   const signUpOnClick = async (value: any) => {
     try {
       let payload = {
@@ -98,64 +113,175 @@ const Index = () => {
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-7">
-              <div className="flex gap-x-5">
-                <CustomInputBox
-                  containerStyle=""
-                  // placeholder=""
-                  label="First Name"
-                  onChange={(e) => {
-                    setsellerData({
-                      ...sellerData,
-                      firstName: e.target.value,
-                    });
-                  }}
-                />
-                <CustomInputBox
-                  containerStyle=""
-                  label="Last Name"
-                  // placeholder=""
-                  onChange={(e) => {
-                    setsellerData({
-                      ...sellerData,
-                      lastName: e.target.value,
-                    });
-                  }}
-                />
+              <div className="grid grid-cols-2 gap-x-5">
+                <div className="">
+                  <CustomInputBox
+                    containerStyle=""
+                    // placeholder=""
+                    label="First Name"
+                    maxLength={16}
+                    onChange={(e) => {
+                      setsellerData({
+                        ...sellerData,
+                        firstName: e.target.value,
+                      });
+                      if (!textRegex.test(e.target.value)) {
+                        setSignUpError({
+                          ...signUpError,
+                          firstName: "Enter Valid name",
+                        });
+                      } else {
+                        setSignUpError({
+                          ...signUpError,
+                          firstName: "",
+                        });
+                      }
+                    }}
+                  />
+                  {signUpError.firstName !== "" && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="" width={10} height={10} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                        {signUpError.firstName}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <CustomInputBox
+                    containerStyle=""
+                    label="Last Name"
+                    maxLength={16}
+                    // placeholder=""
+                    onChange={(e) => {
+                      setsellerData({
+                        ...sellerData,
+                        lastName: e.target.value,
+                      });
+                      if (!textRegex.test(e.target.value)) {
+                        setSignUpError({
+                          ...signUpError,
+                          lastName: "Enter Valid name",
+                        });
+                      } else {
+                        setSignUpError({
+                          ...signUpError,
+                          lastName: "",
+                        });
+                      }
+                    }}
+                  />
+                  {signUpError.lastName !== "" && (
+                    <div className="flex items-center gap-x-1 mt-1">
+                      <img src={InfoCircle} alt="" width={10} height={10} />
+                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                        {signUpError.lastName}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <CustomInputBox
-                label="Email"
-                // placeholder=""
-                onChange={(e) => {
-                  setsellerData({
-                    ...sellerData,
-                    email: e.target.value,
-                  });
-                }}
-              />
-              <CustomInputBox
-                inputType={viewPassWord ? "text" : "password"}
-                label="Password"
-                isRightIcon={true}
-                visibility={viewPassWord}
-                rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
-                setVisibility={setViewPassWord}
-                onChange={(e) => {
-                  setsellerData({
-                    ...sellerData,
-                    password: e.target.value,
-                  });
-                }}
-              />
-              <CustomInputBox
-                label="Referal Code"
-                // placeholder=""
-                onChange={(e) => {
-                  setsellerData({
-                    ...sellerData,
-                    referalCode: e.target.value,
-                  });
-                }}
-              />
+              <div>
+                <CustomInputBox
+                  label="Email"
+                  // placeholder=""
+                  inputClassName={` ${
+                    signUpError.email !== "" && "!border-[#F35838]"
+                  } `}
+                  onChange={(e) => {
+                    setsellerData({
+                      ...sellerData,
+                      email: e.target.value,
+                    });
+                    if (!emailRegex.test(e.target.value)) {
+                      setSignUpError({
+                        ...signUpError,
+                        email: "Enter Valid Email",
+                      });
+                    } else {
+                      setSignUpError({
+                        ...signUpError,
+                        email: "",
+                      });
+                    }
+                  }}
+                />
+                {signUpError.email !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {signUpError.email}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <CustomInputBox
+                  inputType={viewPassWord ? "text" : "password"}
+                  label="Password"
+                  isRightIcon={true}
+                  visibility={viewPassWord}
+                  rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                  setVisibility={setViewPassWord}
+                  onChange={(e) => {
+                    setsellerData({
+                      ...sellerData,
+                      password: e.target.value,
+                    });
+                    if (!strongpasswordRegex.test(e.target.value)) {
+                      setSignUpError({
+                        ...signUpError,
+                        password: "Enter Valid Password",
+                      });
+                    } else {
+                      setSignUpError({
+                        ...signUpError,
+                        password: "",
+                      });
+                    }
+                  }}
+                />
+                {signUpError.password !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {signUpError.password}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <CustomInputBox
+                  label="Referal Code"
+                  maxLength={20}
+                  // placeholder=""
+                  onChange={(e) => {
+                    setsellerData({
+                      ...sellerData,
+                      referalCode: e.target.value,
+                    });
+                    if (!referalRegex.test(e.target.value)) {
+                      setSignUpError({
+                        ...signUpError,
+                        referalCode: "Enter Valid Code",
+                      });
+                    } else {
+                      setSignUpError({
+                        ...signUpError,
+                        referalCode: "",
+                      });
+                    }
+                  }}
+                />
+                {signUpError.referalCode !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {signUpError.referalCode}
+                    </span>
+                  </div>
+                )}
+              </div>
               <CustomButton
                 onClick={(e: any) => signUpOnClick(sellerData)}
                 text="SIGN UP"

@@ -49,55 +49,57 @@ const BusinessType = (props: ITypeProps) => {
     return (
       <div className="flex flex-col relative w-full !h-full lg:px-0 lg:gap-y-0">
         {isLgScreen && modalTitle()}
-        <div className="flex justify-between items-center shadow-md h-[60px] px-6 mb-6 lg:hidden ">
-          <img src={CompanyLogo} alt="" />
-        </div>
+        <div className="overflow-y-auto">
+          <div className="flex justify-between items-center shadow-md h-[60px] px-6 mb-6 lg:hidden ">
+            <img src={CompanyLogo} alt="" />
+          </div>
 
-        <WelcomeHeader
-          className="!mt-[85px]"
-          title="Welcome to Shipyaari"
-          content="Kindly complete your KYC"
-        />
-
-        <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
-          <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
-            Please confirm your business type
-          </p>
-          <Card
-            name="business"
-            value="individual"
-            title="Individual"
-            subTitle="Shipper not having GST"
+          <WelcomeHeader
+            // className="!mt-[85px]"
+            title="Welcome to Shipyaari"
+            content="Kindly complete your KYC"
           />
 
-          <Card
-            name="business"
-            value="business"
-            title="Business"
-            subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
-          />
+          <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
+            <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
+              Please confirm your business type
+            </p>
+            <Card
+              name="business"
+              value="individual"
+              title="Individual"
+              subTitle="Shipper not having GST"
+            />
 
-          <Card
-            name="business"
-            value="company"
-            title="Company"
-            subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
-          />
-        </div>
-        <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
-          <ServiceButton
-            text="PROCEED FOR KYC"
-            className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
-            onClick={() => {
-              onSubmitBusinessType(businessType);
-            }}
-          />
+            <Card
+              name="business"
+              value="business"
+              title="Business"
+              subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
+            />
 
-          <ServiceButton
-            text="SKIP FOR NOW"
-            className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
-            onClick={() => navigate("/onboarding/wallet-recharge")}
-          />
+            <Card
+              name="business"
+              value="company"
+              title="Company"
+              subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
+            />
+          </div>
+          <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
+            <ServiceButton
+              text="PROCEED FOR KYC"
+              className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
+              onClick={() => {
+                onSubmitBusinessType(businessType);
+              }}
+            />
+
+            <ServiceButton
+              text="SKIP FOR NOW"
+              className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
+              onClick={() => navigate("/onboarding/wallet-recharge")}
+            />
+          </div>
         </div>
       </div>
     );
@@ -105,7 +107,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const modalTitle = () => {
     return (
-      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+      <div className="product-box sticky p-4 z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6 object-contain"
           src={CompanyLogo}
