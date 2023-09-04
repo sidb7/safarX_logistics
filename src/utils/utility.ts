@@ -50,6 +50,21 @@ export const getQueryJson = () => {
   });
   return json;
 };
+
+export const generateUniqueCode = (minLength: number, maxLength: number) => {
+  const charset =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const length =
+    Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+  let code = "";
+
+  while (code.length < length) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    code += charset.charAt(randomIndex);
+  }
+
+  return code;
+};
 //export verifyToken = apiIntergration function
 
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";
