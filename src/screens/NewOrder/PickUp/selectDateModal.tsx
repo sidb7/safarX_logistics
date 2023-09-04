@@ -126,6 +126,10 @@ const SelectDateModalContent = (props: ITypeProps) => {
       .split(":")
       .map((value) => parseInt(value));
 
+    if (selectedDay === "tomorrow") {
+      return true;
+    }
+
     if (
       currentHour > endHour ||
       (currentHour === endHour && currentMinute >= endMinute)
@@ -133,8 +137,8 @@ const SelectDateModalContent = (props: ITypeProps) => {
       return false;
     }
 
-    if (selectedDay === "tomorrow") {
-      return true;
+    if (selectedDay === "today" && currentHour >= endHour) {
+      return false;
     }
 
     return true;

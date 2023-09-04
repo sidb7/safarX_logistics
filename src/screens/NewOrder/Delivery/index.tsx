@@ -616,7 +616,7 @@ const Index = () => {
               <img src={LocationIcon} alt="" className="lg:hidden" />
               <img src={WebLocationIcon} alt="" className="hidden lg:block" />
               <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-                Delivery location
+                Delivery Address
               </p>
             </div>
           </div>
@@ -1135,7 +1135,7 @@ const Index = () => {
                 />
 
                 <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-                  Return Address Contact
+                  Billing Address Contact
                 </p>
               </div>
 
@@ -1164,7 +1164,7 @@ const Index = () => {
 
               <div className="mb-4 lg:mb-6 lg:mr-6">
                 <CustomInputBox
-                  label="Email ID(optional)"
+                  label="Email Id(optional)"
                   value={billingAddressContact.emailId}
                   onChange={(e) =>
                     handleBillingAddressContactChange("emailId", e.target.value)

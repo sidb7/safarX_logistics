@@ -419,7 +419,7 @@ const Index = () => {
     },
   };
 
-  console.log("payload", payload);
+  // console.log("payload", payload);
 
   const postPickupOrderDetails = async (payload: any) => {
     try {
@@ -619,7 +619,7 @@ const Index = () => {
         <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-          Pickup location
+          Pickup Address
         </p>
       </div>
       <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
@@ -1173,7 +1173,7 @@ const Index = () => {
 
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
-                label="Email ID(optional)"
+                label="Email Id(optional)"
                 value={returnAddressContact.emailId}
                 onChange={(e) =>
                   handleReturnAddressContactChange("emailId", e.target.value)
