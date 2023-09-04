@@ -247,7 +247,7 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          {latestOrder?.data?.products.map((product: any) => (
+          {latestOrder?.data?.products?.map((product: any) => (
             <BoxDetails
               key={product.productId}
               productName={product.productName}
@@ -261,7 +261,7 @@ const Summary = (props: Props) => {
           ))}
 
           {/*Service */}
-          {latestOrder?.data?.products.map((product: any) => (
+          {latestOrder?.data?.products?.map((product: any) => (
             <SummaryService
               companyServiceName={serviceDetails?.companyServiceName}
               // companyServiceId={serviceDetails?.companyServiceId}
