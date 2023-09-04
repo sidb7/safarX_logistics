@@ -25,6 +25,7 @@ import InputWithFileUpload from "../../../components/InputBox/InputWithFileUploa
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../../components/Layout/breadcrum";
+import CustomInputBox from "../../../components/Input";
 
 interface IProductFilledProps {}
 const steps = [
@@ -69,40 +70,24 @@ const steps = [
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
   const initialUserData = {
+
     productId: "",
-    productName: "",
-    description: "",
-    category: [],
-    tags: [],
-    price: "",
+    name: "",
+    category: "",
+    qty: 1,
     currency: "INR",
-    discountAmount: 0,
-    sale_price: 0,
-    gst: "",
-    stock: 1,
-    dimensions: {
-      length: "",
-      breadth: "",
-      height: "",
-      unit: "cm",
-    },
-    weight: {
-      deadWeight: "",
-      deadWeightUnit: "kg",
-      volumetricWeight: "0",
-      volumetricWeightUnit: "kg",
-      catalogueWeight: {
-        from: 1,
-        to: 2,
-        unit: "kg",
-      },
-    },
-    available: true,
-    attributes: {},
-    features: [],
+    unitPrice: "",
+    unitTax: "",
+    measureUnit: "cm",
+    length: "",
+    breadth: "",
+    height: "",
+    deadWeight: "",
+    weightUnit: "kg",
+    volumetricWeight: "",
+    appliedWeight: "",
+    divisor: "",
     images: [],
-    ratings: {},
-    reviews: [],
   };
 
   const [productPayload, setProductPayload]: any = useState([]);
@@ -112,13 +97,12 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const [productState, setProductState]: any = useState<any>(initialUserData);
   const [successProduct, setSuccessProduct] = useState(false);
   const [commonUUID, setCommonUUID] = useState<any>("");
-
-  console.log("productState", productState);
-  console.log("commonUUID upper", commonUUID);
+  const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
+  const [divisor, setDivisor] = useState<any>(5000);
 
   const addProductInfo = async () => {
     const { data: response } = await POST(POST_PRODUCT_URL, {
-      product: productPayload,
+      products: productPayload,
     });
     let fileName = window.document.getElementById(
       "fileName"
@@ -141,14 +125,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   };
 
   const AddProductInfoData = (index: number) => {
-    // let obj = productInputState[index];
-    // console.log("obj", obj);
-    // let payload = { ...obj, productId: uuidv4() };
-
-    // console.log("payload", payload);
-    // setProductPayload([...productPayload, payload]);
     setProductInputState([...productInputState, initialUserData]);
-    console.log("data check =====>", productPayload);
   };
 
   const deleteProduct = (index: number) => {
@@ -160,8 +137,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     tempPayloadObj.splice(index, 1);
     setProductPayload([...tempPayloadObj]);
 
-    console.log("productInputState", productPayload);
-    console.log("productInputState", productInputState);
   };
 
   useEffect(() => {
@@ -175,11 +150,10 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
-      console.log("data", data?.data?.products);
+      console.log("data", data);
       if (data?.success) {
-        setProductPayload(data?.data?.products);
-        setProductInputState([...data?.data?.products, initialUserData]);
-        console.log("productInputState", productInputState);
+        setProductPayload(data?.data[0]?.products);
+        setProductInputState([...data?.data[0]?.products, initialUserData]);
         // setProductInputState([...productInputState, initialUserData]);
       } else {
         throw new Error(data?.message);
@@ -208,12 +182,41 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     setProductPayload([...arr]);
   };
 
-  const uploadedInputFile = async (e: any, index: number) => {
-    console.log("uploadedInputFile", e.target.files[0]);
+  const calculateVolumeWeight = (
+    length: number,
+    breadth: number,
+    height: number
+  ): number => {
+    const volume = length * breadth * height;
+    return volume / divisor;
+  };
 
+  const handleVolumCalc = (index: any) => {
+    const {
+      length,
+      height,
+      breadth,
+      deadWeight: weight,
+    } = productInputState[index];
+    if (!length) return;
+    if (!height) return;
+    if (!breadth) return;
+
+    const volumetricWeight = +calculateVolumeWeight(
+      length,
+      breadth,
+      height
+    ).toFixed(6);
+    let arr = productInputState;
+    arr[index]["volumetricWeight"] = volumetricWeight;
+    arr[index]["appliedWeight"] = Math.max(volumetricWeight, weight);
+    setProductInputState([...arr]);
+    setProductPayload([...arr]);
+  };
+
+  const uploadedInputFile = async (e: any, index: number) => {
     let uuid = uuidv4();
     let tempArr = productInputState[index]?.images;
-    console.log("tempArr images", tempArr);
     let obj = {
       url: `${uuid}`,
       alt: "",
@@ -272,11 +275,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-3">
-                  <InputBox
+                <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-4">
+                  <CustomInputBox
                     label="Product name"
-                    name="productName"
-                    value={productInputState[index].productName}
+                    name="name"
+                    value={productInputState[index].name}
                     onChange={(e: any) =>
                       handleProductInputChange(
                         { name: e.target.name, value: e.target.value },
@@ -284,23 +287,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
-                  {/* <CustomDropDown
-                    onChange={() => {}}
-                    value={""}
-                    options={[
-                      { label: "Electronics", value: "Electronics" },
-                      { label: "Clothing", value: "Clothing" },
-                      {
-                        label: "Personal Care and Beauty",
-                        value: "Personal Care and Beauty",
-                      },
-                      {
-                        label: "Furniture and Decor",
-                        value: "Furniture and Decor",
-                      },
-                    ]}
-                  /> */}
-                  <InputBox
+                  <CustomInputBox
                     label="Product category"
                     name="category"
                     value={productInputState[index].category}
@@ -311,10 +298,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
-                  <InputBox
-                    label="Product price"
-                    name="price"
-                    value={productInputState[index].price}
+                  <CustomInputBox
+                    label="Product Price"
+                    name="unitPrice"
+                    inputMode="numeric"
+                    value={productInputState[index].unitPrice || ""}
                     onChange={(e: any) =>
                       handleProductInputChange(
                         { name: e.target.name, value: +e.target.value },
@@ -322,10 +310,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
-                  <InputBox
+                  <CustomInputBox
                     label="Product tax"
-                    name="gst"
-                    value={productInputState[index].gst}
+                    name="unitTax"
+                    inputMode="numeric"
+                    value={productInputState[index].unitTax || ""}
                     onChange={(e: any) =>
                       handleProductInputChange(
                         { name: e.target.name, value: +e.target.value },
@@ -333,64 +322,90 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
-                  <div className="grid grid-cols-2 gap-x-2 mt-4 lg:mt-0 lg:col-span-2 lg:gap-x-6">
-                    <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-                      <InputBox
-                        className=""
-                        label="Weight (Kg)"
-                        name="weight.deadWeight"
-                        value={productInputState[index]?.weight?.deadWeight}
-                        onChange={(e: any) =>
-                          handleProductInputChange(
-                            { name: e.target.name, value: e.target.value },
-                            index
-                          )
-                        }
-                      />
-                      <InputBox
-                        className=""
-                        label="Length (CM)"
-                        name="dimensions.length"
-                        value={productInputState[index]?.dimensions.length}
-                        onChange={(e: any) =>
-                          handleProductInputChange(
-                            { name: e.target.name, value: e.target.value },
-                            index
-                          )
-                        }
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
-                      <InputBox
-                        className=""
-                        label="Breadth (CM)"
-                        name="dimensions.breadth"
-                        value={productInputState[index].dimensions.breadth}
-                        onChange={(e: any) =>
-                          handleProductInputChange(
-                            { name: e.target.name, value: e.target.value },
-                            index
-                          )
-                        }
-                      />
-                      <InputBox
-                        label="Height (CM)"
-                        name="dimensions.height"
-                        value={productInputState[index].dimensions.height}
-                        onChange={(e: any) =>
-                          handleProductInputChange(
-                            { name: e.target.name, value: e.target.value },
-                            index
-                          )
-                        }
-                      />
-                    </div>
-                  </div>
+                  <div className="flex gap-x-3 w-full">
+                    <CustomInputBox
+                      className=""
+                      label="Length (CM)"
+                      inputType="number"
+                      name="length"
+                      value={productInputState[index]?.length || ""}
+                      onChange={(e: any) => {
+                        handleProductInputChange(
+                          { name: e.target.name, value: +e.target.value },
+                          index
+                        );
+                        handleVolumCalc(index);
+                      }}
+                    />
 
-                  <InputWithFileUpload
-                    type="file"
-                    onChange={(e) => uploadedInputFile(e, index)}
+                    <CustomInputBox
+                      className=""
+                      label="Breadth (CM)"
+                      name="breadth"
+                      inputType="number"
+                      value={productInputState[index].breadth || ""}
+                      onChange={(e: any) => {
+                        handleProductInputChange(
+                          { name: e.target.name, value: +e.target.value },
+                          index
+                        );
+                        handleVolumCalc(index);
+                      }}
+                    />
+                    <CustomInputBox
+                      label="Height (CM)"
+                      inputType="number"
+                      name="height"
+                      value={productInputState[index].height || ""}
+                      onChange={(e: any) => {
+                        handleProductInputChange(
+                          { name: e.target.name, value: +e.target.value },
+                          index
+                        );
+                        handleVolumCalc(index);
+                      }}
+                    />
+                  </div>
+                  <div className="flex gap-x-5">
+                    <CustomInputBox
+                      className=""
+                      placeholder="Volumetric Weight (Kg)"
+                      label="Volumetric Weight (Kg)"
+                      isDisabled={true}
+                      value={
+                        productInputState[index]?.volumetricWeight ||
+                        volumetricWeight
+                      }
+                    />
+                    <CustomInputBox
+                      className=""
+                      placeholder="Divisor"
+                      label="Divisor"
+                      inputMode="numeric"
+                      isDisabled={true}
+                      value={divisor}
+                    />
+                  </div>
+                  <CustomInputBox
+                    className=""
+                    label="Weight (Kg)"
+                    inputMode="numeric"
+                    name="deadWeight"
+                    value={productInputState[index]?.deadWeight || ""}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: e.target.name, value: +e.target.value },
+                        index
+                      )
+                    }
                   />
+
+                  <div className="">
+                    <InputWithFileUpload
+                      type="file"
+                      onChange={(e) => uploadedInputFile(e, index)}
+                    />
+                  </div>
                 </div>
                 <>
                   {productInputState.length - 1 === index && (
