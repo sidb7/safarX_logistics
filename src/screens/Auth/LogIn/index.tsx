@@ -131,7 +131,7 @@ const Index = () => {
                 Fast and Easy Shipping from your doorstep to your customer's.{" "}
               </p>
             </div>
-            <div className=" flex flex-col mx-4 gap-y-6" style={{border:'2px solid red'}}>
+            <div className=" flex flex-col mx-4 gap-y-6" >
               <CustomInputBox
                 containerStyle="mt-[17px]"
                 label="Email"
