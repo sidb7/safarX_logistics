@@ -37,6 +37,7 @@
   padding-right: 2rem;
   /* Add padding-right for the arrow */
   -webkit-appearance: none;
+    appearance: none;
   /* Remove default arrow in Chrome/Safari */
   background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" width="16" height="16" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>') no-repeat right 1rem center;
   /* Add a custom arrow icon */
