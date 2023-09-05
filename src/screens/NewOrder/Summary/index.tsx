@@ -284,7 +284,12 @@ const Summary = (props: Props) => {
               companyServiceName={serviceDetails?.companyServiceName}
               // companyServiceId={serviceDetails?.companyServiceId}
               price={serviceDetails?.total}
-              partnerServiceId={""}
+              add={serviceDetails?.add}
+              base={serviceDetails?.base}
+              cod={serviceDetails?.cod}
+              gst={serviceDetails?.gst}
+              invoiceValue={serviceDetails?.invoiceValue}
+              // partnerServiceId={""}
               partnerServiceName={serviceDetails?.partnerServiceName}
               baseWeight={product?.deadWeight}
               productWeightUnit={product?.weightUnit}

@@ -4,6 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 interface ISummaryData {
   companyServiceName?: string;
+  add?: any;
+  base?: any;
+  cod?: any;
+  gst?: any;
+  invoiceValue?: any;
+
   companyServiceId?: any;
   baseWeight?: any;
   price?: any;
@@ -20,6 +26,11 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceId = "",
   baseWeight = "",
   price = "",
+  add = "",
+  base = "",
+  cod = "",
+  gst = "",
+  invoiceValue = "",
   partnerServiceId = "",
   partnerServiceName = "",
   productWeightUnit = "",
@@ -66,6 +77,21 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
             {baseWeight} {productWeightUnit} | {productDimensionLength} x{" "}
             {productDimensionBreadth} x {productDimensionHeight}{" "}
             {productDimensionUnit}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            Base:{base}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            Add:{add}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            COD:{cod}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            GST No.:{gst}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            Invoice Value:{invoiceValue}
           </p>
         </div>
       </div>
