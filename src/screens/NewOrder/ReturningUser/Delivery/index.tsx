@@ -1,108 +1,137 @@
-import Checkbox from "../../../../components/CheckBox";
-import CargoRating from "../../../../assets/Delivery/CargoRating.gif";
-import DroneDelivery from "../../../../assets/Delivery/DroneDelivery.svg";
 import { useState } from "react";
-import CustomDelivery from "./customDelivery";
-import {customContactData, customDeliveryData} from "../../../../utils/dummyData";
 import PlusIcon from "../../../../assets/ReturningUser/plusIcon.svg";
 import ProfileIcon from "../../../../assets/ReturningUser/profileIcon.svg";
-import CustomContact from "../PickUp/customContact";
-import {useNavigate} from "react-router-dom";
-import DatePicker from "../../../../components/Datepicker/customDatePicker";
+import LocationIcon from "../../../../assets/PickUp/Location.svg";
+import { useNavigate } from "react-router-dom";
+import PickupCard from "../PickUp/customCard";
+import CustomCheckbox from "../../../../components/CheckBox";
 
 const ReturningDelivery = () => {
-    const [selectRecipient, setSelectRecipient] = useState({
-        business: true,
-        consumer: false,
-      });
-      const navigate = useNavigate();
-      const handleNavgigate = () => {
-        navigate("/neworder/delivery")
-    }
-    return(
-        <div >
-            <div className="relative z-1 mt-5   border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] mx-5">
-                <div className="grid grid-cols-2 gap-3 ">
-                <div
-                    className={`relative z-1  border-[1px] rounded ${
-                    selectRecipient.business === true
-                        ? "border-[#1C1C1C]"
-                        : "border-[#EAEAEA]"
-                    } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
-                    onClick={() =>
-                    setSelectRecipient({ business: true, consumer: false })
-                    }
-                >
-                    <img
-                    src={CargoRating}
-                    alt="Cargo Rating"
-                    className="h-[100%] w-[100%] object-contain"
-                    />
-                    <div className="flex flex-row  items-center gap-2 absolute z-2 -top-3 bg-[#FEFEFE]">
-                    {selectRecipient.business && (
-                        <Checkbox
-                        checked={selectRecipient.business === true ? true : false}
-                        />
-                    )}
-                    <p className="bg-white">Business</p>
-                    </div>
-                </div>
-                <div
-                    className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
-                    selectRecipient.consumer === true
-                        ? "border-[#1C1C1C]"
-                        : "border-[#EAEAEA]"
-                    }  p-5 cursor-pointer`}
-                    onClick={() =>
-                    setSelectRecipient({ business: false, consumer: true })
-                    }
-                >
-                    <img
-                    src={DroneDelivery}
-                    alt="Drone Delivery"
-                    className="h-[100%] w-[100%] object-contain"
-                    />
-                    <div className="flex flex-row absolute z-2 -top-3 items-center gap-2 bg-[#FEFEFE]">
-                    {selectRecipient.consumer && (
-                        <Checkbox
-                        checked={selectRecipient.consumer === true ? true : false}
-                        />
-                    )}
-                    <p className="bg-white">Consumer</p>
-                    </div>
-                </div>
-                </div>
-                <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg w-[90px] px-[13px] py-[4px] text-[#FFFFFF] ">
-                Recipient
-                </p>
-            </div>
-            <div className="mx-5">
-                <CustomDelivery props={customDeliveryData}/>
-            </div>
-            <div className="flex justify-between mx-5">
-                <div className="flex items-center gap-x-2 mt-2"  onClick={handleNavgigate}><img src={PlusIcon} alt="" /><span className="text-[#004EFF] text-[14px] w-[240px]">ADD ADDRESS</span></div>
-                <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">CHANGE</p>
-            </div>
-            <div className="flex items-center mt-5 mx-5">
-                <Checkbox />
-                <p className="text-[#004EFF] text-[14px] font-medium">INCLUDE MY WAREHOUSE</p>
-            </div>
-            <div className="flex items-center mt-8  gap-x-2 mx-5">
-                <img src={ProfileIcon} alt="" />
-                <p className="font-medium">Contact</p>
-            </div>
-            <div>
-                <CustomContact props={customContactData} />
-            </div>
-            <div className="flex justify-between mx-5">
-                <div className="flex items-center gap-x-2 mt-2"  onClick={handleNavgigate}><img src={PlusIcon} alt="" /><span className="text-[#004EFF] text-[14px] w-[240px]">ADD ADDRESS</span></div>
-                <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">CHANGE</p>
-            </div>
-            <div className="mx-5 my-5">
-                <DatePicker />
-            </div>
-            
+  //   const [selectRecipient, setSelectRecipient] = useState({
+  //     business: true,
+  //     consumer: false,
+  //   });
+  const [returningAddress, setReturningAddress] = useState([
+    {
+      label: "Jhindal Warehouse",
+      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
+    },
+    {
+      label: "Jhindal Warehouse",
+      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
+    },
+    {
+      label: "Jhindal Warehouse",
+      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
+    },
+    {
+      label: "Jhindal Warehouse",
+      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
+    },
+    {
+      label: "Jhindal Warehouse",
+      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
+    },
+  ]);
+  const [contactInfo, setContactInfo] = useState([
+    {
+      label: "Warehouse Associate",
+      name: "Anish Sharma ",
+      phoneNumber: "9969401238",
+    },
+    {
+      label: "Warehouse Associate",
+      name: "Anish Sharma ",
+      phoneNumber: "9969401238",
+    },
+    {
+      label: "Warehouse Associate",
+      name: "Anish Sharma ",
+      phoneNumber: "9969401238",
+    },
+    {
+      label: "Warehouse Associate",
+      name: "Anish Sharma ",
+      phoneNumber: "9969401238",
+    },
+    {
+      label: "Warehouse Associate",
+      name: "Anish Sharma ",
+      phoneNumber: "9969401238",
+    },
+  ]);
+  const navigate = useNavigate();
+  const handleNavgigate = () => {
+    navigate("/neworder/delivery");
+  };
+  return (
+    <div>
+      <div className="inline-flex space-x-2 items-center justify-start px-5">
+        <img src={LocationIcon} alt="" />
+
+        <p className="font-Lato text-2xl font-normal leading-8 text-[#323232]">
+          Your Top Delivery Address
+        </p>
+      </div>
+
+      {/* address data  */}
+
+      <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2">
+        {returningAddress?.map((data: any, index: any) => {
+          return <PickupCard cardData={data} key={index} />;
+        })}
+      </div>
+
+      <div className="flex justify-between mx-5 mt-2">
+        <div
+          className="flex items-center gap-x-2 mt-2"
+          onClick={handleNavgigate}
+        >
+          <img src={PlusIcon} alt="" />
+          <span className="text-[#004EFF] text-[14px] w-[240px]">
+            ADD ADDRESS
+          </span>
         </div>
-    )
-}
+        <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
+          CHANGE
+        </p>
+      </div>
+
+      <div className="flex flex-row items-center mx-4 mt-2">
+        <CustomCheckbox />
+        <p className="text-[14px] font-medium uppercase leading-5 text-[#004EFF] lg:font-semibold font-Open">
+          INCLUDE MY WAREHOUSE
+        </p>
+      </div>
+
+      <div className="flex items-center mt-5 mx-5 gap-x-2">
+        <img src={ProfileIcon} alt="" />
+        <p className="font-Lato text-2xl font-normal leading-8 text-[#323232]">
+          Your Top Delivery Address
+        </p>
+      </div>
+
+      <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2">
+        {contactInfo?.map((data: any, index: any) => {
+          return <PickupCard cardData={data} key={index} />;
+        })}
+      </div>
+
+      <div className="flex justify-between mx-5 mt-2">
+        <div
+          className="flex items-center gap-x-2 mt-2"
+          onClick={handleNavgigate}
+        >
+          <img src={PlusIcon} alt="" />
+          <span className="text-[#004EFF] text-[14px] w-[240px]">
+            ADD CONTACT
+          </span>
+        </div>
+        <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
+          CHANGE
+        </p>
+      </div>
+    </div>
+  );
+};
 export default ReturningDelivery;
