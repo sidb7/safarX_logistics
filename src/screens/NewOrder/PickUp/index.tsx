@@ -24,6 +24,8 @@ import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
+import ReturningUserPickup from "../ReturningUser/PickUp";
+
 import TickLogo from "../../../assets/common/Tick.svg";
 import {
   ADD_PICKUP_LOCATION,
@@ -1772,9 +1774,12 @@ const Index = () => {
         </>
       )}
 
-      <>
-        <p>Returning User Component</p>
-      </>
+      {!userType && (
+        <>
+          {/*   <p>Returning User Component</p> */}
+          <ReturningUserPickup />
+        </>
+      )}
 
       <CommonBottomModal
         icon={MapIcon}
