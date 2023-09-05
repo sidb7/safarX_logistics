@@ -322,25 +322,27 @@ const Index = () => {
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
-    // setReturnAddress({
-    //   flatNo: "",
-    //   locality: "",
-    //   fullAddress: "",
-    //   sector: "",
-    //   landmark: "",
-    //   pincode: "",
-    //   city: "",
-    //   state: "",
-    //   country: "",
-    //   addressType: "warehouse",
-    // });
-    // setReturnAddressContacts({
-    //   name: "",
-    //   mobileNo: "",
-    //   alternateMobileNo: "",
-    //   emailId: "",
-    //   type: "warehouse associate",
-    // });
+    if (isChecked === true) {
+      setReturnAddress({
+        flatNo: "",
+        locality: "",
+        fullAddress: "",
+        sector: "",
+        landmark: "",
+        pincode: "",
+        city: "",
+        state: "",
+        country: "",
+        addressType: "warehouse",
+      });
+      setReturnAddressContacts({
+        name: "",
+        mobileNo: "",
+        alternateMobileNo: "",
+        emailId: "",
+        type: "warehouse associate",
+      });
+    }
   };
 
   const editedPickupDateForEpoch = pickupDate.substring(0, 19);
@@ -938,6 +940,7 @@ const Index = () => {
               handlePickupAddressChange("state", event.target.value);
             }}
             options={dummyStateDropdownData}
+            // placeHolder="Select State"
           />
         </div>
 

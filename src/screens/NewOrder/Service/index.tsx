@@ -349,7 +349,7 @@ const Index: React.FC = () => {
             options={companyName}
             onChange={(e) => fetchPartnerServiceName(e)}
             wrapperClass="!w-[20rem] mt-4"
-            heading="Select Shipyaari Service"
+            // heading="Select Shipyaari Service"
           />
         </div>
         {partnerService && (
@@ -360,7 +360,7 @@ const Index: React.FC = () => {
               options={partnerService}
               onChange={(e) => setCardInfoFunction(e)}
               wrapperClass="!w-[20rem] mt-4"
-              heading="Select Partner Service"
+              // heading="Select Partner Service"
             />
           </div>
         )}
