@@ -25,7 +25,11 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { useMediaQuery } from "react-responsive";
 import Map from "../../NewOrder/Map";
 import TickLogo from "../../../assets/common/Tick.svg";
-import { ADD_PICKUP_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
+import {
+  ADD_PICKUP_LOCATION,
+  VERIFY_ADDRESS,
+  GET_LATEST_ORDER,
+} from "../../../utils/ApiUrls";
 import editIcon from "../../../assets/serv/edit.svg";
 import AccordionUp from "../../../assets/AccordionUp.svg";
 
@@ -121,6 +125,7 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
   const [isChecked, setIsChecked] = useState(true);
+  const [latestOrder, setLatestOrder] = useState<any>([]);
 
   const [pickupAddress, setPickupAddress] = useState({
     flatNo: "",
@@ -348,6 +353,139 @@ const Index = () => {
     return Math.floor(parsedDateTime.getTime() / 1000);
   };
   const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
+
+  const getLatestOrderDetails = async () => {
+    try {
+      const { data: response } = await POST(GET_LATEST_ORDER);
+
+      if (response?.success) {
+        if (response.data.length > 0) {
+          const latestOrder = response.data[0];
+
+          if (latestOrder.pickupAddress) {
+            setPickupAddress(latestOrder.pickupAddress);
+          } else {
+            setPickupAddress({
+              flatNo: "",
+              locality: "",
+              fullAddress: "",
+              sector: "",
+              landmark: "",
+              pincode: "",
+              city: "",
+              state: "",
+              country: "",
+              addressType: "warehouse",
+            });
+          }
+
+          if (latestOrder.pickupAddress?.contact) {
+            setContact(latestOrder.pickupAddress.contact);
+          } else {
+            setContact({
+              name: "",
+              mobileNo: "",
+              alternateMobileNo: "",
+              emailId: "",
+              type: "warehouse associate",
+            });
+          }
+
+          if (latestOrder.returnAddress) {
+            setReturnAddress(latestOrder.returnAddress);
+          } else {
+            setReturnAddress({
+              flatNo: "",
+              locality: "",
+              fullAddress: "",
+              sector: "",
+              landmark: "",
+              pincode: "",
+              city: "",
+              state: "",
+              country: "",
+              addressType: "warehouse",
+            });
+          }
+
+          if (latestOrder.returnAddress?.contact) {
+            setReturnAddressContacts(latestOrder.returnAddress.contact);
+          } else {
+            setReturnAddressContacts({
+              name: "",
+              mobileNo: "",
+              alternateMobileNo: "",
+              emailId: "",
+              type: "warehouse associate",
+            });
+          }
+
+          setPastedData(latestOrder.pickupAddress?.fullAddress || "");
+
+          if (latestOrder?.pickupAddress?.pickupDate) {
+            setPickupDate(latestOrder?.pickupAddress?.pickupDate);
+          } else {
+            setPickupDate("");
+          }
+        } else {
+          setPickupAddress({
+            flatNo: "",
+            locality: "",
+            fullAddress: "",
+            sector: "",
+            landmark: "",
+            pincode: "",
+            city: "",
+            state: "",
+            country: "",
+            addressType: "warehouse",
+          });
+
+          setContact({
+            name: "",
+            mobileNo: "",
+            alternateMobileNo: "",
+            emailId: "",
+            type: "warehouse associate",
+          });
+
+          setReturnAddress({
+            flatNo: "",
+            locality: "",
+            fullAddress: "",
+            sector: "",
+            landmark: "",
+            pincode: "",
+            city: "",
+            state: "",
+            country: "",
+            addressType: "warehouse",
+          });
+
+          setReturnAddressContacts({
+            name: "",
+            mobileNo: "",
+            alternateMobileNo: "",
+            emailId: "",
+            type: "warehouse associate",
+          });
+
+          setPickupDate("");
+
+          setPastedData("");
+        }
+      } else {
+        setLatestOrder([]);
+        // toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getLatestOrderDetails();
+  }, []);
 
   const payload = {
     pickupAddress: {
@@ -607,6 +745,8 @@ const Index = () => {
     },
   ];
 
+  console.log("pickupAddress", pickupAddress);
+
   return (
     <div className="w-full">
       <Breadcum label="Add New Order" />
@@ -709,10 +849,10 @@ const Index = () => {
             }
           />
         </div>
-
         <div className="mb-4 lg:mb-6 lg:mr-6 ">
           <CustomInputWithDropDown
             pastedData={pastedData}
+            value={pickupAddress.landmark}
             handlePickupAddressChange={handlePickupAddressChange}
             handleReturnAddressChange={handleReturnAddressChange}
             handleLandmarkSelected={handleLandmarkSelected}
@@ -1034,6 +1174,7 @@ const Index = () => {
 
             <div className="mb-4 lg:mb-6  lg:mr-6 ">
               <CustomInputWithDropDown
+                value={returnAddress.landmark}
                 pastedData={pastedDataReturnAddress}
                 handlePickupAddressChange={handleReturnAddressChange}
                 handleLandmarkSelected={handleLandmarkSelected}
