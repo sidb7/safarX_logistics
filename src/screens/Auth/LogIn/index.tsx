@@ -20,11 +20,13 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
+import InfoCircle from "../../../assets/info-circle.svg";
 import {
   getLocalStorage,
   setLocalStorage,
   tokenKey,
 } from "../../../utils/utility";
+import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -34,6 +36,11 @@ const Index = () => {
   const [showBootScreen, setShowBootScreen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loginError, setLoginError] = useState({
     email: "",
     password: "",
   });
@@ -132,33 +139,76 @@ const Index = () => {
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
-              <CustomInputBox
-                containerStyle="mt-[17px]"
-                label="Email"
-                value={loginCredentials.email}
-                onChange={(e) => {
-                  // console.log("email",e.target.value)
-                  setLoginCredentials({
-                    ...loginCredentials,
-                    email: e.target.value,
-                  });
-                }}
-              />
-              <CustomInputBox
-                inputType={viewPassWord ? "text" : "password"}
-                label="Password"
-                isRightIcon={true}
-                visibility={viewPassWord}
-                rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
-                setVisibility={setViewPassWord}
-                value={loginCredentials.password}
-                onChange={(e) =>
-                  setLoginCredentials({
-                    ...loginCredentials,
-                    password: e.target.value,
-                  })
-                }
-              />
+              <div>
+                <CustomInputBox
+                  containerStyle="mt-[17px]"
+                  label="Email"
+                  value={loginCredentials.email}
+                  onChange={(e) => {
+                    // console.log("email",e.target.value)
+                    setLoginCredentials({
+                      ...loginCredentials,
+                      email: e.target.value,
+                    });
+                    if (!emailRegex.test(e.target.value)) {
+                      setLoginError({
+                        ...loginError,
+                        email: "Incorrect Email",
+                      });
+                    } else {
+                      setLoginError({
+                        ...loginError,
+                        email: "",
+                      });
+                    }
+                  }}
+                />
+                {loginError.email !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {loginError.email}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <CustomInputBox
+                  inputType={viewPassWord ? "text" : "password"}
+                  label="Password"
+                  isRightIcon={true}
+                  value={loginCredentials.password}
+                  visibility={viewPassWord}
+                  rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                  setVisibility={setViewPassWord}
+                  onChange={(e) => {
+                    setLoginCredentials({
+                      ...loginCredentials,
+                      password: e.target.value,
+                    });
+                    if (!strongpasswordRegex.test(e.target.value)) {
+                      setLoginError({
+                        ...loginError,
+                        password: "Incorrect Password",
+                      });
+                    } else {
+                      setLoginError({
+                        ...loginError,
+                        password: "",
+                      });
+                    }
+                  }}
+                />
+                {loginError.password !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {loginError.password}
+                    </span>
+                  </div>
+                )}
+              </div>
+
               <CustomButton
                 onClick={(e: any) => logInOnClick(loginCredentials)}
                 text="LOG IN"
