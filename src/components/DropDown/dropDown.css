@@ -8,7 +8,7 @@
   left: 0;
   pointer-events: none;
   transition: all 0.2s ease-out;
-  color: black;
+
 }
 
 .select-dropdown:focus+.select-label,
@@ -21,7 +21,7 @@
 .select-dropdown {
   background-color: white;
   padding: 10px;
-  /* color: black; */
+  color: black;
   /* border: 1px solid #ccc; */
   border-radius: 0.25rem;
   width: 100%;

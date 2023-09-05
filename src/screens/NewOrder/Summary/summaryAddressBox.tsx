@@ -49,18 +49,18 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-y-2">
-        <p className="font-semibold font-Open text-[12px] text-[#004EFF] ml-[25px] lg:text-[16px]">
+      <div className="flex flex-col gap-y-2 ">
+        <p className="font-semibold font-Open ml-[25px]   text-[12px] text-[#004EFF] lg:text-[16px]">
           {warehouse}
         </p>
-        <div className="flex flex-row items-center gap-2">
-          <p className="text-[12px] font-medium font-Open ml-[25px] w-[90%]  lg:text-[16px] lg:font-semibold">
+        <div className="flex flex-row items-center gap-2  ml-[25px]">
+          <p className="text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
             {summaryAddres}
           </p>
         </div>
-        <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
+        {/* <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
           {city}
-        </p>
+        </p> */}
         {isContactName && (
           <div className="flex flex-row items-center gap-2 ml-[25px]">
             <img src={profileImage} alt="" />

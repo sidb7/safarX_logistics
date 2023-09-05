@@ -46,7 +46,11 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import Stepper from "../../../components/Stepper";
 import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
-import { ADD_DELIVERY_LOCATION, VERIFY_ADDRESS } from "../../../utils/ApiUrls";
+import {
+  ADD_DELIVERY_LOCATION,
+  VERIFY_ADDRESS,
+  GET_LATEST_ORDER,
+} from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcum } from "../../../components/Layout/breadcrum";
@@ -108,12 +112,12 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
   const [isChecked, setIsChecked] = useState(true);
+  const [latestOrder, setLatestOrder] = useState<any>([]);
 
   const [deliveryAddress, setdeliveryAddress] = useState({
     recipientType: "business",
     fullAddress: "",
     flatNo: "",
-
     sector: "",
     landmark: "",
     pincode: "",
@@ -278,6 +282,166 @@ const Index = () => {
   };
   const epochDeliveryDate = convertToEpoch(editeddeliveryDateForEpoch);
 
+  const getLatestOrderDetails = async () => {
+    try {
+      const { data: response } = await POST(GET_LATEST_ORDER);
+
+      if (response?.success) {
+        if (response.data.length > 0) {
+          const latestOrder = response.data[0];
+
+          if (latestOrder.deliveryAddress) {
+            setdeliveryAddress(latestOrder.deliveryAddress);
+          } else {
+            setdeliveryAddress({
+              recipientType: "",
+              flatNo: "",
+              fullAddress: "",
+              sector: "",
+              landmark: "",
+              pincode: "",
+              city: "",
+              state: "",
+              country: "",
+              addressType: "warehouse",
+              gstNo: "",
+              orderType: "B2B",
+            });
+          }
+
+          if (latestOrder.deliveryAddress?.contact) {
+            setContact(latestOrder.deliveryAddress.contact);
+          } else {
+            setContact({
+              name: "",
+              mobileNo: "",
+              alternateMobileNo: "",
+              emailId: "",
+              type: "warehouse associate",
+            });
+          }
+
+          if (latestOrder.billingAddress) {
+            setBillingAddress(latestOrder.billingAddress);
+          } else {
+            setBillingAddress({
+              flatNo: "",
+              locality: "",
+              fullAddress: "",
+              sector: "",
+              landmark: "",
+              pincode: "",
+              city: "",
+              state: "",
+              country: "",
+              addressType: "warehouse",
+            });
+          }
+
+          if (latestOrder.billingAddress?.contact) {
+            setBillingAddressContacts(latestOrder.billingAddress.contact);
+          } else {
+            setBillingAddressContacts({
+              name: "",
+              mobileNo: "",
+              alternateMobileNo: "",
+              emailId: "",
+              type: "warehouse associate",
+            });
+          }
+
+          if (latestOrder?.deliveryAddress?.workingDays) {
+            setTiming({
+              Monday: latestOrder?.deliveryAddress?.workingDays?.monday,
+              Tuesday: latestOrder?.deliveryAddress?.workingDays?.tuesday,
+              Wednesday: latestOrder?.deliveryAddress?.workingDays?.wednesday,
+              Thursday: latestOrder?.deliveryAddress?.workingDays?.thursday,
+              Friday: latestOrder?.deliveryAddress?.workingDays?.friday,
+              Saturday: latestOrder?.deliveryAddress?.workingDays?.saturday,
+              Sunday: latestOrder?.deliveryAddress?.workingDays?.sunday,
+            });
+          } else {
+            setTiming({
+              Monday: true,
+              Tuesday: true,
+              Wednesday: true,
+              Thursday: true,
+              Friday: true,
+              Saturday: true,
+              Sunday: true,
+            });
+          }
+
+          setPastedData(latestOrder.deliveryAddress?.fullAddress || "");
+        } else {
+          setdeliveryAddress({
+            recipientType: "",
+            flatNo: "",
+            fullAddress: "",
+            sector: "",
+            landmark: "",
+            pincode: "",
+            city: "",
+            state: "",
+            country: "",
+            addressType: "warehouse",
+            gstNo: "",
+            orderType: "B2B",
+          });
+
+          setContact({
+            name: "",
+            mobileNo: "",
+            alternateMobileNo: "",
+            emailId: "",
+            type: "warehouse associate",
+          });
+
+          setBillingAddress({
+            flatNo: "",
+            locality: "",
+            fullAddress: "",
+            sector: "",
+            landmark: "",
+            pincode: "",
+            city: "",
+            state: "",
+            country: "",
+            addressType: "warehouse",
+          });
+
+          setBillingAddressContacts({
+            name: "",
+            mobileNo: "",
+            alternateMobileNo: "",
+            emailId: "",
+            type: "warehouse associate",
+          });
+
+          setTiming({
+            Monday: true,
+            Tuesday: true,
+            Wednesday: true,
+            Thursday: true,
+            Friday: true,
+            Saturday: true,
+            Sunday: true,
+          });
+
+          setPastedData("");
+        }
+      } else {
+        setLatestOrder([]);
+        // toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    getLatestOrderDetails();
+  }, []);
   const payload = {
     deliveryAddress: {
       recipientType: deliveryAddress.recipientType,
@@ -732,6 +896,7 @@ const Index = () => {
           <div className="mb-4 lg:mb-6 ">
             <CustomInputWithDropDown
               pastedData={pastedData}
+              value={deliveryAddress.landmark}
               handlePickupAddressChange={handleDeliveryAddressChange}
               handleLandmarkSelected={handleLandmarkSelected}
             />
@@ -1050,6 +1215,7 @@ const Index = () => {
               <div className="mb-4 lg:mb-6  lg:mr-6 ">
                 <CustomInputWithDropDown
                   pastedData={pastedDataBillingAddress}
+                  value={billingAddress.landmark}
                   handlePickupAddressChange={handleBillingAddressChange}
                   handleLandmarkSelected={handleLandmarkSelected}
                 />
