@@ -135,6 +135,7 @@ const Index = () => {
               <CustomInputBox
                 containerStyle="mt-[17px]"
                 label="Email"
+                value={loginCredentials.email}
                 onChange={(e) => {
                   // console.log("email",e.target.value)
                   setLoginCredentials({
@@ -150,6 +151,7 @@ const Index = () => {
                 visibility={viewPassWord}
                 rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                 setVisibility={setViewPassWord}
+                value={loginCredentials.password}
                 onChange={(e) =>
                   setLoginCredentials({
                     ...loginCredentials,
