@@ -427,6 +427,28 @@ const Index = () => {
           } else {
             setPickupDate("");
           }
+
+          if (latestOrder?.pickupAddress?.workingDays) {
+            setTiming({
+              Monday: latestOrder?.pickupAddress?.workingDays?.monday,
+              Tuesday: latestOrder?.pickupAddress?.workingDays?.tuesday,
+              Wednesday: latestOrder?.pickupAddress?.workingDays?.wednesday,
+              Thursday: latestOrder?.pickupAddress?.workingDays?.thursday,
+              Friday: latestOrder?.pickupAddress?.workingDays?.friday,
+              Saturday: latestOrder?.pickupAddress?.workingDays?.saturday,
+              Sunday: latestOrder?.pickupAddress?.workingDays?.sunday,
+            });
+          } else {
+            setTiming({
+              Monday: true,
+              Tuesday: true,
+              Wednesday: true,
+              Thursday: true,
+              Friday: true,
+              Saturday: true,
+              Sunday: true,
+            });
+          }
         } else {
           setPickupAddress({
             flatNo: "",
@@ -468,6 +490,16 @@ const Index = () => {
             alternateMobileNo: "",
             emailId: "",
             type: "warehouse associate",
+          });
+
+          setTiming({
+            Monday: true,
+            Tuesday: true,
+            Wednesday: true,
+            Thursday: true,
+            Friday: true,
+            Saturday: true,
+            Sunday: true,
           });
 
           setPickupDate("");

@@ -350,6 +350,28 @@ const Index = () => {
             });
           }
 
+          if (latestOrder?.deliveryAddress?.workingDays) {
+            setTiming({
+              Monday: latestOrder?.deliveryAddress?.workingDays?.monday,
+              Tuesday: latestOrder?.deliveryAddress?.workingDays?.tuesday,
+              Wednesday: latestOrder?.deliveryAddress?.workingDays?.wednesday,
+              Thursday: latestOrder?.deliveryAddress?.workingDays?.thursday,
+              Friday: latestOrder?.deliveryAddress?.workingDays?.friday,
+              Saturday: latestOrder?.deliveryAddress?.workingDays?.saturday,
+              Sunday: latestOrder?.deliveryAddress?.workingDays?.sunday,
+            });
+          } else {
+            setTiming({
+              Monday: true,
+              Tuesday: true,
+              Wednesday: true,
+              Thursday: true,
+              Friday: true,
+              Saturday: true,
+              Sunday: true,
+            });
+          }
+
           setPastedData(latestOrder.deliveryAddress?.fullAddress || "");
         } else {
           setdeliveryAddress({
@@ -394,6 +416,16 @@ const Index = () => {
             alternateMobileNo: "",
             emailId: "",
             type: "warehouse associate",
+          });
+
+          setTiming({
+            Monday: true,
+            Tuesday: true,
+            Wednesday: true,
+            Thursday: true,
+            Friday: true,
+            Saturday: true,
+            Sunday: true,
           });
 
           setPastedData("");
