@@ -1204,7 +1204,4 @@ export const dummyStateDropdownData = [
     label: "West Bengal",
     value: "West Bengal",
   },
- 
 ];
-
-
