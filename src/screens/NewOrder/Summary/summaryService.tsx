@@ -45,7 +45,10 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
               navigate("/orders/add-order/pickup");
             }}
           >
-            <img src={editIcon} alt="Edit Icon" />
+            <div style={{ width: "20px", height: "20px" }}>
+              {" "}
+              <img src={editIcon} alt="editIcon" className="w-full h-full" />
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">

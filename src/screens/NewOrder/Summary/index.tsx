@@ -109,21 +109,18 @@ const Summary = (props: Props) => {
     getLatestOrderDetails();
   }, []);
 
-  console.log("latestOrder", latestOrder);
-
   const pickupLocationDetails = latestOrder?.data?.[0]?.pickupAddress;
   const pickupLocationReturnAddress = latestOrder?.data?.[0]?.returnAddress;
-
-  console.log("pickupLocationDetails", pickupLocationDetails);
 
   const deliveryLocationDetails = latestOrder?.data?.[0]?.deliveryAddress;
   const deliveryLocationBillingDetails = latestOrder?.data?.[0]?.billingAddress;
   const serviceDetails = latestOrder?.data?.[0]?.service;
+  const products = latestOrder?.data?.[0]?.products || [];
 
-  // latestOrder?.data?.products.forEach((product: any) => {
-  //   const productName = product.productName;
-  //   const productWeight = product.weight.deadWeightUnit;
-  //   const productDimension = product.dimensions.length;
+  // latestOrder?.data?.[0]?.products.forEach((product: any) => {
+  //   const productName = product?.productName;
+  //   const productWeight = product?.weight?.deadWeightUnit;
+  //   const productDimension = product?.dimensions?.length;
   // });
   return (
     <div>
@@ -165,7 +162,10 @@ const Summary = (props: Props) => {
             locationImage={locationIcon}
             summaryTitle="Pickup Details"
             isEditIcon={true}
-            warehouse={pickupLocationDetails?.addressType}
+            warehouse={
+              pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
+              pickupLocationDetails?.addressType.slice(1)
+            }
             editImage={editIcon}
             locationImage2={locationIcon}
             summaryAddres={pickupLocationDetails?.fullAddress}
@@ -181,7 +181,10 @@ const Summary = (props: Props) => {
             locationImage={locationIcon}
             summaryTitle="RTO Address"
             editImage={editIcon}
-            warehouse={pickupLocationReturnAddress?.addressType}
+            warehouse={
+              pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
+              pickupLocationDetails?.addressType.slice(1)
+            }
             locationImage2={locationIcon}
             summaryAddres={pickupLocationReturnAddress?.fullAddress}
             city=""
@@ -203,7 +206,7 @@ const Summary = (props: Props) => {
           >
             <div style={{ width: "20px", height: "20px" }}>
               {" "}
-              <img src={editIcon} alt="" className="w-full h-full" />
+              <img src={editIcon} alt="editIcon" className="w-full h-full" />
             </div>
           </div>
         </div>
@@ -212,7 +215,10 @@ const Summary = (props: Props) => {
             locationImage={locationIcon}
             summaryTitle="Delivery Details"
             isEditIcon={true}
-            warehouse={deliveryLocationDetails?.addressType}
+            warehouse={
+              deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
+              deliveryLocationDetails?.addressType.slice(1)
+            }
             editImage={editIcon}
             locationImage2={locationIcon}
             summaryAddres={deliveryLocationDetails?.fullAddress}
@@ -228,7 +234,10 @@ const Summary = (props: Props) => {
             locationImage={locationIcon}
             summaryTitle="Billing Address"
             editImage={editIcon}
-            warehouse={deliveryLocationDetails?.addressType}
+            warehouse={
+              deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
+              deliveryLocationDetails?.addressType.slice(1)
+            }
             locationImage2={locationIcon}
             summaryAddres={deliveryLocationDetails?.fullAddress}
             city=""
@@ -250,40 +259,39 @@ const Summary = (props: Props) => {
           >
             <div style={{ width: "20px", height: "20px" }}>
               {" "}
-              <img src={editIcon} alt="" className="w-full h-full" />
+              <img src={editIcon} alt="editIcon" className="w-full h-full" />
             </div>
           </div>
         </div>
         {/* latestOrder?.data?.[0]?.products */}
         <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
-          {latestOrder?.data?.products?.map((product: any) => (
+          {products.map((product: any) => (
             <BoxDetails
               key={product.productId}
-              productName={product.productName}
-              productWeight={product.weight?.deadWeight}
-              productWeightUnit={product.weight?.deadWeightUnit}
-              productDimensionLength={product.dimensions.length}
-              productDimensionBreadth={product.dimensions.breadth}
-              productDimensionHeight={product.dimensions.height}
-              productDimensionUnit={product.dimensions.unit}
+              productName={product.name}
+              productWeight={product?.deadWeight}
+              productWeightUnit={product?.weightUnit}
+              productDimensionLength={product.length}
+              productDimensionBreadth={product.breadth}
+              productDimensionHeight={product.height}
+              productDimensionUnit={product.measureUnit}
             />
           ))}
 
           {/*Service */}
-          {latestOrder?.data?.products?.map((product: any) => (
+          {products.map((product: any) => (
             <SummaryService
               companyServiceName={serviceDetails?.companyServiceName}
               // companyServiceId={serviceDetails?.companyServiceId}
-
-              price={serviceDetails?.price}
+              price={serviceDetails?.total}
               partnerServiceId={""}
               partnerServiceName={serviceDetails?.partnerServiceName}
-              baseWeight={product.weight?.deadWeight}
-              productWeightUnit={product.weight?.deadWeightUnit}
-              productDimensionLength={product.dimensions.length}
-              productDimensionBreadth={product.dimensions.breadth}
-              productDimensionHeight={product.dimensions.height}
-              productDimensionUnit={product.dimensions.unit}
+              baseWeight={product?.deadWeight}
+              productWeightUnit={product?.weightUnit}
+              productDimensionLength={product.length}
+              productDimensionBreadth={product.breadth}
+              productDimensionHeight={product.height}
+              productDimensionUnit={product.measureUnit}
               // dimension={productDetails?.dimension}
             />
           ))}
