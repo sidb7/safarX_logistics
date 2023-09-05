@@ -940,7 +940,7 @@ const Index = () => {
               handlePickupAddressChange("state", event.target.value);
             }}
             options={dummyStateDropdownData}
-            // placeHolder="Select State"
+            placeHolder="Select State"
           />
         </div>
 
