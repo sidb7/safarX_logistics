@@ -53,7 +53,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/pickup");
+              navigate("/orders/add-order/service");
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>

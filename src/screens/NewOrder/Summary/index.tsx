@@ -254,7 +254,7 @@ const Summary = (props: Props) => {
           <div
             className="hidden lg:block cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/add-product");
+              navigate("/orders/add-order/delivery");
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>
