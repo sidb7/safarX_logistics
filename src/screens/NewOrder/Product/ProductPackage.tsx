@@ -1,44 +1,35 @@
 import { useEffect, useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
-import EditIcon from "../../../assets/Product/Edit.svg";
-import ItemIcon from "../../../assets/Product/Item.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import CodIcon from "../../../assets/codIcon.svg";
 import ProductBox from "./ProductBox";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import toggle from "../../../assets/toggle-off-circle.svg";
 import toggleBlack from "../../../assets/toggleBlack.svg";
-import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
-import { useMediaQuery } from "react-responsive";
 import "../../../styles/productStyle.css";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import AddButton from "../../../components/Button/addButton";
 import AddComboModal from "./AddComboModal";
-import AddInsuranceModal from "./AddInsuranceModal";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import Cross from "../../../assets/cross.svg";
 import shieldTick from "../../../assets/shield-tick.svg";
 import shieldcross from "../../../assets/shieldcross.svg";
 import Checkbox from "../../../components/CheckBox";
-// import CodIcon from "../../../assets/codIcon.svg";
 import { POST } from "../../../utils/webService";
 import {
   ADD_BOX_INFO,
-  ADD_COD_INFO,
   GET_LATEST_ORDER,
+  GET_SELLER_BOX,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
-import { GET_SELLER_COMPANY_BOX } from "../../../utils/ApiUrls";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
-// import { GET_PACKAGE_INSURANCE } from "../../../utils/ApiUrls";
 
 interface IPackageProps {}
 const steps = [
@@ -82,39 +73,23 @@ const steps = [
 
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const navigate = useNavigate();
-  const isLgScreen = useMediaQuery({
-    query: "(min-width: 1024px)",
-  });
-
   const [combo, setCombo] = useState(false);
-  const [insurance, setInsurance] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
-  const [codData, setCodData] = useState<any>({});
-  const [toggleStatus, setToggleStatus] = useState(false);
+  const [codData, setCodData] = useState<any>({
+    isCod: true,
+    collectableAmount: 0,
+    invoiceValue: 0,
+  });
   const [selectedBox, setSelectedBox]: any = useState({});
-  const [productFinalPayload, setProductFinalPayload] = useState<any>();
+  const [productFinalPayload, setProductFinalPayload] = useState<any>({
+    boxInfo: [],
+  });
   const [paymentMode, setPaymentMode] = useState<any>("cod");
-  const [selectRecipient, setSelectRecipient] = useState({
+  const [selectInsurance, setSelectInsrance] = useState({
     isInsurance: true,
     iwillTakeRisk: false,
   });
-
-  const postCodDetails = async () => {
-    const payload = {
-      paymentType: paymentMode === "cod" ? "COD" : "PREPAID",
-      codCollectAmount: paymentMode === "cod" ? +codData.codAmount : 0,
-      invoiceValue: codData.invoiceValue,
-    };
-
-    const { data } = await POST(ADD_COD_INFO, payload);
-
-    if (data?.success) {
-      return true;
-    } else {
-      return false;
-    }
-  };
 
   useEffect(() => {
     (async () => {
@@ -124,67 +99,50 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     })();
   }, []);
 
-  const insuranceFun = (e: any) => {
-    setCombo(false);
-    setInsurance(true);
-  };
-
   const setPayloadForProduct = (productsInfo: any) => {
-    setCodData({ ...codData, invoiceValue: getInvoiceValue(productsInfo) });
+    setCodData({
+      ...codData,
+      invoiceValue: getInvoiceValue(productsInfo),
+    });
     const payload = {
-      ...productFinalPayload,
-      boxInfo: [
-        {
-          ...selectedBox,
-          productsInfo: productsInfo,
-        },
-      ],
+      boxInfo: [{ ...selectedBox, products: productsInfo }],
     };
-    setProductFinalPayload({ ...payload });
+    setProductFinalPayload(payload);
   };
 
   const getOrderProductDetails = async () => {
-    const { data } = await POST(GET_LATEST_ORDER);
-
-    const { data: boxData } = await POST(GET_SELLER_COMPANY_BOX);
-    if (data?.success) {
-      const codInfo = data?.data?.codInfo;
-
-      setProducts(data?.data?.products);
-
-      setProductFinalPayload({
-        ...productFinalPayload,
-        tempOrderId: data.data.tempOrderId,
-      });
-
-      setCodData({
-        isCOD: codInfo?.isCOD ? true : false,
-        codAmount: codInfo?.codAmount,
-        invoiceValue: getInvoiceValue(data?.data?.products),
-      });
-
-      setToggleStatus(codInfo?.isCOD ? true : false);
-    }
-
-    if (boxData?.success) {
-      setBox(boxData?.data);
-      setSelectedBox(boxData?.data[0]);
+    try {
+      const { data } = await POST(GET_LATEST_ORDER);
+      const { data: boxData } = await POST(GET_SELLER_BOX);
+      if (data?.success) {
+        const { products = [] } = data?.data[0];
+        setProducts(products);
+      }
+      if (boxData?.success) {
+        const { data = [] } = boxData;
+        setBox(data);
+        setSelectedBox(data[0]);
+      }
+    } catch (error) {
+      console.log("getOrderProductDetails", error);
     }
   };
 
-  const handleCallbackFromInsurance = (codInfo: any) => {
-    setInsurance(false);
-    // setCombo(false);
-    setPayloadForProduct({
+  const setBoxAndCODInfo = async () => {
+    let codDataInfo = {
+      ...codData,
+      isCod: paymentMode === "cod" ? true : false,
+    };
+    let payload = {
       ...productFinalPayload,
-      codInfo: codInfo,
-    });
-  };
+      codInfo: { ...codDataInfo },
+      insurance: {
+        status: selectInsurance.isInsurance ? true : false,
+        amount: 0,
+      },
+    };
 
-  const addBoxInfo = async () => {
-    let res = postCodDetails();
-    if (!res) return;
-    const { data } = await POST(ADD_BOX_INFO, productFinalPayload);
+    const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
       toast.success(data?.message);
       navigate("/orders/add-order/service");
@@ -196,7 +154,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const getInvoiceValue = (arr: any = []) => {
     return (
       arr.reduce((accumulator: any, product: any) => {
-        const totalProductPrice = product.price * product.stock;
+        const totalProductPrice = product.unitPrice * +product.qty;
         return accumulator + totalProductPrice;
       }, 0) || 0
     );
@@ -230,22 +188,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               Package 1
             </div>
             <div className="flex items-center">
-              {/* <img
-                src={EditIcon}
-                alt="Edit Product"
-                className="cursor-pointer mr-2"
-              /> */}
               <img
                 src={BookmarkIcon}
                 alt="Bookmark Product"
                 className="mr-2 cursor-pointer"
                 onClick={() => setCombo(true)}
               />
-              {/* <img
-                src={isLgScreen ? DeleteIconForLg : DeleteIcon}
-                alt="Delete Product"
-                className="mr-2 w-4 h-4"
-              /> */}
             </div>
           </div>
 
@@ -256,11 +204,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   <ProductBox
                     key={index}
                     image={SampleProduct}
-                    weight={`${e?.weight?.deadWeight} Kg`}
-                    productName={e?.productName || 0}
-                    breadth={e?.dimensions?.breadth || 0}
-                    length={e?.dimensions?.length || 0}
-                    height={e?.dimensions?.height || 0}
+                    weight={`${e?.deadWeight} Kg`}
+                    productName={e?.name || 0}
+                    breadth={e?.breadth || 0}
+                    length={e?.length || 0}
+                    height={e?.height || 0}
                     className=""
                   />
                 );
@@ -343,12 +291,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               <div className="flex gap-x-3  ">
                 <div
                   className={`relative border-[1px] p-16 rounded ${
-                    selectRecipient.isInsurance === true
+                    selectInsurance.isInsurance === true
                       ? "border-[#1C1C1C]"
                       : "border-[#EAEAEA]"
                   } bg-[#FEFEFE]  cursor-pointer`}
                   onClick={() => {
-                    setSelectRecipient({
+                    setSelectInsrance({
                       isInsurance: true,
                       iwillTakeRisk: false,
                     });
@@ -356,11 +304,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 >
                   <img src={shieldTick} alt="" className="w-16 h-12" />
                   <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
-                    {selectRecipient.isInsurance && (
+                    {selectInsurance.isInsurance && (
                       <Checkbox
                         onChange={() => {}}
                         checked={
-                          selectRecipient?.isInsurance === true ? true : false
+                          selectInsurance?.isInsurance === true ? true : false
                         }
                       />
                     )}
@@ -371,12 +319,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 </div>
                 <div
                   className={`relative z-1  p-16   border-[1px] rounded ${
-                    selectRecipient.iwillTakeRisk === true
+                    selectInsurance.iwillTakeRisk === true
                       ? "border-[#1C1C1C]"
                       : "border-[#EAEAEA]"
                   } bg-[#FEFEFE] cursor-pointer`}
                   onClick={() => {
-                    setSelectRecipient({
+                    setSelectInsrance({
                       iwillTakeRisk: true,
                       isInsurance: false,
                     });
@@ -384,11 +332,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 >
                   <img src={shieldcross} alt="" className="w-16 h-12" />
                   <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
-                    {selectRecipient.iwillTakeRisk && (
+                    {selectInsurance.iwillTakeRisk && (
                       <Checkbox
                         onChange={() => {}}
                         checked={
-                          selectRecipient.iwillTakeRisk === true ? true : false
+                          selectInsurance.iwillTakeRisk === true ? true : false
                         }
                       />
                     )}
@@ -425,13 +373,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   {paymentMode === "cod" && (
                     <CustomInputBox
                       label={"COD Amount to Collect From Buyer"}
-                      value={codData?.codAmount}
+                      value={codData?.collectableAmount}
                       inputType="text"
                       className="!w-60"
                       onChange={(e) => {
                         setCodData({
                           ...codData,
-                          codAmount:
+                          collectableAmount:
                             e.target.value > codData.invoiceValue
                               ? codData.invoiceValue
                               : e.target.value,
@@ -444,7 +392,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     label={"Total invoice value"}
                     isDisabled={true}
                     className="!w-56 text-base font-bold"
-                    value={codData?.invoiceValue}
+                    value={codData?.invoiceValue || 0}
                     onChange={(e) =>
                       setCodData({ ...codData, invoiceValue: e.target.value })
                     }
@@ -474,7 +422,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
 
       <div>
-        <BottomLayout callApi={() => addBoxInfo()} />
+        <BottomLayout callApi={() => setBoxAndCODInfo()} />
       </div>
     </div>
   );

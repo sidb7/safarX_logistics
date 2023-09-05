@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import InputBox from "../../../components/InputBox/index";
 import { useEffect, useState } from "react";
 import {
   POST_SIGN_IN_URL,
@@ -92,7 +93,7 @@ const Index = () => {
 
   const modalTitle = () => {
     return (
-      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
           src={CompanyLogo}
@@ -110,9 +111,9 @@ const Index = () => {
 
   const loginComponent = () => {
     return (
-      <div className="relative h-full w-full">
+      <div className="relative h-full w-full overflow-y-auto hide-scrollbar">
         {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[110px]">
+        <div className="lg:mx-24 lg:mt-[50px]">
           <div className="flex flex-col gap-y-8 w-full">
             <div className="product-box flex items-center lg:hidden">
               <img
