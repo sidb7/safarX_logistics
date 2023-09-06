@@ -325,6 +325,7 @@ const Summary = (props: Props) => {
           {products.map((product: any) => (
             <PricingDetails
               appliedWeight={serviceDetails?.appliedWeight}
+              appliedWeightUnit={product?.weightUnit}
               price={serviceDetails?.total}
               add={serviceDetails?.add}
               base={serviceDetails?.base}
