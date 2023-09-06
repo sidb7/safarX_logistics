@@ -3,6 +3,7 @@ import serviceIcon from "../../../assets/serv/service.svg";
 import { useNavigate } from "react-router-dom";
 
 interface PricingData {
+  appliedWeight?: any;
   add?: string | number;
   base?: string | number;
   cod?: string | number;
@@ -22,6 +23,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   variables = "",
   gst = "",
   invoiceValue = "",
+  appliedWeight = "",
 }) => {
   const navigate = useNavigate();
   const baseValue = typeof base === "string" ? parseFloat(base) : base;
@@ -36,6 +38,12 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
     <div className="p-[24px]  rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[539px] ">
       <div className="flex flex-col ">
         <div className="flex flex-col gap-y-4 mt-2  ">
+          <div className="flex justify-between">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+              Billable Weight:
+            </p>
+            <p> {appliedWeight} </p>
+          </div>
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Order Price:
