@@ -53,8 +53,8 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
         <p className="font-semibold font-Open ml-[25px]   text-[12px] text-[#004EFF] lg:text-[16px]">
           {warehouse}
         </p>
-        <div className="flex flex-row items-center gap-2  ml-[25px]">
-          <p className="text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
+        <div className="flex flex-row items-center gap-2 w-[80%] ml-[25px]">
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {summaryAddres}
           </p>
         </div>

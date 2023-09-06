@@ -136,7 +136,7 @@ const Summary = (props: Props) => {
             Summary
           </p>
         </div>
-        <div className="row-start-2 flex flex-row justify-between items-center h-[48px] rounded p-[10px] border-[1px] border-[#A4A4A4] lg:w-1/4 ">
+        <div className="row-start-2 flex flex-row justify-between items-center h-[48px] w-[200px] rounded p-[10px] border-[1px] border-[#A4A4A4] lg:w-[372px] ">
           <p
             className={`text-[12px] text-[#1C1C1C] font-Open leading-4 ${
               orderId !== ""
@@ -160,8 +160,8 @@ const Summary = (props: Props) => {
         </div>
       </div>
       <div className="flex flex-row">
-        <div className=" basis-2/8 grid grid-cols-1 gap-y-5 px-5   ">
-          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 lg:w-[770px] lg:h-[260px]">
+        <div className=" basis-2/1 grid grid-cols-1 gap-y-5 px-5   ">
+          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
             <SummaryAddressBox
               locationImage={locationIcon}
               summaryTitle="Pickup Details"
@@ -214,7 +214,7 @@ const Summary = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 lg:w-[770px] lg:h-[260px]">
+          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
             <SummaryAddressBox
               locationImage={locationIcon}
               summaryTitle="Delivery Details"
@@ -268,7 +268,7 @@ const Summary = (props: Props) => {
             </div>
           </div>
           {/* latestOrder?.data?.[0]?.products */}
-          <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 lg:w-[770px] pb-20">
+          <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
             {products.map((product: any) => (
               <BoxDetails
                 key={product.productId}
@@ -306,7 +306,7 @@ const Summary = (props: Props) => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row  lg:w-[338px] lg:h-[539px] ">
+        <div className="flex flex-col lg:flex-row mr-5 ">
           {products.map((product: any) => (
             <PricingDetails
               price={serviceDetails?.total}
