@@ -18,7 +18,8 @@ interface propTypes {
   rightIcon?: string;
   setVisibility?: any;
   visibility?: any;
-  onClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: any;
+  imageClassName?: string;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -29,6 +30,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     value,
     inputMode = "",
     onChange,
+    onClick,
     placeholder = "",
     className,
     containerStyle,
@@ -43,6 +45,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     isRightIcon = false,
     setVisibility,
     maxLength,
+    imageClassName,
   } = props;
 
   return (
@@ -51,7 +54,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         <input
           name={name}
           type={inputType}
-          placeholder={placeholder || ''}
+          placeholder={placeholder || ""}
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={onChange}
@@ -72,9 +75,10 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <img
             src={rightIcon}
             alt=""
-            className={`absolute z-20  right-5 top-[30%] cursor-pointer w-[20px] h-[20px]`}
+            className={`${imageClassName} absolute z-20  right-5  top-[30%] cursor-pointer w-[20px] h-[20px]`}
             onClick={() => {
               setVisibility(!visibility);
+              onClick();
             }}
           />
         )}
