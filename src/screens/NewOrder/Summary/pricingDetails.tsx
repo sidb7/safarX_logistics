@@ -37,7 +37,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
       <div className="flex flex-col ">
         <div className="flex flex-col gap-y-4 mt-2  ">
           <div className="flex justify-between">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Order Price:
             </p>
             <p>
@@ -46,7 +46,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Insurance Price:
             </p>
             <p> {`\u20B9`} 2800</p>
@@ -55,7 +55,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             {`\u20B9`} {price}
           </p> */}
           <div className="flex justify-between">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Discount Price:
             </p>
             <p className="text-[#004EFF]"> - {`\u20B9`} 20</p>
