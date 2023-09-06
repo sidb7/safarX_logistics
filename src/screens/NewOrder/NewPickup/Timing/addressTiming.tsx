@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Checkbox from "../../../../components/CheckBox";
 
 type TimingState = {
@@ -11,22 +11,39 @@ type TimingState = {
   Sunday: boolean;
 };
 
-const AddressTiming = () => {
-  const [timing, setTiming] = useState<TimingState>({
-    Monday: true,
-    Tuesday: true,
-    Wednesday: true,
-    Thursday: true,
-    Friday: true,
-    Saturday: true,
-    Sunday: true,
-  });
+interface IAddressTimingProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+    addressLabel: string;
+  };
+}
+
+const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
+  data: { pickupAddress, setPickupAddress, addressLabel },
+}) => {
+  const address =
+    addressLabel === "Return Address"
+      ? pickupAddress.returnAddress
+      : pickupAddress.pickupAddress;
 
   const handleTimingChange = (fieldName: keyof TimingState) => {
-    setTiming((prevData) => ({
+    const addressName: string =
+      addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+    setPickupAddress((prevData: any) => ({
       ...prevData,
-      [fieldName]: !prevData[fieldName],
+      [addressName]: {
+        ...prevData[addressName],
+        workingDays: {
+          ...prevData[addressName].workingDays,
+          [fieldName]: !prevData[addressName].workingDays[fieldName],
+        },
+      },
     }));
+  };
+
+  const titleCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   return (
@@ -38,16 +55,18 @@ const AddressTiming = () => {
       </div>
 
       <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
-        {Object.keys(timing).map((day) => (
+        {Object.keys(address.workingDays).map((day) => (
           <div
             key={day}
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}
             onClick={() => handleTimingChange(day as keyof TimingState)}
           >
             <div className="flex flex-row  items-center  absolute z-2 -top--1 bg-[#FEFEFE] ">
-              <Checkbox checked={timing[day as keyof TimingState]} />
+              <Checkbox
+                checked={address.workingDays[day as keyof TimingState]}
+              />
               <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
-                {day}
+                {titleCase(day)}
               </p>
             </div>
           </div>

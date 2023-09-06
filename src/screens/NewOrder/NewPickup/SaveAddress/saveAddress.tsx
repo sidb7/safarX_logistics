@@ -1,58 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import OfficeIcon from "../../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
 
-const SaveAddress = () => {
-  const [saveAddress, setSaveAddress] = useState({
-    office: false,
-    warehouse: true,
-    other: false,
-  });
+interface ISaveAddressProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+    addressLabel: string;
+  };
+}
 
-  const [pickupAddress, setPickupAddress] = useState({
-    flatNo: "",
-    locality: "",
-    fullAddress: "",
-    sector: "",
-    landmark: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    addressType: "warehouse",
-  });
-
-  const [returnAddress, setReturnAddress] = useState({
-    flatNo: "",
-    locality: "",
-    fullAddress: "",
-    sector: "",
-    landmark: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    addressType: "warehouse",
-  });
+const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
+  data: { pickupAddress, setPickupAddress, addressLabel },
+}) => {
+  const address =
+    addressLabel === "Return Address"
+      ? pickupAddress.returnAddress
+      : pickupAddress.pickupAddress;
 
   const handlePickupAddressChange = (
     fieldName: keyof typeof pickupAddress,
     value: string
   ) => {
-    setPickupAddress((prevData) => ({
+    const addressName: string =
+      addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+    setPickupAddress((prevData: any) => ({
       ...prevData,
-      [fieldName]: value,
-    }));
-  };
-
-  const handleReturnAddressChange = (
-    fieldName: keyof typeof returnAddress,
-    value: string
-  ) => {
-    setReturnAddress((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
+      [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
   };
 
@@ -67,18 +42,12 @@ const SaveAddress = () => {
       <div className="flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
-            saveAddress.office === true
+            address.addressType === "office"
               ? "!border-[#004EFF] !text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            setSaveAddress({
-              office: true,
-              warehouse: false,
-              other: false,
-            });
             handlePickupAddressChange("addressType", "office");
-            handleReturnAddressChange("addressType", "office");
           }}
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
@@ -88,18 +57,12 @@ const SaveAddress = () => {
         </div>
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
-            saveAddress.warehouse === true
+            address.addressType === "warehouse"
               ? "border-[#004EFF] !text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            setSaveAddress({
-              office: false,
-              warehouse: true,
-              other: false,
-            });
             handlePickupAddressChange("addressType", "warehouse");
-            handleReturnAddressChange("addressType", "warehouse");
           }}
         >
           <img src={LocationIcon} alt="Other" />
@@ -109,18 +72,12 @@ const SaveAddress = () => {
         </div>
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
-            saveAddress.other === true
+            address.addressType === "other"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300  text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            setSaveAddress({
-              office: false,
-              warehouse: false,
-              other: true,
-            });
             handlePickupAddressChange("addressType", "other");
-            handleReturnAddressChange("addressType", "other");
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />

@@ -1,51 +1,42 @@
-import ContactIcon from "../../../assets/PickUp/Contact.svg";
-import WebContactIcon from "../../../assets/PickUp/WebContact.svg";
-import WarehouseIcon from "../../../assets/PickUp/Warehouse.svg";
-import OfficeIcon from "../../../assets/PickUp/Office.svg";
+import ContactIcon from "../../../../assets/PickUp/Contact.svg";
+import WebContactIcon from "../../../../assets/PickUp/WebContact.svg";
+import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
+import OfficeIcon from "../../../../assets/PickUp/Office.svg";
 
 import CustomInputBox from "../../../../components/Input";
-import { useState } from "react";
 
-const ContactDetails = () => {
-  const [contact, setContact] = useState({
-    name: "",
-    mobileNo: "",
-    alternateMobileNo: "",
-    emailId: "",
-    type: "warehouse associate",
-  });
-
-  const [returnAddressContact, setReturnAddressContacts] = useState({
-    name: contact.name,
-    mobileNo: contact.mobileNo,
-    alternateMobileNo: contact.alternateMobileNo,
-    emailId: contact.emailId,
-    type: "warehouse associate",
-  });
-
-  const [saveContact, setSaveContact] = useState({
-    shopkeeper: false,
-    warehouse: true,
-    dispatcher: false,
-  });
-
-  const handleContactChange = (
-    fieldName: keyof typeof contact,
-    value: string
-  ) => {
-    setContact((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }));
+interface IContactDetailsProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+    contactLabel: string;
   };
+}
 
-  const handleReturnAddressContactChange = (
-    fieldName: keyof typeof contact,
+const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
+  data: { pickupAddress, setPickupAddress, contactLabel },
+}) => {
+  const address =
+    contactLabel === "Return Address Contact"
+      ? pickupAddress?.returnAddress?.contact
+      : pickupAddress?.pickupAddress?.contact;
+  const handleContactChange = (
+    fieldName: keyof typeof address,
     value: string
   ) => {
-    setReturnAddressContacts((prevData) => ({
+    const addressName: string =
+      contactLabel === "Return Address Contact"
+        ? "returnAddress"
+        : "pickupAddress";
+    setPickupAddress((prevData: any) => ({
       ...prevData,
-      [fieldName]: value,
+      [addressName]: {
+        ...prevData[addressName],
+        contact: {
+          ...prevData[addressName].contact,
+          [fieldName]: value,
+        },
+      },
     }));
   };
 
@@ -56,54 +47,49 @@ const ContactDetails = () => {
         <img src={WebContactIcon} alt="Contact" className="hidden lg:block" />
 
         <p className="text-[18px] font-Lato lg:text-[24px] lg:font-Lato lg:text-[#323232]">
-          Pickup Address Contact
+          {contactLabel}
         </p>
       </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-6">
-        <CustomInputBox
-          label="Name of the contact person"
-          value={contact.name}
-          onChange={(e) => {
-            handleContactChange("name", e.target.value);
-            handleReturnAddressContactChange("name", e.target.value);
-          }}
-        />
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3">
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Name of the contact person"
+            value={address.name}
+            onChange={(e) => {
+              handleContactChange("name", e.target.value);
+            }}
+          />
+        </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-6">
-        <CustomInputBox
-          label="Mobile Number"
-          value={contact.mobileNo}
-          onChange={(e) => {
-            handleContactChange("mobileNo", e.target.value);
-            handleReturnAddressContactChange("mobileNo", e.target.value);
-          }}
-        />
-      </div>
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Mobile Number"
+            value={address.mobileNo}
+            onChange={(e) => {
+              handleContactChange("mobileNo", e.target.value);
+            }}
+          />
+        </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-6">
-        <CustomInputBox
-          label="Email ID(optional)"
-          value={contact.emailId}
-          onChange={(e) => {
-            handleContactChange("emailId", e.target.value);
-            handleReturnAddressContactChange("emailId", e.target.value);
-          }}
-        />
-      </div>
-      <div className="mb-7 lg:mb-6 lg:mr-6">
-        <CustomInputBox
-          label="Alternate mobile number(optional)"
-          value={contact.alternateMobileNo}
-          onChange={(e) => {
-            handleContactChange("alternateMobileNo", e.target.value);
-            handleReturnAddressContactChange(
-              "alternateMobileNo",
-              e.target.value
-            );
-          }}
-        />
+        <div className="mb-4 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Email ID (optional)"
+            value={address.emailId}
+            onChange={(e) => {
+              handleContactChange("emailId", e.target.value);
+            }}
+          />
+        </div>
+        <div className="mb-7 lg:mb-6 lg:mr-6">
+          <CustomInputBox
+            label="Alternate mobile number (optional)"
+            value={address.alternateMobileNo}
+            onChange={(e) => {
+              handleContactChange("alternateMobileNo", e.target.value);
+            }}
+          />
+        </div>
       </div>
 
       <div className="lg:col-span-3  mb-3 lg:mb-[18px]">
@@ -115,19 +101,12 @@ const ContactDetails = () => {
       <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
-            saveContact.shopkeeper === true
+            address.type === "shopkeeper"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            setSaveContact({
-              shopkeeper: true,
-
-              warehouse: false,
-              dispatcher: false,
-            });
             handleContactChange("type", "shopkeeper");
-            handleReturnAddressContactChange("type", "shopkeeper");
           }}
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
@@ -138,23 +117,12 @@ const ContactDetails = () => {
 
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
-            saveContact.warehouse === true
+            address.type === "warehouse associate"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={() => {
-            setSaveContact({
-              shopkeeper: false,
-
-              warehouse: true,
-              dispatcher: false,
-            });
             handleContactChange("type", "warehouse associate");
-            handleReturnAddressContactChange("type", "warehouse associate");
-
-            // isItLgScreen
-            //   ? setIsSaveContactRightModal(true)
-            //   : setIsSaveContactModal(true);
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
@@ -165,23 +133,12 @@ const ContactDetails = () => {
 
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
-            saveContact.dispatcher === true
+            address.type === "dispatcher"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={() => {
-            setSaveContact({
-              shopkeeper: false,
-
-              warehouse: false,
-              dispatcher: true,
-            });
             handleContactChange("type", "dispatcher");
-            handleReturnAddressContactChange("type", "dispatcher");
-
-            // isItLgScreen
-            //   ? setIsSaveContactRightModal(true)
-            //   : setIsSaveContactModal(true);
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />

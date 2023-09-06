@@ -19,10 +19,23 @@ import { VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { dummyStateDropdownData } from "../../../../utils/dummyData";
 
-const AddressCard = () => {
+interface IAddressCardProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+    addressLabel: string;
+  };
+}
+
+const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
+  data: { pickupAddress, setPickupAddress, addressLabel },
+}) => {
+  const address =
+    addressLabel === "Return Address"
+      ? pickupAddress.returnAddress
+      : pickupAddress.pickupAddress;
+
   const navigate = useNavigate();
-  const location = useLocation();
-  const address = location.state?.address || "";
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
@@ -36,71 +49,19 @@ const AddressCard = () => {
   const [prevPastedData, setPrevPastedData] = useState("");
   const [isChecked, setIsChecked] = useState(true);
   const [pastedData, setPastedData] = useState("");
-  const [pastedDataReturnAddress, setPastedDataReturnAddress] =
-    useState(pastedData);
 
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [pickupAddress, setPickupAddress] = useState({
-    flatNo: "",
-    locality: "",
-    fullAddress: "",
-    sector: "",
-    landmark: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    addressType: "warehouse",
-  });
-
-  const [returnAddress, setReturnAddress] = useState({
-    flatNo: "",
-    locality: "",
-    fullAddress: "",
-    sector: "",
-    landmark: "",
-    pincode: "",
-    city: "",
-    state: "",
-    country: "",
-    addressType: "warehouse",
-  });
-
-  const [contact, setContact] = useState({
-    name: "",
-    mobileNo: "",
-    alternateMobileNo: "",
-    emailId: "",
-    type: "warehouse associate",
-  });
-
-  const [returnAddressContact, setReturnAddressContacts] = useState({
-    name: contact.name,
-    mobileNo: contact.mobileNo,
-    alternateMobileNo: contact.alternateMobileNo,
-    emailId: contact.emailId,
-    type: "warehouse associate",
-  });
-
   const handlePickupAddressChange = (
-    fieldName: keyof typeof pickupAddress,
+    fieldName: keyof typeof address,
     value: string
   ) => {
-    setPickupAddress((prevData) => ({
+    const addressName: string =
+      addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+    setPickupAddress((prevData: any) => ({
       ...prevData,
-      [fieldName]: value,
-    }));
-  };
-
-  const handleReturnAddressChange = (
-    fieldName: keyof typeof returnAddress,
-    value: string
-  ) => {
-    setReturnAddress((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
+      [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
   };
 
@@ -110,40 +71,6 @@ const AddressCard = () => {
 
   const handleLandmarkSelected = (landmark: string) => {
     setCustomLandmark(landmark);
-  };
-
-  const getVerifyAddressReturnAddress = async (
-    verifyAddressPayloadForReturnAddress: any
-  ) => {
-    try {
-      setLoading(true);
-
-      const { data: verifyAddressResponse } = await POST(
-        VERIFY_ADDRESS,
-        verifyAddressPayloadForReturnAddress
-      );
-
-      const parsedData = verifyAddressResponse?.data?.message;
-
-      setReturnAddress({
-        flatNo:
-          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
-          "",
-        fullAddress: parsedData.full_address || "",
-        locality: parsedData.locality_name || "",
-        sector: parsedData.locality_name || "",
-        landmark: parsedData.building_name || "",
-        pincode: parsedData.pincode || "",
-        city: parsedData.city_name || "",
-        state: parsedData.state_name || "",
-        country: parsedData.country_name || "India",
-        addressType: pickupAddress.addressType || "warehouse",
-      });
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      return error;
-    }
   };
 
   const verifyAddressPayload = {
@@ -161,35 +88,27 @@ const AddressCard = () => {
 
       const parsedData = verifyAddressResponse?.data?.message;
 
-      setPickupAddress({
-        flatNo:
-          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
-          "",
-        fullAddress: parsedData.full_address || "",
-        locality: parsedData.locality_name || "",
-        sector: parsedData.locality_name || "",
-        landmark: "",
-        pincode: parsedData.pincode || "",
-        city: parsedData.city_name || "",
-        state: parsedData.state_name || "",
-        country: parsedData.country_name || "India",
-        addressType: pickupAddress.addressType || "warehouse",
-      });
+      const addressName: any =
+        addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+      setPickupAddress((prevData: any) => ({
+        ...prevData,
+        [addressName]: {
+          ...prevData[addressName],
+          flatNo:
+            `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+            "",
+          fullAddress: parsedData.full_address || "",
+          locality: parsedData.locality_name || "",
+          sector: parsedData.locality_name || "",
+          landmark: address.landmark,
+          pincode: parsedData.pincode || "",
+          city: parsedData.city_name || "",
+          state: parsedData.state_name || "",
+          country: parsedData.country_name || "India",
+          addressType: address.addressType || "warehouse",
+        },
+      }));
 
-      setReturnAddress({
-        flatNo:
-          `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
-          "",
-        fullAddress: parsedData.full_address || "",
-        locality: parsedData.locality_name || "",
-        sector: parsedData.locality_name || "",
-        landmark: pickupAddress.landmark,
-        pincode: parsedData.pincode || "",
-        city: parsedData.city_name || "",
-        state: parsedData.state_name || "",
-        country: parsedData.country_name || "India",
-        addressType: pickupAddress.addressType || "warehouse",
-      });
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -208,16 +127,16 @@ const AddressCard = () => {
 
   return (
     <div>
-      <div className="inline-flex space-x-2 items-center justify-start px-5 mb-5 lg:mb-[10px]">
+      <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
         <img src={LocationIcon} alt="" className="lg:hidden" />
 
         <img src={WebLocationIcon} alt="" className="hidden lg:block" />
 
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-          Pickup Address
+          {addressLabel}
         </p>
       </div>
-      <div className="flex flex-col   lg:grid lg:grid-cols-3   px-5">
+      <div className="flex flex-col   lg:grid lg:grid-cols-3 ">
         <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
           <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
@@ -280,7 +199,7 @@ const AddressCard = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Plot No., Floor, Building Name"
-            value={pickupAddress.flatNo}
+            value={address.flatNo}
             onChange={(e) => {
               handlePickupAddressChange("flatNo", e.target.value);
             }}
@@ -290,7 +209,7 @@ const AddressCard = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Locality"
-            value={pickupAddress.sector}
+            value={address.sector}
             onChange={(e) =>
               handlePickupAddressChange("sector", e.target.value)
             }
@@ -301,7 +220,6 @@ const AddressCard = () => {
           <CustomInputWithDropDown
             pastedData={pastedData}
             handlePickupAddressChange={handlePickupAddressChange}
-            handleReturnAddressChange={handleReturnAddressChange}
             handleLandmarkSelected={handleLandmarkSelected}
           />
         </div>
@@ -309,7 +227,7 @@ const AddressCard = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Pincode"
-            value={pickupAddress.pincode}
+            value={address.pincode}
             onChange={(e) =>
               handlePickupAddressChange("pincode", e.target.value)
             }
@@ -319,14 +237,14 @@ const AddressCard = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="City"
-            value={pickupAddress.city}
+            value={address.city}
             onChange={(e) => handlePickupAddressChange("city", e.target.value)}
           />
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={pickupAddress.state}
+            value={address.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);
@@ -338,7 +256,7 @@ const AddressCard = () => {
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Country"
-            value={pickupAddress.country}
+            value={address.country}
             onChange={(e) =>
               handlePickupAddressChange("country", e.target.value)
             }
