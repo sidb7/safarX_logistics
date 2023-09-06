@@ -1662,8 +1662,6 @@ const Index = () => {
               />
             </div>
 
-            {/* <div className="hidden lg:block mb-7"></div> */}
-
             <div className="mb-7 lg:col-span-3 pb-16  ">
               <div className="flex flex-col  w-[372px] h-[134px] ">
                 <div

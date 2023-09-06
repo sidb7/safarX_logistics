@@ -49,7 +49,7 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-y-2 ">
+      <div className="flex flex-col gap-y-4 ">
         <p className="font-semibold font-Open ml-[25px]   text-[12px] text-[#004EFF] lg:text-[16px]">
           {warehouse}
         </p>
