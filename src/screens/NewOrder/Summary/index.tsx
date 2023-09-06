@@ -324,6 +324,7 @@ const Summary = (props: Props) => {
         <div className="flex flex-col lg:flex-row mr-5 ">
           {products.map((product: any) => (
             <PricingDetails
+              appliedWeight={serviceDetails?.appliedWeight}
               price={serviceDetails?.total}
               add={serviceDetails?.add}
               base={serviceDetails?.base}
