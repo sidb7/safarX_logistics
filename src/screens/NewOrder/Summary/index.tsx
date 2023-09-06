@@ -2,20 +2,15 @@ import BoxDetails from "./boxDetails";
 import SummaryService from "./summaryService";
 import SummaryAddressBox from "./summaryAddressBox";
 import React, { useState, useEffect } from "react";
-import ServiceButton from "../../../components/Button/ServiceButton";
-
-import serviceIcon from "../../../assets/serv/service.svg";
 import contactIcon from "../../../assets/serv/contact.svg";
 import locationIcon from "../../../assets/serv/location.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
-
 import SummaryIcon from "../../../assets/serv/Summary.svg";
-import copySuccess from "../../../assets/serv/copy-success.svg";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
-import { GET_LATEST_ORDER } from "../../../utils/ApiUrls";
+import { GET_LATEST_ORDER, POST_SET_ORDER_ID } from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
@@ -23,6 +18,9 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
 import { generateUniqueCode } from "../../../utils/utility";
 import PricingDetails from "./pricingDetails";
+import { toast } from "react-toastify";
+import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
+import CustomInputBox from "../../../components/Input";
 
 type Props = {};
 
@@ -40,7 +38,6 @@ const Summary = (props: Props) => {
     country: "",
     addressType: "",
   });
-
   const [completeAddress, setCompleteAddress] = useState("");
   const steps = [
     {
@@ -105,6 +102,23 @@ const Summary = (props: Props) => {
       return error;
     }
   };
+  const setOrderIdApi = async () => {
+    try {
+      let payload = { orderId: orderId };
+
+      const { data: response } = await POST(POST_SET_ORDER_ID, payload);
+
+      if (response?.success) {
+        //  navigate
+        toast.success(response?.message);
+        navigate("/orders/add-order/payment");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   useEffect(() => {
     getLatestOrderDetails();
@@ -123,6 +137,7 @@ const Summary = (props: Props) => {
   //   const productWeight = product?.weight?.deadWeightUnit;
   //   const productDimension = product?.dimensions?.length;
   // });
+
   return (
     <div>
       <Breadcum label="Add New Order" />
@@ -136,27 +151,27 @@ const Summary = (props: Props) => {
             Summary
           </p>
         </div>
-        <div className="row-start-2 flex flex-row justify-between items-center h-[48px] w-[200px] rounded p-[10px] border-[1px] border-[#A4A4A4] lg:w-[372px] ">
-          <p
-            className={`text-[12px] text-[#1C1C1C] font-Open leading-4 ${
-              orderId !== ""
-                ? "lg:text-[#1C1C1C] lg:font-semibold text-base"
-                : "lg:text-[#777777] lg:font-normal"
-            }`}
-          >
-            {orderId !== "" ? orderId : "Generate order ID"}
-          </p>
 
-          <div>
-            <AddButton
-              onClick={() => {
-                const orderId = generateUniqueCode(8, 12);
-                setOrderId(orderId);
-              }}
-              text={"AUTO GENERATE"}
-              className="!bg-transparent !border-none !font-Open !font-semibold !text-sm !leading-5 !shadow-none"
-            />
-          </div>
+        <div className="!w-[372px]">
+          <CustomInputBox
+            isRightIcon={true}
+            containerStyle=""
+            rightIcon={AutoGenerateIcon}
+            className="w-full !text-base !font-semibold"
+            imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+            value={orderId}
+            maxLength={12}
+            label="Generate order ID"
+            onChange={(e) => {
+              setOrderId(e.target.value);
+            }}
+            onClick={() => {
+              const orderId = generateUniqueCode(8, 12);
+              setOrderId(orderId);
+            }}
+            visibility={true}
+            setVisibility={() => {}}
+          />
         </div>
       </div>
       <div className="flex flex-row">
@@ -320,10 +335,7 @@ const Summary = (props: Props) => {
           ))}
         </div>
       </div>
-      <BottomLayout
-        callApi={() => navigate("/orders/add-order/payment")}
-        Button2Name={true}
-      />
+      <BottomLayout callApi={() => setOrderIdApi()} Button2Name={true} />
     </div>
   );
 };
