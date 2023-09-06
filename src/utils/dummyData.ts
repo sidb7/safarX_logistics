@@ -20,6 +20,13 @@ import WixLg from "../assets/Catalogue/WixLg.svg";
 import WooCommerceLg from "../assets/Catalogue/WooCommerceLg.svg";
 import instamojoLg from "../assets/Catalogue/instamojoLg.svg";
 import EditImageWithBlack from "../assets/Catalogue/edit.svg";
+import FashionIcon from "../assets/Product/Product (3).svg";
+import ElectronicsIcon from "../assets/Product/Item.svg";
+import LifestyleIcon from "../assets/Product/watch.svg";
+import SportsIcon from "../assets/Product/sports.svg";
+import FitnessIcon from "../assets/Product/fitness.svg";
+import GiftIcon from "../assets/Product/gift.svg";
+import ForkIcon from "../assets/Product/ForkKnife.svg";
 
 export const insufficientBalance = [
   {
@@ -1089,8 +1096,8 @@ export const dummyPickupDropdownData = [
 
 export const dummyStateDropdownData = [
   {
-    label: "Select State",
-    value: "Select State",
+    label: "",
+    value: "",
   },
   {
     label: "Andhra Pradesh",
@@ -1204,7 +1211,131 @@ export const dummyStateDropdownData = [
     label: "West Bengal",
     value: "West Bengal",
   },
- 
 ];
 
+export const searchProductData = [
+  {
+    productId: "06b2cc68-c923-48a6-be62-a40db36b050a",
+    name: "PS 5",
+    category: "EV",
+    qty: 1,
+    currency: "INR",
+    unitPrice: 40000,
+    unitTax: 10000,
+    measureUnit: "cm",
+    length: 40,
+    breadth: 32,
+    height: 40,
+    deadWeight: 1,
+    weightUnit: "kg",
+    volumetricWeight: 10.24,
+    appliedWeight: 10.24,
+    divisor: 5000,
+    images: [
+      {
+        url: "15b87eaa-6112-412d-8cf7-ee686e426fea",
+        alt: "",
+      },
+    ],
+  },
+  {
+    productId: "8df787dd-d859-4c30-bcfc-9457f1f6f3a8",
+    name: "Mouse 1 ",
+    category: "ev",
+    qty: 1,
+    currency: "INR",
+    unitPrice: 999,
+    unitTax: 99,
+    measureUnit: "cm",
+    length: 50,
+    breadth: 20,
+    height: 20,
+    deadWeight: 1,
+    weightUnit: "kg",
+    volumetricWeight: 4,
+    appliedWeight: 4,
+    divisor: 5000,
+    images: [
+      {
+        url: "c5fd4551-8af6-48c1-b251-c7d65f58f008",
+        alt: "",
+      },
+    ],
+  },
+  {
+    productId: "38696391-8b03-4ec1-9027-a5222445aa7b",
+    name: "Bottle ",
+    category: "test",
+    qty: 1,
+    currency: "INR",
+    unitPrice: 299,
+    unitTax: 20,
+    measureUnit: "cm",
+    length: 10,
+    breadth: 20,
+    height: 10,
+    deadWeight: 1,
+    weightUnit: "kg",
+    volumetricWeight: 0.4,
+    appliedWeight: 1,
+    divisor: 5000,
+    images: [],
+  },
+  {
+    productId: "890f36dd-5328-4dda-b3cd-e0a07766e14a",
+    name: "Earphone 20",
+    category: "ev",
+    qty: 1,
+    currency: "INR",
+    unitPrice: 2999,
+    unitTax: 200,
+    measureUnit: "cm",
+    length: 8,
+    breadth: 6,
+    height: 2,
+    deadWeight: 0.4,
+    weightUnit: "kg",
+    volumetricWeight: 0.02,
+    appliedWeight: 0.4,
+    divisor: 5000,
+    images: [],
+  },
+];
 
+export const filterItems = [
+  {
+    label: "Fashion",
+    icon: FashionIcon,
+    selected: false,
+  },
+  {
+    label: "Electronics",
+    icon: ElectronicsIcon,
+    selected: false,
+  },
+  {
+    label: "Lifestyle",
+    icon: LifestyleIcon,
+    selected: false,
+  },
+  {
+    label: "Sports",
+    icon: SportsIcon,
+    selected: false,
+  },
+  {
+    label: "Food and beverages",
+    icon: ForkIcon,
+    selected: false,
+  },
+  {
+    label: "Fitness",
+    icon: FitnessIcon,
+    selected: false,
+  },
+  {
+    label: "Gift",
+    icon: GiftIcon,
+    selected: false,
+  },
+];

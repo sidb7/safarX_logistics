@@ -53,7 +53,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/pickup");
+              navigate("/orders/add-order/service");
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>
@@ -78,7 +78,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
             {productDimensionBreadth} x {productDimensionHeight}{" "}
             {productDimensionUnit}
           </p>
-          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+          {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             Base:{base}
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
@@ -92,7 +92,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             Invoice Value:{invoiceValue}
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

@@ -30,6 +30,9 @@ import { toast } from "react-toastify";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
+import { useSelector } from "react-redux";
+import SearchProduct from "./SearchProduct";
+import SearchIcon from "../../../assets/Product/search.svg";
 
 interface IPackageProps {}
 const steps = [
@@ -90,6 +93,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     isInsurance: true,
     iwillTakeRisk: false,
   });
+  const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
+    useState<boolean>(false);
+  const isReturningUser = useSelector(
+    (state: any) => state?.user.isReturningUser
+  );
 
   useEffect(() => {
     (async () => {
@@ -171,9 +179,24 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" className="" />
-              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-                Product
-              </h1>
+              {isReturningUser ? (
+                // <SearchProduct />
+                <div className="flex items-center gap-x-2">
+                  <p className="font-Lato font-normal text-2xl leading-8 text-[#323232]">
+                    Select a Product
+                  </p>
+                  <img
+                    src={SearchIcon}
+                    alt="Search Icon"
+                    className="cursor-pointer"
+                    onClick={() => setIsSearchProductRightModalOpen(true)}
+                  />
+                </div>
+              ) : (
+                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
+                  Product
+                </h1>
+              )}
             </div>
             <div className="hidden  lg:flex whitespace-nowrap gap-x-32 bg-[#FFFFFF] shadow-sm p-2  ">
               <p>Handle with care</p>
@@ -420,10 +443,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           />
         </RightSideModal>
       </div>
-
       <div>
         <BottomLayout callApi={() => setBoxAndCODInfo()} />
       </div>
+      <SearchProduct
+        isSearchProductRightModalOpen={isSearchProductRightModalOpen}
+        setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
+      />
+      ;
     </div>
   );
 };
