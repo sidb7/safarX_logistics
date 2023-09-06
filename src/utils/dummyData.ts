@@ -1096,8 +1096,8 @@ export const dummyPickupDropdownData = [
 
 export const dummyStateDropdownData = [
   {
-    label: "Select State",
-    value: "Select State",
+    label: "",
+    value: "",
   },
   {
     label: "Andhra Pradesh",
