@@ -3,6 +3,8 @@ import serviceIcon from "../../../assets/serv/service.svg";
 import { useNavigate } from "react-router-dom";
 
 interface PricingData {
+  appliedWeight?: any;
+  appliedWeightUnit?: any;
   add?: string | number;
   base?: string | number;
   cod?: string | number;
@@ -22,20 +24,31 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   variables = "",
   gst = "",
   invoiceValue = "",
+  appliedWeight = "",
+  appliedWeightUnit = "",
 }) => {
   const navigate = useNavigate();
-  const baseValue = typeof base === "string" ? parseFloat(base) : base;
-  const addValue = typeof add === "string" ? parseFloat(add) : add;
-  const codValue = typeof cod === "string" ? parseFloat(cod) : cod;
-  const variablesValue =
-    typeof variables === "string" ? parseFloat(variables) : variables;
+  const baseValue = +base;
+  const addValue = +add;
+  const codValue = +cod;
+  const variablesValue = +variables;
 
   const orderPrice = baseValue + addValue + variablesValue + codValue;
+
   console.log("orderPrice", orderPrice);
   return (
-    <div className="p-[24px]  rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[539px] ">
+    <div className="p-[24px]  rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[505px] ">
       <div className="flex flex-col ">
-        <div className="flex flex-col gap-y-4 mt-2  ">
+        <div className="flex flex-col gap-y-4  ">
+          <div className="flex justify-between">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+              Billable Weight:
+            </p>
+            <p>
+              {" "}
+              {appliedWeight} {appliedWeightUnit}
+            </p>
+          </div>
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Order Price:
@@ -82,9 +95,9 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p> {gst} %</p>
           </div>
-          <hr className="mt-[150px]"></hr>
-          <div className="flex justify-between ">
-            <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold">
+          <hr className="mt-[100px]"></hr>
+          <div className="flex justify-between mt-[5px] ">
+            <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold ">
               Total:
             </p>
             <p className="text-[#004EFF]">
