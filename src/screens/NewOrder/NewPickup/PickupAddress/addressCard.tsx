@@ -219,6 +219,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         <div className="mb-4 lg:mb-6 lg:mr-6 ">
           <CustomInputWithDropDown
             pastedData={pastedData}
+            value={pickupAddress.landmark}
             handlePickupAddressChange={handlePickupAddressChange}
             handleLandmarkSelected={handleLandmarkSelected}
           />
