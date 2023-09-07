@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
@@ -14,19 +14,73 @@ import { filterItems } from "../../../utils/dummyData";
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
   setIsSearchProductRightModalOpen: any;
+  productsFromLatestOrder?: any;
+  handlePackageDetails?: any;
 }
 
-const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
-  const { isSearchProductRightModalOpen, setIsSearchProductRightModalOpen } =
-    props;
+const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
+  props
+) => {
+  const {
+    isSearchProductRightModalOpen,
+    setIsSearchProductRightModalOpen,
+    productsFromLatestOrder,
+    handlePackageDetails,
+  } = props;
 
-  const [searchedProduct, setSearchedProduct] = React.useState("");
-  const [clearIconVisible, setClearIconVisible] = React.useState(false);
+  const [products, setProducts] = useState<any>([]);
+  const [searchedProduct, setSearchedProduct] = useState<any>("");
+  const [clearIconVisible, setClearIconVisible] = useState<any>(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>([]);
+
+  useEffect(() => {
+    if (productsFromLatestOrder) {
+      productsFromLatestOrder.forEach((product: any) => {
+        product.selected = false;
+      });
+      setProducts(productsFromLatestOrder);
+    }
+  }, [productsFromLatestOrder]);
+
+  const sortOnSelected = (products: any) => {
+    return products.sort((a: any, b: any) => {
+      // Sorting in descending order (selected: true comes first)
+      if (a.selected && !b.selected) {
+        return -1;
+      }
+      if (!a.selected && b.selected) {
+        return 1;
+      }
+      // If selected values are the same, maintain the original order
+      return 0;
+    });
+  };
+
+  const productsDetailsTobeSend = () => {
+    let tempArr = products.filter((product: any) => product.selected);
+    handlePackageDetails(tempArr);
+  };
+
+  const selectProduct = (product: any, index: number) => {
+    const allreadySelected = isProductSelected(index);
+    let tempArr: any = products;
+    if (allreadySelected) {
+      tempArr[index].selected = false;
+      setProducts([...sortOnSelected(tempArr)]);
+    } else {
+      tempArr[index].selected = true;
+      setProducts([...sortOnSelected(tempArr)]);
+    }
+  };
+
+  const isProductSelected = (index: any) => {
+    return products[index]?.selected === true ? true : false;
+  };
 
   const searchProductContent = () => {
     return (
       <div>
-        <div className="p-5">
+        <div className="p-5 ">
           <div className="flex items-center justify-between mb-[27px]">
             <p className="font-Lato font-normal text-2xl leading-8 text-[#323232]">
               Search Product
@@ -71,14 +125,14 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
           </div>
           {/* Most Used */}
 
-          <div className="flex  items-center gap-x-2 mb-4">
+          {/* <div className="flex  items-center gap-x-2 mb-4">
             <img src={ProductIcon} alt="Product" />
             <div className="font-Lato font-normal text-2xl leading-8">
               Most Used
             </div>
           </div>
           <div className="flex flex-wrap gap-5 mb-6 ">
-            {searchProductData.map((eachProduct: any, index: number) => {
+            {productsFromLatestOrder.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox
                   key={index}
@@ -92,7 +146,7 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
                 />
               );
             })}
-          </div>
+          </div> */}
 
           {/* Top Added */}
 
@@ -102,8 +156,8 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
               Top Added
             </div>
           </div>
-          <div className="flex flex-wrap gap-5 mb-6">
-            {searchProductData.map((eachProduct: any, index: number) => {
+          <div className="flex flex-wrap gap-5 mb-6  overflow-scroll ">
+            {products.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox
                   key={index}
@@ -113,7 +167,9 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
                   breadth={eachProduct?.breadth || 0}
                   length={eachProduct?.length || 0}
                   height={eachProduct?.height || 0}
-                  className="!w-72"
+                  className="!w-72 cursor-pointer "
+                  onClick={() => selectProduct(eachProduct, index)}
+                  isSelected={isProductSelected(index)}
                 />
               );
             })}
@@ -132,7 +188,7 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
           />
           <ServiceButton
             text={"SAVE"}
-            onClick={() => {}}
+            onClick={() => productsDetailsTobeSend()}
             className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
           />
         </div>
@@ -145,7 +201,7 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
       <CustomRightModal
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className="lg:w-[50%]"
+        className="lg:w-[52%]"
       >
         {searchProductContent()}
       </CustomRightModal>
@@ -153,4 +209,4 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
   );
 };
 
-export default SearchProduct;
+export default AddPackageDetails;

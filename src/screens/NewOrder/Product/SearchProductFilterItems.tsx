@@ -16,6 +16,7 @@ const SearchProductFilterItems: React.FunctionComponent<
         {productItems.map((eachItem: any, index: number) => {
           return (
             <div
+              key={index}
               className={`${
                 eachItem.selected === true
                   ? "border-[#004EFF]"
