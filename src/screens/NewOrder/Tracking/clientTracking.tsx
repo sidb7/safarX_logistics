@@ -18,6 +18,7 @@ import ClientItem1 from "../../../assets/clientImage1.svg";
 import ClientImage2 from "../../../assets/clientImage2.svg";
 import Joyofriding from "../../../assets/jofofridingImage.svg";
 import ClientProductImage from "../../../assets/clientProductImage.svg";
+import StarRating from "./starRating";
 
 const ClientTracking = () => {
   const [openTracking, setOpenTracking] = useState(false);
@@ -231,12 +232,9 @@ const ClientTracking = () => {
                     family?
                   </p>
                 </div>
-                <div className="flex gap-x-5 pt-6 px-4">
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
+
+                <div className="px-3  pt-2">
+                  <StarRating />
                 </div>
               </div>
             </div>

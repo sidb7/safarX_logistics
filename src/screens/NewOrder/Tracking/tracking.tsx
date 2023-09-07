@@ -16,6 +16,7 @@ import UpwardArrow from "../../../assets/AccordionUp.svg";
 import Product from "../../../assets/layer.svg";
 import GalleryIcon from "../../../assets/galleryIcon.svg";
 import Location from "../../../assets/other.png";
+import StarRating from "./starRating";
 
 const Tracking = () => {
   const [openTracking, setOpenTracking] = useState(false);
@@ -229,12 +230,9 @@ const Tracking = () => {
                     family?
                   </p>
                 </div>
-                <div className="flex gap-x-5 pt-6 px-4">
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
-                  <img src={emptyStar} alt="" />
+
+                <div className="px-3  pt-2">
+                  <StarRating />
                 </div>
               </div>
             </div>
