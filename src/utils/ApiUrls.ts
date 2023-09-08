@@ -139,6 +139,9 @@ const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
 
+// Courier Pricing List
+const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -205,4 +208,5 @@ export {
   POST_SIGN_IN_WITH_GOOGLE_URL,
   GST_AGREEMENTS,
   POST_SET_ORDER_ID,
+  COURIER_PRICING,
 };
