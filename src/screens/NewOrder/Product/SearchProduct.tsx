@@ -10,6 +10,7 @@ import { searchProductData } from "../../../utils/dummyData";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { filterItems } from "../../../utils/dummyData";
+import { searchResults } from "../../../utils/utility";
 
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
@@ -22,6 +23,7 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
 
   const [searchedProduct, setSearchedProduct] = React.useState("");
   const [clearIconVisible, setClearIconVisible] = React.useState(false);
+  const [searchResult, setSearchResult] = React.useState<any>([]);
 
   const searchProductContent = () => {
     return (
@@ -34,7 +36,7 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
             <img
               src={CrossIcon}
               alt="Cross Icon"
-              className="cursor-pointer"
+              className="cursor-pointer self-center"
               onClick={() => setIsSearchProductRightModalOpen(false)}
             />
           </div>
@@ -48,8 +50,11 @@ const SearchProduct: React.FunctionComponent<ISearchProductProps> = (props) => {
               onChange={(e) => {
                 setSearchedProduct(e.target.value);
                 setClearIconVisible(true);
+                const result = searchResults(e.target.value, searchProductData);
+                setSearchResult(result);
               }}
               onClick={() => {
+                setSearchResult([]);
                 setSearchedProduct("");
                 setClearIconVisible(false);
               }}
