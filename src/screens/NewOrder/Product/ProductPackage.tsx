@@ -31,8 +31,9 @@ import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
 import { useSelector } from "react-redux";
-import SearchProduct from "./SearchProduct";
+import AddPackageDetails from "./AddPackageDetails";
 import SearchIcon from "../../../assets/Product/search.svg";
+import ServiceButton from "../../../components/Button/ServiceButton";
 
 interface IPackageProps {}
 const steps = [
@@ -79,15 +80,20 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [combo, setCombo] = useState(false);
   const [products, setProducts] = useState([]);
   const [box, setBox] = useState([]);
+  const [boxIndex, setBoxIndex] = useState<any>(0);
   const [codData, setCodData] = useState<any>({
     isCod: true,
     collectableAmount: 0,
     invoiceValue: 0,
   });
   const [selectedBox, setSelectedBox]: any = useState({});
+  const [boxTypeModal, setBoxTypeModal]: any = useState(false);
   const [productFinalPayload, setProductFinalPayload] = useState<any>({
     boxInfo: [],
   });
+  const [packages, setPackages] = useState<any>([]);
+  const [tempPackage, setTempPackage] = useState<any>({});
+
   const [paymentMode, setPaymentMode] = useState<any>("cod");
   const [selectInsurance, setSelectInsrance] = useState({
     isInsurance: true,
@@ -101,35 +107,81 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   useEffect(() => {
     (async () => {
-      const res: any = await getOrderProductDetails();
-      if (res) {
-      }
+      await getOrderProductDetails();
     })();
   }, []);
 
+  const handlePackageDetailsForProduct = (products: any) => {
+    setTempPackage({ products });
+
+    if (packages[boxIndex] && !packages[boxIndex]?.hasOwnProperty("boxId")) {
+      setIsSearchProductRightModalOpen(false);
+      setBoxTypeModal(true);
+      return;
+    }
+    setProductsToPackage(products);
+    setIsSearchProductRightModalOpen(false);
+  };
+
+  const handleOpenPackageDetails = (boxIndex: any) => {
+    setBoxIndex(boxIndex);
+    setIsSearchProductRightModalOpen(true);
+  };
+
+  const setProductsToPackage = (products: any) => {
+    console.log("setProductsToPackage products from params", products);
+    let tempArr = packages;
+    tempArr[boxIndex] = {
+      ...tempArr[boxIndex],
+      products: JSON.parse(JSON.stringify(products)),
+    };
+    setPackages([...tempArr]);
+    console.log("setProductsToPackage [packages]", packages);
+  };
+
+  const setBoxTypeToPackage = (boxType: any) => {
+    let tempArr = packages;
+    tempArr[boxIndex] = { ...selectedBox, ...tempArr[boxIndex] };
+    setPackages([...tempArr]);
+  };
+
+  const handleBoxType = () => {
+    const { products } = tempPackage;
+    setProductsToPackage(products);
+    setBoxTypeToPackage("");
+    setBoxTypeModal(false);
+  };
+
   const setPayloadForProduct = (productsInfo: any) => {
+    console.log("setPayloadForProduct", productsInfo);
+    return;
     setCodData({
       ...codData,
       invoiceValue: getInvoiceValue(productsInfo),
     });
-    const payload = {
-      boxInfo: [{ ...selectedBox, products: productsInfo }],
-    };
-    setProductFinalPayload(payload);
+    const payload = {};
+    // setProductFinalPayload(payload);
+    console.log("============>", productFinalPayload);
   };
 
   const getOrderProductDetails = async () => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
       const { data: boxData } = await POST(GET_SELLER_BOX);
+      let productsData = [];
       if (data?.success) {
-        const { products = [] } = data?.data[0];
-        setProducts(products);
+        const { products: resProduct = [] } = data?.data[0];
+        setProducts(resProduct);
+        productsData = resProduct;
       }
       if (boxData?.success) {
         const { data = [] } = boxData;
         setBox(data);
-        setSelectedBox(data[0]);
+        setSelectedBox(data[1]);
+        console.log("Product", products);
+        setPayloadForProduct({
+          boxInfo: [{ ...data[0], products: productsData }],
+        });
       }
     } catch (error) {
       console.log("getOrderProductDetails", error);
@@ -175,7 +227,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         <div className="lg:mb-8">
           <Stepper steps={steps} />
         </div>
-        <div className="px-5 py-2">
+        <div className="px-5 py-2 mb-12">
           <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" className="" />
@@ -220,7 +272,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex  gap-x-3">
+          <div className="flex   gap-x-3">
             {products.length > 0 &&
               products.map((e: any, index: number) => {
                 return (
@@ -262,46 +314,52 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
           <div className="mt-7">
-            <div className="flex py-5 gap-2">
-              <img src={ProductIcon} alt="Package Icon" className="" />
-              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                Box Type
-              </h1>
-            </div>
-            <div className="flex gap-3">
-              {box?.map((newpackage: any, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="cursor-pointer"
-                    onClick={() => {
-                      setSelectedBox(newpackage);
-                    }}
-                  >
-                    <PackageBox
-                      packageType={newpackage?.name}
-                      weight={newpackage?.weight}
-                      height={newpackage.height}
-                      breadth={newpackage.breadth}
-                      length={newpackage.length}
-                      selected={
-                        selectedBox.boxId === newpackage.boxId ? true : false
-                      }
-                      boxType={newpackage?.color}
-                      recommended={index === 1 ? true : false}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-
             {/* <Box /> */}
-            <BoxDetails
-              products={products}
-              selectedBox={selectedBox}
-              setProductFinalPayload={setPayloadForProduct}
-            />
-            {/* <UploadInput /> */}
+            <div className="lg:flex gap-6 mt-8">
+              {packages.length > 0 &&
+                packages.map((packageDetails: any, index: number) => {
+                  console.log("packageDetails", packageDetails);
+                  return (
+                    <BoxDetails
+                      products={packageDetails?.products || []}
+                      selectedBox={packageDetails || {}}
+                      // productFinalPayload={productFinalPayload}
+                      // setProductFinalPayload={setPayloadForProduct}
+                      boxIndex={index}
+                      openPackageDetailModal={handleOpenPackageDetails}
+                    />
+                  );
+                })}
+              <div>
+                <div className="hidden lg:flex justify-between ">
+                  <div className="flex py-5 gap-x-2">
+                    <img src={ProductIcon} alt="Package Icon" className="" />
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Box {packages.length + 1}
+                    </h1>
+                  </div>
+                </div>
+                <div
+                  className="flex justify-center items-center w-[550px] p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                  }}
+                >
+                  <AddButton
+                    text="ADD PRODUCT"
+                    onClick={() => {
+                      setBoxIndex(packages.length);
+                      setIsSearchProductRightModalOpen(true);
+                    }}
+                    showIcon={true}
+                    icon={ButtonIcon}
+                    className="rounded bg-white shadow-none"
+                    alt="Add Product"
+                  />
+                </div>
+              </div>
+            </div>
             <div>
               <div className="w-full flex justify-between py-6 ">
                 <div className="flex gap-x-2 items-center ">
@@ -423,18 +481,72 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 </div>
               </div>
             </div>
-
-            <div className="mb-8">
-              <AddButton
-                text="ADD PACKAGE"
-                onClick={() => {}}
-                showIcon={true}
-                icon={ButtonIcon}
-                alt="Add Product"
+          </div>
+        </div>
+        <RightSideModal
+          className="w-[400px]"
+          isOpen={boxTypeModal}
+          onClose={() => setBoxTypeModal(false)}
+        >
+          <div className="p-4 w-full flex-col items-center justify-center">
+            <div className="flex py-5 gap-2">
+              <img src={ProductIcon} alt="Package Icon" className="" />
+              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                Box Type
+              </h1>
+            </div>
+            <div className="flex w-full items-center flex-col gap-3 justify-center">
+              {box?.map((newpackage: any, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="cursor-pointer w-full"
+                    onClick={() => {
+                      setSelectedBox(newpackage);
+                    }}
+                  >
+                    <PackageBox
+                      packageType={newpackage?.name}
+                      weight={newpackage?.weight}
+                      height={newpackage.height}
+                      breadth={newpackage.breadth}
+                      length={newpackage.length}
+                      selected={
+                        selectedBox.boxId === newpackage.boxId ? true : false
+                      }
+                      boxType={newpackage?.color}
+                      recommended={index === 1 ? true : false}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div
+              className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+              style={{ width: "-webkit-fill-available" }}
+            >
+              <ServiceButton
+                text={"CANCEL"}
+                onClick={() => {
+                  setBoxTypeModal(false);
+                }}
+                className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+              />
+              <ServiceButton
+                text={"SAVE"}
+                onClick={() => {
+                  handleBoxType();
+                }}
+                className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
               />
             </div>
           </div>
-        </div>
+          {/* <AddComboModal
+            combo={combo}
+            setCombo={setCombo}
+            insuranceModal={() => {}}
+          /> */}
+        </RightSideModal>
         <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
           <AddComboModal
             combo={combo}
@@ -446,10 +558,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       <div>
         <BottomLayout callApi={() => setBoxAndCODInfo()} />
       </div>
-      <SearchProduct
-        isSearchProductRightModalOpen={isSearchProductRightModalOpen}
-        setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
-      />
+      {products.length > 0 && (
+        <AddPackageDetails
+          productsFromLatestOrder={products}
+          isSearchProductRightModalOpen={isSearchProductRightModalOpen}
+          setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
+          handlePackageDetails={handlePackageDetailsForProduct}
+        />
+      )}
       ;
     </div>
   );

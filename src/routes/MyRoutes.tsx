@@ -114,7 +114,8 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
-import Shipyaari from "../screens/NewOrder/Tracking/Shipyaari";
+import Tracking from "../screens/NewOrder/Tracking/tracking";
+import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -519,10 +520,16 @@ const MyRoutes: React.FC = () => {
               <Route path="/plans" element={<NewUserPlanScreen />} />
               <Route path="/plan-details" element={<PlanDetails />} />
             </Route>
+            <Route>
+              <Route path="/tracking/shipyaari" element={<Tracking />} />
+              <Route
+                path="/tracking/clientTracking"
+                element={<ClientTracking />}
+              />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Route>
-          <Route path="/transaction/shipyaari" element={<Shipyaari />} />
         </Routes>
       </BrowserRouter>
     </div>
