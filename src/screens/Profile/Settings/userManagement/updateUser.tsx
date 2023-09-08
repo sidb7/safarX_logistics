@@ -133,6 +133,7 @@ function UpdateUser() {
                         setVisibility={setViewPassWord}
                         isRightIcon={false}
                         isDisabled={true}
+                        onClick={() => { }}
                         visibility={viewPassWord}
                         rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                         onChange={(e) =>

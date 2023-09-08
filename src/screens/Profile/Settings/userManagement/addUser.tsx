@@ -57,6 +57,7 @@ function AddUser() {
         fieldName: any,
         value: string
     ) => {
+
         setAddUserData((prevData) => ({
             ...prevData,
             [fieldName]: value,
@@ -114,7 +115,7 @@ function AddUser() {
             <div className='grid grid-cols-3 mx-5 mt-5 gap-6'>
                 <div>
                     <CustomInputBox
-                        label='firstName'
+                        label='First Name'
                         value={addUserData.firstName}
                         onChange={(e) =>
                             onChangeAddUserCardHandler("firstName", e.target.value)
@@ -123,7 +124,7 @@ function AddUser() {
                 </div>
                 <div>
                     <CustomInputBox
-                        label='lastName'
+                        label='Last Name'
                         value={addUserData.lastName}
                         onChange={(e) =>
                             onChangeAddUserCardHandler("lastName", e.target.value)
@@ -132,11 +133,12 @@ function AddUser() {
                 </div>
                 <div>
                     <CustomInputBox
-                        label='password'
-                        value={addUserData.password}
+                        label='Password'
+                        value={addUserData?.password}
                         inputType={viewPassWord ? "text" : "password"}
                         setVisibility={setViewPassWord}
                         isRightIcon={true}
+                        onClick={() => { }}
                         visibility={viewPassWord}
                         rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                         onChange={(e) =>
@@ -146,7 +148,7 @@ function AddUser() {
                 </div>
                 <div>
                     <CustomInputBox
-                        label='contactNumber'
+                        label='Contact Number'
                         value={addUserData.contactNumber}
                         onChange={(e) =>
                             onChangeAddUserCardHandler("contactNumber", e.target.value)
@@ -155,7 +157,7 @@ function AddUser() {
                 </div>
                 <div>
                     <CustomInputBox
-                        label='email'
+                        label='Email'
                         value={addUserData.email}
                         onChange={(e) =>
                             onChangeAddUserCardHandler("email", e.target.value)

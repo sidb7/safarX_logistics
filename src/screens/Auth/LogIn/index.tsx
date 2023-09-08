@@ -179,6 +179,7 @@ const Index = () => {
                   isRightIcon={true}
                   value={loginCredentials.password}
                   visibility={viewPassWord}
+                  onClick={()=>{ }}
                   rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {
@@ -229,16 +230,16 @@ const Index = () => {
               </div>
 
               <div className="flex justify-center">
-                <p className="text-[#777777] font-normal text-xs lg:text-lg leading-4 font-Open">
-                  Don't have an account ?
-                </p>
-                <button
-                  type="button"
-                  onClick={signUpOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs lg:text-lg leading-4 font-Open"
-                >
-                  Sign Up
-                </button>
+                  <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
+                    Don't have an account ?
+                  </p>
+                  <button
+                    type="button"
+                    onClick={signUpOnClick}
+                    className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                  >
+                    Sign Up
+                  </button>
               </div>
             </div>
           </div>
