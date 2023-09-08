@@ -27,12 +27,21 @@ const Buttons = (className?: string, usersData?: any) => {
           : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
       }
     >
-      <div className="grid col-span-2">
+      <div className="flex">
+
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+          text="ADD ROLE"
+          onClick={() => navigate("/profile/settings/role-management/add-role")}
+        />
+
+        <CustomButton
+          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
           text="ADD USER"
           onClick={() => navigate("/profile/settings/user-management/add-user")}
         />
+
+
       </div>
     </div>
   );
@@ -45,7 +54,7 @@ function UserManagement() {
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [isModalOpen, setIsModalOpen]: any = useState(false);
   const [deleteUser, setDeleteUser]: any = useState("");
-  
+
   const columnsHelper = createColumnHelper<any>();
   const columns = [
     columnsHelper.accessor("sellerId", {

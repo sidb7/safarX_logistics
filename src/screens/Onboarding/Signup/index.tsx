@@ -221,6 +221,7 @@ const Index = () => {
                   label="Password"
                   isRightIcon={true}
                   visibility={viewPassWord}
+                  onClick={()=>{ }}
                   rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {
