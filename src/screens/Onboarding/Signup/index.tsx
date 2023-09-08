@@ -56,6 +56,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        localStorage.setItem("userInfo", JSON.stringify(sellerData));
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);

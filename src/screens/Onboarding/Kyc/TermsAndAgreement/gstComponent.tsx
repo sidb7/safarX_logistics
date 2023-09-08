@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -23,11 +23,16 @@ export const GSTComponent = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
+  const [userState, setIsUserState] = useState<any>();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem("userInfo") as any);
+    setIsUserState(data);
+  }, []);
+
   const acceptStatus = async () => {
-    dispatch(setAcceptTnCStatus(true));
-    let name = singUpState?.firstName + " " + singUpState?.lastName;
+    let name = userState?.firstName + " " + userState?.lastName;
     const payload = { entityName: name, businessType: "logistics" };
     const { data: responses } = await POST(GST_AGREEMENTS, payload);
     if (responses?.success) {
@@ -115,7 +120,10 @@ export const GSTComponent = (props: ITypeProps) => {
 
                   <p>
                     I/We{" "}
-                    <b className="uppercase">{`${singUpState?.firstName} ${singUpState?.lastName}`}</b>{" "}
+                    <b className="uppercase">
+                      {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
+                      {userState?.firstName + "" + userState?.lastName}
+                    </b>{" "}
                     (Name of the service provider/business entity), do hereby
                     declare that:
                   </p>
