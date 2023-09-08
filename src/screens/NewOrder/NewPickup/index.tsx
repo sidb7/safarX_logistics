@@ -57,7 +57,7 @@ const steps = [
 const PickupLocation = () => {
   const navigate = useNavigate();
   const [isReturnAddress, setIsReturnAddress] = useState(true);
-
+  const [pickupDate, setPickupDate] = useState("");
   const [pickupAddress, setPickupAddress] = useState({
     pickupAddress: {
       fullAddress: "",
@@ -130,7 +130,6 @@ const PickupLocation = () => {
       isActive: false,
     },
   });
-  console.log("🚀 ~ file: index.tsx:132 ~ PickupLocation ~ pickupAddress:", pickupAddress)
 
   const postPickupOrderDetails = async () => {
     try {
@@ -138,10 +137,20 @@ const PickupLocation = () => {
       if (isReturnAddress) {
         payload = {
           ...pickupAddress,
+          pickupAddress: {
+            ...pickupAddress.pickupAddress,
+            pickupDate: pickupDate,
+          },
           returnAddress: pickupAddress.pickupAddress,
         };
       } else {
-        payload = pickupAddress;
+        payload = {
+          ...pickupAddress,
+          pickupAddress: {
+            ...pickupAddress.pickupAddress,
+            pickupDate: pickupDate,
+          },
+        };
       }
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
@@ -194,12 +203,7 @@ const PickupLocation = () => {
         />
       )}
 
-      <PickupDate
-        data={{
-          pickupAddress,
-          setPickupAddress,
-        }}
-      />
+      <PickupDate epochPickupDate={setPickupDate} />
 
       <CustomBranding
         data={{

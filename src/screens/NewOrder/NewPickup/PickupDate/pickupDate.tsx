@@ -8,20 +8,14 @@ import RightSideModal from "../../../../components/CustomModal/customRightModal"
 import SelectDateModalContent from "../../PickUp/selectDateModal";
 
 interface IPickupDateProps {
-  data: {
-    pickupAddress: any;
-    setPickupAddress: any;
-  };
+  epochPickupDate: any;
 }
 
 const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
-  data: {
-    pickupAddress: { pickupAddress: globalPickupAddress },
-    setPickupAddress,
-  },
+  epochPickupDate,
 }) => {
   const [isDateRightModal, setIsDateRightModal] = useState(false);
-
+  const [pickupDate, setPickupDate] = useState("");
   function convertToEpoch(dateTimeString: any) {
     const parsedDateTime = parse(
       dateTimeString,
@@ -32,12 +26,9 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
   }
 
   const handlePickupTimeSelected = (pickupTime: string) => {
+    setPickupDate(pickupTime);
     const editedPickupDateForEpoch = pickupTime?.substring(0, 19);
-    const epochPickupDate = convertToEpoch(editedPickupDateForEpoch);
-    // setPickupAddress((prevData: any) => ({
-    //   ...prevData,
-    //   pickupAddress: { ...prevData.pickupAddress, pickupDate: epochPickupDate },
-    // }));
+    epochPickupDate(convertToEpoch(editedPickupDateForEpoch));
   };
 
   return (
@@ -46,9 +37,8 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
         <CustomInputWithImage
           placeholder="Pickup Date"
           imgSrc={CalenderIcon}
-          value={globalPickupAddress?.pickupDate}
+          value={pickupDate}
           onClick={() => setIsDateRightModal(true)}
-          // onChange={(e) => setPickupDate(e.target.value)}
         />
       </div>
 
