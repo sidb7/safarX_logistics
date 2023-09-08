@@ -60,15 +60,11 @@ function RoleManagement() {
                 );
             },
             cell: (info: any) => {
+                console.log("role id", info.getValue())
                 return (
-                    <>
-                        <p
-                            data-tooltip-id="my-tooltip"
-                            data-tooltip-content={info.getValue()}
-                        >
-                            {info.getValue().substring(0, 12)}
+                        <p>
+                            {info.getValue()}
                         </p>
-                    </>
                 );
             },
         }),
