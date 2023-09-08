@@ -116,6 +116,7 @@ import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
+import HelpScreen from "../screens/Help";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -527,6 +528,10 @@ const MyRoutes: React.FC = () => {
                 element={<ClientTracking />}
               />
             </Route>
+
+            {/* Help Screen Routes */}
+
+            <Route path="/help" element={<HelpScreen />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>
