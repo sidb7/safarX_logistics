@@ -114,6 +114,8 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
+import { Home } from "../screens/Home";
+import Orders from "../screens/Home/Orders";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import HelpScreen from "../screens/Help";
@@ -306,14 +308,51 @@ const MyRoutes: React.FC = () => {
           <Route path="/" element={<CommonLayout />}>
             {/* Order Routes */}
             <Route>
-              <Route
+              {/* <Route
                 path="home/overview"
                 element={
                   <ProtectedRoute>
                     <Overview />
                   </ProtectedRoute>
                 }
+              /> */}
+
+              {/* home page i.e , overview, orders, exception, sy-performance */}
+              <Route
+                path="home/overview"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
               />
+              <Route
+                path="home/orders"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/exception"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/sy-performance"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* End here */}
+
               <Route
                 path="orders/view-orders"
                 element={
