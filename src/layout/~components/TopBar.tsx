@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import InputWithImage from "../../components/InputWithImage/InputWithImage";
 import PowerBoosterlogo from "../../assets/powerbooster.svg";
 import ProfileLogo from "../../assets/Navbar/essential.svg";
+import NotificationLogo from "../../assets/Navbar/notification.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import HamMenu from "../../assets/Navbar/hamMenu.svg";
 import { GetCurrentPath, clearLocalStorage } from "../../utils/utility";
@@ -87,17 +88,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               alt=""
             />
             <div
-              className="relative cursor-pointer col-span-1"
+              className="relative cursor-pointer col-span-1 flex gap-x-4"
               ref={dropdownRef}
-              onClick={() => setIsOpen(!isOpen)}
             >
               <CustomButton
                 icon={ProfileLogo}
+                onClick={() => setIsOpen(!isOpen)}
                 showIcon={true}
                 onlyIcon={true}
                 className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
                 text={""}
-                onClick={() => {}}
+              />
+
+              <CustomButton
+                icon={NotificationLogo}
+                showIcon={true}
+                onlyIcon={true}
+                className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
+                text={""}
+                onClick={() => navigate("/notifications")}
               />
 
               {isModalOpen && (
