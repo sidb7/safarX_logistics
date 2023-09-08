@@ -1,4 +1,4 @@
-.custom-label {
+/* .custom-label {
   transform: translateY(-50%);
   background-color: white;
 
@@ -23,26 +23,23 @@
 
 
 .custom-input:focus + label {
-  /* border-color: #004EFF !important; */
   top: 0;
   transform: translateY(-50%) scale(0.9);
 
 }
-.custom-input:not(:placeholder-shown) + label {
+.custom-input:focus + label {
   
   top: 0;
   transform: translateY(-50%) scale(0.9);
-}
+} */
 
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
+/* input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
-}
+} */

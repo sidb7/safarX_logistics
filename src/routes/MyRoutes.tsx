@@ -116,6 +116,8 @@ import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
 import { Home } from "../screens/Home";
 import Orders from "../screens/Home/Orders";
+import Tracking from "../screens/NewOrder/Tracking/tracking";
+import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -556,6 +558,13 @@ const MyRoutes: React.FC = () => {
             <Route>
               <Route path="/plans" element={<NewUserPlanScreen />} />
               <Route path="/plan-details" element={<PlanDetails />} />
+            </Route>
+            <Route>
+              <Route path="/tracking/shipyaari" element={<Tracking />} />
+              <Route
+                path="/tracking/clientTracking"
+                element={<ClientTracking />}
+              />
             </Route>
 
             <Route path="*" element={<NotFound />} />

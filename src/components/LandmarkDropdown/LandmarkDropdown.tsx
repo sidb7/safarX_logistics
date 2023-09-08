@@ -6,6 +6,7 @@ import { constants } from "buffer";
 
 interface CustomInputWithDropDownProps {
   pastedData: any;
+  value: any;
   handlePickupAddressChange: (field: any, value: any) => any;
   handleReturnAddressChange?: (field: any, value: any) => any;
 
@@ -14,12 +15,13 @@ interface CustomInputWithDropDownProps {
 
 const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   pastedData,
+  value,
   handlePickupAddressChange,
   handleLandmarkSelected,
   handleReturnAddressChange,
 }) => {
   const [arrayValue, setArrayValue] = useState<string[]>([]);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(value || "");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);
@@ -64,6 +66,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
           if (data && data.data && Array.isArray(data.data)) {
             const names = data.data.map((item: any) => item.name);
             setArrayValue(names);
+            // setSelected(initialLandmark);
           } else {
             console.error("Data structure is not as expected");
           }
@@ -87,7 +90,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       <CustomInputBox
         inputType="text"
         label="Landmark"
-        value={selected}
+        value={value || selected}
         onChange={(e) => {
           setSelected(e.target.value);
           handlePickupAddressChange("landmark", e.target.value);
