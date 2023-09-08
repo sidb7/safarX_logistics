@@ -98,6 +98,7 @@ import WalletRecharge from "../screens/Order/WalletRecharge";
 import AddNewProduct from "../screens/NewOrder/Product/AddProduct";
 // import ProductPackage from "../screens/NewOrder/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
+import RoleManagement from "../screens/Profile/Settings/roleManagement/roleManagement";
 import Catalogue from "../screens/NewOrder/NewCatalogue";
 import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addCombo";
 import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
@@ -114,6 +115,12 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
+import AddRole from "../screens/Profile/Settings/roleManagement/addRole";
+import UpdateRole from "../screens/Profile/Settings/roleManagement/updateRole";
+import UserManagement from "../screens/Profile/Settings/userManagement";
+import AddUser from "../screens/Profile/Settings/userManagement/addUser";
+import UpdateUser from "../screens/Profile/Settings/userManagement/updateUser";
+import UsersList from "../screens/Profile/Settings/roleManagement/usersList";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -433,6 +440,68 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <SettingTab />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile/settings/role-management"
+                element={
+                  <ProtectedRoute>
+                    <RoleManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/add-role"
+                element={
+                  <ProtectedRoute>
+                    <AddRole />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/update-role"
+                element={
+                  <ProtectedRoute>
+                    <UpdateRole />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management"
+                element={
+                  <ProtectedRoute>
+                    <UserManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management/add-user"
+                element={
+                  <ProtectedRoute>
+                    <AddUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management/update-user"
+                element={
+                  <ProtectedRoute>
+                    <UpdateUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/userslist"
+                element={
+                  <ProtectedRoute>
+                    <UsersList />
                   </ProtectedRoute>
                 }
               />
