@@ -315,6 +315,7 @@ const Index = (props: ITypeProps) => {
               </div>
             </div>
           </div>
+          <div className="flex flex-col lg:justify-center px-4 lg:items-center"></div>
           <div className="flex flex-col lg:justify-center px-4 lg:items-center">
             <ServiceButton
               text="SUBMIT"
@@ -323,6 +324,13 @@ const Index = (props: ITypeProps) => {
             />
           </div>
         </form>
+        <div className="flex flex-col lg:justify-center px-4 lg:items-center">
+          <ServiceButton
+            text="BACK"
+            className="!bg-[#E8E8E8] !text-black !h-[36px] !font-Open  lg:!w-[320px] mb-5"
+            onClick={() => navigate(-1)}
+          />
+        </div>
       </div>
     );
   };

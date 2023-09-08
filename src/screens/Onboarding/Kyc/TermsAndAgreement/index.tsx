@@ -39,6 +39,7 @@ export const ServiceComponent = (props: ITypeProps) => {
         navigate("/onboarding/kyc");
       } else {
         toast.error(response?.message);
+        navigate("/onboarding/kyc-terms/service-agreement");
       }
     } catch (error) {
       return error;

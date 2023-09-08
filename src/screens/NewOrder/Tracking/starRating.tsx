@@ -6,8 +6,6 @@ const StarRating = () => {
   const [hover, setHover] = useState<any>(null);
   const [userRating, setUserRating] = useState(0);
 
-  console.log("userRating", userRating);
-
   return (
     <div className="flex">
       {[...Array(5)].map((star, index) => {
@@ -26,7 +24,7 @@ const StarRating = () => {
               color={currentRating <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
               onMouseEnter={() => setHover(currentRating)}
               onMouseLeave={() => setHover(null)}
-              onClick={() => setUserRating(currentRating)}
+              onClick={() => setRating(currentRating)}
               className="cursor-pointer"
             />
           </div>

@@ -210,6 +210,7 @@ const Index = (props: ITypeProps) => {
                   label="Aadhar Number"
                   inputType="text"
                   inputMode="numeric"
+                  value={aadharNumber}
                   maxLength={12}
                   labelClassName="!font-Open"
                   className={` ${aadharError !== "" && "!border-[#F35838]"}
@@ -259,6 +260,7 @@ const Index = (props: ITypeProps) => {
                 <CustomInputBox
                   containerStyle="lg:!w-auto"
                   label="GST Number"
+                  value={gstNumber}
                   maxLength={15}
                   className={` ${
                     gstError !== "" && "border-[#F35838]"
