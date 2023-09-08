@@ -1,17 +1,23 @@
-import { useState } from "react";
-
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../components/Layout/breadcrum";
 import CustomButton from "../../components/Button";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import FAQ from "./FAQs";
 import Tickets from "./Tickets";
+import addIcon from "../../assets/Catalogue/add.svg";
+import TicketsTable from "./Tickets/table";
+import RaiseTickets from "./Tickets/raiseTicket";
 
 const HelpScreen = () => {
   const navigate = useNavigate();
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("helpTab") || "FAQs"
   );
+  const [faqType, setFAQType] = useState("all");
+  const [showTable, setShowTable] = useState(false);
+  const [showRaiseTicket, setShowRaiseTicket] = useState(false);
+  console.log("showraiseTicket", showRaiseTicket);
   const listTab = [
     {
       statusName: "FAQs",
@@ -27,25 +33,70 @@ const HelpScreen = () => {
     },
   ];
 
-  // const [helpCategoryTab, setHelpCategoryTab] = useState("all");
-
-  const [faqType, setFAQType] = useState("all");
-  const [productCatalogueTab, setProductCatalogueTab] =
-    useState("singleProduct");
-
   const renderComponent = () => {
     if (tabName === "FAQs") {
       return <FAQ setFAQType={setFAQType} />;
     } else if (tabName === "Tickets") {
-      return <Tickets />;
-    } else if (tabName === "Agreements ") {
-      return <p>Aggrements</p>;
+      if (showTable) {
+        return <TicketsTable />;
+      } else {
+        if (showRaiseTicket) {
+          return <RaiseTickets />;
+        } else {
+          return <Tickets />;
+        }
+      }
+    } else if (tabName === "Agreements") {
+      return <p>Agreements</p>;
+    }
+  };
+  const renderHeaderComponent = () => {
+    if (tabName === "Tickets") {
+      if (showTable) {
+        return (
+          <CustomButton
+            icon={addIcon}
+            showIcon={true}
+            text={showTable && "RAISE TICKET"}
+            className="!p-3"
+            onClick={() => {
+              setShowRaiseTicket(true);
+              setShowTable(false);
+              console.log("raiseticketcliced");
+            }}
+          />
+        );
+      } else {
+        return (
+          <CustomButton
+            icon={addIcon}
+            showIcon={true}
+            text={"VIEW ALL TICKETS"}
+            className="!p-3"
+            onClick={() => {
+              setShowTable(true);
+            }}
+          />
+        );
+      }
+    } else {
+      return (
+        <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"CLOSE TICKET"}
+          className="!p-3"
+          onClick={() => {
+            setShowRaiseTicket(true);
+          }}
+        />
+      );
     }
   };
 
   return (
     <>
-      <Breadcum label="Help" />
+      <Breadcum label="Help" component={renderHeaderComponent()} />
       <div className="lg:mb-24">
         <div className="mt-4 px-5 ">
           <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
@@ -73,6 +124,7 @@ ${tabName === statusName && "!text-[#004EFF] lg:text-[18px]"}`}
           </div>
 
           {renderComponent()}
+          {/* {showRaiseTicket && <RaiseTickets />} */}
         </div>
         <BottomLayout callApi={() => {}} />
       </div>

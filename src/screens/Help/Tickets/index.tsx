@@ -4,6 +4,10 @@ import { toast } from "react-toastify";
 import CustomDropDown from "../../../components/DropDown";
 import { ticketTypeOptions } from "../../../utils/dummyData";
 import CustomInputBox from "../../../components/Input";
+import { createColumnHelper } from "@tanstack/react-table";
+import { CustomTable } from "../../../components/Table";
+import { capitalizeFirstLetter } from "../../../utils/utility";
+import Table from "./table";
 
 const Tickets: React.FunctionComponent = () => {
   const [selectedOption, setSelectedOption] = useState("");
