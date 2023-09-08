@@ -5,6 +5,13 @@ import AudioInputBox from "../../../../components/AudioInput/AudioInputBox";
 import { Spinner } from "../../../../components/Spinner";
 import CustomInputWithImage from "../../../../components/InputWithImage/InputWithImage";
 import CustomInputWithDropDown from "../../../../components/LandmarkDropdown/LandmarkDropdown";
+import Map from "../../../NewOrder/Map";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router";
+import { VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
+import { POST } from "../../../../utils/webService";
+import { dummyStateDropdownData } from "../../../../utils/dummyData";
+import { CommonBottomModal } from "../../../../components/CustomModal/commonBottomModal";
 
 //Icons
 import ChooseLocationIcon from "../../../../assets/PickUp/chooseLocation.svg";
@@ -12,12 +19,8 @@ import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WebLocationIcon from "../../../../assets/PickUp/WebLocation.svg";
 import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
 import AiIcon from "../../../../assets/Buttons.svg";
-import { useMediaQuery } from "react-responsive";
-import { useNavigate } from "react-router";
-import { useLocation } from "react-router";
-import { VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
-import { POST } from "../../../../utils/webService";
-import { dummyStateDropdownData } from "../../../../utils/dummyData";
+import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
+import RightSideModal from "../../../../components/CustomModal/customRightModal";
 
 interface IAddressCardProps {
   data: {
@@ -42,12 +45,14 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
   const [locateAddress, setLocateAddress] = useState("");
   const [customLandmark, setCustomLandmark] = useState("");
+  const [isLandmarkModal, setIsLandmarkModal] = useState(false);
+
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
   const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
-  const [isChecked, setIsChecked] = useState(true);
   const [pastedData, setPastedData] = useState("");
 
   const [selectedOption, setSelectedOption] = useState("");
@@ -273,6 +278,38 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           />
         </div>
       </div>
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Enter Landmark as"
+        buttonLabel="CONFIRM"
+        inputLabel="Type landmark"
+        imgAlt="Landmark Icon"
+        isModalOpen={isLandmarkModal}
+        setIsModalOpen={setIsLandmarkModal}
+        onClick={() => {}}
+      />
+
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Directions to reach"
+        inputLabel="Tap to add directions"
+        imgAlt="mic"
+        showBtn={false}
+        audioInput={true}
+        isModalOpen={isAudioModal}
+        setIsModalOpen={setIsAudioModal}
+        onClick={() => {}}
+        setAudio={setDirectionAudio}
+        audio={directionAudio}
+      />
+
+      <RightSideModal
+        isOpen={isLocationRightModal}
+        onClose={() => setIsLocationRightModal(false)}
+        className="!w-[389px]"
+      >
+        <Map onClick={() => setIsLocationRightModal(false)} />
+      </RightSideModal>
     </div>
   );
 };

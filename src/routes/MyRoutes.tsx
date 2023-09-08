@@ -116,6 +116,7 @@ import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
+import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -326,7 +327,7 @@ const MyRoutes: React.FC = () => {
                 path="/orders/add-order/pickup"
                 element={
                   <ProtectedRoute>
-                    <PickUpScreen />
+                    <PickupLocationNew />
                   </ProtectedRoute>
                 }
               />

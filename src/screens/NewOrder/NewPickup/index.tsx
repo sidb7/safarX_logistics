@@ -2,10 +2,18 @@ import { useState } from "react";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
+import { v4 as uuidv4 } from "uuid";
 
 //Icons
 import TickLogo from "../../../assets/common/Tick.svg";
 import PickupAddress from "./PickupAddress/pickupLocation";
+import CustomBranding from "./CustomBranding/customBranding";
+import BottomLayout from "../../../components/Layout/bottomLayout";
+import { toast } from "react-toastify";
+import { POST } from "../../../utils/webService";
+import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
+import { useNavigate } from "react-router-dom";
+import PickupDate from "./PickupDate/pickupDate";
 
 const steps = [
   {
@@ -47,6 +55,9 @@ const steps = [
 ];
 
 const PickupLocation = () => {
+  const navigate = useNavigate();
+  const [isReturnAddress, setIsReturnAddress] = useState(true);
+
   const [pickupAddress, setPickupAddress] = useState({
     pickupAddress: {
       fullAddress: "",
@@ -68,13 +79,13 @@ const PickupLocation = () => {
         saturday: false,
         sunday: false,
       },
-      workingHours: "",
+      workingHours: "09:00",
       contact: {
         name: "",
         mobileNo: "",
         alternateMobileNo: "",
         emailId: "",
-        type: "",
+        type: "warehouse associate",
       },
       pickupDate: 0,
     },
@@ -98,28 +109,52 @@ const PickupLocation = () => {
         saturday: false,
         sunday: false,
       },
-      workingHours: "",
+      workingHours: "09:00",
       contact: {
         name: "",
         mobileNo: "",
         alternateMobileNo: "",
         emailId: "",
-        type: "",
+        type: "warehouse associate",
       },
     },
     branding: {
-      id: "",
+      id: uuidv4(),
       name: "",
       logo: "",
       address: "",
       contact: {
         name: "",
-        mobileNo: 0,
+        mobileNo: "",
       },
+      isActive: false,
     },
   });
+  console.log("🚀 ~ file: index.tsx:132 ~ PickupLocation ~ pickupAddress:", pickupAddress)
 
-  const [isReturnAddress, setIsReturnAddress] = useState(true);
+  const postPickupOrderDetails = async () => {
+    try {
+      let payload = {};
+      if (isReturnAddress) {
+        payload = {
+          ...pickupAddress,
+          returnAddress: pickupAddress.pickupAddress,
+        };
+      } else {
+        payload = pickupAddress;
+      }
+      const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
+
+      if (response?.success) {
+        toast.success(response?.message);
+        navigate("/orders/add-order/delivery");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
 
   return (
     <div className="w-full">
@@ -158,6 +193,25 @@ const PickupLocation = () => {
           }}
         />
       )}
+
+      <PickupDate
+        data={{
+          pickupAddress,
+          setPickupAddress,
+        }}
+      />
+
+      <CustomBranding
+        data={{
+          pickupAddress,
+          setPickupAddress,
+        }}
+      />
+
+      <BottomLayout
+        callApi={() => postPickupOrderDetails()}
+        Button2Name={true}
+      />
     </div>
   );
 };
