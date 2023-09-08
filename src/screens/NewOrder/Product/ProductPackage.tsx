@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
+import EditImageWithBlack from "../../../../assets/Catalogue/edit.svg";
 import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import CodIcon from "../../../assets/codIcon.svg";
@@ -18,6 +19,7 @@ import shieldTick from "../../../assets/shield-tick.svg";
 import shieldcross from "../../../assets/shieldcross.svg";
 import Checkbox from "../../../components/CheckBox";
 import { POST } from "../../../utils/webService";
+import { Spinner } from "../../../components/Spinner";
 import {
   ADD_BOX_INFO,
   GET_LATEST_ORDER,
@@ -74,11 +76,25 @@ const steps = [
     imgSrc: TickLogo,
   },
 ];
-
 const Package: React.FunctionComponent<IPackageProps> = (props) => {
+  useEffect(() => {
+    const preventUnload = (event: BeforeUnloadEvent) => {
+      // NOTE: This message isn't used in modern browsers, but is required
+      const message = "Data will be lost if you leave the page, are you sure?";
+      event.preventDefault();
+      event.returnValue = message;
+    };
+
+    window.addEventListener("beforeunload", preventUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", preventUnload);
+    };
+  }, []);
   const navigate = useNavigate();
   const [combo, setCombo] = useState(false);
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [box, setBox] = useState([]);
   const [boxIndex, setBoxIndex] = useState<any>(0);
   const [codData, setCodData] = useState<any>({
@@ -88,12 +104,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   });
   const [selectedBox, setSelectedBox]: any = useState({});
   const [boxTypeModal, setBoxTypeModal]: any = useState(false);
-  const [productFinalPayload, setProductFinalPayload] = useState<any>({
-    boxInfo: [],
-  });
+  const [selectedProductsOfPackage, setSelectedProductsOfPackage]: any =
+    useState([]);
   const [packages, setPackages] = useState<any>([]);
   const [tempPackage, setTempPackage] = useState<any>({});
-
+  const [boxTypeEditMode, setBoxTypeEditMode]: any = useState(false);
   const [paymentMode, setPaymentMode] = useState<any>("cod");
   const [selectInsurance, setSelectInsrance] = useState({
     isInsurance: true,
@@ -106,62 +121,89 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   );
 
   useEffect(() => {
+    let codDataInfo = codData;
+    let totalInvoiceValue = codData.invoiceValue || 0;
+    packages.forEach((packages: any) => {
+      totalInvoiceValue = +getInvoiceValue(packages?.products);
+    });
+
+    codDataInfo.invoiceValue = totalInvoiceValue;
+    setCodData({ ...codDataInfo });
+  }, [packages]);
+
+  useEffect(() => {
     (async () => {
       await getOrderProductDetails();
     })();
   }, []);
 
-  const handlePackageDetailsForProduct = (products: any) => {
-    setTempPackage({ products });
+  const handleRemovePackage = (boxIndex: any) => {
+    let tempArr = packages;
+    tempArr.splice(boxIndex, 1);
+    setPackages([...tempArr]);
+  };
 
-    if (packages[boxIndex] && !packages[boxIndex]?.hasOwnProperty("boxId")) {
+  const handlePackageDetailsForProduct = (productsData: any) => {
+    setTempPackage({ products: productsData });
+
+    if (!packages[boxIndex] && !packages[boxIndex]?.hasOwnProperty("boxId")) {
       setIsSearchProductRightModalOpen(false);
       setBoxTypeModal(true);
       return;
     }
-    setProductsToPackage(products);
+    setProductsToPackage(productsData, boxIndex);
     setIsSearchProductRightModalOpen(false);
   };
 
   const handleOpenPackageDetails = (boxIndex: any) => {
+    const { products } = packages[boxIndex];
+    setSelectedProductsOfPackage([...products]);
     setBoxIndex(boxIndex);
     setIsSearchProductRightModalOpen(true);
   };
 
-  const setProductsToPackage = (products: any) => {
-    console.log("setProductsToPackage products from params", products);
+  const handleEditBoxType = (boxType: any, boxIndex: any, editBoxType: any) => {
+    let selectedBox = { ...boxType };
+    delete selectedBox.products;
+    setBoxIndex(boxIndex);
+    setBoxTypeEditMode(true);
+    setSelectedBox(selectedBox);
+    setBoxTypeModal(true);
+  };
+
+  const setProductsToPackage = (products: any, boxIndex: number) => {
     let tempArr = packages;
     tempArr[boxIndex] = {
       ...tempArr[boxIndex],
-      products: JSON.parse(JSON.stringify(products)),
+      products: [...products],
     };
     setPackages([...tempArr]);
-    console.log("setProductsToPackage [packages]", packages);
   };
 
   const setBoxTypeToPackage = (boxType: any) => {
     let tempArr = packages;
-    tempArr[boxIndex] = { ...selectedBox, ...tempArr[boxIndex] };
+    tempArr[boxIndex] = { ...boxType, ...tempArr[boxIndex] };
     setPackages([...tempArr]);
   };
 
   const handleBoxType = () => {
-    const { products } = tempPackage;
-    setProductsToPackage(products);
-    setBoxTypeToPackage("");
+    if (!boxTypeEditMode) {
+      const { products } = tempPackage;
+      setProductsToPackage(products, boxIndex);
+      setBoxTypeToPackage(selectedBox);
+      setBoxTypeModal(false);
+    }
+
+    let tempArr = packages;
+    let selectedBoxTemp = selectedBox;
+    delete selectedBoxTemp.products;
+    tempArr[boxIndex] = { ...tempArr[boxIndex], ...selectedBoxTemp };
+    setPackages([...tempArr]);
     setBoxTypeModal(false);
   };
 
-  const setPayloadForProduct = (productsInfo: any) => {
-    console.log("setPayloadForProduct", productsInfo);
-    return;
-    setCodData({
-      ...codData,
-      invoiceValue: getInvoiceValue(productsInfo),
-    });
-    const payload = {};
-    // setProductFinalPayload(payload);
-    console.log("============>", productFinalPayload);
+  const setPayloadForProduct = (productsInfo: any, boxIndex: any) => {
+    setProductsToPackage(productsInfo, boxIndex);
   };
 
   const getOrderProductDetails = async () => {
@@ -177,11 +219,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       if (boxData?.success) {
         const { data = [] } = boxData;
         setBox(data);
-        setSelectedBox(data[1]);
-        console.log("Product", products);
-        setPayloadForProduct({
-          boxInfo: [{ ...data[0], products: productsData }],
-        });
+        // setSelectedBox(data[1]);
       }
     } catch (error) {
       console.log("getOrderProductDetails", error);
@@ -194,7 +232,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       isCod: paymentMode === "cod" ? true : false,
     };
     let payload = {
-      ...productFinalPayload,
+      boxInfo: packages,
       codInfo: { ...codDataInfo },
       insurance: {
         status: selectInsurance.isInsurance ? true : false,
@@ -272,8 +310,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex   gap-x-3">
-            {products.length > 0 &&
+          <div className="flex  gap-x-3 ">
+            {products.length > 0 ? (
               products.map((e: any, index: number) => {
                 return (
                   <ProductBox
@@ -287,7 +325,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     className=""
                   />
                 );
-              })}
+              })
+            ) : (
+              <div>
+                <Spinner />
+              </div>
+            )}
           </div>
 
           <div className="mt-6">
@@ -313,172 +356,173 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               <p className="text-[14px] text-[#F35838]">DEACTIVATE</p>
             </div>
           </div>
-          <div className="mt-7">
-            {/* <Box /> */}
-            <div className="lg:flex gap-6 mt-8">
-              {packages.length > 0 &&
-                packages.map((packageDetails: any, index: number) => {
-                  console.log("packageDetails", packageDetails);
-                  return (
-                    <BoxDetails
-                      products={packageDetails?.products || []}
-                      selectedBox={packageDetails || {}}
-                      // productFinalPayload={productFinalPayload}
-                      // setProductFinalPayload={setPayloadForProduct}
-                      boxIndex={index}
-                      openPackageDetailModal={handleOpenPackageDetails}
-                    />
-                  );
-                })}
-              <div>
-                <div className="hidden lg:flex justify-between ">
-                  <div className="flex py-5 gap-x-2">
-                    <img src={ProductIcon} alt="Package Icon" className="" />
-                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                      Box {packages.length + 1}
-                    </h1>
-                  </div>
-                </div>
-                <div
-                  className="flex justify-center items-center w-[550px] p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
-                  style={{
-                    boxShadow:
-                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
-                  }}
-                >
-                  <AddButton
-                    text="ADD PRODUCT"
-                    onClick={() => {
-                      setBoxIndex(packages.length);
-                      setIsSearchProductRightModalOpen(true);
-                    }}
-                    showIcon={true}
-                    icon={ButtonIcon}
-                    className="rounded bg-white shadow-none"
-                    alt="Add Product"
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="w-full flex justify-between py-6 ">
-                <div className="flex gap-x-2 items-center ">
-                  <img src={shieldTick} alt="" />
+          {/* <Box /> */}
+          <div className="lg:grid grid-cols-3 pt-12 ">
+            {packages.map((packageDetails: any, index: number) => {
+              return (
+                <BoxDetails
+                  key={index}
+                  products={packageDetails?.products || []}
+                  selectedBox={packageDetails || {}}
+                  setProductFinalPayload={setPayloadForProduct}
+                  handleEditBoxType={handleEditBoxType}
+                  boxIndex={index}
+                  removePackage={handleRemovePackage}
+                  setBoxIndex={setBoxIndex}
+                  openPackageDetailModal={handleOpenPackageDetails}
+                />
+              );
+            })}
+            <div className="pt-6 px-4">
+              <div className="hidden lg:flex justify-between ">
+                <div className="flex py-5 gap-x-2">
+                  <img src={ProductIcon} alt="Package Icon" className="" />
                   <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                    Add Insurance
+                    Box {packages.length + 1}
                   </h1>
                 </div>
               </div>
-              <div className="flex gap-x-3  ">
-                <div
-                  className={`relative border-[1px] p-16 rounded ${
-                    selectInsurance.isInsurance === true
-                      ? "border-[#1C1C1C]"
-                      : "border-[#EAEAEA]"
-                  } bg-[#FEFEFE]  cursor-pointer`}
+              <div
+                className="flex justify-center items-center w-full p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
+                style={{
+                  boxShadow:
+                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                }}
+              >
+                <AddButton
+                  text={`ADD PRODUCTS BOX ${packages.length + 1}`}
                   onClick={() => {
-                    setSelectInsrance({
-                      isInsurance: true,
-                      iwillTakeRisk: false,
-                    });
+                    setBoxIndex(packages.length);
+                    setSelectedProductsOfPackage([]);
+                    setBoxTypeEditMode(false);
+                    setIsSearchProductRightModalOpen(true);
                   }}
-                >
-                  <img src={shieldTick} alt="" className="w-16 h-12" />
-                  <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
-                    {selectInsurance.isInsurance && (
-                      <Checkbox
-                        onChange={() => {}}
-                        checked={
-                          selectInsurance?.isInsurance === true ? true : false
-                        }
-                      />
-                    )}
-                    <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
-                      I want insurance
-                    </p>
-                  </div>
-                </div>
-                <div
-                  className={`relative z-1  p-16   border-[1px] rounded ${
-                    selectInsurance.iwillTakeRisk === true
-                      ? "border-[#1C1C1C]"
-                      : "border-[#EAEAEA]"
-                  } bg-[#FEFEFE] cursor-pointer`}
-                  onClick={() => {
-                    setSelectInsrance({
-                      iwillTakeRisk: true,
-                      isInsurance: false,
-                    });
-                  }}
-                >
-                  <img src={shieldcross} alt="" className="w-16 h-12" />
-                  <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
-                    {selectInsurance.iwillTakeRisk && (
-                      <Checkbox
-                        onChange={() => {}}
-                        checked={
-                          selectInsurance.iwillTakeRisk === true ? true : false
-                        }
-                      />
-                    )}
-                    <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
-                      I'll take risk
-                    </p>
-                  </div>
-                </div>
+                  showIcon={true}
+                  icon={ButtonIcon}
+                  className="rounded bg-white !shadow-none text-lg"
+                  alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
+                />
               </div>
             </div>
-            <div className="">
-              <div className="w-full flex justify-between pt-6 ">
-                <div className="flex gap-x-2 items-center">
-                  <img src={CodIcon} alt="" />
-                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                    Payment Mode
-                  </h1>
-                </div>
+          </div>
+          <div>
+            <div className="w-full flex justify-between py-6 ">
+              <div className="flex gap-x-2 items-center ">
+                <img src={shieldTick} alt="" />
+                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                  Add Insurance
+                </h1>
               </div>
-
-              <div className="">
-                <div className="flex py-5 ">
-                  <GroupRadioButtons
-                    options={[
-                      { text: "Prepaid", value: "prepaid" },
-                      { text: "COD", value: "cod" },
-                    ]}
-                    value={paymentMode}
-                    selectedValue={setPaymentMode}
-                  />
-                </div>
-
-                <div className="flex w-fit gap-x-8 py-2 pb-8">
-                  {paymentMode === "cod" && (
-                    <CustomInputBox
-                      label={"COD Amount to Collect From Buyer"}
-                      value={codData?.collectableAmount}
-                      inputType="text"
-                      className="!w-60"
-                      onChange={(e) => {
-                        setCodData({
-                          ...codData,
-                          collectableAmount:
-                            e.target.value > codData.invoiceValue
-                              ? codData.invoiceValue
-                              : e.target.value,
-                        });
-                      }}
+            </div>
+            <div className="flex gap-x-3  ">
+              <div
+                className={`relative border-[1px] p-16 rounded ${
+                  selectInsurance.isInsurance === true
+                    ? "border-[#1C1C1C]"
+                    : "border-[#EAEAEA]"
+                } bg-[#FEFEFE]  cursor-pointer`}
+                onClick={() => {
+                  setSelectInsrance({
+                    isInsurance: true,
+                    iwillTakeRisk: false,
+                  });
+                }}
+              >
+                <img src={shieldTick} alt="" className="w-16 h-12" />
+                <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
+                  {selectInsurance.isInsurance && (
+                    <Checkbox
+                      onChange={() => {}}
+                      checked={
+                        selectInsurance?.isInsurance === true ? true : false
+                      }
                     />
                   )}
-                  <CustomInputBox
-                    inputType="text"
-                    label={"Total invoice value"}
-                    isDisabled={true}
-                    className="!w-56 text-base font-bold"
-                    value={codData?.invoiceValue || 0}
-                    onChange={(e) =>
-                      setCodData({ ...codData, invoiceValue: e.target.value })
-                    }
-                  />
+                  <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                    I want insurance
+                  </p>
                 </div>
+              </div>
+              <div
+                className={`relative z-1  p-16   border-[1px] rounded ${
+                  selectInsurance.iwillTakeRisk === true
+                    ? "border-[#1C1C1C]"
+                    : "border-[#EAEAEA]"
+                } bg-[#FEFEFE] cursor-pointer`}
+                onClick={() => {
+                  setSelectInsrance({
+                    iwillTakeRisk: true,
+                    isInsurance: false,
+                  });
+                }}
+              >
+                <img src={shieldcross} alt="" className="w-16 h-12" />
+                <div className="flex flex-row  items-center  absolute z-2 -top-3 px-2 left-0 bg-[#FEFEFE] ">
+                  {selectInsurance.iwillTakeRisk && (
+                    <Checkbox
+                      onChange={() => {}}
+                      checked={
+                        selectInsurance.iwillTakeRisk === true ? true : false
+                      }
+                    />
+                  )}
+                  <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+                    I'll take risk
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="">
+            <div className="w-full flex justify-between pt-6 ">
+              <div className="flex gap-x-2 items-center">
+                <img src={CodIcon} alt="" />
+                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                  Payment Mode
+                </h1>
+              </div>
+            </div>
+
+            <div className="">
+              <div className="flex py-5 ">
+                <GroupRadioButtons
+                  options={[
+                    { text: "Prepaid", value: "prepaid" },
+                    { text: "COD", value: "cod" },
+                  ]}
+                  value={paymentMode}
+                  selectedValue={setPaymentMode}
+                />
+              </div>
+
+              <div className="flex w-fit gap-x-8 py-2 pb-8">
+                {paymentMode === "cod" && (
+                  <CustomInputBox
+                    label={"COD Amount to Collect From Buyer"}
+                    value={codData?.collectableAmount}
+                    inputType="text"
+                    className="!w-60"
+                    onChange={(e) => {
+                      setCodData({
+                        ...codData,
+                        collectableAmount:
+                          e.target.value > codData.invoiceValue
+                            ? codData.invoiceValue
+                            : e.target.value,
+                      });
+                    }}
+                  />
+                )}
+                <CustomInputBox
+                  inputType="text"
+                  label={"Total invoice value"}
+                  isDisabled={true}
+                  className="!w-56 text-base font-bold"
+                  value={codData?.invoiceValue || 0}
+                  onChange={(e) =>
+                    setCodData({ ...codData, invoiceValue: e.target.value })
+                  }
+                />
               </div>
             </div>
           </div>
@@ -561,6 +605,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       {products.length > 0 && (
         <AddPackageDetails
           productsFromLatestOrder={products}
+          selectedProducts={selectedProductsOfPackage}
           isSearchProductRightModalOpen={isSearchProductRightModalOpen}
           setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
           handlePackageDetails={handlePackageDetailsForProduct}
