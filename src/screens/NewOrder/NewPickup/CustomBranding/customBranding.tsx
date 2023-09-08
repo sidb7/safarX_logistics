@@ -5,21 +5,32 @@ import RightSideModal from "../../../../components/CustomModal/customRightModal"
 import CustomBrandingContent from "./CustomBrandingContent";
 
 //Icons
-import editIcon from "../../../assets/serv/edit.svg";
-import AccordionUp from "../../../assets/AccordionUp.svg";
-import MapIcon from "../../../assets/PickUp/MapIcon.svg";
+import editIcon from "../../../../assets/serv/edit.svg";
+import AccordionUp from "../../../../assets/AccordionUp.svg";
+import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
+import LabelContainer from "../../../../components/LabelContainer";
 
-const CustomBranding = () => {
+interface ICustomBrandingProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+  };
+}
+
+const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
+  data: { pickupAddress, setPickupAddress },
+}) => {
   const [customBrandingModal, setCustomBrandingModal] = useState(false);
   const [customBrandingRightModal, setCustomBrandingRightModal] =
     useState(false);
-  const [toggleStatus, setToggleStatus] = useState(false);
-
+  const branding = pickupAddress.branding;
+  const [toggleStatus, setToggleStatus] = useState(branding.isActive);
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+
   return (
-    <div className="mb-7 lg:col-span-3 pb-16  ">
+    <div className="!mb-20 lg:col-span-3 px-5 ">
       <div className="flex flex-col  w-[372px] h-[134px] ">
         <div
           className={`grid grid-cols-2 p-2 ${
@@ -43,11 +54,25 @@ const CustomBranding = () => {
               } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
               onClick={() => {
                 setToggleStatus(!toggleStatus);
+                setPickupAddress((prevData: any) => ({
+                  ...prevData,
+                  branding: {
+                    ...prevData.branding,
+                    isActive: !toggleStatus,
+                  },
+                }));
               }}
             >
               <Switch
                 onChange={() => {
                   setToggleStatus(!toggleStatus);
+                   setPickupAddress((prevData: any) => ({
+                     ...prevData,
+                     branding: {
+                       ...prevData.branding,
+                       isActive: !toggleStatus,
+                     },
+                   }));
                 }}
                 checked={toggleStatus}
                 onColor="#FFFFF"
@@ -65,22 +90,64 @@ const CustomBranding = () => {
                 {toggleStatus ? "ACTIVE" : "DEACTIVE"}
               </p>
             </button>
-            {toggleStatus && <img src={editIcon} alt="" className="ml-2" />}
+            {toggleStatus && (
+              <img
+                src={editIcon}
+                alt=""
+                className="ml-2"
+                onClick={() => setCustomBrandingRightModal(true)}
+              />
+            )}
             {toggleStatus && <img src={AccordionUp} alt="" className="ml-2" />}
           </div>
         </div>
         {toggleStatus && (
-          <div className=" border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2 pb-8">
-            <div
-              className="flex cursor-pointer "
-              onClick={() => {
-                isItLgScreen
-                  ? setCustomBrandingRightModal(true)
-                  : setCustomBrandingModal(true);
-              }}
-            >
-              <img src={editIcon} alt="" className="ml-2 mr-2" />
-              <p> Add Branding</p>
+          <div
+            className="grid grid-cols-2 items-center border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2"
+            onClick={() => {
+              isItLgScreen
+                ? setCustomBrandingRightModal(true)
+                : setCustomBrandingModal(true);
+            }}
+          >
+            <div className="flex flex-col mt-2 px-2">
+              <LabelContainer
+                label="Brand Name"
+                className="text-[12px]"
+                info={branding?.name}
+                classNameInfo="!text-[14px]"
+              />
+            </div>
+
+            <div className="flex flex-col mt-2 px-2 border-l-[1px]">
+              <LabelContainer
+                label="Brand Address"
+                className="text-[12px]"
+                info={
+                  branding?.address.length > 20
+                    ? `${branding?.address?.substring(0, 20)} ...`
+                    : branding?.address
+                }
+                classNameInfo="!text-[14px]"
+              />
+            </div>
+
+            <div className="flex flex-col my-2 px-2">
+              <LabelContainer
+                label="Brand Contact"
+                className="text-[12px]"
+                info={branding?.contact?.mobileNo}
+                classNameInfo="!text-[14px]"
+              />
+            </div>
+
+            <div className="flex flex-col my-2 px-2 border-l-[1px]">
+              <LabelContainer
+                label="Brand Logo"
+                className="text-[12px]"
+                info={" "}
+                classNameInfo="!text-[14px]"
+              />
             </div>
           </div>
         )}
@@ -97,7 +164,7 @@ const CustomBranding = () => {
           buttonText="UPDATE"
           inputLabel="Brand Name"
           onClick={() => setCustomBrandingRightModal(false)}
-          // onCustomLandmarkSelection={handleLandmarkSelected}
+          data={{ pickupAddress, setPickupAddress }}
         />
       </RightSideModal>
     </div>

@@ -1,9 +1,17 @@
-import { useState } from "react";
-import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
-import CustomInputBox from "../../../../components/InputBox";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import CustomInputBox from "../../../../components/Input";
+import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
+import { toast } from "react-toastify";
+import { POST } from "../../../../utils/webService";
+import { FILE_UPLOAD } from "../../../../utils/ApiUrls";
+import { v4 as uuidv4 } from "uuid";
 
 interface ITypeProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+  };
   titleIcon?: string;
   title?: any;
   inputLabel?: string;
@@ -12,29 +20,45 @@ interface ITypeProps {
 }
 
 const CustomBrandingContent = (props: ITypeProps) => {
-  const { titleIcon, title, inputLabel, buttonText, onClick } = props;
-
-  const [customBranding, setCustomBranding] = useState({
-    brandName: "",
-    brandAddress: "",
-    brandLogo: "",
-    brandContact: "",
-  });
+  const {
+    titleIcon,
+    title,
+    inputLabel,
+    buttonText,
+    onClick,
+    data: {
+      pickupAddress: { branding },
+      setPickupAddress,
+    },
+  } = props;
 
   const handleCustomBrandingChange = (
-    fieldName: keyof typeof customBranding,
+    fieldName: keyof typeof branding,
     value: string
   ) => {
-    setCustomBranding((prevData) => ({
+    setPickupAddress((prevData: any) => ({
       ...prevData,
-      [fieldName]: value,
+      branding: { ...prevData.branding, [fieldName]: value },
     }));
   };
 
-  console.log("customBranding", customBranding);
-  const handleButtonClick = () => {
-    if (onClick) {
-      onClick();
+  const uploadedInputFile = async (e: any) => {
+    let uuid = uuidv4();
+
+    let formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    formData.append("fileName", uuid);
+    const { data: response } = await POST(FILE_UPLOAD, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    if (response?.success) {
+      toast.success(response?.message);
+      handleCustomBrandingChange("logo", uuid);
+    } else {
+      toast.error("Failed To Upload!");
     }
   };
 
@@ -54,46 +78,50 @@ const CustomBrandingContent = (props: ITypeProps) => {
           />
         </div>
       </div>
-      <CustomInputBox
-        label={inputLabel}
-        className="mb-4 lg:mb-6 px-5"
-        value={customBranding.brandName}
-        onChange={(e) =>
-          handleCustomBrandingChange("brandName", e.target.value)
-        }
-      />
+      <div className="px-5 space-y-4">
+        <CustomInputBox
+          label={inputLabel}
+          value={branding.name}
+          onChange={(e) => handleCustomBrandingChange("name", e.target.value)}
+        />
 
-      <CustomInputBox
-        label="Brand Address"
-        className="mb-4 lg:mb-6 px-5"
-        value={customBranding.brandAddress}
-        onChange={(e) =>
-          handleCustomBrandingChange("brandAddress", e.target.value)
-        }
-      />
-      <CustomInputBox
-        label="Brand Logo"
-        className="mb-4 lg:mb-6 px-5"
-        value={customBranding.brandLogo}
-        onChange={(e) =>
-          handleCustomBrandingChange("brandLogo", e.target.value)
-        }
-      />
-      <CustomInputBox
-        label="Brand Contact"
-        className="mb-4 lg:mb-6 px-5"
-        value={customBranding.brandContact}
-        onChange={(e) =>
-          handleCustomBrandingChange("brandContact", e.target.value)
-        }
-      />
+        <CustomInputBox
+          label="Brand Address"
+          value={branding.address}
+          onChange={(e) =>
+            handleCustomBrandingChange("address", e.target.value)
+          }
+        />
+
+        <CustomInputBox
+          label="Brand Contact"
+          value={branding.contact.mobileNo}
+          onChange={(e) =>
+            setPickupAddress((prevData: any) => ({
+              ...prevData,
+              branding: {
+                ...prevData.branding,
+                contact: {
+                  ...prevData.branding.contact,
+                  mobileNo: e.target.value,
+                },
+              },
+            }))
+          }
+        />
+        <InputWithFileUpload
+          type="file"
+          onChange={(e) => uploadedInputFile(e)}
+        />
+      </div>
+
       <div
         className="hidden lg:flex justify-end shadow-lg border-[1px] bg-[#FFFFFF] p-6 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
           text={buttonText}
-          onClick={handleButtonClick}
+          onClick={onClick}
           className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-4"
         />
       </div>
