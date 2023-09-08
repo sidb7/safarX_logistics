@@ -115,6 +115,9 @@ import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
 
+//Help Screens
+import HelpScreen from "../screens/Help";
+
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -887,6 +890,10 @@ const MyRoutes: React.FC = () => {
           {/* <Route path="/" element={<CommonLayout />}>
             <Route path="/plan" element={<NewUserPlanScreen />} />
           </Route> */}
+
+          {/* Help Screen Routes */}
+
+          <Route path="/help" element={<HelpScreen />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

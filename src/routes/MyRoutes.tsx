@@ -98,6 +98,7 @@ import WalletRecharge from "../screens/Order/WalletRecharge";
 import AddNewProduct from "../screens/NewOrder/Product/AddProduct";
 // import ProductPackage from "../screens/NewOrder/Product/ProductPackage";
 import { ProfileSetting } from "../screens/Profile/Settings/setting";
+import RoleManagement from "../screens/Profile/Settings/roleManagement/roleManagement";
 import Catalogue from "../screens/NewOrder/NewCatalogue";
 import AddComboScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addCombo";
 import AddProductScreen from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
@@ -114,9 +115,19 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
+import AddRole from "../screens/Profile/Settings/roleManagement/addRole";
+import UpdateRole from "../screens/Profile/Settings/roleManagement/updateRole";
+import UserManagement from "../screens/Profile/Settings/userManagement";
+import AddUser from "../screens/Profile/Settings/userManagement/addUser";
+import UpdateUser from "../screens/Profile/Settings/userManagement/updateUser";
+import UsersList from "../screens/Profile/Settings/roleManagement/usersList";
+import { Home } from "../screens/Home";
+import Orders from "../screens/Home/Orders";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
+import Notifications from "../screens/Notification/notifications";
+import HelpScreen from "../screens/Help";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -306,14 +317,51 @@ const MyRoutes: React.FC = () => {
           <Route path="/" element={<CommonLayout />}>
             {/* Order Routes */}
             <Route>
-              <Route
+              {/* <Route
                 path="home/overview"
                 element={
                   <ProtectedRoute>
                     <Overview />
                   </ProtectedRoute>
                 }
+              /> */}
+
+              {/* home page i.e , overview, orders, exception, sy-performance */}
+              <Route
+                path="home/overview"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
               />
+              <Route
+                path="home/orders"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/exception"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/sy-performance"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* End here */}
+
               <Route
                 path="orders/view-orders"
                 element={
@@ -440,6 +488,68 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
+                path="/profile/settings/role-management"
+                element={
+                  <ProtectedRoute>
+                    <RoleManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/add-role"
+                element={
+                  <ProtectedRoute>
+                    <AddRole />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/update-role"
+                element={
+                  <ProtectedRoute>
+                    <UpdateRole />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management"
+                element={
+                  <ProtectedRoute>
+                    <UserManagement />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management/add-user"
+                element={
+                  <ProtectedRoute>
+                    <AddUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/user-management/update-user"
+                element={
+                  <ProtectedRoute>
+                    <UpdateUser />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/profile/settings/role-management/userslist"
+                element={
+                  <ProtectedRoute>
+                    <UsersList />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/profile/refer-earn"
                 element={
                   <ProtectedRoute>
@@ -528,6 +638,13 @@ const MyRoutes: React.FC = () => {
                 element={<ClientTracking />}
               />
             </Route>
+            <Route>
+              <Route path="/notifications" element={<Notifications />} />
+            </Route>
+
+            {/* Help Screen Routes */}
+
+            <Route path="/help" element={<HelpScreen />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>

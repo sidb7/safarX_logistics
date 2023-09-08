@@ -95,7 +95,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
               onClick={() => navigate(-1)}
             />
 
-            <p className="pl-2 text-lg font-bold text-center  text-[#1C1C1C] lg:text-[28px]">
+            <p className="pl-2 text-lg font-bold text-center  text-[#1C1C1C] lg:text-[28px] lg:font-Lato lg:font-semibold lg:leading-9">
               {label}
             </p>
           </div>

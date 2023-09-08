@@ -1339,3 +1339,17 @@ export const filterItems = [
     selected: false,
   },
 ];
+
+
+export const ticketTypeOptions=[
+{
+    label: "Support Type",
+   
+    selected: true,
+  },
+  {
+    label: "Other Type",
+   
+    selected: false,
+  },
+]

@@ -457,6 +457,61 @@ const data = [
     ],
     icon: "Plans",
   },
+  {
+    id: "60",
+    name: "Notifications",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "61",
+        name: "Notifications",
+        isActive: false,
+        path: "/notifications",
+        menu: [],
+      },
+    ],
+    icon: "notification",
+  },
+  {
+    id: "80",
+    name: "Help",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "81",
+        name: "Help",
+        isActive: false,
+        path: "/help",
+        menu: [],
+        pages: [
+          {
+            id: "82",
+            name: "Help",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
+    ],
+    icon: "Help",
+  },
 ];
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;
