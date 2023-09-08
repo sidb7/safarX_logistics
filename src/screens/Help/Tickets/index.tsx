@@ -4,6 +4,10 @@ import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { toast } from "react-toastify";
 import CustomDropDown from "../../../components/DropDown";
 import { ticketTypeOptions } from "../../../utils/dummyData";
+import { createColumnHelper } from "@tanstack/react-table";
+import { CustomTable } from "../../../components/Table";
+import { capitalizeFirstLetter } from "../../../utils/utility";
+import Table from "./table";
 
 const Tickets: React.FunctionComponent = () => {
   const [selectedOption, setSelectedOption] = useState("");
@@ -38,6 +42,7 @@ const Tickets: React.FunctionComponent = () => {
           heading="Issues"
         />
       </div>
+      <Table />
     </div>
   );
 };
