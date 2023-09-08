@@ -48,6 +48,7 @@ const Index = () => {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
+      setOtp({ ...otp, loginOtp: "" });
     } else {
       toast.error(response?.message);
     }
@@ -153,6 +154,7 @@ const Index = () => {
 
               <div className="flex justify-center">
                 <CustomInputBox
+                  value={otp.loginOtp}
                   maxLength={6}
                   containerStyle="mt-[32px]"
                   label="Enter OTP"

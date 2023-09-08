@@ -125,6 +125,8 @@ import { Home } from "../screens/Home";
 import Orders from "../screens/Home/Orders";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
+import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
+import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
 
 const MyRoutes: React.FC = () => {
@@ -373,7 +375,7 @@ const MyRoutes: React.FC = () => {
                 path="/orders/add-order/pickup"
                 element={
                   <ProtectedRoute>
-                    <PickUpScreen />
+                    <PickupLocationNew />
                   </ProtectedRoute>
                 }
               />
@@ -635,6 +637,9 @@ const MyRoutes: React.FC = () => {
                 path="/tracking/clientTracking"
                 element={<ClientTracking />}
               />
+            </Route>
+            <Route>
+              <Route path="/notifications" element={<Notifications />} />
             </Route>
 
             {/* Help Screen Routes */}

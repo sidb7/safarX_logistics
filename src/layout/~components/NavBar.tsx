@@ -458,6 +458,22 @@ const data = [
     icon: "Plans",
   },
   {
+    id: "60",
+    name: "Notifications",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "61",
+        name: "Notifications",
+        isActive: false,
+        path: "/notifications",
+        menu: [],
+      },
+    ],
+    icon: "notification",
+  },
+  {
     id: "80",
     name: "Help",
     pages: [],

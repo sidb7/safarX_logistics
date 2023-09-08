@@ -8,7 +8,7 @@ import BlueSend from "../../../assets/blueSend.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 
-const Table = () => {
+const TicketsTable = () => {
   const columnsHelper = createColumnHelper<any>();
 
   const TicketsData = [
@@ -218,4 +218,4 @@ const Table = () => {
   return <CustomTable columns={TicketsHeading} data={TicketsData} />;
 };
 
-export default Table;
+export default TicketsTable;
