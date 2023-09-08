@@ -62,7 +62,7 @@ export const Home = (props: IOverview) => {
 
   return (
     <div className="m-4">
-      <div className="">
+      <div>
         <Breadcum label="Home" />
       </div>
       <div className="flex justify-between">
@@ -77,9 +77,7 @@ export const Home = (props: IOverview) => {
         {renderingComponents === 0 && (
           <div>
             <CustomDropDown
-              onChange={(e) => {
-                console.log("e year :", e.target.value);
-              }}
+              onChange={(e) => {}}
               options={yearArr}
               heading="Select Filter"
             />

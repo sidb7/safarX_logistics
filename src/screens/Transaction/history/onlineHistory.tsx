@@ -36,7 +36,7 @@ export const OnlineDetailsColumns = () => {
                 Transaction ID
               </h1>
             </div>
-            <div className="">
+            <div>
               <img src={sortIconTable} alt="" />
             </div>
           </div>

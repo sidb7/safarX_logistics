@@ -55,7 +55,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
       </div>
 
       <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
-        {Object.keys(address.workingDays).map((day) => (
+        {Object.keys(address.workingDays)?.map((day) => (
           <div
             key={day}
             className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}

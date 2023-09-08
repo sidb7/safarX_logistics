@@ -145,11 +145,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
           <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-              <img
-                src={MagicLocationIcon}
-                alt="Magic Location Icon"
-                className=""
-              />
+              <img src={MagicLocationIcon} alt="Magic Location Icon" />
               <div className="text-white text-[12px] font-Open">
                 Magic Address
               </div>

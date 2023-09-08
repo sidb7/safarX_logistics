@@ -21,7 +21,7 @@ const StandardService = (props: Props) => {
           <p className="text-[18px] text-[#202427] font-semibold  ">Service</p>
         </div>
 
-        {standardServiceData.map((each) => {
+        {standardServiceData?.map((each) => {
           return (
             <></>
             // <ServiceCard

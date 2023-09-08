@@ -547,7 +547,7 @@ function AddRole() {
               />
             </div>
 
-            <div className="">
+            <div>
               <div className="flex ">
                 <div>
                   <SearchBox label="Search" value="" onChange={() => {}} />
@@ -565,7 +565,7 @@ function AddRole() {
             </div>
           </div>
           {/* 
-        <div className="">
+        <div >
           <CustomAccordion
             menuData={menuData}
             setMenuData={setMenuData}

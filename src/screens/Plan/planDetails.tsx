@@ -285,7 +285,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("bronze", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -297,7 +297,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("silver", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -312,7 +312,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("gold", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -324,7 +324,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("platinum", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -489,7 +489,6 @@ const PlanDetails = (props: ITypeProps) => {
           setPlanData(response.data);
         }
       } catch (error) {
-        console.log("GET PLAN API ERROR", error);
         return error;
       }
     })();

@@ -5,7 +5,7 @@ import CustomInputBox from "../../components/Input";
 import { useNavigate } from "react-router-dom";
 import Cross from "../../assets/cross.svg";
 
-const Index = (props:any) => {
+const Index = (props: any) => {
   const navigate = useNavigate();
 
   const signUpOnClick = () => {
@@ -15,19 +15,24 @@ const Index = (props:any) => {
     navigate("/auth/login");
   };
 
-  const responseMessage = (response: any) => {
-    console.log("response data", response);
-  };
+  const responseMessage = (response: any) => {};
 
   return (
     <div className="flex flex-col gap-y-1 ">
       <div className="product-box flex justify-between items-center">
         <img className="m-4 h-[25px] object-contain" src={CompanyLogo} />
-        <img src={Cross} alt="" className="w-[24px] h-[24px] m-4" onClick={(e)=>props.closeModal()}/>
+        <img
+          src={Cross}
+          alt=""
+          className="w-[24px] h-[24px] m-4"
+          onClick={(e) => props.closeModal()}
+        />
       </div>
 
       <div className="flex flex-col mt-7 mx-[70px] gap-y-2">
-        <p className="text-center	 text-[22px] font-medium">Welcome to Shipyaari</p>
+        <p className="text-center	 text-[22px] font-medium">
+          Welcome to Shipyaari
+        </p>
         <p className="text-center	 font-thin">
           Fast and Easy Shipping from your doorstep to your customer's.{" "}
         </p>
@@ -48,12 +53,8 @@ const Index = (props:any) => {
         <div className="flex justify-center">
           <GoogleLogin
             text="signup_with"
-            
-            onSuccess={
-              responseMessage}
-            onError={() => {
-              console.log("Google Signup Failed");
-            }}
+            onSuccess={responseMessage}
+            onError={() => {}}
           />
         </div>
         <div className="flex justify-center">

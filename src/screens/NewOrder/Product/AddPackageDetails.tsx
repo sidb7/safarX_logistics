@@ -41,13 +41,13 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       let tempArr = JSON.parse(JSON.stringify(productsFromLatestOrder));
       let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
 
-      tempArr.forEach((product: any) => {
+      tempArr?.forEach((product: any) => {
         product.selected = false;
       });
 
       if (tempSelectedArr.length > 0) {
-        tempSelectedArr.forEach((selectedProduct: any) => {
-          tempArr.forEach((products: any) => {
+        tempSelectedArr?.forEach((selectedProduct: any) => {
+          tempArr?.forEach((products: any) => {
             if (selectedProduct.productId === products.productId) {
               products.selected = true;
               products.qty = selectedProduct.qty;
@@ -149,7 +149,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             </div>
           </div>
           <div className="flex flex-wrap gap-5 mb-6  overflow-scroll ">
-            {products.map((eachProduct: any, index: number) => {
+            {products?.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox
                   key={index}

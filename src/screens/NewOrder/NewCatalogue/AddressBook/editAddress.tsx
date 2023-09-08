@@ -31,7 +31,6 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
       mobileNo,
     },
   } = useLocation().state;
-  console.log("🚀 ~ file: editAddress.tsx:19 ~ activeTab:", activeTab);
 
   const [updateAddress, setUpdateAddress] = useState<any>({
     flatNo: flatNo,

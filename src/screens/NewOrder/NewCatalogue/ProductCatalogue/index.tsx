@@ -66,9 +66,10 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       <div
         className={`flex mt-6 text-[14px] text-[#777777] font-medium h-[44px]`}
       >
-        {filterData.map((singleData, index) => {
+        {filterData?.map((singleData, index) => {
           return (
             <span
+              key={index}
               className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
                 filterId === index
                   ? `${
@@ -164,10 +165,11 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             Most Viewed
           </h1>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
-            {productData.map((data: any, index: number) => {
+            {productData?.map((data: any, index: number) => {
               if (filterId === 0) {
                 return (
                   <div
+                    key={index}
                     className="w-[272px] h-[76px]"
                     // onClick={() => setViewed(index)}
                   >

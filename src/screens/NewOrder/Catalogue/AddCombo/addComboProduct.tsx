@@ -123,9 +123,9 @@ const AddComboProduct = () => {
       </div>
       {products ? (
         <div className="mb-12">
-          {productsArray.map((each: any, index: any) => {
+          {productsArray?.map((each: any, index: any) => {
             return (
-              <div className="w-[272px] h-[76px] ml-5 mb-10">
+              <div className="w-[272px] h-[76px] ml-5 mb-10" key={index}>
                 <h1 className="text-[22px] font-semibold mt-4 text-[#004EFF]">
                   Product {index + 1}
                 </h1>
@@ -160,11 +160,7 @@ const AddComboProduct = () => {
         </div>
         <div className="bg-white rounded-lg overflow-hidden shadow-lg relative w-[768px] h-[98px]">
           <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-            <img
-              src={MagicLocationIcon}
-              alt="Magic Location Icon"
-              className=""
-            />
+            <img src={MagicLocationIcon} alt="Magic Location Icon" />
             <div className="text-white text-[12px] font-normal">
               Magic Address
             </div>
@@ -231,7 +227,6 @@ const AddComboProduct = () => {
               />
 
               <InputBox
-                className=""
                 label="Length"
                 value={data.length}
                 onChange={(e) => setData({ ...data, length: e.target.value })}
@@ -239,7 +234,6 @@ const AddComboProduct = () => {
             </div>
             <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
               <InputBox
-                className=""
                 label="Breadth"
                 value={data.breadth}
                 onChange={(e) => setData({ ...data, breadth: e.target.value })}
@@ -256,7 +250,6 @@ const AddComboProduct = () => {
               icon={UploadImg}
               placeholder="Upload Product Image"
               text="UPLOAD"
-              className=""
             />
           </div>
         </div>

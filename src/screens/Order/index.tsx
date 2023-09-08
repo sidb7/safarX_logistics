@@ -213,19 +213,17 @@ const Index = () => {
         throw new Error(data?.meesage);
       }
     } catch (error: any) {
-      console.log(error);
       toast.error(error);
       return false;
     }
   };
 
   const handleFilter = (index: any) => {
-    console.log("handleFilter", orders, index);
     // setTempOrders(JSON.parse(JSON.stringify(orders)));
-    // console.log("test", tempOrders);
+    //
     // switch (+index) {
     //   case 1:
-    //     console.log("handleFilter", orders, index);
+    //
     //     setOrders(
     //       tempOrders.filter((e: any) => e.orderStatus?.isOrderPlaced) || []
     //     );
@@ -244,7 +242,6 @@ const Index = () => {
   };
 
   useEffect(() => {
-    console.log("Orers", orders);
     handleTabChanges();
   }, []);
 
@@ -256,8 +253,8 @@ const Index = () => {
     if (!orderList) return;
     if (statusList && !statusList.length) return;
 
-    statusData.forEach((e: any) => {
-      statusList.forEach((e1: any) => {
+    statusData?.forEach((e: any) => {
+      statusList?.forEach((e1: any) => {
         if (e.orderNumber === e1.count) return;
         if (e.value === e1._id) {
           e.orderNumber = e1.count.toLocaleString("en-US", {
@@ -285,8 +282,6 @@ const Index = () => {
 
     setOrders(orderList ?? []);
   };
-
-  console.log("Orders", orders);
 
   return (
     <div>

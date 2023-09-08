@@ -164,13 +164,13 @@ const Index: React.FC = () => {
 
   const navigate = useNavigate();
 
-  //console.log("selectedService", selectedService);
+  //
 
-  //console.log("recommendedData", recommendedData);
+  //
 
-  //console.log("responsefromAPicall", response);
+  //
   // const dataArray = (response as any).data;
-  //console.log("dataArray", dataArray);
+  //
 
   // endpoint to maintain order state
   // const getLatestOrderDetails = async () => {
@@ -201,7 +201,7 @@ const Index: React.FC = () => {
   // }, []);
 
   const getServicePayload = latestOrder?.data?.codInfo;
-  //console.log("getServicepayload", getServicePayload);
+  //
 
   /* getserviceAPI Static Payload */
 
@@ -254,7 +254,7 @@ const Index: React.FC = () => {
         toast.error(response?.message);
       }
     } catch (error) {
-      //console.log("Error in ServicePostAPI:", error);
+      //
       return error;
     }
   };

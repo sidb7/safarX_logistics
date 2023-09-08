@@ -61,15 +61,16 @@ export const WelcomeKyc: React.FunctionComponent = () => {
           </div>
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px] lg:mt-0">
-              <div className="">
+              <div>
                 <span className="text-xl font-semibold leading-[26px] font-Lato">
                   {question}
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                {questionsData[4]?.options.map((element: any, index: any) => {
+                {questionsData[4]?.options?.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      key={index}
                       disabled={true}
                       checked={true}
                       onChange={(element) => {

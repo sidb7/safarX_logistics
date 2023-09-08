@@ -29,7 +29,7 @@ const Index = (props: ITypeProps) => {
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
   );
-  console.log("BT", businessType);
+
   const clientId = useSelector((state: any) => state?.onboarding.onOtpClientId);
   const otp = useSelector((state: any) => state?.onboarding.otp);
   const panCard = useSelector((state: any) => state?.onboarding.panNumber);
@@ -185,8 +185,6 @@ const Index = (props: ITypeProps) => {
     }
   };
 
-  console.log("LOCATION  PAT :", location?.state?.path);
-
   const onVerifyOtp = async (e: any) => {
     try {
       e.preventDefault();
@@ -203,7 +201,6 @@ const Index = (props: ITypeProps) => {
           toast.success(response?.message);
           //Navigate Url's go here
         } else {
-          console.log("Response OTP!", response?.message);
           toast.error(response?.message);
         }
       } else if (businessType === "business") {

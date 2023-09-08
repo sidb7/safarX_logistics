@@ -13,7 +13,7 @@ const SearchProductFilterItems: React.FunctionComponent<
   return (
     <>
       <div className="flex-wrap flex gap-3">
-        {productItems.map((eachItem: any, index: number) => {
+        {productItems?.map((eachItem: any, index: number) => {
           return (
             <div
               key={index}

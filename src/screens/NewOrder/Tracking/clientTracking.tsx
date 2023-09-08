@@ -83,7 +83,7 @@ import ClientProductImage from "../../../assets/clientProductImage.svg";
 //             {/*tracking ID Box */}
 //             <div className="flex flex-col">
 //               <div>
-//                 <InputBox label="Enter tracking ID" className="" />
+//                 <InputBox label="Enter tracking ID"  />
 //                 <p className="text-[10px] py-2 font-Open font-bold">
 //                   For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
 //                 </p>
@@ -255,7 +255,7 @@ import ClientProductImage from "../../../assets/clientProductImage.svg";
 //               <img src={Joyofriding} alt="" />
 //             </div>
 //           </div>
-//           <div className="">
+//           <div >
 //             <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
 //               Social Campaigns
 //             </p>
@@ -520,15 +520,15 @@ const Tracking = () => {
             {/*tracking ID Box */}
             <div className="flex flex-col">
               <div>
-                <InputBox label="Enter tracking ID" className="" />
+                <InputBox label="Enter tracking ID" />
                 <p className="text-[10px] py-2 font-Open font-bold">
                   For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
                 </p>
               </div>
 
-              {trackingState.map((each: any, indexTracking: number) => {
+              {trackingState?.map((each: any, indexTracking: number) => {
                 return (
-                  <div className="">
+                  <div key={indexTracking}>
                     <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4 ">
                       <div className="border-l-[24px]  border-l-[#C5122F] py-4 px-5 rounded-lg">
                         {/*delhivery details */}
@@ -604,34 +604,35 @@ const Tracking = () => {
                             each?.trackingDetails?.map(
                               (each: any, index: number) => {
                                 return (
-                                  <>
-                                    <div className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll">
-                                      <div className="pt-1">
-                                        <p className="text-xs font-Open font-normal">
-                                          {each?.date}
-                                        </p>
-                                        <p className="text-xs font-Open font-normal">
-                                          {each?.time}
-                                        </p>
-                                      </div>
-                                      <div className="border-l-4 border-l-[#C5122F] pl-5 border-dotted pt-1">
-                                        <p className="text-xs font-Open  font-normal">
-                                          {each?.heading}
-                                        </p>
-                                        <div className="flex pt-1 gap-x-2">
-                                          <img
-                                            src={each?.locationImage}
-                                            alt=""
-                                            className="w-4 h- 4"
-                                          />
-                                          <p className="text-xs font-Open font-normal">
-                                            {each?.location}
-                                          </p>
-                                        </div>
-                                        <div className="w-2 h-2 bg-[#C5122F] rounded-full absolute top-5 left-[83px]"></div>
-                                      </div>
+                                  <div
+                                    className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                    key={index}
+                                  >
+                                    <div className="pt-1">
+                                      <p className="text-xs font-Open font-normal">
+                                        {each?.date}
+                                      </p>
+                                      <p className="text-xs font-Open font-normal">
+                                        {each?.time}
+                                      </p>
                                     </div>
-                                  </>
+                                    <div className="border-l-4 border-l-[#C5122F] pl-5 border-dotted pt-1">
+                                      <p className="text-xs font-Open  font-normal">
+                                        {each?.heading}
+                                      </p>
+                                      <div className="flex pt-1 gap-x-2">
+                                        <img
+                                          src={each?.locationImage}
+                                          alt=""
+                                          className="w-4 h- 4"
+                                        />
+                                        <p className="text-xs font-Open font-normal">
+                                          {each?.location}
+                                        </p>
+                                      </div>
+                                      <div className="w-2 h-2 bg-[#C5122F] rounded-full absolute top-5 left-[83px]"></div>
+                                    </div>
+                                  </div>
                                 );
                               }
                             )}
@@ -674,19 +675,20 @@ const Tracking = () => {
                               each?.productDetails?.map(
                                 (each: any, index: number) => {
                                   return (
-                                    <>
-                                      <div className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg ">
-                                        <img src={each?.galleryImage} alt="" />
-                                        <div>
-                                          <p className="text-sm font-Open font-semibold">
-                                            {each?.productheading}
-                                          </p>
-                                          <p className="text-sm font-Open font-normal">
-                                            ₹ {each?.price}
-                                          </p>
-                                        </div>
+                                    <div
+                                      key={index}
+                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
+                                    >
+                                      <img src={each?.galleryImage} alt="" />
+                                      <div>
+                                        <p className="text-sm font-Open font-semibold">
+                                          {each?.productheading}
+                                        </p>
+                                        <p className="text-sm font-Open font-normal">
+                                          ₹ {each?.price}
+                                        </p>
                                       </div>
-                                    </>
+                                    </div>
                                   );
                                 }
                               )}
@@ -726,7 +728,7 @@ const Tracking = () => {
               <img src={Joyofriding} alt="" />
               <img src={Joyofriding} alt="" />
             </div>
-            <div className="">
+            <div>
               <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
                 Social Campaigns
               </p>

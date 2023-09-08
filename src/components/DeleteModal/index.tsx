@@ -36,7 +36,7 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
   };
 
   return (
-    <div className="">
+    <div>
       <CustomBottomModal
         overlayClassName="items-center"
         className="mx-4 !rounded-md"

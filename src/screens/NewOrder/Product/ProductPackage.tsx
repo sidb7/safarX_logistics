@@ -123,7 +123,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   useEffect(() => {
     let codDataInfo = codData;
     let totalInvoiceValue = codData.invoiceValue || 0;
-    packages.forEach((packages: any) => {
+    packages?.forEach((packages: any) => {
       totalInvoiceValue = +getInvoiceValue(packages?.products);
     });
 
@@ -221,9 +221,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setBox(data);
         // setSelectedBox(data[1]);
       }
-    } catch (error) {
-      console.log("getOrderProductDetails", error);
-    }
+    } catch (error) {}
   };
 
   const setBoxAndCODInfo = async () => {
@@ -260,7 +258,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   return (
     <div>
-      <div className="">
+      <div>
         <Breadcum label="Add New Order" />
         <div className="lg:mb-8">
           <Stepper steps={steps} />
@@ -268,7 +266,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         <div className="px-5 py-2 mb-12">
           <div className="flex justify-between ">
             <div className="flex items-center gap-2">
-              <img src={ProductIcon} alt="Product Icon" className="" />
+              <img src={ProductIcon} alt="Product Icon" />
               {isReturningUser ? (
                 // <SearchProduct />
                 <div className="flex items-center gap-x-2">
@@ -312,7 +310,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
           <div className="flex  gap-x-3 ">
             {products.length > 0 ? (
-              products.map((e: any, index: number) => {
+              products?.map((e: any, index: number) => {
                 return (
                   <ProductBox
                     key={index}
@@ -322,7 +320,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     breadth={e?.breadth || 0}
                     length={e?.length || 0}
                     height={e?.height || 0}
-                    className=""
                   />
                 );
               })
@@ -358,7 +355,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
           {/* <Box /> */}
           <div className="lg:grid grid-cols-3 pt-12 ">
-            {packages.map((packageDetails: any, index: number) => {
+            {packages?.map((packageDetails: any, index: number) => {
               return (
                 <BoxDetails
                   key={index}
@@ -376,7 +373,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <div className="pt-6 px-4">
               <div className="hidden lg:flex justify-between ">
                 <div className="flex py-5 gap-x-2">
-                  <img src={ProductIcon} alt="Package Icon" className="" />
+                  <img src={ProductIcon} alt="Package Icon" />
                   <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
                     Box {packages.length + 1}
                   </h1>
@@ -473,7 +470,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           </div>
-          <div className="">
+          <div>
             <div className="w-full flex justify-between pt-6 ">
               <div className="flex gap-x-2 items-center">
                 <img src={CodIcon} alt="" />
@@ -483,7 +480,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
 
-            <div className="">
+            <div>
               <div className="flex py-5 ">
                 <GroupRadioButtons
                   options={[
@@ -534,7 +531,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         >
           <div className="p-4 w-full flex-col items-center justify-center">
             <div className="flex py-5 gap-2">
-              <img src={ProductIcon} alt="Package Icon" className="" />
+              <img src={ProductIcon} alt="Package Icon" />
               <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
                 Box Type
               </h1>

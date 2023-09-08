@@ -76,7 +76,6 @@ const Index = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userType = useSelector((state: any) => state.user.isReturningUser);
-  console.log("userType", userType);
 
   const address = location.state?.address || "";
   const isItLgScreen = useMediaQuery({
@@ -123,7 +122,7 @@ const Index = () => {
   const [customLandmark, setCustomLandmark] = useState("");
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
-  // const { address } = useAppSelector((state) => state.map);
+  // const { address } = useAppSelector((state) => state?.map);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [isLocationModal, setIsLocationModal] = useState(false);
@@ -597,8 +596,6 @@ const Index = () => {
     },
   };
 
-  console.log("payload", payload);
-
   const postPickupOrderDetails = async (payload: any) => {
     try {
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
@@ -785,8 +782,6 @@ const Index = () => {
     },
   ];
 
-  console.log("pickupAddress", pickupAddress);
-
   return (
     <div className="w-full">
       <Breadcum label="Add New Order" />
@@ -809,11 +804,7 @@ const Index = () => {
             <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
               <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
                 <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-                  <img
-                    src={MagicLocationIcon}
-                    alt="Magic Location Icon"
-                    className=""
-                  />
+                  <img src={MagicLocationIcon} alt="Magic Location Icon" />
                   <div className="text-white text-[12px] font-Open">
                     Magic Address
                   </div>
@@ -1084,7 +1075,7 @@ const Index = () => {
             </div>
 
             <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
-              {Object.keys(timing).map((day) => (
+              {Object.keys(timing)?.map((day) => (
                 <div
                   key={day}
                   className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] `}
@@ -1141,11 +1132,7 @@ const Index = () => {
                 <div className="lg:col-span-2 mb-4 lg:mb-6 lg:mr-6  ">
                   <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
                     <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-                      <img
-                        src={MagicLocationIcon}
-                        alt="Magic Location Icon"
-                        className=""
-                      />
+                      <img src={MagicLocationIcon} alt="Magic Location Icon" />
                       <div className="text-white text-[12px] font-Open">
                         Magic Address
                       </div>

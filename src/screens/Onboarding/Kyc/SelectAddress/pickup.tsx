@@ -32,7 +32,6 @@ const PickUp = (props: ITypeProps) => {
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
-      // console.log("response", response);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
@@ -60,7 +59,7 @@ const PickUp = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div className="">
+      <div>
         <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
@@ -92,8 +91,8 @@ const PickUp = (props: ITypeProps) => {
             <div className="  space-y-3 mb-6 ">
               {defaultAddress?.map((el: any, i: number) => {
                 return (
-                  <>
-                    {el?.fullAddress != "" && (
+                  <div key={i}>
+                    {el?.fullAddress !== "" && (
                       <Card
                         onClick={(e) => setDefaultAddressSelect(e.target.value)}
                         name="address"
@@ -104,7 +103,7 @@ const PickUp = (props: ITypeProps) => {
                         cardClassName="!mt-6"
                       />
                     )}
-                  </>
+                  </div>
                 );
               })}
             </div>

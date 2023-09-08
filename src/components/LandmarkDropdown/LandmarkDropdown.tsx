@@ -38,8 +38,6 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  console.log("selectedLandmark", selected);
-
   useEffect(() => {
     (async () => {
       const payload = {
@@ -64,7 +62,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         if (response.ok) {
           const data = await response.json();
           if (data && data.data && Array.isArray(data.data)) {
-            const names = data.data.map((item: any) => item.name);
+            const names = data.data?.map((item: any) => item.name);
             setArrayValue(names);
             // setSelected(initialLandmark);
           } else {
@@ -98,10 +96,6 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
             handleReturnAddressChange("landmark", e.target.value);
           }
           handleLandmarkSelected(e.target.value);
-          console.log(
-            "selectedLandmarkhandler",
-            handlePickupAddressChange("landmark", e.target.value)
-          );
         }}
         className="downarrowImage"
       />

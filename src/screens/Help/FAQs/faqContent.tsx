@@ -9,7 +9,7 @@ interface FAQContentProps {
 }
 
 const FAQContent: React.FC<FAQContentProps> = ({ faqType }) => {
-  const faqData: FAQData = {
+  const faqData: any = {
     All: [
       { question: "Question 1", answer: "Answer 1" },
       { question: "Question 2", answer: "Answer 2" },
@@ -40,7 +40,7 @@ const FAQContent: React.FC<FAQContentProps> = ({ faqType }) => {
 
   return (
     <div>
-      {faqData[faqType]?.map((faq, index) => (
+      {faqData[faqType]?.map((faq: any, index: number) => (
         <div key={index} className="mb-4 mt-4">
           <div
             className={`flex justify-between items-center cursor-pointer ${

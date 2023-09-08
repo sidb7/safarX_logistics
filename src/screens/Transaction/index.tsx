@@ -108,7 +108,7 @@ export const Transaction = () => {
 
   return (
     <>
-      <div className="">
+      <div>
         <Breadcum label="Transaction History" />
       </div>
       <div className="flex flex-col">

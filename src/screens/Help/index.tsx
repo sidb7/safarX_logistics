@@ -17,7 +17,7 @@ const HelpScreen = () => {
   const [faqType, setFAQType] = useState("all");
   const [showTable, setShowTable] = useState(false);
   const [showRaiseTicket, setShowRaiseTicket] = useState(false);
-  console.log("showraiseTicket", showRaiseTicket);
+
   const listTab = [
     {
       statusName: "FAQs",
@@ -62,7 +62,6 @@ const HelpScreen = () => {
             onClick={() => {
               setShowRaiseTicket(true);
               setShowTable(false);
-              console.log("raiseticketcliced");
             }}
           />
         );
@@ -100,7 +99,7 @@ const HelpScreen = () => {
       <div className="lg:mb-24">
         <div className="mt-4 px-5 ">
           <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
-            {listTab.map(({ statusName }, index) => {
+            {listTab?.map(({ statusName }, index) => {
               return (
                 <div
                   className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4

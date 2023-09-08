@@ -107,7 +107,7 @@ const Catalogue = () => {
       <div className="lg:mb-24">
         <div className="mt-4 px-5 ">
           <div className="flex flex-row  whitespace-nowrap mt-2 lg:h-[34px]">
-            {listTab.map(({ statusName }, index) => {
+            {listTab?.map(({ statusName }, index) => {
               return (
                 <div
                   className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 

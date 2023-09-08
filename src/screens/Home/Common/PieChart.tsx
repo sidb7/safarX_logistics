@@ -25,9 +25,7 @@ const PieChart = (props: IBarChart) => {
         </div>
         <div>
           <CustomDropDown
-            onChange={(e) => {
-              console.log("e year :", e.target.value);
-            }}
+            onChange={(e) => {}}
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"

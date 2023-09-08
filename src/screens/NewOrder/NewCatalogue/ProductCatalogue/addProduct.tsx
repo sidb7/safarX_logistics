@@ -84,7 +84,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                 onClick={() => {}}
               />
             </div>
-            <div className="">
+            <div>
               <CustomButton
                 icon={AddOrder}
                 showIcon={true}
@@ -98,7 +98,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
       />
 
       <div className="mx-5">
-        <div className="">
+        <div>
           <div className="mt-4 pb-[25px]">
             <h1 className="font-semibold font-Lato leading-7 capitalize text-[#004EFF] text-[22px]">
               Product
@@ -106,11 +106,7 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
           </div>
           <div className="bg-white rounded-lg overflow-hidden shadow-lg relative w-[768px] h-[98px]">
             <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-              <img
-                src={MagicLocationIcon}
-                alt="Magic Location Icon"
-                className=""
-              />
+              <img src={MagicLocationIcon} alt="Magic Location Icon" />
               <div className="text-white leading-normal font-Open text-[12px] font-normal">
                 Magic Address
               </div>
@@ -198,7 +194,6 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                 />
 
                 <InputBox
-                  className=""
                   label="Length"
                   value={products?.dimensions?.length || ""}
                   inputMode="numeric"
@@ -215,7 +210,6 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
               </div>
               <div className="grid grid-cols-2 gap-x-2 lg:gap-x-6">
                 <InputBox
-                  className=""
                   label="Breadth"
                   value={products?.dimensions?.width || ""}
                   inputMode="numeric"
@@ -245,12 +239,11 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
                 />
               </div>
             </div>
-            <div className="">
+            <div>
               <FileUploadWithText
                 icon={UploadImg}
                 placeholder="Upload Product Image"
                 text="UPLOAD"
-                className=""
               />
             </div>
           </div>

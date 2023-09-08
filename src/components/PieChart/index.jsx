@@ -1,5 +1,13 @@
 import React, { PureComponent } from "react";
-import { PieChart, Pie, Legend, LegendType , Sector, Cell, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Legend,
+  LegendType,
+  Sector,
+  Cell,
+  ResponsiveContainer,
+} from "recharts";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -30,34 +38,29 @@ const renderCustomizedLabel = ({
   );
 };
 
- const  PieChartComponent = ({data})=>{
-  
-    return (
-      <ResponsiveContainer width="100%" height="90%">
-        <PieChart width={400} height={400}>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={100}
-            innerRadius={60}
-            fill="#8884d8"
-            dataKey="value"
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
-    );
-
-}
+const PieChartComponent = ({ data }) => {
+  return (
+    <ResponsiveContainer width="100%" height="90%">
+      <PieChart width={400} height={400}>
+        <Pie
+          data={data}
+          cx="50%"
+          cy="50%"
+          labelLine={false}
+          label={renderCustomizedLabel}
+          outerRadius={100}
+          innerRadius={60}
+          fill="#8884d8"
+          dataKey="value"
+        >
+          {data?.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          ))}
+        </Pie>
+        <Legend />
+      </PieChart>
+    </ResponsiveContainer>
+  );
+};
 
 export default PieChartComponent;

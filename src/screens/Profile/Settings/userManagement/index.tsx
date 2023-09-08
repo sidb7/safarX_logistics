@@ -228,7 +228,7 @@ function UserManagement() {
   }, []);
 
   return (
-    <div className="">
+    <div>
       <Breadcum label="User Management" component={Buttons("", usersData)} />
       <div className=" my-3 mx-6">
         <div className=" flex justify-end">

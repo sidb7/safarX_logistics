@@ -145,7 +145,7 @@ const Index = () => {
                   label="Email"
                   value={loginCredentials.email}
                   onChange={(e) => {
-                    // console.log("email",e.target.value)
+                    //
                     setLoginCredentials({
                       ...loginCredentials,
                       email: e.target.value,
@@ -223,9 +223,7 @@ const Index = () => {
               <div className="flex justify-center">
                 <GoogleLogin
                   onSuccess={(googleData) => signInWithGoogle(googleData)}
-                  onError={() => {
-                    console.log("Google Login Failed");
-                  }}
+                  onError={() => {}}
                 />
               </div>
 

@@ -14,7 +14,7 @@ const ProductPage: React.FunctionComponent<IProductPageProps> = (props) => {
   return (
     <div className="mx-4">
       <div className="flex justify-between mt-3">
-        <div className="">
+        <div>
           <h2 className="font-semibold">Product 2</h2>
         </div>
         <div className="flex">
@@ -42,10 +42,10 @@ const ProductPage: React.FunctionComponent<IProductPageProps> = (props) => {
             selectClassName="rounded-md bg-[#FEFEFE]"
           />
 
-          <InputBox className="" label="Length" />
+          <InputBox label="Length" />
         </div>
         <div className="grid grid-cols-2 gap-x-2">
-          <InputBox className="" label="Breadth" />
+          <InputBox label="Breadth" />
           <InputBox label="Height" />
         </div>
       </div>

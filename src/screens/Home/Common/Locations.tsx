@@ -30,17 +30,13 @@ const Locations = (props: IBarChart) => {
         </div>
         <div className="flex gap-3">
           <CustomDropDown
-            onChange={(e) => {
-              console.log("e year :", e.target.value);
-            }}
+            onChange={(e) => {}}
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
           />
           <CustomDropDown
-            onChange={(e) => {
-              console.log("e year :", e.target.value);
-            }}
+            onChange={(e) => {}}
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
@@ -51,7 +47,7 @@ const Locations = (props: IBarChart) => {
         <div className="h-[500px]">
           <BarChartComponent data={data} />
         </div>
-        <div className="">
+        <div>
           <div className="mt-10">
             <span
               className={`cursor-pointer text-[1rem] font-semibold px-6 py-4 border ${

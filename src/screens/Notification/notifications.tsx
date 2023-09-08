@@ -48,9 +48,10 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
         <div
           className={`flex text-[14px] text-[#777777] font-semibold font-Open leading-[22px] h-[44px] cursor-pointer`}
         >
-          {filterData.map((singleData, index) => {
+          {filterData?.map((singleData, index) => {
             return (
               <span
+                key={index}
                 className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
                   filterId === index
                     ? `${

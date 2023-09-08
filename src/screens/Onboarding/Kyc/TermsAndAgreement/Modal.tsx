@@ -17,7 +17,7 @@ const Modal = (props: ITypesProps) => {
 
   return (
     <div>
-      <div className="">
+      <div>
         <PopUpModal
           isOpen={showModal}
           contentLabel="hello"

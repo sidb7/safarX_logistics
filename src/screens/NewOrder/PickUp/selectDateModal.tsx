@@ -98,7 +98,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
       const endTime = new Date(selectedScheduleDateTime);
       endTime.setHours(endTime.getHours() + 1);
       timeRange = getFormattedTimeRange(selectedScheduleDateTime, endTime);
-      console.log("timeRange", timeRange);
+
       return `${formatDate(selectedScheduleDateTime)} ${timeRange}`;
     } else if (selectedDay === "today" && selectedTime) {
       return `${formatDate(new Date())} ${selectedTime}`;
@@ -121,10 +121,10 @@ const SelectDateModalContent = (props: ITypeProps) => {
     const [startTime, endTime] = timeSlot.value.split(" - ");
     const [startHour, startMinute] = startTime
       .split(":")
-      .map((value) => parseInt(value));
+      ?.map((value) => parseInt(value));
     const [endHour, endMinute] = endTime
       .split(":")
-      .map((value) => parseInt(value));
+      ?.map((value) => parseInt(value));
 
     if (selectedDay === "tomorrow") {
       return true;

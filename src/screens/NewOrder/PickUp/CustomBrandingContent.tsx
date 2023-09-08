@@ -45,7 +45,6 @@ const CustomBrandingContent = (props: ITypeProps) => {
     }));
   };
 
-  console.log("customBranding", customBranding);
   const handleButtonClick = () => {
     // onCustomLandmarkSelection(customBranding);
 

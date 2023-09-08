@@ -51,7 +51,7 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const calcAllTotalProductWeight: any = () => {
     let totalWeight = 0;
-    allProducts.forEach((e: any) => {
+    allProducts?.forEach((e: any) => {
       const { deadWeight } = e;
       totalWeight += +deadWeight * +e.qty || 0;
     });
@@ -100,15 +100,13 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const handleAddPackage = (packageData: any, index: any) => {
-    console.log("handleAddPackage", packageData, index);
-    console.log("productFinalPayload", productFinalPayload);
     // setProductFinalPayload({ boxInfo: [...productFinalPayload?.boxInfo, packageData] });
   };
 
   return (
     <div className="w-[500px]">
       <div className="flex p-5 gap-x-2">
-        <img src={ProductIcon} alt="Package Icon" className="" />
+        <img src={ProductIcon} alt="Package Icon" />
         <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
           Box {boxIndex + 1}
         </h1>
@@ -144,7 +142,7 @@ const BoxDetails = (props: IBoxdetails) => {
               No Products Added
             </div>
           )}
-          {allProducts.map((e: any, index: number) => {
+          {allProducts?.map((e: any, index: number) => {
             return (
               <div key={index}>
                 <div className="flex justify-between items-center " key={index}>

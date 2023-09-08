@@ -22,9 +22,10 @@ const Service: React.FC = () => {
         </p>
       </div>
       <div className="flex flex-col lg:flex-row     gap-y-[22px] mx-5 mb-5 lg:gap-6 lg:mb-9">
-        {RecommendedServiceData.map((each) => {
+        {RecommendedServiceData?.map((each, index: number) => {
           return (
             <ServiceCard
+              key={index}
               isRecommendation={each.isRecommendation}
               recommendation={each.recommendation}
               courierPartner={each.courierPartner}
@@ -49,16 +50,14 @@ const Service: React.FC = () => {
             </div>
           </div>
         </div>
-        <FilterItems
-          items={items}
-          onClick={(e) => console.log("e :", e.target.id)}
-        />
+        <FilterItems items={items} onClick={(e) => {}} />
       </div>
 
       <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] overflow-y-scroll  lg:overflow-x-scroll flex-nowrap   lg:gap-x-6  ">
-        {FilterServiceData.map((each) => {
+        {FilterServiceData?.map((each, index: number) => {
           return (
             <ServiceCard
+              key={index}
               isRecommendation={each.isRecommendation}
               recommendation={each.recommendation}
               courierPartner={each.courierPartner}

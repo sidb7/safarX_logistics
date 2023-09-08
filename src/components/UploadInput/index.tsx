@@ -23,7 +23,6 @@ export const UploadInput = () => {
 
     input.files = dt.files;
     setFiles(dt.files);
-    console.log(files);
   };
 
   const fileComponent = (fileName: string, productImage: any, key: number) => {
@@ -48,7 +47,7 @@ export const UploadInput = () => {
   const renderFiles = (files: any) => {
     const keys = Object.keys(files);
     if (files && keys.length > 0) {
-      const fileListComponents = keys.map((key: any) => {
+      const fileListComponents = keys?.map((key: any) => {
         const imageDataUrl = window.URL.createObjectURL(files[key]);
         return fileComponent(files[key].name, imageDataUrl, key);
       });

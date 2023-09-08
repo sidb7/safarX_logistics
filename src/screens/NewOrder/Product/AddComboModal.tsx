@@ -16,7 +16,6 @@ const AddComboModal = (props: Iprops) => {
   const { combo, setCombo, insuranceModal } = props;
 
   const [insurance, setInsurance] = useState(false);
-  console.log("insurance", insurance);
 
   const handleModals = () => {
     setCombo(false);
@@ -25,7 +24,7 @@ const AddComboModal = (props: Iprops) => {
   };
 
   return (
-    <div className="">
+    <div>
       <div className="flex justify-between items-center p-5">
         <div className="flex gap-x-2 items-center">
           <img src={layer} alt="" className="w-6 h-6" />

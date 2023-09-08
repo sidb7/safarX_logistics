@@ -324,7 +324,7 @@ const OnBoundingWalletRecharge = () => {
       orderId: orderId,
     };
     const datas = await POST(RECHARGE_STATUS, payload);
-    console.log("response", datas);
+
     if (datas?.data?.success) {
       setIsLoading(false);
       toast.success(datas?.data?.message);
@@ -390,6 +390,7 @@ const OnBoundingWalletRecharge = () => {
             {moneyArr?.map((el: any, i: number) => {
               return (
                 <div
+                  key={i}
                   onClick={() => setMoney(el?.value)}
                   className={`${
                     money === el?.value

@@ -115,7 +115,7 @@ const Index = () => {
             </div>
             <div className=" flex flex-col mx-4 gap-y-7">
               <div className="grid grid-cols-2 gap-x-5">
-                <div className="">
+                <div>
                   <CustomInputBox
                     containerStyle=""
                     // placeholder=""

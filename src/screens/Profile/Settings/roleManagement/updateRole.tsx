@@ -491,8 +491,6 @@ function UpdateRole() {
 
       const { data: menus } = await POST(POST_GET_ALL_INITIAL_MENU, {});
 
-      console.log("menus", menus);
-
       if (data?.success) {
         setMenuData(menus?.data || []);
         let temp = data?.data?.[0]?.roleName;
@@ -554,7 +552,7 @@ function UpdateRole() {
               />
             </div>
 
-            <div className="">
+            <div>
               <div className="flex ">
                 <div>
                   <SearchBox label="Search" value="" onChange={() => {}} />
@@ -572,7 +570,7 @@ function UpdateRole() {
             </div>
           </div>
           {/* 
-<div className="">
+<div >
   <CustomAccordion
     menuData={menuData}
     setMenuData={setMenuData}

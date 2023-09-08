@@ -64,7 +64,6 @@ function RoleManagement() {
         );
       },
       cell: (info: any) => {
-        console.log("role id", info.getValue());
         return <p>{info.getValue()}</p>;
       },
     }),
@@ -196,7 +195,7 @@ function RoleManagement() {
   }, []);
 
   return (
-    <div className="">
+    <div>
       <div className="lg:ml-5 lg:mr-6 mx-5">
         <Breadcum label="Role Management" component={Buttons()} />
       </div>

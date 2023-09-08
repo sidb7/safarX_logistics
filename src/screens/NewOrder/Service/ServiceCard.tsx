@@ -50,11 +50,6 @@ const ServiceCard = (props: IServiceCardProps & { serviceData: any }) => {
     onSelectService(value);
   };
 
-  // console.log("serviceDetails", serviceDetails);
-  console.log("serviceData", props.serviceData);
-
-  console.log("name", name);
-  console.log("value", value);
   return (
     <div
       className={`${

@@ -32,7 +32,7 @@ function PassModal(props: PassModalProps) {
           </div>
         </div>
         <div className="flex flex-col mt-8 gap-y-4 w-ful">
-          <CustomInputBox label="Email" className="" />
+          <CustomInputBox label="Email" />
           <CustomInputBox label="New Password" />
           <CustomInputBox label="Re-enter New Password" />
         </div>

@@ -319,6 +319,7 @@ const Payment = () => {
                 {moneyArr?.map((el: any, i: number) => {
                   return (
                     <div
+                      key={i}
                       onClick={() => setWalletValue(el?.value)}
                       className={`${
                         walletValue === el?.value

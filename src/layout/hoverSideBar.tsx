@@ -98,8 +98,6 @@ const Sidebar = (props: IpropTypes) => {
 
         <div className="flex flex-col items-start gap-y-4 mt-4">
           {menuData?.data?.[0]?.menu?.map((panel: any, index: number) => {
-            console.log("panel :", panel);
-
             return (
               <div
                 key={index}

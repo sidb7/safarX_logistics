@@ -25,9 +25,8 @@ const Modal = (props: ITypesProps) => {
   useEffect(() => {
     (async () => {
       const devices = await navigator.mediaDevices.enumerateDevices();
-      devices.forEach((eachDevices) => {
+      devices?.forEach((eachDevices) => {
         if (eachDevices.kind === "videoinput") {
-          console.log("Camera");
           setCameraPermission(true);
         }
       });
@@ -36,7 +35,7 @@ const Modal = (props: ITypesProps) => {
 
   const getCameraPermission = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices();
-    devices.forEach((eachDevices) => {
+    devices?.forEach((eachDevices) => {
       if (eachDevices.kind === "videoinput") {
         setCameraPermission(true);
       }
@@ -60,7 +59,7 @@ const Modal = (props: ITypesProps) => {
   };
 
   return (
-    <div className="">
+    <div>
       <PopUpModal
         isOpen={showModal}
         contentLabel=""

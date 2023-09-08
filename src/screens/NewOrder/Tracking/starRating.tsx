@@ -8,10 +8,10 @@ const StarRating = () => {
 
   return (
     <div className="flex">
-      {[...Array(5)].map((star, index) => {
+      {[...Array(5)]?.map((star, index) => {
         const currentRating = index + 1;
         return (
-          <div className="cursor-pointer">
+          <div className="cursor-pointer" key={index}>
             <input
               type="radio"
               name="rating"
