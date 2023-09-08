@@ -5,6 +5,7 @@ import { Breadcum } from "../../components/Layout/breadcrum";
 import CustomButton from "../../components/Button";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import FAQ from "./FAQs";
+import Tickets from "./Tickets";
 
 const HelpScreen = () => {
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ const HelpScreen = () => {
     if (tabName === "FAQs") {
       return <FAQ setFAQType={setFAQType} />;
     } else if (tabName === "Tickets") {
-      return <p>Tickets</p>;
+      return <Tickets />;
     } else if (tabName === "Agreements ") {
       return <p>Aggrements</p>;
     }

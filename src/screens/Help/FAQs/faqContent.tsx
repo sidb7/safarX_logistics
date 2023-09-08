@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-// Define a type for FAQ data
 type FAQData = {
   [key: string]: { question: string; answer: string }[];
 };
