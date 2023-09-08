@@ -16,6 +16,8 @@ import "react-tooltip/dist/react-tooltip.css";
 import { GET_PLAN_URL } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
+import { ScrollNav } from "../../components/ScrollNav";
+import CourierPricing from "./courierPricing";
 
 interface ITypeProps {}
 
@@ -23,6 +25,13 @@ const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
   const [isRateCardPresent, setIsRateCardPresent] = useState(true);
   const [planData, setPlanData]: any = useState([]);
+  const [renderingComponents, setRenderingComponents] = React.useState(0);
+
+  const arrayData = [
+    { index: 0, label: "Courier Pricing" },
+    { index: 1, label: "VAS Pricing" },
+    { index: 2, label: "COD Pricing" },
+  ];
   let pricingData = [
     {
       pricing: "Subscription Amount",
@@ -486,6 +495,10 @@ const PlanDetails = (props: ITypeProps) => {
     })();
   }, []);
 
+  const setScrollIndex = (id: number) => {
+    setRenderingComponents(id);
+  };
+
   return (
     <>
       <div className="mr-4">
@@ -493,7 +506,6 @@ const PlanDetails = (props: ITypeProps) => {
           <Breadcum label="Plans" />
         </div>
         {/* Plan Upgradation */}
-
         <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
           <div className="flex items-center">
             <img
@@ -524,11 +536,9 @@ const PlanDetails = (props: ITypeProps) => {
           />
         </div>
         {/* Plan Details */}
-
         <div className="ml-[30px] mb-9">
           <PlanDetailsCard planDetails={planData} />
         </div>
-
         {/* Info Cards */}
         <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-9 xl:justify-between ">
           <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
@@ -548,9 +558,7 @@ const PlanDetails = (props: ITypeProps) => {
             denominator={30}
           />
         </div>
-
         {/*Active Recommended */}
-
         <div className="flex items-center justify-end  gap-x-4 mb-[21px] ml-[30px] ">
           <div className="rounded py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 ">
             Active
@@ -575,9 +583,7 @@ const PlanDetails = (props: ITypeProps) => {
             }}
           />
         </div>
-
         {/*Pricing Table */}
-
         <div className="ml-[30px] ">
           <CustomTable
             columns={PricingColumns}
@@ -587,7 +593,6 @@ const PlanDetails = (props: ITypeProps) => {
           />
         </div>
         {/* Change Buttons */}
-
         <div className="grid grid-cols-12 gap-x-4 ml-[30px] mr-6 ">
           <div className="col-span-7"></div>
 
@@ -608,7 +613,6 @@ const PlanDetails = (props: ITypeProps) => {
             className="!h-[34px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 "
           />
         </div>
-
         {/* Features Table */}
         <div className="ml-[30px] mb-[68px] ">
           <CustomTable
@@ -618,7 +622,6 @@ const PlanDetails = (props: ITypeProps) => {
             thclassName={"border-none bg-white"}
           />
         </div>
-
         <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF] ml-[30px] mb-6">
           <p className="font-Lato font-semibold text-xl leading-[26px] text-[#494949]">
             Not sure which plan to choose?
@@ -642,6 +645,19 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div>
         )}
+        {/* Pricing Details */}
+        <div className="ml-[30px]">
+          <ScrollNav
+            arrayData={arrayData}
+            showNumber={false}
+            setScrollIndex={setScrollIndex}
+          />
+        </div>
+
+        {renderingComponents === 0 && <CourierPricing />}
+
+        {/* end here */}
+
         {/* Terms & Conditions */}
         <div className="ml-[30px]">
           <CustomAccordianWithTable

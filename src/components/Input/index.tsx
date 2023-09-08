@@ -1,4 +1,4 @@
-import "./inputStyle.css";
+import "../../styles/inputBox.css";
 interface propTypes {
   label?: string;
   value?: string | number;
@@ -18,7 +18,8 @@ interface propTypes {
   rightIcon?: string;
   setVisibility?: any;
   visibility?: any;
-  onClick?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClick?: any;
+  imageClassName?: string;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -29,6 +30,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     value,
     inputMode = "",
     onChange,
+    onClick,
     placeholder = "",
     className,
     containerStyle,
@@ -43,21 +45,16 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     isRightIcon = false,
     setVisibility,
     maxLength,
+    imageClassName,
   } = props;
 
-  
-  
   return (
     <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>
         <input
-
-        
-
-          
           name={name}
-
           type={inputType}
+          placeholder={placeholder || ""}
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={onChange}
@@ -67,7 +64,9 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           maxLength={maxLength}
         />
         <label
-          className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4 font-Open custom-label ${labelClassName}`}
+          className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
+            value && "filled"
+          } `}
         >
           {label}
         </label>
@@ -76,9 +75,10 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <img
             src={rightIcon}
             alt=""
-            className={`absolute z-20  right-5 top-[30%] cursor-pointer w-[20px] h-[20px]`}
+            className={`${imageClassName} absolute z-20  right-5  top-[30%] cursor-pointer w-[20px] h-[20px]`}
             onClick={() => {
               setVisibility(!visibility);
+              onClick();
             }}
           />
         )}

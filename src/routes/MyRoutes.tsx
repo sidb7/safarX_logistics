@@ -121,6 +121,11 @@ import UserManagement from "../screens/Profile/Settings/userManagement";
 import AddUser from "../screens/Profile/Settings/userManagement/addUser";
 import UpdateUser from "../screens/Profile/Settings/userManagement/updateUser";
 import UsersList from "../screens/Profile/Settings/roleManagement/usersList";
+import { Home } from "../screens/Home";
+import Orders from "../screens/Home/Orders";
+import Tracking from "../screens/NewOrder/Tracking/tracking";
+import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
+import HelpScreen from "../screens/Help";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -310,14 +315,51 @@ const MyRoutes: React.FC = () => {
           <Route path="/" element={<CommonLayout />}>
             {/* Order Routes */}
             <Route>
-              <Route
+              {/* <Route
                 path="home/overview"
                 element={
                   <ProtectedRoute>
                     <Overview />
                   </ProtectedRoute>
                 }
+              /> */}
+
+              {/* home page i.e , overview, orders, exception, sy-performance */}
+              <Route
+                path="home/overview"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
               />
+              <Route
+                path="home/orders"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/exception"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="home/sy-performance"
+                element={
+                  <ProtectedRoute>
+                    <Home />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* End here */}
+
               <Route
                 path="orders/view-orders"
                 element={
@@ -587,6 +629,17 @@ const MyRoutes: React.FC = () => {
               <Route path="/plans" element={<NewUserPlanScreen />} />
               <Route path="/plan-details" element={<PlanDetails />} />
             </Route>
+            <Route>
+              <Route path="/tracking/shipyaari" element={<Tracking />} />
+              <Route
+                path="/tracking/clientTracking"
+                element={<ClientTracking />}
+              />
+            </Route>
+
+            {/* Help Screen Routes */}
+
+            <Route path="/help" element={<HelpScreen />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>

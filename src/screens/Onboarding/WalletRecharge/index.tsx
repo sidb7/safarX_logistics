@@ -411,7 +411,7 @@ const OnBoundingWalletRecharge = () => {
           </div>
         </div>
         <div className="flex m-5">
-          <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
+          <div className="w-full    p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
             <div className="flex  gap-x-2 text-[14px]">
               <img src={rechargeIcon} alt="" className="object-contain" />
               <p className="  font-semibold text-sm lg:text-lg lg:text-[#1C1C1C]">
@@ -419,7 +419,7 @@ const OnBoundingWalletRecharge = () => {
               </p>
             </div>
 
-            <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+            <div className="flex mt-4   justify-between lg:mb-0 ml-4 mr-5">
               {/* <PaytmButton /> */}
 
               <div
@@ -436,6 +436,7 @@ const OnBoundingWalletRecharge = () => {
                 <Paytm text={"Paytm"} amt={money} />
                 {/* <p className="text-[12px]">UPI</p> */}
               </div>
+
               {/* <div className="flex flex-col items-center gap-y-2">
                 <img src={cardPayment} alt="" className="object-contain" />
                 <p className="text-[12px]">Cardpayment</p>
@@ -449,6 +450,7 @@ const OnBoundingWalletRecharge = () => {
                 <p className="text-[12px]">Netbanking</p>
               </div> */}
             </div>
+
             {/* {upiText && (
               <div className="flex items-center mt-4">
                 <div>
@@ -468,6 +470,20 @@ const OnBoundingWalletRecharge = () => {
               </div>
             )} */}
           </div>
+        </div>
+        <div className="mx-48 mb-2">
+          <CustomButton
+            text={"NEXT"}
+            onClick={() => navigate("/home/overview")}
+          />
+        </div>
+        <div
+          className="flex justify-center  cursor-pointer"
+          onClick={() => navigate("/home/overview")}
+        >
+          <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
+            SKIP FOR NOW{" "}
+          </p>
         </div>
       </div>
     );

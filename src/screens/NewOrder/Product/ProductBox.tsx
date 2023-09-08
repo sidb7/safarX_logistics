@@ -10,6 +10,8 @@ interface IPackageBoxProps {
   length?: any;
   height?: any;
   breadth?: any;
+  onClick?: () => void;
+  isSelected?: any;
 }
 
 const productBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -23,10 +25,19 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   className = "",
   dimensionClassName = "",
   label = "",
+  onClick,
+  isSelected = false,
 }) => {
   return (
     <div
-      className={` ${className} product-box flex items-center border-2  rounded-md h-20 relative`}
+      className={` ${className} product-box flex items-center border-2 rounded-md h-20 relative ${
+        isSelected && "border-[#004EFF]"
+      }`}
+      onClick={onClick}
+      style={{
+        boxShadow:
+          "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+      }}
     >
       <span
         className={`${

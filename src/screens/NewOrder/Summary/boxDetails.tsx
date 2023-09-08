@@ -41,7 +41,10 @@ const BoxDetails = ({
               navigate("/orders/add-order/add-product");
             }}
           >
-            <img src={editIcon} alt="Edit Icon" />
+            <div style={{ width: "20px", height: "20px" }}>
+              {" "}
+              <img src={editIcon} alt="editIcon" className="w-full h-full" />
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-y-2 mb-10">

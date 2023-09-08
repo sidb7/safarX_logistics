@@ -1,4 +1,4 @@
-body,
+/* body,
 html {
   font-family: "Roboto", sans-serif;
   margin: 0;
@@ -22,10 +22,9 @@ input {
 
 input:focus + label {
   top: 0;
-
   transform: translateY(-50%) scale(0.9);
 }
 input:not(:placeholder-shown) + label {
   top: 0;
   transform: translateY(-50%) scale(0.9);
-}
+} */

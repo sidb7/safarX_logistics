@@ -80,6 +80,7 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -90,7 +91,7 @@ const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableServic
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
-const LANDMARK_API= `${SELLER_BASE_URL}/landmark/landmark`;
+const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
@@ -153,6 +154,8 @@ const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`
 
 
 
+// Courier Pricing List
+const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;
 
 export {
   SELLER_URL,
@@ -227,5 +230,7 @@ export {
   POST_GET_ALL_USER_DATA,
   POST_DELETE_USER_DATA,
   POST_CREATE_NEW_USER,
-  POST_UPDATE_USER_DATA
+  POST_UPDATE_USER_DATA,
+  POST_SET_ORDER_ID,
+  COURIER_PRICING,
 };
