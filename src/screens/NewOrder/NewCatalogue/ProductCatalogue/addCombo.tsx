@@ -74,11 +74,11 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
       category: selectedcat,
       productArrray: selectedProductId,
     });
-    if (data.success) {
-      toast.success(data.message);
+    if (data?.success) {
+      toast.success(data?.message);
       navigate(-1);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 
@@ -89,7 +89,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
         limit: 10,
         pageNo: 1,
       });
-      if (data.success) {
+      if (data?.success) {
         setProductData(data.data);
       } else {
         setProductData([]);

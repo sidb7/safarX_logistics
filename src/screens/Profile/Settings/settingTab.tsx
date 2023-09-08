@@ -22,11 +22,11 @@ export const SettingTab = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const navigateTo = (text?: string) => {
     if (!isItLgScreen) {
-      if (text == "settings")
+      if (text === "settings")
         navigate("/profile/profile-setting-change-password");
       else navigate("/profile/profile-setting-edit-profile");
     } else {
-      if (text == "settings") {
+      if (text === "settings") {
         setIsPassModalOpen(true);
       } else setIsProfileModalOpen(true);
     }
@@ -148,7 +148,6 @@ export const SettingTab = () => {
               </div>
             </div>
           </div>
-
         </div>
 
         <PassModal
@@ -169,7 +168,7 @@ export const SettingTab = () => {
           deleteURL={DELETE_SELLER}
           payloadBody={{}}
         />
-        <BottomLayout callApi={() => { }} />
+        <BottomLayout callApi={() => {}} />
       </div>
     </>
   );

@@ -224,7 +224,7 @@ const Index: React.FC = () => {
         setResponse([]);
 
         if (response?.message) {
-          toast.error(response.message);
+          toast.error(response?.message);
         }
       }
     } catch (error) {

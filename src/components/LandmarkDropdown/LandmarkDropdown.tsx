@@ -53,7 +53,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
 
       try {
         const response = await fetch(
-          "http://65.2.176.43:8006/api/v1/landmark/landmark",
+          "http://13.235.186.32:8006/api/v1/landmark/landmark",
           {
             method: "POST",
             headers,

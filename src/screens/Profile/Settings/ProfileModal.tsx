@@ -34,13 +34,11 @@ function ProfileModal(props: PassModalProps) {
     const { data } = await POST(UPDATE_SELLER, {
       data: { ...profileData, firstName: firstName, lastName: lastName },
     });
-    if (data.success) {
+    if (data?.success) {
       setProfileData(data?.data);
-      console.log("profile data", data);
-
       toast.success(data?.message);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
   return (

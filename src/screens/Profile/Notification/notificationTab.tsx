@@ -44,8 +44,8 @@ export const ProfileNotificationTab = () => {
         operationDetails: notificationData?.operationDetails,
       },
     });
-    if (data.success) {
-      // toast.success(data.message);
+    if (data?.success) {
+      // toast.success(data?.message);
     } else {
       toast.error(data?.message);
     }

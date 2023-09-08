@@ -5,6 +5,7 @@ import CustomInputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import { GET_SERVICABLE_PINCODE } from "../../utils/ApiUrls";
 import "../../styles/scrollablePincodeServiceTale.css";
+import { toast } from "react-toastify";
 
 // import Button from "./Button";
 
@@ -30,13 +31,11 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       if (response?.success) {
         setResponse(response);
-        //   toast.success(response?.message);
       } else {
-        console.error("PickupDataerror");
-        //   toast.error(response?.message);
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
+      console.error("Error in  ADD_PICKUP_LOCATION_API", error);
       return error;
     }
   };

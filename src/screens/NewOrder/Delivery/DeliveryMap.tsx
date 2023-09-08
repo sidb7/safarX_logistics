@@ -57,7 +57,7 @@ const DeliveryMap: React.FunctionComponent<IPropsTypes> = (
 
       const response = await axios(config);
 
-      if (response.data.success === 1 && response.data.data.result) {
+      if (response.data?.success === 1 && response.data.data.result) {
         const formattedAddress = response.data.data.result.formatted_address;
         console.log("Formatted Address:", formattedAddress);
         setAddress(formattedAddress);
@@ -85,7 +85,7 @@ const DeliveryMap: React.FunctionComponent<IPropsTypes> = (
       const response = await axios(config);
       console.log("responsefromcoordinatesAPI", response);
 
-      if (response.data.success === 1 && response.data.data.results) {
+      if (response.data?.success === 1 && response.data.data.results) {
         const formattedAddress =
           response.data.data.results[0].formatted_address;
         console.log("Formatted Address:", formattedAddress);

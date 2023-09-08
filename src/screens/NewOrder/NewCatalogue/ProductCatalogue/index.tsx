@@ -51,7 +51,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           pageNo: 1,
         }
       );
-      if (data.success) {
+      if (data?.success) {
         setProductData(data.data);
         // setTotalItemCount()
       } else {

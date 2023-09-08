@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import { CustomTable } from "../../../../components/Table";
 import { Breadcum } from "../../../../components/Layout/breadcrum";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -8,13 +8,12 @@ import { createColumnHelper } from "@tanstack/react-table";
 import EyeIcon from "../../../../assets/Login/eye.svg";
 import { toast } from "react-toastify";
 import { POST } from "../../../../utils/webService";
-import CenterModal from "../../../../components/CustomModal/customCenterModal"
-import DeleteConfirmModale from './deleteConfirmationModal';
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
+import DeleteConfirmModale from "./deleteConfirmationModal";
 import {
   POST_GET_ALL_USER_DATA,
-  POST_DELETE_USER_DATA
+  POST_DELETE_USER_DATA,
 } from "../../../../utils/ApiUrls";
-
 
 const Buttons = (className?: string, usersData?: any) => {
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ const Buttons = (className?: string, usersData?: any) => {
       }
     >
       <div className="flex">
-
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
           text="ADD ROLE"
@@ -40,13 +38,10 @@ const Buttons = (className?: string, usersData?: any) => {
           text="ADD USER"
           onClick={() => navigate("/profile/settings/user-management/add-user")}
         />
-
-
       </div>
     </div>
   );
 };
-
 
 function UserManagement() {
   const navigate = useNavigate();
@@ -62,10 +57,7 @@ function UserManagement() {
         return (
           <div className="flex justify-between items-center">
             <h1>User ID</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
@@ -76,29 +68,25 @@ function UserManagement() {
         return (
           <div className="flex justify-between items-center">
             <h1>User Name</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
       cell: (info: any) => {
-        const data = info.cell.row.original
+        const data = info.cell.row.original;
         return (
-          <div>{data.firstName} {data.lastName}</div>
-        )
-      }
+          <div>
+            {data.firstName} {data.lastName}
+          </div>
+        );
+      },
     }),
     columnsHelper.accessor("email", {
       header: () => {
         return (
           <div className="flex justify-between items-center">
             <h1>Email</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
@@ -109,10 +97,7 @@ function UserManagement() {
         return (
           <div className="flex justify-between items-center">
             <h1>Mobile</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
@@ -125,11 +110,7 @@ function UserManagement() {
           <div>
             <div className="flex justify-between items-center">
               <h1>Role Id</h1>
-              <div
-                className="cursor-pointer"
-              >
-
-              </div>
+              <div className="cursor-pointer"></div>
             </div>
           </div>
         );
@@ -141,10 +122,7 @@ function UserManagement() {
         return (
           <div className="flex justify-between items-center">
             <h1>Role Name</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
@@ -155,10 +133,7 @@ function UserManagement() {
         return (
           <div className="flex justify-between items-center">
             <h1>User Status</h1>
-            <div
-              className="cursor-pointer"
-            >
-            </div>
+            <div className="cursor-pointer"></div>
           </div>
         );
       },
@@ -184,15 +159,14 @@ function UserManagement() {
             <div>
               <CustomButton
                 text={"UPDATE"}
-
                 onClick={() =>
-                  navigate(
-                    `/profile/settings/user-management/update-user`, { state: { data: row?.original } }
-                  )
+                  navigate(`/profile/settings/user-management/update-user`, {
+                    state: { data: row?.original },
+                  })
                 }
               />
             </div>
-            <div className='border mx-2'>
+            <div className="border mx-2">
               <CustomButton
                 text={"DELETE"}
                 onClick={() => deleteRoleModal(row?.original)}
@@ -203,8 +177,6 @@ function UserManagement() {
       },
     }),
   ];
-
-
 
   // get users list from api
   const getUsersData = async () => {
@@ -221,7 +193,6 @@ function UserManagement() {
       setUsersData([]);
     }
   };
-
 
   // delete role api call
   const deleteUserApiCall = async (payload: any) => {
@@ -243,7 +214,6 @@ function UserManagement() {
     }
   };
 
-
   const deleteRoleModal = async (data: any) => {
     try {
       setDeleteUser(data || {});
@@ -257,19 +227,18 @@ function UserManagement() {
     getUsersData();
   }, []);
 
-
   return (
-    <div className=''>
-      <Breadcum label='User Management' component={Buttons("", usersData)} />
-      <div className=' my-3 mx-6'>
-        <div className=' flex justify-end'>
+    <div className="">
+      <Breadcum label="User Management" component={Buttons("", usersData)} />
+      <div className=" my-3 mx-6">
+        <div className=" flex justify-end">
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">
             <div>
-              <SearchBox label="Search" value="" onChange={() => { }} />
+              <SearchBox label="Search" value="" onChange={() => {}} />
             </div>
             <div
               className="flex justify-between items-center p-2 gap-x-2"
-            // onClick={() => setFilterModal(true)}
+              // onClick={() => setFilterModal(true)}
             >
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
@@ -278,7 +247,7 @@ function UserManagement() {
           </div>
         </div>
 
-        <div className=' mt-6'>
+        <div className=" mt-6">
           <CustomTable data={usersData || []} columns={columns || []} />
         </div>
 
@@ -294,15 +263,9 @@ function UserManagement() {
             title="user"
           />
         </CenterModal>
-
-
       </div>
     </div>
-  )
+  );
 }
 
-export default UserManagement
-
-
-
-
+export default UserManagement;

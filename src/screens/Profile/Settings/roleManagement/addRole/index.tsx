@@ -1,574 +1,570 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../../../components/Button";
 import { Breadcum } from "../../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../../components/Input";
 import { SearchBox } from "../../../../../components/SearchBox";
-import ReusableAccordion from "../../../../../components/CustomAccordian/reusableAccordion"
+import ReusableAccordion from "../../../../../components/CustomAccordian/reusableAccordion";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import { POST } from "../../../../../utils/webService";
 import {
-    POST_GET_ALL_INITIAL_MENU,
-    POST_CREATE_NEW_ROLL
+  POST_GET_ALL_INITIAL_MENU,
+  POST_CREATE_NEW_ROLL,
 } from "../../../../../utils/ApiUrls";
 
-const Buttons = (className?: string, createRoleApiCall?: any, disabled?:boolean) => {
-    const navigate = useNavigate();
+const Buttons = (
+  className?: string,
+  createRoleApiCall?: any,
+  disabled?: boolean
+) => {
+  const navigate = useNavigate();
 
-    return (
-        <div
-            className={
-                className
-                    ? className
-                    : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
-            }
-        >
-            <div className="grid col-span-2">
-                <CustomButton
-                    className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
-                    text="ADD ROLE"
-                    onClick={createRoleApiCall}
-
-                    disabled={disabled}
-                />
-            </div>
-
-        </div>
-    );
+  return (
+    <div
+      className={
+        className
+          ? className
+          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+      }
+    >
+      <div className="grid col-span-2">
+        <CustomButton
+          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
+          text="ADD ROLE"
+          onClick={createRoleApiCall}
+          disabled={disabled}
+        />
+      </div>
+    </div>
+  );
 };
 
-
 function AddRole() {
-    const [menuData, setMenuData]: any = useState([]);
-    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-    const [disabled, setDisabled]: any = useState(true);
-    const [roleName, setRoleName]: any = useState("");
+  const [menuData, setMenuData]: any = useState([]);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [disabled, setDisabled]: any = useState(true);
+  const [roleName, setRoleName]: any = useState("");
 
+  const navigate = useNavigate();
 
+  const handle_Level_1_Menu = (level1_id: any, value: any) => {
+    let allMenuArray: any = [...menuData] || [];
 
-    const navigate = useNavigate();
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      // find the menu by id
+      if (allMenuArray[i]?.id === level1_id) {
+        allMenuArray[i].isActive = value;
 
+        // do check on all menu key in json
+        let singleMenu: any = allMenuArray[i]?.menu || [];
 
-    const handle_Level_1_Menu = (level1_id: any, value: any) => {
-        let allMenuArray: any = [...menuData] || [];
+        for (let j = 0; j < singleMenu?.length; j++) {
+          singleMenu[j].isActive = value;
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            // find the menu by id
-            if (allMenuArray[i]?.id === level1_id) {
-                allMenuArray[i].isActive = value;
+          // do check all pages key in json
+          let singlePage: any = singleMenu[j]?.pages || [];
 
-                // do check on all menu key in json
-                let singleMenu: any = allMenuArray[i]?.menu || [];
+          for (let k = 0; k < singlePage?.length; k++) {
+            singlePage[k].isActive = value;
+            singlePage[k].permissions.create = value;
+            singlePage[k].permissions.read = value;
+            singlePage[k].permissions.update = value;
+            singlePage[k].permissions.delete = value;
+            singlePage[k].permissions.upload = value;
+            singlePage[k].permissions.download = value;
+          }
 
-                for (let j = 0; j < singleMenu?.length; j++) {
-                    singleMenu[j].isActive = value;
+          // do all check level 3 menu key
 
-                    // do check all pages key in json
-                    let singlePage: any = singleMenu[j]?.pages || [];
+          let childMenu: any = singleMenu[j]?.menu || [];
 
-                    for (let k = 0; k < singlePage?.length; k++) {
-                        singlePage[k].isActive = value;
-                        singlePage[k].permissions.create = value;
-                        singlePage[k].permissions.read = value;
-                        singlePage[k].permissions.update = value;
-                        singlePage[k].permissions.delete = value;
-                        singlePage[k].permissions.upload = value;
-                        singlePage[k].permissions.download = value;
-                    }
+          for (let k = 0; k < childMenu?.length; k++) {
+            childMenu[k].isActive = value;
 
-                    // do all check level 3 menu key
+            let childPage: any = childMenu[k]?.pages || [];
 
-                    let childMenu: any = singleMenu[j]?.menu || [];
-
-                    for (let k = 0; k < childMenu?.length; k++) {
-                        childMenu[k].isActive = value;
-
-                        let childPage: any = childMenu[k]?.pages || [];
-
-                        for (let l = 0; l < childPage?.length; l++) {
-                            childPage[l].isActive = value;
-                            childPage[l].permissions.create = value;
-                            childPage[l].permissions.read = value;
-                            childPage[l].permissions.update = value;
-                            childPage[l].permissions.delete = value;
-                            childPage[l].permissions.upload = value;
-                            childPage[l].permissions.download = value;
-                        }
-                    }
-                }
-
-                break;
+            for (let l = 0; l < childPage?.length; l++) {
+              childPage[l].isActive = value;
+              childPage[l].permissions.create = value;
+              childPage[l].permissions.read = value;
+              childPage[l].permissions.update = value;
+              childPage[l].permissions.delete = value;
+              childPage[l].permissions.upload = value;
+              childPage[l].permissions.download = value;
             }
+          }
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        break;
+      }
+    }
 
-    const handle_Level_2_Pages = (level1_id: any, level2_id: any, value: any) => {
-        let allMenuArray: any = [...menuData] || [];
+    setMenuData([...allMenuArray]);
+  };
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            // find the menu by id
-            if (allMenuArray[i]?.id === level1_id) {
+  const handle_Level_2_Pages = (level1_id: any, level2_id: any, value: any) => {
+    let allMenuArray: any = [...menuData] || [];
+
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      // find the menu by id
+      if (allMenuArray[i]?.id === level1_id) {
+        let topMenuCheck = false;
+        // find the level2 doc
+        let singleDoc: any = allMenuArray[i]?.menu || [];
+
+        for (let j = 0; j < singleDoc?.length; j++) {
+          if (singleDoc[j].id === level2_id) {
+            singleDoc[j].isActive = value;
+
+            let singlePage: any = singleDoc[j]?.pages || [];
+
+            for (let l = 0; l < singlePage?.length; l++) {
+              singlePage[l].isActive = value;
+
+              singlePage[l].permissions.create = value;
+              singlePage[l].permissions.read = value;
+              singlePage[l].permissions.update = value;
+              singlePage[l].permissions.delete = value;
+              singlePage[l].permissions.upload = value;
+              singlePage[l].permissions.download = value;
+            }
+
+            let singleMenu: any = singleDoc[j]?.menu || [];
+
+            for (let l = 0; l < singleMenu?.length; l++) {
+              singleMenu[l].isActive = value;
+
+              let anotherPage: any = singleMenu[l]?.pages || [];
+
+              for (let m = 0; m < anotherPage?.length; m++) {
+                anotherPage[m].isActive = value;
+                anotherPage[m].permissions.create = value;
+                anotherPage[m].permissions.read = value;
+                anotherPage[m].permissions.update = value;
+                anotherPage[m].permissions.delete = value;
+                anotherPage[m].permissions.upload = value;
+                anotherPage[m].permissions.download = value;
+              }
+            }
+          }
+
+          if (singleDoc[j].isActive === true) {
+            topMenuCheck = true;
+          }
+        }
+
+        allMenuArray[i].isActive = topMenuCheck;
+      }
+    }
+
+    setMenuData([...allMenuArray]);
+  };
+
+  // all at thirs level page
+  const handle_Level_3_Pages = (
+    level1_id: any,
+    level2_id: any,
+    level3_id: any,
+    value: any
+  ) => {
+    let allMenuArray: any = [...menuData] || [];
+
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      if (allMenuArray[i].id === level1_id) {
+        let topMenuCheck = false;
+        // level 1
+        let singleMenu: any = allMenuArray[i]?.menu || [];
+        // level 2
+        for (let j = 0; j < singleMenu?.length; j++) {
+          let menuCheck = false;
+          if (singleMenu[j].id === level2_id) {
+            let singlePages: any = singleMenu[j]?.pages || [];
+
+            for (let k = 0; k < singlePages?.length; k++) {
+              if (singlePages[k].id === level3_id) {
+                singlePages[k].isActive = value;
+                singlePages[k].permissions.create = value;
+                singlePages[k].permissions.read = value;
+                singlePages[k].permissions.delete = value;
+                singlePages[k].permissions.download = value;
+                singlePages[k].permissions.update = value;
+                singlePages[k].permissions.upload = value;
+              }
+
+              if (singlePages[k].isActive === true) {
+                menuCheck = true;
+              }
+            }
+
+            singleMenu[j].isActive = menuCheck;
+          }
+
+          if (singleMenu[j].isActive === true) {
+            topMenuCheck = true;
+          }
+        }
+
+        allMenuArray[i].isActive = topMenuCheck;
+      }
+    }
+
+    setMenuData([...allMenuArray]);
+  };
+
+  const handle_Level_3_Menu_Pages = (
+    level1_id: any,
+    level2_id: any,
+    level3_id: any,
+    page_id: any,
+    value: any
+  ) => {
+    let allMenuArray: any = [...menuData] || [];
+
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      // find menu
+      if (allMenuArray[i].id === level1_id) {
+        let firstMenu: any = allMenuArray[i]?.menu || [];
+
+        let topMenuCheck2 = false;
+
+        for (let j = 0; j < firstMenu?.length; j++) {
+          if (firstMenu[j].id === level2_id) {
+            let secondMenu: any = firstMenu[j]?.menu || [];
+
+            for (let k = 0; k < secondMenu?.length; k++) {
+              if (secondMenu[k].id === level3_id) {
                 let topMenuCheck = false;
-                // find the level2 doc
-                let singleDoc: any = allMenuArray[i]?.menu || [];
+                let singlePage: any = secondMenu[k].pages;
 
-                for (let j = 0; j < singleDoc?.length; j++) {
-                    if (singleDoc[j].id === level2_id) {
-                        singleDoc[j].isActive = value;
+                for (let l = 0; l < singlePage?.length; l++) {
+                  if (singlePage[l].id === page_id) {
+                    singlePage[l].isActive = value;
+                    singlePage[l].permissions.create = value;
+                    singlePage[l].permissions.read = value;
+                    singlePage[l].permissions.delete = value;
+                    singlePage[l].permissions.download = value;
+                    singlePage[l].permissions.update = value;
+                    singlePage[l].permissions.upload = value;
+                  }
 
-                        let singlePage: any = singleDoc[j]?.pages || [];
-
-                        for (let l = 0; l < singlePage?.length; l++) {
-                            singlePage[l].isActive = value;
-
-                            singlePage[l].permissions.create = value;
-                            singlePage[l].permissions.read = value;
-                            singlePage[l].permissions.update = value;
-                            singlePage[l].permissions.delete = value;
-                            singlePage[l].permissions.upload = value;
-                            singlePage[l].permissions.download = value;
-                        }
-
-                        let singleMenu: any = singleDoc[j]?.menu || [];
-
-                        for (let l = 0; l < singleMenu?.length; l++) {
-                            singleMenu[l].isActive = value;
-
-                            let anotherPage: any = singleMenu[l]?.pages || [];
-
-                            for (let m = 0; m < anotherPage?.length; m++) {
-                                anotherPage[m].isActive = value;
-                                anotherPage[m].permissions.create = value;
-                                anotherPage[m].permissions.read = value;
-                                anotherPage[m].permissions.update = value;
-                                anotherPage[m].permissions.delete = value;
-                                anotherPage[m].permissions.upload = value;
-                                anotherPage[m].permissions.download = value;
-                            }
-                        }
-                    }
-
-                    if (singleDoc[j].isActive === true) {
-                        topMenuCheck = true;
-                    }
+                  if (singlePage[l].isActive === true) {
+                    topMenuCheck = true;
+                  }
                 }
 
-                allMenuArray[i].isActive = topMenuCheck;
+                secondMenu[k].isActive = topMenuCheck;
+              }
+
+              if (secondMenu[k].isActive === true) {
+                topMenuCheck2 = true;
+              }
             }
+          }
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        allMenuArray[i].isActive = topMenuCheck2;
+      }
+    }
 
-    // all at thirs level page
-    const handle_Level_3_Pages = (
-        level1_id: any,
-        level2_id: any,
-        level3_id: any,
-        value: any
-    ) => {
-        let allMenuArray: any = [...menuData] || [];
+    setMenuData([...allMenuArray]);
+  };
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            if (allMenuArray[i].id === level1_id) {
-                let topMenuCheck = false;
-                // level 1
-                let singleMenu: any = allMenuArray[i]?.menu || [];
-                // level 2
-                for (let j = 0; j < singleMenu?.length; j++) {
-                    let menuCheck = false;
-                    if (singleMenu[j].id === level2_id) {
-                        let singlePages: any = singleMenu[j]?.pages || [];
+  const handle_Level_3_Menu_All_Pages = (
+    level1_id: any,
+    level2_id: any,
+    level3_id: any,
+    value: any,
+    keyName: any
+  ) => {
+    let allMenuArray: any = [...menuData] || [];
 
-                        for (let k = 0; k < singlePages?.length; k++) {
-                            if (singlePages[k].id === level3_id) {
-                                singlePages[k].isActive = value;
-                                singlePages[k].permissions.create = value;
-                                singlePages[k].permissions.read = value;
-                                singlePages[k].permissions.delete = value;
-                                singlePages[k].permissions.download = value;
-                                singlePages[k].permissions.update = value;
-                                singlePages[k].permissions.upload = value;
-                            }
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      // find menu
+      if (allMenuArray[i].id === level1_id) {
+        let firstMenu: any = allMenuArray[i]?.menu || [];
 
-                            if (singlePages[k].isActive === true) {
-                                menuCheck = true;
-                            }
-                        }
+        for (let j = 0; j < firstMenu?.length; j++) {
+          if (firstMenu[j].id === level2_id) {
+            let secondMenu: any = firstMenu[j]?.menu || [];
 
-                        singleMenu[j].isActive = menuCheck;
-                    }
+            let menuChecked = false;
 
-                    if (singleMenu[j].isActive === true) {
-                        topMenuCheck = true;
-                    }
+            for (let k = 0; k < secondMenu?.length; k++) {
+              if (secondMenu[k].id === level3_id) {
+                secondMenu[k].isActive = value;
+                let singlePage: any = secondMenu[k].pages;
+
+                for (let l = 0; l < singlePage?.length; l++) {
+                  singlePage[l].isActive = value;
+                  singlePage[l].permissions.create = value;
+                  singlePage[l].permissions.read = value;
+                  singlePage[l].permissions.delete = value;
+                  singlePage[l].permissions.download = value;
+                  singlePage[l].permissions.update = value;
+                  singlePage[l].permissions.upload = value;
                 }
+              }
 
-                allMenuArray[i].isActive = topMenuCheck;
+              if (secondMenu[k].isActive === true) {
+                menuChecked = true;
+              }
             }
+
+            firstMenu[j].isActive = menuChecked;
+          }
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        let mainMenuCheck = false;
+        for (let j = 0; j < firstMenu?.length; j++) {
+          if (firstMenu[j].isActive === true) {
+            mainMenuCheck = true;
+          }
+        }
 
-    const handle_Level_3_Menu_Pages = (
-        level1_id: any,
-        level2_id: any,
-        level3_id: any,
-        page_id: any,
-        value: any
-    ) => {
-        let allMenuArray: any = [...menuData] || [];
+        allMenuArray[i].isActive = mainMenuCheck;
+      }
+    }
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            // find menu
-            if (allMenuArray[i].id === level1_id) {
-                let firstMenu: any = allMenuArray[i]?.menu || [];
+    setMenuData([...allMenuArray]);
+  };
 
-                let topMenuCheck2 = false;
+  const handle_Level_3_Single_Page_Check = (
+    level1_id: any,
+    level2_id: any,
+    level3_id: any,
+    keyName: any,
+    value: any
+  ) => {
+    let allMenuArray: any = [...menuData] || [];
 
-                for (let j = 0; j < firstMenu?.length; j++) {
-                    if (firstMenu[j].id === level2_id) {
-                        let secondMenu: any = firstMenu[j]?.menu || [];
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      if (allMenuArray[i].id === level1_id) {
+        let topMenuCheck = false;
+        let singleMenu: any = allMenuArray[i]?.menu || [];
+        for (let j = 0; j < singleMenu?.length; j++) {
+          let parentCheck = false;
 
-                        for (let k = 0; k < secondMenu?.length; k++) {
-                            if (secondMenu[k].id === level3_id) {
-                                let topMenuCheck = false;
-                                let singlePage: any = secondMenu[k].pages;
+          if (singleMenu[j].id === level2_id) {
+            let singlePage: any = singleMenu[j]?.pages || [];
 
-                                for (let l = 0; l < singlePage?.length; l++) {
-                                    if (singlePage[l].id === page_id) {
-                                        singlePage[l].isActive = value;
-                                        singlePage[l].permissions.create = value;
-                                        singlePage[l].permissions.read = value;
-                                        singlePage[l].permissions.delete = value;
-                                        singlePage[l].permissions.download = value;
-                                        singlePage[l].permissions.update = value;
-                                        singlePage[l].permissions.upload = value;
-                                    }
+            for (let k = 0; k < singlePage?.length; k++) {
+              if (singlePage[k].id === level3_id) {
+                singlePage[k].permissions[`${value}`] = keyName;
 
-                                    if (singlePage[l].isActive === true) {
-                                        topMenuCheck = true;
-                                    }
-                                }
-
-                                secondMenu[k].isActive = topMenuCheck;
-                            }
-
-                            if (secondMenu[k].isActive === true) {
-                                topMenuCheck2 = true;
-                            }
-                        }
-                    }
+                // check all permission are active
+                if (
+                  singlePage[k].permissions.create ||
+                  singlePage[k].permissions.read ||
+                  singlePage[k].permissions.update ||
+                  singlePage[k].permissions.delete ||
+                  singlePage[k].permissions.upload ||
+                  singlePage[k].permissions.download
+                ) {
+                  singlePage[k].isActive = true;
+                } else {
+                  singlePage[k].isActive = false;
                 }
+              }
 
-                allMenuArray[i].isActive = topMenuCheck2;
+              if (singlePage[k].isActive === true) {
+                parentCheck = true;
+              }
             }
+
+            singleMenu[j].isActive = parentCheck;
+          }
+
+          if (singleMenu[j].isActive === true) {
+            topMenuCheck = true;
+          }
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        allMenuArray[i].isActive = topMenuCheck;
+      }
+    }
 
-    const handle_Level_3_Menu_All_Pages = (
-        level1_id: any,
-        level2_id: any,
-        level3_id: any,
-        value: any,
-        keyName: any
-    ) => {
-        let allMenuArray: any = [...menuData] || [];
+    setMenuData([...allMenuArray]);
+  };
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            // find menu
-            if (allMenuArray[i].id === level1_id) {
-                let firstMenu: any = allMenuArray[i]?.menu || [];
+  const handle_Level_3_Single_Menu_Page_Check = (
+    level1_id: any,
+    level2_id: any,
+    level3_id: any,
+    keyName: any,
+    value: any,
+    key: any
+  ) => {
+    let allMenuArray: any = [...menuData] || [];
 
-                for (let j = 0; j < firstMenu?.length; j++) {
-                    if (firstMenu[j].id === level2_id) {
-                        let secondMenu: any = firstMenu[j]?.menu || [];
+    for (let i = 0; i < allMenuArray?.length; i++) {
+      if (allMenuArray[i].id === level1_id) {
+        // level 1
+        let singleMenu: any = allMenuArray[i]?.menu || [];
 
-                        let menuChecked = false;
+        for (let j = 0; j < singleMenu?.length; j++) {
+          let secondMenu: any = singleMenu[j]?.menu || [];
 
-                        for (let k = 0; k < secondMenu?.length; k++) {
-                            if (secondMenu[k].id === level3_id) {
-                                secondMenu[k].isActive = value;
-                                let singlePage: any = secondMenu[k].pages;
+          let topMenuCheck = false;
 
-                                for (let l = 0; l < singlePage?.length; l++) {
-                                    singlePage[l].isActive = value;
-                                    singlePage[l].permissions.create = value;
-                                    singlePage[l].permissions.read = value;
-                                    singlePage[l].permissions.delete = value;
-                                    singlePage[l].permissions.download = value;
-                                    singlePage[l].permissions.update = value;
-                                    singlePage[l].permissions.upload = value;
-                                }
-                            }
+          for (let k = 0; k < secondMenu?.length; k++) {
+            if (secondMenu[k].id === level3_id) {
+              // level 2
+              let menuCheck = false;
 
-                            if (secondMenu[k].isActive === true) {
-                                menuChecked = true;
-                            }
-                        }
+              let singlePage: any = secondMenu[k]?.pages || [];
 
-                        firstMenu[j].isActive = menuChecked;
-                    }
+              for (let l = 0; l < singlePage?.length; l++) {
+                if (singlePage[l].id === keyName) {
+                  singlePage[l].permissions[`${key}`] = value;
+                  // check all permission are active
+                  if (
+                    singlePage[l].permissions.create ||
+                    singlePage[l].permissions.read ||
+                    singlePage[l].permissions.update ||
+                    singlePage[l].permissions.delete ||
+                    singlePage[l].permissions.upload ||
+                    singlePage[l].permissions.download
+                  ) {
+                    singlePage[l].isActive = true;
+                  } else {
+                    singlePage[l].isActive = false;
+                  }
                 }
 
-                let mainMenuCheck = false;
-                for (let j = 0; j < firstMenu?.length; j++) {
-                    if (firstMenu[j].isActive === true) {
-                        mainMenuCheck = true;
-                    }
+                if (singlePage[l].isActive === true) {
+                  menuCheck = true;
                 }
+              }
 
-                allMenuArray[i].isActive = mainMenuCheck;
+              secondMenu[k].isActive = menuCheck;
             }
-        }
 
-        setMenuData([...allMenuArray]);
-    };
-
-    const handle_Level_3_Single_Page_Check = (
-        level1_id: any,
-        level2_id: any,
-        level3_id: any,
-        keyName: any,
-        value: any
-    ) => {
-        let allMenuArray: any = [...menuData] || [];
-
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            if (allMenuArray[i].id === level1_id) {
-                let topMenuCheck = false;
-                let singleMenu: any = allMenuArray[i]?.menu || [];
-                for (let j = 0; j < singleMenu?.length; j++) {
-                    let parentCheck = false;
-
-                    if (singleMenu[j].id === level2_id) {
-                        let singlePage: any = singleMenu[j]?.pages || [];
-
-                        for (let k = 0; k < singlePage?.length; k++) {
-                            if (singlePage[k].id === level3_id) {
-                                singlePage[k].permissions[`${value}`] = keyName;
-
-                                // check all permission are active
-                                if (
-                                    singlePage[k].permissions.create ||
-                                    singlePage[k].permissions.read ||
-                                    singlePage[k].permissions.update ||
-                                    singlePage[k].permissions.delete ||
-                                    singlePage[k].permissions.upload ||
-                                    singlePage[k].permissions.download
-                                ) {
-                                    singlePage[k].isActive = true;
-                                } else {
-                                    singlePage[k].isActive = false;
-                                }
-                            }
-
-                            if (singlePage[k].isActive === true) {
-                                parentCheck = true;
-                            }
-                        }
-
-                        singleMenu[j].isActive = parentCheck;
-                    }
-
-                    if (singleMenu[j].isActive === true) {
-                        topMenuCheck = true;
-                    }
-                }
-
-                allMenuArray[i].isActive = topMenuCheck;
+            if (secondMenu[k].isActive === true) {
+              topMenuCheck = true;
             }
+          }
+
+          singleMenu[j].isActive = topMenuCheck;
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        for (let j = 0; j < singleMenu?.length; j++) {
+          let topMenuCheck = false;
 
-    const handle_Level_3_Single_Menu_Page_Check = (
-        level1_id: any,
-        level2_id: any,
-        level3_id: any,
-        keyName: any,
-        value: any,
-        key: any
-    ) => {
-        let allMenuArray: any = [...menuData] || [];
+          let singleChild = singleMenu[j]?.menu || [];
 
-        for (let i = 0; i < allMenuArray?.length; i++) {
-            if (allMenuArray[i].id === level1_id) {
-                // level 1
-                let singleMenu: any = allMenuArray[i]?.menu || [];
-
-                for (let j = 0; j < singleMenu?.length; j++) {
-                    let secondMenu: any = singleMenu[j]?.menu || [];
-
-                    let topMenuCheck = false;
-
-                    for (let k = 0; k < secondMenu?.length; k++) {
-                        if (secondMenu[k].id === level3_id) {
-                            // level 2
-                            let menuCheck = false;
-
-                            let singlePage: any = secondMenu[k]?.pages || [];
-
-                            for (let l = 0; l < singlePage?.length; l++) {
-                                if (singlePage[l].id === keyName) {
-                                    singlePage[l].permissions[`${key}`] = value;
-                                    // check all permission are active
-                                    if (
-                                        singlePage[l].permissions.create ||
-                                        singlePage[l].permissions.read ||
-                                        singlePage[l].permissions.update ||
-                                        singlePage[l].permissions.delete ||
-                                        singlePage[l].permissions.upload ||
-                                        singlePage[l].permissions.download
-                                    ) {
-                                        singlePage[l].isActive = true;
-                                    } else {
-                                        singlePage[l].isActive = false;
-                                    }
-                                }
-
-                                if (singlePage[l].isActive === true) {
-                                    menuCheck = true;
-                                }
-                            }
-
-                            secondMenu[k].isActive = menuCheck;
-                        }
-
-                        if (secondMenu[k].isActive === true) {
-                            topMenuCheck = true;
-                        }
-                    }
-
-                    singleMenu[j].isActive = topMenuCheck;
-                }
-
-                for (let j = 0; j < singleMenu?.length; j++) {
-                    let topMenuCheck = false;
-
-                    let singleChild = singleMenu[j]?.menu || [];
-
-                    for (let k = 0; k < singleChild?.length; k++) {
-                        if (singleChild[k].isActive === true) {
-                            topMenuCheck = true;
-                        }
-                    }
-
-                    singleMenu[j].isActive = topMenuCheck;
-                }
-
-                // for menu check
-
-                let currentMenu = allMenuArray[i]?.menu || [];
-
-                let topMenuCheck2 = false;
-
-                for (let j = 0; j < currentMenu?.length; j++) {
-                    if (currentMenu[j].isActive === true) {
-                        topMenuCheck2 = true;
-                    }
-                }
-
-                allMenuArray[i].isActive = topMenuCheck2;
+          for (let k = 0; k < singleChild?.length; k++) {
+            if (singleChild[k].isActive === true) {
+              topMenuCheck = true;
             }
+          }
+
+          singleMenu[j].isActive = topMenuCheck;
         }
 
-        setMenuData([...allMenuArray]);
-    };
+        // for menu check
 
-    const getAllInitialMenu = async () => {
-        try {
-            const { data } = await POST(POST_GET_ALL_INITIAL_MENU, {});
+        let currentMenu = allMenuArray[i]?.menu || [];
 
-            if (data?.success) {
-                setMenuData(data?.data || []);
-            } else {
-                toast.error("Failed to fetch intiail menu");
-            }
-        } catch (error) {
-            toast.error("Failed to fetch initial menu");
+        let topMenuCheck2 = false;
+
+        for (let j = 0; j < currentMenu?.length; j++) {
+          if (currentMenu[j].isActive === true) {
+            topMenuCheck2 = true;
+          }
         }
-    };
 
-    const updateRoleName = (e: any) => {
-        if (e.target.value.length < 1) {
-            setDisabled(true)
-        }
-        else {
-            setDisabled(false)
-        }
-        setRoleName(e.target.value);
-    };
+        allMenuArray[i].isActive = topMenuCheck2;
+      }
+    }
 
-    const createRoleApiCall: any = async () => {
-        try {
-            const reqBody = {
-                roleName,
-                menu: menuData,
-            };
+    setMenuData([...allMenuArray]);
+  };
 
-            const { data } = await POST(POST_CREATE_NEW_ROLL, reqBody);
-            if (data?.success) {
-                navigate("/profile/settings/role-management");
-            } else {
-                toast.error(data?.message);
-            }
-        } catch (error: any) {
-            toast.error(error.message);
-        }
-    };
+  const getAllInitialMenu = async () => {
+    try {
+      const { data } = await POST(POST_GET_ALL_INITIAL_MENU, {});
 
-    // useEffect(() => { }, [menuData]);
+      if (data?.success) {
+        setMenuData(data?.data || []);
+      } else {
+        toast.error("Failed to fetch intiail menu");
+      }
+    } catch (error) {
+      toast.error("Failed to fetch initial menu");
+    }
+  };
 
-    useEffect(() => {
-        getAllInitialMenu();
-    }, []);
+  const updateRoleName = (e: any) => {
+    if (e.target.value.length < 1) {
+      setDisabled(true);
+    } else {
+      setDisabled(false);
+    }
+    setRoleName(e.target.value);
+  };
 
-    return (
-        <div>
-            <div>
-                <div className=" lg:ml-5 lg:mr-6 mx-5">
-                    <Breadcum label='Add Role' component={Buttons("", createRoleApiCall, disabled)} />
+  const createRoleApiCall: any = async () => {
+    try {
+      const reqBody = {
+        roleName,
+        menu: menuData,
+      };
+
+      const { data } = await POST(POST_CREATE_NEW_ROLL, reqBody);
+      if (data?.success) {
+        navigate("/profile/settings/role-management");
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+    }
+  };
+
+  // useEffect(() => { }, [menuData]);
+
+  useEffect(() => {
+    getAllInitialMenu();
+  }, []);
+
+  return (
+    <div>
+      <div>
+        <div className=" lg:ml-5 lg:mr-6 mx-5">
+          <Breadcum
+            label="Add Role"
+            component={Buttons("", createRoleApiCall, disabled)}
+          />
+        </div>
+        <div className="mx-5 mt-4">
+          <div className=" mx-5 flex justify-between items-center">
+            <div className="w-[300px]">
+              <CustomInputBox
+                label="Enter Role Name"
+                value={roleName}
+                onChange={(e) => updateRoleName(e)}
+              />
+            </div>
+
+            <div className="">
+              <div className="flex ">
+                <div>
+                  <SearchBox label="Search" value="" onChange={() => {}} />
                 </div>
-                <div className='mx-5 mt-4'>
-
-                    <div className=" mx-5 flex justify-between items-center">
-
-                        <div className="w-[300px]">
-                            <CustomInputBox
-                                label="Enter Role Name"
-                                value={roleName}
-                                onChange={(e) => updateRoleName(e)}
-                            />
-                        </div>
-
-
-                        <div className="">
-                            <div className="flex ">
-                                <div>
-                                    <SearchBox label="Search" value="" onChange={() => { }} />
-                                </div>
-                                <div
-                                    className="flex justify-between items-center p-2 gap-x-2"
-                                // onClick={() => setFilterModal(true)}
-                                >
-                                    {/* <img src={FilterIcon} alt="" /> */}
-                                    <span className="text-[#004EFF] text-[14px] font-semibold">
-                                        FILTER
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    {/* 
+                <div
+                  className="flex justify-between items-center p-2 gap-x-2"
+                  // onClick={() => setFilterModal(true)}
+                >
+                  {/* <img src={FilterIcon} alt="" /> */}
+                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                    FILTER
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 
         <div className="">
           <CustomAccordion
             menuData={menuData}
@@ -584,24 +580,26 @@ function AddRole() {
             }
           />
         </div> */}
-                    <div className="lg:ml-5 lg:mr-6 mx-5 mt-8">
-                        <ReusableAccordion
-                            menuData={menuData}
-                            setMenuData={setMenuData}
-                            handle_Level_1_Menu={handle_Level_1_Menu}
-                            handle_Level_2_Pages={handle_Level_2_Pages}
-                            handle_Level_3_Pages={handle_Level_3_Pages}
-                            handle_Level_3_Menu_Pages={handle_Level_3_Menu_Pages}
-                            handle_Level_3_Menu_All_Pages={handle_Level_3_Menu_All_Pages}
-                            handle_Level_3_Single_Page_Check={handle_Level_3_Single_Page_Check}
-                            handle_Level_3_Single_Menu_Page_Check={
-                                handle_Level_3_Single_Menu_Page_Check
-                            }
-                        />
-                    </div>
-                </div>
+          <div className="lg:ml-5 lg:mr-6 mx-5 mt-8">
+            <ReusableAccordion
+              menuData={menuData}
+              setMenuData={setMenuData}
+              handle_Level_1_Menu={handle_Level_1_Menu}
+              handle_Level_2_Pages={handle_Level_2_Pages}
+              handle_Level_3_Pages={handle_Level_3_Pages}
+              handle_Level_3_Menu_Pages={handle_Level_3_Menu_Pages}
+              handle_Level_3_Menu_All_Pages={handle_Level_3_Menu_All_Pages}
+              handle_Level_3_Single_Page_Check={
+                handle_Level_3_Single_Page_Check
+              }
+              handle_Level_3_Single_Menu_Page_Check={
+                handle_Level_3_Single_Menu_Page_Check
+              }
+            />
+          </div>
+        </div>
 
-                {/* <CustomModal
+        {/* <CustomModal
                 isModalOpen={isSearchModalOpen}
                 closeModal={() => {
                     setIsSearchModalOpen(false);
@@ -613,12 +611,10 @@ function AddRole() {
                     </div>
                 }
             ></CustomModal> */}
-                <ToastContainer />
-            </div>
-        </div>
-    )
+        <ToastContainer />
+      </div>
+    </div>
+  );
 }
 
-export default AddRole
-
-
+export default AddRole;

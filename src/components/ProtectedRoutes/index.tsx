@@ -21,8 +21,8 @@ const ProtectedRoute = ({ children }: Props) => {
 
   React.useEffect(() => {
     (async () => {
-      const { data } = await POST(VALIDATE_USER_TOKEN);
-      if (!data?.success) {
+      const response = await POST(VALIDATE_USER_TOKEN);
+      if (!response?.data?.success) {
         setIsAuthenticated(false);
         clearLocalStorage();
         navigate("/auth/login");

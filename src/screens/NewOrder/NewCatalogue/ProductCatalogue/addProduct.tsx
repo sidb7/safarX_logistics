@@ -62,11 +62,11 @@ const AddProduct: React.FunctionComponent<IAddProductProps> = (props) => {
   });
   const addProduct = async () => {
     const { data } = await POST(POST_ADD_PRODUCT, products);
-    if (data.success) {
-      toast.success(data.message);
+    if (data?.success) {
+      toast.success(data?.message);
       navigate(-1);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
   return (

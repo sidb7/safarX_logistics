@@ -140,19 +140,17 @@ const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
 
 //Role Management
-const POST_CREATE_NEW_ROLL = `${SELLER_BASE_URL}/sellerRole/createSellerRole`
-const POST_GET_ALL_ROLES_DATA = `${SELLER_BASE_URL}/sellerRole/fetchAllSellerRole` 
-const POST_GET_ALL_INITIAL_MENU = `${SELLER_BASE_URL}/sellerMenu/getSellerMenus`
-const POST_UPDATE_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/updateSellerRole`
-const POST_DELETE_ROLE_DATA = `${SELLER_BASE_URL}/sellerRole/deleteSellerRole`
+const POST_CREATE_NEW_ROLL = `${SELLER_BASE_URL}/sellerRole/createSellerRole`;
+const POST_GET_ALL_ROLES_DATA = `${SELLER_BASE_URL}/sellerRole/fetchAllSellerRole`;
+const POST_GET_ALL_INITIAL_MENU = `${SELLER_BASE_URL}/sellerMenu/getSellerMenus`;
+const POST_UPDATE_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/updateSellerRole`;
+const POST_DELETE_ROLE_DATA = `${SELLER_BASE_URL}/sellerRole/deleteSellerRole`;
 
 //User Management
-const POST_CREATE_NEW_USER = `${SELLER_BASE_URL}/sellerUser/createSellerUser`
-const POST_DELETE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/deleteSellerUser`
-const POST_GET_ALL_USER_DATA = `${SELLER_BASE_URL}/sellerUser/getSellerUser`
-const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`
-
-
+const POST_CREATE_NEW_USER = `${SELLER_BASE_URL}/sellerUser/createSellerUser`;
+const POST_DELETE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/deleteSellerUser`;
+const POST_GET_ALL_USER_DATA = `${SELLER_BASE_URL}/sellerUser/getSellerUser`;
+const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`;
 
 // Courier Pricing List
 const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;

@@ -22,11 +22,11 @@ export const EditProfileBank = () => {
     const { data } = await POST(UPDATE_SELLER, {
       data: { bankDetails: editBankDetails },
     });
-    if (data.success) {
+    if (data?.success) {
       setEditBankDetails(data?.data?.bankDetails);
-      // toast.success(data.message);
+      toast.success(data?.message);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 

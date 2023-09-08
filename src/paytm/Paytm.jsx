@@ -5,21 +5,16 @@ import { INITIAL_RECHARGE, RECHARGE_STATUS } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 function Paytm({ text, amt }) {
-  console.log('text :',text)
-
-  const rechargeStatus=async(paytmStatus)=>{
-    const { data } = await POST(
-        RECHARGE_STATUS,
-        {
-          orderId : paytmStatus?.ORDERID,
-          paymentGateway: "PAYTM"
-        }
-      );
-      if (data?.success) {
-        // setShowCheckout(false);
-        toast.success('Successfully Done');
-        }
-  }
+  const rechargeStatus = async (paytmStatus) => {
+    const { data } = await POST(RECHARGE_STATUS, {
+      orderId: paytmStatus?.ORDERID,
+      paymentGateway: "PAYTM",
+    });
+    if (data?.success) {
+      // setShowCheckout(false);
+      toast.success("Successfully Done");
+    }
+  };
   const CONFIG = {
     root: "",
     style: {
@@ -68,17 +63,15 @@ function Paytm({ text, amt }) {
     },
     handler: {
       transactionStatus: function transactionStatus(paymentStatus) {
-        console.log("Transaction Status", paymentStatus);
-        if(paymentStatus?.STATUS==="TXN_SUCCESS"){
-          rechargeStatus(paymentStatus)
-          setMConfig(null)
+        if (paymentStatus?.STATUS === "TXN_SUCCESS") {
+          rechargeStatus(paymentStatus);
+          setMConfig(null);
           // setShowCheckout(false);
-          document.getElementById('paytm-checkoutjs').style.display = "none"
+          document.getElementById("paytm-checkoutjs").style.display = "none";
         }
-
       },
       notifyMerchant: function notifyMerchant(eventName, data) {
-        console.log("Event : ", eventName, data);
+        console.info("Event", eventName, data);
       },
     },
   };
@@ -86,29 +79,26 @@ function Paytm({ text, amt }) {
   const [showCheckout, setShowCheckout] = useState(false);
   const [checkoutJsInstance, setCheckoutJsInstance] = useState(null);
 
-  const initialPaytm =async()=>{
-    const { data } = await POST(
-        INITIAL_RECHARGE,
-        {
-          paymentObject: {
-            amount: String(amt),
-            callbackUrl: "/orders/add-order/payment",
-          },
-          paymentGateway: 'PAYTM'
-        }
-      );
-      if (data?.success) {
-        setMConfig({
-          ...mConfig,
-          data: {
-            ...mConfig.data,
-            token: data?.data?.txnToken,
-            orderId: data?.data?.orderId,
-            amount: data?.data?.amount,
-          },
-        });
-      }
-  }
+  const initialPaytm = async () => {
+    const { data } = await POST(INITIAL_RECHARGE, {
+      paymentObject: {
+        amount: String(amt),
+        callbackUrl: "/orders/add-order/payment",
+      },
+      paymentGateway: "PAYTM",
+    });
+    if (data?.success) {
+      setMConfig({
+        ...mConfig,
+        data: {
+          ...mConfig.data,
+          token: data?.data?.txnToken,
+          orderId: data?.data?.orderId,
+          amount: data?.data?.amount,
+        },
+      });
+    }
+  };
 
   const loadCheckoutScript = () => {
     const url = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
@@ -124,7 +114,7 @@ function Paytm({ text, amt }) {
         checkoutJsInstance.onLoad(() => {
           setCheckoutJsInstance(checkoutJsInstance);
           setShowCheckout(true);
-          initialPaytm()
+          initialPaytm();
         });
       } else {
         console.error("onload not available!");

@@ -227,7 +227,7 @@ const Payment = () => {
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
-    if (data.success) {
+    if (data?.success) {
       setIsLoading(true);
       const payload = {
         walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",

@@ -67,7 +67,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             width={"22px"}
             height={"22px"}
             alt=""
-            className="cursor-pointer hidden"
+            className="cursor-pointer"
             onClick={() => setIsModalOpen(true)}
           />
 
@@ -92,21 +92,20 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               ref={dropdownRef}
             >
               <CustomButton
-                icon={ProfileLogo}
-                onClick={() => setIsOpen(!isOpen)}
-                showIcon={true}
-                onlyIcon={true}
-                className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
-                text={""}
-              />
-
-              <CustomButton
                 icon={NotificationLogo}
                 showIcon={true}
                 onlyIcon={true}
                 className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
                 text={""}
                 onClick={() => navigate("/notifications")}
+              />
+              <CustomButton
+                icon={ProfileLogo}
+                onClick={() => setIsOpen(!isOpen)}
+                showIcon={true}
+                onlyIcon={true}
+                className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
+                text={""}
               />
 
               {isModalOpen && (
@@ -125,12 +124,12 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               {/* <img src={ProfileLogo} alt="" /> */}
               {isOpen && (
                 <div
-                  className="origin-top-right z-10 absolute right-4 mt-2 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                  className="origin-top-right z-10 absolute right-2 mt-8 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
                 >
-                  <div className="py-1" role="none">
+                  <div className="py-0.5" role="none">
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
