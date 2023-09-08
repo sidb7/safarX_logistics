@@ -42,12 +42,18 @@ const FAQContent: React.FC<FAQContentProps> = ({ faqType }) => {
   return (
     <div>
       {faqData[faqType]?.map((faq, index) => (
-        <div key={index} className="mb-4">
+        <div key={index} className="mb-4 mt-4">
           <div
-            className="flex justify-between cursor-pointer"
+            className={`flex justify-between items-center cursor-pointer ${
+              activeQuestion === faq.question ? "bg-[#E8E8E8]" : "bg-white"
+            } rounded-lg w-[1148px] h-[48px] border-r-0 border-b-2 border-t-1 border-l-0 border-[#E8E8E8] gap-2 p-4 ${
+              activeQuestion === faq.question
+                ? "border-r-1 border-[#E8E8E8] "
+                : ""
+            }`}
             onClick={() => toggleQuestion(faq.question)}
           >
-            <p className="font-medium text-lg">{faq.question}</p>
+            <p className="font-medium text-lg ">{faq.question}</p>
             <svg
               className={`w-6 h-6 ${
                 activeQuestion === faq.question ? "transform rotate-180" : ""
@@ -66,7 +72,7 @@ const FAQContent: React.FC<FAQContentProps> = ({ faqType }) => {
             </svg>
           </div>
           {activeQuestion === faq.question && (
-            <p className="mt-2">{faq.answer}</p>
+            <p className="mt-2 ml-8">{faq.answer}</p>
           )}
         </div>
       ))}
