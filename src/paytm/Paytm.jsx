@@ -1,10 +1,31 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CheckoutProvider, Checkout } from "paytm-blink-checkout-react";
 import { POST } from "../utils/webService";
-import { INITIAL_RECHARGE, RECHARGE_STATUS } from "../utils/ApiUrls";
+import {
+  Enviornment,
+  INITIAL_RECHARGE,
+  RECHARGE_STATUS,
+} from "../utils/ApiUrls";
 import { toast } from "react-toastify";
 
 function Paytm({ text, amt }) {
+  let urlLink = "";
+  let mid = "";
+  let website = "";
+  let env = "";
+  if (Enviornment === "production") {
+    urlLink = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
+    mid = "Shipya54880889423475";
+    website = "DEFAULT";
+    env = "PROD";
+  } else {
+    urlLink =
+      "https://securegw-stage.paytm.in/merchantpgpui/checkoutjs/merchants/";
+    mid = "xEWnAV30432428282879";
+    website = "WEBSTAGING";
+    env = "STAGE";
+  }
+
   const rechargeStatus = async (paytmStatus) => {
     const { data } = await POST(RECHARGE_STATUS, {
       orderId: paytmStatus?.ORDERID,
@@ -54,10 +75,10 @@ function Paytm({ text, amt }) {
         "LOGIN",
       ],
     },
-    website: "DEFAULT",
+    website: website,
     flow: "DEFAULT",
     merchant: {
-      mid: "Shipya54880889423475",
+      mid: mid,
       name: "AVN BUSINESS SOLUTIONS",
       redirect: false,
     },
@@ -101,7 +122,7 @@ function Paytm({ text, amt }) {
   };
 
   const loadCheckoutScript = () => {
-    const url = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
+    const url = urlLink;
     const scriptElement = document.createElement("script");
     scriptElement.async = true;
     scriptElement.src = url.concat(mConfig.merchant.mid);
@@ -172,7 +193,7 @@ function Paytm({ text, amt }) {
         config={mConfig}
         checkoutJsInstance={checkoutJsInstance}
         openInPopup={true}
-        env="PROD"
+        env={env}
       >
         {showCheckout && <Checkout />}
       </CheckoutProvider>

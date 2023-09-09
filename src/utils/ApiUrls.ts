@@ -1,8 +1,8 @@
+export let Enviornment = "";
 let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
-let Enviornment = "";
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
