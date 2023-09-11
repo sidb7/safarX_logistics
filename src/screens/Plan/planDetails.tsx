@@ -27,8 +27,6 @@ const PlanDetails = (props: ITypeProps) => {
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
 
-  // const [isRateCardPresent, setIsRateCardPresent] = useState(true);
-  // const [planData, setPlanData]: any = useState([]);
   const [renderingComponents, setRenderingComponents] = React.useState(0);
 
   const arrayData = [
@@ -635,32 +633,26 @@ const PlanDetails = (props: ITypeProps) => {
     (async () => {
       try {
         //Get Plan API
-        const { data: response }: any = await POST(GET_PLAN_URL);
+        const { data: planResponse }: any = await POST(GET_PLAN_URL);
+        const { data: response }: any = await POST(GET_ALL_PLANS, {
+          limit: 4,
+        });
 
-        if (response?.success) {
-          setPlanData(response?.data);
+        if (planResponse?.success) {
+          setPlanData(planResponse?.data);
         }
-      } catch (error) {
-        return error;
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        //Get all plans API
-        const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
 
         if (response?.success) {
           setAllPlans(response?.data.reverse());
         }
       } catch (error) {
-        console.log("GET ALL PLANS API ERROR", error);
+        console.error(" PLANS API ERROR", error);
+
         return error;
       }
     })();
   }, []);
+
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
   };
@@ -706,6 +698,16 @@ const PlanDetails = (props: ITypeProps) => {
         <div className="ml-[30px] mb-9">
           <PlanDetailsCard planDetails={planData} />
         </div>
+        {/* Pricing Details */}
+        <div className="ml-[30px] mb-4">
+          <ScrollNav
+            arrayData={arrayData}
+            showNumber={false}
+            setScrollIndex={setScrollIndex}
+          />
+        </div>
+        {renderingComponents === 0 && <CourierPricing />}
+
         {/* Info Cards */}
         <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
           <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
@@ -776,14 +778,6 @@ const PlanDetails = (props: ITypeProps) => {
           />
         </div>
 
-        {/* Pricing Details */}
-        <div className="ml-[30px]">
-          <ScrollNav
-            arrayData={arrayData}
-            showNumber={false}
-            setScrollIndex={setScrollIndex}
-          />
-        </div>
         {/* Terms & Conditions */}
 
         <div className="ml-[30px]">
@@ -796,8 +790,6 @@ const PlanDetails = (props: ITypeProps) => {
             columns={termsAndConditionsColumns}
           />
         </div>
-
-        {renderingComponents === 0 && <CourierPricing />}
 
         {/* end here */}
       </div>

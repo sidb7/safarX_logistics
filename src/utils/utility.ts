@@ -59,8 +59,9 @@ export const generateUniqueCode = (minLength: number, maxLength: number) => {
   let code = "";
 
   while (code.length < length) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    code += charset.charAt(randomIndex);
+    const randomIndex = Math.random() * charset.length;
+    const randomIndexOnFloor = Math.floor(randomIndex);
+    code += charset.charAt(randomIndexOnFloor);
   }
 
   return code;

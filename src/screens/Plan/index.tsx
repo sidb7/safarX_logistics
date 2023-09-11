@@ -216,13 +216,12 @@ const Index = (props: ITypeProps) => {
       try {
         //Get all plans API
         const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
-        console.log("Response....", response);
+
         if (response?.success) {
-          console.log("Response...", response);
           setAllPlans(response?.data.reverse());
         }
       } catch (error) {
-        console.log("GET PLAN API ERROR", error);
+        console.error("GET PLAN API ERROR", error);
         return error;
       }
     })();

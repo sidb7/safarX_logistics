@@ -10,7 +10,11 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
-import { GET_LATEST_ORDER, POST_SET_ORDER_ID } from "../../../utils/ApiUrls";
+import {
+  GET_LATEST_ORDER,
+  POST_SET_ORDER_ID,
+  POST_PLACE_ORDER,
+} from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
@@ -106,15 +110,36 @@ const Summary = (props: Props) => {
     try {
       let payload = { orderId: orderId };
 
-      const { data: response } = await POST(POST_SET_ORDER_ID, payload);
+      const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
+      const placeOrderPromise = await POST(POST_PLACE_ORDER);
 
-      if (response?.success) {
-        //  navigate
-        toast.success(response?.message);
-        navigate("/orders/add-order/payment");
-      } else {
-        toast.error(response?.message);
-      }
+      let promiseSetOrderId = new Promise(function (resolve, reject) {
+        resolve(setOrderIdPromise);
+      });
+
+      let promisePlaceOrder = new Promise(function (resolve, reject) {
+        resolve(placeOrderPromise);
+      });
+
+      promiseSetOrderId
+        .then(function (successMessage: any) {
+          toast.success(successMessage?.data?.message);
+          promisePlaceOrder
+            .then(function (successResponse: any) {
+              const requiredBalance =
+                successResponse?.data?.data[0]?.requiredBalance;
+
+              navigate("/orders/add-order/payment", {
+                state: { requiredBalance: requiredBalance },
+              });
+            })
+            .catch(function (errorResponse) {
+              toast.error(errorResponse?.data?.message);
+            });
+        })
+        .catch(function (errorMessage) {
+          toast.error(errorMessage?.data?.message);
+        });
     } catch (error) {
       return error;
     }
@@ -339,7 +364,12 @@ const Summary = (props: Props) => {
           ))}
         </div>
       </div>
-      <BottomLayout callApi={() => setOrderIdApi()} Button2Name={true} />
+      <BottomLayout
+        customButtonText="PLACE ORDER"
+        callApi={() => setOrderIdApi()}
+        className="lg:w-[120px]"
+        Button2Name={true}
+      />
     </div>
   );
 };

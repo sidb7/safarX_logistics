@@ -289,11 +289,11 @@ const CourierPricing = () => {
     }),
   ];
 
-  return (
+  return data && data?.length > 0 ? (
     <div className="ml-[30px] mb-[68px] ">
       <CustomTable columns={CourierPricingDataHeading} data={data} />
     </div>
-  );
+  ) : null;
 };
 
 export default CourierPricing;

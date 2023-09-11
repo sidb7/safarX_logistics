@@ -25,7 +25,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
         </div>
 
         <div className="  ">
-          {planDetails.length >= 1 ? (
+          {planDetails && planDetails.length > 0 ? (
             planDetails?.map((eachPlan: any, index: any) => {
               return (
                 <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-5 py-4  lg:h-[70px]">
