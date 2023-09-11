@@ -6,6 +6,8 @@ import WeightFreezeBanner from "./WeightFreezeBanner";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import WeightFreezeTable from "./WeightFreezetable";
 import NewDiscrepancyTable from "./Newdiscrepancy";
+import PendingDispute from "./PendingDispute";
+import CompletedTable from "./CompletedTable";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const [filterId, setFilterId] = useState(0);
@@ -62,6 +64,10 @@ const WeightFreeze: React.FunctionComponent = () => {
       return <WeightFreezeTable />;
     } else if (tabName === "New Discrepancy") {
       return <NewDiscrepancyTable />;
+    } else if (tabName === "Pending Dispute") {
+      return <PendingDispute />;
+    } else if (tabName === "Completed") {
+      return <CompletedTable />;
     }
   };
   return (

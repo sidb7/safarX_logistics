@@ -8,14 +8,14 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { CustomTable } from "../../components/Table";
 
-const NewDiscrepancyTable = () => {
+const PendingDispute = () => {
   const columnsHelper = createColumnHelper<any>();
 
-  const NewDiscrepancyData = [
+  const PendingDisputeData = [
     {
       packageDetails: "Product1+Product2",
       orderDetails: "Delhivery Partner, Tracking Id",
-      status: "Pending",
+      status: "Approved",
       appliedWeightAndPrice: "15x15x15 cm 120kg Price:1200",
       sellerPhoto: "15x15x15 cm 120kg",
       chargedWeightAndPrice: "20% discrepancy chance",
@@ -35,7 +35,7 @@ const NewDiscrepancyTable = () => {
     {
       packageDetails: "Product1+Product2",
       orderDetails: "Delhivery Partner, Tracking Id",
-      status: "Resolved",
+      status: "Reject and Debit",
       appliedWeightAndPrice: "15x15x15 cm 120kg Price:1200",
       sellerPhoto: "15x15x15 cm 120kg",
       chargedWeightAndPrice: "20% discrepancy chance",
@@ -43,7 +43,7 @@ const NewDiscrepancyTable = () => {
       courierPhotos: "images",
     },
   ];
-  const NewDiscrepancyHeading = [
+  const PendingDisputeHeading = [
     columnsHelper.accessor("packageDetails", {
       header: () => {
         return (
@@ -82,44 +82,7 @@ const NewDiscrepancyTable = () => {
         );
       },
     }),
-    columnsHelper.accessor("status", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Status
-            </p>
-          </div>
-        );
-      },
 
-      cell: (info: any) => {
-        return (
-          <p
-            className={`flex items-center ${
-              info.row.original.status === "Pending"
-                ? "text-[#F35838] bg-[#FEEEEB]  border-[#FEEEEB]"
-                : info.row.original.status === "Resolved"
-                ? "text-[#7CCA62] bg-[#F2FAEF] border-[#7CCA62]"
-                : "text-[#F0A22E] bg-[#FDF6EA] border-[#FDF6EA]"
-            } font-Open text-sm font-semibold leading-5 px-4 py-2 rounded-lg`}
-          >
-            <img
-              src={
-                info.row.original.status === "Pending"
-                  ? ClockErrorIcon
-                  : info.row.original.status === "Resolved"
-                  ? ResolvedIcon
-                  : ProcessingIcon
-              }
-              alt=""
-            />
-            &nbsp;
-            {capitalizeFirstLetter(info.row.original.status)}
-          </p>
-        );
-      },
-    }),
     columnsHelper.accessor("appliedWeightAndPrice", {
       header: () => {
         return (
@@ -215,7 +178,44 @@ const NewDiscrepancyTable = () => {
         );
       },
     }),
+    columnsHelper.accessor("status", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Status
+            </p>
+          </div>
+        );
+      },
 
+      cell: (info: any) => {
+        return (
+          <p
+            className={`flex items-center ${
+              info.row.original.status === "Reject and Debit"
+                ? "text-[#F35838] bg-[#FEEEEB]  border-[#FEEEEB]"
+                : info.row.original.status === "Approved"
+                ? "text-[#7CCA62] bg-[#F2FAEF] border-[#7CCA62]"
+                : "text-[#F0A22E] bg-[#FDF6EA] border-[#FDF6EA]"
+            } font-Open text-sm font-semibold leading-5 px-4 py-2 rounded-lg`}
+          >
+            {/* <img
+              src={
+                info.row.original.status === "Reject and Debit"
+                  ? ""
+                  : info.row.original.status === "Approved"
+                  ? ""
+                  : ""
+              }
+              alt=""
+            />
+            &nbsp; */}
+            {capitalizeFirstLetter(info.row.original.status)}
+          </p>
+        );
+      },
+    }),
     columnsHelper.accessor("actions", {
       header: () => {
         return (
@@ -241,8 +241,8 @@ const NewDiscrepancyTable = () => {
     }),
   ];
   return (
-    <CustomTable columns={NewDiscrepancyHeading} data={NewDiscrepancyData} />
+    <CustomTable columns={PendingDisputeHeading} data={PendingDisputeData} />
   );
 };
 
-export default NewDiscrepancyTable;
+export default PendingDispute;
