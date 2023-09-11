@@ -34,7 +34,7 @@ const SearchProductFilterItems: React.FunctionComponent<
                 setProductItems([...temp]);
               }}
             >
-              <img src={eachItem.icon} alt="" className="!w-5 !h-5ss" />
+              <img src={eachItem.icon} alt="" className="!w-5 !h-5" />
               <span
                 className={`${
                   eachItem.selected ? "text-[#004EFF]" : "text-[#1C1C1C]"
