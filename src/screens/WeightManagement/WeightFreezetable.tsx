@@ -1,0 +1,181 @@
+import React from "react";
+import ClockErrorIcon from "../../assets/clock.svg";
+import ProcessingIcon from "../../assets/processing.svg";
+import ResolvedIcon from "../../assets/resolved.svg";
+import BlueEye from "../../assets/blueEye.svg";
+import BlueSend from "../../assets/blueSend.svg";
+import { createColumnHelper } from "@tanstack/react-table";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import { CustomTable } from "../../components/Table";
+
+const WeightFreezeTable = () => {
+  const columnsHelper = createColumnHelper<any>();
+
+  const WeightFreezeData = [
+    {
+      packageDetails: "Product1+Product2",
+      ids: "SKU:ABCDE",
+      packageImages: "UploadedPhotos",
+      weight: "15x15x15 cm 120kg",
+      idealWeight: "15x15x15 cm 120kg",
+      weightAccuracyStatus: "20% discrepancy chance",
+    },
+    {
+      packageDetails: "Product1+Product2",
+      ids: "SKU:ABCDE",
+      packageImages: "UploadedPhotos",
+      weight: "15x15x15 cm 120kg",
+      idealWeight: "15x15x15 cm 120kg",
+      weightAccuracyStatus: "20% discrepancy chance",
+    },
+    {
+      packageDetails: "Product1+Product2",
+      ids: "SKU:ABCDE",
+      packageImages: "UploadedPhotos",
+      weight: "15x15x15 cm 120kg",
+      idealWeight: "15x15x15 cm 120kg",
+      weightAccuracyStatus: "20% discrepancy chance",
+    },
+  ];
+  const WeightFreezeHeading = [
+    columnsHelper.accessor("packageDetails", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Package Details
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.packageDetails}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("ids", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              IDs
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.ids}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("packageImages", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Package Images
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.packageImages}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("weight", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Weight
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {capitalizeFirstLetter(info.row.original.weight)}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("idealWeight", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Ideal Weight
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {capitalizeFirstLetter(info.row.original.idealWeight)}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("weightAccuracyStatus", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Weight Accuracy Status
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {capitalizeFirstLetter(info.row.original.weightAccuracyStatus)}
+          </p>
+        );
+      },
+    }),
+
+    columnsHelper.accessor("actions", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Actions
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div className="flex">
+            <img src={BlueEye} alt="" />
+
+            <img src={BlueSend} alt="" />
+          </div>
+        );
+      },
+    }),
+  ];
+  return <CustomTable columns={WeightFreezeHeading} data={WeightFreezeData} />;
+};
+
+export default WeightFreezeTable;
