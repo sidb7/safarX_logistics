@@ -121,14 +121,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   );
 
   useEffect(() => {
-    let codDataInfo = codData;
-    let totalInvoiceValue = codData.invoiceValue || 0;
-    packages?.forEach((packages: any) => {
-      totalInvoiceValue = +getInvoiceValue(packages?.products);
+    let totalInvoiceValue = 0;
+    let tempArr = packages;
+    tempArr?.forEach((packages: any) => {
+      totalInvoiceValue =
+        totalInvoiceValue + +getInvoiceValue(packages?.products);
     });
 
-    codDataInfo.invoiceValue = totalInvoiceValue;
-    setCodData({ ...codDataInfo });
+    setCodData({ ...codData, invoiceValue: totalInvoiceValue });
   }, [packages]);
 
   useEffect(() => {
@@ -144,6 +144,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const handlePackageDetailsForProduct = (productsData: any) => {
+    if (!productsData.length) {
+      console.log("handlePackageDetailsForProduct", productsData);
+      toast.error("Please Atleast One Product");
+      return;
+    }
+
     setTempPackage({ products: productsData });
 
     if (!packages[boxIndex] && !packages[boxIndex]?.hasOwnProperty("boxId")) {
@@ -370,7 +376,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 />
               );
             })}
-            <div className="pt-6 px-4">
+            <div className="">
               <div className="hidden lg:flex justify-between ">
                 <div className="flex py-5 gap-x-2">
                   <img src={ProductIcon} alt="Package Icon" />

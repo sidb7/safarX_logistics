@@ -63,6 +63,9 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const handleDeleteProduct = (index: any) => {
+    if (allProducts.length === 1) {
+      return;
+    }
     let tempArr = allProducts;
     tempArr.splice(index, 1);
     setAllProducts([...tempArr]);
@@ -99,16 +102,24 @@ const BoxDetails = (props: IBoxdetails) => {
     ).toFixed(2);
   };
 
-  const handleAddPackage = (packageData: any, index: any) => {
-    // setProductFinalPayload({ boxInfo: [...productFinalPayload?.boxInfo, packageData] });
+  const calcTotalProducts = (arr: any) => {
+    return (
+      arr.reduce((accumulator: any, product: any) => {
+        const totalProducts = +(+product.qty);
+        return accumulator + totalProducts;
+      }, 0) || 0
+    );
   };
 
   return (
     <div className="w-[500px]">
       <div className="flex p-5 gap-x-2">
         <img src={ProductIcon} alt="Package Icon" />
-        <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+        <h1 className="flex items-baseline gap-x-2 font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
           Box {boxIndex + 1}
+          <div className="font-semibold font-Lato text-lg text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]">{`(${calcTotalProducts(
+            allProducts
+          )} Products) `}</div>
         </h1>
       </div>
       <div
@@ -120,7 +131,7 @@ const BoxDetails = (props: IBoxdetails) => {
         }}
       >
         <div className="p-2 flex items-center ">
-          <div className="font-semibold text-lg ">{selectedBox.name}</div>
+          <div className="font-semibold text-lg">{selectedBox.name}</div>
           <div className="flex px-4 gap-x-2">
             <div
               onClick={() => handleEditBoxType(selectedBox, boxIndex, true)}
@@ -136,6 +147,7 @@ const BoxDetails = (props: IBoxdetails) => {
             </div>
           </div>
         </div>
+
         <div className="h-full overflow-auto rounded-lg">
           {!(allProducts.length > 0) && (
             <div className="h-full w-full flex justify-center items-center">

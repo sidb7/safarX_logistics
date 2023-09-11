@@ -50,14 +50,11 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       };
 
       try {
-        const response = await fetch(
-          "http://13.235.186.32:8006/api/v1/landmark/landmark",
-          {
-            method: "POST",
-            headers,
-            body: JSON.stringify(payload),
-          }
-        );
+        const response = await fetch("https://sylandmarkdev.yaarilabs.com/", {
+          method: "POST",
+          headers,
+          body: JSON.stringify(payload),
+        });
 
         if (response.ok) {
           const data = await response.json();
