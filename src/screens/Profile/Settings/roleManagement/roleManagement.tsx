@@ -37,7 +37,7 @@ const Buttons = (className?: string) => {
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
           text="ADD ROLE"
           onClick={() => navigate("/profile/settings/role-management/add-role")}
-          showIcon={true}
+          showIcon={false}
         />
       </div>
     </div>
@@ -196,9 +196,7 @@ function RoleManagement() {
 
   return (
     <div>
-      <div className="lg:ml-5 lg:mr-6 mx-5">
         <Breadcum label="Role Management" component={Buttons()} />
-      </div>
       <div className=" my-3 mx-6">
         <div className=" flex justify-end">
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">
