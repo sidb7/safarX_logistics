@@ -8,8 +8,11 @@ import WeightFreezeTable from "./WeightFreezetable";
 import NewDiscrepancyTable from "./Newdiscrepancy";
 import PendingDispute from "./PendingDispute";
 import CompletedTable from "./CompletedTable";
+import CustomButton from "../../components/Button";
+import addIcon from "../../assets/Catalogue/add.svg";
 
 const WeightFreeze: React.FunctionComponent = () => {
+  const [isActiveFreezeweight, setActiveFreezeweight] = useState(true);
   const [filterId, setFilterId] = useState(0);
   const [activeTab, setActiveTab] = useState("Weight-Freeze");
   const [tabName, setTabName] = useState(
@@ -21,6 +24,7 @@ const WeightFreeze: React.FunctionComponent = () => {
     { label: "Pending Dispute", isActive: false },
     { label: "Completed", isActive: false },
   ]);
+  const [showRaiseTicket, setShowRaiseTicket] = useState(false);
 
   const disputeArray = [
     {
@@ -59,6 +63,20 @@ const WeightFreeze: React.FunctionComponent = () => {
     },
   ];
 
+  const renderHeaderComponent = () => {
+    return (
+      <CustomButton
+        icon={addIcon}
+        showIcon={true}
+        text={"RAISE TICKET"}
+        className="!p-3"
+        onClick={() => {
+          setShowRaiseTicket(true);
+        }}
+      />
+    );
+  };
+
   const renderComponent = () => {
     if (tabName === "Weight-Freeze") {
       return <WeightFreezeTable />;
@@ -72,7 +90,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   };
   return (
     <div className="m-4">
-      <Breadcum label="Weight Management" />
+      <Breadcum label="Weight Management" component={renderHeaderComponent()} />
       <div className="m-4">
         <div className="flex justify-between !mt-4 gap-4 mb-10">
           {disputeArray?.map((order: any, i: number) => (
@@ -93,8 +111,8 @@ const WeightFreeze: React.FunctionComponent = () => {
         </div>
       </div>
       <div>
-        <div className="m-4">
-          <WeightFreezeBanner />
+        <div className="m-7">
+          <WeightFreezeBanner isActiveFreezeweight={isActiveFreezeweight} />
         </div>
       </div>
       <div className="lg:mb-24">

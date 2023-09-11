@@ -1,11 +1,23 @@
-import React, { useState, useEffect, SetStateAction } from "react";
+import React from "react";
 
-const WeightFreezeBanner: React.FunctionComponent = () => {
+interface WeightFreezeBannerProps {
+  isActiveFreezeweight: boolean;
+}
+
+const WeightFreezeBanner: React.FC<WeightFreezeBannerProps> = ({
+  isActiveFreezeweight,
+}) => {
   return (
-    <div className=" rounded-lg p-8 bg-[#E5EDFF]">
-      <p className="font-Lato font-semibold">
-        Congrats! With Weight Freeze, you have saved upto 20% of your money.
-      </p>
+    <div className={"rounded-lg p-8 bg-[#E5EDFF]"}>
+      {isActiveFreezeweight ? (
+        <p className="font-Lato font-semibold">
+          Congrats! With Weight Freeze, you have saved up to 20% of your money.
+        </p>
+      ) : (
+        <p className="font-Lato font-semibold">
+          Save up to 40% weight discrepancy with weight freeze{" "}
+        </p>
+      )}
     </div>
   );
 };

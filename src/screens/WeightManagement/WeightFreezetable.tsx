@@ -7,6 +7,8 @@ import LockIcon from "../../assets/WeightManagement/lockicon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { CustomTable } from "../../components/Table";
+import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
+import editIcon from "../../assets/serv/edit.svg";
 
 const WeightFreezeTable = () => {
   const columnsHelper = createColumnHelper<any>();
@@ -15,7 +17,7 @@ const WeightFreezeTable = () => {
     {
       packageDetails: "Product1+Product2",
       ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
+      packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
       weightAccuracyStatus: "20% discrepancy chance",
@@ -23,7 +25,7 @@ const WeightFreezeTable = () => {
     {
       packageDetails: "Product1+Product2",
       ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
+      packageImages: "Upload Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
       weightAccuracyStatus: "20% discrepancy chance",
@@ -31,7 +33,7 @@ const WeightFreezeTable = () => {
     {
       packageDetails: "Product1+Product2",
       ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
+      packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
       weightAccuracyStatus: "20% discrepancy chance",
@@ -89,9 +91,13 @@ const WeightFreezeTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.packageImages}
-          </p>
+          <div className="flex items-center justify-center ">
+            <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 mr-2 ">
+              {info.row.original.packageImages}
+            </p>
+            <img src={actionIcon} alt="actionIcon" className="mr-2" />
+            {/* <img src={DeleteIconForLg} alt="deleteIcon" className="w-5 h-5" /> */}
+          </div>
         );
       },
     }),
