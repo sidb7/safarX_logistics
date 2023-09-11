@@ -1,6 +1,6 @@
 import React from "react";
 // import ProductIcon from "../../../assets/Product/Product.svg";
-import ProductIcon from "../../../../assets/Product/Product.svg"
+import ProductIcon from "../../../../assets/Product/Product.svg";
 import DeleteIcon from "../../../../assets/Product/Delete.svg";
 import BookmarkIcon from "../../../../assets/Product/Bookmark.svg";
 import EditIcon from "../../../../assets/Product/Edit.svg";
@@ -18,11 +18,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   return (
     <div className="mx-4">
       <div className="flex gap-2">
-        <img src={ProductIcon} alt="Product Icon" className="" />
+        <img src={ProductIcon} alt="Product Icon" />
         <h1 className="font-bold leading-6 text-lg ">Product</h1>
       </div>
       <div className="flex justify-between mt-3">
-        <div className="">
+        <div>
           <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
             Package 1
           </h2>

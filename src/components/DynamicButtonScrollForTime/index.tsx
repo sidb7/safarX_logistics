@@ -13,7 +13,7 @@ const index = (props: IProps) => {
 
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-4 py-2 w-[352px] h-[137px]">
-      {items.map((item: any, index: number) => (
+      {items?.map((item: any, index: number) => (
         <button
           key={index}
           className={`flex items-center justify-center border-[1px] w-[168px] h-[35px] rounded text-[14px] font-semibold ${

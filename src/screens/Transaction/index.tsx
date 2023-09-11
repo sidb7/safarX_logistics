@@ -39,7 +39,7 @@ export const Transaction = () => {
         if (data?.success) {
           setData(data.data[0]);
         } else {
-          toast.error(data.message);
+          toast.error(data?.message);
         }
       })();
     }
@@ -108,7 +108,7 @@ export const Transaction = () => {
 
   return (
     <>
-      <div className="">
+      <div>
         <Breadcum label="Transaction History" />
       </div>
       <div className="flex flex-col">

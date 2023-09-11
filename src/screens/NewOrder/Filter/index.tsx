@@ -5,8 +5,6 @@ import dummyDatas from "../../NewOrder/Filter/dummyFile.json";
 type Props = {};
 
 const index = (props: Props) => {
-  console.log("data", dummyDatas);
-
   return (
     <div>
       <CustomAccordian

@@ -11,7 +11,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import DownloadIcon from "../../../../assets/Label/download.svg";
 import { useNavigate } from "react-router-dom";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
-import {useState} from "react";
+import { useState } from "react";
 import OrderModal from "../../../../screens/NewOrder/ReturningUser/Label/orderModal";
 
 const FileText =
@@ -20,28 +20,28 @@ const FileText =
 type Props = {};
 
 const Label = (props: Props) => {
-    const navigate = useNavigate();
-    const [order, setOrder] = useState(false);
-    const closeModal = () => setOrder(false);
+  const navigate = useNavigate();
+  const [order, setOrder] = useState(false);
+  const closeModal = () => setOrder(false);
 
-    const orderConfirmationModal = () => {
-        setOrder(true)
-    }
+  const orderConfirmationModal = () => {
+    setOrder(true);
+  };
 
   return (
     <div className="flex flex-col  gap-y-5">
-        <header className="fixed top-0 z-10 w-full ">
-          <NavBar />
-        </header>
-        <div>
-            <div className="inline-flex space-x-2 items-center justify-start px-5 mt-20">
-              <img src={BackArrowIcon} alt="" />
+      <header className="fixed top-0 z-10 w-full ">
+        <NavBar />
+      </header>
+      <div>
+        <div className="inline-flex space-x-2 items-center justify-start px-5 mt-20">
+          <img src={BackArrowIcon} alt="" />
 
-              <p className="text-lg font-semibold text-center text-gray-900 ">
-                Add new order
-              </p>
-            </div>
-          </div>
+          <p className="text-lg font-semibold text-center text-gray-900 ">
+            Add new order
+          </p>
+        </div>
+      </div>
       <div className="flex items-center justify-between mt-5 mx-5">
         <div className="flex items-center gap-2">
           <img src={LabelIcon} alt="LabelIcon" />
@@ -72,56 +72,56 @@ const Label = (props: Props) => {
           height="600px"
         />
       </div>
-      <CustomBottomModal isOpen={order} onRequestClose={closeModal} overlayClassName="flex p-5 items-center">
-                <OrderModal onRequestClose={closeModal}/>
-        </CustomBottomModal>
+      <CustomBottomModal
+        isOpen={order}
+        onRequestClose={closeModal}
+        overlayClassName="flex p-5 items-center"
+      >
+        <OrderModal onRequestClose={closeModal} />
+      </CustomBottomModal>
       <footer className="w-full fixed  bottom-0 	">
-            <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0">
-              {window.location.pathname !== "/neworder/label" ? 
-            
-              (
-                <>
-                  <ServiceButton
-                    text="DOWNLOAD"
-                    icon={DownloadIcon}
-                    showIcon={true}
-                    className="!bg-[#F2F6FF] text-[#0066FF] border-none text-[14px] font-semibold "
-                  />
-                </>
-              ):(
-                <>
-                  <ServiceButton
-                    text="BACK"
-                    onClick={() => {
-                      window.history.back();
-                    }}
-                  />
-                </>
-              )}
-
+        <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0">
+          {window.location.pathname !== "/neworder/label" ? (
+            <>
               <ServiceButton
-                text="NEXT"
-                className="bg-[#1C1C1C] text-[#FFFFFF]"
-                onClick={() => {orderConfirmationModal();
-                  console.log(window.location.pathname);
-
-                  if (window.location.pathname === "/neworder/pickup") {
-                    navigate("/neworder/delivery");
-                  } else if (
-                    window.location.pathname === "/neworder/delivery"
-                  ) {
-                    navigate("/neworder/package");
-                  } else if (window.location.pathname === "/neworder/package") {
-                    navigate("/neworder/service");
-                  } else if (window.location.pathname === "/neworder/service") {
-                    navigate("/neworder/summary");
-                  } else if (window.location.pathname === "/neworder/summary") {
-                    navigate("/neworder/payment");
-                  }
+                text="DOWNLOAD"
+                icon={DownloadIcon}
+                showIcon={true}
+                className="!bg-[#F2F6FF] text-[#0066FF] border-none text-[14px] font-semibold "
+              />
+            </>
+          ) : (
+            <>
+              <ServiceButton
+                text="BACK"
+                onClick={() => {
+                  window.history.back();
                 }}
               />
-            </div>
-          </footer>
+            </>
+          )}
+
+          <ServiceButton
+            text="NEXT"
+            className="bg-[#1C1C1C] text-[#FFFFFF]"
+            onClick={() => {
+              orderConfirmationModal();
+
+              if (window.location.pathname === "/neworder/pickup") {
+                navigate("/neworder/delivery");
+              } else if (window.location.pathname === "/neworder/delivery") {
+                navigate("/neworder/package");
+              } else if (window.location.pathname === "/neworder/package") {
+                navigate("/neworder/service");
+              } else if (window.location.pathname === "/neworder/service") {
+                navigate("/neworder/summary");
+              } else if (window.location.pathname === "/neworder/summary") {
+                navigate("/neworder/payment");
+              }
+            }}
+          />
+        </div>
+      </footer>
     </div>
   );
 };

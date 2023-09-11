@@ -76,7 +76,6 @@ const RechargePayment = () => {
   const [congratulations, setCongratulations] = useState(false);
 
   const congo = () => setCongratulations(true);
-  console.log("congratulations", congratulations);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);

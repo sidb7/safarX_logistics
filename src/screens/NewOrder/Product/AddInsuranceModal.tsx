@@ -20,7 +20,7 @@ interface IProps {
 
 const AddInsuranceModal = (props: IProps) => {
   const { codData1 } = props;
-  console.log("codData1", codData1);
+
   const [toggleStatus, setToggleStatus] = useState(false);
   const [productInsurance, setProductInsurance] = useState({});
   const [codData, setCodData] = useState<any>(codData1);
@@ -28,14 +28,13 @@ const AddInsuranceModal = (props: IProps) => {
   const { insurance, setInsurance } = props;
 
   useEffect(() => {
-    console.log("codData1.isCOD", codData1);
     if (codData1.isCOD) {
       setToggleStatus(true);
     }
   }, [codData1]);
 
   const postCodDetails = async () => {
-    // console.log("postCodDetails", toggleStatus);
+    //
 
     const payload = {
       paymentType: "COD",
@@ -49,7 +48,6 @@ const AddInsuranceModal = (props: IProps) => {
       setInsurance({
         codInfo: codData,
       });
-      console.log("POST_PACKAGE", data);
     }
   };
 
@@ -141,7 +139,6 @@ const AddInsuranceModal = (props: IProps) => {
             inputType="text"
             onChange={(e) => {
               setCodData({ ...codData, codAmount: e.target.value });
-              console.log(codData);
             }}
           />
           <CustomInputBox

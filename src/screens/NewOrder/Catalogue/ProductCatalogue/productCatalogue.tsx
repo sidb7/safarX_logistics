@@ -16,7 +16,7 @@ import FoodIcon from "../../../../assets/Catalogue/food.svg";
 import { log } from "console";
 
 const ProductCatalogue = () => {
-  // console.log('useSelector :',useSelector(state:any));
+  //
 
   const catalogueState = useSelector((state: any) => state?.catalogue);
 
@@ -27,7 +27,6 @@ const ProductCatalogue = () => {
 
   const [statusData, setStatusData] = useState("single_product");
   const [extraProducts, setExtraProducts] = useState(true);
-  console.log("products=>", extraProducts);
 
   return (
     <div>
@@ -92,8 +91,8 @@ const ProductCatalogue = () => {
 
       {catalogueState?.productBtnName === "Single Product" && (
         <div className="flex flex-col lg:grid grid-cols-4  px-5 justify-center mt-1 gap-x-[25px] gap-y-[34px]">
-          {productCatalogueData.map((item: any, index: number) => (
-            <div className="w-[320px] lg:w-[272px] h-[76px]">
+          {productCatalogueData?.map((item: any, index: number) => (
+            <div className="w-[320px] lg:w-[272px] h-[76px]" key={index}>
               <ProductBox
                 image={ItemIcon}
                 productName="Mac book air"
@@ -108,8 +107,8 @@ const ProductCatalogue = () => {
 
       {catalogueState?.productBtnName === "Combo Product" && (
         <div className="grid grid-cols-4 px-5 justify-center mt-1 gap-x-[25px] gap-y-[34px]">
-          {productCatalogueData.map((item: any, index: number) => (
-            <div className="w-[320px] lg:w-[272px] h-[76px]">
+          {productCatalogueData?.map((item: any, index: number) => (
+            <div className="w-[320px] lg:w-[272px] h-[76px]" key={index}>
               <ProductBox
                 image={ItemIcon}
                 productName="Mac book air"

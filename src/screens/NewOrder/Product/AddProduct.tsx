@@ -135,9 +135,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       } else {
         throw new Error(data?.message);
       }
-    } catch (error) {
-      console.log("getOrderProductDetails", error);
-    }
+    } catch (error) {}
   };
 
   const isLgScreen = useMediaQuery({
@@ -226,11 +224,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       </div>
       <div className="px-5 mb-20">
         <div>
-          {productInputState.map((e: any, index: number) => {
+          {productInputState?.map((e: any, index: number) => {
             return (
               <div className="py-4" key={index}>
                 <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-                  <div className="">
+                  <div>
                     <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
                       Product {index + 1}
                     </h2>
@@ -294,7 +292,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   />
                   <div className="flex gap-x-3 w-full">
                     <CustomInputBox
-                      className=""
                       label="Length (CM)"
                       inputType="number"
                       name="length"
@@ -309,7 +306,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     />
 
                     <CustomInputBox
-                      className=""
                       label="Breadth (CM)"
                       name="breadth"
                       inputType="number"
@@ -338,7 +334,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   </div>
                   <div className="flex gap-x-5">
                     <CustomInputBox
-                      className=""
                       placeholder="Volumetric Weight (Kg)"
                       label="Volumetric Weight (Kg)"
                       isDisabled={true}
@@ -348,7 +343,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       }
                     />
                     <CustomInputBox
-                      className=""
                       placeholder="Divisor"
                       label="Divisor"
                       inputMode="numeric"
@@ -357,7 +351,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     />
                   </div>
                   <CustomInputBox
-                    className=""
                     label="Weight (Kg)"
                     inputType="number"
                     name="deadWeight"
@@ -370,7 +363,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     }
                   />
 
-                  <div className="">
+                  <div>
                     <InputWithFileUpload
                       type="file"
                       onChange={(e) => uploadedInputFile(e, index)}

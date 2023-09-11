@@ -27,9 +27,9 @@ export const CustomTable = (props: ITablePropTypes) => {
     <div className="py-2">
       <table className="w-full  bg-white tableContainerStyle	">
         <thead className="border-b border-[#E8E8E8]">
-          {table.getHeaderGroups().map((headerGroup: any) => (
+          {table.getHeaderGroups()?.map((headerGroup: any) => (
             <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header: any) => (
+              {headerGroup.headers?.map((header: any) => (
                 <th
                   key={header.id}
                   className={`px-4 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8] ${thclassName} `}
@@ -46,12 +46,12 @@ export const CustomTable = (props: ITablePropTypes) => {
           ))}
         </thead>
         <tbody className="section ">
-          {table.getRowModel().rows.map((row: any) => (
+          {table.getRowModel().rows?.map((row: any) => (
             <tr
               key={row.id}
               className={`shadow-md rounded-lg	hover:bg-slate-100 ${trclassName}`}
             >
-              {row.getVisibleCells().map((cell: any) => (
+              {row.getVisibleCells()?.map((cell: any) => (
                 <td key={cell.id} className={`px-4 text-left ${tdclassName}`}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
@@ -60,9 +60,9 @@ export const CustomTable = (props: ITablePropTypes) => {
           ))}
         </tbody>
         {/* <tfoot>
-          {table.getFooterGroups().map((footerGroup: any) => (
+          {table.getFooterGroups()?.map((footerGroup: any) => (
             <tr key={footerGroup.id}>
-              {footerGroup.headers.map((header: any) => (
+              {footerGroup.headers?.map((header: any) => (
                 <th key={header.id}>
                   {header.isPlaceholder
                     ? null

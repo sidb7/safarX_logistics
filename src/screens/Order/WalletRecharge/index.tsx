@@ -147,7 +147,7 @@ const WalletRecharge = () => {
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
-    if (data.success) {
+    if (data?.success) {
       setIsLoading(true);
       const payload = {
         walletId: "932defa2-2bfa-40b5-8f5c-275ac834ce94",
@@ -220,6 +220,7 @@ const WalletRecharge = () => {
                 {moneyArr?.map((el: any, i: number) => {
                   return (
                     <div
+                      key={i}
                       onClick={() => setWalletValue(el?.value)}
                       className={`${
                         walletValue === el?.value

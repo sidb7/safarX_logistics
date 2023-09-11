@@ -74,11 +74,11 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
       category: selectedcat,
       productArrray: selectedProductId,
     });
-    if (data.success) {
-      toast.success(data.message);
+    if (data?.success) {
+      toast.success(data?.message);
       navigate(-1);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
   };
 
@@ -89,7 +89,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
         limit: 10,
         pageNo: 1,
       });
-      if (data.success) {
+      if (data?.success) {
         setProductData(data.data);
       } else {
         setProductData([]);
@@ -113,7 +113,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 onClick={() => {}}
               />
             </div>
-            <div className="">
+            <div>
               <CustomButton
                 icon={AddOrder}
                 showIcon={true}
@@ -127,7 +127,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
       />
       <div className="mx-5 overflow-y-auto h-[575px]">
         <div className="relative">
-          <div className="">
+          <div>
             <div className="flex flex-col mt-1">
               <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
                 <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
@@ -239,8 +239,9 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 Most Viewed
               </h1>
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
-                {productData.map((data: any, index: number) => (
+                {productData?.map((data: any, index: number) => (
                   <div
+                    key={index}
                     className="w-[272px] h-[76px]"
                     onClick={() => {
                       if (selectedProductId[data.productId]) {

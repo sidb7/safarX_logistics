@@ -17,7 +17,7 @@ import BottomLayout from "../../../../components/Layout/bottomLayout";
 import DeliceryIcon from "../../../../assets/Delivery Icon.svg";
 
 const ProductCatalogue = () => {
-  // console.log('useSelector :',useSelector(state:any));
+  //
 
   const catalogueState = useSelector((state: any) => state?.catalogue);
   const [viewed, setViewed] = useState(-1);
@@ -98,10 +98,11 @@ const ProductCatalogue = () => {
             {viewed === -1 ? "Most Used" : "Most Viewed"}
           </h1>
           <div className="grid grid-cols-4 px-4 justify-center mt-1 gap-x-[25px] gap-y-[34px]">
-            {productCatalogueData.map((item: any, index: number) => (
+            {productCatalogueData?.map((item: any, index: number) => (
               <div
                 className="w-[272px] h-[76px]"
                 onClick={() => setViewed(index)}
+                key={index}
               >
                 <ProductBox
                   image={ItemIcon}

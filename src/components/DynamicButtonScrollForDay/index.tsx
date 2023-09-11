@@ -9,12 +9,10 @@ interface IProps {
 
 const index = (props: IProps) => {
   const { items, onClick, icons, selectedDay } = props;
-  console.log("selectedDay", selectedDay);
-  console.log("items", items);
 
   return (
     <div className="flex overflow-x-auto whitespace-nowrap space-x-4 py-2 ">
-      {items.map((item: any, index: number) => (
+      {items?.map((item: any, index: number) => (
         <button
           key={index}
           className={`flex items-center justify-center border-[1px] w-[107px] h-[35px] grow ${

@@ -16,6 +16,7 @@ interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
   setIsSearchProductRightModalOpen: any;
   productsFromLatestOrder?: any;
+  selectedProducts?: any;
   handlePackageDetails?: any;
 }
 
@@ -26,6 +27,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     isSearchProductRightModalOpen,
     setIsSearchProductRightModalOpen,
     productsFromLatestOrder,
+    selectedProducts,
     handlePackageDetails,
   } = props;
 
@@ -37,12 +39,28 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
   useEffect(() => {
     if (productsFromLatestOrder) {
-      productsFromLatestOrder.forEach((product: any) => {
+      setProducts([]);
+      let tempArr = JSON.parse(JSON.stringify(productsFromLatestOrder));
+      let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
+
+      tempArr?.forEach((product: any) => {
         product.selected = false;
       });
-      setProducts(productsFromLatestOrder);
+
+      if (tempSelectedArr.length > 0) {
+        tempSelectedArr?.forEach((selectedProduct: any) => {
+          tempArr?.forEach((products: any) => {
+            if (selectedProduct.productId === products.productId) {
+              products.selected = true;
+              products.qty = selectedProduct.qty;
+            }
+          });
+        });
+      }
+
+      setProducts([...sortOnSelected(tempArr)]);
     }
-  }, [productsFromLatestOrder]);
+  }, [isSearchProductRightModalOpen, selectedProducts]);
 
   const sortOnSelected = (products: any) => {
     return products.sort((a: any, b: any) => {
@@ -128,32 +146,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
             <SearchProductFilterItems filterItems={filterItems} />
           </div>
-          {/* Most Used */}
-
-          {/* <div className="flex  items-center gap-x-2 mb-4">
-            <img src={ProductIcon} alt="Product" />
-            <div className="font-Lato font-normal text-2xl leading-8">
-              Most Used
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-5 mb-6 ">
-            {productsFromLatestOrder.map((eachProduct: any, index: number) => {
-              return (
-                <ProductBox
-                  key={index}
-                  image={SampleProduct}
-                  weight={`${eachProduct?.deadWeight} Kg`}
-                  productName={eachProduct?.name || 0}
-                  breadth={eachProduct?.breadth || 0}
-                  length={eachProduct?.length || 0}
-                  height={eachProduct?.height || 0}
-                  className="!w-72"
-                />
-              );
-            })}
-          </div> */}
-
-          {/* Top Added */}
 
           <div className="flex  items-center gap-x-2 mb-4">
             <img src={ProductIcon} alt="Product" />
@@ -162,7 +154,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             </div>
           </div>
           <div className="flex flex-wrap gap-5 mb-6  overflow-scroll ">
-            {products.map((eachProduct: any, index: number) => {
+            {products?.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox
                   key={index}
@@ -206,7 +198,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       <CustomRightModal
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className="lg:w-[52%]"
+        className="lg:w-[52%] "
       >
         {searchProductContent()}
       </CustomRightModal>

@@ -35,7 +35,7 @@ const BusinessType = (props: ITypeProps) => {
         toast.success(response?.message);
         // navigate("/onboarding/kyc-photo"); // temparory hide
         navigate("/onboarding/kyc-form");
-        // toast.success(response.message);
+        // toast.success(response?.message);
         //Navigate Url' go here
       } else {
         toast.error(response?.message);

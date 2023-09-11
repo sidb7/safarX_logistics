@@ -43,7 +43,7 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           &lt;
         </button>
-        {Array.from(Array(totalPages).keys()).map((page) => (
+        {Array.from(Array(totalPages).keys())?.map((page) => (
           <button
             key={page}
             onClick={() => handlePageChange(page + 1)}
@@ -68,7 +68,7 @@ const Pagination: React.FC<PaginationProps> = ({
         <div className="flex items-center gap-x-2">
           <p>Items per page</p>
           <CustomDropDown
-            options={itemsPerPageOptions.map((option) => ({
+            options={itemsPerPageOptions?.map((option) => ({
               label: option,
               value: option,
             }))}

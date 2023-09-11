@@ -37,7 +37,7 @@ const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
   ];
   const [bottomMenuItem, setBottomMenuItem]: any = useState(menuItem);
   const handleNavigate = (index: number, path: any) => {
-    bottomMenuItem.forEach((e: any) => {
+    bottomMenuItem?.forEach((e: any) => {
       e.isActive = false;
     });
     let arr = bottomMenuItem;
@@ -53,13 +53,14 @@ const BottomBar: React.FunctionComponent<IBottomBarProps> = (props) => {
           boxShadow: "0px -4px 8px 0px rgba(0, 0, 0, 0.04)",
         }}
       >
-        {bottomMenuItem.map((e: any, index: number) => {
+        {bottomMenuItem?.map((e: any, index: number) => {
           return (
             <>
               <div
                 className={`m-1 cursor-pointer ${
                   e.isActive ? "bg-[black]" : ""
                 }`}
+                key={index}
               >
                 {e.isActive}
                 <img

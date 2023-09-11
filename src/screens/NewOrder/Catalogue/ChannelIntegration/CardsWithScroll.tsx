@@ -11,7 +11,7 @@ const CardsWithScroll = (props: any) => {
         {eachChannelType.title}
       </p>
       <div className=" w-[360px] flex items-center gap-x-3 flex-nowrap lg:whitespace-nowrap overflow-x-scroll lg:w-full lg:flex-wrap">
-        {eachChannelType.channels.map((eachChannel: any, index: any) => {
+        {eachChannelType.channels?.map((eachChannel: any, index: any) => {
           return (
             <div className="relative z-1  mt-5" key={index}>
               <div

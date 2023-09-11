@@ -83,7 +83,6 @@ const Index = (props: ITypeProps) => {
     try {
       const payload = { adhaar_no: value };
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
-      console.log("Response", response);
 
       if (response?.success) {
         toast.success(response?.message);
@@ -210,6 +209,7 @@ const Index = (props: ITypeProps) => {
                   label="Aadhar Number"
                   inputType="text"
                   inputMode="numeric"
+                  value={aadharNumber}
                   maxLength={12}
                   labelClassName="!font-Open"
                   className={` ${aadharError !== "" && "!border-[#F35838]"}
@@ -259,6 +259,7 @@ const Index = (props: ITypeProps) => {
                 <CustomInputBox
                   containerStyle="lg:!w-auto"
                   label="GST Number"
+                  value={gstNumber}
                   maxLength={15}
                   className={` ${
                     gstError !== "" && "border-[#F35838]"

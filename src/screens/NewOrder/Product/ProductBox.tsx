@@ -47,10 +47,10 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
         {label}
       </span>
       <div className="px-4">
-        <img src={image} alt="" className="" />
+        <img src={image} alt="" />
       </div>
       <div className="flex flex-col  pr-4">
-        <span className="">{productName}</span>
+        <span>{productName}</span>
         <span className="flex ">
           {`${weight} | ${length} x ${breadth} x ${height} cm`}
         </span>

@@ -1,8 +1,8 @@
+export let Enviornment = "";
 let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
-let Enviornment = "";
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
@@ -141,6 +141,22 @@ const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
 
+//Role Management
+const POST_CREATE_NEW_ROLL = `${SELLER_BASE_URL}/sellerRole/createSellerRole`;
+const POST_GET_ALL_ROLES_DATA = `${SELLER_BASE_URL}/sellerRole/fetchAllSellerRole`;
+const POST_GET_ALL_INITIAL_MENU = `${SELLER_BASE_URL}/sellerMenu/getSellerMenus`;
+const POST_UPDATE_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/updateSellerRole`;
+const POST_DELETE_ROLE_DATA = `${SELLER_BASE_URL}/sellerRole/deleteSellerRole`;
+
+//User Management
+const POST_CREATE_NEW_USER = `${SELLER_BASE_URL}/sellerUser/createSellerUser`;
+const POST_DELETE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/deleteSellerUser`;
+const POST_GET_ALL_USER_DATA = `${SELLER_BASE_URL}/sellerUser/getSellerUser`;
+const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`;
+
+// Courier Pricing List
+const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -206,7 +222,17 @@ export {
   POST_SIGN_UP_WITH_GOOGLE_URL,
   POST_SIGN_IN_WITH_GOOGLE_URL,
   GST_AGREEMENTS,
+  POST_GET_ALL_ROLES_DATA,
+  POST_GET_ALL_INITIAL_MENU,
+  POST_UPDATE_SELLER_ROLE,
+  POST_DELETE_ROLE_DATA,
+  POST_CREATE_NEW_ROLL,
+  POST_GET_ALL_USER_DATA,
+  POST_DELETE_USER_DATA,
+  POST_CREATE_NEW_USER,
+  POST_UPDATE_USER_DATA,
   POST_SET_ORDER_ID,
   GET_ALL_PLANS,
   POST_CREATE_PLAN,
+  COURIER_PRICING,
 };

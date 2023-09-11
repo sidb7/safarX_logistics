@@ -15,7 +15,7 @@ const Index = (props: any) => {
 
   return (
     <>
-      {dummyDatas.map((dummyItem: any, index: number) => {
+      {dummyDatas?.map((dummyItem: any, index: number) => {
         let childLength = dummyItem.menu.length;
 
         return (
@@ -57,7 +57,7 @@ const Index = (props: any) => {
               <div
                 className={`flex flex-col border-[1px] rounded-bl-md rounded-br-md  py-0 transition-all duration-400 ease-in-out `}
               >
-                {dummyItem.menu.map((subMenu: any, index1: number) => {
+                {dummyItem.menu?.map((subMenu: any, index1: number) => {
                   return (
                     <div className=" px-2     " key={index1}>
                       <button

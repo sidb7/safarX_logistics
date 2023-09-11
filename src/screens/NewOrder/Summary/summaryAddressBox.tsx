@@ -34,7 +34,7 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
   warehouse = "",
 }) => {
   return (
-    <div className="">
+    <div>
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row items-center gap-x-2 mb-4 ">
           <img src={locationImage} alt="" />

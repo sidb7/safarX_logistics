@@ -26,9 +26,7 @@ const Invoices = (props: IInvoices) => {
         </div>
         <div>
           <CustomDropDown
-            onChange={(e) => {
-              console.log("e year :", e.target.value);
-            }}
+            onChange={(e) => {}}
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
@@ -38,7 +36,7 @@ const Invoices = (props: IInvoices) => {
       <div className="grid grid-cols-4 gap-3 mx-6">
         {data?.map((ele: any, i: number) => {
           return (
-            <div className="mt-10">
+            <div className="mt-10" key={i}>
               <span className="py-6 px-8  bg-[#F6F6F6] text-[#004EFF] text-[1.37rem] font-Lato font-semibold h-[2.6rem]">
                 {ele?.count}
               </span>

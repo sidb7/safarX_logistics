@@ -9,7 +9,7 @@ type Props = {
 const FilterBy = (props: Props) => {
   const { items } = props;
   return (
-    <div className="">
+    <div>
       <div>
         <div className="flex flex-row items-center gap-x-2 mb-5">
           <img src={FilterIcon} alt="Filter" />

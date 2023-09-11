@@ -23,7 +23,7 @@ const AddressBook = () => {
       statusName: "Delivery Address",
     },
   ]);
-  console.log("statusId", statusId);
+
   const [filterData, setFilterData] = useState([
     { label: "Domestic", isActive: false },
     { label: "Hyperlocal", isActive: false },
@@ -50,13 +50,14 @@ const AddressBook = () => {
         </div>
       </div>
       <div className="flex justify-center gap-x-2 overflow-x-scroll whitespace-nowrap mt-5 h-[34px]">
-        {statusData.map(({ statusName }, index) => {
+        {statusData?.map(({ statusName }, index) => {
           return (
             <div
               className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
                 statusId === index ? "!border-[#004EFF]" : ""
               }`}
               onClick={() => setStatusId(index)}
+              key={index}
             >
               <span
                 className={`text-[#777777] text-[14px] ${
@@ -71,7 +72,7 @@ const AddressBook = () => {
       </div>
       <div className="flex justify-center">
         <div className="flex  text-[14px] text-[#777777] font-medium mt-4 h-[44px]">
-          {filterData.map((singleData, index) => {
+          {filterData?.map((singleData, index) => {
             return (
               <span
                 className={`flex justify-center items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
@@ -80,6 +81,7 @@ const AddressBook = () => {
                     : ""
                 }`}
                 onClick={() => setFilterId(index)}
+                key={index}
               >
                 {singleData.label}
               </span>
@@ -123,8 +125,6 @@ const AddressBook = () => {
             text="SAVE"
             className="bg-[#1C1C1C] text-[#FFFFFF]"
             onClick={() => {
-              console.log(window.location.pathname);
-
               if (window.location.pathname === "/neworder/pickup") {
                 navigate("/neworder/delivery");
               } else if (window.location.pathname === "/neworder/delivery") {

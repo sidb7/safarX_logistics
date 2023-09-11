@@ -404,7 +404,10 @@ const SyPerfromance = () => {
     <div className="m-4">
       <div className="flex justify-between gap-4 !mt-4 mb-10">
         {ordersArr?.map((order: any, i: number) => (
-          <div className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden">
+          <div
+            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            key={i}
+          >
             <div className="flex justify-between px-6 py-4">
               <div>
                 <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
@@ -427,9 +430,7 @@ const SyPerfromance = () => {
         </h1>
         <div>
           <CustomDropDown
-            onChange={(e) => {
-              console.log("e year :", e.target.value);
-            }}
+            onChange={(e) => {}}
             options={yearArr}
             heading="Top to Least"
           />
@@ -437,7 +438,10 @@ const SyPerfromance = () => {
       </div>
       <div className="flex justify-between gap-4 !mt-4 mb-10">
         {orderRevenue?.map((order: any, i: number) => (
-          <div className="w-[17rem] h-[8.75rem] rounded-lg border-2  px-4 py-2 overflow-hidden">
+          <div
+            className="w-[17rem] h-[8.75rem] rounded-lg border-2  px-4 py-2 overflow-hidden"
+            key={i}
+          >
             <div className="flex justify-between">
               <div>
                 <span className="text-[0.875rem] font-Open font-normal">

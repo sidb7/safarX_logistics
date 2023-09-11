@@ -19,7 +19,7 @@ const ProductCategoryBox: React.FunctionComponent<IProductCategoryBoxProps> = ({
       onClick={onClick}
     >
       <div className=" w-5">
-        <img src={image} alt="ProductLogo" className="" />
+        <img src={image} alt="ProductLogo" />
       </div>
       <div>
         <span

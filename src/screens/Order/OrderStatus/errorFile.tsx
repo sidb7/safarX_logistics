@@ -13,9 +13,12 @@ const ErrorFile: React.FunctionComponent<IProductData> = ({ props }) => {
   return (
     <div className="mt-5">
       <div>
-        {props.map((each: any, index: any) => {
+        {props?.map((each: any, index: any) => {
           return (
-            <div className="border-2 rounded-lg p-4  mt-4 border-[#E8E8E8]">
+            <div
+              className="border-2 rounded-lg p-4  mt-4 border-[#E8E8E8]"
+              key={index}
+            >
               <div className="flex justify-between">
                 <p className="text-[16px] font-medium">{each.header}</p>
                 <div className="flex gap-x-4">

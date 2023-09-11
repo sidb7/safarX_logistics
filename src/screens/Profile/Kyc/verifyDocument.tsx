@@ -30,29 +30,29 @@ const VerifyDocument: React.FunctionComponent<IVerifyDocumentProps> = ({
     if (documentName === "aadhar") {
       const payload = { adhaar_no: number };
       const { data } = await POST(POST_VERIFY_AADHAR_URL, payload);
-      if (data.success) {
-        toast.success(data.message);
+      if (data?.success) {
+        toast.success(data?.message);
         setDataResponse(data.data.data);
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     } else if (documentName === "pan") {
       const payload = { pan_no: number };
       const { data } = await POST(POST_VERIFY_PAN_URL, payload);
-      if (data.success) {
-        toast.success(data.message);
+      if (data?.success) {
+        toast.success(data?.message);
         closeModal();
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     } else if (documentName === "gst") {
       const payload = { gstIn: number };
       const { data } = await POST(POST_VERIFY_GST_URL, payload);
-      if (data.success) {
-        toast.success(data.message);
+      if (data?.success) {
+        toast.success(data?.message);
         setDataResponse(data.data[0].data);
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     }
   };
@@ -64,12 +64,12 @@ const VerifyDocument: React.FunctionComponent<IVerifyDocumentProps> = ({
         otp: otp,
       };
       const { data } = await POST(POST_VERIFY_AADHAR_OTP_URL, payload);
-      if (data.success) {
-        toast.success(data.message);
+      if (data?.success) {
+        toast.success(data?.message);
         setDataResponse(data.data);
         closeModal();
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     } else if (documentName === "gst") {
       const payload = {
@@ -78,21 +78,19 @@ const VerifyDocument: React.FunctionComponent<IVerifyDocumentProps> = ({
         otp: otp,
       };
       const { data } = await POST(POST_VERIFY_GST_OTP, payload);
-      if (data.success) {
-        toast.success(data.message);
+      if (data?.success) {
+        toast.success(data?.message);
         setDataResponse(data.data);
         closeModal();
       } else {
-        toast.error(data.message);
+        toast.error(data?.message);
       }
     }
   };
 
   const header = () => {
-    return <div className="font-bold">
-      {`Verify ${label}`}
-    </div>
-  }
+    return <div className="font-bold">{`Verify ${label}`}</div>;
+  };
   return (
     <div>
       <CustomBottomModal

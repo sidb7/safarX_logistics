@@ -91,8 +91,8 @@ const Index = () => {
       setShowBootScreen(false);
     }, 2000);
     (async () => {
-      const { data } = await POST(VALIDATE_USER_TOKEN);
-      if (data?.success) {
+      const response = await POST(VALIDATE_USER_TOKEN);
+      if (response?.data?.success) {
         navigate("/home/overview");
       }
     })();
@@ -145,7 +145,7 @@ const Index = () => {
                   label="Email"
                   value={loginCredentials.email}
                   onChange={(e) => {
-                    // console.log("email",e.target.value)
+                    //
                     setLoginCredentials({
                       ...loginCredentials,
                       email: e.target.value,
@@ -179,6 +179,7 @@ const Index = () => {
                   isRightIcon={true}
                   value={loginCredentials.password}
                   visibility={viewPassWord}
+                  onClick={() => {}}
                   rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {
@@ -222,20 +223,18 @@ const Index = () => {
               <div className="flex justify-center">
                 <GoogleLogin
                   onSuccess={(googleData) => signInWithGoogle(googleData)}
-                  onError={() => {
-                    console.log("Google Login Failed");
-                  }}
+                  onError={() => {}}
                 />
               </div>
 
               <div className="flex justify-center">
-                <p className="text-[#777777] font-normal text-xs lg:text-lg leading-4 font-Open">
+                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                   Don't have an account ?
                 </p>
                 <button
                   type="button"
                   onClick={signUpOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs lg:text-lg leading-4 font-Open"
+                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
                 >
                   Sign Up
                 </button>

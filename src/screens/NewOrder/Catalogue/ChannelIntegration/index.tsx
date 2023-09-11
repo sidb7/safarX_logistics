@@ -23,7 +23,6 @@ const Index = (props: IPropsTypes) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const catalogueState = useSelector((state: any) => state?.catalogue);
-  console.log("catalogueState :", catalogueState);
 
   const [statusId, setStatusId] = useState(0);
   const [statusData, setStatusData] = useState([
@@ -112,7 +111,7 @@ const Index = (props: IPropsTypes) => {
         ""
       ) : (
         <div className="flex flex-col lg:flex lg:flex-row gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px] lg:mt-9">
-          {statusData.map(({ statusName }, index) => {
+          {statusData?.map(({ statusName }, index) => {
             return (
               <div
                 className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 ${
@@ -146,7 +145,7 @@ const Index = (props: IPropsTypes) => {
               height: "calc(100vh - 200px)",
             }}
           >
-            {dummyChannelIntegrationData.map((eachChannelType, index) => {
+            {dummyChannelIntegrationData?.map((eachChannelType, index) => {
               return (
                 <CardsWithScroll
                   eachChannelType={eachChannelType}

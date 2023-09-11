@@ -21,11 +21,11 @@ const DeleteModal = (props: IDeleteProps) => {
   const deleteApi = async () => {
     setLoading(true);
     const { data } = await POST(deleteURL, payloadBody);
-    if (data.success) {
-      // toast.success(data.message);
+    if (data?.success) {
+      // toast.success(data?.message);
       setModal(false);
     } else {
-      toast.error(data.message);
+      toast.error(data?.message);
     }
     setLoading(false);
   };

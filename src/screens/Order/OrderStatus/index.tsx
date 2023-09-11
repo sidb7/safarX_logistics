@@ -56,9 +56,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       <div
         className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
       >
-        {filterData.map((singleData, index) => {
+        {filterData?.map((singleData, index) => {
           return (
             <span
+              key={index}
               className={`flex items-center py-[8px] px-[16px] border-[1px] cursor-pointer border-[#A4A4A4] ${
                 filterId === index
                   ? "rounded-l-md bg-[#D2D2D2] font-medium text-[#1C1C1C]"
@@ -115,7 +116,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const handleStatusChanges = (index: any) => {
-    console.log("handleStatusChanges", index);
     handleTabChange(index);
     setStatusId(index);
   };
@@ -123,34 +123,33 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   return (
     <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
-        {statusData.map(
-          ({ statusName, orderNumber }: any, index: SetStateAction<number>) => {
-            return (
-              <div
-                style={{ borderBottomWidth: "3px" }}
-                className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
-                  statusId === index ? "!border-[#004EFF]" : ""
+        {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
+          return (
+            <div
+              key={index}
+              style={{ borderBottomWidth: "3px" }}
+              className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
+                statusId === index ? "!border-[#004EFF]" : ""
+              }`}
+              onClick={() => handleStatusChanges(index)}
+            >
+              <span
+                className={`text-[#777777] text-[15px] lg:text-[18px] ${
+                  statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
                 }`}
-                onClick={() => handleStatusChanges(index)}
               >
-                <span
-                  className={`text-[#777777] text-[15px] lg:text-[18px] ${
-                    statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
-                  }`}
-                >
-                  {statusName}
-                </span>
-                <span
-                  className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] w-5 h-5 ${
-                    statusId === index ? "!bg-[#004EFF]" : ""
-                  }`}
-                >
-                  {orderNumber}
-                </span>
-              </div>
-            );
-          }
-        )}
+                {statusName}
+              </span>
+              <span
+                className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] w-5 h-5 ${
+                  statusId === index ? "!bg-[#004EFF]" : ""
+                }`}
+              >
+                {orderNumber}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grid grid-cols-2 justify-center my-8 h-[46px] lg:flex lg:justify-between">
@@ -178,7 +177,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           }}
           className="!justify-between !items-stretch !hidden lg:!block"
         >
-          <div className="">
+          <div>
             <div className="flex justify-between mt-5 mx-5">
               <div>
                 <p className="text-2xl font-normal">Filter</p>

@@ -8,7 +8,7 @@ const items = ["Fastest", "Low Price", "Economy", "Standard", "Premium"];
 
 const FilterBy = (props: Props) => {
   return (
-    <div className="">
+    <div>
       <div>
         <div className="flex flex-row items-center gap-x-2 mb-5">
           <img src={FilterIcon} alt="Filter" />

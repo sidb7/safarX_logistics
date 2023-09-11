@@ -29,7 +29,7 @@ const BusinessType = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
-  console.log("defaultAddress", defaultAddress?.doctype);
+
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -63,7 +63,6 @@ const BusinessType = (props: ITypeProps) => {
     const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (response?.success) {
       toast.success(response?.message);
-      // console.log("defaultAddressSelect", defaultAddressSelect);
 
       const payload = { addressId: defaultAddressSelect, isDefault: true };
       const { data: responses } = await POST(
@@ -134,7 +133,7 @@ const BusinessType = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div className="">
+      <div>
         <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
@@ -171,6 +170,7 @@ const BusinessType = (props: ITypeProps) => {
                   {defaultAddress?.map((el: any, i: number) => {
                     return (
                       <Card
+                        key={i}
                         onClick={(e) => setDefaultAddressSelect(e.target.value)}
                         name="address"
                         value={el?.fullAddress}
@@ -195,8 +195,8 @@ const BusinessType = (props: ITypeProps) => {
                 <div className="mb-4 h-[200px]  overflow-auto">
                   {defaultAddress?.map((el: any, i: number) => {
                     return (
-                      <>
-                        {el?.fullAddress != "" && (
+                      <div key={i}>
+                        {el?.fullAddress !== "" && (
                           <Card
                             onClick={(e) =>
                               setDefaultAddressSelect(e.target.value)
@@ -209,7 +209,7 @@ const BusinessType = (props: ITypeProps) => {
                             cardClassName="!mt-6"
                           />
                         )}
-                      </>
+                      </div>
                     );
                   })}
                 </div>

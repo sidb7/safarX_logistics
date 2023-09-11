@@ -148,8 +148,6 @@ const ReturningSummary = (props: Props) => {
               text="Pay ₹ 2000"
               className="bg-[#1C1C1C] text-[#FFFFFF]"
               onClick={() => {
-                console.log(window.location.pathname);
-
                 if (window.location.pathname === "/neworder/pickup") {
                   navigate("/neworder/delivery");
                 } else if (window.location.pathname === "/neworder/delivery") {

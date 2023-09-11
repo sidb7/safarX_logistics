@@ -9,7 +9,6 @@ import { Breadcrumb } from "flowbite-react";
 export const NotificationLayout = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({});
-  console.log("🚀 ~ file: notificationLayout.tsx:10 ~ NotificationLayout ~ data:", data)
 
   return (
     <>
@@ -20,7 +19,7 @@ export const NotificationLayout = () => {
 
         <div className="relative top-20">
           <div>
-            <Breadcrumb/>
+            <Breadcrumb />
           </div>
 
           <main className="pb-24">
@@ -29,7 +28,7 @@ export const NotificationLayout = () => {
             </div>
           </main>
 
-          <BottomLayout/>
+          <BottomLayout />
         </div>
       </div>
     </>

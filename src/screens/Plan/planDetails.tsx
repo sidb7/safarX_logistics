@@ -16,6 +16,8 @@ import { GET_PLAN_URL } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 import { GET_ALL_PLANS } from "../../utils/ApiUrls";
+import { ScrollNav } from "../../components/ScrollNav";
+import CourierPricing from "./courierPricing";
 
 interface ITypeProps {}
 
@@ -25,6 +27,15 @@ const PlanDetails = (props: ITypeProps) => {
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
 
+  // const [isRateCardPresent, setIsRateCardPresent] = useState(true);
+  // const [planData, setPlanData]: any = useState([]);
+  const [renderingComponents, setRenderingComponents] = React.useState(0);
+
+  const arrayData = [
+    { index: 0, label: "Courier Pricing" },
+    { index: 1, label: "VAS Pricing" },
+    { index: 2, label: "COD Pricing" },
+  ];
   let pricingData = [
     {
       pricing: "Subscription Amount",
@@ -271,7 +282,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("freemium", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -286,7 +297,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("silver", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -302,7 +313,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("gold", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -317,7 +328,7 @@ const PlanDetails = (props: ITypeProps) => {
     }),
     columnsHelper.accessor("platinum", {
       header: () => {
-        return <div className=""></div>;
+        return <div></div>;
       },
       cell: (info: any) => {
         return (
@@ -630,7 +641,6 @@ const PlanDetails = (props: ITypeProps) => {
           setPlanData(response?.data);
         }
       } catch (error) {
-        console.log("GET PLAN API ERROR", error);
         return error;
       }
     })();
@@ -651,6 +661,9 @@ const PlanDetails = (props: ITypeProps) => {
       }
     })();
   }, []);
+  const setScrollIndex = (id: number) => {
+    setRenderingComponents(id);
+  };
 
   return (
     <>
@@ -659,7 +672,6 @@ const PlanDetails = (props: ITypeProps) => {
           <Breadcum label="Plans" />
         </div>
         {/* Plan Upgradation */}
-
         <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
           <div className="flex items-center">
             <img
@@ -691,11 +703,9 @@ const PlanDetails = (props: ITypeProps) => {
           </div>
         </div>
         {/* Plan Details */}
-
         <div className="ml-[30px] mb-9">
           <PlanDetailsCard planDetails={planData} />
         </div>
-
         {/* Info Cards */}
         <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
           <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
@@ -715,7 +725,6 @@ const PlanDetails = (props: ITypeProps) => {
             denominator={30}
           />
         </div>
-
         {/*Active Recommended */}
 
         <div className="ml-[30px] ">
@@ -727,9 +736,7 @@ const PlanDetails = (props: ITypeProps) => {
             trclassName={"shadow-none"}
           />
         </div>
-
         {/*Pricing Table */}
-
         <div className="ml-[30px] ">
           <CustomTable
             columns={pricingColumns}
@@ -749,7 +756,6 @@ const PlanDetails = (props: ITypeProps) => {
             trclassName={"shadow-none"}
           />
         </div>
-
         {/* Features Table */}
         <div className="ml-[30px] mb-[68px] ">
           <CustomTable
@@ -759,7 +765,6 @@ const PlanDetails = (props: ITypeProps) => {
             thclassName={"border-none bg-white"}
           />
         </div>
-
         <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF] ml-[30px] mb-6">
           <p className="font-Lato font-semibold text-xl leading-[26px] text-[#494949]">
             Not sure which plan to choose?
@@ -771,7 +776,16 @@ const PlanDetails = (props: ITypeProps) => {
           />
         </div>
 
+        {/* Pricing Details */}
+        <div className="ml-[30px]">
+          <ScrollNav
+            arrayData={arrayData}
+            showNumber={false}
+            setScrollIndex={setScrollIndex}
+          />
+        </div>
         {/* Terms & Conditions */}
+
         <div className="ml-[30px]">
           <CustomAccordianWithTable
             dummyDatas={DummyData}
@@ -782,6 +796,10 @@ const PlanDetails = (props: ITypeProps) => {
             columns={termsAndConditionsColumns}
           />
         </div>
+
+        {renderingComponents === 0 && <CourierPricing />}
+
+        {/* end here */}
       </div>
     </>
   );

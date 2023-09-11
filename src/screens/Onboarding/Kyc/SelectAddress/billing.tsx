@@ -32,7 +32,6 @@ const Billing = (props: ITypeProps) => {
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
-      // console.log("response", response);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
@@ -61,7 +60,7 @@ const Billing = (props: ITypeProps) => {
   const addressComponent = () => {
     return (
       <div className="relative">
-        <div className="">
+        <div>
           <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
             <img src={CompanyLogo} alt="" />
           </div>
@@ -93,8 +92,8 @@ const Billing = (props: ITypeProps) => {
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4">
                 {defaultAddress?.map((el: any, i: number) => {
                   return (
-                    <>
-                      {el?.fullAddress != "" && (
+                    <div key={i}>
+                      {el?.fullAddress !== "" && (
                         <Card
                           onClick={(e) =>
                             setDefaultAddressSelect(e.target.value)
@@ -107,7 +106,7 @@ const Billing = (props: ITypeProps) => {
                           titleClassName="!font-normal !text-[12px]"
                         />
                       )}
-                    </>
+                    </div>
                   );
                 })}
               </div>

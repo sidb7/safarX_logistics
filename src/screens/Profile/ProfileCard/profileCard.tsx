@@ -7,6 +7,7 @@ import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
 
 interface ProfileCardProps {
   ProfileDetails?: any;
@@ -42,6 +43,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const yaariPoints = props?.ProfileDetails?.yaariPoints;
   const walletBalance = props?.ProfileDetails?.walletBalance;
   const companyDisplayName = props?.ProfileDetails?.privateCompany?.name;
+  const activePlanExpiry = props?.ProfileDetails?.activePlanExpiry;
 
   const navigate = useNavigate();
 
@@ -141,6 +143,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <div className="flex mt-2">
               <span className="text-[14px] text-[#494949]">
                 {/* Activited since Jun 2023 */}
+                {`Activated Since ${date_DD_MMM_YYY(activePlanExpiry)}`}
               </span>
             </div>
           </div>

@@ -29,7 +29,7 @@ const Index = (props: ITypeProps) => {
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
   );
-  console.log("BT", businessType);
+
   const clientId = useSelector((state: any) => state?.onboarding.onOtpClientId);
   const otp = useSelector((state: any) => state?.onboarding.otp);
   const panCard = useSelector((state: any) => state?.onboarding.panNumber);
@@ -185,8 +185,6 @@ const Index = (props: ITypeProps) => {
     }
   };
 
-  console.log("LOCATION  PAT :", location?.state?.path);
-
   const onVerifyOtp = async (e: any) => {
     try {
       e.preventDefault();
@@ -203,7 +201,6 @@ const Index = (props: ITypeProps) => {
           toast.success(response?.message);
           //Navigate Url's go here
         } else {
-          console.log("Response OTP!", response?.message);
           toast.error(response?.message);
         }
       } else if (businessType === "business") {
@@ -315,6 +312,7 @@ const Index = (props: ITypeProps) => {
               </div>
             </div>
           </div>
+          <div className="flex flex-col lg:justify-center px-4 lg:items-center"></div>
           <div className="flex flex-col lg:justify-center px-4 lg:items-center">
             <ServiceButton
               text="SUBMIT"
@@ -323,6 +321,13 @@ const Index = (props: ITypeProps) => {
             />
           </div>
         </form>
+        <div className="flex flex-col lg:justify-center px-4 lg:items-center">
+          <ServiceButton
+            text="BACK"
+            className="!bg-[#E8E8E8] !text-black !h-[36px] !font-Open  lg:!w-[320px] mb-5"
+            onClick={() => navigate(-1)}
+          />
+        </div>
       </div>
     );
   };

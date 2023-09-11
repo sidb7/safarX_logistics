@@ -44,8 +44,8 @@ export const ProfileNotificationTab = () => {
         operationDetails: notificationData?.operationDetails,
       },
     });
-    if (data.success) {
-      // toast.success(data.message);
+    if (data?.success) {
+      // toast.success(data?.message);
     } else {
       toast.error(data?.message);
     }
@@ -241,12 +241,12 @@ export const ProfileNotificationTab = () => {
 
   const webRender = () => {
     return (
-      <div className="">
+      <div>
         <div className="text-[#323232] text-2xl font-normal py-5">
           <span> Operational Details</span>
         </div>
         <div className="grid grid-cols-3 gap-4 gap-y-4">
-          <div className="">
+          <div>
             <CustomInputBox
               label="Operational email"
               value={notificationData?.operationDetails?.email}

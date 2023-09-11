@@ -457,6 +457,61 @@ const data = [
     ],
     icon: "Plans",
   },
+  {
+    id: "60",
+    name: "Notifications",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "61",
+        name: "Notifications",
+        isActive: false,
+        path: "/notifications",
+        menu: [],
+      },
+    ],
+    icon: "notification",
+  },
+  {
+    id: "80",
+    name: "Help",
+    pages: [],
+    isActive: false,
+    menu: [
+      {
+        id: "81",
+        name: "Help",
+        isActive: false,
+        path: "/help",
+        menu: [],
+        pages: [
+          {
+            id: "82",
+            name: "Help",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
+    ],
+    icon: "Help",
+  },
 ];
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   const { openMobileSideBar, setMobileSideBar } = props;
@@ -475,11 +530,11 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
   useEffect(() => {
     let tempArr = sideBarMenus;
-    tempArr.forEach((e: any) => {
+    tempArr?.forEach((e: any) => {
       e.isChild = false;
       e.isActivePath = false;
       if (e.menu) {
-        e.menu.forEach((e1: any) => {
+        e.menu?.forEach((e1: any) => {
           e1.isChild = false;
           e1.isActivePath = false;
           if (e1.menu.menu) {
@@ -501,10 +556,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
     const paths = pathname.split("/");
 
-    tempArr.forEach((e: any) => {
+    tempArr?.forEach((e: any) => {
       if (e.menu) {
         if (e.isActivePath) e.isActivePath = !e.isActivePath;
-        e.menu.forEach((e1: any) => {
+        e.menu?.forEach((e1: any) => {
           if (e1.isActivePath) e1.isActivePath = !e1.isActivePath;
           if (paths[1] === e1.path.split("/")[1]) {
             e.isActivePath = true;
@@ -525,10 +580,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
 
   const setIsActivePath = (index: number, childIndex: number, path: any) => {
     let tempArr = sideBarMenus;
-    tempArr.forEach((e: any) => {
+    tempArr?.forEach((e: any) => {
       e.isActivePath = false;
       if (e.menu) {
-        e.menu.forEach((e1: any) => {
+        e.menu?.forEach((e1: any) => {
           e1.isActivePath = false;
           if (e1.menu.menu) {
             e1.menu.menu.foEach((e2: any) => {
@@ -558,10 +613,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     setIsHover(true);
   };
   const handleClose = () => {
-    sideBarMenus.forEach((e: any) => {
+    sideBarMenus?.forEach((e: any) => {
       if (e.isChild) e.isChild = !e.isChild;
       if (e.menu) {
-        e.menu.forEach((e1: any) => {
+        e.menu?.forEach((e1: any) => {
           if (e1.isChild) e1.isChild = !e1.isChild;
           if (e1.menu.menu) {
             e1.menu.menu.foEach((e2: any) => {
@@ -648,7 +703,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               </div>
               {e.isChild ? (
                 <div className="flex flex-col  overflow-hidden">
-                  {e.menu.map((child: any, childIndex: number) => {
+                  {e.menu?.map((child: any, childIndex: number) => {
                     return (
                       <div
                         key={childIndex}
@@ -709,7 +764,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               onClick={() => setMobileSideBar(false)}
             />
           </div>
-          {sideBarMenus.map((e: any, index: number) => {
+          {sideBarMenus?.map((e: any, index: number) => {
             let iconName = e.icon.toLowerCase();
             const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
             return (
@@ -744,7 +799,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                 </div>
                 {e.isChild ? (
                   <div className="flex flex-col overflow-hidden ">
-                    {e.menu.map((child: any, childIndex: number) => {
+                    {e.menu?.map((child: any, childIndex: number) => {
                       return (
                         <div
                           key={`${child.path + childIndex}`}

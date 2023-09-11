@@ -10,7 +10,7 @@ const Index = () => {
   return (
     <div>
       <div className="flex py-5 pr-5 gap-2">
-        <img src={ProductIcon} alt="Package Icon" className="" />
+        <img src={ProductIcon} alt="Package Icon" />
         <h1 className="font-bold text-lg leading-6">Box types</h1>
       </div>
 

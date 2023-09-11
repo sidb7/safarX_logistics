@@ -5,7 +5,7 @@ export const KycActivation = () => {
   return (
     <div>
       <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px]">
-        <div className="">
+        <div>
           <span className="text-xl font-semibold">Benefits of doing KYC</span>
         </div>
         <div className="flex flex-col items-start mt-4">

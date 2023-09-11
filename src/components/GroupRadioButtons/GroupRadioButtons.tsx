@@ -40,7 +40,7 @@ const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
 
   return (
     <div className="flex items-center cursor-pointer px-4">
-      {options.map((option: any) => (
+      {options?.map((option: any) => (
         <div key={option?.value} className="flex items-center px-2">
           <input
             type="radio"

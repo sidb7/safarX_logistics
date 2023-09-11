@@ -64,8 +64,6 @@ const NavBar = (props: IpropTypes) => {
   };
 
   const toggleAccordion = (index: number) => {
-    console.log("index :", index);
-
     if (activeItem === index) {
       setActiveItem(null);
     } else {
@@ -80,10 +78,8 @@ const NavBar = (props: IpropTypes) => {
 
   const handleToggle = () => {
     if (open === false) {
-      console.log("click if", open);
       setOpen(true);
     } else {
-      console.log("click else", open);
       setOpen(false);
     }
   };
@@ -211,10 +207,7 @@ col-span-1
                     />
 
                     {open && (
-                      <div
-                        className="col-span-4"
-                        onClick={() => console.log("rrrr")}
-                      >
+                      <div className="col-span-4" onClick={() => {}}>
                         <div className="grid grid-cols-4">
                           <p className="col-span-3"> {panel.name}</p>
                           <svg

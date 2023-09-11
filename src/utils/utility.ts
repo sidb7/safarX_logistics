@@ -42,7 +42,7 @@ export const getQueryJson = () => {
   }
   const paramPairs = queryParams.split("&");
   const json: any = {};
-  paramPairs.forEach((paramPair) => {
+  paramPairs?.forEach((paramPair) => {
     const [key, value] = paramPair.split("=");
     const decodedKey = decodeURIComponent(key);
     const decodedValue = decodeURIComponent(value);

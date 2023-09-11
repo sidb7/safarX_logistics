@@ -132,7 +132,7 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.[0]?.service;
   const products = latestOrder?.data?.[0]?.products || [];
 
-  // latestOrder?.data?.[0]?.products.forEach((product: any) => {
+  // latestOrder?.data?.[0]?.products?.forEach((product: any) => {
   //   const productName = product?.productName;
   //   const productWeight = product?.weight?.deadWeightUnit;
   //   const productDimension = product?.dimensions?.length;
@@ -284,7 +284,7 @@ const Summary = (props: Props) => {
           </div>
           {/* latestOrder?.data?.[0]?.products */}
           <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
-            {products.map((product: any) => (
+            {products?.map((product: any) => (
               <BoxDetails
                 key={product.productId}
                 productName={product.name}
@@ -298,8 +298,9 @@ const Summary = (props: Props) => {
             ))}
 
             {/*Service */}
-            {products.map((product: any) => (
+            {products?.map((product: any, index: number) => (
               <SummaryService
+                key={index}
                 companyServiceName={serviceDetails?.companyServiceName}
                 // companyServiceId={serviceDetails?.companyServiceId}
                 price={serviceDetails?.total}
@@ -322,8 +323,9 @@ const Summary = (props: Props) => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row mr-5 ">
-          {products.map((product: any) => (
+          {products?.map((product: any, index: number) => (
             <PricingDetails
+              key={index}
               appliedWeight={serviceDetails?.appliedWeight}
               appliedWeightUnit={product?.weightUnit}
               price={serviceDetails?.total}

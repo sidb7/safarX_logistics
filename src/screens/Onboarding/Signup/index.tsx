@@ -56,6 +56,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        localStorage.setItem("userInfo", JSON.stringify(sellerData));
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
@@ -114,7 +115,7 @@ const Index = () => {
             </div>
             <div className=" flex flex-col mx-4 gap-y-7">
               <div className="grid grid-cols-2 gap-x-5">
-                <div className="">
+                <div>
                   <CustomInputBox
                     containerStyle=""
                     // placeholder=""
@@ -221,6 +222,7 @@ const Index = () => {
                   label="Password"
                   isRightIcon={true}
                   visibility={viewPassWord}
+                  onClick={() => {}}
                   rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {

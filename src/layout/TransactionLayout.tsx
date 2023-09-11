@@ -20,7 +20,7 @@ const TransactionLayout = () => {
           </div>
         </div>
 
-        <div className="">
+        <div>
           <Transaction />
         </div>
 

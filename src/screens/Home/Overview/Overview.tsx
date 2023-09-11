@@ -160,7 +160,10 @@ export const Overview = (props: IOverview) => {
       </div>
       <div className="flex justify-between !mt-4 gap-4 mb-10">
         {ordersArr?.map((order: any, i: number) => (
-          <div className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden">
+          <div
+            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            key={i}
+          >
             <div className="px-6 py-4">
               <div className="font-bold font-Lato mb-2 text-[#F57960] text-[2rem]">
                 {order?.count}

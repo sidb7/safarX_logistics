@@ -44,7 +44,7 @@ const DatePicker: React.FC = () => {
     //   {/*
     //   {isOpen && (
     //     <div className="absolute mt-1 w-64 p-2 bg-white rounded shadow">
-    //       {daysArray.map((day) => (
+    //       {daysArray?.map((day) => (
     //         <button
     //           key={day}
     //           className={`block w-full text-left ${

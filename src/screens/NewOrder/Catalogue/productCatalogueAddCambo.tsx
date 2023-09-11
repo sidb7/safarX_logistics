@@ -27,7 +27,6 @@ const ProductCatalogueAddCambo = () => {
       statusName: "Combo Product",
     },
   ]);
-  console.log("statusId", statusId);
 
   return (
     <div>
@@ -52,13 +51,14 @@ const ProductCatalogueAddCambo = () => {
         </div>
       </div>
       <div className="flex justify-center gap-x-2 overflow-x-scroll whitespace-nowrap mt-5 h-[34px]">
-        {statusData.map(({ statusName }, index) => {
+        {statusData?.map(({ statusName }, index) => {
           return (
             <div
               className={`flex justify-center items-center border-b-2 border-[#777777] px-4 ${
                 statusId === index ? "!border-[#004EFF]" : ""
               }`}
               onClick={() => setStatusId(index)}
+              key={index}
             >
               <span
                 className={`text-[#777777] text-[14px] ${
@@ -123,8 +123,6 @@ const ProductCatalogueAddCambo = () => {
             text="SAVE"
             className="bg-[#1C1C1C] text-[#FFFFFF]"
             onClick={() => {
-              console.log(window.location.pathname);
-
               if (window.location.pathname === "/neworder/pickup") {
                 navigate("/neworder/delivery");
               } else if (window.location.pathname === "/neworder/delivery") {

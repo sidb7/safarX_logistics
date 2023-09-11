@@ -41,7 +41,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   function handleCheckBox(element: any, index: any) {
     let tempArr = questionsData;
 
-    tempArr[2]?.options.forEach((e: any, index2: number) => {
+    tempArr[2]?.options?.forEach((e: any, index2: number) => {
       e.isChecked = false;
     });
     tempArr[2].options[index].isChecked = element;
@@ -63,15 +63,16 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           </div>
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
-              <div className="">
+              <div>
                 <span className="text-xl font-semibold leading-[26px] font-Lato">
                   {question}
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4">
-                {questionsData[2]?.options.map((element: any, index: any) => {
+                {questionsData[2]?.options?.map((element: any, index: any) => {
                   return (
                     <Checkbox
+                      key={index}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);
                       }}

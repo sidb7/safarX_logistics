@@ -5,6 +5,7 @@ import CustomInputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import { GET_SERVICABLE_PINCODE } from "../../utils/ApiUrls";
 import "../../styles/scrollablePincodeServiceTale.css";
+import { toast } from "react-toastify";
 
 // import Button from "./Button";
 
@@ -30,13 +31,11 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       if (response?.success) {
         setResponse(response);
-        //   toast.success(response?.message);
       } else {
-        console.error("PickupDataerror");
-        //   toast.error(response?.message);
+        toast.error(response?.message);
       }
     } catch (error) {
-      console.log("Error in  ADD_PICKUP_LOCATION_API", error);
+      console.error("Error in  ADD_PICKUP_LOCATION_API", error);
       return error;
     }
   };
@@ -74,14 +73,11 @@ const ServicabilityPincode = (props: ITypeProps) => {
     },
   ];
 
-  console.log("pincode", pincode);
-
-  console.log("responseee", response);
   function convertToPascalCase(input: string): string {
     return input
       .replace(/([a-z])([A-Z])/g, "$1 $2")
       .split(/[_\s]/)
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   }
   return (
@@ -128,7 +124,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
               <tr>
                 {Object.keys(response.data[0])
                   .filter((key) => key !== "companyId" && key !== "partnerId") // Exclude specified fields
-                  .map((key) => (
+                  ?.map((key) => (
                     <th className="whitespace-nowrap" key={key}>
                       {convertToPascalCase(key)}
                     </th>
@@ -136,11 +132,11 @@ const ServicabilityPincode = (props: ITypeProps) => {
               </tr>
             </thead>
             <tbody>
-              {response.data.map((item: any, index: number) => (
+              {response.data?.map((item: any, index: number) => (
                 <tr key={index}>
                   {Object.keys(item)
                     .filter((key) => key !== "companyId" && key !== "partnerId") // Exclude specified fields
-                    .map((key) => (
+                    ?.map((key) => (
                       <td key={key}>
                         {key === "isActive" ||
                         key === "isDeleted" ||
@@ -165,7 +161,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         <table>
           <thead>
             <tr>
-              {Object.keys(tableData[0]).map((key) => (
+              {Object.keys(tableData[0])?.map((key) => (
                 <th className="whitespace-nowrap" key={key}>
                   {convertToPascalCase(key)}
                 </th>
@@ -173,9 +169,9 @@ const ServicabilityPincode = (props: ITypeProps) => {
             </tr>
           </thead>
           <tbody>
-            {tableData.map((item: any, index: any) => (
+            {tableData?.map((item: any, index: any) => (
               <tr key={index}>
-                {Object.keys(item).map((key) => (
+                {Object.keys(item)?.map((key) => (
                   <td key={key}>
                     {key === "isActive" ||
                     key === "isDeleted" ||
