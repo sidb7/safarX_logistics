@@ -65,7 +65,7 @@ const Billing = (props: ITypeProps) => {
             <img src={CompanyLogo} alt="" />
           </div>
           <WelcomeHeader
-            className="!mt-[58px]"
+            // className="!mt-[58px]"
             title="Welcome to Shipyaari"
             content="Select your Billing Address"
           />

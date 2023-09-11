@@ -11,7 +11,7 @@ interface PricingData {
   variables?: string | number;
   gst?: number;
   invoiceValue?: number;
-
+  insurance?: number;
   baseWeight?: number;
   price?: number;
 }
@@ -24,6 +24,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   variables = "",
   gst = "",
   invoiceValue = "",
+  insurance = "",
   appliedWeight = "",
   appliedWeightUnit = "",
 }) => {
@@ -43,10 +44,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Billable Weight:
             </p>
-            <p>
-              {" "}
-              {appliedWeight} {appliedWeightUnit}
-            </p>
+            <p> {appliedWeight} kg</p>
           </div>
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
@@ -61,18 +59,21 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Insurance Price:
             </p>
-            <p> {`\u20B9`} 2800</p>
+            <p>
+              {" "}
+              {`\u20B9`} {insurance}
+            </p>
           </div>
           {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] text-[#004EFF] lg:font-semibold">
             {`\u20B9`} {price}
           </p> */}
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Discount Price:
             </p>
             <p className="text-[#004EFF]"> - {`\u20B9`} 20</p>
-          </div>
-          <div className="flex justify-between mt-4">
+          </div> */}
+          {/* <div className="flex justify-between mt-4">
             <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
               Amount:
             </p>
@@ -80,19 +81,21 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
               {" "}
               {`\u20B9`} {price}
             </p>
-          </div>
-          <hr></hr>
+          </div> */}
+          {/* <hr></hr>
           <div className="flex justify-between ">
             <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
               Additional Charges:
             </p>
             <p> {`\u20B9`} 3000</p>
-          </div>
+          </div> */}
           <div className="flex justify-between">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               GST :
             </p>
-            <p> {gst} %</p>
+            <p>
+              {`\u20B9`} {gst}{" "}
+            </p>
           </div>
           <hr className="mt-[100px]"></hr>
           <div className="flex justify-between mt-[5px] ">

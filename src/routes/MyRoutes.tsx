@@ -131,6 +131,7 @@ import HelpScreen from "../screens/Help";
 import OrdersScreen from "../screens/Billing/orders";
 import CreditNote from "../screens/Billing/creditNote";
 import Invoice from "../screens/Billing/invoice";
+import WeightFreeze from "../screens/WeightManagement";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -678,6 +679,9 @@ const MyRoutes: React.FC = () => {
             {/* Help Screen Routes */}
 
             <Route path="/help" element={<HelpScreen />} />
+
+            {/* Weight Management */}
+            <Route path="/weight-freeze" element={<WeightFreeze />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>
