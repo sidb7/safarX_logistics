@@ -59,12 +59,27 @@ export const generateUniqueCode = (minLength: number, maxLength: number) => {
   let code = "";
 
   while (code.length < length) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    code += charset.charAt(randomIndex);
+    const randomIndex = Math.random() * charset.length;
+    const randomIndexOnFloor = Math.floor(randomIndex);
+    code += charset.charAt(randomIndexOnFloor);
   }
 
   return code;
 };
-//export verifyToken = apiIntergration function
 
+export const searchResults = (value: any, searchProductData: any = []) => {
+  let productArray: any = [];
+  searchProductData.map((eachProduct: any, index: any) => {
+    let joinedName = eachProduct?.name?.split(" ").join("");
+    if (
+      eachProduct?.name?.toUpperCase().includes(value.toUpperCase()) ||
+      joinedName.toUpperCase().includes(value.toUpperCase())
+    ) {
+      productArray.push(eachProduct);
+    }
+  });
+  return productArray;
+};
+
+//export verifyToken = apiIntergration function
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";

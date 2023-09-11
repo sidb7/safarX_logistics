@@ -13,7 +13,7 @@ import discountIcon from "../../../assets/Payment/discount-shape.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import UpiPayment from "./upiPayment";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 import "react-tooltip/dist/react-tooltip.css";
@@ -41,6 +41,7 @@ import {
   INITIAL_RECHARGE,
   PLACE_ORDER,
   RECHARGE_STATUS,
+  POST_PLACE_ORDER,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -48,6 +49,8 @@ import Paytm from "../../../paytm/Paytm";
 const Payment = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [payment, setPayment] = useState(false);
   const [modal, setModal] = useState(false);
   // const [toast, setToast] = useState(false);
@@ -62,6 +65,8 @@ const Payment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [upiText, setUpiText] = useState<boolean>();
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
+  const requiredBalance = location?.state?.requiredBalance;
+
   let myInterval: number | any;
 
   const openModal = () => setIsOpen(true);
@@ -79,6 +84,7 @@ const Payment = () => {
 
   useEffect(() => {
     fetchCurrentWallet();
+    setWalletValue(requiredBalance);
   }, []);
 
   const steps = [
@@ -205,7 +211,7 @@ const Payment = () => {
   };
 
   const placeOrderApi = async () => {
-    const { data } = await POST(PLACE_ORDER, {});
+    const { data } = await POST(POST_PLACE_ORDER, {});
 
     if (data?.success) {
       // toast.success(data?.message);
@@ -305,7 +311,7 @@ const Payment = () => {
               </p>
               <p
                 onClick={() => convertToEdit()}
-                className="text-[1rem] flex items-center lg:font-semibold lg:text-[#1C1C1C]"
+                className="text-[1rem]  flex items-center lg:font-semibold lg:text-[#1C1C1C]"
               >
                 <span>₹</span>
                 <input

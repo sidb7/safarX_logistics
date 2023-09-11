@@ -80,7 +80,6 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
-const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -92,11 +91,13 @@ const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
+const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
+const POST_PLACE_ORDER = `${SELLER_BASE_URL}/order/placeOrder`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
-const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/newProduct/getProduct`;
+const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/product/getProduct`;
 const GET_SELLER_BOX = `${SELLER_URL}/api/v1/box/getSellerBox`;
 const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
@@ -109,8 +110,8 @@ const ADD_COD_INFO = `${SELLER_URL}/api/v1/order/addCodInfo`;
 const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
-const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/getPickupLocation`;
-const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/getDeliveryLocation`;
+const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 //paytm
 const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
@@ -135,6 +136,8 @@ const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
+const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
+const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -232,5 +235,8 @@ export {
   POST_CREATE_NEW_USER,
   POST_UPDATE_USER_DATA,
   POST_SET_ORDER_ID,
+  GET_ALL_PLANS,
+  POST_CREATE_PLAN,
   COURIER_PRICING,
+  POST_PLACE_ORDER,
 };
