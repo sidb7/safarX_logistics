@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "./~components/NavBar";
 import TopBar from "./~components/TopBar";
 import { Outlet } from "react-router-dom";
 import { ResponsiveState } from "../utils/responsiveState";
+import { getRoles } from "../redux/reducers/role";
+import { useDispatch } from "react-redux";
 // import BottomBar from "./~components/BottomBar";
 
-interface ICommonLayoutProps {}
+interface ICommonLayoutProps { }
 
 const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   const [openMobileSideBar, setMobileSideBar]: any = useState(false);
   const { isLgScreen } = ResponsiveState();
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getRoles());
+  }, [])
 
   return (
     <>
