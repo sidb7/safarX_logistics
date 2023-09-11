@@ -69,13 +69,14 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {partnerServiceName}
           </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
+            {baseWeight} kg
+          </p>
 
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {`\u20B9`} {price}
           </p>
-          <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
-            {baseWeight} kg
-          </p>
+
           {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             Base:{base}
           </p>

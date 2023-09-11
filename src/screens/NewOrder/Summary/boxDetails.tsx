@@ -47,6 +47,11 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
             </div>
           </div>
         </div>
+        <div className="ml-[25px] mb-[10px]">
+          <p className="text-[12px] font-medium  font-Open lg:text-[16px] lg:font-semibold">
+            Box Count: {boxInfo.length}
+          </p>
+        </div>
 
         {boxInfo?.map((box, index) => (
           <div key={index}>
@@ -80,20 +85,24 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
             </div>
             {expandedBox === index && (
               <div className="flex flex-col gap-y-2 mb-10">
-                <p className="text-[12px] font-medium ml-[25px] mt-[15px] font-Open lg:text-[16px] lg:font-semibold">
+                <p className="text-[12px] font-medium ml-[25px] mt-[15px] font-Open lg:text-[16px] ">
                   Box Weight: {box?.deadWeight} {box?.weightUnit}
                 </p>
+                <hr></hr>
                 {box?.products?.map((product: any, productIndex: any) => (
                   <div key={productIndex}>
-                    <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] lg:font-semibold">
+                    <p className="text-[12px] font-medium ml-[25px] font-Open lg:text-[16px] ">
                       Product Name: {product?.name}
                     </p>
-                    <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] lg:font-semibold">
+                    <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
                       Product Weight: {product?.deadWeight}{" "}
-                      {product?.weightUnit} | Dimensions: {product?.length} x{" "}
-                      {product?.breadth} x {product?.height}{" "}
-                      {product?.measureUnit}
+                      {product?.weightUnit}
                     </p>
+                    <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
+                      Product Dimensions: {product?.length} x {product?.breadth}{" "}
+                      x {product?.height} {product?.measureUnit}
+                    </p>
+                    <hr></hr>
                   </div>
                 ))}
               </div>

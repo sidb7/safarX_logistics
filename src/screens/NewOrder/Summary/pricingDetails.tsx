@@ -94,9 +94,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
               GST :
             </p>
             <p>
-              {" "}
-              {`\u20B9`}
-              {gst}{" "}
+              {`\u20B9`} {gst}{" "}
             </p>
           </div>
           <hr className="mt-[100px]"></hr>
