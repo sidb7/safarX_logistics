@@ -128,6 +128,9 @@ import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
+import OrdersScreen from "../screens/Billing/orders";
+import CreditNote from "../screens/Billing/creditNote";
+import Invoice from "../screens/Billing/invoice";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -432,6 +435,36 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <WalletRecharge />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
+            {/* billing details Routes */}
+            <Route>
+              <Route
+                path="/billing/orders"
+                element={
+                  <ProtectedRoute>
+                    <OrdersScreen />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/billing/invoice"
+                element={
+                  <ProtectedRoute>
+                    <Invoice />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/billing/credit-note"
+                element={
+                  <ProtectedRoute>
+                    <CreditNote />
                   </ProtectedRoute>
                 }
               />
