@@ -536,12 +536,10 @@ function UpdateRole() {
   return (
     <div>
       <div>
-        <div className=" lg:ml-5 lg:mr-6 mx-5">
           <Breadcum
             label="Update Role"
             component={Buttons("", updateRoleApi)}
           />
-        </div>
         <div className="mx-5 mt-4">
           <div className=" mx-5 flex justify-between items-center">
             <div className="w-[300px]">

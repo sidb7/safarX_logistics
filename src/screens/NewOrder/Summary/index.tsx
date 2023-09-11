@@ -1,13 +1,5 @@
-import BoxDetails from "./boxDetails";
-import SummaryService from "./summaryService";
-import SummaryAddressBox from "./summaryAddressBox";
 import React, { useState, useEffect } from "react";
-import contactIcon from "../../../assets/serv/contact.svg";
-import locationIcon from "../../../assets/serv/location.svg";
-import phoneIcon from "../../../assets/serv/phone.svg";
-import editIcon from "../../../assets/serv/edit.svg";
-import TickLogo from "../../../assets/common/Tick.svg";
-import SummaryIcon from "../../../assets/serv/Summary.svg";
+import SummaryAddressBox from "./summaryAddressBox";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
 import {
@@ -25,6 +17,14 @@ import PricingDetails from "./pricingDetails";
 import { toast } from "react-toastify";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
 import CustomInputBox from "../../../components/Input";
+import BoxDetails from "./boxDetails";
+import SummaryService from "./summaryService";
+import contactIcon from "../../../assets/serv/contact.svg";
+import locationIcon from "../../../assets/serv/location.svg";
+import phoneIcon from "../../../assets/serv/phone.svg";
+import editIcon from "../../../assets/serv/edit.svg";
+import TickLogo from "../../../assets/common/Tick.svg";
+import SummaryIcon from "../../../assets/serv/Summary.svg";
 
 type Props = {};
 
@@ -91,21 +91,15 @@ const Summary = (props: Props) => {
       const { data: response } = await POST(GET_LATEST_ORDER);
 
       if (response?.success) {
-        // const recommended = response.filter(
-        //   (item: any) => item?.isRecommendation
-        // );
-        // const filter = response.filter((item: any) => !item?.isRecommendation);
-
         setLatestOrder(response);
-        // setFilterData(filter);
       } else {
         setLatestOrder([]);
-        // toast.error(response?.message);
       }
     } catch (error) {
       return error;
     }
   };
+
   const setOrderIdApi = async () => {
     try {
       let payload = { orderId: orderId };
@@ -156,12 +150,9 @@ const Summary = (props: Props) => {
   const deliveryLocationBillingDetails = latestOrder?.data?.[0]?.billingAddress;
   const serviceDetails = latestOrder?.data?.[0]?.service;
   const products = latestOrder?.data?.[0]?.products || [];
+  const boxInfo = latestOrder?.data?.[0]?.boxInfo;
 
-  // latestOrder?.data?.[0]?.products?.forEach((product: any) => {
-  //   const productName = product?.productName;
-  //   const productWeight = product?.weight?.deadWeightUnit;
-  //   const productDimension = product?.dimensions?.length;
-  // });
+  // console.log("boxInfo", boxInfo);
 
   return (
     <div>
@@ -170,7 +161,7 @@ const Summary = (props: Props) => {
         <Stepper steps={steps} />
       </div>
       <div className="grid grid-cols-1 gap-y-5 p-5 ">
-        <div className=" flex flex-row gap-2">
+        <div className="flex flex-row gap-2">
           <img src={SummaryIcon} alt="Summary Icon" />
           <p className="text-[18px] text-[#202427] font-semibold lg:font-normal font:lato lg:text-2xl ">
             Summary
@@ -200,7 +191,8 @@ const Summary = (props: Props) => {
         </div>
       </div>
       <div className="flex flex-row">
-        <div className=" basis-2/1 grid grid-cols-1 gap-y-5 px-5   ">
+        <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
+          {/* Pickup Details */}
           <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
             <SummaryAddressBox
               locationImage={locationIcon}
@@ -237,23 +229,9 @@ const Summary = (props: Props) => {
               contactImage={phoneIcon}
               contactName={pickupLocationReturnAddress?.contact?.name}
             />
-
-            {/* <div className="hidden lg:block w-20 h-20">
-            <img src={editIcon} alt="" />
-          </div> */}
-
-            <div
-              className="hidden lg:block cursor-pointer"
-              onClick={() => {
-                navigate("/orders/add-order/pickup");
-              }}
-            >
-              <div style={{ width: "20px", height: "20px" }}>
-                {" "}
-                <img src={editIcon} alt="editIcon" className="w-full h-full" />
-              </div>
-            </div>
           </div>
+
+          {/* Delivery Details */}
           <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
             <SummaryAddressBox
               locationImage={locationIcon}
@@ -290,78 +268,39 @@ const Summary = (props: Props) => {
               contactImage={phoneIcon}
               contactName={deliveryLocationDetails?.contact?.name}
             />
-
-            {/* <div className="hidden lg:block">
-            <img src={editIcon} alt="" />
-          </div> */}
-
-            <div
-              className="hidden lg:block cursor-pointer"
-              onClick={() => {
-                navigate("/orders/add-order/delivery");
-              }}
-            >
-              <div style={{ width: "20px", height: "20px" }}>
-                {" "}
-                <img src={editIcon} alt="editIcon" className="w-full h-full" />
-              </div>
-            </div>
           </div>
-          {/* latestOrder?.data?.[0]?.products */}
+
+          {/* Product Details */}
           <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
-            {products?.map((product: any) => (
-              <BoxDetails
-                key={product.productId}
-                productName={product.name}
-                productWeight={product?.deadWeight}
-                productWeightUnit={product?.weightUnit}
-                productDimensionLength={product.length}
-                productDimensionBreadth={product.breadth}
-                productDimensionHeight={product.height}
-                productDimensionUnit={product.measureUnit}
-              />
-            ))}
+            <BoxDetails boxInfo={boxInfo} />
 
-            {/*Service */}
-            {products?.map((product: any, index: number) => (
-              <SummaryService
-                key={index}
-                companyServiceName={serviceDetails?.companyServiceName}
-                // companyServiceId={serviceDetails?.companyServiceId}
-                price={serviceDetails?.total}
-                add={serviceDetails?.add}
-                base={serviceDetails?.base}
-                cod={serviceDetails?.cod}
-                gst={serviceDetails?.gst}
-                invoiceValue={serviceDetails?.invoiceValue}
-                // partnerServiceId={""}
-                partnerServiceName={serviceDetails?.partnerServiceName}
-                baseWeight={product?.deadWeight}
-                productWeightUnit={product?.weightUnit}
-                productDimensionLength={product.length}
-                productDimensionBreadth={product.breadth}
-                productDimensionHeight={product.height}
-                productDimensionUnit={product.measureUnit}
-                // dimension={productDetails?.dimension}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="flex flex-col lg:flex-row mr-5 ">
-          {products?.map((product: any, index: number) => (
-            <PricingDetails
-              key={index}
-              appliedWeight={serviceDetails?.appliedWeight}
-              appliedWeightUnit={product?.weightUnit}
+            {/* Service Details */}
+            <SummaryService
+              companyServiceName={serviceDetails?.companyServiceName}
               price={serviceDetails?.total}
               add={serviceDetails?.add}
               base={serviceDetails?.base}
-              variables={serviceDetails?.variables}
               cod={serviceDetails?.cod}
               gst={serviceDetails?.gst}
               invoiceValue={serviceDetails?.invoiceValue}
+              partnerServiceName={serviceDetails?.partnerServiceName}
+              baseWeight={serviceDetails?.appliedWeight}
             />
-          ))}
+          </div>
+        </div>
+        <div className="flex flex-col lg:flex-row mr-5 ">
+          {/* Pricing Details */}
+          <PricingDetails
+            appliedWeight={serviceDetails?.appliedWeight}
+            price={serviceDetails?.total}
+            add={serviceDetails?.add}
+            base={serviceDetails?.base}
+            variables={serviceDetails?.variables}
+            cod={serviceDetails?.cod}
+            gst={serviceDetails?.gst}
+            invoiceValue={serviceDetails?.invoiceValue}
+            insurance={serviceDetails?.insurance}
+          />
         </div>
       </div>
       <BottomLayout

@@ -148,6 +148,7 @@ const POST_GET_ALL_ROLES_DATA = `${SELLER_BASE_URL}/sellerRole/fetchAllSellerRol
 const POST_GET_ALL_INITIAL_MENU = `${SELLER_BASE_URL}/sellerMenu/getSellerMenus`;
 const POST_UPDATE_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/updateSellerRole`;
 const POST_DELETE_ROLE_DATA = `${SELLER_BASE_URL}/sellerRole/deleteSellerRole`;
+const POST_FETCH_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/fetchSellerRole`
 
 //User Management
 const POST_CREATE_NEW_USER = `${SELLER_BASE_URL}/sellerUser/createSellerUser`;
@@ -226,6 +227,7 @@ export {
   POST_GET_ALL_ROLES_DATA,
   POST_GET_ALL_INITIAL_MENU,
   POST_UPDATE_SELLER_ROLE,
+  POST_FETCH_SELLER_ROLE,
   POST_DELETE_ROLE_DATA,
   POST_CREATE_NEW_ROLL,
   POST_GET_ALL_USER_DATA,
