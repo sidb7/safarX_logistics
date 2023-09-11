@@ -8,36 +8,42 @@ import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { CustomTable } from "../../components/Table";
 
-const WeightFreezeTable = () => {
+const NewDiscrepancyTable = () => {
   const columnsHelper = createColumnHelper<any>();
 
-  const WeightFreezeData = [
+  const NewDiscrepancyData = [
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
-      weight: "15x15x15 cm 120kg",
-      idealWeight: "15x15x15 cm 120kg",
-      weightAccuracyStatus: "20% discrepancy chance",
+      orderDetails: "Delhivery Partner, Tracking Id",
+      status: "Pending",
+      appliedWeightAndPrice: "15x15x15 cm 120kg Price:1200",
+      sellerPhoto: "15x15x15 cm 120kg",
+      chargedWeightAndPrice: "20% discrepancy chance",
+      dispute: "Weight Difference, Price Difference",
+      courierPhotos: "images",
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
-      weight: "15x15x15 cm 120kg",
-      idealWeight: "15x15x15 cm 120kg",
-      weightAccuracyStatus: "20% discrepancy chance",
+      orderDetails: "Delhivery Partner, Tracking Id",
+      status: "Pending",
+      appliedWeightAndPrice: "15x15x15 cm 120kg Price:1200",
+      sellerPhoto: "15x15x15 cm 120kg",
+      chargedWeightAndPrice: "20% discrepancy chance",
+      dispute: "Weight Difference, Price Difference",
+      courierPhotos: "images",
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
-      packageImages: "UploadedPhotos",
-      weight: "15x15x15 cm 120kg",
-      idealWeight: "15x15x15 cm 120kg",
-      weightAccuracyStatus: "20% discrepancy chance",
+      orderDetails: "Delhivery Partner, Tracking Id",
+      status: "Pending",
+      appliedWeightAndPrice: "15x15x15 cm 120kg Price:1200",
+      sellerPhoto: "15x15x15 cm 120kg",
+      chargedWeightAndPrice: "20% discrepancy chance",
+      dispute: "Weight Difference, Price Difference",
+      courierPhotos: "images",
     },
   ];
-  const WeightFreezeHeading = [
+  const NewDiscrepancyHeading = [
     columnsHelper.accessor("packageDetails", {
       header: () => {
         return (
@@ -57,12 +63,12 @@ const WeightFreezeTable = () => {
         );
       },
     }),
-    columnsHelper.accessor("ids", {
+    columnsHelper.accessor("orderDetails", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              IDs
+              Order Details
             </p>
           </div>
         );
@@ -71,17 +77,17 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.ids}
+            {info.row.original.orderDetails}
           </p>
         );
       },
     }),
-    columnsHelper.accessor("packageImages", {
+    columnsHelper.accessor("status", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Package Images
+              Status
             </p>
           </div>
         );
@@ -90,17 +96,17 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.packageImages}
+            {info.row.original.status}
           </p>
         );
       },
     }),
-    columnsHelper.accessor("weight", {
+    columnsHelper.accessor("appliedWeightAndPrice", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Weight
+              Applied Weight And Price
             </p>
           </div>
         );
@@ -109,17 +115,17 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {capitalizeFirstLetter(info.row.original.weight)}
+            {capitalizeFirstLetter(info.row.original.appliedWeightAndPrice)}
           </p>
         );
       },
     }),
-    columnsHelper.accessor("idealWeight", {
+    columnsHelper.accessor("sellerPhoto", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Ideal Weight
+              Seller Photo
             </p>
           </div>
         );
@@ -128,17 +134,17 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {capitalizeFirstLetter(info.row.original.idealWeight)}
+            {capitalizeFirstLetter(info.row.original.sellerPhoto)}
           </p>
         );
       },
     }),
-    columnsHelper.accessor("weightAccuracyStatus", {
+    columnsHelper.accessor("chargedWeightAndPrice", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Weight Accuracy Status
+              Charged Weight And Price
             </p>
           </div>
         );
@@ -147,7 +153,45 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {capitalizeFirstLetter(info.row.original.weightAccuracyStatus)}
+            {capitalizeFirstLetter(info.row.original.chargedWeightAndPrice)}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("dispute", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Dispute
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {capitalizeFirstLetter(info.row.original.dispute)}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("courierPhotos", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Courier Photos
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {capitalizeFirstLetter(info.row.original.courierPhotos)}
           </p>
         );
       },
@@ -167,15 +211,19 @@ const WeightFreezeTable = () => {
       cell: (info: any) => {
         return (
           <div className="flex justify-evenly">
-            <img src={actionIcon} alt="actionIcon" />
-
-            <img src={LockIcon} alt="lockIcon" />
+            <p className="font-Open text-[#004EFF] font-semibold">ACCEPT</p>
+            <p className="font-Open text-[#004EFF] text-lg font-semibold">
+              ...
+            </p>
+            {/* <img src={LockIcon} alt="lockIcon" /> */}
           </div>
         );
       },
     }),
   ];
-  return <CustomTable columns={WeightFreezeHeading} data={WeightFreezeData} />;
+  return (
+    <CustomTable columns={NewDiscrepancyHeading} data={NewDiscrepancyData} />
+  );
 };
 
-export default WeightFreezeTable;
+export default NewDiscrepancyTable;

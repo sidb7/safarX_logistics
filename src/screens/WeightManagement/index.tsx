@@ -5,6 +5,7 @@ import { Breadcum } from "../../components/Layout/breadcrum";
 import WeightFreezeBanner from "./WeightFreezeBanner";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import WeightFreezeTable from "./WeightFreezetable";
+import NewDiscrepancyTable from "./Newdiscrepancy";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const [filterId, setFilterId] = useState(0);
@@ -14,7 +15,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   );
   const [filterData, setFilterData] = useState([
     { label: "Weight-Freeze", isActive: false },
-    { label: "New-Discrepancy", isActive: false },
+    { label: "New Discrepancy", isActive: false },
     { label: "Pending Dispute", isActive: false },
     { label: "Completed", isActive: false },
   ]);
@@ -43,7 +44,7 @@ const WeightFreeze: React.FunctionComponent = () => {
       active: true,
     },
     {
-      statusName: "New-Discrepancy",
+      statusName: "New Discrepancy",
       active: false,
     },
     {
@@ -59,6 +60,8 @@ const WeightFreeze: React.FunctionComponent = () => {
   const renderComponent = () => {
     if (tabName === "Weight-Freeze") {
       return <WeightFreezeTable />;
+    } else if (tabName === "New Discrepancy") {
+      return <NewDiscrepancyTable />;
     }
   };
   return (
