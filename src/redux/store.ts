@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./reducers/userReducer";
 import { PaymentSlice } from "./reducers/paymentReducer";
+import {roleSlice} from "./reducers/role"
 import { mapSlice } from "./reducers/mapReducer";
 import { SignupSlice } from "./reducers/signUpReducer";
 import { SignInSlice } from "./reducers/signInReducer";
@@ -12,6 +13,7 @@ export const store = configureStore({
     user: userSlice.reducer,
     payment: PaymentSlice.reducer,
     map: mapSlice.reducer,
+    roles:roleSlice.reducer,
     signup: SignupSlice.reducer,
     signin: SignInSlice.reducer,
     catalogue: catalogueSlice.reducer,
