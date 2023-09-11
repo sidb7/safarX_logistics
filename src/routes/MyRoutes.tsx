@@ -128,6 +128,7 @@ import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
+import WeightFreeze from "../screens/WeightManagement";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -645,6 +646,9 @@ const MyRoutes: React.FC = () => {
             {/* Help Screen Routes */}
 
             <Route path="/help" element={<HelpScreen />} />
+
+            {/* Weight Management */}
+            <Route path="/weight-freeze" element={<WeightFreeze />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>
