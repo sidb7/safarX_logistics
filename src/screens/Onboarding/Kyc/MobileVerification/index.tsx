@@ -251,19 +251,19 @@ const Index = (props: ITypeProps) => {
   const mobileVerificationComponent = () => {
     return (
       <div className=" lg:px-0 ">
-        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6  mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
         {heading === "Aadhaar Verification" ? (
-          <p className="flex justify-center mt-10">
+          <p className="flex justify-center">
             Aadhaar OTP will be valid for 10 Minutes
           </p>
         ) : (
-          <p className="flex justify-center mt-10">
+          <p className="flex justify-center">
             GST OTP will be valid for 10 Minutes
           </p>
         )}
-        <WelcomeHeader className="!mt-[30px]" title={heading} content="" />
+        <WelcomeHeader className="!mt-3" title={heading} content="" />
 
         <form onSubmit={onVerifyOtp}>
           <div className="px-5 lg:mb-6">

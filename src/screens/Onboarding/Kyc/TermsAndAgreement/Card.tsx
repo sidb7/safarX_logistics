@@ -28,7 +28,7 @@ const Card = (props: ITypesProps) => {
   }, []);
 
   return (
-    <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-[27px]">
+    <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-4">
       <div>
         <p
           className={`font-bold  font-Open  text-[16px] text-[#1C1C1C] text-center mb-3 ${titleClassName}`}
