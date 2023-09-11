@@ -135,6 +135,8 @@ const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
+const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
+const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -205,4 +207,6 @@ export {
   POST_SIGN_IN_WITH_GOOGLE_URL,
   GST_AGREEMENTS,
   POST_SET_ORDER_ID,
+  GET_ALL_PLANS,
+  POST_CREATE_PLAN,
 };

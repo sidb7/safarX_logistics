@@ -11,10 +11,11 @@ interface ITablePropTypes {
   columns: any;
   tdclassName?: any;
   thclassName?: any;
+  trclassName?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
-  const { data, columns, tdclassName, thclassName } = props;
+  const { data, columns, tdclassName, thclassName, trclassName } = props;
 
   const table = useReactTable({
     data,
@@ -48,7 +49,7 @@ export const CustomTable = (props: ITablePropTypes) => {
           {table.getRowModel().rows.map((row: any) => (
             <tr
               key={row.id}
-              className=" shadow-md rounded-lg	hover:bg-slate-100	"
+              className={`shadow-md rounded-lg	hover:bg-slate-100 ${trclassName}`}
             >
               {row.getVisibleCells().map((cell: any) => (
                 <td key={cell.id} className={`px-4 text-left ${tdclassName}`}>
