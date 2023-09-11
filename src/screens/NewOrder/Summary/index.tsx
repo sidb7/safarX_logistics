@@ -125,7 +125,7 @@ const Summary = (props: Props) => {
   const products = latestOrder?.data?.[0]?.products || [];
   const boxInfo = latestOrder?.data?.[0]?.boxInfo;
 
-  console.log("boxInfo", boxInfo);
+  // console.log("boxInfo", boxInfo);
 
   return (
     <div>

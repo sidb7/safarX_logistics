@@ -23,8 +23,6 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
     setExpandedBox(expandedBox === index ? null : index);
   };
 
-  console.log("boxInfoArrayforBoxDetails", boxInfo);
-
   return (
     <div className="p-[12px] gap-[8px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#FFFFFF] lg:w-[385px]">
       <div className="flex flex-col">
