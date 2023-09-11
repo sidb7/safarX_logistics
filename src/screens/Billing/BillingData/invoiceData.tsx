@@ -8,41 +8,40 @@ import downloadIcon from "../../../assets/download.svg";
 import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
 
-interface ICreditNoteDataProps {}
+interface IInvoiceDataProps {}
 
-const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
-  props
-) => {
+const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
   const columnsHelper = createColumnHelper<any>();
   const [data, setData] = useState([
     {
-      date: "23 May 2023",
-      recieved: "COUPON",
-      amount: "50",
-      description:
-        "Rs. 50 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
+      invoiceId: "GSHD8374JSKJSHJ",
+      invoiceDate: "24 Jul 2023",
+      dueDate: "24 Jul 2023",
+      invoiceAmount: "499",
+      payableAmount: "499",
     },
     {
-      date: "23 May 2023",
-      recieved: "COUPON",
-      amount: "50",
-      description: "NEFT- INWARD-SBIN323032121145- FROM SRC TECH SOLUTION LTD.",
+      invoiceId: "GSHD8374JSKJSHJ",
+      invoiceDate: "24 Jul 2023",
+      dueDate: "24 Jul 2023",
+      invoiceAmount: "499",
+      payableAmount: "499",
     },
     {
-      date: "23 May 2023",
-      recieved: "NEFT/IMPS/RTGS",
-      amount: "300",
-      description:
-        "Rs. 300 has been credited on 2023-06-04 19:39:04 through NEFT SBIN323032121145- SRC TECH SOLUTION LTD.",
+      invoiceId: "GSHD8374JSKJSHJ",
+      invoiceDate: "24 Jul 2023",
+      dueDate: "24 Jul 2023",
+      invoiceAmount: "499",
+      payableAmount: "499",
     },
   ]);
   const billingOrdersHeading = [
-    columnsHelper.accessor("date", {
+    columnsHelper.accessor("invoiceId", {
       header: () => {
         return (
           <div className="flex justify-between ">
             <h1 className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center ">
-              Date
+              Invoice Id
             </h1>
             <img className="cursor-pointer" src={sortIcon} alt="" />
           </div>
@@ -51,20 +50,20 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
 
       cell: (info: any) => {
         return (
-          <div className="pb-16">
+          <div className="py-4">
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original.date}
+              {info.row.original.invoiceId}
             </p>
           </div>
         );
       },
     }),
-    columnsHelper.accessor("recievedVia", {
+    columnsHelper.accessor("invoiceDate", {
       header: () => {
         return (
           <div className="flex justify-between ">
             <h1 className="font-Open text-sm font-semibold leading-5 text-[#1C1C1C] self-center ">
-              Recieved Via
+              Invoice Date
             </h1>
             <img className="cursor-pointer" src={sortIcon} alt="" />
           </div>
@@ -73,21 +72,21 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
 
       cell: (info: any) => {
         return (
-          <div className="pb-16">
+          <div>
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original.recieved}
+              {info.row.original.invoiceDate}
             </p>
           </div>
         );
       },
     }),
 
-    columnsHelper.accessor("amount", {
+    columnsHelper.accessor("dueDate", {
       header: () => {
         return (
           <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
-              Amount
+              Due Date
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
           </div>
@@ -96,20 +95,20 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
 
       cell: (info: any) => {
         return (
-          <div className="pb-16">
+          <div className="">
             <p className="font-Open text-sm font-normal leading-5">
-              ₹{info.row.original.amount}
+              {info.row.original.dueDate}
             </p>
           </div>
         );
       },
     }),
-    columnsHelper.accessor("description", {
+    columnsHelper.accessor("invoiceAmount", {
       header: () => {
         return (
           <div className="flex justify-between ">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
-              Description
+              Invoice Amount
             </p>
             <img className="cursor-pointer" src={sortIcon} alt="" />
           </div>
@@ -118,8 +117,28 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
 
       cell: (info: any) => {
         return (
-          <div className="flex-wrap pb-16">
-            <p>{info.row.original.description}</p>
+          <div className="">
+            <p>₹{info.row.original.invoiceAmount}</p>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("payableAmount", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              Payable Amount
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div className="">
+            <p>₹{info.row.original.payableAmount}</p>
           </div>
         );
       },
@@ -137,7 +156,7 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
 
       cell: (info: any) => {
         return (
-          <div className="flex gap-x-5 mt-[-50px] ">
+          <div className="flex gap-x-5 ">
             <img className="cursor-pointer" src={downloadIcon} alt="" />
             <img className="cursor-pointer" src={exportIcon} alt="" />
           </div>
@@ -156,4 +175,4 @@ const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
   );
 };
 
-export default CreditNoteData;
+export default InvoiceData;

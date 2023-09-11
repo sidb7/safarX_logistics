@@ -4,6 +4,7 @@ import { ScrollNav } from "../../components/ScrollNav";
 import { SearchBox } from "../../components/SearchBox";
 import PaginationComponent from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
+import InvoiceData from "./BillingData/invoiceData";
 
 interface IInvoiceProps {}
 
@@ -57,7 +58,9 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             </div>
           </div>
         </div>
-        <p>table for Invoice </p>
+        <div className="mx-4">
+          <InvoiceData />
+        </div>
 
         {totalItemCount > 0 && (
           <PaginationComponent
