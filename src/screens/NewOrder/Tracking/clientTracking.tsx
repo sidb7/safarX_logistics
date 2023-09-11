@@ -1,3 +1,6 @@
+import Joyofriding from "../../../assets/jofofridingImage.svg";
+import ClientProductImage from "../../../assets/clientProductImage.svg";
+
 import { useState } from "react";
 import ClientIcon from "../../../assets/clientIcon.svg";
 import InputBox from "../../../components/Input/index";

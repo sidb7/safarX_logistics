@@ -73,7 +73,7 @@ const Index = (props: ITypeProps) => {
         />
 
         <form onSubmit={onSendOtp}>
-          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[160px] px-5 lg:px-0 gap-y-5 mb-6">
             <div>
               <CustomInputBox
                 containerStyle={`lg:!w-auto`}
