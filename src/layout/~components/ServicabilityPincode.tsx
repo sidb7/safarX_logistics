@@ -29,7 +29,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
     pincode: pincode,
   };
 
-  const postPickupOrderDetails = async (payload: any) => {
+  const postServicablePincode = async (payload: any) => {
     try {
       const { data: response } = await POST(GET_SERVICABLE_PINCODE, payload);
 
@@ -43,8 +43,6 @@ const ServicabilityPincode = (props: ITypeProps) => {
       return error;
     }
   };
-
-  console.log("responsedata", response?.data);
 
   const columns = [
     columnsHelper.accessor("accountId", {
@@ -232,8 +230,8 @@ const ServicabilityPincode = (props: ITypeProps) => {
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5">
       <div className="flex justify-between lg:mb-10 lg:px-5">
-        <div className="flex gap-x-2 lg:gap-x-3">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232]">
+        <div className="flex gap-x-2 lg:gap-x-3 ">
+          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-4">
             Servicable Pincode
           </h3>
         </div>
@@ -259,13 +257,15 @@ const ServicabilityPincode = (props: ITypeProps) => {
         <AddButton
           text="Check Availability"
           onClick={() => {
-            postPickupOrderDetails(payload);
+            postServicablePincode(payload);
           }}
         />
       </div>
-      {response && response?.data && response.data.length > 0 && (
-        <div className="mx-10">
-          <CustomTable columns={columns} data={response.data} />
+      {response && response?.data && response?.data?.length > 0 && (
+        <div className="ml-10 mr-5 max-w-screen-xl ">
+          <div className="overflow-x-auto  overflow-y-auto">
+            <CustomTable columns={columns} data={response?.data} />
+          </div>
         </div>
       )}
     </div>
