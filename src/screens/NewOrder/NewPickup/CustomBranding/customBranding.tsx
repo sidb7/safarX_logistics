@@ -24,17 +24,18 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
   const [customBrandingRightModal, setCustomBrandingRightModal] =
     useState(false);
   const branding = pickupAddress.branding;
-  const [toggleStatus, setToggleStatus] = useState(branding.isActive);
+  const isActive = pickupAddress.branding.isActive;
+
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
 
   return (
-    <div className="!mb-20 lg:col-span-3 px-5 ">
+    <div className={` ${isActive && "!mb-[130px]"} lg:col-span-3 px-5`}>
       <div className="flex flex-col  w-[372px] h-[134px] ">
         <div
           className={`grid grid-cols-2 p-2 ${
-            toggleStatus
+            isActive
               ? "bg-[#E8E8E8] rounded-tr-lg w-[372px] h-[44px] rounded-tl-lg border-[1px]"
               : "shadow-md rounded "
           }`}
@@ -45,36 +46,34 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
 
           <div
             className={`flex ${
-              toggleStatus ? "justify-start" : "justify-end"
+              isActive ? "justify-start" : "justify-end"
             } items-center gap-x-1`}
           >
             <button
               className={`${
-                toggleStatus ? "bg-[#7CCA62]" : "bg-[#F35838]"
+                isActive ? "bg-[#7CCA62]" : "bg-[#F35838]"
               } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
               onClick={() => {
-                setToggleStatus(!toggleStatus);
                 setPickupAddress((prevData: any) => ({
                   ...prevData,
                   branding: {
                     ...prevData.branding,
-                    isActive: !toggleStatus,
+                    isActive: !isActive,
                   },
                 }));
               }}
             >
               <Switch
                 onChange={() => {
-                  setToggleStatus(!toggleStatus);
-                   setPickupAddress((prevData: any) => ({
-                     ...prevData,
-                     branding: {
-                       ...prevData.branding,
-                       isActive: !toggleStatus,
-                     },
-                   }));
+                  setPickupAddress((prevData: any) => ({
+                    ...prevData,
+                    branding: {
+                      ...prevData.branding,
+                      isActive: !isActive,
+                    },
+                  }));
                 }}
-                checked={toggleStatus}
+                checked={isActive}
                 onColor="#FFFFF"
                 onHandleColor="#7CCA62"
                 offColor="#FFFFF"
@@ -87,10 +86,10 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
               />
 
               <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
-                {toggleStatus ? "ACTIVE" : "DEACTIVE"}
+                {isActive ? "ACTIVE" : "DEACTIVE"}
               </p>
             </button>
-            {toggleStatus && (
+            {isActive && (
               <img
                 src={editIcon}
                 alt=""
@@ -98,10 +97,10 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
                 onClick={() => setCustomBrandingRightModal(true)}
               />
             )}
-            {toggleStatus && <img src={AccordionUp} alt="" className="ml-2" />}
+            {isActive && <img src={AccordionUp} alt="" className="ml-2" />}
           </div>
         </div>
-        {toggleStatus && (
+        {isActive && (
           <div
             className="grid grid-cols-2 items-center border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg p-2"
             onClick={() => {
