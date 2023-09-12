@@ -29,6 +29,8 @@ import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../components/Layout/breadcrum";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import BulkUpload from "./BulkUpload";
 
 const ArrowNavigator = () => {
   return (
@@ -45,6 +47,7 @@ const ArrowNavigator = () => {
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div
@@ -71,12 +74,24 @@ const Buttons = (className?: string) => {
         </span>
       </div>
 
-      <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
+      <div
+        className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+        onClick={() => setIsModalOpen(true)}
+      >
         <img src={BlukOrderIcon} alt="" width="16px" />
         <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-          BLUK UPLOAD
+          BULK UPLOAD
         </span>
       </div>
+      {isModalOpen && (
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <BulkUpload
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          />
+        </CenterModal>
+      )}
     </div>
   );
 };
