@@ -8,7 +8,8 @@ import { toast } from "react-toastify";
 import Checkbox from "../../components/CheckBox";
 import InputWithFileUpload from "../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
-import { FILE_UPLOAD } from "../../utils/ApiUrls";
+import whiteDownloadIcon from "../../assets/whiteDownloadIcon.svg";
+
 interface ITypeProps {
   onClick?: any;
 }
@@ -16,13 +17,45 @@ interface ITypeProps {
 const BulkUpload = (props: ITypeProps) => {
   const { onClick } = props;
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
-
+  const [file, setFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("");
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };
 
-  console.log("selectedOption", selectedOption);
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null;
+    setFile(selectedFile);
+  };
+
+  const handleFileUpload = async () => {
+    if (!file) {
+      toast.error("Please select a file to upload.");
+      return;
+    }
+
+    let uuid = uuidv4();
+    let formData = new FormData();
+    formData.append("file", file);
+    formData.append("fileName", uuid);
+
+    try {
+      const { data: response } = await POST("", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response?.success) {
+        toast.success(response?.message);
+      } else {
+        toast.error("Failed To Upload!");
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      toast.error("An error occurred during file upload.");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
@@ -44,7 +77,7 @@ const BulkUpload = (props: ITypeProps) => {
 
       <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
         <div className="flex flex-row  items-center   ">
-          <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-sm">
+          <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
             Order Type:
           </p>
           <Checkbox
@@ -64,32 +97,29 @@ const BulkUpload = (props: ITypeProps) => {
           <div className="w-[20%] ml-[250px]">
             <AddButton
               text="Download Sample"
+              showIcon={true}
+              icon={whiteDownloadIcon}
               onClick={() => {
                 {
                 }
               }}
+              className=""
             />
           </div>
         </div>
       </div>
 
       <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
-        <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+        <p className="bg-white   lg:font-semibold lg:font-Open lg:text-base">
           File Upload:
         </p>
-        <div>
-          <InputWithFileUpload type="file" />
+        <div className="w-[40%] mt-2">
+          <InputWithFileUpload type="file" onChange={handleFileSelect} />
         </div>
       </div>
 
       <div className="w-[20%] ml-5 mt-[-25px]">
-        <AddButton
-          text="Upload Order"
-          onClick={() => {
-            {
-            }
-          }}
-        />
+        <AddButton text="Upload Order" onClick={handleFileUpload} />
       </div>
     </div>
   );
