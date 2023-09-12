@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -11,7 +11,7 @@ import CustomBranding from "./CustomBranding/customBranding";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { toast } from "react-toastify";
 import { POST } from "../../../utils/webService";
-import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
+import { ADD_PICKUP_LOCATION, GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
 
@@ -58,7 +58,7 @@ const PickupLocation = () => {
   const navigate = useNavigate();
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
-  const [pickupAddress, setPickupAddress] = useState({
+  const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
       flatNo: "",
@@ -164,6 +164,20 @@ const PickupLocation = () => {
       return error;
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_LATEST_ORDER);
+      if (data.success && data?.data.length > 0) {
+        const lastestOrderData = data?.data[0];
+        setPickupAddress({
+          pickupAddress: lastestOrderData?.pickupAddress,
+          returnAddress: lastestOrderData?.returnAddress,
+          branding: lastestOrderData?.branding,
+        });
+      }
+    })();
+  }, []);
 
   return (
     <div className="w-full">

@@ -24,13 +24,15 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
   const [customBrandingRightModal, setCustomBrandingRightModal] =
     useState(false);
   const branding = pickupAddress.branding;
-  const [toggleStatus, setToggleStatus] = useState(branding.isActive);
+  const isActive = pickupAddress.branding.isActive;
+
+  const [toggleStatus, setToggleStatus] = useState(isActive);
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
 
   return (
-    <div className="!mb-20 lg:col-span-3 px-5 ">
+    <div className={` ${toggleStatus && "!mb-[130px]"} lg:col-span-3 px-5`}>
       <div className="flex flex-col  w-[372px] h-[134px] ">
         <div
           className={`grid grid-cols-2 p-2 ${
@@ -66,13 +68,13 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
               <Switch
                 onChange={() => {
                   setToggleStatus(!toggleStatus);
-                   setPickupAddress((prevData: any) => ({
-                     ...prevData,
-                     branding: {
-                       ...prevData.branding,
-                       isActive: !toggleStatus,
-                     },
-                   }));
+                  setPickupAddress((prevData: any) => ({
+                    ...prevData,
+                    branding: {
+                      ...prevData.branding,
+                      isActive: !toggleStatus,
+                    },
+                  }));
                 }}
                 checked={toggleStatus}
                 onColor="#FFFFF"
