@@ -24,19 +24,19 @@ import RightSideModal from "../../../../components/CustomModal/customRightModal"
 
 interface IAddressCardProps {
   data: {
-    pickupAddress: any;
-    setPickupAddress: any;
+    deliveryAddress: any;
+    setDeliveryAddress: any;
     addressLabel: string;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { pickupAddress, setPickupAddress, addressLabel },
+  data: { deliveryAddress, setDeliveryAddress, addressLabel },
 }) => {
   const address =
-    addressLabel === "Return Address"
-      ? pickupAddress.returnAddress
-      : pickupAddress.pickupAddress;
+    addressLabel === "Billing Address"
+      ? deliveryAddress.billingAddress
+      : deliveryAddress.deliveryAddress;
 
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
@@ -63,8 +63,8 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     value: string
   ) => {
     const addressName: string =
-      addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
-    setPickupAddress((prevData: any) => ({
+      addressLabel === "billing Address" ? "billingAddress" : "deliveryAddress";
+    setDeliveryAddress((prevData: any) => ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
@@ -94,8 +94,10 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       const parsedData = verifyAddressResponse?.data?.message;
 
       const addressName: any =
-        addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
-      setPickupAddress((prevData: any) => ({
+        addressLabel === "Billing Address"
+          ? "billingAddress"
+          : "deliveryAddress";
+      setDeliveryAddress((prevData: any) => ({
         ...prevData,
         [addressName]: {
           ...prevData[addressName],
@@ -275,6 +277,21 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onClick={() => !directionAudio && setIsAudioModal(true)}
           />
         </div>
+
+        {addressLabel === "Delivery Address" && (
+          <div className="mb-4 lg:mb-6 lg:mr-6">
+            <CustomInputBox
+              label="GST No."
+              value={deliveryAddress.gstNumber}
+              onChange={(e) =>
+                setDeliveryAddress((prevData: any) => ({
+                  ...prevData,
+                  gstNumber: e.target.value,
+                }))
+              }
+            />
+          </div>
+        )}
       </div>
       <CommonBottomModal
         icon={MapIcon}

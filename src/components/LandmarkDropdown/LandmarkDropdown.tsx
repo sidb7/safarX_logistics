@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import CustomInputBox from "../Input";
 import "./landmarkDropdown.css";
-import { POST } from "../../utils/webService";
-import { constants } from "buffer";
 
 interface CustomInputWithDropDownProps {
   pastedData: any;
@@ -50,11 +48,14 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       };
 
       try {
-        const response = await fetch("https://sylandmarkdev.yaarilabs.com/", {
-          method: "POST",
-          headers,
-          body: JSON.stringify(payload),
-        });
+        const response = await fetch(
+          "https://sylandmarkdev.yaarilabs.com/api/v1/landmark/landmark",
+          {
+            method: "POST",
+            headers,
+            body: JSON.stringify(payload),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
