@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ClockErrorIcon from "../../assets/clock.svg";
 import ProcessingIcon from "../../assets/processing.svg";
 import ResolvedIcon from "../../assets/resolved.svg";
@@ -7,16 +7,20 @@ import LockIcon from "../../assets/WeightManagement/lockicon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { CustomTable } from "../../components/Table";
-import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
-import editIcon from "../../assets/serv/edit.svg";
+import blueDeleteIcon from "../../assets/WeightManagement/blueDeleteIcon.svg";
+import blueEditIcon from "../../assets/WeightManagement/blueEditIcon.svg";
+import CustomCheckbox from "../../components/CheckBox";
 
 const WeightFreezeTable = () => {
+  const [isCheckedAll, setIsCheckedAll] = useState<boolean>(false);
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+
   const columnsHelper = createColumnHelper<any>();
 
   const WeightFreezeData = [
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEFS",
       packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
@@ -24,7 +28,7 @@ const WeightFreezeTable = () => {
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEDS",
       packageImages: "Upload Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
@@ -32,7 +36,7 @@ const WeightFreezeTable = () => {
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEDA",
       packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
@@ -43,7 +47,11 @@ const WeightFreezeTable = () => {
     columnsHelper.accessor("packageDetails", {
       header: () => {
         return (
-          <div className="flex justify-between">
+          <div className="flex ">
+            <CustomCheckbox
+              checked={isCheckedAll}
+              onChange={handleCheckboxChangeAll}
+            />
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Package Details
             </p>
@@ -53,9 +61,15 @@ const WeightFreezeTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.packageDetails}
-          </p>
+          <div className="flex">
+            <CustomCheckbox
+              checked={selectedRows.includes(info.index)}
+              onChange={() => handleCheckboxChange(info.index)}
+            />
+            <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+              {info.row.original.packageDetails}
+            </p>
+          </div>
         );
       },
     }),
@@ -91,12 +105,18 @@ const WeightFreezeTable = () => {
 
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-center ">
-            <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 mr-2 ">
+          <div className="flex items-center justify-center">
+            <p className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 mr-2">
               {info.row.original.packageImages}
             </p>
-            <img src={actionIcon} alt="actionIcon" className="mr-2" />
-            {/* <img src={DeleteIconForLg} alt="deleteIcon" className="w-5 h-5" /> */}
+            {info.row.original.packageImages === "Uploaded Photos" ? (
+              <>
+                <img src={blueEditIcon} alt="editIcon" className=" mr-2" />
+                <img src={blueDeleteIcon} alt="deleteIcon" className="" />
+              </>
+            ) : (
+              <img src={actionIcon} alt="actionIcon" className="mr-14" />
+            )}
           </div>
         );
       },
@@ -181,6 +201,22 @@ const WeightFreezeTable = () => {
       },
     }),
   ];
+  const handleCheckboxChangeAll = () => {
+    if (isCheckedAll) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(WeightFreezeData.map((_, index) => index));
+    }
+    setIsCheckedAll(!isCheckedAll);
+  };
+
+  const handleCheckboxChange = (rowIndex: number) => {
+    if (selectedRows.includes(rowIndex)) {
+      setSelectedRows(selectedRows.filter((index) => index !== rowIndex));
+    } else {
+      setSelectedRows([...selectedRows, rowIndex]);
+    }
+  };
   return <CustomTable columns={WeightFreezeHeading} data={WeightFreezeData} />;
 };
 
