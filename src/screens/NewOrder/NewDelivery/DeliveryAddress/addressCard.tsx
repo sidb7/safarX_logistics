@@ -34,9 +34,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   data: { deliveryAddress, setDeliveryAddress, addressLabel },
 }) => {
   const address =
-    addressLabel === "Billing Address"
-      ? deliveryAddress.billingAddress
-      : deliveryAddress.deliveryAddress;
+  addressLabel === "Billing Address"
+  ? deliveryAddress.billingAddress
+  : deliveryAddress.deliveryAddress;
 
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
@@ -63,7 +63,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     value: string
   ) => {
     const addressName: string =
-      addressLabel === "billing Address" ? "billingAddress" : "deliveryAddress";
+      addressLabel === "Billing Address" ? "billingAddress" : "deliveryAddress";
     setDeliveryAddress((prevData: any) => ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },

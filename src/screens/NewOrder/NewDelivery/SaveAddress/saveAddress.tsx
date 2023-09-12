@@ -24,7 +24,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
     value: string
   ) => {
     const addressName: string =
-      addressLabel === "Billing Address" ? "returnAddress" : "deliveryAddress";
+      addressLabel === "Billing Address" ? "billingAddress" : "deliveryAddress";
     setDeliveryAddress((prevData: any) => ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },

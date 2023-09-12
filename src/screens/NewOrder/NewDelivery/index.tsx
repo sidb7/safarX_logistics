@@ -122,10 +122,7 @@ const DeliveryLocation = () => {
     orderType: "B2B",
     gstNumber: "",
   });
-  console.log(
-    "🚀 ~ file: index.tsx:123 ~ DeliveryLocation ~ deliveryAddress:",
-    deliveryAddress
-  );
+  console.log("🚀 ~ file: index.tsx:125 ~ DeliveryLocation ~ deliveryAddress:", deliveryAddress)
 
   const postDeliveryOrderDetails = async () => {
     try {
