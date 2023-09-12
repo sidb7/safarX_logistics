@@ -132,6 +132,7 @@ import OrdersScreen from "../screens/Billing/orders";
 import CreditNote from "../screens/Billing/creditNote";
 import Invoice from "../screens/Billing/invoice";
 import WeightFreeze from "../screens/WeightManagement";
+import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -387,10 +388,11 @@ const MyRoutes: React.FC = () => {
                 path="/orders/add-order/delivery"
                 element={
                   <ProtectedRoute>
-                    <DeliveryScreen />
+                    <DeliveryLocation />
                   </ProtectedRoute>
                 }
               />
+              
               <Route
                 path="/orders/add-order/add-product"
                 element={
