@@ -10,7 +10,8 @@ import PendingDispute from "./PendingDispute";
 import CompletedTable from "./CompletedTable";
 import CustomButton from "../../components/Button";
 import addIcon from "../../assets/Catalogue/add.svg";
-
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import DiscrepancyDetails from "./DiscrepancyDetailModal";
 const WeightFreeze: React.FunctionComponent = () => {
   const [isActiveFreezeweight, setActiveFreezeweight] = useState(true);
   const [filterId, setFilterId] = useState(0);
@@ -25,6 +26,9 @@ const WeightFreeze: React.FunctionComponent = () => {
     { label: "Completed", isActive: false },
   ]);
   const [showRaiseTicket, setShowRaiseTicket] = useState(false);
+  const [discrepancyDetailsModal, setDiscrepancyDetailsModal] = useState(false);
+  const [discrepancyDetailsRightModal, setDiscrepancyDetailsRightModal] =
+    useState(true);
 
   const disputeArray = [
     {
@@ -143,6 +147,19 @@ ${tabName === statusName && "!text-[#004EFF] lg:text-[18px]"}`}
 
           {renderComponent()}
         </div>
+        <RightSideModal
+          isOpen={discrepancyDetailsRightModal}
+          onClose={() => setDiscrepancyDetailsRightModal(false)}
+          className="!w-[389px]"
+        >
+          <DiscrepancyDetails
+            title="Discrepancy Details"
+            buttonText="UPDATE"
+            inputLabel="Enter SKU no."
+            onClick={() => setDiscrepancyDetailsRightModal(false)}
+            // onCustomLandmarkSelection={handleLandmarkSelected}
+          />
+        </RightSideModal>
         <BottomLayout callApi={() => {}} />
       </div>
     </div>

@@ -20,7 +20,7 @@ const WeightFreezeTable = () => {
   const WeightFreezeData = [
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEFS",
       packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
@@ -28,7 +28,7 @@ const WeightFreezeTable = () => {
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEDS",
       packageImages: "Upload Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
@@ -36,7 +36,7 @@ const WeightFreezeTable = () => {
     },
     {
       packageDetails: "Product1+Product2",
-      ids: "SKU:ABCDE",
+      ids: "SKU:ABCDEDA",
       packageImages: "Uploaded Photos",
       weight: "15x15x15 cm 120kg",
       idealWeight: "15x15x15 cm 120kg",
