@@ -21,6 +21,7 @@ import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
 import AiIcon from "../../../../assets/Buttons.svg";
 import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
+import { titleCase } from "../../../../utils/utility";
 
 interface IAddressCardProps {
   data: {
@@ -34,9 +35,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   data: { deliveryAddress, setDeliveryAddress, addressLabel },
 }) => {
   const address =
-  addressLabel === "Billing Address"
-  ? deliveryAddress.billingAddress
-  : deliveryAddress.deliveryAddress;
+    addressLabel === "Billing Address"
+      ? deliveryAddress.billingAddress
+      : deliveryAddress.deliveryAddress;
 
   const navigate = useNavigate();
   const isItLgScreen = useMediaQuery({
@@ -250,7 +251,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={address.state}
+            value={titleCase(address.state)}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);
