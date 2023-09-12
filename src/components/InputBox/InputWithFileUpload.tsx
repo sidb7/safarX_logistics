@@ -57,7 +57,10 @@ const InputWithFileUpload = (props: propTypes) => {
           {label}
         </label>
 
-        <div className="flex justify-center items-center  gap-2 z-[1]">
+        <div
+          className="flex justify-center items-center  gap-2 z-[1] cursor-pointer"
+          onChange={onChange}
+        >
           <img
             src={imgSrc ? imgSrc : UploadFileIcon}
             alt=""
