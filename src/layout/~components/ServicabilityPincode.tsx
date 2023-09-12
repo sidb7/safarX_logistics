@@ -64,6 +64,44 @@ const ServicabilityPincode = (props: ITypeProps) => {
         );
       },
     }),
+    columnsHelper.accessor("partnerName", {
+      header: () => {
+        return (
+          <div className="">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Partner Name
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
+            {info.row.original.partnerName}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("pincode", {
+      header: () => {
+        return (
+          <div className="">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              Pincode
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
+            {info.row.original.pincode}
+          </p>
+        );
+      },
+    }),
     columnsHelper.accessor("city", {
       header: () => {
         return (
@@ -79,6 +117,25 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
             {info.row.original.city}
+          </p>
+        );
+      },
+    }),
+    columnsHelper.accessor("state", {
+      header: () => {
+        return (
+          <div className="">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+              State
+            </p>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
+            {info.row.original.state}
           </p>
         );
       },
@@ -147,25 +204,6 @@ const ServicabilityPincode = (props: ITypeProps) => {
       },
     }),
 
-    columnsHelper.accessor("partnerName", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Partner Name
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.partnerName}
-          </p>
-        );
-      },
-    }),
     columnsHelper.accessor("pickup", {
       header: () => {
         return (
@@ -183,44 +221,6 @@ const ServicabilityPincode = (props: ITypeProps) => {
             className={`flex items-center text-[#1C1C1C] font-Open text-sm font-semibold`}
           >
             {info.row.original.pickup ? "Yes" : "No"}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("pincode", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Pincode
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.pincode}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("state", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              State
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.state}
           </p>
         );
       },
