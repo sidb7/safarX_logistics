@@ -28,7 +28,7 @@ const WeightFreeze: React.FunctionComponent = () => {
   const [showRaiseTicket, setShowRaiseTicket] = useState(false);
   const [discrepancyDetailsModal, setDiscrepancyDetailsModal] = useState(false);
   const [discrepancyDetailsRightModal, setDiscrepancyDetailsRightModal] =
-    useState(true);
+    useState(false);
 
   const disputeArray = [
     {
