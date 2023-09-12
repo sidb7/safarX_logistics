@@ -35,43 +35,10 @@ const ServicabilityPincode = (props: ITypeProps) => {
         toast.error(response?.message);
       }
     } catch (error) {
-      console.error("Error in  ADD_PICKUP_LOCATION_API", error);
+      console.error("Error in  ServicablePincode API", error);
       return error;
     }
   };
-
-  const tableData = [
-    {
-      partnerName: "BLUEDART",
-      accountId: 100,
-      accountName: "BLUEDART-B2C",
-      pickup: true,
-      cod: true,
-      delivery: true,
-      insurance: true,
-      pincode: 421301,
-      city: "KALYAN",
-      state: "MAHARASHTRA",
-      country: "IN",
-      isActive: true,
-      isDeleted: false,
-    },
-    {
-      partnerName: "BLUE",
-      accountId: 100,
-      accountName: "BLUEDART-B2B",
-      pickup: true,
-      cod: true,
-      delivery: true,
-      insurance: true,
-      pincode: 421301,
-      city: "KALYAN",
-      state: "MAHARASHTRA",
-      country: "IN",
-      isActive: true,
-      isDeleted: false,
-    },
-  ];
 
   function convertToPascalCase(input: string): string {
     return input
@@ -123,7 +90,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
             <thead>
               <tr>
                 {Object.keys(response.data[0])
-                  .filter((key) => key !== "companyId" && key !== "partnerId") // Exclude specified fields
+                  .filter((key) => key !== "companyId" && key !== "partnerId")
                   ?.map((key) => (
                     <th className="whitespace-nowrap" key={key}>
                       {convertToPascalCase(key)}
@@ -135,7 +102,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
               {response.data?.map((item: any, index: number) => (
                 <tr key={index}>
                   {Object.keys(item)
-                    .filter((key) => key !== "companyId" && key !== "partnerId") // Exclude specified fields
+                    .filter((key) => key !== "companyId" && key !== "partnerId")
                     ?.map((key) => (
                       <td key={key}>
                         {key === "isActive" ||
