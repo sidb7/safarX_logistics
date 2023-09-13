@@ -213,6 +213,8 @@ const Index: React.FC = () => {
 
   const getCourierPartnerService = async () => {
     try {
+      setLoading(true);
+
       const { data: response } = await POST(
         GET_COURIER_PARTNER_SERVICE,
         getServicePayload
@@ -220,6 +222,7 @@ const Index: React.FC = () => {
 
       if (response?.success) {
         setResponse(response);
+        setLoading(false);
       } else {
         setResponse([]);
 
@@ -228,6 +231,8 @@ const Index: React.FC = () => {
         }
       }
     } catch (error) {
+      setLoading(false);
+
       console.error("Error in API call:", error);
     }
   };
@@ -328,7 +333,7 @@ const Index: React.FC = () => {
     },
   ];
   return (
-    <div>
+    <div className="w-full ">
       <Breadcum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
@@ -341,33 +346,42 @@ const Index: React.FC = () => {
         </p>
       </div>
 
-      <div className="flex gap-4 p-2">
-        <div>
-          <h1 className="font-Lato">Select Shipyaari Service</h1>
-          <CustomDropDown
-            value={companyServiceId}
-            options={companyName}
-            onChange={(e) => fetchPartnerServiceName(e)}
-            wrapperClass="!w-[20rem] mt-4"
-            heading="Select Shipyaari Service"
-          />
+      {loading ? (
+        <div className="w-10 ml-[50%] mt-[150px]">
+          <Spinner />
         </div>
-        {partnerService && (
-          <div>
-            <h1 className="font-Lato">Select Partner Service</h1>
-            <CustomDropDown
-              value={partnerServiceId}
-              options={partnerService}
-              onChange={(e) => setCardInfoFunction(e)}
-              wrapperClass="!w-[20rem] mt-4"
-              heading="Select Partner Service"
-            />
+      ) : (
+        <>
+          <div className="flex gap-4 p-2">
+            <div>
+              <h1 className="font-Lato">Shipyaari Service</h1>
+              <CustomDropDown
+                value={companyServiceId}
+                options={companyName}
+                onChange={(e) => fetchPartnerServiceName(e)}
+                wrapperClass="!w-[20rem] mt-4"
+                heading="Select Shipyaari Service"
+              />
+            </div>
+
+            {partnerService && (
+              <div>
+                <h1 className="font-Lato">Partner Service</h1>
+                <CustomDropDown
+                  value={partnerServiceId}
+                  options={partnerService}
+                  onChange={(e) => setCardInfoFunction(e)}
+                  wrapperClass="!w-[20rem] mt-4"
+                  heading="Select Partner Service"
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       {cardInfo && (
-        <div className="max-w-2xl rounded shadow-xl">
+        <div className="max-w-2xl rounded shadow-xl pb-20">
           <div className="px-6 py-4">
             <div className="font-bold text-xl mb-2 underline">
               Service Information :

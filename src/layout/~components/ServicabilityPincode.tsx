@@ -45,12 +45,12 @@ const ServicabilityPincode = (props: ITypeProps) => {
   };
 
   const columns = [
-    columnsHelper.accessor("accountId", {
+    columnsHelper.accessor("accountName", {
       header: () => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Account Id
+              Account Name
             </p>
           </div>
         );
@@ -59,7 +59,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <p className="text-[#1C1C1C] font-Open text-sm font-semibold ">
-            {info.row.original.accountId}
+            {info.row.original.accountName}
           </p>
         );
       },
@@ -262,10 +262,8 @@ const ServicabilityPincode = (props: ITypeProps) => {
         />
       </div>
       {response && response?.data && response?.data?.length > 0 && (
-        <div className="ml-10 mr-5 max-w-screen-xl ">
-          <div className="overflow-x-auto  overflow-y-auto">
-            <CustomTable columns={columns} data={response?.data} />
-          </div>
+        <div className="ml-10 mr-5  overflow-scroll">
+          <CustomTable columns={columns} data={response?.data} />
         </div>
       )}
     </div>

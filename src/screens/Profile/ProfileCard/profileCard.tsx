@@ -154,7 +154,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <LabelComponent
               label="Wallet Balance"
               className={"text-[18px] pl-3"}
-              info={walletBalance || "0"}
+              info={`${`\u20B9`} ${walletBalance || 0}`}
               classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
             />
           </div>

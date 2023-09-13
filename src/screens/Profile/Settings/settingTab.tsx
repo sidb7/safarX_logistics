@@ -38,7 +38,7 @@ export const SettingTab = () => {
         <Breadcum label="Settings" />
         <div className="mx-4 mt-2">
           <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1`}
+            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 cursor-pointer`}
             style={{
               boxShadow:
                 "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -65,7 +65,7 @@ export const SettingTab = () => {
           </div>
 
           <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
+            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
             onClick={() => navigateTo()}
             style={{
               boxShadow:
@@ -89,8 +89,8 @@ export const SettingTab = () => {
             </div>
           </div>
 
-          <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
+          {/* <div
+            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
             onClick={() => setIsDeleteModalOpen(true)}
             style={{
               boxShadow:
@@ -107,10 +107,10 @@ export const SettingTab = () => {
                 <img src={RightArrowIcon} alt="" className="ml-4" />
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div
-            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
+            className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer cursor-pointer`}
             onClick={() => navigate(`/profile/settings/role-management`)}
             style={{
               boxShadow:
@@ -161,13 +161,13 @@ export const SettingTab = () => {
           setIsProfileModalOpen={setIsProfileModalOpen}
         />
 
-        <DeleteModal
+        {/* <DeleteModal
           isOpen={isDeleteModalOpen}
           setModal={setIsDeleteModalOpen}
           deleteTextMessage="Are you sure you want to delete this user"
           deleteURL={DELETE_SELLER}
           payloadBody={{}}
-        />
+        /> */}
         <BottomLayout callApi={() => {}} />
       </div>
     </>
