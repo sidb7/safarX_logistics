@@ -261,6 +261,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
           }}
         />
       </div>
+
       {response && response?.data && response?.data?.length > 0 && (
         <div className="ml-10 mr-5  overflow-scroll">
           <CustomTable columns={columns} data={response?.data} />
