@@ -224,32 +224,170 @@ const idHelper = [
 ];
 
 // table for draft/pending order
-export const columnHelperForPendingOrder = []
+export const columnHelperForPendingOrder = [];
 
-export const columnHelperForNewOrder = [
-  ...commonColumnHelper,
-  columnsHelper.accessor("createdAt", {
-    header: () => {
-      return (
-        <div className="flex justify-between">
-          <h1>Order Placed</h1>
-        </div>
-      );
-    },
-    cell: (info: any) => {
-      return (
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex gap-x-2">
-            <img src={BlackShipIcon} alt="" />
-            <span className="text-[14px]">04 Jun 2023</span>
+export const columnHelperForNewOrder = (navigate: any) => {
+  return [
+    columnsHelper.accessor("IDs", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>IDs</h1>
           </div>
-        </div>
-      );
-    },
-  }),
-  ...idHelper,
-  ...mainCommonHelper,
-];
+        );
+      },
+      cell: (info: any) => {
+        const { tempOrderId = "-", sellerId = "-" } = info?.row?.original;
+        return (
+          <div className="py-3">
+            <div className="flex items-center">
+              <span className="">Order ID :</span>
+              <span className="px-2">{tempOrderId}</span>
+              <img src={CopyIcon} alt="" className="mr-4" />
+            </div>
+            <div className="flex  items-center">
+              <span className="">Shipyaari ID :</span>
+              <span className="px-2">{sellerId}</span>
+              <img src={CopyIcon} alt="" className="mr-4" />
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor(".", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Package Details</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { boxInfo = [] } = info?.row?.original;
+        return (
+          <div className="my-4 space-y-2 ">
+            {boxInfo.length > 0 ? (
+              <div>
+                <span>
+                  {boxInfo[0].name} {boxInfo[1]?.boxInfo ?? ""}
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => navigate("/orders/add-order/product-package")}
+                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+              >
+                ADD PACKAGE DETAILS
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("Pickup Adreess", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Pickup Adreess</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="text-base py-3 text-[#8D8D8D]">
+            {info?.row?.original?.pickupAddress?.fullAddress ?? (
+              <div
+                onClick={() => navigate("/orders/add-order/pickup")}
+                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+              >
+                ADD PICKUP ADDRESS
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("Delivery Adreess", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Delivery Adreess</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="text-base  py-3 text-[#8D8D8D]">
+            {info?.row?.original?.deliveryAddress?.fullAddress ?? (
+              <div
+                onClick={() => navigate("/orders/add-order/delivery")}
+                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+              >
+                ADD DELIVERY ADDRESS
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("orderStatus", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Status</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex justify-center items-center gap-x-2 p-2 bg-[#F2FAEF] rounded-md border-[1px] border-[#7CCA62] whitespace-nowrap h-[28px] w-[93px]">
+            <img src={Delivery} alt="" className="w-[12px]" />
+            <span className="text-[#7CCA62] text-[12px] font-semibold  ">
+              Sucsess
+            </span>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("Payment", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Payment</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { payment, codInfo } = info?.row?.original;
+        return (
+          <>
+            <div className="flex flex-col gap-y-2 text-base py-3">
+              <span>
+                {payment?.amount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                }) ?? "0"}
+              </span>
+              <span>{codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}</span>
+            </div>
+          </>
+        );
+      },
+    }),
+    columnsHelper.accessor("asda", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Actions</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return <span>Actions</span>;
+      },
+    }),
+  ];
+};
 
 export const columnHelperForBookedAndReadyToPicked = [
   ...commonColumnHelper,
