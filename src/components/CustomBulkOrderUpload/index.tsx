@@ -18,7 +18,7 @@ const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
 
     if (file) {
       readFileAsBlob(file);
-      setAddButton(true);
+      // setAddButton(true);
       setDisabled(false);
       setUploadFile(file);
     }

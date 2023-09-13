@@ -93,7 +93,7 @@ const BulkUpload = (props: ITypeProps) => {
         icon={whiteDownloadIcon}
         showIcon={true}
         text={`Download ${selectedOption} Sample`}
-        className="!p-3"
+        className="!p-5"
         onClick={handleDownloadSample}
       />
     );
