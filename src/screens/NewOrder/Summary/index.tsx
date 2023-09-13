@@ -25,10 +25,12 @@ import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
+import { Spinner } from "flowbite-react";
 
 type Props = {};
 
 const Summary = (props: Props) => {
+  const [loading, setLoading] = useState(true);
   const [ishighRisk, setIsHighRisk] = useState(false);
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [pickupLocation, setPickupLocation] = useState({
@@ -85,9 +87,10 @@ const Summary = (props: Props) => {
   const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
 
-  // endpoint to maintain order state
   const getLatestOrderDetails = async () => {
     try {
+      setLoading(true);
+
       const { data: response } = await POST(GET_LATEST_ORDER);
 
       if (response?.success) {
@@ -96,7 +99,9 @@ const Summary = (props: Props) => {
         setLatestOrder([]);
       }
     } catch (error) {
-      return error;
+      console.error("Error in API call:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,6 +111,7 @@ const Summary = (props: Props) => {
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
       const placeOrderPromise = await POST(POST_PLACE_ORDER);
+      // const placeOrderPromise = await POST(POST_PLACE_ORDER, payload);
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
         resolve(setOrderIdPromise);
@@ -190,142 +196,160 @@ const Summary = (props: Props) => {
           />
         </div>
       </div>
-      <div className="flex flex-row">
-        <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
-          {/* Pickup Details */}
-          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
-            <SummaryAddressBox
-              locationImage={locationIcon}
-              summaryTitle="Pickup Details"
-              isEditIcon={true}
-              warehouse={
-                pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
-                pickupLocationDetails?.addressType.slice(1)
-              }
-              editImage={editIcon}
-              locationImage2={locationIcon}
-              summaryAddres={pickupLocationDetails?.fullAddress}
-              city={pickupLocationDetails?.city}
-              profileImage={contactIcon}
-              contactNumber={pickupLocationDetails?.contact?.mobileNo}
-              contactImage={phoneIcon}
-              contactName={pickupLocationDetails?.contact?.name}
-              isContactName={true}
-              isContactNumber={true}
-            />
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="flex flex-row">
+          <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
+            {/* Pickup Details */}
+            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Pickup Details"
+                isEditIcon={true}
+                warehouse={
+                  pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  pickupLocationDetails?.addressType.slice(1)
+                }
+                editImage={editIcon}
+                locationImage2={locationIcon}
+                summaryAddres={pickupLocationDetails?.fullAddress}
+                city={pickupLocationDetails?.city}
+                profileImage={contactIcon}
+                contactNumber={pickupLocationDetails?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={pickupLocationDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
 
-            <SummaryAddressBox
-              locationImage={locationIcon}
-              summaryTitle="RTO Address"
-              editImage={editIcon}
-              warehouse={
-                pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
-                pickupLocationDetails?.addressType.slice(1)
-              }
-              locationImage2={locationIcon}
-              summaryAddres={pickupLocationReturnAddress?.fullAddress}
-              city=""
-              profileImage={contactIcon}
-              contactNumber={pickupLocationReturnAddress?.contact?.mobileNo}
-              contactImage={phoneIcon}
-              contactName={pickupLocationReturnAddress?.contact?.name}
-            />
-            <div
-              className="hidden lg:block cursor-pointer"
-              onClick={() => {
-                navigate("/orders/add-order/pickup");
-              }}
-            >
-              <div style={{ width: "20px", height: "20px" }}>
-                {" "}
-                <img src={editIcon} alt="editIcon" className="w-full h-full" />
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="RTO Address"
+                editImage={editIcon}
+                warehouse={
+                  pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  pickupLocationDetails?.addressType.slice(1)
+                }
+                locationImage2={locationIcon}
+                summaryAddres={pickupLocationReturnAddress?.fullAddress}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={pickupLocationReturnAddress?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={pickupLocationReturnAddress?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <div
+                className="hidden lg:block cursor-pointer"
+                onClick={() => {
+                  navigate("/orders/add-order/pickup");
+                }}
+              >
+                <div style={{ width: "20px", height: "20px" }}>
+                  {" "}
+                  <img
+                    src={editIcon}
+                    alt="editIcon"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Delivery Details */}
-          <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
-            <SummaryAddressBox
-              locationImage={locationIcon}
-              summaryTitle="Delivery Details"
-              isEditIcon={true}
-              warehouse={
-                deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
-                deliveryLocationDetails?.addressType.slice(1)
-              }
-              editImage={editIcon}
-              locationImage2={locationIcon}
-              summaryAddres={deliveryLocationDetails?.fullAddress}
-              city=""
-              profileImage={contactIcon}
-              contactNumber={deliveryLocationDetails?.contact?.mobileNo}
-              contactImage={phoneIcon}
-              contactName={deliveryLocationDetails?.contact?.name}
-              isContactName={true}
-              isContactNumber={true}
-            />
-            <SummaryAddressBox
-              locationImage={locationIcon}
-              summaryTitle="Billing Address"
-              editImage={editIcon}
-              warehouse={
-                deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
-                deliveryLocationDetails?.addressType.slice(1)
-              }
-              locationImage2={locationIcon}
-              summaryAddres={deliveryLocationDetails?.fullAddress}
-              city=""
-              profileImage={contactIcon}
-              contactNumber={deliveryLocationDetails?.contact?.mobileNo}
-              contactImage={phoneIcon}
-              contactName={deliveryLocationDetails?.contact?.name}
-            />
-            <div
-              className="hidden lg:block cursor-pointer"
-              onClick={() => {
-                navigate("/orders/add-order/delivery");
-              }}
-            >
-              <div style={{ width: "20px", height: "20px" }}>
-                {" "}
-                <img src={editIcon} alt="editIcon" className="w-full h-full" />
+            {/* Delivery Details */}
+            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Delivery Details"
+                isEditIcon={true}
+                warehouse={
+                  deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  deliveryLocationDetails?.addressType.slice(1)
+                }
+                editImage={editIcon}
+                locationImage2={locationIcon}
+                summaryAddres={deliveryLocationDetails?.fullAddress}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={deliveryLocationDetails?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={deliveryLocationDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Billing Address"
+                editImage={editIcon}
+                warehouse={
+                  deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  deliveryLocationDetails?.addressType.slice(1)
+                }
+                locationImage2={locationIcon}
+                summaryAddres={deliveryLocationDetails?.fullAddress}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={deliveryLocationDetails?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={deliveryLocationDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <div
+                className="hidden lg:block cursor-pointer"
+                onClick={() => {
+                  navigate("/orders/add-order/delivery");
+                }}
+              >
+                <div style={{ width: "20px", height: "20px" }}>
+                  {" "}
+                  <img
+                    src={editIcon}
+                    alt="editIcon"
+                    className="w-full h-full"
+                  />
+                </div>
               </div>
             </div>
+
+            {/* Product Details */}
+            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
+              <BoxDetails boxInfo={boxInfo} />
+
+              {/* Service Details */}
+              <SummaryService
+                companyServiceName={serviceDetails?.companyServiceName}
+                price={serviceDetails?.total}
+                add={serviceDetails?.add}
+                base={serviceDetails?.base}
+                cod={serviceDetails?.cod}
+                gst={serviceDetails?.gst}
+                invoiceValue={serviceDetails?.invoiceValue}
+                partnerServiceName={serviceDetails?.partnerServiceName}
+                baseWeight={serviceDetails?.appliedWeight}
+              />
+            </div>
           </div>
-
-          {/* Product Details */}
-          <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
-            <BoxDetails boxInfo={boxInfo} />
-
-            {/* Service Details */}
-            <SummaryService
-              companyServiceName={serviceDetails?.companyServiceName}
+          <div className="flex flex-col lg:flex-row mr-5 ">
+            {/* Pricing Details */}
+            <PricingDetails
+              appliedWeight={serviceDetails?.appliedWeight}
               price={serviceDetails?.total}
               add={serviceDetails?.add}
               base={serviceDetails?.base}
+              variables={serviceDetails?.variables}
               cod={serviceDetails?.cod}
               gst={serviceDetails?.gst}
               invoiceValue={serviceDetails?.invoiceValue}
-              partnerServiceName={serviceDetails?.partnerServiceName}
-              baseWeight={serviceDetails?.appliedWeight}
+              insurance={serviceDetails?.insurance}
             />
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row mr-5 ">
-          {/* Pricing Details */}
-          <PricingDetails
-            appliedWeight={serviceDetails?.appliedWeight}
-            price={serviceDetails?.total}
-            add={serviceDetails?.add}
-            base={serviceDetails?.base}
-            variables={serviceDetails?.variables}
-            cod={serviceDetails?.cod}
-            gst={serviceDetails?.gst}
-            invoiceValue={serviceDetails?.invoiceValue}
-            insurance={serviceDetails?.insurance}
-          />
-        </div>
-      </div>
+      )}
       <BottomLayout
         customButtonText="PLACE ORDER"
         callApi={() => setOrderIdApi()}

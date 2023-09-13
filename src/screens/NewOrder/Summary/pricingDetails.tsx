@@ -34,7 +34,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   const codValue = +cod;
   const variablesValue = +variables;
 
-  const orderPrice = baseValue + addValue + variablesValue + codValue;
+  const orderPrice = baseValue + addValue + variablesValue;
 
   return (
     <div className="p-[24px]  rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[505px] ">
@@ -53,6 +53,15 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             <p>
               {" "}
               {`\u20B9`} {orderPrice}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+              COD:
+            </p>
+            <p>
+              {" "}
+              {`\u20B9`} {cod}
             </p>
           </div>
           <div className="flex justify-between">
