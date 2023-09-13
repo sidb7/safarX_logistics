@@ -133,6 +133,7 @@ import CreditNote from "../screens/Billing/creditNote";
 import Invoice from "../screens/Billing/invoice";
 import WeightFreeze from "../screens/WeightManagement";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
+import BulkUpload from "../screens/Order/BulkUpload/BulkUpload";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -372,6 +373,15 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <Order />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="orders/bulk-upload"
+                element={
+                  <ProtectedRoute>
+                    <BulkUpload />
                   </ProtectedRoute>
                 }
               />

@@ -109,7 +109,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
           <hr className="mt-[100px]"></hr>
           <div className="flex justify-between mt-[5px] ">
             <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold ">
-              Total:
+              Gross Total:
             </p>
             <p className="text-[#004EFF]">
               {" "}

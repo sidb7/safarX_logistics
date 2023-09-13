@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import CancelIcon from "../../assets/common/cancel.svg";
-import AddButton from "../../components/Button";
-import CustomInputBox from "../../components/Input";
-import { POST } from "../../utils/webService";
-import "../../styles/scrollablePincodeServiceTale.css";
+import CancelIcon from "../../../assets/common/cancel.svg";
+import AddButton from "../../../components/Button";
+import CustomInputBox from "../../../components/Input";
+import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
-import Checkbox from "../../components/CheckBox";
-import InputWithFileUpload from "../../components/InputBox/InputWithFileUpload";
+import Checkbox from "../../../components/CheckBox";
+import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
-import whiteDownloadIcon from "../../assets/whiteDownloadIcon.svg";
+import whiteDownloadIcon from "../../../assets/whiteDownloadIcon.svg";
 
 interface ITypeProps {
   onClick?: any;
@@ -18,11 +17,12 @@ const BulkUpload = (props: ITypeProps) => {
   const { onClick } = props;
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
   const [file, setFile] = useState<File | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string>("B2B");
+  const [fileName, setFileName] = useState<string | null>(null);
+
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };
-
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
     setFile(selectedFile);
@@ -54,6 +54,31 @@ const BulkUpload = (props: ITypeProps) => {
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("An error occurred during file upload.");
+    }
+  };
+
+  const handleDownloadSample = async () => {
+    try {
+      const payload = { fileType: selectedOption };
+
+      const { data: response } = await POST("", payload);
+
+      if (response?.success) {
+        toast.success(response?.message);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error("Error downloading sample:", error);
+      toast.error("An error occurred during sample download.");
+    }
+  };
+
+  const handleDroppedFiles = (droppedFiles: FileList) => {
+    if (droppedFiles.length > 0) {
+      const selectedFile = droppedFiles[0];
+      setFile(selectedFile);
+      setFileName(selectedFile.name);
     }
   };
 
@@ -96,13 +121,10 @@ const BulkUpload = (props: ITypeProps) => {
           </p>
           <div className="w-[20%] ml-[250px]">
             <AddButton
-              text="Download Sample"
+              text={`Download ${selectedOption} Sample`}
               showIcon={true}
               icon={whiteDownloadIcon}
-              onClick={() => {
-                {
-                }
-              }}
+              onClick={handleDownloadSample}
               className=""
             />
           </div>
@@ -113,7 +135,25 @@ const BulkUpload = (props: ITypeProps) => {
         <p className="bg-white   lg:font-semibold lg:font-Open lg:text-base">
           File Upload:
         </p>
-        <div className="w-[40%] mt-2">
+        <div
+          className="w-[40%] mt-2"
+          // onDragOver={(e) => {
+          //   e.preventDefault();
+          // }}
+          // onDrop={(e) => {
+          //   e.preventDefault();
+          //   handleDroppedFiles(e.dataTransfer.files);
+          // }}
+        >
+          {/* <p className="bg-white lg:font-semibold lg:font-Open lg:text-base">
+            Drag and drop files here or click to select
+          </p>
+          <input
+            type="text"
+            value={fileName || ""}
+            readOnly
+            className="w-full px-2 py-1 border-gray-300 border rounded-md"
+          /> */}
           <InputWithFileUpload type="file" onChange={handleFileSelect} />
         </div>
       </div>
