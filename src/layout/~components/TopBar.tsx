@@ -228,7 +228,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </span>
                     </div>
                     <div className="grid grid-cols-4 gap-6 overflow-hidden mt-4">
-                      <div className="flex flex-col text-center">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/wallet/recharge-wallet")}
+                      >
                         <img
                           src={WalletIcon}
                           alt=""
@@ -243,7 +246,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           ₹ {quickData?.walletBalance}
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/wallet/recharge-wallet")}
+                      >
                         <img
                           src={YaariIcon}
                           alt=""
@@ -258,7 +264,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           {quickData?.yaariPoints}
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/tracking/shipyaari")}
+                      >
                         <img
                           src={TrackOrderIcon}
                           alt=""
@@ -270,7 +279,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Track Order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/weight-freeze")}
+                      >
                         <img
                           src={WeightIcon}
                           alt=""
@@ -282,7 +294,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Weight Freeze
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/orders/add-order/pickup")}
+                      >
                         <img
                           src={CreateOrderIcon}
                           alt=""
@@ -294,7 +309,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Create an order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
                         <img
                           src={SyncOrder}
                           alt=""
@@ -306,7 +321,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Sync Order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
                         <img
                           src={AddBulkIcon}
                           alt=""
@@ -318,7 +333,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Add Bulk
                         </span>
                       </div>
-                      <div className="flex flex-col text-center">
+                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
                         <img
                           src={PinCodeIcon}
                           alt=""
