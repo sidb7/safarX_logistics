@@ -2,7 +2,7 @@ import "../../../styles/packageStyle.css";
 interface IPackageBoxProps {
   recommended?: boolean;
   packageType: string;
-  weight: string;
+  volumetricWeight: string;
   dimension?: string;
   boxType: string;
   height?: string;
@@ -15,8 +15,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   recommended = false,
   packageType = "",
   selected = false,
-  weight = "",
-  dimension = "",
+  volumetricWeight = "",
   boxType = "",
   height = "",
   breadth = "",
@@ -26,7 +25,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
     <div className={recommended ? "relative py-2" : "py-2"}>
       <div
         className={`flex flex-col  py-2 justify-center !w-64  ${
-          selected ? "border-3 border-black" : ""
+          selected ? "border-[#004EFF]" : ""
         }  lg:w-full border-2 rounded-md px-4 package-box`}
       >
         {recommended ? (
@@ -42,9 +41,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
           {packageType}
         </span>
         <div className="flex">
-          <span className="leading-6  font-Open">{`${
-            weight.split("kg")[0]
-          } Kg`}</span>
+          <span className="leading-6  font-Open">{`${volumetricWeight} Kg`}</span>
           <span className="leading-6  font-Open pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
         </div>
         <div className="text-gray-400">{boxType}</div>

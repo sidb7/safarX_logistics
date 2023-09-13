@@ -153,7 +153,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               Top Added
             </div>
           </div>
-          <div className="flex flex-wrap gap-5 mb-6  overflow-scroll ">
+          <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
             {products?.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox
@@ -196,9 +196,10 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   return (
     <>
       <CustomRightModal
+        wrapperClassName="rounded"
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className="lg:w-[52%] "
+        className="lg:w-[52%] rounded-l-xl"
       >
         {searchProductContent()}
       </CustomRightModal>

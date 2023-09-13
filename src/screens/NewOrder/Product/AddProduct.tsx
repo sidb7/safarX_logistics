@@ -133,9 +133,13 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         setProductPayload(data?.data[0]?.products);
         setProductInputState([...data?.data[0]?.products, initialUserData]);
       } else {
+        toast.error(data?.message);
+        navigate("/orders/add-order/pickup");
         throw new Error(data?.message);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("getOrderProductDetails", error);
+    }
   };
 
   const isLgScreen = useMediaQuery({
