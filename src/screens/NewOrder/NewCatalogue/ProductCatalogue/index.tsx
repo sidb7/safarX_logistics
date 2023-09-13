@@ -17,6 +17,7 @@ import {
   GET_PRODUCT_URL,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -29,6 +30,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   const [filterId, setFilterId] = useState(0);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [viewed, setViewed] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
   const [filterData, setFilterData] = useState([
     { label: "Single Product", isActive: false },
@@ -42,6 +44,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   const onPerPageItemChange = () => {};
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const { data } = await POST(
         filterId === 0 ? GET_PRODUCT_URL : GET_COMBO_PRODUCT_URL,
@@ -53,10 +56,12 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       );
       if (data?.success) {
         setProductData(data.data);
+        setLoading(false);
         // setTotalItemCount()
       } else {
         setProductData([]);
         toast.error(data?.message);
+        setLoading(false);
       }
     })();
   }, [filterId]);
@@ -97,133 +102,142 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   };
 
   return (
-    <div>
-      {filterComponent()}
+    <>
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div>
+          {filterComponent()}
 
-      {/* Display Address */}
-      <div className="mt-4 overflow-y-auto h-[425px]">
-        <div className="flex flex-col mt-1">
-          <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
-            <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
-          </h1>
+          {/* Display Address */}
+          <div className="mt-4 overflow-y-auto h-[425px]">
+            <div className="flex flex-col mt-1">
+              <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
+                <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
+              </h1>
 
-          <div className="flex gap-x-3">
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={ProductIcon}
-              productName="Fashion"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={CategoryLogo}
-              productName="Electronics"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={Categorylogo2}
-              productName="LifeStyle"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={Categorylogo2}
-              productName="LifeStyle"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={SportsLogo}
-              productName="Sports"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={FitnessCategoryLogo}
-              productName="Fitness"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={GiftLogo}
-              productName="Gift"
-            />
-            <ProductCategoryBox
-              className="!border-2 !border-[#1C1C1C]"
-              textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
-              image={FitnessCategoryLogo}
-              productName="Fitness"
-            />
+              <div className="flex gap-x-3">
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={ProductIcon}
+                  productName="Fashion"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={CategoryLogo}
+                  productName="Electronics"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={Categorylogo2}
+                  productName="LifeStyle"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={Categorylogo2}
+                  productName="LifeStyle"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={SportsLogo}
+                  productName="Sports"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={FitnessCategoryLogo}
+                  productName="Fitness"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={GiftLogo}
+                  productName="Gift"
+                />
+                <ProductCategoryBox
+                  className="!border-2 !border-[#1C1C1C]"
+                  textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
+                  image={FitnessCategoryLogo}
+                  productName="Fitness"
+                />
+              </div>
+            </div>
+
+            <div className="mt-[26px]">
+              <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
+                <img src={DeliveryIcon} alt="" className="mr-2" />
+                Most Viewed
+              </h1>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
+                {productData?.map((data: any, index: number) => {
+                  if (filterId === 0) {
+                    return (
+                      <div
+                        key={index}
+                        className="w-[272px] h-[76px]"
+                        // onClick={() => setViewed(index)}
+                      >
+                        <ProductBox
+                          image={
+                            (data?.images?.length > 0 && data?.images[0].url) ||
+                            ""
+                          }
+                          productName={data?.productName}
+                          weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
+                          dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
+                          className={`cursor-pointer p-[16px] ${
+                            viewed === index
+                              ? "border-2 border-solid border-[#004EFF]"
+                              : ""
+                          }`}
+                        />
+                      </div>
+                    );
+                  } else if (filterId === 1) {
+                    return (
+                      <div
+                        className="w-[272px] h-[76px]"
+                        // onClick={() => setViewed(index)}
+                      >
+                        <ProductBox
+                          image={StackLogo}
+                          productName={data?.comboProductName}
+                          weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
+                          dimension={`${data?.totalPrice}`}
+                          className={`cursor-pointer p-[16px] ${
+                            viewed === index
+                              ? "border-2 border-solid border-[#004EFF]"
+                              : ""
+                          }`}
+                          label={`Product: ${data?.productCount || 4}`}
+                        />
+                      </div>
+                    );
+                  }
+                })}
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-24">
+            {totalItemCount > 0 && (
+              <PaginationComponent
+                totalItems={totalItemCount}
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
+            )}
           </div>
         </div>
-
-        <div className="mt-[26px]">
-          <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
-            <img src={DeliveryIcon} alt="" className="mr-2" />
-            Most Viewed
-          </h1>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
-            {productData?.map((data: any, index: number) => {
-              if (filterId === 0) {
-                return (
-                  <div
-                    key={index}
-                    className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
-                  >
-                    <ProductBox
-                      image={
-                        (data?.images?.length > 0 && data?.images[0].url) || ""
-                      }
-                      productName={data?.productName}
-                      weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
-                      dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
-                      className={`cursor-pointer p-[16px] ${
-                        viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                      }`}
-                    />
-                  </div>
-                );
-              } else if (filterId === 1) {
-                return (
-                  <div
-                    className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
-                  >
-                    <ProductBox
-                      image={StackLogo}
-                      productName={data?.comboProductName}
-                      weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
-                      dimension={`${data?.totalPrice}`}
-                      className={`cursor-pointer p-[16px] ${
-                        viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                      }`}
-                      label={`Product: ${data?.productCount || 4}`}
-                    />
-                  </div>
-                );
-              }
-            })}
-          </div>
-        </div>
-      </div>
-      <div className="absolute bottom-24">
-        {totalItemCount > 0 && (
-          <PaginationComponent
-            totalItems={totalItemCount}
-            itemsPerPageOptions={[10, 20, 30, 50]}
-            onPageChange={onPageIndexChange}
-            onItemsPerPageChange={onPerPageItemChange}
-          />
-        )}
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
