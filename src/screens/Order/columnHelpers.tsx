@@ -223,6 +223,9 @@ const idHelper = [
   }),
 ];
 
+// table for draft/pending order
+export const columnHelperForPendingOrder = []
+
 export const columnHelperForNewOrder = [
   ...commonColumnHelper,
   columnsHelper.accessor("createdAt", {

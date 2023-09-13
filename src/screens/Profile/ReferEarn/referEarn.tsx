@@ -22,7 +22,7 @@ export const ProfileReferEarn = ({ ReferData }: any) => {
   return (
     <>
       <div
-        className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
+        className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
         onClick={navigateTo}
       >
         <div className={`flex justify-between items-center h-[44px]`}>

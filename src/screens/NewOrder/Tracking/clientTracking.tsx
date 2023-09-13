@@ -14,10 +14,6 @@ import Product from "../../../assets/layer.svg";
 import GalleryIcon from "../../../assets/galleryIcon.svg";
 import Location from "../../../assets/other.png";
 import StarRating from "./starRating";
-import ClientItem1 from "../../../assets/clientImage1.svg";
-import ClientImage2 from "../../../assets/clientImage2.svg";
-import Joyofriding from "../../../assets/jofofridingImage.svg";
-import ClientProductImage from "../../../assets/clientProductImage.svg";
 
 const Tracking = () => {
   let tracking = [
@@ -416,8 +412,18 @@ const Tracking = () => {
               })}
             </div>
             <div className="flex flex-col gap-y-4 pl-10">
-              <img src={ClientItem1} alt="" />
-              <img src={ClientImage2} alt="" />
+              <img
+                src={
+                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage1.svg"
+                }
+                alt=""
+              />
+              <img
+                src={
+                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage2.svg"
+                }
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -428,8 +434,18 @@ const Tracking = () => {
             </p>
 
             <div className="flex gap-x-5 overflow-x-scroll ">
-              <img src={Joyofriding} alt="" />
-              <img src={Joyofriding} alt="" />
+              <img
+                src={
+                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
+                }
+                alt=""
+              />
+              <img
+                src={
+                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
+                }
+                alt=""
+              />
             </div>
             <div>
               <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
@@ -437,14 +453,54 @@ const Tracking = () => {
               </p>
 
               <div className="flex gap-x-5 overflow-x-scroll ">
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
-                <img src={ClientProductImage} alt="" />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
+                  }
+                  alt=""
+                />
               </div>
             </div>
           </div>

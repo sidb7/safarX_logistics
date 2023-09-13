@@ -122,10 +122,6 @@ const DeliveryLocation = () => {
     orderType: "B2B",
     gstNumber: "",
   });
-  console.log(
-    "🚀 ~ file: index.tsx:123 ~ DeliveryLocation ~ deliveryAddress:",
-    deliveryAddress
-  );
 
   const postDeliveryOrderDetails = async () => {
     try {
@@ -272,7 +268,7 @@ const DeliveryLocation = () => {
 
       <BottomLayout
         callApi={() => postDeliveryOrderDetails()}
-        Button2Name={true}
+        // Button2Name={true}
       />
     </div>
   );

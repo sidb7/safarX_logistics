@@ -17,6 +17,7 @@ import ErrorFile from "./OrderStatus/errorFile";
 import Slider from "react-slick";
 import "../../styles/silkStyle.css";
 import {
+  columnHelperForPendingOrder,
   columnHelperForNewOrder,
   columnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
@@ -31,19 +32,6 @@ import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload";
-
-const ArrowNavigator = () => {
-  return (
-    <div className="flex items-center mb-4 lg:mb-0 lg:text-[28px] lg:font-semibold">
-      <div className="inline-flex space-x-2 items-center justify-start ">
-        <img src={BackArrowIcon} alt="" />
-        <p className="text-lg font-semibold text-center text-gray-900 ">
-          Orders
-        </p>
-      </div>
-    </div>
-  );
-};
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -97,6 +85,11 @@ const Buttons = (className?: string) => {
 };
 
 const tabs = [
+  {
+    statusName: "Pending",
+    value: "pending",
+    orderNumber: 0,
+  },
   {
     statusName: "New",
     value: "newOrder",
@@ -265,22 +258,27 @@ const Index = () => {
       statusData[index].value
     );
 
-    if (!orderList) return;
-    if (statusList && !statusList.length) return;
+    //temparory commented for change
 
-    statusData?.forEach((e: any) => {
-      statusList?.forEach((e1: any) => {
-        if (e.orderNumber === e1.count) return;
-        if (e.value === e1._id) {
-          e.orderNumber = e1.count.toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
-        }
-      });
-    });
+    // if (!orderList) return;
+    // if (statusList && !statusList.length) return;
+
+    // statusData?.forEach((e: any) => {
+    //   statusList?.forEach((e1: any) => {
+    //     if (e.orderNumber === e1.count) return;
+    //     if (e.value === e1._id) {
+    //       e.orderNumber = e1.count.toLocaleString("en-US", {
+    //         minimumIntegerDigits: 2,
+    //         useGrouping: false,
+    //       });
+    //     }
+    //   });
+    // });
 
     switch (tabs[index].value) {
+      case "pending":
+        setColumnhelper(columnHelperForPendingOrder);
+        break;
       case "newOrder":
         setColumnhelper(columnHelperForNewOrder);
         break;

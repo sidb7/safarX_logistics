@@ -103,3 +103,11 @@ export const convertEpochToDateTime = (value: number) => {
 
 //export verifyToken = apiIntergration function
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";
+
+export const titleCase = (str: string) => {
+  if (typeof str !== "string" || str.length === 0) {
+    return null;
+  }
+
+  return str[0].charAt(0).toUpperCase() + str.substring(1, str.length);
+};
