@@ -1,4 +1,10 @@
-<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2.50098 2.5L9.50051 9.49953" stroke="#F35838" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M2.50047 9.49953L9.5 2.5" stroke="#F35838" stroke-linecap="round" stroke-linejoin="round"/>
+<svg width="12" height="13" viewBox="0 0 12 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="vuesax/linear/add">
+<g id="add">
+<g id="Group 33824">
+<path id="Vector" d="M2.5 3.25391L9.49953 10.2534" stroke="#F35838" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_2" d="M2.50047 10.2534L9.5 3.25391" stroke="#F35838" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+</g>
 </svg>

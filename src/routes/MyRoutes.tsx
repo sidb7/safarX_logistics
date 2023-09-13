@@ -132,6 +132,7 @@ import OrdersScreen from "../screens/Billing/orders";
 import CreditNote from "../screens/Billing/creditNote";
 import Invoice from "../screens/Billing/invoice";
 import WeightFreeze from "../screens/WeightManagement";
+import SystemLog from "../screens/SystemLog";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 
 const MyRoutes: React.FC = () => {
@@ -681,6 +682,8 @@ const MyRoutes: React.FC = () => {
             {/* Help Screen Routes */}
 
             <Route path="/help" element={<HelpScreen />} />
+
+            <Route path="/system-log" element={<SystemLog />} />
 
             {/* Weight Management */}
             <Route path="/weight-freeze" element={<WeightFreeze />} />
