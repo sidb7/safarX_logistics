@@ -8,6 +8,10 @@ import Checkbox from "../../../components/CheckBox";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
 import whiteDownloadIcon from "../../../assets/whiteDownloadIcon.svg";
+import { Breadcum } from "../../../components/Layout/breadcrum";
+import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
+import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
+import CustomButton from "../../../components/Button";
 
 interface ITypeProps {
   onClick?: any;
@@ -60,6 +64,7 @@ const BulkUpload = (props: ITypeProps) => {
   const handleDownloadSample = async () => {
     try {
       const payload = { fileType: selectedOption };
+      console.log("payload", payload);
 
       const { data: response } = await POST("", payload);
 
@@ -82,23 +87,20 @@ const BulkUpload = (props: ITypeProps) => {
     }
   };
 
+  const renderHeaderComponent = () => {
+    return (
+      <CustomButton
+        icon={whiteDownloadIcon}
+        showIcon={true}
+        text={`Download ${selectedOption} Sample`}
+        className="!p-3"
+        onClick={handleDownloadSample}
+      />
+    );
+  };
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
-      <div className="flex justify-between lg:px-5">
-        <div className="flex gap-x-2 lg:gap-x-3">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232]">
-            Bulk Upload
-          </h3>
-        </div>
-        <div>
-          <img
-            src={CancelIcon}
-            alt=""
-            onClick={onClick}
-            className="cursor-pointer"
-          />
-        </div>
-      </div>
+      <Breadcum label="Add Bulk Upload" component={renderHeaderComponent()} />
 
       <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
         <div className="flex flex-row  items-center   ">
@@ -116,10 +118,10 @@ const BulkUpload = (props: ITypeProps) => {
             checked={selectedOption === "B2C"}
             onChange={() => handleOptionSelect("B2C")}
           />
-          <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+          <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
             B2C
           </p>
-          <div className="w-[20%] ml-[250px]">
+          {/* <div className="w-[20%] ml-[250px]">
             <AddButton
               text={`Download ${selectedOption} Sample`}
               showIcon={true}
@@ -127,39 +129,16 @@ const BulkUpload = (props: ITypeProps) => {
               onClick={handleDownloadSample}
               className=""
             />
-          </div>
+          </div> */}
         </div>
       </div>
 
-      <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
-        <p className="bg-white   lg:font-semibold lg:font-Open lg:text-base">
-          File Upload:
+      <div className="flex flex-col justify-center items-center">
+        <CustomBulkOrderUploadButton className="!mt-[15rem] " />
+        <p className="text-[16px] mt-1 font-semibold">or Drop files here</p>
+        <p className="text-[12px] mt-1 text-black text-opacity-30">
+          Pdf, excels files are supported
         </p>
-        <div
-          className="w-[40%] mt-2"
-          // onDragOver={(e) => {
-          //   e.preventDefault();
-          // }}
-          // onDrop={(e) => {
-          //   e.preventDefault();
-          //   handleDroppedFiles(e.dataTransfer.files);
-          // }}
-        >
-          {/* <p className="bg-white lg:font-semibold lg:font-Open lg:text-base">
-            Drag and drop files here or click to select
-          </p>
-          <input
-            type="text"
-            value={fileName || ""}
-            readOnly
-            className="w-full px-2 py-1 border-gray-300 border rounded-md"
-          /> */}
-          <InputWithFileUpload type="file" onChange={handleFileSelect} />
-        </div>
-      </div>
-
-      <div className="w-[20%] ml-5 mt-[-25px]">
-        <AddButton text="Upload Order" onClick={handleFileUpload} />
       </div>
     </div>
   );
