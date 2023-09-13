@@ -24,16 +24,14 @@ const SearchProductFilterItems: React.FunctionComponent<
               } flex items-center whitespace-nowrap  cursor-pointer   rounded border-[0.5px]  px-4 pr-4  py-2 gap-x-2 h-[35px]`}
               onClick={() => {
                 let temp = [...productItems];
-                let selectionObject: any = [];
-                for (let i = 0; i < temp.length; i++) {
-                  const element = temp[i];
-                  element.selected = false;
-                  selectionObject.push(element);
+
+                for (let i = 0; i < filterItems.length; i++) {
+                  if (i !== index) {
+                    temp[i].selected = false;
+                  }
                 }
-
-                selectionObject[index].selected = true;
-
-                setProductItems([...selectionObject]);
+                temp[index].selected = true;
+                setProductItems([...temp]);
               }}
             >
               <img src={eachItem.icon} alt="" className="!w-5 !h-5" />

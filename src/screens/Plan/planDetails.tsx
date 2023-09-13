@@ -8,7 +8,6 @@ import PlanDetailsCard from "./planDetailsCard";
 import InfoCards from "./infoCards";
 import DummyData from "../../screens/NewOrder/Filter/dummyFile.json";
 import CustomAccordianWithTable from "../../components/CustomAccordian/customAccordianWithTable";
-import RateCardIcon from "../../assets/Plan/Essential.svg";
 import TermsAndConditionsIcon from "../../assets/Plan/document.svg";
 import "../../styles/plan.css";
 import { Tooltip } from "react-tooltip";
@@ -16,6 +15,7 @@ import "react-tooltip/dist/react-tooltip.css";
 import { GET_PLAN_URL } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
+import { GET_ALL_PLANS } from "../../utils/ApiUrls";
 import { ScrollNav } from "../../components/ScrollNav";
 import CourierPricing from "./courierPricing";
 
@@ -23,8 +23,10 @@ interface ITypeProps {}
 
 const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
-  const [isRateCardPresent, setIsRateCardPresent] = useState(true);
-  const [planData, setPlanData]: any = useState([]);
+
+  const [planData, setPlanData] = useState<any>([]);
+  const [allPlans, setAllPlans] = useState<any>([]);
+
   const [renderingComponents, setRenderingComponents] = React.useState(0);
 
   const arrayData = [
@@ -35,7 +37,7 @@ const PlanDetails = (props: ITypeProps) => {
   let pricingData = [
     {
       pricing: "Subscription Amount",
-      bronze: "Free",
+      freemium: "Free",
       silver: "₹ 500",
       gold: "₹ 500",
       platinum: "On Request",
@@ -43,71 +45,64 @@ const PlanDetails = (props: ITypeProps) => {
 
     {
       pricing: "Annual Pricing",
-      bronze: "Free",
+      freemium: "Free",
       silver: "₹ 5000",
       gold: "₹ 5000",
       platinum: "On Request",
     },
     {
       pricing: "Your Savings",
-      bronze: "-",
+      freemium: "-",
       silver: "₹ 5000",
       gold: "₹ 5000",
       platinum: "-",
     },
-  ];
-
-  const pricingDataOnRateCardFalse = [
     {
       pricing: "Zone 1",
-      bronze: "Free",
+      freemium: "₹ 10",
       silver: "₹ 10",
       gold: "₹ 10",
       platinum: "₹ 10",
     },
     {
       pricing: "Zone 2",
-      bronze: "Free",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
+      freemium: "₹ 20",
+      silver: "₹ 20",
+      gold: "₹ 20",
+      platinum: "₹ 20",
     },
 
     {
       pricing: "Zone 3",
-      bronze: "Free",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
+      freemium: "₹ 30",
+      silver: "₹ 30",
+      gold: "₹ 30",
+      platinum: "₹ 30",
     },
     {
       pricing: "Zone 4",
-      bronze: "Free",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
+      freemium: "₹ 40",
+      silver: "₹ 40",
+      gold: "₹ 40",
+      platinum: "₹ 40",
     },
     {
       pricing: "Zone 5",
-      bronze: "Free",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
+      freemium: "₹ 50",
+      silver: "₹ 50",
+      gold: "₹ 50",
+      platinum: "₹ 50",
     },
   ];
 
-  if (isRateCardPresent === false) {
-    pricingData = [...pricingData, ...pricingDataOnRateCardFalse];
-  }
-
-  const PricingColumns = [
+  const pricingColumns = [
     columnsHelper.accessor("pricing", {
       header: () => {
         return (
           <p
             className={`font-Open  
                text-base leading-[22px] text-[#004EFF]
-             font-semibold   text-start  whitespace-nowrap  lg:w-[642px] `}
+             font-semibold   text-start  whitespace-nowrap  lg:min-w-[642px] lg:max-w-[642px]`}
           >
             Pricing
           </p>
@@ -123,18 +118,18 @@ const PlanDetails = (props: ITypeProps) => {
       },
     }),
 
-    columnsHelper.accessor("bronze", {
+    columnsHelper.accessor("freemium", {
       header: () => {
         return (
           <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
-            Bronze
+            {allPlans[0]?.planName || "FREEMIUM"}
           </p>
         );
       },
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.bronze}
+            {info.row.original.freemium}
           </div>
         );
       },
@@ -142,8 +137,8 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("silver", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
-            Silver
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+            {allPlans[1]?.planName || "SILVER"}
           </p>
         );
       },
@@ -158,8 +153,8 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("gold", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
-            Gold
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+            {allPlans[2]?.planName || "GOLD"}
           </p>
         );
       },
@@ -174,8 +169,8 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("platinum", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
-            Platinum
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+            {allPlans[3]?.planName || "PLATINUM"}
           </p>
         );
       },
@@ -189,11 +184,11 @@ const PlanDetails = (props: ITypeProps) => {
     }),
   ];
 
-  const FeaturesData = [
+  const featuresData = [
     {
       overview: "Shared Support Team",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -201,7 +196,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Account Manager",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -209,7 +204,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Multiple Carrier Partner",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -217,7 +212,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Channel Integration",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -226,7 +221,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Label Customization",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -234,7 +229,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Domestic International Shipping",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -242,7 +237,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Complementary NDR Support",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -250,7 +245,7 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Exception Management Support",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -258,14 +253,14 @@ const PlanDetails = (props: ITypeProps) => {
     {
       overview: "Customized Reporting & Analytical Solution",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
     },
   ];
 
-  const FeaturesColumns = [
+  const featuresColumns = [
     columnsHelper.accessor("overview", {
       header: () => {
         return (
@@ -283,14 +278,17 @@ const PlanDetails = (props: ITypeProps) => {
         );
       },
     }),
-    columnsHelper.accessor("bronze", {
+    columnsHelper.accessor("freemium", {
       header: () => {
         return <div></div>;
       },
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center">
-            <Checkbox checked={info.row.original.bronze} />
+            <Checkbox
+              checked={info.row.original.freemium}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
@@ -305,6 +303,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Checkbox
               checkboxClassName="!text-black"
               checked={info.row.original.silver}
+              style={{ accentColor: "black" }}
             />
           </div>
         );
@@ -317,7 +316,10 @@ const PlanDetails = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center ">
-            <Checkbox checked={info.row.original.gold} />
+            <Checkbox
+              checked={info.row.original.gold}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
@@ -329,166 +331,323 @@ const PlanDetails = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center ">
-            <Checkbox checked={info.row.original.platinum} />
+            <Checkbox
+              checked={info.row.original.platinum}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
     }),
   ];
 
-  const RateCardData = [
-    {
-      zone: "Zone 1",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 2",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-
-    {
-      zone: "Zone 3",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 4",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
-    {
-      zone: "Zone 5",
-      bronze: "₹ 10",
-      silver: "₹ 10",
-      gold: "₹ 10",
-      platinum: "₹ 10",
-    },
+  const activeData = [
+    { pricing: "", freemium: "", silver: "", gold: "", platinum: "" },
   ];
-
-  const RateCardDataColumns = [
-    columnsHelper.accessor("zone", {
+  const activeColumns = [
+    columnsHelper.accessor("pricing", {
       header: () => {
-        return (
-          <p
-            className={`font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap lg:w-[642px] `}
-          >
-            Zones
-          </p>
-        );
+        return <div className="lg:w-[642px]"></div>;
       },
 
       cell: (info: any) => {
         return (
-          <p className="flex items-center justify-start  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.zone}
+          <p className="flex items-center  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+            {info.row.original.pricing}
           </p>
         );
       },
     }),
 
-    columnsHelper.accessor("bronze", {
+    columnsHelper.accessor("freemium", {
       header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap "
-          >
-            Bronze
-          </p>
-        );
+        return <></>;
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.bronze}
-          </div>
+          planData[0]?.planName.toUpperCase() === "FREEMIUM" && activeElement()
         );
       },
     }),
     columnsHelper.accessor("silver", {
       header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap"
-          >
-            Silver
-          </p>
-        );
+        return <></>;
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-start first-letter:justify-center font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.silver}
-          </div>
+          planData[0]?.planName.toUpperCase() === "SILVER" && activeElement()
         );
       },
     }),
     columnsHelper.accessor("gold", {
       header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap"
-          >
-            Gold
-          </p>
-        );
+        return <></>;
       },
       cell: (info: any) => {
         return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.gold}
-          </div>
+          planData[0]?.planName.toUpperCase() === "GOLD" && activeElement()
         );
       },
     }),
     columnsHelper.accessor("platinum", {
       header: () => {
-        return (
-          <p
-            className="font-Open  
-               text-sm leading-5 text-[#1C1C1C]
-             font-semibold   text-start  whitespace-nowrap "
-          >
-            Platinum
-          </p>
-        );
+        return <></>;
       },
       cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-start font-Open font-normal text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.platinum}
+        return planData[0]?.planName.toUpperCase() === "PLATINUM" ? (
+          activeElement()
+        ) : (
+          <div className="flex items-center justify-center">
+            <div
+              className="rounded  py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 "
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content="Get more custom labels & channel integrations"
+            >
+              Recommended
+            </div>
+            <Tooltip
+              id="my-tooltip-inline"
+              style={{
+                backgroundColor: "#004EFF",
+                color: "#FFFFFF",
+                width: "166px",
+                fontFamily: "font-Open",
+                fontSize: "12px",
+                lineHeight: "16px",
+              }}
+            />
           </div>
         );
       },
     }),
   ];
 
+  const changePlansData = [
+    { pricing: "", freemium: "", silver: "", gold: "", platinum: "" },
+  ];
+  const changePlansColumns = [
+    columnsHelper.accessor("pricing", {
+      header: () => {
+        return <div className="lg:w-[642px]"></div>;
+      },
+
+      cell: (info: any) => {
+        return <></>;
+      },
+    }),
+
+    columnsHelper.accessor("freemium", {
+      header: () => {
+        return (
+          <div className="flex justify-center">
+            {planData[0]?.planName.toUpperCase() !== "FREEMIUM" &&
+              changeButton()}
+          </div>
+        );
+      },
+      cell: (info: any) => {},
+    }),
+    columnsHelper.accessor("silver", {
+      header: () => {
+        return (
+          <div className="flex justify-center">
+            {planData[0]?.planName.toUpperCase() !== "SILVER" && changeButton()}
+          </div>
+        );
+      },
+      cell: (info: any) => {},
+    }),
+    columnsHelper.accessor("gold", {
+      header: () => {
+        return (
+          <div className="flex justify-center">
+            {planData[0]?.planName.toUpperCase() !== "GOLD" && changeButton()}
+          </div>
+        );
+      },
+      cell: (info: any) => {},
+    }),
+    columnsHelper.accessor("platinum", {
+      header: () => {
+        return (
+          <div className="flex justify-center">
+            {planData[0]?.planName.toUpperCase() !== "PLATINUM" && (
+              <div className="flex items-center justify-center">
+                <ServiceButton
+                  onClick={() => {}}
+                  text="UPGRADE"
+                  className="!h-[34px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  "
+                />
+              </div>
+            )}
+          </div>
+        );
+      },
+      cell: (info: any) => {},
+    }),
+  ];
+
+  const termsAndConditionsData = [
+    {
+      termType: "Courier Selection",
+      definition:
+        "Courier Partner Selection will be done by Shipyaari monitored Automation Right Tool",
+    },
+    {
+      termType: "COD Charges",
+      definition: "INR 39 or 1.50 % whichever is higher",
+    },
+    {
+      termType: "Return Charge",
+      definition: "Same as forward charges",
+    },
+    {
+      termType: "Reverse Pick Up Charge",
+      definition:
+        "1.5 times of forward charges. (i.e.- if forward charges - INR 100, then reverse charge is INR 150)",
+    },
+
+    {
+      termType: "Insurance Charges on Invoice value (Optional)",
+      definition: (
+        <div className="flex items-center justify-between max-w-[400px]">
+          <div className="flex flex-col">
+            <span className="mb-2">Sum Assured</span>
+            <span>{`(i)  Up to 5000 `}</span>
+            <span>{`(ii)  5000 to 50000 `}</span>
+            <span>{`(iii)  50,000 to 1,00,000 `}</span>
+            <span>{`(iv)  Above 1 Lakh`}</span>
+          </div>
+          <div className="flex flex-col">
+            <span className="mb-2">Premium</span>
+            <span>{`0.00 %`}</span>
+            <span>{`0.75 %`}</span>
+            <span>{`1.00 %`}</span>
+            <span>{`On Demand Quote`}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      termType: "Certificate of Fact",
+      definition:
+        "0.3% of the invoice value or INR 50 whichever is higher. (optional)",
+    },
+    {
+      termType: "Chargeable Weight",
+      definition:
+        "The volumetric or dimensional weight is calculated and compared with the actual weight of the shipment to ascertain which is greater, the higher weight is used to calculate the shipment cost.",
+    },
+    {
+      termType: "Volumetric Calculation",
+      definition: (
+        <div className="flex flex-col gap-y-4">
+          <p>
+            The volumetric weight of a shipmentis a calculation that reflects
+            the density of a package. Calculations would be follow:
+          </p>
+          <div className="flex flex-col gap-y-2">
+            <span>{`Surface mode (L*B*H)/4000 in Centimeter`}</span>
+            <span>{`Air mode (L*B*H)/5000 in Centimeter`}</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      termType: "Manual Label Penalty",
+      definition: "INR 500 per shipment",
+    },
+    {
+      termType: "ODA / OPA / ESS",
+      definition:
+        "INR 1000 per consignment or INR 160/kg, whichever is higher.",
+    },
+  ];
+  const termsAndConditionsColumns = [
+    columnsHelper.accessor("termType", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center max-w-[266px]">
+            <div>
+              <h1 className="text-sm font-Open leading-5 font-semibold text-[#1C1C1C]">
+                Term Type
+              </h1>
+            </div>
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div className="font-Open font-normal text-sm leading-5 text-[#1C1C1C]">
+            {info.row.original.termType}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("definition", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center  ">
+            <h1 className="text-sm font-Open leading-5 font-semibold text-[#1C1C1C]">
+              Definition
+            </h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="font-Open font-normal text-sm leading-5 text-[#1C1C1C] p-2">
+            {info.row.original.definition}
+          </div>
+        );
+      },
+    }),
+  ];
+
+  const activeElement = () => {
+    return (
+      <div className="flex items-center justify-center">
+        <div
+          className={`rounded   py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 `}
+        >
+          Active
+        </div>
+      </div>
+    );
+  };
+
+  const changeButton = () => {
+    return (
+      <div className="flex items-center justify-center">
+        <ServiceButton
+          text={"Change"}
+          className="!py-2 !px-4 !h-[34px]"
+          onClick={() => {}}
+        />
+      </div>
+    );
+  };
+
   useEffect(() => {
     (async () => {
       try {
-        const { data: response }: any = await POST(GET_PLAN_URL);
+        //Get Plan API
+        const { data: planResponse }: any = await POST(GET_PLAN_URL);
+        const { data: response }: any = await POST(GET_ALL_PLANS, {
+          limit: 4,
+        });
+
+        if (planResponse?.success) {
+          setPlanData(planResponse?.data);
+        }
 
         if (response?.success) {
-          setPlanData(response.data);
+          setAllPlans(response?.data.reverse());
         }
       } catch (error) {
+        console.error(" PLANS API ERROR", error);
+
         return error;
       }
     })();
@@ -514,7 +673,7 @@ const PlanDetails = (props: ITypeProps) => {
               width={124}
               className="lg:mr-8"
             />
-            <div className="flex flex-col justify-center gap-y-2  h-[120px]  lg:w-[838px] lg:mr-5">
+            <div className="flex flex-col justify-center gap-y-2  h-[120px]   lg:mr-5">
               <p className="font-Lato text-[#004EFF] font-semibold text-[22px] leading-7  ">
                 PLATINUM PLAN
               </p>
@@ -527,19 +686,30 @@ const PlanDetails = (props: ITypeProps) => {
               </p>
             </div>
           </div>
-
-          <ServiceButton
-            onClick={() => {}}
-            text="UPGRADE"
-            className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
-          />
+          <div className="justify-end">
+            <ServiceButton
+              onClick={() => {}}
+              text="UPGRADE"
+              className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+            />
+          </div>
         </div>
         {/* Plan Details */}
         <div className="ml-[30px] mb-9">
           <PlanDetailsCard planDetails={planData} />
         </div>
+        {/* Pricing Details */}
+        <div className="ml-[30px] mb-4">
+          <ScrollNav
+            arrayData={arrayData}
+            showNumber={false}
+            setScrollIndex={setScrollIndex}
+          />
+        </div>
+        {renderingComponents === 0 && <CourierPricing />}
+
         {/* Info Cards */}
-        <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-9 xl:justify-between ">
+        <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
           <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
           <InfoCards
             title="Total Shipments"
@@ -558,65 +728,41 @@ const PlanDetails = (props: ITypeProps) => {
           />
         </div>
         {/*Active Recommended */}
-        <div className="flex items-center justify-end  gap-x-4 mb-[21px] ml-[30px] ">
-          <div className="rounded py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 ">
-            Active
-          </div>
 
-          <div
-            className="rounded py-1 px-2 bg-[#004EFF] text-[#FFFFFF] font-Open font-semibold text-[12px] leading-4 "
-            data-tooltip-id="my-tooltip-inline"
-            data-tooltip-content="Get more custom labels & channel integrations"
-          >
-            Recommended
-          </div>
-          <Tooltip
-            id="my-tooltip-inline"
-            style={{
-              backgroundColor: "#004EFF",
-              color: "#FFFFFF",
-              width: "166px",
-              fontFamily: "font-Open",
-              fontSize: "12px",
-              lineHeight: "16px",
-            }}
+        <div className="ml-[30px] ">
+          <CustomTable
+            data={activeData}
+            columns={activeColumns}
+            thclassName={"border-none bg-white"}
+            tdclassName={"border-none "}
+            trclassName={"shadow-none"}
           />
         </div>
         {/*Pricing Table */}
         <div className="ml-[30px] ">
           <CustomTable
-            columns={PricingColumns}
+            columns={pricingColumns}
             data={pricingData}
             tdclassName={"def"}
             thclassName={"bg-white"}
           />
         </div>
-        {/* Change Buttons */}
-        <div className="grid grid-cols-12 gap-x-4 ml-[30px] mr-6 ">
-          <div className="col-span-7"></div>
+        {/* Change-Upgrade Plans */}
 
-          <ServiceButton
-            text={"Change"}
-            className="!py-2 !px-4 !h-[34px]"
-            onClick={() => {}}
-          />
-          <ServiceButton
-            text={"Change"}
-            className="!py-2 !px-4 !h-[34px]"
-            onClick={() => {}}
-          />
-          <div className="col-span-1"></div>
-          <ServiceButton
-            onClick={() => {}}
-            text="UPGRADE"
-            className="!h-[34px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 "
+        <div className="ml-[30px]">
+          <CustomTable
+            data={changePlansData}
+            columns={changePlansColumns}
+            thclassName={"border-none bg-white"}
+            tdclassName={"border-none "}
+            trclassName={"shadow-none"}
           />
         </div>
         {/* Features Table */}
         <div className="ml-[30px] mb-[68px] ">
           <CustomTable
-            columns={FeaturesColumns}
-            data={FeaturesData}
+            columns={featuresColumns}
+            data={featuresData}
             tdclassName={"def"}
             thclassName={"border-none bg-white"}
           />
@@ -631,43 +777,21 @@ const PlanDetails = (props: ITypeProps) => {
             onClick={() => {}}
           />
         </div>
-        {/* Rate Card  */}
-        {isRateCardPresent && (
-          <div className="ml-[30px] mb-6">
-            <CustomAccordianWithTable
-              dummyDatas={DummyData}
-              title="Rate Card"
-              isIcon={true}
-              icon={RateCardIcon}
-              data={RateCardData}
-              columns={RateCardDataColumns}
-            />
-          </div>
-        )}
-        {/* Pricing Details */}
-        <div className="ml-[30px]">
-          <ScrollNav
-            arrayData={arrayData}
-            showNumber={false}
-            setScrollIndex={setScrollIndex}
-          />
-        </div>
-
-        {renderingComponents === 0 && <CourierPricing />}
-
-        {/* end here */}
 
         {/* Terms & Conditions */}
+
         <div className="ml-[30px]">
           <CustomAccordianWithTable
             dummyDatas={DummyData}
             title="Terms & Conditions"
             isIcon={true}
             icon={TermsAndConditionsIcon}
-            data={[]}
-            columns={[]}
+            data={termsAndConditionsData}
+            columns={termsAndConditionsColumns}
           />
         </div>
+
+        {/* end here */}
       </div>
     </>
   );

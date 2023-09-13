@@ -195,13 +195,13 @@ const Index = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
-          className="!mt-[78px]"
+          // className="!mt-[78px]"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <form onSubmit={onSendOtp}>
-          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[160px] px-5 lg:px-0 gap-y-5 mb-6">
             {businessType === "individual" ? (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
                 <CustomInputBox
@@ -346,7 +346,7 @@ const Index = (props: ITypeProps) => {
               )}
             </div>
           </div>
-          <div className="flex  lg:justify-center lg:items-center px-5 pb-12 ">
+          <div className="flex  lg:justify-center lg:items-center px-5 pb-12">
             <ServiceButton
               text="SEND OTP"
               disabled={!otpFormBtnStatus}
@@ -372,7 +372,7 @@ const Index = (props: ITypeProps) => {
           isOpen={openModal}
           onRequestClose={closeModal}
           className="!p-0 !w-[500px] !h-[700px]"
-          overlayClassName="flex  items-center"
+          overlayClassName="!flex   items-center"
         >
           {sendOtpFormComponent()}
         </CustomBottomModal>

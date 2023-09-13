@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Breadcum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -11,7 +11,7 @@ import CustomBranding from "./CustomBranding/customBranding";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { toast } from "react-toastify";
 import { POST } from "../../../utils/webService";
-import { ADD_PICKUP_LOCATION } from "../../../utils/ApiUrls";
+import { ADD_PICKUP_LOCATION, GET_LATEST_ORDER } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
 
@@ -58,7 +58,7 @@ const PickupLocation = () => {
   const navigate = useNavigate();
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
-  const [pickupAddress, setPickupAddress] = useState({
+  const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
       flatNo: "",
@@ -95,7 +95,7 @@ const PickupLocation = () => {
       locality: "",
       sector: "",
       landmark: "",
-      pincode: 0,
+      pincode: "",
       city: "",
       state: "",
       country: "",
@@ -164,6 +164,89 @@ const PickupLocation = () => {
       return error;
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_LATEST_ORDER);
+      if (data.success && data?.data.length > 0) {
+        const orderData = data?.data[0];
+        setPickupAddress({
+          pickupAddress: {
+            fullAddress: orderData?.pickupAddress?.fullAddress,
+            flatNo: orderData?.pickupAddress?.flatNo,
+            locality: orderData?.pickupAddress?.locality,
+            sector: orderData?.pickupAddress?.sector,
+            landmark: orderData?.pickupAddress?.landmark,
+            pincode: orderData?.pickupAddress?.pincode,
+            city: orderData?.pickupAddress?.city,
+            state: orderData?.pickupAddress?.state,
+            country: orderData?.pickupAddress?.country,
+            addressType: orderData?.pickupAddress?.addressType,
+            workingDays: {
+              monday: orderData?.pickupAddress?.workingDays?.monday,
+              tuesday: orderData?.pickupAddress?.workingDays?.tuesday,
+              wednesday: orderData?.pickupAddress?.workingDays?.wednesday,
+              thursday: orderData?.pickupAddress?.workingDays?.thursday,
+              friday: orderData?.pickupAddress?.workingDays?.friday,
+              saturday: orderData?.pickupAddress?.workingDays?.saturday,
+              sunday: orderData?.pickupAddress?.workingDays?.sunday,
+            },
+            workingHours: orderData?.pickupAddress?.workingHours,
+            contact: {
+              name: orderData?.pickupAddress?.contact?.name,
+              mobileNo: orderData?.pickupAddress?.contact?.mobileNo,
+              alternateMobileNo:
+                orderData?.pickupAddress?.contact?.alternateMobileNo,
+              emailId: orderData?.pickupAddress?.contact?.emailId,
+              type: orderData?.pickupAddress?.contact?.type,
+            },
+            pickupDate: 0,
+          },
+          returnAddress: {
+            fullAddress: orderData?.returnAddress?.fullAddress,
+            flatNo: orderData?.returnAddress?.flatNo,
+            locality: orderData?.returnAddress?.locality,
+            sector: orderData?.returnAddress?.sector,
+            landmark: orderData?.returnAddress?.landmark,
+            pincode: orderData?.returnAddress?.pincode,
+            city: orderData?.returnAddress?.city,
+            state: orderData?.returnAddress?.state,
+            country: orderData?.returnAddress?.country,
+            addressType: orderData?.returnAddress?.addressType,
+            workingDays: {
+              monday: orderData?.returnAddress?.workingDays?.monday,
+              tuesday: orderData?.returnAddress?.workingDays?.tuesday,
+              wednesday: orderData?.returnAddress?.workingDays?.wednesday,
+              thursday: orderData?.returnAddress?.workingDays?.thursday,
+              friday: orderData?.returnAddress?.workingDays?.friday,
+              saturday: orderData?.returnAddress?.workingDays?.saturday,
+              sunday: orderData?.returnAddress?.workingDays?.sunday,
+            },
+            workingHours: orderData?.returnAddress?.workingHours,
+            contact: {
+              name: orderData?.returnAddress?.contact?.name,
+              mobileNo: orderData?.returnAddress?.contact?.mobileNo,
+              alternateMobileNo:
+                orderData?.returnAddress?.contact?.alternateMobileNo,
+              emailId: orderData?.returnAddress?.contact?.emailId,
+              type: orderData?.returnAddress?.contact?.type,
+            },
+          },
+          branding: {
+            id: orderData?.branding?.id,
+            name: orderData?.branding?.name,
+            logo: orderData?.branding?.logo,
+            address: orderData?.branding?.address,
+            contact: {
+              name: orderData?.branding?.contact?.name,
+              mobileNo: orderData?.branding?.contact?.mobileNo,
+            },
+            isActive: orderData?.branding?.isActive,
+          },
+        });
+      }
+    })();
+  }, []);
 
   return (
     <div className="w-full">

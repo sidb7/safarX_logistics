@@ -60,7 +60,7 @@ const BusinessType = (props: ITypeProps) => {
             content="Kindly complete your KYC"
           />
 
-          <div className="flex flex-col items-center lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
+          <div className="flex flex-col items-center gap-y-4 lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
             <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
               Please confirm your business type
             </p>
@@ -107,9 +107,9 @@ const BusinessType = (props: ITypeProps) => {
 
   const modalTitle = () => {
     return (
-      <div className="product-box sticky p-4 z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
+      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
         <img
-          className="my-auto ml-6 object-contain"
+          className="my-auto  object-contain"
           src={CompanyLogo}
           alt="Company Logo"
         />
@@ -123,7 +123,7 @@ const BusinessType = (props: ITypeProps) => {
           shouldCloseOnOverlayClick={false}
           isOpen={openModal}
           onClose={() => setOpenModal(false)}
-          className="!w-[500px] lg:!h-4/6"
+          className="!w-[500px] lg:!h-[700px]"
         >
           {businessTypeComponent()}
         </CenterModal>

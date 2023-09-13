@@ -2,7 +2,12 @@ import { useState } from "react";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 
-const BottomLayout = ({ callApi, Button2Name }: any) => {
+const BottomLayout = ({
+  callApi,
+  Button2Name,
+  customButtonText = undefined,
+  className = "",
+}: any) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -20,8 +25,14 @@ const BottomLayout = ({ callApi, Button2Name }: any) => {
         )}
 
         <ServiceButton
-          text={loading ? "LOADING" : Button2Name ? "NEXT" : "SAVE"}
-          className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
+          text={
+            loading
+              ? "LOADING"
+              : Button2Name
+              ? `${customButtonText ? customButtonText : "NEXT"}`
+              : "SAVE"
+          }
+          className={`bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px] ${className}`}
           onClick={async () => {
             setLoading(true);
             await callApi();

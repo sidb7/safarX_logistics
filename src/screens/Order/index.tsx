@@ -17,6 +17,7 @@ import ErrorFile from "./OrderStatus/errorFile";
 import Slider from "react-slick";
 import "../../styles/silkStyle.css";
 import {
+  columnHelperForPendingOrder,
   columnHelperForNewOrder,
   columnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
@@ -29,22 +30,12 @@ import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcum } from "../../components/Layout/breadcrum";
-
-const ArrowNavigator = () => {
-  return (
-    <div className="flex items-center mb-4 lg:mb-0 lg:text-[28px] lg:font-semibold">
-      <div className="inline-flex space-x-2 items-center justify-start ">
-        <img src={BackArrowIcon} alt="" />
-        <p className="text-lg font-semibold text-center text-gray-900 ">
-          Orders
-        </p>
-      </div>
-    </div>
-  );
-};
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import BulkUpload from "./BulkUpload";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div
@@ -71,12 +62,24 @@ const Buttons = (className?: string) => {
         </span>
       </div>
 
-      <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
+      <div
+        className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+        onClick={() => setIsModalOpen(true)}
+      >
         <img src={BlukOrderIcon} alt="" width="16px" />
         <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-          BLUK UPLOAD
+          BULK UPLOAD
         </span>
       </div>
+      {isModalOpen && (
+        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <BulkUpload
+            onClick={() => {
+              setIsModalOpen(false);
+            }}
+          />
+        </CenterModal>
+      )}
     </div>
   );
 };
@@ -131,13 +134,13 @@ const tabs = [
 
 const Index = () => {
   const [filterId, setFilterId] = useState(0);
+  const navigate = useNavigate();
   const [statusData, setStatusData]: any = useState(tabs);
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
   const [orders, setOrders]: any = useState([]);
-
-  const [tempOrders, setTempOrders]: any = useState([]);
-  const [columnHelper, setColumnhelper]: any = useState(columnHelpersForRest);
+  const [isLoading, setIsLoading] = useState<any>(false);
+  const [columnHelper, setColumnhelper]: any = useState([]);
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -178,15 +181,6 @@ const Index = () => {
     initialSlide: 0, // Start from the second slide to hide the slide on the left side
   };
 
-  // const mobileSettings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   centerMode: true,
-  // };
-
   const currentSettings = isMobileView ? mobileSettings : desktopSettings;
 
   const getSellerOrderByStatus = async (
@@ -198,6 +192,7 @@ const Index = () => {
     limit?: 100
   ) => {
     try {
+      setIsLoading(true);
       const { data } = await POST(GET_SELLER_ORDER, {
         pageNo,
         select,
@@ -208,37 +203,17 @@ const Index = () => {
       });
 
       if (data?.status) {
+        setIsLoading(false);
         return data?.data[0];
       } else {
+        setIsLoading(false);
         throw new Error(data?.meesage);
       }
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error);
       return false;
     }
-  };
-
-  const handleFilter = (index: any) => {
-    // setTempOrders(JSON.parse(JSON.stringify(orders)));
-    //
-    // switch (+index) {
-    //   case 1:
-    //
-    //     setOrders(
-    //       tempOrders.filter((e: any) => e.orderStatus?.isOrderPlaced) || []
-    //     );
-    //     break;
-    //   case 2:
-    //     setOrders(
-    //       tempOrders.filter((e: any) => !e.orderStatus?.isOrderPlaced) || []
-    //     );
-    //     break;
-
-    //   default:
-    //     setOrders(tempOrders);
-    //     break;
-    // }
-    setFilterId(index);
   };
 
   useEffect(() => {
@@ -246,28 +221,29 @@ const Index = () => {
   }, []);
 
   const handleTabChanges = async (index: any = 0) => {
-    const { orderList, statusList } = await getSellerOrderByStatus(
-      statusData[index].value
-    );
+    const { pendingOrder, successFullOrder, statusList } =
+      await getSellerOrderByStatus(statusData[index].value);
+    const { data = [] } = successFullOrder;
+    let orderList: any = [];
+    orderList = data;
 
-    if (!orderList) return;
-    if (statusList && !statusList.length) return;
-
-    statusData?.forEach((e: any) => {
-      statusList?.forEach((e1: any) => {
-        if (e.orderNumber === e1.count) return;
-        if (e.value === e1._id) {
-          e.orderNumber = e1.count.toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
-        }
+    statusList.length > 0 &&
+      statusData?.forEach((e: any) => {
+        statusList?.forEach((e1: any) => {
+          if (e.orderNumber === e1.count) return;
+          if (e.value === e1._id) {
+            e.orderNumber = e1.count.toLocaleString("en-US", {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            });
+          }
+        });
       });
-    });
 
     switch (tabs[index].value) {
       case "newOrder":
-        setColumnhelper(columnHelperForNewOrder);
+        setColumnhelper(columnHelperForNewOrder(navigate));
+        orderList = pendingOrder;
         break;
       case "booked":
         setColumnhelper(columnHelperForBookedAndReadyToPicked);
@@ -280,6 +256,8 @@ const Index = () => {
         break;
     }
 
+    console.log("orderList", orderList);
+
     setOrders(orderList ?? []);
   };
 
@@ -287,14 +265,43 @@ const Index = () => {
     <div>
       <Breadcum label="Orders" component={Buttons()} />
       {isLgScreen && (
-        <div className="overflow-x-auto pl-5">
+        <div className="pl-5 pr-6">
           <OrderStatus
             filterId={filterId}
-            setFilterId={handleFilter}
+            setFilterId={setFilterId}
             handleTabChange={handleTabChanges}
             statusData={statusData}
           />
-          <CustomTable data={orders} columns={columnHelper || []} />
+          {isLoading ? (
+            <div>
+              <div className="flex items-stretch h-16 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+              <div className="flex items-stretch h-44 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+              <div className="flex items-stretch h-44 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+            </div>
+          ) : (
+            <CustomTable data={orders} columns={columnHelper || []} />
+          )}
         </div>
       )}
     </div>

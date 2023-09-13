@@ -128,6 +128,12 @@ import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
+import OrdersScreen from "../screens/Billing/orders";
+import CreditNote from "../screens/Billing/creditNote";
+import Invoice from "../screens/Billing/invoice";
+import WeightFreeze from "../screens/WeightManagement";
+import SystemLog from "../screens/SystemLog";
+import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -383,10 +389,11 @@ const MyRoutes: React.FC = () => {
                 path="/orders/add-order/delivery"
                 element={
                   <ProtectedRoute>
-                    <DeliveryScreen />
+                    <DeliveryLocation />
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="/orders/add-order/add-product"
                 element={
@@ -432,6 +439,36 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <WalletRecharge />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
+            {/* billing details Routes */}
+            <Route>
+              <Route
+                path="/billing/orders"
+                element={
+                  <ProtectedRoute>
+                    <OrdersScreen />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/billing/invoice"
+                element={
+                  <ProtectedRoute>
+                    <Invoice />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/billing/credit-note"
+                element={
+                  <ProtectedRoute>
+                    <CreditNote />
                   </ProtectedRoute>
                 }
               />
@@ -645,6 +682,11 @@ const MyRoutes: React.FC = () => {
             {/* Help Screen Routes */}
 
             <Route path="/help" element={<HelpScreen />} />
+
+            <Route path="/system-log" element={<SystemLog />} />
+
+            {/* Weight Management */}
+            <Route path="/weight-freeze" element={<WeightFreeze />} />
 
             <Route path="*" element={<NotFound />} />
           </Route>

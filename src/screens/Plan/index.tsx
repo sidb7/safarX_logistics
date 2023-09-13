@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PlanCard from "./planCard";
 import { CustomTable } from "../../components/Table";
 import { Breadcum } from "../../components/Layout/breadcrum";
@@ -7,11 +7,16 @@ import "../../styles/plan.css";
 
 import { createColumnHelper } from "@tanstack/react-table";
 import Checkbox from "../../components/CheckBox";
+import { GET_ALL_PLANS, POST_CREATE_PLAN } from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
+import { toast } from "react-toastify";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const [allPlans, setAllPlans] = useState<any>([]);
+  const [activePlanId, setActivePlanId] = useState<string>("");
 
   //Table Data
 
@@ -19,7 +24,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Shared Support Team",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -27,7 +32,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Account Manager",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -35,7 +40,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Multiple Carrier Partner",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -43,7 +48,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Channel Integration",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -52,7 +57,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Label Customization",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -60,7 +65,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Domestic International Shipping",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -68,7 +73,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Complementary NDR Support",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -76,7 +81,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Exception Management Support",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -84,7 +89,7 @@ const Index = (props: ITypeProps) => {
     {
       overview: "Customized Reporting & Analytical Solution",
 
-      bronze: true,
+      freemium: true,
       silver: true,
       gold: true,
       platinum: true,
@@ -111,18 +116,21 @@ const Index = (props: ITypeProps) => {
         );
       },
     }),
-    columnsHelper.accessor("bronze", {
+    columnsHelper.accessor("freemium", {
       header: () => {
         return (
           <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            Bronze
+            {allPlans[0]?.planName || "FREEMIUM"}
           </p>
         );
       },
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center ">
-            <Checkbox checked={info.row.original.bronze} />
+            <Checkbox
+              checked={info.row.original.freemium}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
@@ -131,7 +139,7 @@ const Index = (props: ITypeProps) => {
       header: () => {
         return (
           <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            Silver
+            {allPlans[1]?.planName || "SILVER"}
           </p>
         );
       },
@@ -141,6 +149,7 @@ const Index = (props: ITypeProps) => {
             <Checkbox
               checkboxClassName="!text-black"
               checked={info.row.original.silver}
+              style={{ accentColor: "black" }}
             />
           </div>
         );
@@ -150,14 +159,17 @@ const Index = (props: ITypeProps) => {
       header: () => {
         return (
           <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            Gold
+            {allPlans[2]?.planName || "GOLD"}
           </p>
         );
       },
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center ">
-            <Checkbox checked={info.row.original.gold} />
+            <Checkbox
+              checked={info.row.original.gold}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
@@ -166,19 +178,54 @@ const Index = (props: ITypeProps) => {
       header: () => {
         return (
           <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            Platinum
+            {allPlans[3]?.planName || "PLATINUM"}
           </p>
         );
       },
       cell: (info: any) => {
         return (
           <div className="flex items-center justify-center ">
-            <Checkbox checked={info.row.original.platinum} />
+            <Checkbox
+              checked={info.row.original.platinum}
+              style={{ accentColor: "black" }}
+            />
           </div>
         );
       },
     }),
   ];
+
+  const createPlan = async (payload: any) => {
+    try {
+      //Create Plan API
+      const { data: response }: any = await POST(POST_CREATE_PLAN, payload);
+
+      if (response?.success) {
+        setActivePlanId(payload?.planId);
+        toast.success(response?.message);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        //Get all plans API
+        const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
+
+        if (response?.success) {
+          setAllPlans(response?.data.reverse());
+        }
+      } catch (error) {
+        console.error("GET PLAN API ERROR", error);
+        return error;
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -189,31 +236,19 @@ const Index = (props: ITypeProps) => {
 
         {/* Plan Cards */}
         <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly  mb-[60px] ">
-          <PlanCard
-            planName="BRONZE"
-            pricePerMonth="Free"
-            isBronze={true}
-            planDescription="Ideal for all new established D2C brands, Social sellers, SME & MSMEs"
-          />
-          <PlanCard
-            planName="SILVER"
-            pricePerMonth="499"
-            pricePerGrams={27}
-            planDescription="Ideal for growing business selling on multiple marketplaces & websites"
-          />
-          <PlanCard
-            planName="GOLD"
-            pricePerMonth="999"
-            pricePerGrams={26}
-            isMostPopular={true}
-            planDescription="Ideal for business selling on multiple marketplaces & websites"
-          />
-          <PlanCard
-            planName="PLATINUM"
-            pricePerMonth="Price On Request"
-            isPlatinum={true}
-            planDescription="Plan built exclusively as per logistic requirements of your business"
-          />
+          {allPlans.map((eachPlan: any, index: any) => {
+            return (
+              <PlanCard
+                planId={eachPlan.planId}
+                planName={eachPlan.planName}
+                price={eachPlan.price}
+                validity={eachPlan.validity}
+                description={eachPlan.description}
+                onClick={() => createPlan(eachPlan)}
+                activePlanId={activePlanId}
+              />
+            );
+          })}
         </div>
         {/* Table */}
         <div className="ml-5 ">

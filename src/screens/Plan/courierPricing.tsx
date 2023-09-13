@@ -290,8 +290,8 @@ const CourierPricing = () => {
   ];
 
   return (
-    <div className="ml-[30px] mb-[68px] ">
-      <CustomTable columns={CourierPricingDataHeading} data={data} />
+    <div className="ml-[30px] mb-[68px] overflow-x-scroll ">
+      <CustomTable columns={CourierPricingDataHeading} data={data || []} />
     </div>
   );
 };

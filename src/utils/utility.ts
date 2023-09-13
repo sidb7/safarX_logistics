@@ -59,12 +59,55 @@ export const generateUniqueCode = (minLength: number, maxLength: number) => {
   let code = "";
 
   while (code.length < length) {
-    const randomIndex = Math.floor(Math.random() * charset.length);
-    code += charset.charAt(randomIndex);
+    const randomIndex = Math.random() * charset.length;
+    const randomIndexOnFloor = Math.floor(randomIndex);
+    code += charset.charAt(randomIndexOnFloor);
   }
 
   return code;
 };
-//export verifyToken = apiIntergration function
 
+export const searchResults = (value: any, searchProductData: any = []) => {
+  let productArray: any = [];
+  searchProductData.map((eachProduct: any, index: any) => {
+    let joinedName = eachProduct?.name?.split(" ").join("");
+    if (
+      eachProduct?.name?.toUpperCase().includes(value.toUpperCase()) ||
+      joinedName.toUpperCase().includes(value.toUpperCase())
+    ) {
+      productArray.push(eachProduct);
+    }
+  });
+  return productArray;
+};
+
+export const convertEpochToDateTime = (value: number) => {
+  let epoch = value;
+  const date = new Date(epoch);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // Months are zero-based, so add 1
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+
+  // Format the date and time as a string
+  const formattedDateTime = `${year}-${month.toString().padStart(2, "0")}-${day
+    .toString()
+    .padStart(2, "0")} ${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+  return formattedDateTime;
+};
+
+//export verifyToken = apiIntergration function
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";
+
+export const titleCase = (str: string) => {
+  if (typeof str !== "string" || str.length === 0) {
+    return null;
+  }
+
+  return str[0].charAt(0).toUpperCase() + str.substring(1, str.length);
+};

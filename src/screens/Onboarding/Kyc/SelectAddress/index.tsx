@@ -138,7 +138,7 @@ const BusinessType = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
-          className="!mt-[58px]"
+          // className="!mt-[58px]"
           title="Welcome to Shipyaari"
           content="Tell us more about your company"
         />

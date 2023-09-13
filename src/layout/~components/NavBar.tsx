@@ -7,6 +7,7 @@ import CloseMenu from "../../assets/Navbar/closeMenu.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { GetCurrentPath } from "../../utils/utility";
 import { ResponsiveState } from "../../utils/responsiveState";
+import { useSelector } from "react-redux";
 
 interface INavBarProps {
   openMobileSideBar: any;
@@ -509,17 +510,76 @@ const data = [
           },
         ],
       },
+      {
+        id: "82",
+        name: "System Log",
+        isActive: false,
+        path: "/system-log",
+        menu: [],
+        pages: [
+          {
+            id: "82",
+            name: "System Log",
+            isActive: false,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              upload: true,
+              download: true,
+            },
+            routes: {
+              create: "/api/v1/roles/createRole",
+              read: "/api/v1/roles/fetchRole,/api/v1/roles/fetchRoleWithUsers,/api/v1/roles/fetchRoleByUser",
+              update: "/api/v1/roles/updateRole",
+              delete: "/api/v1/roles/deleteRole",
+              upload: "",
+              download: "",
+            },
+          },
+        ],
+      },
     ],
     icon: "Help",
   },
 ];
 const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
+  const roles = useSelector((state: any) => state?.roles);
+  const [sideBarMenus, setSideBarMenus]: any = useState([]);
+
   const { openMobileSideBar, setMobileSideBar } = props;
   const { isLgScreen } = ResponsiveState();
   const navigate = useNavigate();
   const location = useLocation();
   const [isHover, setIsHover]: any = useState(false);
-  const [sideBarMenus, setSideBarMenus]: any = useState(data);
+
+  useEffect(() => {
+    let { roles: data, loading } = roles;
+    if (loading === false) {
+      let tempArr = JSON.parse(JSON.stringify(data[0]?.menu || []));
+
+      tempArr?.length > 0 &&
+        tempArr.forEach((e: any) => {
+          e.isChild = false;
+          e.isActivePath = false;
+          if (e.menu) {
+            e.menu?.forEach((e1: any) => {
+              e1.isChild = false;
+              e1.isActivePath = false;
+              if (e1.menu.menu) {
+                e1.menu.menu.foEach((e2: any) => {
+                  e2.isActivePath = false;
+                  e2.isChild = false;
+                });
+              }
+            });
+          }
+        });
+      setSideBarMenus([...tempArr]);
+    }
+  }, [roles]);
+
   const conditinalClass = {
     width: `${isHover ? "25rem" : "75px"}`,
     backdropFilter: `${
@@ -528,26 +588,26 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     mobileWidth: `${openMobileSideBar ? "100%" : "0"}`,
   };
 
-  useEffect(() => {
-    let tempArr = sideBarMenus;
-    tempArr?.forEach((e: any) => {
-      e.isChild = false;
-      e.isActivePath = false;
-      if (e.menu) {
-        e.menu?.forEach((e1: any) => {
-          e1.isChild = false;
-          e1.isActivePath = false;
-          if (e1.menu.menu) {
-            e1.menu.menu.foEach((e2: any) => {
-              e2.isActivePath = false;
-              e2.isChild = false;
-            });
-          }
-        });
-      }
-    });
-    setSideBarMenus([...tempArr]);
-  }, []);
+  // useEffect(() => {
+  //   let tempArr = sideBarMenus;
+  //   tempArr?.forEach((e: any) => {
+  //     e.isChild = false;
+  //     e.isActivePath = false;
+  //     if (e.menu) {
+  //       e.menu?.forEach((e1: any) => {
+  //         e1.isChild = false;
+  //         e1.isActivePath = false;
+  //         if (e1.menu.menu) {
+  //           e1.menu.menu.foEach((e2: any) => {
+  //             e2.isActivePath = false;
+  //             e2.isChild = false;
+  //           });
+  //         }
+  //       });
+  //     }
+  //   });
+  //   setSideBarMenus([...tempArr]);
+  // }, []);
 
   useEffect(() => {
     let tempArr = sideBarMenus;
@@ -650,81 +710,83 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             <img src={CompanyLogo} alt="" />
           )}
         </div>
-        {sideBarMenus?.map((e: any, index: number) => {
-          let iconName = e.icon.toLowerCase();
-          const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
-          return (
-            <div className="w-full flex-col" key={index}>
-              <div
-                key={`${e.name + index}`}
-                className={`h-10 flex items-center  rounded-lg px-2
+        {sideBarMenus.length > 0 &&
+          sideBarMenus?.map((e: any, index: number) => {
+            let iconName = e?.icon?.toLowerCase() || "";
+            const iconPath =
+              require(`../../assets/Navbar/${iconName}.svg`) || "";
+            return (
+              <div className="w-full flex-col" key={index}>
+                <div
+                  key={`${e.name + index}`}
+                  className={`h-10 flex items-center  rounded-lg px-2
                 } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
-                onClick={() => {
-                  opneAndCloseChild(index, e.isChild);
-                }}
-              >
-                <img
-                  src={iconPath}
-                  className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
-                  alt=""
-                />
-                {isHover ? (
-                  <div
-                    className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize overflow-hidden`}
-                  >
-                    <p
-                      className={`px-2 whitespace-nowrap ${
-                        e.isActivePath ? " invert" : ""
-                      }`}
-                    >
-                      {e.name}
-                    </p>
-
+                  onClick={() => {
+                    opneAndCloseChild(index, e.isChild);
+                  }}
+                >
+                  <img
+                    src={iconPath}
+                    className={`ml-[2px] ${e.isActivePath ? " invert" : ""}`}
+                    alt=""
+                  />
+                  {isHover ? (
                     <div
-                      className={`${
-                        e.isActivePath ? "text-white" : ""
-                      } flex items-center gap-2`}
+                      className={` flex items-center justify-between w-full text-base font-semibold leading-5 capitalize overflow-hidden`}
                     >
-                      <CustomButton
-                        icon={downArrow}
-                        showIcon={true}
-                        onlyIcon={true}
-                        className={`${
+                      <p
+                        className={`px-2 whitespace-nowrap ${
                           e.isActivePath ? " invert" : ""
-                        } bg-white w-fit !p-0 !h-fit`}
-                        text={""}
-                        onClick={() => {}}
-                      />
+                        }`}
+                      >
+                        {e.name}
+                      </p>
+
+                      <div
+                        className={`${
+                          e.isActivePath ? "text-white" : ""
+                        } flex items-center gap-2`}
+                      >
+                        <CustomButton
+                          icon={downArrow}
+                          showIcon={true}
+                          onlyIcon={true}
+                          className={`${
+                            e.isActivePath ? " invert" : ""
+                          } bg-white w-fit !p-0 !h-fit`}
+                          text={""}
+                          onClick={() => {}}
+                        />
+                      </div>
                     </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                {e.isChild ? (
+                  <div className="flex flex-col  overflow-hidden">
+                    {e.menu?.map((child: any, childIndex: number) => {
+                      return (
+                        <div
+                          key={childIndex}
+                          className={`py-2 pl-10 rounded-lg ${
+                            child.isActivePath ? "bg-[#E8E8E8]" : ""
+                          }`}
+                          onClick={() =>
+                            setIsActivePath(index, childIndex, child.path)
+                          }
+                        >
+                          {child.name}
+                        </div>
+                      );
+                    })}
                   </div>
                 ) : (
                   ""
                 )}
               </div>
-              {e.isChild ? (
-                <div className="flex flex-col  overflow-hidden">
-                  {e.menu?.map((child: any, childIndex: number) => {
-                    return (
-                      <div
-                        key={childIndex}
-                        className={`py-2 pl-10 rounded-lg ${
-                          child.isActivePath ? "bg-[#E8E8E8]" : ""
-                        }`}
-                        onClick={() =>
-                          setIsActivePath(index, childIndex, child.path)
-                        }
-                      >
-                        {child.name}
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          );
-        })}
+            );
+          })}
         {/* <img
           src={`../../assets/Navbar/Weight.svg`}
           className="!w-8 !h-8"
@@ -764,61 +826,64 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               onClick={() => setMobileSideBar(false)}
             />
           </div>
-          {sideBarMenus?.map((e: any, index: number) => {
-            let iconName = e.icon.toLowerCase();
-            const iconPath = require(`../../assets/Navbar/${iconName}.svg`);
-            return (
-              <div
-                className="w-full flex-col px-6 py-4"
-                key={`${e.name + index}`}
-              >
-                <div
-                  className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
-                  onClick={() => {
-                    opneAndCloseChild(index, e.isChild);
-                  }}
-                >
-                  <img src={iconPath} alt="" />
-                  <div
-                    className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
-                  >
-                    <p className={` whitespace-nowrap`}>{e.name}</p>
+          {sideBarMenus?.length > 0 &&
+            sideBarMenus?.map((e: any, index: number) => {
+              let iconName = e?.icon?.toLowerCase() || "";
+              const iconPath =
+                require(`../../assets/Navbar/${iconName}.svg`) || "";
 
-                    <div className={` flex items-center gap-2`}>
-                      <CustomButton
-                        icon={downArrow}
-                        showIcon={true}
-                        onlyIcon={true}
-                        className={`
+              return (
+                <div
+                  className="w-full flex-col px-6 py-4"
+                  key={`${e.name + index}`}
+                >
+                  <div
+                    className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
+                    onClick={() => {
+                      opneAndCloseChild(index, e.isChild);
+                    }}
+                  >
+                    <img src={iconPath} alt="" />
+                    <div
+                      className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                    >
+                      <p className={` whitespace-nowrap`}>{e.name}</p>
+
+                      <div className={` flex items-center gap-2`}>
+                        <CustomButton
+                          icon={downArrow}
+                          showIcon={true}
+                          onlyIcon={true}
+                          className={`
                             bg-white w-fit !p-0 !h-fit`}
-                        text={""}
-                        onClick={() => {}}
-                      />
+                          text={""}
+                          onClick={() => {}}
+                        />
+                      </div>
                     </div>
                   </div>
+                  {e.isChild ? (
+                    <div className="flex flex-col overflow-hidden ">
+                      {e.menu?.map((child: any, childIndex: number) => {
+                        return (
+                          <div
+                            key={`${child.path + childIndex}`}
+                            className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
+                            onClick={() =>
+                              setIsActivePath(index, childIndex, child.path)
+                            }
+                          >
+                            {child.name}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
-                {e.isChild ? (
-                  <div className="flex flex-col overflow-hidden ">
-                    {e.menu?.map((child: any, childIndex: number) => {
-                      return (
-                        <div
-                          key={`${child.path + childIndex}`}
-                          className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
-                          onClick={() =>
-                            setIsActivePath(index, childIndex, child.path)
-                          }
-                        >
-                          {child.name}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            );
-          })}
+              );
+            })}
         </nav>
       </>
     </>
