@@ -33,6 +33,8 @@ const Summary = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [ishighRisk, setIsHighRisk] = useState(false);
   const [latestOrder, setLatestOrder] = useState<any>([]);
+  const [ewaybillNumber, setEwaybillNumber] = useState("");
+
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
     address: "",
@@ -107,11 +109,10 @@ const Summary = (props: Props) => {
 
   const setOrderIdApi = async () => {
     try {
-      let payload = { orderId: orderId };
+      let payload = { orderId: orderId, ewaybillNumber: ewaybillNumber };
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
       const placeOrderPromise = await POST(POST_PLACE_ORDER);
-      // const placeOrderPromise = await POST(POST_PLACE_ORDER, payload);
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
         resolve(setOrderIdPromise);
@@ -174,26 +175,38 @@ const Summary = (props: Props) => {
           </p>
         </div>
 
-        <div className="!w-[372px]">
-          <CustomInputBox
-            isRightIcon={true}
-            containerStyle=""
-            rightIcon={AutoGenerateIcon}
-            className="w-full !text-base !font-semibold"
-            imageClassName="!h-[12px] !w-[113px] !top-[40%] "
-            value={orderId}
-            maxLength={12}
-            label="Generate order ID"
-            onChange={(e) => {
-              setOrderId(e.target.value);
-            }}
-            onClick={() => {
-              const orderId = generateUniqueCode(8, 12);
-              setOrderId(orderId);
-            }}
-            visibility={true}
-            setVisibility={() => {}}
-          />
+        <div className="flex flex-col lg:flex-row gap-5">
+          <div className="!w-[372px]">
+            <div className="!w-[372px]">
+              <CustomInputBox
+                label="Enter Eway Bill No."
+                value={ewaybillNumber}
+                onChange={(e) => setEwaybillNumber(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="!w-[372px]">
+            <CustomInputBox
+              isRightIcon={true}
+              containerStyle=""
+              rightIcon={AutoGenerateIcon}
+              className="w-full !text-base !font-semibold"
+              imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+              value={orderId}
+              maxLength={12}
+              label="Generate order ID"
+              onChange={(e) => {
+                setOrderId(e.target.value);
+              }}
+              onClick={() => {
+                const orderId = generateUniqueCode(8, 12);
+                setOrderId(orderId);
+              }}
+              visibility={true}
+              setVisibility={() => {}}
+            />
+          </div>
         </div>
       </div>
       {loading ? (
@@ -334,6 +347,7 @@ const Summary = (props: Props) => {
               />
             </div>
           </div>
+
           <div className="flex flex-col lg:flex-row mr-5 ">
             {/* Pricing Details */}
             <PricingDetails
@@ -350,6 +364,7 @@ const Summary = (props: Props) => {
           </div>
         </div>
       )}
+
       <BottomLayout
         customButtonText="PLACE ORDER"
         callApi={() => setOrderIdApi()}
