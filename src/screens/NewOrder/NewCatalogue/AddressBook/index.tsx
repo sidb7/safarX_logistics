@@ -7,6 +7,7 @@ import {
   GET_DELIVERY_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -18,6 +19,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
   const [filterId, setFilterId] = useState(0);
   const [address, setAddress]: any = useState();
   const [activeTab, setActiveTab] = useState("pickup");
+  const [loading, setLoading] = useState(false);
 
   const [filterData, setFilterData] = useState([
     { label: "Pickup Address", isActive: false },
@@ -43,15 +45,18 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
   };
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const { data: allAddressData }: any = await POST(
         filterId === 0 ? GET_PICKUP_ADDRESS : GET_DELIVERY_ADDRESS
       );
       if (allAddressData?.success) {
         setAddress(allAddressData.data);
+        setLoading(false);
       } else {
         toast.error(allAddressData?.message);
         setAddress([]);
+        setLoading(false);
       }
     })();
   }, [filterId]);
@@ -109,23 +114,31 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
   };
 
   return (
-    <div>
-      {filterComponent()}
+    <>
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div>
+          {filterComponent()}
 
-      {/* Display Address */}
-      <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
-        {address?.map((data: any, index: any) => {
-          return (
-            <AddressCard
-              cardData={cardData(data)}
-              key={index}
-              addressData={data}
-              activeTab={activeTab}
-            />
-          );
-        })}
-      </div>
-    </div>
+          {/* Display Address */}
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
+            {address?.map((data: any, index: any) => {
+              return (
+                <AddressCard
+                  cardData={cardData(data)}
+                  key={index}
+                  addressData={data}
+                  activeTab={activeTab}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
