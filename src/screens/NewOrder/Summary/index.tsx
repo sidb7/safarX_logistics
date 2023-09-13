@@ -213,6 +213,7 @@ const Summary = (props: Props) => {
               isContactName={true}
               isContactNumber={true}
             />
+
             <SummaryAddressBox
               locationImage={locationIcon}
               summaryTitle="RTO Address"
@@ -229,6 +230,17 @@ const Summary = (props: Props) => {
               contactImage={phoneIcon}
               contactName={pickupLocationReturnAddress?.contact?.name}
             />
+            <div
+              className="hidden lg:block cursor-pointer"
+              onClick={() => {
+                navigate("/orders/add-order/pickup");
+              }}
+            >
+              <div style={{ width: "20px", height: "20px" }}>
+                {" "}
+                <img src={editIcon} alt="editIcon" className="w-full h-full" />
+              </div>
+            </div>
           </div>
 
           {/* Delivery Details */}
@@ -268,6 +280,17 @@ const Summary = (props: Props) => {
               contactImage={phoneIcon}
               contactName={deliveryLocationDetails?.contact?.name}
             />
+            <div
+              className="hidden lg:block cursor-pointer"
+              onClick={() => {
+                navigate("/orders/add-order/delivery");
+              }}
+            >
+              <div style={{ width: "20px", height: "20px" }}>
+                {" "}
+                <img src={editIcon} alt="editIcon" className="w-full h-full" />
+              </div>
+            </div>
           </div>
 
           {/* Product Details */}

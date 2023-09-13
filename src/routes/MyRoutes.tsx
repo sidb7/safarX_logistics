@@ -392,7 +392,7 @@ const MyRoutes: React.FC = () => {
                   </ProtectedRoute>
                 }
               />
-              
+
               <Route
                 path="/orders/add-order/add-product"
                 element={
