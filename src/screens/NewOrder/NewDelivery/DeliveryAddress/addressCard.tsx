@@ -279,7 +279,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           />
         </div>
 
-        {addressLabel === "Delivery Address" && (
+        {deliveryAddress.orderType === "B2B" && addressLabel === "Delivery Address" && (
           <div className="mb-4 lg:mb-6 lg:mr-6">
             <CustomInputBox
               label="GST No."
