@@ -7,6 +7,7 @@ import {
   GET_COMPANY_BOX_DETAILS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 interface Props {}
 
 const BoxCatalogue = (props: Props) => {
@@ -15,6 +16,7 @@ const BoxCatalogue = (props: Props) => {
     { label: "Seller Box", isActive: false },
     { label: "Company Box", isActive: false },
   ]);
+  const [loading, setLoading] = useState(false);
   const [boxDetails, setBoxDetails] = useState<any>();
   const filterComponent = (className?: string) => {
     return (
@@ -47,46 +49,57 @@ const BoxCatalogue = (props: Props) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const { data: allAddressData }: any = await POST(
         filterId === 0 ? GET_SELLER_BOX_DETAILS : GET_COMPANY_BOX_DETAILS
       );
       if (allAddressData?.success) {
         setBoxDetails(allAddressData.data);
+        setLoading(false);
       } else {
         toast.error(allAddressData?.message);
         setBoxDetails([]);
+        setLoading(false);
       }
     })();
   }, [filterId]);
 
   return (
-    <div>
-      {filterComponent()}
-      <div className="flex items-center mt-6 gap-x-2">
-        <img src={BoxIcon} alt="" />
-        <span className="font-bold font-Lato  text-lg lg:text-2xl text-[#323232] ">
-          {filterId === 0 ? "Seller Box" : "Company Box"}
-        </span>
-      </div>
-
-      <div className="flex overflow-x-scroll">
-        <div className="flex  whitespace-nowrap overflow-x-scroll gap-x-4">
-          {boxDetails?.map((data: any, index: any) => {
-            return (
-              // display package box
-              <PackageBox
-                key={index}
-                packageType={data?.name}
-                weight={data?.weight}
-                dimension={`${data?.length} x ${data?.breadth} x ${data?.height} ${data?.measureUnit} `}
-                boxType="White box"
-              />
-            );
-          })}
+    <>
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
         </div>
-      </div>
-    </div>
+      ) : (
+        <div>
+          {filterComponent()}
+          <div className="flex items-center mt-6 gap-x-2">
+            <img src={BoxIcon} alt="" />
+            <span className="font-bold font-Lato  text-lg lg:text-2xl text-[#323232] ">
+              {filterId === 0 ? "Seller Box" : "Company Box"}
+            </span>
+          </div>
+
+          <div className="flex overflow-x-scroll">
+            <div className="flex  whitespace-nowrap overflow-x-scroll gap-x-4">
+              {boxDetails?.map((data: any, index: any) => {
+                return (
+                  // display package box
+                  <PackageBox
+                    key={index}
+                    packageType={data?.name}
+                    weight={data?.weight}
+                    dimension={`${data?.length} x ${data?.breadth} x ${data?.height} ${data?.measureUnit} `}
+                    boxType="White box"
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

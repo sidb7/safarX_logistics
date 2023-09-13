@@ -87,11 +87,6 @@ const Buttons = (className?: string) => {
 
 const tabs = [
   {
-    statusName: "Pending",
-    value: "pending",
-    orderNumber: 0,
-  },
-  {
     statusName: "New",
     value: "newOrder",
     orderNumber: 0,
@@ -140,13 +135,13 @@ const tabs = [
 
 const Index = () => {
   const [filterId, setFilterId] = useState(0);
+  const navigate = useNavigate();
   const [statusData, setStatusData]: any = useState(tabs);
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
   const [orders, setOrders]: any = useState([]);
-
-  const [tempOrders, setTempOrders]: any = useState([]);
-  const [columnHelper, setColumnhelper]: any = useState(columnHelpersForRest);
+  const [isLoading, setIsLoading] = useState<any>(false);
+  const [columnHelper, setColumnhelper]: any = useState([]);
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -187,15 +182,6 @@ const Index = () => {
     initialSlide: 0, // Start from the second slide to hide the slide on the left side
   };
 
-  // const mobileSettings = {
-  //   dots: true,
-  //   infinite: true,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  //   centerMode: true,
-  // };
-
   const currentSettings = isMobileView ? mobileSettings : desktopSettings;
 
   const getSellerOrderByStatus = async (
@@ -207,6 +193,7 @@ const Index = () => {
     limit?: 100
   ) => {
     try {
+      setIsLoading(true);
       const { data } = await POST(GET_SELLER_ORDER, {
         pageNo,
         select,
@@ -217,37 +204,17 @@ const Index = () => {
       });
 
       if (data?.status) {
+        setIsLoading(false);
         return data?.data[0];
       } else {
+        setIsLoading(false);
         throw new Error(data?.meesage);
       }
     } catch (error: any) {
+      setIsLoading(false);
       toast.error(error);
       return false;
     }
-  };
-
-  const handleFilter = (index: any) => {
-    // setTempOrders(JSON.parse(JSON.stringify(orders)));
-    //
-    // switch (+index) {
-    //   case 1:
-    //
-    //     setOrders(
-    //       tempOrders.filter((e: any) => e.orderStatus?.isOrderPlaced) || []
-    //     );
-    //     break;
-    //   case 2:
-    //     setOrders(
-    //       tempOrders.filter((e: any) => !e.orderStatus?.isOrderPlaced) || []
-    //     );
-    //     break;
-
-    //   default:
-    //     setOrders(tempOrders);
-    //     break;
-    // }
-    setFilterId(index);
   };
 
   useEffect(() => {
@@ -255,33 +222,29 @@ const Index = () => {
   }, []);
 
   const handleTabChanges = async (index: any = 0) => {
-    const { orderList, statusList } = await getSellerOrderByStatus(
-      statusData[index].value
-    );
+    const { pendingOrder, successFullOrder, statusList } =
+      await getSellerOrderByStatus(statusData[index].value);
+    const { data = [] } = successFullOrder;
+    let orderList: any = [];
+    orderList = data;
 
-    //temparory commented for change
-
-    // if (!orderList) return;
-    // if (statusList && !statusList.length) return;
-
-    // statusData?.forEach((e: any) => {
-    //   statusList?.forEach((e1: any) => {
-    //     if (e.orderNumber === e1.count) return;
-    //     if (e.value === e1._id) {
-    //       e.orderNumber = e1.count.toLocaleString("en-US", {
-    //         minimumIntegerDigits: 2,
-    //         useGrouping: false,
-    //       });
-    //     }
-    //   });
-    // });
+    statusList.length > 0 &&
+      statusData?.forEach((e: any) => {
+        statusList?.forEach((e1: any) => {
+          if (e.orderNumber === e1.count) return;
+          if (e.value === e1._id) {
+            e.orderNumber = e1.count.toLocaleString("en-US", {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            });
+          }
+        });
+      });
 
     switch (tabs[index].value) {
-      case "pending":
-        setColumnhelper(columnHelperForPendingOrder);
-        break;
       case "newOrder":
-        setColumnhelper(columnHelperForNewOrder);
+        setColumnhelper(columnHelperForNewOrder(navigate));
+        orderList = pendingOrder;
         break;
       case "booked":
         setColumnhelper(columnHelperForBookedAndReadyToPicked);
@@ -294,6 +257,8 @@ const Index = () => {
         break;
     }
 
+    console.log("orderList", orderList);
+
     setOrders(orderList ?? []);
   };
 
@@ -301,14 +266,43 @@ const Index = () => {
     <div>
       <Breadcum label="Orders" component={Buttons()} />
       {isLgScreen && (
-        <div className="overflow-x-auto pl-5">
+        <div className="pl-5 pr-6">
           <OrderStatus
             filterId={filterId}
-            setFilterId={handleFilter}
+            setFilterId={setFilterId}
             handleTabChange={handleTabChanges}
             statusData={statusData}
           />
-          <CustomTable data={orders} columns={columnHelper || []} />
+          {isLoading ? (
+            <div>
+              <div className="flex items-stretch h-16 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+              <div className="flex items-stretch h-44 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+              <div className="flex items-stretch h-44 rounded-xl">
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+                <div className="flex-1 m-2 animated rounded-xl"></div>
+              </div>
+            </div>
+          ) : (
+            <CustomTable data={orders} columns={columnHelper || []} />
+          )}
         </div>
       )}
     </div>
