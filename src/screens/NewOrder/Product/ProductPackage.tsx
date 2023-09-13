@@ -22,6 +22,7 @@ import { POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
 import {
   ADD_BOX_INFO,
+  GET_SELLER_COMPANY_BOX,
   GET_LATEST_ORDER,
   GET_SELLER_BOX,
 } from "../../../utils/ApiUrls";
@@ -92,28 +93,30 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
-  const [combo, setCombo] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [box, setBox] = useState([]);
+  const [combo, setCombo] = useState<any>(false);
+  const [products, setProducts] = useState<any>([]);
+  const [sellerBox, setSellerBox] = useState<any>([]);
+  const [companyBox, setCompanyBox] = useState<any>([]);
   const [boxIndex, setBoxIndex] = useState<any>(0);
   const [codData, setCodData] = useState<any>({
     isCod: true,
     collectableAmount: 0,
     invoiceValue: 0,
   });
-  const [selectedBox, setSelectedBox]: any = useState({});
-  const [boxTypeModal, setBoxTypeModal]: any = useState(false);
-  const [selectedProductsOfPackage, setSelectedProductsOfPackage]: any =
-    useState([]);
+  const [selectedBox, setSelectedBox] = useState<any>({});
+  const [boxTypeModal, setBoxTypeModal] = useState<any>(false);
+  const [selectedProductsOfPackage, setSelectedProductsOfPackage] =
+    useState<any>([]);
   const [packages, setPackages] = useState<any>([]);
   const [tempPackage, setTempPackage] = useState<any>({});
-  const [boxTypeEditMode, setBoxTypeEditMode]: any = useState(false);
+  const [boxTypeEditMode, setBoxTypeEditMode] = useState<any>(false);
   const [paymentMode, setPaymentMode] = useState<any>("cod");
-  const [selectInsurance, setSelectInsrance] = useState({
+  const [selectInsurance, setSelectInsrance] = useState<any>({
     isInsurance: true,
     iwillTakeRisk: false,
   });
+  const [showAddBox, setShowAddBox] = useState<any>(true);
+  const [orderType, setOrderType] = useState<any>({});
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
   const isReturningUser = useSelector(
@@ -123,6 +126,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   useEffect(() => {
     let totalInvoiceValue = 0;
     let tempArr = packages;
+
+    if (packages.length === 1 && orderType === "B2C") {
+      setShowAddBox(false);
+    } else {
+      setShowAddBox(true);
+    }
+
     tempArr?.forEach((packages: any) => {
       totalInvoiceValue =
         totalInvoiceValue + +getInvoiceValue(packages?.products);
@@ -132,9 +142,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   }, [packages]);
 
   useEffect(() => {
-    (async () => {
-      await getOrderProductDetails();
-    })();
+    getOrderProductDetails();
   }, []);
 
   const handleRemovePackage = (boxIndex: any) => {
@@ -145,8 +153,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   const handlePackageDetailsForProduct = (productsData: any) => {
     if (!productsData.length) {
-      console.log("handlePackageDetailsForProduct", productsData);
-      toast.error("Please Atleast One Product");
+      toast.error("Please Select Atleast One Product");
       return;
     }
 
@@ -193,6 +200,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const handleBoxType = () => {
+    if (!Object.keys(selectedBox).length) {
+      toast.error("Please Select Atleast One Box Type");
+      return;
+    }
+
     if (!boxTypeEditMode) {
       const { products } = tempPackage;
       setProductsToPackage(products, boxIndex);
@@ -216,18 +228,27 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     try {
       const { data } = await POST(GET_LATEST_ORDER);
       const { data: boxData } = await POST(GET_SELLER_BOX);
-      let productsData = [];
+      const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
-        const { products: resProduct = [] } = data?.data[0];
+        const { products: resProduct = [], orderType } = data?.data[0];
+        setOrderType(orderType);
         setProducts(resProduct);
-        productsData = resProduct;
+      } else {
+        toast.error(data?.message);
+        navigate("/orders/add-order/pickup");
+        return;
       }
       if (boxData?.success) {
         const { data = [] } = boxData;
-        setBox(data);
-        // setSelectedBox(data[1]);
+        setSellerBox(data);
       }
-    } catch (error) {}
+      if (companyBoxData?.success) {
+        const { data = [] } = companyBoxData;
+        setCompanyBox(data);
+      }
+    } catch (error) {
+      console.error("getOrderProductDetails", error);
+    }
   };
 
   const setBoxAndCODInfo = async () => {
@@ -262,6 +283,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
+  const isOrderTypeB2C = () => {};
+
   return (
     <div>
       <div>
@@ -283,7 +306,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     src={SearchIcon}
                     alt="Search Icon"
                     className="cursor-pointer"
-                    onClick={() => setIsSearchProductRightModalOpen(true)}
+                    // onClick={() => setIsSearchProductRightModalOpen(true)}
                   />
                 </div>
               ) : (
@@ -360,7 +383,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
           {/* <Box /> */}
-          <div className="lg:grid grid-cols-3 pt-12 ">
+          <div className="flex flex-wrap gap-6">
             {packages?.map((packageDetails: any, index: number) => {
               return (
                 <BoxDetails
@@ -376,37 +399,41 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 />
               );
             })}
-            <div className="">
-              <div className="hidden lg:flex justify-between ">
-                <div className="flex py-5 gap-x-2">
-                  <img src={ProductIcon} alt="Package Icon" />
-                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                    Box {packages.length + 1}
-                  </h1>
+            {showAddBox ? (
+              <div className="w-[500px] ">
+                <div className="hidden lg:flex justify-between ">
+                  <div className="flex py-5 gap-x-2">
+                    <img src={ProductIcon} alt="Package Icon" />
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Box {packages.length + 1}
+                    </h1>
+                  </div>
+                </div>
+                <div
+                  className="flex justify-center items-center w-full p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                  }}
+                >
+                  <AddButton
+                    text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
+                    onClick={() => {
+                      setBoxIndex(packages.length);
+                      setSelectedProductsOfPackage([]);
+                      setBoxTypeEditMode(false);
+                      setIsSearchProductRightModalOpen(true);
+                    }}
+                    showIcon={true}
+                    icon={ButtonIcon}
+                    className="rounded bg-white !shadow-none text-lg"
+                    alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
+                  />
                 </div>
               </div>
-              <div
-                className="flex justify-center items-center w-full p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
-                style={{
-                  boxShadow:
-                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
-                }}
-              >
-                <AddButton
-                  text={`ADD PRODUCTS BOX ${packages.length + 1}`}
-                  onClick={() => {
-                    setBoxIndex(packages.length);
-                    setSelectedProductsOfPackage([]);
-                    setBoxTypeEditMode(false);
-                    setIsSearchProductRightModalOpen(true);
-                  }}
-                  showIcon={true}
-                  icon={ButtonIcon}
-                  className="rounded bg-white !shadow-none text-lg"
-                  alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
-                />
-              </div>
-            </div>
+            ) : (
+              ""
+            )}
           </div>
           <div>
             <div className="w-full flex justify-between py-6 ">
@@ -532,67 +559,119 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         </div>
         <RightSideModal
           className="w-[400px]"
+          wrapperClassName="rounded-l-xl"
           isOpen={boxTypeModal}
           onClose={() => setBoxTypeModal(false)}
         >
-          <div className="p-4 w-full flex-col items-center justify-center">
-            <div className="flex py-5 gap-2">
-              <img src={ProductIcon} alt="Package Icon" />
-              <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                Box Type
-              </h1>
+          <div className="p-4 w-full flex-col items-center justify-center h-full">
+            <div className="">
+              <div className="flex py-5 gap-2">
+                <img src={ProductIcon} alt="Package Icon" />
+                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                  Seller Box Types
+                </h1>
+              </div>
+              <div className="flex w-full items-center flex-col gap-3 justify-center">
+                {sellerBox?.map((newpackage: any, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="cursor-pointer w-full"
+                      onClick={() => {
+                        setSelectedBox(newpackage);
+                      }}
+                    >
+                      <PackageBox
+                        packageType={newpackage?.name}
+                        volumetricWeight={newpackage?.volumetricWeight}
+                        height={newpackage.height}
+                        breadth={newpackage.breadth}
+                        length={newpackage.length}
+                        selected={
+                          selectedBox.boxId === newpackage.boxId ? true : false
+                        }
+                        boxType={newpackage?.color}
+                        recommended={index === 1 ? true : false}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div
+                className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+                style={{ width: "-webkit-fill-available" }}
+              >
+                <ServiceButton
+                  text={"CANCEL"}
+                  onClick={() => {
+                    setBoxTypeModal(false);
+                  }}
+                  className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+                />
+                <ServiceButton
+                  text={"SAVE"}
+                  onClick={() => {
+                    handleBoxType();
+                  }}
+                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
+                />
+              </div>
             </div>
-            <div className="flex w-full items-center flex-col gap-3 justify-center">
-              {box?.map((newpackage: any, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="cursor-pointer w-full"
-                    onClick={() => {
-                      setSelectedBox(newpackage);
-                    }}
-                  >
-                    <PackageBox
-                      packageType={newpackage?.name}
-                      weight={newpackage?.weight}
-                      height={newpackage.height}
-                      breadth={newpackage.breadth}
-                      length={newpackage.length}
-                      selected={
-                        selectedBox.boxId === newpackage.boxId ? true : false
-                      }
-                      boxType={newpackage?.color}
-                      recommended={index === 1 ? true : false}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <div
-              className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
-              style={{ width: "-webkit-fill-available" }}
-            >
-              <ServiceButton
-                text={"CANCEL"}
-                onClick={() => {
-                  setBoxTypeModal(false);
-                }}
-                className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
-              />
-              <ServiceButton
-                text={"SAVE"}
-                onClick={() => {
-                  handleBoxType();
-                }}
-                className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
-              />
+
+            <div>
+              <div className="flex py-5 gap-2">
+                <img src={ProductIcon} alt="Package Icon" />
+                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                  Compnay Box Types
+                </h1>
+              </div>
+              <div className="flex w-full items-center flex-col gap-3 justify-center">
+                {companyBox?.map((newpackage: any, index: number) => {
+                  return (
+                    <div
+                      key={index}
+                      className="cursor-pointer w-full"
+                      onClick={() => {
+                        setSelectedBox(newpackage);
+                      }}
+                    >
+                      <PackageBox
+                        packageType={newpackage?.name}
+                        volumetricWeight={newpackage?.volumetricWeight}
+                        height={newpackage.height}
+                        breadth={newpackage.breadth}
+                        length={newpackage.length}
+                        selected={
+                          selectedBox.boxId === newpackage.boxId ? true : false
+                        }
+                        boxType={newpackage?.color}
+                        recommended={index === 1 ? true : false}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div
+                className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+                style={{ width: "-webkit-fill-available" }}
+              >
+                <ServiceButton
+                  text={"CANCEL"}
+                  onClick={() => {
+                    setBoxTypeModal(false);
+                  }}
+                  className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+                />
+                <ServiceButton
+                  text={"SAVE"}
+                  onClick={() => {
+                    handleBoxType();
+                  }}
+                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
+                />
+              </div>
             </div>
           </div>
-          {/* <AddComboModal
-            combo={combo}
-            setCombo={setCombo}
-            insuranceModal={() => {}}
-          /> */}
         </RightSideModal>
         <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
           <AddComboModal
