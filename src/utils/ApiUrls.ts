@@ -156,6 +156,16 @@ const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`;
 // Courier Pricing List
 const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;
 
+// CREATE BULK PRODUCT
+const CREATE_BULK_PRODUCT = `${SELLER_BASE_URL}/product/createBulkProduct`
+const GET_PRODUCTS = `${SELLER_BASE_URL}/product/getProduct`
+
+//COMBO PRODUCTS
+//create combo
+const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct`
+//get combo
+const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -233,4 +243,8 @@ export {
   POST_UPDATE_USER_DATA,
   POST_SET_ORDER_ID,
   COURIER_PRICING,
+  CREATE_BULK_PRODUCT,
+  GET_PRODUCTS,
+  CREATE_COMBO_PRODUCT,
+  GET_COMBO_PRODUCT
 };

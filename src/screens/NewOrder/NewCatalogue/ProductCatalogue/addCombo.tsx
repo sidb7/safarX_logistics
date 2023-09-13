@@ -14,6 +14,7 @@ import SportsLogo from "../../../../assets/Product/sports.svg";
 import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
 import ProductBox from "../../Product/ProductBox";
+import ComboProductBox from "../../../../components/ComboProductBox";
 import { Breadcum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import PaginationComponent from "../../../../components/Pagination";
@@ -26,9 +27,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import CustomInputBox from "../../../../components/Input";
 
-interface IAddcomboProps {}
+interface IAddcomboProps { }
 
-const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
+const Addcombo: React.FunctionComponent<IAddcomboProps> = (props: any) => {
   const navigate = useNavigate();
   const [productData, setProductData] = useState([]);
   const [selectedProducts, setSelectedProduct] = useState<any>({
@@ -49,10 +50,10 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
   const [selectedProductId, setSelectedProductId] = useState<any>({});
   const [totalItemCount, setTotalItemCount] = useState(10);
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = () => { };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = () => { };
 
   const addCombo = async () => {
     const selectedcat = [];
@@ -110,7 +111,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 showIcon={true}
                 text={"UPLOAD"}
                 className="!p-4"
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
             <div>
@@ -119,7 +120,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 showIcon={true}
                 text={"FROM CHANNEL"}
                 className="!p-4"
-                onClick={() => {}}
+                onClick={() => { }}
               />
             </div>
           </div>
@@ -130,14 +131,12 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
           <div>
             <div className="flex flex-col mt-1">
               <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
-                <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
+                <img src={DeliceryIcon} alt="" className="mr-2" /> By Category amit
               </h1>
 
               <div className="flex gap-x-3">
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.Fashion && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.Fashion && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={ProductIcon}
                   productName="Fashion"
@@ -149,9 +148,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                   }}
                 />
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.Electronics && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.Electronics && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={CategoryLogo}
                   productName="Electronics"
@@ -163,9 +160,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                   }
                 />
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.LifeStyle && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.LifeStyle && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={Categorylogo2}
                   productName="LifeStyle"
@@ -178,9 +173,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                 />
 
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.Sports && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.Sports && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={SportsLogo}
                   productName="Sports"
@@ -192,9 +185,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                   }
                 />
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.Fitness && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.Fitness && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={FitnessCategoryLogo}
                   productName="Fitness"
@@ -206,9 +197,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                   }
                 />
                 <ProductCategoryBox
-                  className={`!border-2 !border-[#1C1C1C] ${
-                    selectedCatagories.Gift && "bg-gray-200"
-                  }`}
+                  className={`!border-2 !border-[#1C1C1C] ${selectedCatagories.Gift && "bg-gray-200"}`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={GiftLogo}
                   productName="Gift"
@@ -257,16 +246,14 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props) => {
                       }
                     }}
                   >
-                    <ProductBox
+                    <ComboProductBox
                       image={
                         (data?.images?.length > 0 && data?.images[0].url) || ""
                       }
                       productName={data?.productName}
                       weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
                       dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
-                      className={`cursor-pointer p-[16px] ${
-                        selectedProductId[data?.productId] && "bg-gray-200"
-                      }`}
+                      className={`cursor-pointer p-[16px] ${selectedProductId[data?.productId] && "bg-gray-200"}`}
                     />
                   </div>
                 ))}

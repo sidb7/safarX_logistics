@@ -13,9 +13,10 @@ import GiftLogo from "../../../../assets/Product/gift.svg";
 import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
 import { POST } from "../../../../utils/webService";
 import {
-  GET_COMBO_PRODUCT_URL,
-  GET_PRODUCT_URL,
+  GET_COMBO_PRODUCT,
+  GET_PRODUCTS,
 } from "../../../../utils/ApiUrls";
+import ComboProductBox from "../../../../components/ComboProductBox";
 import { toast } from "react-toastify";
 
 interface IProductCatalogue {
@@ -29,6 +30,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   const [filterId, setFilterId] = useState(0);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [viewed, setViewed] = useState(-1);
+  const [showComboProductList, setShowComboProductList] = useState(false)
 
   const [filterData, setFilterData] = useState([
     { label: "Single Product", isActive: false },
@@ -36,15 +38,15 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   ]);
 
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = () => { };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = () => { };
 
   useEffect(() => {
     (async () => {
       const { data } = await POST(
-        filterId === 0 ? GET_PRODUCT_URL : GET_COMBO_PRODUCT_URL,
+        filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
         {
           skip: 0,
           limit: 10,
@@ -70,15 +72,13 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           return (
             <span
               key={index}
-              className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
-                filterId === index
-                  ? `${
-                      index === filterData.length - 1
-                        ? "rounded-r-md"
-                        : "rounded-l-md"
-                    } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
-                  : ""
-              }`}
+              className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] cursor-pointer ${filterId === index
+                ? `${index === filterData.length - 1
+                  ? "rounded-r-md"
+                  : "rounded-l-md"
+                } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
+                : ""
+                }`}
               onClick={() => {
                 setFilterId(index);
                 if (index === 0) {
@@ -163,48 +163,52 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
             <img src={DeliveryIcon} alt="" className="mr-2" />
             Most Viewed
+
           </h1>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
             {productData?.map((data: any, index: number) => {
               if (filterId === 0) {
                 return (
                   <div
                     key={index}
                     className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
+                  // onClick={() => setViewed(index)}
                   >
                     <ProductBox
                       image={
                         (data?.images?.length > 0 && data?.images[0].url) || ""
                       }
-                      productName={data?.productName}
-                      weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
-                      dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
-                      className={`cursor-pointer p-[16px] ${
-                        viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                      }`}
+                      productName={data?.name}
+                      weight={`${data?.appliedWeight} ${data?.weightUnit}`}
+                      height={data?.height}
+                      breadth={data?.breadth}
+                      length={data?.length}
+                      className={`cursor-pointer p-[16px] ${viewed === index
+                        ? "border-2 border-solid border-[#004EFF]"
+                        : ""
+                        }`}
                     />
                   </div>
                 );
               } else if (filterId === 1) {
                 return (
                   <div
-                    className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
+                    className="w-[272px] h-[76px] my-2"
+                    key={`${data.name}_${index}`}
                   >
-                    <ProductBox
+                    <ComboProductBox
                       image={StackLogo}
-                      productName={data?.comboProductName}
-                      weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
+                      productName={data?.name}
+                      weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
+                      Value={data?.totalValue}
                       dimension={`${data?.totalPrice}`}
-                      className={`cursor-pointer p-[16px] ${
-                        viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                      }`}
-                      label={`Product: ${data?.productCount || 4}`}
+                      className={`cursor-pointer p-[16px] ${viewed === index
+                        ? "border-2 border-solid border-[#004EFF]"
+                        : ""
+                        }`}
+                      label={`Product: ${data?.products?.length}`}
+                      data={data}
+                      index={index}
                     />
                   </div>
                 );
