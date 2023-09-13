@@ -166,8 +166,9 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
               <img src={DeliveryIcon} alt="" className="mr-2" />
               Most Viewed
+
             </h1>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
               {productData?.map((data: any, index: number) => {
                 if (filterId === 0) {
                   return (
@@ -178,12 +179,13 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     >
                       <ProductBox
                         image={
-                          (data?.images?.length > 0 && data?.images[0].url) ||
-                          ""
+                          (data?.images?.length > 0 && data?.images[0].url) || ""
                         }
-                        productName={data?.productName}
-                        weight={`${data?.weight?.deadWeight} ${data?.weight?.deadWeightUnit}`}
-                        dimension={`${data?.dimensions?.length} x ${data?.dimensions?.width} x ${data?.dimensions?.height} ${data?.dimensions?.unit}`}
+                        productName={data?.name}
+                        weight={`${data?.appliedWeight} ${data?.weightUnit}`}
+                        height={data?.height}
+                        breadth={data?.breadth}
+                        length={data?.length}
                         className={`cursor-pointer p-[16px] ${viewed === index
                           ? "border-2 border-solid border-[#004EFF]"
                           : ""
@@ -194,19 +196,22 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 } else if (filterId === 1) {
                   return (
                     <div
-                      className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
+                      className="w-[272px] h-[76px] my-2"
+                      key={`${data.name}_${index}`}
                     >
-                      <ProductBox
+                      <ComboProductBox
                         image={StackLogo}
-                        productName={data?.comboProductName}
-                        weight={`${data?.totalDeadWeight} ${data?.deadWeightUnit}`}
+                        productName={data?.name}
+                        weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
+                        Value={data?.totalValue}
                         dimension={`${data?.totalPrice}`}
                         className={`cursor-pointer p-[16px] ${viewed === index
                           ? "border-2 border-solid border-[#004EFF]"
                           : ""
                           }`}
-                        label={`Product: ${data?.productCount || 4}`}
+                        label={`Product: ${data?.products?.length}`}
+                        data={data}
+                        index={index}
                       />
                     </div>
                   );
@@ -227,7 +232,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
         </div>
       </div>
 
-      <div className="mt-[26px]">
+      {/* <div className="mt-[26px]">
         <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
           <img src={DeliveryIcon} alt="" className="mr-2" />
           Most Viewed
@@ -283,8 +288,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             }
           })}
         </div>
-      </div>
-      <div className="absolute bottom-24">
+      </div> */}
+      {/* <div className="absolute bottom-24">
         {totalItemCount > 0 && (
           <PaginationComponent
             totalItems={totalItemCount}
@@ -293,7 +298,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             onItemsPerPageChange={onPerPageItemChange}
           />
         )}
-      </div>
+      </div> */}
     </>
   );
 };
