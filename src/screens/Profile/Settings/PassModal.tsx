@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
 import RightSideModal from "../.././../components/CustomModal/customRightModal";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { toast } from "react-toastify";
+import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
 
 interface PassModalProps {
   isPassModalOpen: boolean;
@@ -11,6 +14,30 @@ interface PassModalProps {
 
 function PassModal(props: PassModalProps) {
   const { isPassModalOpen, setIsPassModalOpen } = props;
+  const [password, setPassword] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const updatePassword = async () => {
+    if (password?.newPassword !== password?.confirmNewPassword) {
+      return toast.error(
+        "Please enter a new password and re-enter the same password !"
+      );
+    }
+    const { data }: any = await POST(UPDATE_PASSWORD, {
+      oldPassword: password?.oldPassword,
+      newPassword: password?.newPassword,
+    });
+
+    if (data?.success) {
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+  console.log("password", password);
   return (
     <RightSideModal
       isOpen={isPassModalOpen}
@@ -31,10 +58,28 @@ function PassModal(props: PassModalProps) {
             />{" "}
           </div>
         </div>
-        <div className="flex flex-col mt-8 gap-y-4 w-ful">
-          <CustomInputBox label="Email" />
-          <CustomInputBox label="New Password" />
-          <CustomInputBox label="Re-enter New Password" />
+        <div className="flex flex-col mx-4 mt-4 gap-y-4">
+          <CustomInputBox
+            label="Old Password"
+            inputType="password"
+            onChange={(e) =>
+              setPassword({ ...password, oldPassword: e.target.value })
+            }
+          />
+          <CustomInputBox
+            label="New Password"
+            inputType="password"
+            onChange={(e) =>
+              setPassword({ ...password, newPassword: e.target.value })
+            }
+          />
+          <CustomInputBox
+            label="Re-enter New Password"
+            inputType="password"
+            onChange={(e) =>
+              setPassword({ ...password, confirmNewPassword: e.target.value })
+            }
+          />
         </div>
       </div>
       <div style={{ width: "-webkit-fill-available" }}>
@@ -58,7 +103,9 @@ function PassModal(props: PassModalProps) {
             <ServiceButton
               text="SAVE"
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[80px]"
-              onClick={() => {}}
+              onClick={() => {
+                updatePassword();
+              }}
             />
           </div>
         </footer>

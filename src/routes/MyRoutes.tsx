@@ -335,7 +335,7 @@ const MyRoutes: React.FC = () => {
 
               {/* home page i.e , overview, orders, exception, sy-performance */}
               <Route
-                path="home/overview"
+                path="dashboard/overview"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -343,7 +343,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/orders"
+                path="dashboard/orders"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -351,7 +351,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/exception"
+                path="dashboard/exception"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -359,7 +359,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/sy-performance"
+                path="dashboard/sy-performance"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -527,7 +527,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile/settings"
+                path="/settings/settings"
                 element={
                   <ProtectedRoute>
                     <SettingTab />
@@ -617,7 +617,31 @@ const MyRoutes: React.FC = () => {
             {/* Catalogue Routes */}
             <Route>
               <Route
-                path="/catalogues/catalogue"
+                path="/catalogues/channel-integration"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/address-book"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/product-catalogue"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/box-catalogue"
                 element={
                   <ProtectedRoute>
                     <Catalogue />

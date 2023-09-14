@@ -257,6 +257,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               handlePickupAddressChange("state", event.target.value);
             }}
             options={dummyStateDropdownData}
+            placeHolder="Select State"
           />
         </div>
 
@@ -279,20 +280,21 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           />
         </div>
 
-        {deliveryAddress.orderType === "B2B" && addressLabel === "Delivery Address" && (
-          <div className="mb-4 lg:mb-6 lg:mr-6">
-            <CustomInputBox
-              label="GST No."
-              value={deliveryAddress.gstNumber}
-              onChange={(e) =>
-                setDeliveryAddress((prevData: any) => ({
-                  ...prevData,
-                  gstNumber: e.target.value,
-                }))
-              }
-            />
-          </div>
-        )}
+        {deliveryAddress.orderType === "B2B" &&
+          addressLabel === "Delivery Address" && (
+            <div className="mb-4 lg:mb-6 lg:mr-6">
+              <CustomInputBox
+                label="GST No."
+                value={deliveryAddress.gstNumber}
+                onChange={(e) =>
+                  setDeliveryAddress((prevData: any) => ({
+                    ...prevData,
+                    gstNumber: e.target.value,
+                  }))
+                }
+              />
+            </div>
+          )}
       </div>
       <CommonBottomModal
         icon={MapIcon}
