@@ -23,6 +23,8 @@ import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
 import { titleCase } from "../../../../utils/utility";
 
+import "../../../../styles/magicAddressInput.css";
+
 interface IAddressCardProps {
   data: {
     pickupAddress: any;
@@ -255,6 +257,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               handlePickupAddressChange("state", event.target.value);
             }}
             options={dummyStateDropdownData}
+            placeHolder="Select State"
           />
         </div>
 
