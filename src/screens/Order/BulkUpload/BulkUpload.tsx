@@ -12,6 +12,7 @@ import { Breadcum } from "../../../components/Layout/breadcrum";
 import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
+import BottomLayout from "../../../components/Layout/bottomLayout";
 
 interface ITypeProps {
   onClick?: any;
@@ -23,7 +24,10 @@ const BulkUpload = (props: ITypeProps) => {
   const [file, setFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("B2B");
   const [fileName, setFileName] = useState<string | null>(null);
-
+  const [addButton, setAddButton]: any = useState(false);
+  const [disabled, setDisabled]: any = useState(true);
+  const [uploadFile, setUploadFile]: any = useState(null);
+  console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };
@@ -33,14 +37,14 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const handleFileUpload = async () => {
-    if (!file) {
+    if (!uploadFile) {
       toast.error("Please select a file to upload.");
       return;
     }
 
     let uuid = uuidv4();
     let formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", uploadFile);
     formData.append("fileName", uuid);
 
     try {
@@ -98,6 +102,17 @@ const BulkUpload = (props: ITypeProps) => {
       />
     );
   };
+
+  // async function uploadFile(e: any) {
+  //   const payload = new FormData();
+  //   payload.append("file", uploadedFile);
+  //   let response: any = await POST("", payload);
+  //   // if (response?.data?.success === true) {
+  //   //   setSuccessModal(true);
+  //   // } else {
+  //   //   setFailureModal(true);
+  //   // }
+  // }
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
       <Breadcum label="Add Bulk Upload" component={renderHeaderComponent()} />
@@ -134,12 +149,45 @@ const BulkUpload = (props: ITypeProps) => {
       </div>
 
       <div className="flex flex-col justify-center items-center">
-        <CustomBulkOrderUploadButton className="!mt-[15rem] " />
-        <p className="text-[16px] mt-1 font-semibold">or Drop files here</p>
-        <p className="text-[12px] mt-1 text-black text-opacity-30">
+        <CustomBulkOrderUploadButton
+          className="!mt-[15rem]"
+          setDisabled={setDisabled}
+          setAddButton={setAddButton}
+          setUploadFile={setUploadFile}
+        />
+
+        <p className="text-[16px] mt-1 font-semibold font-Open">
+          or Drop files here
+        </p>
+        <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
           Pdf, excels files are supported
         </p>
+
+        {addButton && (
+          <>
+            <p className="text-[16px] mt-5 font-semibold font-Open text-[12px] lg:text-[16px]">
+              <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
+                Selected File:
+              </span>{" "}
+              {uploadFile?.name || null}
+            </p>
+            {/* <button
+              onClick={handleFileUpload}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
+            >
+              Upload File
+            </button> */}
+          </>
+        )}
       </div>
+      <BottomLayout
+        customButtonText="Upload Bulk Order"
+        callApi={() => {
+          handleFileUpload();
+        }}
+        className="lg:w-[150px]"
+        Button2Name={true}
+      />
     </div>
   );
 };

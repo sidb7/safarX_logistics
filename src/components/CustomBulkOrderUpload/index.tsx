@@ -3,24 +3,25 @@ import DownloadIconWhite from "../../assets/downloadIconWhite.svg";
 
 interface ICustomuploadButtomProps {
   className?: string;
-  setUploadFile?: any;
-  setDisabled?: any;
-  setAddButton?: any;
+  setUploadFile?: (file: File | null) => void;
+  setDisabled?: (disabled: boolean) => void;
+  setAddButton?: (isVisible: boolean) => void;
 }
 
 const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
   const { setDisabled, setAddButton, setUploadFile } = props;
   const { className } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
+  console.log("props", props);
 
   const handleFileChange = useCallback((event: any) => {
     const file = event.target.files[0];
-
+    const selectedFileName = event.target.files?.[0]?.name || null;
     if (file) {
+      setAddButton?.(true);
       readFileAsBlob(file);
-      // setAddButton(true);
-      setDisabled(false);
-      setUploadFile(file);
+      setDisabled?.(false);
+      setUploadFile?.(file);
     }
   }, []);
 

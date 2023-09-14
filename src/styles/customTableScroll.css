@@ -1,0 +1,38 @@
+.customContainer {
+    width: 93vw;
+    overflow-x: scroll;
+}
+
+.table-content {
+    /* border: 1px solid #DDD;
+   height: 100px;
+   width : 800px;
+   display:table; */
+    width: max-content;
+
+}
+
+.table-content .fixedCol:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 0;
+    /* border-right: 3px solid #ddd; */
+    background-color: white;
+}
+
+.table-content .fixedCol:nth-child(2) {
+    position: sticky;
+    left: 205px;
+    z-index: 0;
+    /* border-right: 3px solid #ddd; */
+    background-color: white;
+}
+
+.table-content .fixedCol:last-child {
+    position: sticky;
+    right: 0;
+    z-index: 0;
+    /* border-right: 3px solid #ddd; */
+    background-color: white;
+}
+
