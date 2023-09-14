@@ -186,6 +186,10 @@ const LANDMARK_API= `${LANDMARK_URL}/api/v1/landmark/landmark`
 const BULK_UPLOAD=`${SELLER_BASE_URL}/order/bulkOrder`
 
 
+//Forgot Password
+const FORGOT_PASSWORD=`${SELLER_BASE_URL}/seller/forgotPassword`
+
+
 
 export {
   SELLER_URL,
@@ -273,4 +277,5 @@ export {
   POST_PLACE_ORDER,
   LANDMARK_API,
   BULK_UPLOAD,
+  FORGOT_PASSWORD
 };

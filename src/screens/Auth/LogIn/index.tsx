@@ -27,12 +27,15 @@ import {
   tokenKey,
 } from "../../../utils/utility";
 import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
+import ForgotPassword from "./ForgotPassword";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+
   const [showBootScreen, setShowBootScreen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({
@@ -239,6 +242,13 @@ const Index = () => {
                   Sign Up
                 </button>
               </div>
+              <button
+                type="button"
+                onClick={() => setForgotPasswordModal(true)}
+                className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+              >
+                Forgot Password
+              </button>
             </div>
           </div>
         </div>
@@ -269,6 +279,15 @@ const Index = () => {
 
           {!isLgScreen && loginComponent()}
         </>
+      )}
+
+      {isLgScreen && forgotPasswordModal && (
+        <CenterModal
+          isOpen={forgotPasswordModal}
+          onClose={() => setForgotPasswordModal(false)}
+        >
+          <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
+        </CenterModal>
       )}
     </>
   );

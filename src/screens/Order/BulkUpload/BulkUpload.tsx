@@ -84,6 +84,47 @@ const BulkUpload = (props: ITypeProps) => {
     }
   };
 
+  // const handleDownloadSample = async () => {
+  //   try {
+  //     const payload = { fileType: selectedOption };
+  //     console.log("payload", payload);
+
+  //     const { data, headers } = await POST("", payload, {
+  //       responseType: "blob",
+  //     });
+
+  //     if (data) {
+  //       let fileName;
+  //       if (selectedOption === "B2B") {
+  //         fileName = "B2Bsample.csv";
+  //       } else if (selectedOption === "B2C") {
+  //         fileName = "B2C.csv";
+  //       } else {
+  //         fileName = "downloaded_file.csv";
+  //       }
+
+  //       const blob = new Blob([data], { type: headers["content-type"] });
+
+  //       const url = window.URL.createObjectURL(blob);
+
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = fileName;
+  //       a.style.display = "none";
+
+  //       document.body.appendChild(a);
+  //       a.click();
+
+  //       window.URL.revokeObjectURL(url);
+  //     } else {
+  //       toast.error("No file data received.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error downloading sample:", error);
+  //     toast.error("An error occurred during sample download.");
+  //   }
+  // };
+
   const handleDroppedFiles = (droppedFiles: FileList) => {
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
