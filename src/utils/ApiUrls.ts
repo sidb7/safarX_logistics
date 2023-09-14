@@ -3,6 +3,7 @@ let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
+let LANDMARK_URL ="";
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
@@ -13,6 +14,8 @@ switch (Enviornment) {
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
+    LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
+
     break;
 
   case "test":
@@ -20,6 +23,9 @@ switch (Enviornment) {
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
+    LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
+    
+
     break;
 
   case "production":
@@ -27,6 +33,8 @@ switch (Enviornment) {
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
+    LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
+
     break;
 
   default:
@@ -34,6 +42,8 @@ switch (Enviornment) {
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
+    LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
+
     break;
 }
 
@@ -90,7 +100,7 @@ const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableServic
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
-const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
+// const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
 const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
 const POST_PLACE_ORDER = `${SELLER_BASE_URL}/order/placeOrder`;
 
@@ -169,6 +179,8 @@ const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct
 //get combo
 const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
 
+//Landmark endpoit
+const LANDMARK_API= `${LANDMARK_URL}api/v1/landmark/landmark`
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -253,4 +265,5 @@ export {
   CREATE_COMBO_PRODUCT,
   GET_COMBO_PRODUCT,
   POST_PLACE_ORDER,
+  LANDMARK_API
 };
