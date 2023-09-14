@@ -13,6 +13,7 @@ import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { BULK_UPLOAD } from "../../../utils/ApiUrls";
 
 interface ITypeProps {
   onClick?: any;
@@ -45,10 +46,10 @@ const BulkUpload = (props: ITypeProps) => {
     let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
-    formData.append("fileName", uuid);
+    formData.append("type", selectedOption);
 
     try {
-      const { data: response } = await POST("", formData, {
+      const { data: response } = await POST(BULK_UPLOAD, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -179,8 +179,14 @@ const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct
 //get combo
 const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
 
-//Landmark endpoit
+//Landmark endpoint
 const LANDMARK_API= `${LANDMARK_URL}/api/v1/landmark/landmark`
+
+//BulkUpload
+const BULK_UPLOAD=`${SELLER_BASE_URL}/order/bulkOrder`
+
+
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -265,5 +271,6 @@ export {
   CREATE_COMBO_PRODUCT,
   GET_COMBO_PRODUCT,
   POST_PLACE_ORDER,
-  LANDMARK_API
+  LANDMARK_API,
+  BULK_UPLOAD,
 };
