@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
+import CustomTableWithScroll from "../../components/CustomTableWithScroll";
 
 interface ITypeProps {
   onClick?: any;
@@ -245,7 +246,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         </div>
       </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-10 ml-10 w-[50%]">
+      <div className="mb-4 lg:mb-6 lg:mr-10 ml-10 w-[20%]">
         <CustomInputBox
           label="Enter Pincode"
           value={pincode}
@@ -253,7 +254,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         />
       </div>
 
-      <div className="w-[50%] ml-10">
+      <div className="w-[20%] ml-10">
         <AddButton
           text="Check Availability"
           onClick={() => {
