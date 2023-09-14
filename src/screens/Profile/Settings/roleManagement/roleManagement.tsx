@@ -196,7 +196,7 @@ function RoleManagement() {
 
   return (
     <div>
-        <Breadcum label="Role Management" component={Buttons()} />
+      <Breadcum label="Role Management" component={Buttons()} />
       <div className=" my-3 mx-6">
         <div className=" flex justify-end">
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">
@@ -220,7 +220,7 @@ function RoleManagement() {
 
         <CenterModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onRequestClose={() => setIsModalOpen(false)}
           className="!h-[280px] !w-[480px]"
         >
           <DeleteConfirmModale

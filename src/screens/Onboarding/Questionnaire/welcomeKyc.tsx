@@ -111,7 +111,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
           shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[700px]"
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
           {question5()}
         </CenterModal>

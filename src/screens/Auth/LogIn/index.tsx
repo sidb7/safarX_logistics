@@ -271,7 +271,7 @@ const Index = () => {
           {isLgScreen && isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+              onRequestClose={() => setIsModalOpen(false)}
             >
               {loginComponent()}
             </CenterModal>
@@ -284,7 +284,7 @@ const Index = () => {
       {isLgScreen && forgotPasswordModal && (
         <CenterModal
           isOpen={forgotPasswordModal}
-          onClose={() => setForgotPasswordModal(false)}
+          onRequestClose={() => setForgotPasswordModal(false)}
         >
           <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
         </CenterModal>

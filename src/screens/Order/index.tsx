@@ -73,7 +73,10 @@ const Buttons = (className?: string) => {
         </span>
       </div>
       {isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+        >
           <BulkUpload
             onClick={() => {
               setIsModalOpen(false);

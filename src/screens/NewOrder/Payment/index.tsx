@@ -535,7 +535,7 @@ const Index = () => {
 
       <CustomCenterModal
         isOpen={isPostPaymentModal}
-        onClose={() => setIsPostPaymentModal(false)}
+        onRequestClose={() => setIsPostPaymentModal(false)}
         className="!h-[450px] !w-[580px]"
       >
         <ModalContent />

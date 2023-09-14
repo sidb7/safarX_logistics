@@ -510,7 +510,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
           className="!h-[490px] !w-[688px]"
         >
           {walletRecharge()}
@@ -521,7 +521,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isRechargeModalOpen}
-          onClose={() => setIsRechargeModalOpen(false)}
+          // onRequestClose={() => setIsRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"
         >
           {walletDetails()}
@@ -532,7 +532,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={walletRechargeModalOpen}
-          onClose={() => setWalletRechargeModalOpen(false)}
+          // onRequestClose={() => setWalletRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"
         >
           {isLoading ? (
