@@ -159,7 +159,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               {isModalOpen && (
                 <CenterModal
                   isOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
+                  onRequestClose={() => setIsModalOpen(false)}
                   className="w-3/4 h-3/4 max-h-screen overflow-auto"
                 >
                   <ServicabilityPincode

@@ -253,7 +253,7 @@ function UserManagement() {
 
         <CenterModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onRequestClose={() => setIsModalOpen(false)}
           className="!h-[340px] !w-[480px]"
         >
           <DeleteConfirmModale

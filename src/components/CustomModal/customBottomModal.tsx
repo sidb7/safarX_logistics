@@ -4,7 +4,7 @@ import Modal from "react-modal";
 // Define modal properties
 interface ModalProps {
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
   children: ReactNode;
   contentLabel?: string;
   overlayClassName?: string;

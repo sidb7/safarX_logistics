@@ -261,7 +261,7 @@ const Index = () => {
           {isLgScreen && isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+              onRequestClose={() => setIsModalOpen(false)}
             >
               {loginComponent()}
             </CenterModal>

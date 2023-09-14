@@ -114,7 +114,7 @@ const Index: React.FC<IPropsTypes> = (props: IPropsTypes) => {
       </div>
       {/* <CustomCenterModal
         isOpen={isPostPaymentModal}
-        onClose={() => setIsPostPaymentModal(false)}
+        onRequestClose={() => setIsPostPaymentModal(false)}
         className="!h-[500px] !w-[600px]"
       >
         <ModalContent />

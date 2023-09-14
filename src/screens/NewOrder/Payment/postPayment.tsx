@@ -48,7 +48,7 @@ const PostPayment = () => {
       {isItLgScreen && (
         <CustomCenterModal
           isOpen={true}
-          onClose={() => false}
+          onRequestClose={() => false}
           className="!h-[320px] !w-[500px]"
         >
           {Content}

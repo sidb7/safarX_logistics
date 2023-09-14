@@ -120,7 +120,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
           shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[688px]"
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
           {question1()}
         </CenterModal>

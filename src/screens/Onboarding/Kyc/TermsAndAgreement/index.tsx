@@ -33,6 +33,7 @@ export const ServiceComponent = (props: ITypeProps) => {
         acceptNoGST: acceptTnC,
         noGSTVersion: "1.0.0",
       };
+
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
         toast.success(response?.message);

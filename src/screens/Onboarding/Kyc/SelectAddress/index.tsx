@@ -19,6 +19,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -29,18 +30,22 @@ const BusinessType = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
+  const [loading, setLoading] = useState(false);
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const initialAddressCall = async () => {
+    setLoading(true);
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
+      setLoading(false);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
       //Navigate Url's go here
     } else {
+      setLoading(false);
       toast.error(response?.message);
     }
   };
@@ -60,6 +65,7 @@ const BusinessType = (props: ITypeProps) => {
         logoUrl: "brandLogo",
       },
     };
+
     const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
     if (response?.success) {
       toast.success(response?.message);
@@ -260,7 +266,13 @@ const BusinessType = (props: ITypeProps) => {
             className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
           >
-            {addressComponent()}
+            {loading ? (
+              <div className="flex justify-center items-center h-full">
+                <Spinner />
+              </div>
+            ) : (
+              addressComponent()
+            )}
           </CustomBottomModal>
         </div>
       )}

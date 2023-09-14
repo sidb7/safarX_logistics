@@ -22,6 +22,7 @@ import {
   POST_VERIFY_GST_URL,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -35,6 +36,7 @@ const Index = (props: ITypeProps) => {
   const panCard = useSelector((state: any) => state?.onboarding.panNumber);
   const gstNo = useSelector((state: any) => state?.onboarding.gstNumber);
   const aadharNo = useSelector((state: any) => state?.onboarding?.aadharNumber);
+  const [loading, setLoading] = useState<any>(false);
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -191,30 +193,36 @@ const Index = (props: ITypeProps) => {
 
       if (businessType === "individual") {
         const payload = { client_id: clientId, otp: otp };
+        setLoading(true);
         const { data: response } = await POST(
           POST_VERIFY_AADHAR_OTP_URL,
           payload
         );
         if (response?.success) {
+          setLoading(false);
           verifyPAN(panCard);
 
           toast.success(response?.message);
           //Navigate Url's go here
         } else {
           toast.error(response?.message);
+          setLoading(false);
         }
       } else if (businessType === "business") {
         if (location?.state?.path === "aadhar-form") {
           const payload = { client_id: clientId, otp: otp };
+          setLoading(true);
           const { data: response } = await POST(
             POST_VERIFY_AADHAR_OTP_URL,
             payload
           );
           if (response?.success) {
+            setLoading(false);
             verifyPAN(panCard);
             // toast.success(response?.message);
             //Navigate Url's go here
           } else {
+            setLoading(false);
             toast.error(response?.message);
           }
         } else {
@@ -223,12 +231,16 @@ const Index = (props: ITypeProps) => {
             client_id: clientId,
             otp: otp,
           };
+
+          setLoading(true);
           const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
           if (response?.success) {
+            setLoading(false);
             if (location?.state?.path === "otp-form") {
               navigate("/onboarding/kyc-aadhar-form");
             }
           } else {
+            setLoading(false);
             toast.error(response?.message);
           }
         }
@@ -238,9 +250,13 @@ const Index = (props: ITypeProps) => {
           client_id: clientId,
           otp: otp,
         };
+        setLoading(true);
         const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
         if (response?.success) {
+          setLoading(false);
           verifyPAN(panCard);
+        } else {
+          setLoading(false);
         }
       }
     } catch (error) {
@@ -343,7 +359,13 @@ const Index = (props: ITypeProps) => {
           className="!p-0 !w-[500px] !h-[700px]"
           overlayClassName="flex  items-center"
         >
-          {mobileVerificationComponent()}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            mobileVerificationComponent()
+          )}
         </CustomBottomModal>
       )}
     </div>
