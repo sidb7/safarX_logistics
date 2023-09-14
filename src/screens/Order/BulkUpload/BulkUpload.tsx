@@ -13,6 +13,7 @@ import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { BULK_UPLOAD } from "../../../utils/ApiUrls";
 
 interface ITypeProps {
   onClick?: any;
@@ -45,10 +46,10 @@ const BulkUpload = (props: ITypeProps) => {
     let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
-    formData.append("fileName", uuid);
+    formData.append("type", selectedOption);
 
     try {
-      const { data: response } = await POST("", formData, {
+      const { data: response } = await POST(BULK_UPLOAD, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -82,6 +83,47 @@ const BulkUpload = (props: ITypeProps) => {
       toast.error("An error occurred during sample download.");
     }
   };
+
+  // const handleDownloadSample = async () => {
+  //   try {
+  //     const payload = { fileType: selectedOption };
+  //     console.log("payload", payload);
+
+  //     const { data, headers } = await POST("", payload, {
+  //       responseType: "blob",
+  //     });
+
+  //     if (data) {
+  //       let fileName;
+  //       if (selectedOption === "B2B") {
+  //         fileName = "B2Bsample.csv";
+  //       } else if (selectedOption === "B2C") {
+  //         fileName = "B2C.csv";
+  //       } else {
+  //         fileName = "downloaded_file.csv";
+  //       }
+
+  //       const blob = new Blob([data], { type: headers["content-type"] });
+
+  //       const url = window.URL.createObjectURL(blob);
+
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = fileName;
+  //       a.style.display = "none";
+
+  //       document.body.appendChild(a);
+  //       a.click();
+
+  //       window.URL.revokeObjectURL(url);
+  //     } else {
+  //       toast.error("No file data received.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error downloading sample:", error);
+  //     toast.error("An error occurred during sample download.");
+  //   }
+  // };
 
   const handleDroppedFiles = (droppedFiles: FileList) => {
     if (droppedFiles.length > 0) {
