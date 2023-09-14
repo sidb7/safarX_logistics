@@ -180,7 +180,7 @@ const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct
 const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
 
 //Landmark endpoit
-const LANDMARK_API= `${LANDMARK_URL}api/v1/landmark/landmark`
+const LANDMARK_API= `${LANDMARK_URL}/api/v1/landmark/landmark`
 export {
   SELLER_URL,
   ADD_BOX_INFO,
