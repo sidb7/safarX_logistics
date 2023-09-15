@@ -54,34 +54,6 @@ const ForgotPassword = (props: ITypeProps) => {
     }));
   };
 
-  //   let body = {
-  //     email: signUpUser.email,
-  //     firstName: signUpUser.firstName,
-  //     mobileNo: mobileNumber.mobileNo,
-  //   };
-
-  //   const sendOtpOnClick = async (value: any) => {
-  //     try {
-  //       const { data: response } = await POST(POST_SEND_OTP_URL, value);
-  //       if (response?.success === true) {
-  //         navigate("/onboarding/verifyOtp", { state: { path: body } });
-  //       } else {
-  //         toast.error(response?.message);
-  //       }
-  //     } catch (error) {
-  //       return error;
-  //     }
-  //   };
-
-  //   const handleSaveClick = () => {
-  //     const { email, companyName } = formData;
-
-  //     console.log("Email:", email);
-  //     console.log("companyName:", companyName);
-
-  //     setFormData({ email: "", companyName: "" });
-  //   };
-
   const postForgotPasswordData = async () => {
     try {
       const { data: response } = await POST(FORGOT_PASSWORD, formData);
@@ -180,8 +152,6 @@ const ForgotPassword = (props: ITypeProps) => {
         password: password.newPassword,
         otp: otp.forgotPasswordOtp,
       };
-
-      console.log("updatedFormData", updatedFormData);
 
       const { data: response } = await POST(FORGOT_PASSWORD, updatedFormData);
 
