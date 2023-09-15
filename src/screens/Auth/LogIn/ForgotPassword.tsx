@@ -14,6 +14,7 @@ import CustomButton from "../../../components/Button";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Breadcum } from "../../../components/Layout/breadcrum";
 
 interface ITypeProps {
   onClick?: any;
@@ -30,7 +31,12 @@ const ForgotPassword = (props: ITypeProps) => {
   });
   const [formData, setFormData] = useState({
     email: "",
-    companyName: "",
+    companyName: "Shipyaari",
+  });
+  const [password, setPassword] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
   });
 
   const [mobileNumber, setMobileNumber] = useState({
@@ -38,7 +44,7 @@ const ForgotPassword = (props: ITypeProps) => {
   });
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(30);
-
+  const [emailVerified, setEmailVerified] = useState(false);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -76,14 +82,13 @@ const ForgotPassword = (props: ITypeProps) => {
   //   };
 
   const postForgotPasswordData = async () => {
-    const { email, companyName } = formData;
-
     try {
       const { data: response } = await POST(FORGOT_PASSWORD, formData);
 
       if (response?.success) {
         setResponse(response);
-        setFormData({ email: "", companyName: "" });
+        setEmailVerified(true);
+        // setFormData({ email: "", companyName: "" });
       } else {
         toast.error(response?.message);
       }
@@ -179,98 +184,84 @@ const ForgotPassword = (props: ITypeProps) => {
           />
         </div>
       </div>
-
-      <div className="mb-4 lg:mb-6 lg:mr-10 ml-10 w-[20%]">
+      <div className="flex flex-col ml-40 mt-4 w-[50%] gap-y-4">
         <CustomInputBox
           label="Enter Email"
           name="email"
           value={formData.email}
           onChange={handleInputChange}
         />
-      </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-10 ml-10 w-[20%]">
-        <CustomInputBox
-          label="Enter Company Name"
-          name="companyName"
-          value={formData.companyName}
-          onChange={handleInputChange}
+        <CustomButton
+          onClick={postForgotPasswordData}
+          text="Submit Email"
+          className="mt-4"
         />
-      </div>
 
-      <div className="flex flex-col mx-4 mt-6  lg:mt-12 gap-y-3">
-        <p className="text-center text-[22px] text-[#323232] font-bold font-Lato leading-7 ">
-          Mobile Verification
+        <CustomInputBox
+          value={otp.loginOtp}
+          maxLength={6}
+          containerStyle="mt-[32px]"
+          label="Enter OTP"
+          onChange={(e: any) => {
+            setOtp({ ...otp, loginOtp: e.target.value });
+          }}
+        />
+
+        <p className="mt-3 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
+          {resendOtpTimer()}
         </p>
 
-        <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] ">
-          Enter The OTP Sent To{" "}
-          <span className="text-[#494949] font-Open text-base font-semibold leading-[22px]">
-            {/* +91 {state.mobileNo}{" "} */}
+        <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+          Didn't Receive Code ?
+          <span
+            className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
+              (seconds > 0 || (seconds > 0 && minutes === 0)) &&
+              "text-[#494949]"
+            }`}
+            onClick={() => {
+              if (seconds === 0 && minutes === 0) {
+                resendOtp();
+              }
+            }}
+          >
+            Resend
           </span>
         </p>
-      </div>
-
-      <div className=" flex flex-col mx-4">
-        <div className="flex justify-center">
-          <img
-            className="h-[180px] w-[180px] object-contain "
-            src={MobileGif}
-            alt="MobileIcon"
-          />
-        </div>
-
-        <div className="flex justify-center">
-          <CustomInputBox
-            value={otp.loginOtp}
-            maxLength={6}
-            containerStyle="mt-[32px]"
-            label="Enter OTP"
-            onChange={(e: any) => {
-              setOtp({ ...otp, loginOtp: e.target.value });
-            }}
-          />
-        </div>
-        <div className="flex justify-center">
-          <p className="mt-3 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
-            {resendOtpTimer()}
-          </p>
-        </div>
-
-        <div className="flex justify-center mt-4">
-          <p className="text-[#494949] font-Open font-normal text-xs leading-4">
-            Didn't Receive Code ?
-            <span
-              className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-                (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-                "text-[#494949]"
-              }`}
-              onClick={() => {
-                if (seconds === 0 && minutes === 0) {
-                  resendOtp();
-                }
-              }}
-            >
-              Resend
-            </span>
-          </p>
-          {/* <button
+        {/* <button
                   type="button"
                   className="text-[#004EFF] font-Open font-semibold ml-1 text-xs leading-4"
                 >
                   Resend
                 </button> */}
-        </div>
 
         <CustomButton
           onClick={onClickVerifyOtp}
           text="SUBMIT"
           className="mt-4"
         />
-      </div>
 
-      <div className="w-[20%] ml-10">
-        <AddButton text="Save" onClick={postForgotPasswordData} />
+        <CustomInputBox
+          label="Old Password"
+          inputType="password"
+          onChange={(e) =>
+            setPassword({ ...password, oldPassword: e.target.value })
+          }
+        />
+        <CustomInputBox
+          label="New Password"
+          inputType="password"
+          onChange={(e) =>
+            setPassword({ ...password, newPassword: e.target.value })
+          }
+        />
+        <CustomInputBox
+          label="Re-enter New Password"
+          inputType="password"
+          onChange={(e) =>
+            setPassword({ ...password, confirmNewPassword: e.target.value })
+          }
+        />
       </div>
     </div>
   );
