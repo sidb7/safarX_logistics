@@ -163,6 +163,7 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
 
       if (response?.success) {
+        toast.success(response?.message);
         dispatch(
           setNavigateOnOtpFormVerify({
             panVerifyNavigate: true,

@@ -5,7 +5,7 @@ interface OnboardingState {
   businessType?: string;
   gstNumber?: string;
   panNumber?: string;
-  aadharNumber?: number;
+  aadharNumber?: 0;
   onOtpClientId?: string;
   acceptTnCStatus?: boolean;
   otp?: number;

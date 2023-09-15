@@ -53,6 +53,7 @@ export const ServiceComponent = (props: ITypeProps) => {
         <div className="flex items-center lg:px-9  self-start my-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
+            style={{ accentColor: "black" }}
           />
           <p className="font-normal text-[12px] text-[#494949]font-Open">
             I Agree with the terms & conditions

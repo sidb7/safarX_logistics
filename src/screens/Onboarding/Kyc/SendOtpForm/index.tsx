@@ -26,6 +26,7 @@ import { aadharRegex, panRegex, gstRegex } from "../../../../utils/regexCheck";
 import { setOnOtpClientId } from "../../../../redux/reducers/onboarding";
 import { toast } from "react-toastify";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -83,9 +84,11 @@ const Index = (props: ITypeProps) => {
   const verifyAadhar = async (value: any) => {
     try {
       const payload = { adhaar_no: value };
+      setLoading(true);
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
+        setLoading(false);
         toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         dispatch(
@@ -94,11 +97,13 @@ const Index = (props: ITypeProps) => {
           })
         );
         if (businessType === "individual") {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "aadhaar-verification" },
           });
         }
       } else {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             aadharVerifyNavigate: false,
@@ -375,7 +380,13 @@ const Index = (props: ITypeProps) => {
           className="!p-0 !w-[500px] !h-[700px]"
           overlayClassName="!flex   items-center"
         >
-          {sendOtpFormComponent()}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            sendOtpFormComponent()
+          )}
         </CustomBottomModal>
       )}
     </div>

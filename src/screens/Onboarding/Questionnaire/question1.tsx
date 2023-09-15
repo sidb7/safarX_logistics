@@ -38,6 +38,21 @@ export const QuestionComponent1: React.FunctionComponent = () => {
     }
   }
 
+  const nextHandler = () => {
+    if (questionsData && questionsData?.length > 0) {
+      const filterQuestion = questionsData[0]?.options.filter(
+        (singleData: any) => singleData.isChecked === true
+      );
+
+      if (filterQuestion?.length === 0) {
+        return toast.error("Please select atleast one option");
+      }
+    }
+    navigate("/onboarding/questionnaire/question2", {
+      state: { questionsData },
+    });
+  };
+
   const question = questionsData[0]?.question;
 
   useEffect(() => {
@@ -98,14 +113,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton
-                text="NEXT"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question2", {
-                    state: { questionsData },
-                  })
-                }
-              />
+              <CustomButton text="NEXT" onClick={() => nextHandler()} />
             </div>
           </div>
         </div>
