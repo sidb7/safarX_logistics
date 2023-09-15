@@ -8,6 +8,7 @@ import {
   FORGOT_PASSWORD,
   POST_SEND_OTP_URL,
   POST_VERIFY_OTP,
+  VERIFY_FORGET_PASSWORD,
 } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import CustomButton from "../../../components/Button";
@@ -61,6 +62,7 @@ const ForgotPassword = (props: ITypeProps) => {
       if (response?.success) {
         setResponse(response);
         setEmailVerified(true);
+        toast.success(response.message);
         // setFormData({ email: "", companyName: "" });
       } else {
         toast.error(response?.message);
@@ -85,39 +87,40 @@ const ForgotPassword = (props: ITypeProps) => {
   };
 
   const resendOtp = async () => {
-    const { data: response } = await POST(POST_SEND_OTP_URL, "");
+    const { data: response } = await POST(FORGOT_PASSWORD, formData);
     if (response?.success === true) {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
       setOtp({ ...otp, forgotPasswordOtp: "" });
+      setEmailVerified(true);
     } else {
       toast.error(response?.message);
     }
   };
-  const onClickVerifyOtp = async () => {
-    try {
-      let payload = {
-        email: formData.email,
-        otp: otp.forgotPasswordOtp,
-      };
-      const { data: response } = await POST(POST_VERIFY_OTP, payload);
-      if (response?.success === true) {
-        setOtpVerified(true);
-        // setLocalStorage(tokenKey, response?.data[0]?.token);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  // const onClickVerifyOtp = async () => {
+  //   try {
+  //     let payload = {
+  //       email: formData.email,
+  //       otp: otp.forgotPasswordOtp,
+  //     };
+  //     const { data: response } = await POST(POST_VERIFY_OTP, payload);
+  //     if (response?.success === true) {
+  //       setOtpVerified(true);
+  //       // setLocalStorage(tokenKey, response?.data[0]?.token);
+  //     } else {
+  //       toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  useEffect(() => {
-    if (otp?.forgotPasswordOtp.length === 6) {
-      onClickVerifyOtp();
-    }
-  }, [otp]);
+  // useEffect(() => {
+  //   if (otp?.forgotPasswordOtp.length === 6) {
+  //     onClickVerifyOtp();
+  //   }
+  // }, [otp]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -153,9 +156,13 @@ const ForgotPassword = (props: ITypeProps) => {
         otp: otp.forgotPasswordOtp,
       };
 
-      const { data: response } = await POST(FORGOT_PASSWORD, updatedFormData);
+      const { data: response } = await POST(
+        VERIFY_FORGET_PASSWORD,
+        updatedFormData
+      );
 
       if (response?.success) {
+        toast.success(response.message);
       } else {
         toast.error(response?.message);
       }
@@ -228,15 +235,15 @@ const ForgotPassword = (props: ITypeProps) => {
               </span>
             </p>
 
-            <CustomButton
+            {/* <CustomButton
               onClick={onClickVerifyOtp}
               text="Submit Otp"
               className="mt-2"
-            />
+            /> */}
           </>
         )}
 
-        {emailVerified && otpVerified && (
+        {emailVerified && (
           <>
             <CustomInputBox
               label="Old Password"
