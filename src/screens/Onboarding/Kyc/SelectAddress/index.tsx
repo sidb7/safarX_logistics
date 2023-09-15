@@ -20,6 +20,7 @@ import {
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import { error } from "console";
 
 interface ITypeProps {}
 
@@ -31,21 +32,19 @@ const BusinessType = (props: ITypeProps) => {
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
   const [loading, setLoading] = useState(false);
+  console.log("🚀 ~ file: index.tsx:35 ~ BusinessType ~ loading:", loading);
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-
+  console.log(defaultAddressSelect, "hiij");
   const initialAddressCall = async () => {
-    setLoading(true);
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
-      setLoading(false);
       setDefaultAddress(response?.data);
 
       // toast.success(response?.message);
       //Navigate Url's go here
     } else {
-      setLoading(false);
       toast.error(response?.message);
     }
   };
@@ -55,43 +54,69 @@ const BusinessType = (props: ITypeProps) => {
   }, []);
 
   const onSubmitForm = async () => {
-    const payload = {
-      companyInfo: {
-        address: "",
-        pincode: 0,
-        city: "",
-        state: "",
-        name: brandName || "",
-        logoUrl: "brandLogo",
-      },
-    };
+    try {
+      const payload = { data: defaultAddressSelect?.fullAddress };
+      setLoading(true);
+      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
+      setLoading(false);
+      let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
 
-    const { data: response } = await POST(POST_UPDATE_COMPANY_URL, payload);
-    if (response?.success) {
-      toast.success(response?.message);
-
-      const payload = { addressId: defaultAddressSelect, isDefault: true };
-      const { data: responses } = await POST(
-        POST_UPDATE_DEFAULT_ADDRESS,
-        payload
+      const companyObj = {
+        companyInfo: {
+          address: combineAdd,
+          pincode: +responses?.data?.message?.pincode,
+          city: responses?.data?.message?.city_name,
+          state: responses?.data?.message?.state_name,
+          name: brandName || "",
+          logoUrl: "brandLogo",
+        },
+        addressId: defaultAddressSelect?.addressId,
+        isDefault: true,
+      };
+      setLoading(true);
+      const { data: response } = await POST(
+        POST_UPDATE_COMPANY_URL,
+        companyObj
       );
-      if (responses?.success) {
-        toast.success(responses?.message);
-
+      if (response?.success) {
+        setLoading(false);
         navigate("/onboarding/wallet-recharge");
-
-        //Navigate Url's go here
       } else {
-        toast.error(responses?.message);
+        setLoading(false);
+        toast.error(response.message);
+        navigate("/onboarding/wallet-recharge");
       }
-      //Navigate Url's go here
-    } else {
-      toast.error(response?.message);
+      // if (response?.success) {
+      //   toast.success(response?.message);
+
+      //   const payload = { addressId: defaultAddressSelect, isDefault: true };
+      //   const { data: responses } = await POST(
+      //     POST_UPDATE_DEFAULT_ADDRESS,
+      //     payload
+      //   );
+      //   if (responses?.success) {
+      //     toast.success(responses?.message);
+      //     // setLoading(false);
+
+      //     navigate("/onboarding/wallet-recharge");
+
+      //     //Navigate Url's go here
+      //   } else {
+      //     navigate("/onboarding/wallet-recharge");
+      //     // toast.error(responses?.message);
+      //   }
+      //   //Navigate Url's go here
+      // } else {
+      //   // setLoading(false);
+      //   toast.error(response?.message);
+      // }
+    } catch (error) {
+      return error;
     }
   };
 
   const onMagicForm = async () => {
-    const payload = { data: defaultAddressSelect };
+    const payload = { data: defaultAddressSelect?.fullAddress };
     const { data: responses } = await POST(MAGIC_ADDRESS, payload);
     if (responses?.success) {
       let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
@@ -120,22 +145,23 @@ const BusinessType = (props: ITypeProps) => {
     }
   };
 
-  const uploadFile = async (e: any) => {
-    let formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    formData.append("fileName", "brandLogo");
-    const { data: response } = await POST(FILE_UPLOAD, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    if (response?.success) {
-      toast.success(response?.message);
-      //Navigate Url's go here
-    } else {
-      toast.error(response?.message);
-    }
-  };
+  // const uploadFile = async (e: any) => {
+  //   let formData = new FormData();
+  //   formData.append("file", e.target.files[0]);
+  //   formData.append("fileName", "brandLogo");
+  //   const data = await POST(FILE_UPLOAD, formData, {
+  //     headers: {
+  //       "Content-Type": "multipart/form-data",
+  //     },
+  //   });
+  //   console.log("data", data);
+  //   // if (response?.success) {
+  //   //   toast.success(response?.message);
+  //   //   //Navigate Url's go here
+  //   // } else {
+  //   //   toast.error(response?.message);
+  //   // }
+  // };
 
   const addressComponent = () => {
     return (
@@ -177,7 +203,7 @@ const BusinessType = (props: ITypeProps) => {
                     return (
                       <Card
                         key={i}
-                        onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                        onClick={(e) => setDefaultAddressSelect(el)}
                         name="address"
                         value={el?.fullAddress}
                         title={el?.fullAddress}
@@ -204,11 +230,9 @@ const BusinessType = (props: ITypeProps) => {
                       <div key={i}>
                         {el?.fullAddress !== "" && (
                           <Card
-                            onClick={(e) =>
-                              setDefaultAddressSelect(e.target.value)
-                            }
+                            onClick={(e) => setDefaultAddressSelect(el)}
                             name="address"
-                            value={el?.addressId}
+                            value={el?.fullAddress}
                             title={el?.fullAddress}
                             doctype={el?.doctype}
                             titleClassName="!font-normal !text-[12px]"
@@ -235,7 +259,8 @@ const BusinessType = (props: ITypeProps) => {
                     className="font-Open  "
                     inputClassName="  lg:!w-[320px]"
                     type="file"
-                    onChange={(e) => uploadFile(e)}
+                    // onChange={(e) => uploadFile(e)}
+                    isRequired={false}
                   />
                 </div>
                 <div className={`${!isLgScreen && "w-full"}`}>

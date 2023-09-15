@@ -203,7 +203,7 @@ const OnBoundingWalletRecharge = () => {
 
             <div
               className="flex justify-center mt-4 cursor-pointer"
-              onClick={() => navigate("/home/overview")}
+              onClick={() => navigate("/dashboard/overview")}
             >
               <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                 SKIP FOR NOW{" "}
@@ -329,7 +329,7 @@ const OnBoundingWalletRecharge = () => {
       setIsLoading(false);
       toast.success(datas?.data?.message);
       clearInterval(myInterval);
-      navigate("/home/overview");
+      navigate("/dashboard/overview");
     } else if (
       datas?.data?.message ===
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
@@ -475,12 +475,12 @@ const OnBoundingWalletRecharge = () => {
         <div className="mx-48 mb-2">
           <CustomButton
             text={"NEXT"}
-            onClick={() => navigate("/home/overview")}
+            onClick={() => navigate("/dashboard/overview")}
           />
         </div>
         <div
           className="flex justify-center  cursor-pointer"
-          onClick={() => navigate("/home/overview")}
+          onClick={() => navigate("/dashboard/overview")}
         >
           <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
             SKIP FOR NOW{" "}

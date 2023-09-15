@@ -521,7 +521,7 @@ const MyRoutes: React.FC = () => {
               <Route path="order-details" />
             </Route>
             <Route
-              path="home/overview"
+              path="dashboard/overview"
               element={
                 <ProtectedRoute>
                   <Overview />
