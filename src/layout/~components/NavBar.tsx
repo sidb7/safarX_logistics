@@ -24,7 +24,7 @@ const data = [
         id: "2",
         name: "Overview",
         isActive: false,
-        path: "/home/overview",
+        path: "/dashboard/overview",
         menu: [],
         pages: [
           {
