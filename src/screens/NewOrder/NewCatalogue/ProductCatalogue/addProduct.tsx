@@ -66,7 +66,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     });
     if (response?.success) {
       toast.success(response?.message);
-      navigate("/catalogues/catalogue");
+      navigate("/catalogues/product-catalogue");
     } else {
       toast.error("Failed To Upload!");
     }

@@ -38,17 +38,31 @@ export const QuestionComponent1: React.FunctionComponent = () => {
     }
   }
 
-  const question = questionsData[0]?.question;
-
   useEffect(() => {
     getQuestions();
   }, []);
+
+  const question = questionsData[0]?.question;
 
   function handleCheckBox(element: any, index: any) {
     let tempArr = questionsData;
     tempArr[0].options[index].isChecked = element;
     setQuestionsData([...tempArr]);
   }
+
+  const nextHandler = () => {
+    if (questionsData && questionsData?.length > 0) {
+      const filterQuestion = questionsData[0]?.options.filter(
+        (singleData: any) => singleData.isChecked === true
+      );
+      if (filterQuestion?.length === 0) {
+        return toast.error("Please Select Atleast One Option");
+      }
+    }
+    navigate("/onboarding/questionnaire/question2", {
+      state: { questionsData },
+    });
+  };
 
   const modalTitle = () => {
     return (
@@ -98,14 +112,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton
-                text="NEXT"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question2", {
-                    state: { questionsData },
-                  })
-                }
-              />
+              <CustomButton text="NEXT" onClick={() => nextHandler()} />
             </div>
           </div>
         </div>
