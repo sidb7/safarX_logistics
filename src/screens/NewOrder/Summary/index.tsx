@@ -124,12 +124,12 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then(function (successMessage: any) {
-          toast.success(successMessage?.data?.message);
+          // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then(function (successResponse: any) {
               const requiredBalance =
                 successResponse?.data?.data[0]?.requiredBalance;
-
+              toast.error(successResponse?.data?.message);
               navigate("/orders/add-order/payment", {
                 state: { requiredBalance: requiredBalance },
               });

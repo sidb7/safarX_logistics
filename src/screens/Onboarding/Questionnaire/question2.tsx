@@ -7,6 +7,7 @@ import Onboarding from "../../../assets/AccountQuestions/Onboarding.gif";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
+import { toast } from "react-toastify";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 export const QuestionComponent2: React.FunctionComponent = (props: any) => {
@@ -38,6 +39,20 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   }
 
   const question = questionsData[1]?.question;
+
+  const nextHandler = () => {
+    if (questionsData && questionsData?.length > 0) {
+      const filterQuestion = questionsData[1]?.options.filter(
+        (singleData: any) => singleData.isChecked === true
+      );
+      if (filterQuestion?.length === 0) {
+        return toast.error("Please Select Atleast One Option");
+      }
+    }
+    navigate("/onboarding/questionnaire/question3", {
+      state: { questionsData },
+    });
+  };
 
   const question2 = () => {
     return (
@@ -86,14 +101,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                   })
                 }
               />
-              <CustomButton
-                text="NEXT"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question3", {
-                    state: { questionsData },
-                  })
-                }
-              />
+              <CustomButton text="NEXT" onClick={() => nextHandler()} />
             </div>
             <div className="mt-3"></div>
           </div>
