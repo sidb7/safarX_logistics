@@ -139,6 +139,7 @@ const DeliveryLocation = () => {
           ...deliveryAddress,
         };
       }
+
       const { data: response } = await POST(ADD_DELIVERY_LOCATION, payload);
 
       if (response?.success) {
@@ -178,7 +179,7 @@ const DeliveryLocation = () => {
               saturday: orderData?.deliveryAddress?.workingDays?.saturday,
               sunday: orderData?.deliveryAddress?.workingDays?.sunday,
             },
-            workingHours: orderData?.deliveryAddress?.workingHours,
+            workingHours: orderData?.deliveryAddress?.workingHours || "09:00",
             contact: {
               name: orderData?.deliveryAddress?.contact?.name,
               mobileNo: orderData?.deliveryAddress?.contact?.mobileNo,
@@ -209,7 +210,7 @@ const DeliveryLocation = () => {
               saturday: orderData?.billingAddress?.workingDays?.saturday,
               sunday: orderData?.billingAddress?.workingDays?.sunday,
             },
-            workingHours: orderData?.billingAddress?.workingHours,
+            workingHours: orderData?.billingAddress?.workingHours || "09:00",
             contact: {
               name: orderData?.billingAddress?.contact?.name,
               mobileNo: orderData?.billingAddress?.contact?.mobileNo,
