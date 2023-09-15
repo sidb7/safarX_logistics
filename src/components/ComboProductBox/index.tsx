@@ -47,8 +47,6 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
     const [isModalOpen, setIsModalOpen] = useState<any>(false);
     const navigate = useNavigate()
 
-    console.log("data", data)
-
     return (
         <>
             <div
