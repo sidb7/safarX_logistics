@@ -294,6 +294,8 @@ const Index: React.FC = () => {
     setCardInfo(CardInfo[0]);
   };
 
+  console.log("cardInfo", cardInfo?.insurance);
+
   const steps = [
     {
       label: "Pickup",
@@ -437,12 +439,11 @@ const Index: React.FC = () => {
                 <span className="font-bold font-Lato">Variables : </span>
                 &#8377; {cardInfo.variables}
               </div>
-              {cardInfo?.insurance && (
-                <div className="text-sm">
-                  <span className="font-bold font-Lato">Insurance : </span>
-                  &#8377; {cardInfo?.insurance}
-                </div>
-              )}
+
+              <div className="text-sm">
+                <span className="font-bold font-Lato">Insurance : </span>
+                &#8377; {cardInfo?.insurance}
+              </div>
             </div>
           </div>
         </div>
