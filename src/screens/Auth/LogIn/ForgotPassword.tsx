@@ -28,7 +28,7 @@ const ForgotPassword = (props: ITypeProps) => {
   const signUpUser = useSelector((state: any) => state);
   const [otpVerified, setOtpVerified] = useState<any>(false);
   const [otp, setOtp] = useState({
-    loginOtp: "",
+    forgotPasswordOtp: "",
   });
   const [formData, setFormData] = useState({
     email: "",
@@ -118,7 +118,7 @@ const ForgotPassword = (props: ITypeProps) => {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
-      setOtp({ ...otp, loginOtp: "" });
+      setOtp({ ...otp, forgotPasswordOtp: "" });
     } else {
       toast.error(response?.message);
     }
@@ -127,7 +127,7 @@ const ForgotPassword = (props: ITypeProps) => {
     try {
       let payload = {
         email: formData.email,
-        otp: otp.loginOtp,
+        otp: otp.forgotPasswordOtp,
       };
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
@@ -142,7 +142,7 @@ const ForgotPassword = (props: ITypeProps) => {
   };
 
   useEffect(() => {
-    if (otp?.loginOtp.length === 6) {
+    if (otp?.forgotPasswordOtp.length === 6) {
       onClickVerifyOtp();
     }
   }, [otp]);
@@ -178,7 +178,7 @@ const ForgotPassword = (props: ITypeProps) => {
       const updatedFormData = {
         ...formData,
         password: password.newPassword,
-        otp: otp.loginOtp,
+        otp: otp.forgotPasswordOtp,
       };
 
       console.log("updatedFormData", updatedFormData);
@@ -228,12 +228,12 @@ const ForgotPassword = (props: ITypeProps) => {
         {emailVerified && (
           <>
             <CustomInputBox
-              value={otp.loginOtp}
+              value={otp.forgotPasswordOtp}
               maxLength={6}
               containerStyle="mt-[32px]"
               label="Enter OTP"
               onChange={(e: any) => {
-                setOtp({ ...otp, loginOtp: e.target.value });
+                setOtp({ ...otp, forgotPasswordOtp: e.target.value });
               }}
             />
 
