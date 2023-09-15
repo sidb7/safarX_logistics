@@ -176,7 +176,7 @@ const ForgotPassword = (props: ITypeProps) => {
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 overflow-auto">
       <div className="flex justify-between lg:mb-10 lg:px-5">
         <div className="flex gap-x-2 lg:gap-x-3 ">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-4">
+          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-[140px]">
             Forgot Password
           </h3>
         </div>
@@ -189,7 +189,7 @@ const ForgotPassword = (props: ITypeProps) => {
           />
         </div>
       </div>
-      <div className="flex flex-col ml-40 mt-4 w-[50%] gap-y-4">
+      <div className="flex flex-col ml-40 mt-4 w-[70%] gap-y-4">
         <CustomInputBox
           label="Enter Email"
           name="email"
@@ -199,7 +199,7 @@ const ForgotPassword = (props: ITypeProps) => {
 
         <CustomButton
           onClick={postForgotPasswordData}
-          text="Submit Email"
+          text="Send OTP"
           className="mt-4"
         />
         {emailVerified && (
@@ -245,13 +245,6 @@ const ForgotPassword = (props: ITypeProps) => {
 
         {emailVerified && (
           <>
-            <CustomInputBox
-              label="Old Password"
-              inputType="password"
-              onChange={(e) =>
-                setPassword({ ...password, oldPassword: e.target.value })
-              }
-            />
             <CustomInputBox
               label="New Password"
               inputType="password"
