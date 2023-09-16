@@ -157,7 +157,7 @@ const OnBoundingWalletRecharge = () => {
                     checkboxClassName="text-black"
                     style={{ accentColor: "black" }}
                   />
-                  <p className="ml-2 mt-[2px] text-[16px]font-Open font-normal leading-[22px]">
+                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
                     Get Discounts/Offers on Recharge
                   </p>
                 </div>
