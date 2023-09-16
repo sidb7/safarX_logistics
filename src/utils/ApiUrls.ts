@@ -188,6 +188,7 @@ const BULK_UPLOAD=`${SELLER_BASE_URL}/order/bulkOrder`
 
 //Forgot Password
 const FORGOT_PASSWORD=`${SELLER_BASE_URL}/seller/forgotPassword`
+const VERIFY_FORGET_PASSWORD=`${SELLER_BASE_URL}/seller/verifyForgotPassword`
 
 
 
@@ -277,5 +278,6 @@ export {
   POST_PLACE_ORDER,
   LANDMARK_API,
   BULK_UPLOAD,
-  FORGOT_PASSWORD
+  FORGOT_PASSWORD,
+  VERIFY_FORGET_PASSWORD
 };

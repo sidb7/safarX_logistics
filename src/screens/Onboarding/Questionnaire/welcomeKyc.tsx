@@ -93,7 +93,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
             <div
               className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4 cursor-pointer"
-              onClick={() => navigate("/home/overview")}
+              onClick={() => navigate("/dashboard/overview")}
             >
               SKIP FOR NOW
             </div>

@@ -60,7 +60,7 @@ const Index = () => {
       } else if (response?.data?.[0]?.nextStep?.kyc === false) {
         navigate("/onboarding/kyc-type");
       } else {
-        navigate("/home/overview");
+        navigate("/dashboard/overview");
       }
     } else {
       toast.error(response?.message);
@@ -83,7 +83,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/home/overview");
+      navigate("/dashboard/overview");
     } else {
       toast.error(response?.message);
     }
@@ -96,7 +96,7 @@ const Index = () => {
     (async () => {
       const response = await POST(VALIDATE_USER_TOKEN);
       if (response?.data?.success) {
-        navigate("/home/overview");
+        navigate("/dashboard/overview");
       }
     })();
   }, []);
@@ -242,13 +242,16 @@ const Index = () => {
                   Sign Up
                 </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setForgotPasswordModal(true)}
-                className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
-              >
-                Forgot Password
-              </button>
+
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setForgotPasswordModal(true)}
+                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                >
+                  Forgot Password
+                </button>
+              </div>
             </div>
           </div>
         </div>

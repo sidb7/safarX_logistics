@@ -8,6 +8,7 @@ import {
   FORGOT_PASSWORD,
   POST_SEND_OTP_URL,
   POST_VERIFY_OTP,
+  VERIFY_FORGET_PASSWORD,
 } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import CustomButton from "../../../components/Button";
@@ -26,12 +27,13 @@ const ForgotPassword = (props: ITypeProps) => {
 
   const [response, setResponse] = useState<any>(null);
   const signUpUser = useSelector((state: any) => state);
+  const [otpVerified, setOtpVerified] = useState<any>(false);
   const [otp, setOtp] = useState({
-    loginOtp: "",
+    forgotPasswordOtp: "",
   });
   const [formData, setFormData] = useState({
     email: "",
-    companyName: "Shipyaari",
+    companyName: "SHIPYAARI",
   });
   const [password, setPassword] = useState({
     oldPassword: "",
@@ -53,34 +55,6 @@ const ForgotPassword = (props: ITypeProps) => {
     }));
   };
 
-  //   let body = {
-  //     email: signUpUser.email,
-  //     firstName: signUpUser.firstName,
-  //     mobileNo: mobileNumber.mobileNo,
-  //   };
-
-  //   const sendOtpOnClick = async (value: any) => {
-  //     try {
-  //       const { data: response } = await POST(POST_SEND_OTP_URL, value);
-  //       if (response?.success === true) {
-  //         navigate("/onboarding/verifyOtp", { state: { path: body } });
-  //       } else {
-  //         toast.error(response?.message);
-  //       }
-  //     } catch (error) {
-  //       return error;
-  //     }
-  //   };
-
-  //   const handleSaveClick = () => {
-  //     const { email, companyName } = formData;
-
-  //     console.log("Email:", email);
-  //     console.log("companyName:", companyName);
-
-  //     setFormData({ email: "", companyName: "" });
-  //   };
-
   const postForgotPasswordData = async () => {
     try {
       const { data: response } = await POST(FORGOT_PASSWORD, formData);
@@ -88,6 +62,7 @@ const ForgotPassword = (props: ITypeProps) => {
       if (response?.success) {
         setResponse(response);
         setEmailVerified(true);
+        toast.success(response.message);
         // setFormData({ email: "", companyName: "" });
       } else {
         toast.error(response?.message);
@@ -112,39 +87,40 @@ const ForgotPassword = (props: ITypeProps) => {
   };
 
   const resendOtp = async () => {
-    const { data: response } = await POST(POST_SEND_OTP_URL, "");
+    const { data: response } = await POST(FORGOT_PASSWORD, formData);
     if (response?.success === true) {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
-      setOtp({ ...otp, loginOtp: "" });
+      setOtp({ ...otp, forgotPasswordOtp: "" });
+      setEmailVerified(true);
     } else {
       toast.error(response?.message);
     }
   };
-  const onClickVerifyOtp = async () => {
-    try {
-      let payload = {
-        email: signUpUser.email,
-        otp: otp.loginOtp,
-      };
-      const { data: response } = await POST(POST_VERIFY_OTP, payload);
-      if (response?.success === true) {
-        setLocalStorage(tokenKey, response?.data[0]?.token);
-        navigate("/onBoarding/get-started");
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  // const onClickVerifyOtp = async () => {
+  //   try {
+  //     let payload = {
+  //       email: formData.email,
+  //       otp: otp.forgotPasswordOtp,
+  //     };
+  //     const { data: response } = await POST(POST_VERIFY_OTP, payload);
+  //     if (response?.success === true) {
+  //       setOtpVerified(true);
+  //       // setLocalStorage(tokenKey, response?.data[0]?.token);
+  //     } else {
+  //       toast.error(response?.message);
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
-  useEffect(() => {
-    if (otp?.loginOtp.length === 6) {
-      onClickVerifyOtp();
-    }
-  }, [otp]);
+  // useEffect(() => {
+  //   if (otp?.forgotPasswordOtp.length === 6) {
+  //     onClickVerifyOtp();
+  //   }
+  // }, [otp]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -167,11 +143,40 @@ const ForgotPassword = (props: ITypeProps) => {
     };
   }, [seconds]);
 
+  const updatePasswordData = async () => {
+    try {
+      if (password?.newPassword !== password?.confirmNewPassword) {
+        return toast.error(
+          "Please enter a new password and re-enter the same password !"
+        );
+      }
+      const updatedFormData = {
+        ...formData,
+        password: password.newPassword,
+        otp: otp.forgotPasswordOtp,
+      };
+
+      const { data: response } = await POST(
+        VERIFY_FORGET_PASSWORD,
+        updatedFormData
+      );
+
+      if (response?.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error("Error in UpdatePasswordAPI", error);
+      return error;
+    }
+  };
+
   return (
-    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5">
+    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 overflow-auto">
       <div className="flex justify-between lg:mb-10 lg:px-5">
         <div className="flex gap-x-2 lg:gap-x-3 ">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-4">
+          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-[140px]">
             Forgot Password
           </h3>
         </div>
@@ -184,7 +189,7 @@ const ForgotPassword = (props: ITypeProps) => {
           />
         </div>
       </div>
-      <div className="flex flex-col ml-40 mt-4 w-[50%] gap-y-4">
+      <div className="flex flex-col ml-40 mt-4 w-[70%] gap-y-4">
         <CustomInputBox
           label="Enter Email"
           name="email"
@@ -194,74 +199,74 @@ const ForgotPassword = (props: ITypeProps) => {
 
         <CustomButton
           onClick={postForgotPasswordData}
-          text="Submit Email"
+          text="Send OTP"
           className="mt-4"
         />
+        {emailVerified && (
+          <>
+            <CustomInputBox
+              value={otp.forgotPasswordOtp}
+              maxLength={6}
+              containerStyle="mt-[32px]"
+              label="Enter OTP"
+              onChange={(e: any) => {
+                setOtp({ ...otp, forgotPasswordOtp: e.target.value });
+              }}
+            />
 
-        <CustomInputBox
-          value={otp.loginOtp}
-          maxLength={6}
-          containerStyle="mt-[32px]"
-          label="Enter OTP"
-          onChange={(e: any) => {
-            setOtp({ ...otp, loginOtp: e.target.value });
-          }}
-        />
+            <p className="mt-1 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
+              {resendOtpTimer()}
+            </p>
 
-        <p className="mt-3 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
-          {resendOtpTimer()}
-        </p>
+            <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+              Didn't Receive Code ?
+              <span
+                className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
+                  (seconds > 0 || (seconds > 0 && minutes === 0)) &&
+                  "text-[#494949]"
+                }`}
+                onClick={() => {
+                  if (seconds === 0 && minutes === 0) {
+                    resendOtp();
+                  }
+                }}
+              >
+                Resend
+              </span>
+            </p>
 
-        <p className="text-[#494949] font-Open font-normal text-xs leading-4">
-          Didn't Receive Code ?
-          <span
-            className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-              (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-              "text-[#494949]"
-            }`}
-            onClick={() => {
-              if (seconds === 0 && minutes === 0) {
-                resendOtp();
+            {/* <CustomButton
+              onClick={onClickVerifyOtp}
+              text="Submit Otp"
+              className="mt-2"
+            /> */}
+          </>
+        )}
+
+        {emailVerified && (
+          <>
+            <CustomInputBox
+              label="New Password"
+              inputType="password"
+              onChange={(e) =>
+                setPassword({ ...password, newPassword: e.target.value })
               }
-            }}
-          >
-            Resend
-          </span>
-        </p>
-        {/* <button
-                  type="button"
-                  className="text-[#004EFF] font-Open font-semibold ml-1 text-xs leading-4"
-                >
-                  Resend
-                </button> */}
+            />
+            <CustomInputBox
+              label="Re-enter New Password"
+              inputType="password"
+              onChange={(e) =>
+                setPassword({ ...password, confirmNewPassword: e.target.value })
+              }
+            />
 
-        <CustomButton
-          onClick={onClickVerifyOtp}
-          text="SUBMIT"
-          className="mt-4"
-        />
-
-        <CustomInputBox
-          label="Old Password"
-          inputType="password"
-          onChange={(e) =>
-            setPassword({ ...password, oldPassword: e.target.value })
-          }
-        />
-        <CustomInputBox
-          label="New Password"
-          inputType="password"
-          onChange={(e) =>
-            setPassword({ ...password, newPassword: e.target.value })
-          }
-        />
-        <CustomInputBox
-          label="Re-enter New Password"
-          inputType="password"
-          onChange={(e) =>
-            setPassword({ ...password, confirmNewPassword: e.target.value })
-          }
-        />
+            <CustomButton
+              onClick={updatePasswordData}
+              text="Update Password"
+              className="mt-4"
+            />
+          </>
+        )}
       </div>
     </div>
   );
