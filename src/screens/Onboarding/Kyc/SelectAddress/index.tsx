@@ -20,7 +20,6 @@ import {
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
-import { error } from "console";
 
 interface ITypeProps {}
 
@@ -32,11 +31,10 @@ const BusinessType = (props: ITypeProps) => {
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>();
   const [loading, setLoading] = useState(false);
-  console.log("🚀 ~ file: index.tsx:35 ~ BusinessType ~ loading:", loading);
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-  console.log(defaultAddressSelect, "hiij");
+
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
     if (response?.success) {
@@ -116,32 +114,41 @@ const BusinessType = (props: ITypeProps) => {
   };
 
   const onMagicForm = async () => {
-    const payload = { data: defaultAddressSelect?.fullAddress };
-    const { data: responses } = await POST(MAGIC_ADDRESS, payload);
-    if (responses?.success) {
-      let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
-      const magicpayload = {
-        companyInfo: {
-          address: combineAdd,
-          pincode: responses?.data?.message?.pincode,
-          city: responses?.data?.message?.city_name,
-          state: responses?.data?.message?.state_name,
-        },
-        isDefault: true,
-      };
-
-      const { data: response } = await POST(
-        POST_UPDATE_COMPANY_URL,
-        magicpayload
-      );
-      if (response?.success) {
-        toast.success(response?.message);
-        navigate("/onboarding/select-address-billing");
+    setLoading(true);
+    try {
+      setLoading(true);
+      const payload = { data: defaultAddressSelect?.fullAddress };
+      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
+      setLoading(false);
+      if (responses?.success) {
+        let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
+        const magicpayload = {
+          companyInfo: {
+            address: combineAdd,
+            pincode: responses?.data?.message?.pincode,
+            city: responses?.data?.message?.city_name,
+            state: responses?.data?.message?.state_name,
+          },
+          isDefault: true,
+        };
+        setLoading(true);
+        const { data: response } = await POST(
+          POST_UPDATE_COMPANY_URL,
+          magicpayload
+        );
+        if (response?.success) {
+          setLoading(false);
+          toast.success(response?.message);
+          navigate("/onboarding/select-address-billing");
+        } else {
+          setLoading(false);
+          toast.error(responses?.message);
+        }
       } else {
         toast.error(responses?.message);
       }
-    } else {
-      toast.error(responses?.message);
+    } catch (error) {
+      return error;
     }
   };
 

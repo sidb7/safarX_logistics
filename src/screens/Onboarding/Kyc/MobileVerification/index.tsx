@@ -164,6 +164,7 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response?.message);
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             panVerifyNavigate: true,
@@ -200,7 +201,6 @@ const Index = (props: ITypeProps) => {
           payload
         );
         if (response?.success) {
-          setLoading(false);
           verifyPAN(panCard);
 
           toast.success(response?.message);
@@ -246,12 +246,12 @@ const Index = (props: ITypeProps) => {
           }
         }
       } else if (businessType === "company") {
+        setLoading(true);
         const payload = {
           gstIn: gstNo,
           client_id: clientId,
           otp: otp,
         };
-        setLoading(true);
         const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
         if (response?.success) {
           setLoading(false);

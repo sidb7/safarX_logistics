@@ -35,7 +35,7 @@ interface OnboardingState {
 
 // Define the initial state using that type
 const initialState: OnboardingState = {
-  businessType: "",
+  businessType: "company",
   gstNumber: "",
   panNumber: "",
   aadharNumber: 0,

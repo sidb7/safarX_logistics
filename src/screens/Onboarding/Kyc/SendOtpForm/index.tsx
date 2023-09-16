@@ -119,24 +119,29 @@ const Index = (props: ITypeProps) => {
 
   const verifyGST = async (value: any) => {
     try {
+      setLoading(true);
       const payload = { gstIn: value };
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             gstVerifyNavigate: true,
           })
         );
         if (businessType === "business" || businessType === "company") {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });
         } else {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
         dispatch(setOnOtpClientId(response.data[0].data.client_id));
       } else {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             gstVerifyNavigate: false,
