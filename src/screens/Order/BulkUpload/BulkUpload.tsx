@@ -33,7 +33,7 @@ const BulkUpload = (props: ITypeProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  console.log("uploadedFile", uploadFile);
+  // console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };
@@ -77,13 +77,11 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const handleDroppedFiles = (droppedFiles: File[]) => {
-    console.log("droppedFiles", droppedFiles);
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
 
-      console.log("selectedFile", selectedFile);
       setUploadFile(selectedFile);
-      console.log("uploadedFIle", uploadFile);
+
       setFileName(selectedFile.name);
       setAddButton(true);
     }

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CancelIcon from "../../../assets/common/cancel.svg";
+import CloseIcon from "../../../assets/CloseIcon.svg";
+
 import CustomInputBox from "../../../components/Input";
 import AddButton from "../../../components/Button/addButton";
 import { POST } from "../../../utils/webService";
@@ -16,6 +18,9 @@ import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
+import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import "../../../styles/signupPages.css";
 
 interface ITypeProps {
   onClick?: any;
@@ -24,6 +29,7 @@ interface ITypeProps {
 const ForgotPassword = (props: ITypeProps) => {
   const { onClick } = props;
   const navigate = useNavigate();
+  const { isLgScreen } = ResponsiveState();
 
   const [response, setResponse] = useState<any>(null);
   const signUpUser = useSelector((state: any) => state);
@@ -171,24 +177,44 @@ const ForgotPassword = (props: ITypeProps) => {
       return error;
     }
   };
+  const modalTitle = () => {
+    return (
+      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
+        <img
+          className="my-auto ml-6  h-[25px] object-contain"
+          src={CompanyLogo}
+          alt="Company Logo"
+        />
+        <img
+          className="my-auto mr-6 cursor-pointer"
+          src={CloseIcon}
+          alt="Close"
+          onClick={onClick}
+        />
+      </div>
+    );
+  };
 
   return (
-    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 overflow-auto">
-      <div className="flex justify-between lg:mb-10 lg:px-5">
-        <div className="flex gap-x-2 lg:gap-x-3 ">
-          <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-[140px]">
-            Forgot Password
-          </h3>
-        </div>
-        <div>
-          <img
-            src={CancelIcon}
-            alt=""
-            onClick={onClick}
-            className="cursor-pointer"
-          />
-        </div>
+    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full  overflow-auto">
+      {isLgScreen && modalTitle()}
+      <div className="product-box flex items-center lg:hidden">
+        <img
+          className="m-4 h-[25px] object-contain"
+          src={CompanyLogo}
+          alt="CompanyLogo"
+        />
       </div>
+
+      <div className="flex flex-col  mx-4 gap-y-8">
+        <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
+          Reset Password
+        </p>
+        <p className="text-center font-Open font-light leading-[22px]">
+          Enter your email ID to reset the password.
+        </p>
+      </div>
+
       <div className="flex flex-col ml-40 mt-4 w-[70%] gap-y-4">
         <CustomInputBox
           label="Enter Email"
@@ -200,7 +226,8 @@ const ForgotPassword = (props: ITypeProps) => {
         <CustomButton
           onClick={postForgotPasswordData}
           text="Send OTP"
-          className="mt-4"
+          className={`mt-4 ${emailVerified ? "bg-gray-300" : ""}`}
+          disabled={emailVerified}
         />
         {emailVerified && (
           <>
