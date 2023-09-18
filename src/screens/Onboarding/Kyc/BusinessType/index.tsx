@@ -40,6 +40,7 @@ const BusinessType = (props: ITypeProps) => {
 
         // navigate("/onboarding/kyc-photo"); // temparory hide
         navigate("/onboarding/kyc-form");
+
         // toast.success(response?.message);
         //Navigate Url' go here
       } else {
