@@ -53,99 +53,85 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitForm = async () => {
     try {
-      const payload = { data: defaultAddressSelect?.fullAddress };
-      setLoading(true);
-      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
-      setLoading(false);
-      let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
-
-      const companyObj = {
-        companyInfo: {
-          address: combineAdd,
-          pincode: +responses?.data?.message?.pincode,
-          city: responses?.data?.message?.city_name,
-          state: responses?.data?.message?.state_name,
-          name: brandName || "",
-          logoUrl: "brandLogo",
-        },
-        addressId: defaultAddressSelect?.addressId,
-        isDefault: true,
-      };
-      setLoading(true);
-      const { data: response } = await POST(
-        POST_UPDATE_COMPANY_URL,
-        companyObj
-      );
-      if (response?.success) {
+      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
+        const payload = { data: defaultAddressSelect?.fullAddress };
+        setLoading(true);
+        const { data: responses } = await POST(MAGIC_ADDRESS, payload);
         setLoading(false);
-        navigate("/onboarding/wallet-recharge");
+        let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
+        const companyObj = {
+          companyInfo: {
+            address: combineAdd,
+            pincode: +responses?.data?.message?.pincode,
+            city: responses?.data?.message?.city_name,
+            state: responses?.data?.message?.state_name,
+            name: brandName || "",
+            logoUrl: "brandLogo",
+          },
+          addressId: defaultAddressSelect?.addressId,
+          isDefault: true,
+        };
+        setLoading(true);
+        const { data: response } = await POST(
+          POST_UPDATE_COMPANY_URL,
+          companyObj
+        );
+        if (response?.success) {
+          setLoading(false);
+          toast.success(responses?.message);
+
+          navigate("/onboarding/wallet-recharge");
+        } else {
+          setLoading(false);
+          toast.error(response.message);
+        }
+        //
       } else {
-        setLoading(false);
-        toast.error(response.message);
-        navigate("/onboarding/wallet-recharge");
+        toast.error("Please Select Address");
       }
-      // if (response?.success) {
-      //   toast.success(response?.message);
-
-      //   const payload = { addressId: defaultAddressSelect, isDefault: true };
-      //   const { data: responses } = await POST(
-      //     POST_UPDATE_DEFAULT_ADDRESS,
-      //     payload
-      //   );
-      //   if (responses?.success) {
-      //     toast.success(responses?.message);
-      //     // setLoading(false);
-
-      //     navigate("/onboarding/wallet-recharge");
-
-      //     //Navigate Url's go here
-      //   } else {
-      //     navigate("/onboarding/wallet-recharge");
-      //     // toast.error(responses?.message);
-      //   }
-      //   //Navigate Url's go here
-      // } else {
-      //   // setLoading(false);
-      //   toast.error(response?.message);
-      // }
     } catch (error) {
       return error;
     }
   };
 
   const onMagicForm = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
-      setLoading(true);
-      const payload = { data: defaultAddressSelect?.fullAddress };
-      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
-      setLoading(false);
-      if (responses?.success) {
-        let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
-        const magicpayload = {
-          companyInfo: {
-            address: combineAdd,
-            pincode: responses?.data?.message?.pincode,
-            city: responses?.data?.message?.city_name,
-            state: responses?.data?.message?.state_name,
-          },
-          isDefault: true,
-        };
+      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
         setLoading(true);
-        const { data: response } = await POST(
-          POST_UPDATE_COMPANY_URL,
-          magicpayload
-        );
-        if (response?.success) {
-          setLoading(false);
-          toast.success(response?.message);
-          navigate("/onboarding/select-address-billing");
+        const payload = { data: defaultAddressSelect?.fullAddress };
+        const { data: responses } = await POST(MAGIC_ADDRESS, payload);
+        // setLoading(false);
+        if (responses?.success) {
+          let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
+          const magicpayload = {
+            companyInfo: {
+              address: combineAdd,
+              pincode: responses?.data?.message?.pincode,
+              city: responses?.data?.message?.city_name,
+              state: responses?.data?.message?.state_name,
+            },
+            isDefault: true,
+          };
+          // setLoading(false);
+          const { data: response } = await POST(
+            POST_UPDATE_COMPANY_URL,
+            magicpayload
+          );
+          if (response?.success) {
+            setLoading(false);
+            toast.success(response?.message);
+            navigate("/onboarding/select-address-billing");
+          } else {
+            setLoading(false);
+            toast.error(responses?.message);
+          }
         } else {
           setLoading(false);
           toast.error(responses?.message);
         }
       } else {
-        toast.error(responses?.message);
+        toast.error("Please Select Address");
       }
     } catch (error) {
       return error;
@@ -216,6 +202,7 @@ const BusinessType = (props: ITypeProps) => {
                         title={el?.fullAddress}
                         doctype={el?.doctype}
                         titleClassName="!font-normal !text-[12px]"
+                        cardClassName="!mt-4"
                       />
                     );
                   })}
@@ -243,7 +230,7 @@ const BusinessType = (props: ITypeProps) => {
                             title={el?.fullAddress}
                             doctype={el?.doctype}
                             titleClassName="!font-normal !text-[12px]"
-                            cardClassName="!mt-6"
+                            cardClassName="!mt-4"
                           />
                         )}
                       </div>

@@ -26,7 +26,9 @@ const Billing = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
   const [defaultAddress, setDefaultAddress] = useState<any>();
+
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
+
   const [loading, setLoading] = useState(false);
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -49,15 +51,26 @@ const Billing = (props: ITypeProps) => {
   }, []);
 
   const onSubmit = async () => {
-    const payload = { addressId: defaultAddressSelect, isBilling: true };
+    try {
+      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
+        const payload = { addressId: defaultAddressSelect, isBilling: true };
 
-    const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
-    if (responses?.success) {
-      toast.success(responses?.message);
-      navigate("/onboarding/select-address-pickup");
-      //Navigate Url's go here
-    } else {
-      toast.error(responses?.message);
+        const { data: responses } = await POST(
+          POST_UPDATE_COMPANY_URL,
+          payload
+        );
+        if (responses?.success) {
+          toast.success(responses?.message);
+          navigate("/onboarding/select-address-pickup");
+          //Navigate Url's go here
+        } else {
+          toast.error(responses?.message);
+        }
+      } else {
+        toast.error("Please Select Address");
+      }
+    } catch (error) {
+      return error;
     }
   };
 
