@@ -234,7 +234,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (
                             Top Added
                         </div>
                     </div>
-                    <div className="flex flex-wrap gap-5 mb-6  overflow-scroll ">
+                    <div className="flex max-h-[350px] flex-wrap gap-5 mb-6  overflow-scroll ">
                         {products?.map((eachProduct: any, index: number) => {
                             return (
                                 <ProductBox
@@ -253,7 +253,8 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (
                         })}
                     </div>
                 </div>
-                <div className="grid grid-cols-2 mx-5 gap-5">
+                <hr />
+                <div className="grid grid-cols-2 mx-5 mt-6 gap-5">
                     <div className="flex-1">
                         <CustomInputBox
                             label="Combo Name"

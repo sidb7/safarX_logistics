@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -26,6 +27,8 @@ export const GSTComponent = (props: ITypeProps) => {
   const [userState, setIsUserState] = useState<any>();
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem("userInfo") as any);
     setIsUserState(data);
@@ -34,12 +37,15 @@ export const GSTComponent = (props: ITypeProps) => {
   const acceptStatus = async () => {
     let name = userState?.firstName + " " + userState?.lastName;
     const payload = { entityName: name, businessType: "logistics" };
+    setLoading(true);
     const { data: responses } = await POST(GST_AGREEMENTS, payload);
     try {
       if (responses?.success) {
+        setLoading(false);
         dispatch(setAcceptTnCStatus(true));
         navigate("/onboarding/kyc-terms/service-agreement");
       } else {
+        setLoading(false);
         // toast.error(responses?.message);
         //As their is a error in api at this time routed to the service-agreement
         // navigate("/onboarding/kyc-terms/gst-agreement");
@@ -56,6 +62,7 @@ export const GSTComponent = (props: ITypeProps) => {
         <div className="flex items-center  lg:px-9 self-start my-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
+            style={{ accentColor: "black" }}
           />
           <p className="font-normal text-[12px] text-[#494949] font-Open">
             I Agree with the terms & conditions
@@ -129,7 +136,7 @@ export const GSTComponent = (props: ITypeProps) => {
                     I/We{" "}
                     <b className="uppercase">
                       {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
-                      {userState?.firstName + "" + userState?.lastName}
+                      {userState?.firstName + " " + userState?.lastName}
                     </b>{" "}
                     (Name of the service provider/business entity), do hereby
                     declare that:
@@ -206,7 +213,13 @@ export const GSTComponent = (props: ITypeProps) => {
           className="!p-0 !w-[500px] !h-[700px] overflow-x-scroll"
           overlayClassName="flex  items-center"
         >
-          {gstCommonComponent()}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            gstCommonComponent()
+          )}
         </CustomBottomModal>
       )}
     </div>

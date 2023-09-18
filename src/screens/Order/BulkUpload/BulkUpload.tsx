@@ -13,6 +13,7 @@ import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { BULK_UPLOAD } from "../../../utils/ApiUrls";
 
 interface ITypeProps {
   onClick?: any;
@@ -45,10 +46,10 @@ const BulkUpload = (props: ITypeProps) => {
     let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
-    formData.append("fileName", uuid);
+    formData.append("type", selectedOption);
 
     try {
-      const { data: response } = await POST("", formData, {
+      const { data: response } = await POST(BULK_UPLOAD, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -65,24 +66,6 @@ const BulkUpload = (props: ITypeProps) => {
     }
   };
 
-  const handleDownloadSample = async () => {
-    try {
-      const payload = { fileType: selectedOption };
-      console.log("payload", payload);
-
-      const { data: response } = await POST("", payload);
-
-      if (response?.success) {
-        toast.success(response?.message);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      console.error("Error downloading sample:", error);
-      toast.error("An error occurred during sample download.");
-    }
-  };
-
   const handleDroppedFiles = (droppedFiles: FileList) => {
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
@@ -92,27 +75,26 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const renderHeaderComponent = () => {
+    const downloadUrl =
+      "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SHIPYAARI_BULK_ORDER.csv";
+
     return (
-      <CustomButton
-        icon={whiteDownloadIcon}
-        showIcon={true}
-        text={`Download ${selectedOption} Sample`}
-        className="!p-5"
-        onClick={handleDownloadSample}
-      />
+      <a
+        href={downloadUrl}
+        download="SHIPYAARI_BULK_ORDER.csv"
+        className="flex items-center"
+      >
+        <CustomButton
+          icon={whiteDownloadIcon}
+          showIcon={true}
+          text={`Download ${selectedOption} Sample`}
+          className="!p-5"
+          onClick={() => {}}
+        />
+      </a>
     );
   };
 
-  // async function uploadFile(e: any) {
-  //   const payload = new FormData();
-  //   payload.append("file", uploadedFile);
-  //   let response: any = await POST("", payload);
-  //   // if (response?.data?.success === true) {
-  //   //   setSuccessModal(true);
-  //   // } else {
-  //   //   setFailureModal(true);
-  //   // }
-  // }
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
       <Breadcum label="Add Bulk Upload" component={renderHeaderComponent()} />
@@ -156,11 +138,11 @@ const BulkUpload = (props: ITypeProps) => {
           setUploadFile={setUploadFile}
         />
 
-        <p className="text-[16px] mt-1 font-semibold font-Open">
+        {/* <p className="text-[16px] mt-1 font-semibold font-Open">
           or Drop files here
-        </p>
+        </p> */}
         <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-          Pdf, excels files are supported
+          excels files are supported
         </p>
 
         {addButton && (

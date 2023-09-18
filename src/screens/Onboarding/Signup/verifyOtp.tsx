@@ -12,6 +12,7 @@ import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import { Spinner } from "../../../components/Spinner";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Index = () => {
 
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const [otp, setOtp] = useState({
     loginOtp: "",
@@ -59,11 +61,14 @@ const Index = () => {
         email: signUpUser.email,
         otp: otp.loginOtp,
       };
+      setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
+        setLoading(false);
         setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");
       } else {
+        setLoading(false);
         toast.error(response?.message);
       }
     } catch (error) {
@@ -212,9 +217,15 @@ const Index = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
-          {verifyOtp()}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            verifyOtp()
+          )}
         </CenterModal>
       )}
 

@@ -159,7 +159,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               {isModalOpen && (
                 <CenterModal
                   isOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
+                  onRequestClose={() => setIsModalOpen(false)}
                   className="w-3/4 h-3/4 max-h-screen overflow-auto"
                 >
                   <ServicabilityPincode
@@ -189,7 +189,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      onClick={() => navigate("/profile/settings")}
+                      onClick={() => navigate("/settings/settings")}
                     >
                       Settings
                     </button>

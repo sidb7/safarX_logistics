@@ -73,7 +73,10 @@ const Buttons = (className?: string) => {
         </span>
       </div>
       {isModalOpen && (
-        <CenterModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <CenterModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+        >
           <BulkUpload
             onClick={() => {
               setIsModalOpen(false);
@@ -222,44 +225,46 @@ const Index = () => {
   }, []);
 
   const handleTabChanges = async (index: any = 0) => {
-    const { pendingOrder, successFullOrder, statusList } =
-      await getSellerOrderByStatus(statusData[index].value);
-    const { data = [] } = successFullOrder;
-    let orderList: any = [];
-    orderList = data;
+    try {
+      const { pendingOrder, successFullOrder, statusList } =
+        await getSellerOrderByStatus(statusData[index].value);
 
-    statusList.length > 0 &&
-      statusData?.forEach((e: any) => {
-        statusList?.forEach((e1: any) => {
-          if (e.orderNumber === e1.count) return;
-          if (e.value === e1._id) {
-            e.orderNumber = e1.count.toLocaleString("en-US", {
+      if (successFullOrder && successFullOrder.data) {
+        const { data: orderList = [] } = successFullOrder;
+
+        statusList.forEach((e1: any) => {
+          const matchingStatus = statusData.find(
+            (e: any) => e.value === e1._id
+          );
+          if (matchingStatus) {
+            matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
               minimumIntegerDigits: 2,
               useGrouping: false,
             });
           }
         });
-      });
 
-    switch (tabs[index].value) {
-      case "newOrder":
-        setColumnhelper(columnHelperForNewOrder(navigate));
-        orderList = pendingOrder;
-        break;
-      case "booked":
-        setColumnhelper(columnHelperForBookedAndReadyToPicked);
-        break;
-      case "readyToPick":
-        setColumnhelper(columnHelperForBookedAndReadyToPicked);
-        break;
-      default:
-        setColumnhelper(columnHelpersForRest);
-        break;
+        let columnHelperToUpdate;
+
+        switch (tabs[index].value) {
+          case "newOrder":
+            columnHelperToUpdate = columnHelperForNewOrder(navigate);
+            break;
+          case "booked":
+          case "readyToPick":
+            columnHelperToUpdate = columnHelperForBookedAndReadyToPicked;
+            break;
+          default:
+            columnHelperToUpdate = columnHelpersForRest;
+            break;
+        }
+
+        setColumnhelper(columnHelperToUpdate);
+        setOrders(orderList);
+      }
+    } catch (error) {
+      console.error("An error occurred in handleTabChanges function:", error);
     }
-
-    console.log("orderList", orderList);
-
-    setOrders(orderList ?? []);
   };
 
   return (

@@ -98,11 +98,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [sellerBox, setSellerBox] = useState<any>([]);
   const [companyBox, setCompanyBox] = useState<any>([]);
   const [boxIndex, setBoxIndex] = useState<any>(0);
-  const [codData, setCodData] = useState<any>({
-    isCod: true,
-    collectableAmount: 0,
-    invoiceValue: 0,
-  });
+
   const [selectedBox, setSelectedBox] = useState<any>({});
   const [boxTypeModal, setBoxTypeModal] = useState<any>(false);
   const [selectedProductsOfPackage, setSelectedProductsOfPackage] =
@@ -117,12 +113,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   });
   const [showAddBox, setShowAddBox] = useState<any>(true);
   const [orderType, setOrderType] = useState<any>({});
+  const [codData, setCodData] = useState<any>({
+    isCod: orderType === "B2C",
+    collectableAmount: 0,
+    invoiceValue: 0,
+  });
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
   const isReturningUser = useSelector(
     (state: any) => state?.user.isReturningUser
   );
-
+  const isOrderTypeB2B = orderType === "B2B";
+  console.log("codData", codData);
   useEffect(() => {
     let totalInvoiceValue = 0;
     let tempArr = packages;
@@ -254,7 +256,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const setBoxAndCODInfo = async () => {
     let codDataInfo = {
       ...codData,
-      isCod: paymentMode === "cod" ? true : false,
+      isCod: orderType === "B2B" ? false : true,
     };
     let payload = {
       boxInfo: packages,
@@ -515,18 +517,20 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
             <div>
               <div className="flex py-5 ">
-                <GroupRadioButtons
-                  options={[
-                    { text: "Prepaid", value: "prepaid" },
-                    { text: "COD", value: "cod" },
-                  ]}
-                  value={paymentMode}
-                  selectedValue={setPaymentMode}
-                />
+                {!isOrderTypeB2B && (
+                  <GroupRadioButtons
+                    options={[
+                      { text: "Prepaid", value: "prepaid" },
+                      { text: "COD", value: "cod" },
+                    ]}
+                    value={paymentMode}
+                    selectedValue={setPaymentMode}
+                  />
+                )}
               </div>
 
               <div className="flex w-fit gap-x-8 py-2 pb-8">
-                {paymentMode === "cod" && (
+                {paymentMode === "cod" && !isOrderTypeB2B && (
                   <CustomInputBox
                     label={"COD Amount to Collect From Buyer"}
                     value={codData?.collectableAmount}

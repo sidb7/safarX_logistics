@@ -109,7 +109,6 @@ import AddAddress from "../screens/NewOrder/NewCatalogue/AddressBook/addAddress"
 import ProtectedRoute from "../components/ProtectedRoutes";
 
 import CatalogueAddProduct from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addProduct";
-import Overview from "../screens/Home/Overview/Overview";
 import { Transaction } from "../screens/Transaction";
 import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
@@ -122,7 +121,6 @@ import AddUser from "../screens/Profile/Settings/userManagement/addUser";
 import UpdateUser from "../screens/Profile/Settings/userManagement/updateUser";
 import UsersList from "../screens/Profile/Settings/roleManagement/usersList";
 import { Home } from "../screens/Home";
-import Orders from "../screens/Home/Orders";
 import Tracking from "../screens/NewOrder/Tracking/tracking";
 import ClientTracking from "../screens/NewOrder/Tracking/clientTracking";
 import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
@@ -324,18 +322,9 @@ const MyRoutes: React.FC = () => {
           <Route path="/" element={<CommonLayout />}>
             {/* Order Routes */}
             <Route>
-              {/* <Route
-                path="home/overview"
-                element={
-                  <ProtectedRoute>
-                    <Overview />
-                  </ProtectedRoute>
-                }
-              /> */}
-
               {/* home page i.e , overview, orders, exception, sy-performance */}
               <Route
-                path="home/overview"
+                path="dashboard/overview"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -343,7 +332,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/orders"
+                path="dashboard/orders"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -351,7 +340,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/exception"
+                path="dashboard/exception"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -359,7 +348,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="home/sy-performance"
+                path="dashboard/sy-performance"
                 element={
                   <ProtectedRoute>
                     <Home />
@@ -527,7 +516,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile/settings"
+                path="/settings/settings"
                 element={
                   <ProtectedRoute>
                     <SettingTab />
@@ -617,7 +606,31 @@ const MyRoutes: React.FC = () => {
             {/* Catalogue Routes */}
             <Route>
               <Route
-                path="/catalogues/catalogue"
+                path="/catalogues/channel-integration"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/address-book"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/product-catalogue"
+                element={
+                  <ProtectedRoute>
+                    <Catalogue />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/box-catalogue"
                 element={
                   <ProtectedRoute>
                     <Catalogue />

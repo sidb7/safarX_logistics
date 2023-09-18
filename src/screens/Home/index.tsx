@@ -16,7 +16,7 @@ import SyPerfromance from "./SyPerformance";
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
-  const [renderingComponents, setRenderingComponents] = React.useState(0);
+  const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
 
   const arrayData = [
     { index: 0, label: "Overview" },
@@ -54,11 +54,35 @@ export const Home = (props: IOverview) => {
       .toLocaleLowerCase()
       .replace(/ /g, "-");
 
-    const newUrl = `/home/${filterNewUrl}`; // Specify the new URL here
+    const newUrl = `/dashboard/${filterNewUrl}`; // Specify the new URL here
 
     window.history.pushState(null, "", newUrl);
     setRenderingComponents(id);
   };
+
+  React.useEffect(() => {
+    const GetCurrentPath = () => {
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const location = url;
+      const path = location.pathname;
+      const pathArray = path.split("/");
+      const removedFirstPath = pathArray.slice(1);
+      return removedFirstPath;
+    };
+
+    const data = GetCurrentPath() as any;
+
+    if (data[1] === "overview") {
+      setRenderingComponents(0);
+    } else if (data[1] === "orders") {
+      setRenderingComponents(1);
+    } else if (data[1] === "exception") {
+      setRenderingComponents(2);
+    } else if (data[1] === "sy-performance") {
+      setRenderingComponents(3);
+    }
+  });
 
   return (
     <div className="m-4">

@@ -27,12 +27,15 @@ import {
   tokenKey,
 } from "../../../utils/utility";
 import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
+import ForgotPassword from "./ForgotPassword";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
+
   const [showBootScreen, setShowBootScreen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({
@@ -57,7 +60,7 @@ const Index = () => {
       } else if (response?.data?.[0]?.nextStep?.kyc === false) {
         navigate("/onboarding/kyc-type");
       } else {
-        navigate("/home/overview");
+        navigate("/dashboard/overview");
       }
     } else {
       toast.error(response?.message);
@@ -80,7 +83,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/home/overview");
+      navigate("/dashboard/overview");
     } else {
       toast.error(response?.message);
     }
@@ -93,7 +96,7 @@ const Index = () => {
     (async () => {
       const response = await POST(VALIDATE_USER_TOKEN);
       if (response?.data?.success) {
-        navigate("/home/overview");
+        navigate("/dashboard/overview");
       }
     })();
   }, []);
@@ -239,6 +242,16 @@ const Index = () => {
                   Sign Up
                 </button>
               </div>
+
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  onClick={() => setForgotPasswordModal(true)}
+                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                >
+                  Forgot Password
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -261,7 +274,7 @@ const Index = () => {
           {isLgScreen && isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
+              onRequestClose={() => setIsModalOpen(false)}
             >
               {loginComponent()}
             </CenterModal>
@@ -269,6 +282,15 @@ const Index = () => {
 
           {!isLgScreen && loginComponent()}
         </>
+      )}
+
+      {isLgScreen && forgotPasswordModal && (
+        <CenterModal
+          isOpen={forgotPasswordModal}
+          onRequestClose={() => setForgotPasswordModal(false)}
+        >
+          <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
+        </CenterModal>
       )}
     </>
   );

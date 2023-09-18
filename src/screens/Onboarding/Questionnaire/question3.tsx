@@ -7,6 +7,7 @@ import WelcomeHeader from "./welcomeHeader";
 import { ResponsiveState } from "../../../utils/responsiveState";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
+import { toast } from "react-toastify";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
@@ -49,6 +50,20 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   }
 
   const question = questionsData[2]?.question;
+
+  const nextHandler = () => {
+    if (questionsData && questionsData?.length > 0) {
+      const filterQuestion = questionsData[2]?.options.filter(
+        (singleData: any) => singleData.isChecked === true
+      );
+      if (filterQuestion?.length === 0) {
+        return toast.error("Please Select Atleast One Option");
+      }
+    }
+    navigate("/onboarding/questionnaire/question4", {
+      state: { questionsData },
+    });
+  };
 
   const question3 = () => {
     return (
@@ -95,14 +110,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                   })
                 }
               />
-              <CustomButton
-                text="NEXT"
-                onClick={() =>
-                  navigate("/onboarding/questionnaire/question4", {
-                    state: { questionsData },
-                  })
-                }
-              />
+              <CustomButton text="NEXT" onClick={() => nextHandler()} />
             </div>
           </div>
         </div>
@@ -117,7 +125,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
           shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[688px]"
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
           {question3()}
         </CenterModal>

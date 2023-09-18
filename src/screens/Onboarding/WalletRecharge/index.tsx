@@ -157,7 +157,7 @@ const OnBoundingWalletRecharge = () => {
                     checkboxClassName="text-black"
                     style={{ accentColor: "black" }}
                   />
-                  <p className="ml-2 mt-[2px] text-[16px]font-Open font-normal leading-[22px]">
+                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
                     Get Discounts/Offers on Recharge
                   </p>
                 </div>
@@ -203,7 +203,7 @@ const OnBoundingWalletRecharge = () => {
 
             <div
               className="flex justify-center mt-4 cursor-pointer"
-              onClick={() => navigate("/home/overview")}
+              onClick={() => navigate("/dashboard/overview")}
             >
               <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                 SKIP FOR NOW{" "}
@@ -329,7 +329,7 @@ const OnBoundingWalletRecharge = () => {
       setIsLoading(false);
       toast.success(datas?.data?.message);
       clearInterval(myInterval);
-      navigate("/home/overview");
+      navigate("/dashboard/overview");
     } else if (
       datas?.data?.message ===
       "Looks like the payment is not complete. Please wait while we confirm the status with your bank."
@@ -475,12 +475,12 @@ const OnBoundingWalletRecharge = () => {
         <div className="mx-48 mb-2">
           <CustomButton
             text={"NEXT"}
-            onClick={() => navigate("/home/overview")}
+            onClick={() => navigate("/dashboard/overview")}
           />
         </div>
         <div
           className="flex justify-center  cursor-pointer"
-          onClick={() => navigate("/home/overview")}
+          onClick={() => navigate("/dashboard/overview")}
         >
           <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF]">
             SKIP FOR NOW{" "}
@@ -510,7 +510,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
           className="!h-[490px] !w-[688px]"
         >
           {walletRecharge()}
@@ -521,7 +521,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isRechargeModalOpen}
-          onClose={() => setIsRechargeModalOpen(false)}
+          // onRequestClose={() => setIsRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"
         >
           {walletDetails()}
@@ -532,7 +532,7 @@ const OnBoundingWalletRecharge = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={walletRechargeModalOpen}
-          onClose={() => setWalletRechargeModalOpen(false)}
+          // onRequestClose={() => setWalletRechargeModalOpen(false)}
           className="!h-[37.265rem] !w-[31.25rem]"
         >
           {isLoading ? (

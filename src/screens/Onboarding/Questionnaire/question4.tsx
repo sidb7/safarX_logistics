@@ -68,6 +68,18 @@ export const QuestionComponent4: React.FunctionComponent = () => {
     }
   }
 
+  const nextHandler = () => {
+    if (questionsData && questionsData?.length > 0) {
+      const filterQuestion = questionsData[3]?.options.filter(
+        (singleData: any) => singleData.isChecked === true
+      );
+      if (filterQuestion?.length === 0) {
+        return toast.error("Please Select Atleast One Option");
+      }
+    }
+    submitAnswer(payload);
+  };
+
   const question4 = () => {
     return (
       <div className="relative h-full w-full">
@@ -115,7 +127,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                   })
                 }
               />
-              <CustomButton text="NEXT" onClick={() => submitAnswer(payload)} />
+              <CustomButton text="NEXT" onClick={() => nextHandler()} />
             </div>
           </div>
         </div>
@@ -130,7 +142,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
           shouldCloseOnOverlayClick={false}
           className="h-[474px] w-[700px]"
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
           {question4()}
         </CenterModal>

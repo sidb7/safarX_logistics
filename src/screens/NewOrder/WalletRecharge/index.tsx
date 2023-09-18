@@ -120,7 +120,7 @@ const WalletRecharge = () => {
       {isLgScreen && isModalOpen && (
         <CenterModal
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          onRequestClose={() => setIsModalOpen(false)}
           className="h-[490px] w-[688px]"
         >
           {walletRecharge()}

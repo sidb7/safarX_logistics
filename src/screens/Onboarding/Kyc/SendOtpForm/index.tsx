@@ -26,6 +26,7 @@ import { aadharRegex, panRegex, gstRegex } from "../../../../utils/regexCheck";
 import { setOnOtpClientId } from "../../../../redux/reducers/onboarding";
 import { toast } from "react-toastify";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -35,6 +36,7 @@ const Index = (props: ITypeProps) => {
   // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
   // const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/gm;
   // const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/gm;
+  const [loading, setLoading] = useState(false);
 
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
@@ -82,9 +84,11 @@ const Index = (props: ITypeProps) => {
   const verifyAadhar = async (value: any) => {
     try {
       const payload = { adhaar_no: value };
+      setLoading(true);
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
 
       if (response?.success) {
+        setLoading(false);
         toast.success(response?.message);
         dispatch(setOnOtpClientId(response.data.data.client_id));
         dispatch(
@@ -93,11 +97,13 @@ const Index = (props: ITypeProps) => {
           })
         );
         if (businessType === "individual") {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "aadhaar-verification" },
           });
         }
       } else {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             aadharVerifyNavigate: false,
@@ -113,24 +119,29 @@ const Index = (props: ITypeProps) => {
 
   const verifyGST = async (value: any) => {
     try {
+      setLoading(true);
       const payload = { gstIn: value };
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             gstVerifyNavigate: true,
           })
         );
         if (businessType === "business" || businessType === "company") {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });
         } else {
+          setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
         dispatch(setOnOtpClientId(response.data[0].data.client_id));
       } else {
+        setLoading(false);
         dispatch(
           setNavigateOnOtpFormVerify({
             gstVerifyNavigate: false,
@@ -374,7 +385,13 @@ const Index = (props: ITypeProps) => {
           className="!p-0 !w-[500px] !h-[700px]"
           overlayClassName="!flex   items-center"
         >
-          {sendOtpFormComponent()}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            sendOtpFormComponent()
+          )}
         </CustomBottomModal>
       )}
     </div>

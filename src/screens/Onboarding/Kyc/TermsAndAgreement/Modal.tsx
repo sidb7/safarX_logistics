@@ -10,6 +10,7 @@ interface ITypesProps {}
 
 const Modal = (props: ITypesProps) => {
   const [showModal, setShowModal] = useState(true);
+
   const businessType = useSelector(
     (state: any) => state?.onboarding.businessType
   );
@@ -21,9 +22,9 @@ const Modal = (props: ITypesProps) => {
         <PopUpModal
           isOpen={showModal}
           contentLabel="hello"
-          onRequestClose={() => {
-            setShowModal(false);
-          }}
+          // onRequestClose={() => {
+          //   setShowModal(false);
+          // }}
           overlayClassName=" px-4 flex items-center "
           className="!rounded !border-none w-[320px] h-[298px] lg:w-[500px]"
         >

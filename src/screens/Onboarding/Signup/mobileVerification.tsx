@@ -115,7 +115,7 @@ const Index = () => {
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          // onRequestClose={() => setIsModalOpen(false)}
         >
           {mobileVerification()}
         </CenterModal>
