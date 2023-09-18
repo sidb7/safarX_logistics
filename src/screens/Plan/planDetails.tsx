@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import Checkbox from "../../components/CheckBox";
@@ -661,7 +661,7 @@ const PlanDetails = (props: ITypeProps) => {
     <>
       <div className="mr-4">
         <div className="mb-5">
-          <Breadcum label="Plans" />
+          <Breadcrum label="Plans" />
         </div>
         {/* Plan Upgradation */}
         <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">

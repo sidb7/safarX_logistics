@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InfoCircle from "../../../../assets/info-circle.svg";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
 import { POST } from "../../../../utils/webService";
@@ -125,7 +125,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="Add Address" />
+      <Breadcrum label="Add Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <div>

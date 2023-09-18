@@ -24,7 +24,7 @@ import {
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 
 interface IProductFilledProps {}
@@ -222,7 +222,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   return (
     <>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

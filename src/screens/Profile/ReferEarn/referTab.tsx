@@ -3,7 +3,7 @@ import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
 
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL } from "../../../utils/ApiUrls";
 import { useEffect, useState } from "react";
@@ -22,7 +22,7 @@ export const ReferTab = () => {
   }, []);
   return (
     <div className="h-full">
-      <Breadcum label="Refer and Earn" />
+      <Breadcrum label="Refer and Earn" />
       <div className="mt-[77px]">
         <div className="flex justify-center items-center">
           <img

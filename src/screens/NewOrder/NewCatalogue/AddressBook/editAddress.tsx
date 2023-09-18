@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
 import { useLocation } from "react-router-dom";
@@ -79,7 +79,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   };
   return (
     <div className="h-full">
-      <Breadcum label="Edit Address" />
+      <Breadcrum label="Edit Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <CustomInputBox

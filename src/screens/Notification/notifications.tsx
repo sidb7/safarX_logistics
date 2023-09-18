@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import { SearchBox } from "../../components/SearchBox";
 import NotificationCard from "./notificationCard";
 
@@ -90,7 +90,7 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
 
   return (
     <div>
-      <Breadcum label="Notifications" />
+      <Breadcrum label="Notifications" />
 
       {filterComponent()}
       <div className="flex flex-col gap-y-4 mt-7 mx-4">

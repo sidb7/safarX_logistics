@@ -54,8 +54,8 @@ export const ProfileCard = (props: ProfileCardProps) => {
   return (
     <div className="flex flex-col">
       <div className="md:grid md:grid-cols-2">
-        <div className="grid grid-cols-3 border-[1px] border-[#E8E8E8] rounded-md mt-4">
-          <div className="flex flex-col col-span-1 items-center py-4 ">
+        <div className="grid grid-cols-6 border-[1px] border-[#E8E8E8] rounded-lg">
+          <div className="flex flex-col col-span-1 items-start py-2 pr-4 pl-3 ">
             <div
               style={{
                 width: "82px",
@@ -77,15 +77,15 @@ export const ProfileCard = (props: ProfileCardProps) => {
                     : ProfileIcon
                 }`}
                 alt="Profile"
-                className="w-[82px] "
+                className="w-[82px]"
               />
             </div>
-            <span className="text-[12px] text-[#1C1C1C]">
+            <span className="text-[14px] font-Lato font-normal leading-5 capitalize text-[#1C1C1C]">
               Seller ID: {sellerId}
             </span>
           </div>
-          <div className="col-span-2 whitespace-nowrap flex flex-col space-y-1 text-[14px] font-normal py-4">
-            <span className="flex justify-between">
+          <div className="col-span-5  whitespace-nowrap flex flex-col space-y-2 py-2 pr-4 pl-3">
+            <span className="flex justify-between font-Lato font-semibold leading-7 capitalize">
               {`${firstName} ${lastName}`}
               <img
                 src={BlackEditIcon}
@@ -94,16 +94,16 @@ export const ProfileCard = (props: ProfileCardProps) => {
                 onClick={() => navigate("/profile/edit-profile")}
               />
             </span>
-            <span className="flex">
-              <img src={EmailIcon} alt="Email" className="w-[16px] mr-1" />
+            <span className="flex font-Lato text-[16px] font-normal leading-6">
+              <img src={EmailIcon} alt="Email" className="w-[16px] mr-2" />
               {email}
             </span>
-            <span className="flex">
-              <img src={PhoneIcon} alt="Phone" className="w-[16px] mr-1" />
+            <span className="flex font-Lato text-[16px] font-normal leading-6">
+              <img src={PhoneIcon} alt="Phone" className="w-[16px] mr-2" />
               {`+91 ${contactNumber}`}
             </span>
-            <span className="flex">
-              <img src={WebsiteIcon} alt="Website" className="w-[16px] mr-1" />
+            <span className="flex font-Lato text-[16px] font-normal leading-6 capitalize">
+              <img src={WebsiteIcon} alt="Website" className="w-[16px] mr-2" />
               {companyDisplayName}
             </span>
           </div>

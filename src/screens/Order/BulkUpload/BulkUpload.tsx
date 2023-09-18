@@ -8,7 +8,7 @@ import Checkbox from "../../../components/CheckBox";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
 import whiteDownloadIcon from "../../../assets/whiteDownloadIcon.svg";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
@@ -129,7 +129,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
-      <Breadcum label="Add Bulk Upload" component={renderHeaderComponent()} />
+      <Breadcrum label="Add Bulk Upload" component={renderHeaderComponent()} />
 
       <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
         <div className="flex flex-row  items-center   ">

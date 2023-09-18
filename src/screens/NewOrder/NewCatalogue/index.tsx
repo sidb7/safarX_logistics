@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
@@ -169,7 +169,7 @@ const Catalogue = () => {
 
   return (
     <>
-      <Breadcum
+      <Breadcrum
         label="Catalogue"
         component={renderHeaderComponent(setShowCombo)}
       />

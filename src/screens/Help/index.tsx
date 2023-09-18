@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import CustomButton from "../../components/Button";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import FAQ from "./FAQs";
@@ -95,7 +95,7 @@ const HelpScreen = () => {
 
   return (
     <>
-      <Breadcum label="Help" component={renderHeaderComponent()} />
+      <Breadcrum label="Help" component={renderHeaderComponent()} />
       <div className="lg:mb-24">
         <div className="mt-4 px-5 ">
           <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
