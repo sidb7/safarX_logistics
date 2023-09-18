@@ -1,7 +1,7 @@
 import { useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
@@ -32,7 +32,7 @@ export const ChangePassword = () => {
   console.log("password", password);
   return (
     <div className="h-full">
-      <Breadcum label="Change Password" />
+      <Breadcrum label="Change Password" />
       <div className="flex flex-col mx-4 mt-4 gap-y-4">
         <CustomInputBox
           label="Old Password"

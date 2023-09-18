@@ -15,7 +15,7 @@ import CustomButton from "../../../components/Button";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 
 interface ITypeProps {
   onClick?: any;

@@ -6,7 +6,7 @@ import PassModal from "./PassModal";
 import ProfileModal from "./ProfileModal";
 import DeleteModal from "../../../components/CustomModal/DeleteModal";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { DELETE_SELLER } from "../../../utils/ApiUrls";
 
 export const SettingTab = () => {
@@ -35,7 +35,7 @@ export const SettingTab = () => {
   return (
     <>
       <div className="h-full">
-        <Breadcum label="Settings" />
+        <Breadcrum label="Settings" />
         <div className="mx-4 mt-2">
           <div
             className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 cursor-pointer`}

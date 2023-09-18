@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
 import { v4 as uuidv4 } from "uuid";
@@ -250,7 +250,7 @@ const PickupLocation = () => {
 
   return (
     <div className="w-full">
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

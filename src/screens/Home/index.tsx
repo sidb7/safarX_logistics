@@ -7,7 +7,7 @@ import GreenEllipse from "../../../assets/greenEllipse.svg";
 import RedEllipse from "../../../assets/redEllipse.svg";
 import Box from "../../../assets/Delivery Icon.svg";
 import InvoiceIcon from "../../../assets/invoices.svg";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import CustomDropDown from "../../components/DropDown";
 import Orders from "./Orders";
 import Exception from "./Exception";
@@ -87,7 +87,7 @@ export const Home = (props: IOverview) => {
   return (
     <div className="m-4">
       <div>
-        <Breadcum label="Home" />
+        <Breadcrum label="Home" />
       </div>
       <div className="flex justify-between">
         {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}

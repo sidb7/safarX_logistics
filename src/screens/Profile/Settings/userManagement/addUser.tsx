@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../../components/Button";
@@ -110,7 +110,7 @@ function AddUser() {
 
   return (
     <div>
-      <Breadcum label="ADD USER" component={Buttons("", addUserHandler)} />
+      <Breadcrum label="ADD USER" component={Buttons("", addUserHandler)} />
       <div className="grid grid-cols-3 mx-5 mt-5 gap-6">
         <div>
           <CustomInputBox
