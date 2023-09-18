@@ -123,16 +123,21 @@ const Summary = (props: Props) => {
       });
 
       promiseSetOrderId
-        .then(function (successMessage: any) {
+        .then((orderIdResponse: any) => {
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
-            .then(function (successResponse: any) {
-              const requiredBalance =
-                successResponse?.data?.data[0]?.requiredBalance;
-              toast.error(successResponse?.data?.message);
-              navigate("/orders/add-order/payment", {
-                state: { requiredBalance: requiredBalance },
-              });
+            .then((orderPlaceResponse: any) => {
+              if (orderPlaceResponse?.success) {
+                toast.success(orderPlaceResponse?.data?.message);
+                navigate("/orders/view-orders");
+              } else {
+                const requiredBalance =
+                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+
+                navigate("/orders/add-order/payment", {
+                  state: { requiredBalance: requiredBalance },
+                });
+              }
             })
             .catch(function (errorResponse) {
               toast.error(errorResponse?.data?.message);
