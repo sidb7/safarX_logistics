@@ -76,17 +76,41 @@ const BulkUpload = (props: ITypeProps) => {
     }
   };
 
-  const handleDroppedFiles = (droppedFiles: FileList) => {
+  const handleDroppedFiles = (droppedFiles: File[]) => {
+    console.log("droppedFiles", droppedFiles);
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
-      setFile(selectedFile);
+
+      console.log("selectedFile", selectedFile);
+      setUploadFile(selectedFile);
+      console.log("uploadedFIle", uploadFile);
       setFileName(selectedFile.name);
+      setAddButton(true);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer.items) {
+      const files = Array.from(e.dataTransfer.items)
+        .map((item: DataTransferItem) =>
+          item.kind === "file" ? item.getAsFile() : null
+        )
+        .filter((file): file is File => file !== null);
+
+      handleDroppedFiles(files);
     }
   };
 
   const renderHeaderComponent = () => {
     const downloadUrl =
       "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SHIPYAARI_BULK_ORDER.csv";
+
+    // const downloadUrlB2B = `${baseUrl}B2B_SAMPLE.csv`;
+    // const downloadUrlB2C = `${baseUrl}B2C_SAMPLE.csv`;
+
+    // const downloadUrl =
+    //   selectedOption === "B2B" ? downloadUrlB2B : downloadUrlB2C;
 
     return (
       <a
@@ -156,9 +180,18 @@ const BulkUpload = (props: ITypeProps) => {
           {/* <p className="text-[16px] mt-1 font-semibold font-Open">
           or Drop files here  ; 
         </p> */}
-          <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-            excels files are supported
-          </p>
+          <div
+            className="flex flex-col justify-center items-center mt-5"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleDrop}
+          >
+            <p className="text-[16px] mt-1 font-semibold font-Open">
+              or Drop files here
+            </p>
+            <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
+              excels files are supported
+            </p>
+          </div>
 
           {addButton && (
             <>
