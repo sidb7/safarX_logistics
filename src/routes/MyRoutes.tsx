@@ -699,7 +699,10 @@ const MyRoutes: React.FC = () => {
               />
             </Route>
             <Route>
-              <Route path="/notifications" element={<Notifications />} />
+              <Route
+                path="notifications/notifications"
+                element={<Notifications />}
+              />
             </Route>
 
             {/* Help Screen Routes */}
