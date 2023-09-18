@@ -7,16 +7,16 @@ import { getRoles } from "../redux/reducers/role";
 import { useDispatch } from "react-redux";
 // import BottomBar from "./~components/BottomBar";
 
-interface ICommonLayoutProps { }
+interface ICommonLayoutProps {}
 
 const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
-  const [openMobileSideBar, setMobileSideBar]: any = useState(false);
+  const [openMobileSideBar, setMobileSideBar] = useState<boolean>(false);
   const { isLgScreen } = ResponsiveState();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getRoles());
-  }, [])
+  }, []);
 
   return (
     <>
