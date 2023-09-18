@@ -1,7 +1,7 @@
 import React, { useState, useEffect, SetStateAction } from "react";
 
 import { toast } from "react-toastify";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import WeightFreezeBanner from "./WeightFreezeBanner";
 import BottomLayout from "../../components/Layout/bottomLayout";
 import WeightFreezeTable from "./WeightFreezetable";
@@ -94,7 +94,10 @@ const WeightFreeze: React.FunctionComponent = () => {
   };
   return (
     <div className="m-4">
-      <Breadcum label="Weight Management" component={renderHeaderComponent()} />
+      <Breadcrum
+        label="Weight Management"
+        component={renderHeaderComponent()}
+      />
       <div className="m-4">
         <div className="flex justify-between !mt-4 gap-4 mb-10">
           {disputeArray?.map((order: any, i: number) => (

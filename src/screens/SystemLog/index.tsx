@@ -1,5 +1,5 @@
 import React from "react";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import {
@@ -181,7 +181,7 @@ const SystemLog = () => {
   return (
     <>
       <div>
-        <Breadcum label="System Log" />
+        <Breadcrum label="System Log" />
       </div>
       <div className="mx-4">
         <CustomTable data={systemLogData} columns={systemLogColumns} />

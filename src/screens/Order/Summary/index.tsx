@@ -7,7 +7,7 @@ import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 const steps = [
   {
@@ -52,7 +52,7 @@ type Props = {};
 const Summary = (props: Props) => {
   return (
     <div>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

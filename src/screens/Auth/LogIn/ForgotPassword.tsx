@@ -17,7 +17,7 @@ import CustomButton from "../../../components/Button";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import "../../../styles/signupPages.css";

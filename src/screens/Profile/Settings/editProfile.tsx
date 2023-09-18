@@ -2,7 +2,7 @@ import CustomInputBox from "../../../components/Input";
 import { useEffect, useState } from "react";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -47,7 +47,7 @@ export const EditProfile = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="Edit Profile" />
+      <Breadcrum label="Edit Profile" />
       <div className=" grid grid-cols-1 mx-4 mt-4 gap-y-4">
         <div className="flex flex-col justify-center items-center mb-4">
           <div
