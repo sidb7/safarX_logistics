@@ -145,7 +145,7 @@ const BulkUpload = (props: ITypeProps) => {
           <Spinner />
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center mt-[150px]">
+        <div className="flex flex-col justify-center items-center mt-[155px]">
           <CustomBulkOrderUploadButton
             className="!mt-[5rem]"
             setDisabled={setDisabled}
@@ -154,7 +154,7 @@ const BulkUpload = (props: ITypeProps) => {
           />
 
           {/* <p className="text-[16px] mt-1 font-semibold font-Open">
-          or Drop files here  const [isLoading, setIsLoading] = useState(false); 
+          or Drop files here  ; 
         </p> */}
           <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
             excels files are supported
