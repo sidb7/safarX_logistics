@@ -25,10 +25,10 @@ import {
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
 
-interface IProductFilledProps { }
+interface IProductFilledProps {}
 
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
@@ -53,11 +53,12 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   };
 
   const [productPayload, setProductPayload]: any = useState([]);
-  const [productInputState, setProductInputState]: any = useState([{ ...initialUserData }]);
+  const [productInputState, setProductInputState]: any = useState([
+    { ...initialUserData },
+  ]);
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [showCombo, setShowCombo] = useState<any>(false);
   const [divisor, setDivisor] = useState<any>(5000);
-
 
   //adding all products info
   const addProductInfo = async () => {
@@ -72,11 +73,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     }
   };
 
-
   const AddProductInfoData = () => {
     setProductInputState([...productInputState, initialUserData]);
   };
-
 
   const deleteProduct = (index: number) => {
     let tempArr = productInputState;
@@ -168,7 +167,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   return (
     <>
-      <Breadcum label="Add New Product" />
+      <Breadcrum label="Add New Product" />
       {/* <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div> */}
@@ -320,12 +319,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         onChange={(e: any) => uploadedInputFile(e, index)}
                       />
                     </div>
-
                   </div>
                 </div>
-                <>
-
-                </>
+                <></>
               </>
             );
           })}
@@ -333,9 +329,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         {/* {productInputState.length - 1 === index && ( */}
         <>
           <div className="text-gray-400	text-xs	mt-3 lg:hidden">
-            <p>
-              Volumetric weight includes dimensions of the product
-            </p>
+            <p>Volumetric weight includes dimensions of the product</p>
           </div>
 
           <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
@@ -361,195 +355,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
 export default AddProduct;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // import React, { useState, useRef } from "react";
 // // import BackArrow from "../../../../assets/Catalogue/backBTN.svg";
 // import AddOrder from "../../../../assets/Catalogue/add_order.svg";
@@ -563,7 +368,7 @@ export default AddProduct;
 // import CustomDropDown from "../../../../components/DropDown";
 // import FileUploadWithText from "../../../../components/FileUploadWithText/fileUploadWithText";
 // import BottomLayout from "../../../../components/Layout/bottomLayout";
-// import { Breadcum } from "../../../../components/Layout/breadcrum";
+// import { Breadcrum } from "../../../../components/Layout/breadcrum";
 // // import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 // import { POST } from "../../../../utils/webService";
 // import { POST_ADD_PRODUCT } from "../../../../utils/ApiUrls";
@@ -623,7 +428,7 @@ export default AddProduct;
 //   };
 //   return (
 //     <div className="h-full">
-//       <Breadcum
+//       <Breadcrum
 //         label="Add Product amit"
 //         component={
 //           <div className="flex">

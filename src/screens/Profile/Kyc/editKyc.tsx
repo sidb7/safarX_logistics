@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import { CustomUploadInput } from "../../../components/UploadInput/customUploadInput";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
@@ -55,7 +55,7 @@ export const EditProfileKyc = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="KYC Details" />
+      <Breadcrum label="KYC Details" />
       <div className="mx-4 mt-2 overflow-y-auto h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:h-auto">
         <CustomInputBox
           containerStyle={"self-end mt-2"}

@@ -8,7 +8,7 @@ import {
   POST_PLACE_ORDER,
 } from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
@@ -163,7 +163,7 @@ const Summary = (props: Props) => {
 
   return (
     <div>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

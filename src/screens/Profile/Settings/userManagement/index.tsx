@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CustomTable } from "../../../../components/Table";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import { Navigate, useNavigate } from "react-router-dom";
 import CustomButton from "../../../../components/Button";
 import { SearchBox } from "../../../../components/SearchBox";
@@ -229,7 +229,7 @@ function UserManagement() {
 
   return (
     <div>
-      <Breadcum label="User Management" component={Buttons("", usersData)} />
+      <Breadcrum label="User Management" component={Buttons("", usersData)} />
       <div className=" my-3 mx-6">
         <div className=" flex justify-end">
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">

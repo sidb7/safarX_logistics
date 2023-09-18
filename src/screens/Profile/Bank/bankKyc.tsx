@@ -5,7 +5,7 @@ import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 
 const options = [
   { value: "Saving", label: "Saving" },
@@ -43,7 +43,7 @@ export const EditProfileBank = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="Bank Details" />
+      <Breadcrum label="Bank Details" />
 
       <div className="mx-4 mt-4 overflow-y-auto h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:h-auto gap-4">
         <CustomInputBox

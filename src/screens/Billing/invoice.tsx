@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import { ScrollNav } from "../../components/ScrollNav";
 import { SearchBox } from "../../components/SearchBox";
 import PaginationComponent from "../../components/Pagination";
@@ -42,7 +42,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   return (
     <>
       <div>
-        <Breadcum label="Billing" />
+        <Breadcrum label="Billing" />
         <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
           <div>
             <ScrollNav
