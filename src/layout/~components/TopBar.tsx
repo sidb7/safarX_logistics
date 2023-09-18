@@ -231,7 +231,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <div className="grid grid-cols-4 gap-6 overflow-hidden mt-4">
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/wallet/recharge-wallet")}
+                        onClick={() => navigate("/wallet/view-wallet")}
                       >
                         <img
                           src={WalletIcon}
@@ -249,7 +249,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </div>
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/wallet/recharge-wallet")}
+                        onClick={() => navigate("/wallet/view-wallet")}
                       >
                         <img
                           src={YaariIcon}
