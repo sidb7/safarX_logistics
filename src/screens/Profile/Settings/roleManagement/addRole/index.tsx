@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../../../components/Button";
-import { Breadcum } from "../../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../../components/Input";
 import { SearchBox } from "../../../../../components/SearchBox";
 import ReusableAccordion from "../../../../../components/CustomAccordian/reusableAccordion";
@@ -531,10 +531,10 @@ function AddRole() {
   return (
     <div>
       <div>
-          <Breadcum
-            label="Add Role"
-            component={Buttons("", createRoleApiCall, disabled)}
-          />
+        <Breadcrum
+          label="Add Role"
+          component={Buttons("", createRoleApiCall, disabled)}
+        />
         <div className="mx-5 mt-4">
           <div className=" mx-5 flex justify-between items-center">
             <div className="w-[300px]">

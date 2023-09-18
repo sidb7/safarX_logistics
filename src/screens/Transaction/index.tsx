@@ -15,7 +15,7 @@ import { cashbackDetailsColumns } from "./history/cashbackHistory";
 import { POST } from "../../utils/webService";
 import { GET_WALLET_TRANSACTION } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 
 const arrayData = [
@@ -119,7 +119,7 @@ export const Transaction = () => {
       ) : (
         <>
           <div>
-            <Breadcum label="Transaction History" />
+            <Breadcrum label="Transaction History" />
           </div>
           <div className="flex flex-col">
             <div className="mx-4">

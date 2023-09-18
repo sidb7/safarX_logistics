@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
 import { useNavigate, useLocation } from "react-router-dom";
 import CustomButton from "../../../../components/Button";
@@ -104,7 +104,7 @@ function UpdateUser() {
 
   return (
     <div>
-      <Breadcum
+      <Breadcrum
         label="UPDATE USER"
         component={Buttons("", updateUserHandler)}
       />

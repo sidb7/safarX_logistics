@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import BackArrowIcon from "../../assets/backArrow.svg";
 import { ReactElement } from "react";
-interface IBreadcumProps {
+interface IBreadcrumProps {
   label: string;
   component?: ReactElement;
 }
 
-export const Breadcum = ({ label, component }: IBreadcumProps) => {
+export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
   const navigate = useNavigate();
 
   const GetCurrentPath = () => {
@@ -39,7 +39,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
             className={`flex items-center gap-x-2 cursor-pointer`}
             onClick={() => navigate("/")}
           >
-            <p className="!mb-0 hover:underline text-base  text-[#777777]">
+            <p className="!mb-0 hover:underline text-sm font-Open font-normal text-[#1C1C1C] leading-5">
               Home
             </p>
             <div>
@@ -64,14 +64,16 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
                       : el === "manage-services"
                       ? "cursor-not-allowed"
                       : "hover:underline cursor-pointer "
-                  } !mb-0  text-base  text-[#777777]`}
+                  } !mb-0 text-base text-[#777777] `}
                   onClick={() => {
                     handleClick(index, el);
                   }}
                 >
                   <div
                     className={`${
-                      arr.length - 1 === index ? "text-[black] " : ""
+                      arr.length - 1 === index
+                        ? "text-sm font-Open font-semibold text-[#1C1C1C] leading-[18px] "
+                        : ""
                     }`}
                   >
                     {el.charAt(0).toUpperCase() + el.slice(1)}
@@ -87,7 +89,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
           })}
         </div>
         <div className="flex justify-between !h-10 ">
-          <div className="inline-flex space-x-2 items-center justify-start ">
+          <div className="inline-flex space-x-1 items-center justify-start ">
             <img
               src={BackArrowIcon}
               alt=""
@@ -95,7 +97,7 @@ export const Breadcum = ({ label, component }: IBreadcumProps) => {
               onClick={() => navigate(-1)}
             />
 
-            <p className="pl-2 text-lg font-bold text-center  text-[#1C1C1C] lg:text-[28px] lg:font-Lato lg:font-semibold lg:leading-9">
+            <p className="pl-2 text-lg font-bold text-center  text-[#1C1C1C] lg:text-[28px] lg:font-Lato lg:font-semibold lg:leading-9 capitalize">
               {label}
             </p>
           </div>

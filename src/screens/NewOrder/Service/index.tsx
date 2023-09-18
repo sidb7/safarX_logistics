@@ -7,7 +7,7 @@ import FilterBy from "./FilterBy";
 // import { RecommendedServiceData } from "../../../utils/dummyData";
 // import { FilterServiceData } from "../../../utils/dummyData";
 import Stepper from "../../../components/Stepper";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import "../../../styles/radioButtonForServiceCard.css";
 import { POST } from "../../../utils/webService";
@@ -336,7 +336,7 @@ const Index: React.FC = () => {
   ];
   return (
     <div className="w-full ">
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
@@ -349,7 +349,7 @@ const Index: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed bottom-0 right-0 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (

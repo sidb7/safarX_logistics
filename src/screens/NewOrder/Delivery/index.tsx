@@ -53,7 +53,7 @@ import {
 } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Spinner } from "../../../components/Spinner";
 import CustomInputWithDropDown from "../../../components/LandmarkDropdown/LandmarkDropdown";
@@ -691,7 +691,7 @@ const Index = () => {
 
   return (
     <div>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

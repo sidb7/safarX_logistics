@@ -8,6 +8,7 @@ import { ProfileSetting } from "./Settings/setting";
 import { POST } from "../../utils/webService";
 import { GET_PROFILE_URL } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 
 export const Profile = () => {
   const [profileData, setProfileData]: any = useState([]);
@@ -23,6 +24,9 @@ export const Profile = () => {
   }, []);
   return (
     <div className="mx-4">
+      <div className="">
+        <Breadcrum label="Profile" />
+      </div>
       <ProfileCard ProfileDetails={profileData} />
       <ProfileKycCard KycDetails={profileData?.kycDetails} />
       <ProfileBankCard BankDetails={profileData?.bankDetails} />

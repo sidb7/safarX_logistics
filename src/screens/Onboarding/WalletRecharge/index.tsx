@@ -148,7 +148,7 @@ const OnBoundingWalletRecharge = () => {
           <div className="lg:grid">
             <div className="mx-5 mt-24 rounded-lg border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
               <div className="lg:space-y-4">
-                <h1 className="ml-2 font-Lato font-semibold text-[20px] leading-[26px]">
+                <h1 className="ml-2 font-Lato font-semibold text-[20px] text-[#1C1C1C] leading-[26px]">
                   Benefits of shipyaari wallet
                 </h1>
                 <div className="flex mt-[26px]">
@@ -167,7 +167,7 @@ const OnBoundingWalletRecharge = () => {
                     checkboxClassName="text-black"
                     style={{ accentColor: "black" }}
                   />
-                  <p className="ml-2 mt-[2px] text-[16px]">
+                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
                     Faster order processing
                   </p>
                 </div>
@@ -177,7 +177,7 @@ const OnBoundingWalletRecharge = () => {
                     checkboxClassName="text-black"
                     style={{ accentColor: "black" }}
                   />
-                  <p className="ml-2 mt-[2px] text-[16px]">
+                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
                     Instant Payment Processing
                   </p>
                 </div>
@@ -187,7 +187,7 @@ const OnBoundingWalletRecharge = () => {
                     checkboxClassName="text-black"
                     style={{ accentColor: "black" }}
                   />
-                  <p className="ml-2 mt-[2px] text-[16px]">
+                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
                     Simplified Accounting
                   </p>
                 </div>
@@ -236,7 +236,7 @@ const OnBoundingWalletRecharge = () => {
           <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
             Welcome to Shipyaari
           </h1>
-          <p className="mt-3 text-[16px] font-light">
+          <p className="mt-3 text-[16px] font-light leading-[22px] font-Open">
             Please fill your bank details
           </p>
         </div>
