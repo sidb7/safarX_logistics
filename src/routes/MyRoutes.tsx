@@ -707,7 +707,7 @@ const MyRoutes: React.FC = () => {
 
             {/* Help Screen Routes */}
 
-            <Route path="/help" element={<HelpScreen />} />
+            <Route path="/help/faqs" element={<HelpScreen />} />
 
             <Route path="/system-log" element={<SystemLog />} />
 
