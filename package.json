@@ -45,6 +45,7 @@
     "react-tooltip": "^5.18.0",
     "recharts": "^2.8.0",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.7.2",
     "swiper": "^10.0.3",
     "typescript": "4.9.5",
     "uuid": "^9.0.0",
