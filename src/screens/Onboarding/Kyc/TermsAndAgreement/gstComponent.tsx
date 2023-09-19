@@ -140,7 +140,7 @@ export const GSTComponent = (props: ITypeProps) => {
                       {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
                       {/* {userState?.firstName + " " + userState?.lastName} */}
                       {/*This will work when user login but didn't work when user signup as the line 144 is commented */}
-                      {signInState?.name}
+                      {" " + signInState?.name + " "}
                       {/*at the time of signup and signin rendering is different so tried with the condition*/}
                       {/* {(userState?.firstName &&
                         userState.lastName === undefined) ||
