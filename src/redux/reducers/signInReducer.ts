@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface SignInState {
   email: string;
+  name: string;
 }
 
 const initialState: SignInState = {
   email: "",
+  name: "",
 };
 
 export const SignInSlice = createSlice({
@@ -16,9 +18,11 @@ export const SignInSlice = createSlice({
       state,
       action: PayloadAction<{
         email: string;
+        name: string;
       }>
     ) => {
       state.email = action.payload.email;
+      state.name = action.payload.name;
     },
   },
 });
