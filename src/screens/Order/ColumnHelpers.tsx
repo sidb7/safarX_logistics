@@ -6,6 +6,7 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { date_DD_MMM_YYY } from "../../utils/dateFormater";
 import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
+import ShowLabel from "./ShowLabel";
 const ColumnsHelper = createColumnHelper<any>();
 
 const ProductBox = ({ name = "", dimension = "" }: any) => {
@@ -31,7 +32,7 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Payment</h1>
+            <h1>Amounts</h1>
           </div>
         );
       },
@@ -350,12 +351,22 @@ export const ColumnHelperForBookedAndReadyToPicked = () => {
         );
       },
       cell: (info: any) => {
+        console.log("info", info.row.original);
+        const { otherDetails = {} } = info?.row?.original;
+        const { label = [] } = otherDetails;
+        const fileUrl = label[0] || "";
         return (
           <>
-            {/* <div className="flex">
-              <img src={HamBurger} alt="" />
+            {fileUrl !== "" ? (
+              <ShowLabel fileUrl={fileUrl} />
+            ) : (
+              <div className="text-[grey]">No Label Found</div>
+            )}
+
+            {/* <div className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer">
+              VIEW LABEL
+              
             </div> */}
-              {/* <MenuForColumnHelper /> */}
           </>
         );
       },

@@ -98,7 +98,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [sellerBox, setSellerBox] = useState<any>([]);
   const [companyBox, setCompanyBox] = useState<any>([]);
   const [boxIndex, setBoxIndex] = useState<any>(0);
-
   const [selectedBox, setSelectedBox] = useState<any>({});
   const [boxTypeModal, setBoxTypeModal] = useState<any>(false);
   const [selectedProductsOfPackage, setSelectedProductsOfPackage] =
