@@ -19,9 +19,9 @@ import "../../styles/silkStyle.css";
 import {
   columnHelperForPendingOrder,
   columnHelperForNewOrder,
-  columnHelperForBookedAndReadyToPicked,
+  ColumnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
-} from "./columnHelpers";
+} from "./ColumnHelpers";
 import { insufficientBalance } from "../../utils/dummyData";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
@@ -229,39 +229,39 @@ const Index = () => {
       const { pendingOrder, successFullOrder, statusList } =
         await getSellerOrderByStatus(statusData[index].value);
 
-      if (successFullOrder && successFullOrder.data) {
-        const { data: orderList = [] } = successFullOrder;
+      const { data = [] } = successFullOrder;
+      let orderListTobeSet: any = [];
+      orderListTobeSet = data;
 
-        statusList.forEach((e1: any) => {
-          const matchingStatus = statusData.find(
-            (e: any) => e.value === e1._id
-          );
-          if (matchingStatus) {
-            matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
-              minimumIntegerDigits: 2,
-              useGrouping: false,
-            });
-          }
-        });
-
-        let columnHelperToUpdate;
-
-        switch (tabs[index].value) {
-          case "newOrder":
-            columnHelperToUpdate = columnHelperForNewOrder(navigate);
-            break;
-          case "booked":
-          case "readyToPick":
-            columnHelperToUpdate = columnHelperForBookedAndReadyToPicked;
-            break;
-          default:
-            columnHelperToUpdate = columnHelpersForRest;
-            break;
+      statusList.forEach((e1: any) => {
+        const matchingStatus = statusData.find((e: any) => e.value === e1._id);
+        if (matchingStatus) {
+          matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
+            minimumIntegerDigits: 2,
+            useGrouping: false,
+          });
         }
+      });
 
-        setColumnhelper(columnHelperToUpdate);
-        setOrders(orderList);
+      switch (tabs[index].value) {
+        case "newOrder":
+          setColumnhelper(columnHelperForNewOrder(navigate));
+          orderListTobeSet = pendingOrder;
+          break;
+        case "booked":
+          setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
+          break;
+        case "readyToPick":
+          setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
+          orderListTobeSet = [];
+          break;
+        default:
+          setColumnhelper(columnHelpersForRest);
+          orderListTobeSet = [];
+          break;
       }
+
+      setOrders(orderListTobeSet);
     } catch (error) {
       console.error("An error occurred in handleTabChanges function:", error);
     }
