@@ -1,6 +1,6 @@
 import { POST } from "../../utils/webService";
 import { GET_SINGLE_FILE } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import downloadIcon from "../../assets/download.svg";
 import { useState } from "react";
 interface IShowLabelProps {
@@ -24,10 +24,8 @@ const ShowLabel: React.FunctionComponent<IShowLabelProps> = (props) => {
       fileName: `labels/${url}`,
     });
     if (data?.status) {
-      console.log("from label file", data);
       window.location.href = data?.data;
-      // setIsPDFOpen(true);/
-      // setPDFurl(data?.data);
+      toast.success(data?.meesage);
     } else {
       toast.error(data?.meesage);
     }
