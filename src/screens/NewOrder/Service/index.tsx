@@ -21,6 +21,7 @@ import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";
 import CustomDropDown from "../../../components/DropDown";
+import ServiceBox from "./ServiceBox";
 
 export const RecommendedServiceData = [
   {
@@ -142,7 +143,11 @@ const Index: React.FC = () => {
   const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
+  console.log("selectedService", selectedService);
   const [response, setResponse] = useState<any>();
+  const [serviceOptions, setServiceOptions] = useState<any>([]);
+  console.log("serviceOptions", serviceOptions);
+  console.log("============>", response);
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [companyServiceId, setCompanyServiceId] = useState<any>();
@@ -222,6 +227,15 @@ const Index: React.FC = () => {
 
       if (response?.success) {
         setResponse(response);
+
+        let options = response?.data.map((service: any) => {
+          return {
+            text: service,
+            value: service?.companyServiceId,
+          };
+        });
+
+        setServiceOptions(options);
         setLoading(false);
       } else {
         setResponse([]);
@@ -242,11 +256,29 @@ const Index: React.FC = () => {
   }, []);
 
   const postServiceDetails = async () => {
+    console.log("selectedService", selectedService);
+
+    if (selectedService === null) {
+      toast.error("Please Select a Service");
+      return;
+    }
+
+    let tempPayalod = response.data?.filter(
+      (service: any) => service?.companyServiceId === selectedService
+    );
+
+    let {
+      partnerServiceId,
+      partnerServiceName,
+      companyServiceId,
+      companyServiceName,
+    } = tempPayalod[0];
+
     const payload = {
-      partnerServiceId: partnerServiceId,
-      partnerServiceName: partnerServiceName,
-      companyServiceId: companyServiceId,
-      companyServiceName: companyServiceName,
+      partnerServiceId,
+      partnerServiceName,
+      companyServiceId,
+      companyServiceName,
     };
     try {
       const { data: response } = await POST(SET_PARTNER_SERVICE_INFO, payload);
@@ -349,7 +381,7 @@ const Index: React.FC = () => {
       </div>
 
       {loading ? (
-        <div className="fixed bottom-0 right-0 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="flex p-20 justify-center">
           <Spinner />
         </div>
       ) : (
@@ -357,16 +389,20 @@ const Index: React.FC = () => {
           <div className="flex gap-4 p-2">
             <div>
               <h1 className="font-Lato">Shipyaari Service</h1>
-              <CustomDropDown
+              <ServiceBox
+                options={serviceOptions}
+                selectedValue={setSelectedService}
+              />
+              {/* <CustomDropDown
                 value={companyServiceId}
                 options={companyName}
                 onChange={(e) => fetchPartnerServiceName(e)}
                 wrapperClass="!w-[20rem] mt-4"
                 heading="Select Shipyaari Service"
-              />
+              /> */}
             </div>
 
-            {partnerService && (
+            {/* {partnerService && (
               <div>
                 <h1 className="font-Lato">Partner Service</h1>
                 <CustomDropDown
@@ -377,7 +413,7 @@ const Index: React.FC = () => {
                   heading="Select Partner Service"
                 />
               </div>
-            )}
+            )} */}
           </div>
         </>
       )}
