@@ -8,12 +8,14 @@ import Checkbox from "../../../components/CheckBox";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
 import whiteDownloadIcon from "../../../assets/whiteDownloadIcon.svg";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomUploadButton from "../../NewOrder/Product/CustomUploadButton";
 import CustomBulkOrderUploadButton from "../../../components/CustomBulkOrderUpload";
 import CustomButton from "../../../components/Button";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { BULK_UPLOAD } from "../../../utils/ApiUrls";
+import { Spinner } from "../../../components/Spinner";
+import { useNavigate } from "react-router-dom";
 
 interface ITypeProps {
   onClick?: any;
@@ -28,7 +30,10 @@ const BulkUpload = (props: ITypeProps) => {
   const [addButton, setAddButton]: any = useState(false);
   const [disabled, setDisabled]: any = useState(true);
   const [uploadFile, setUploadFile]: any = useState(null);
-  console.log("uploadedFile", uploadFile);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };
@@ -46,9 +51,11 @@ const BulkUpload = (props: ITypeProps) => {
     let uuid = uuidv4();
     let formData = new FormData();
     formData.append("file", uploadFile);
-    formData.append("type", selectedOption);
+    formData.append("orderType", selectedOption);
 
     try {
+      setIsLoading(true);
+
       const { data: response } = await POST(BULK_UPLOAD, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -63,20 +70,45 @@ const BulkUpload = (props: ITypeProps) => {
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("An error occurred during file upload.");
+    } finally {
+      setIsLoading(false);
+      navigate("/orders/view-orders");
     }
   };
 
-  const handleDroppedFiles = (droppedFiles: FileList) => {
+  const handleDroppedFiles = (droppedFiles: File[]) => {
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
-      setFile(selectedFile);
+
+      setUploadFile(selectedFile);
+
       setFileName(selectedFile.name);
+      setAddButton(true);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    if (e.dataTransfer.items) {
+      const files = Array.from(e.dataTransfer.items)
+        .map((item: DataTransferItem) =>
+          item.kind === "file" ? item.getAsFile() : null
+        )
+        .filter((file): file is File => file !== null);
+
+      handleDroppedFiles(files);
     }
   };
 
   const renderHeaderComponent = () => {
     const downloadUrl =
       "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SHIPYAARI_BULK_ORDER.csv";
+
+    // const downloadUrlB2B = `${baseUrl}B2B_SAMPLE.csv`;
+    // const downloadUrlB2C = `${baseUrl}B2C_SAMPLE.csv`;
+
+    // const downloadUrl =
+    //   selectedOption === "B2B" ? downloadUrlB2B : downloadUrlB2C;
 
     return (
       <a
@@ -97,7 +129,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   return (
     <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
-      <Breadcum label="Add Bulk Upload" component={renderHeaderComponent()} />
+      <Breadcrum label="Add Bulk Upload" component={renderHeaderComponent()} />
 
       <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
         <div className="flex flex-row  items-center   ">
@@ -130,38 +162,53 @@ const BulkUpload = (props: ITypeProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center">
-        <CustomBulkOrderUploadButton
-          className="!mt-[15rem]"
-          setDisabled={setDisabled}
-          setAddButton={setAddButton}
-          setUploadFile={setUploadFile}
-        />
+      {isLoading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center mt-[155px]">
+          <CustomBulkOrderUploadButton
+            className="!mt-[5rem]"
+            setDisabled={setDisabled}
+            setAddButton={setAddButton}
+            setUploadFile={setUploadFile}
+          />
 
-        {/* <p className="text-[16px] mt-1 font-semibold font-Open">
-          or Drop files here
+          {/* <p className="text-[16px] mt-1 font-semibold font-Open">
+          or Drop files here  ; 
         </p> */}
-        <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-          excels files are supported
-        </p>
-
-        {addButton && (
-          <>
-            <p className="text-[16px] mt-5 font-semibold font-Open text-[12px] lg:text-[16px]">
-              <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
-                Selected File:
-              </span>{" "}
-              {uploadFile?.name || null}
+          <div
+            className="flex flex-col justify-center items-center mt-5"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleDrop}
+          >
+            <p className="text-[16px] mt-1 font-semibold font-Open">
+              or Drop files here
             </p>
-            {/* <button
+            <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
+              excels files are supported
+            </p>
+          </div>
+
+          {addButton && (
+            <>
+              <p className="text-[16px] mt-5 font-semibold font-Open text-[12px] lg:text-[16px]">
+                <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
+                  Selected File:
+                </span>{" "}
+                {uploadFile?.name || null}
+              </p>
+              {/* <button
               onClick={handleFileUpload}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
             >
               Upload File
             </button> */}
-          </>
-        )}
-      </div>
+            </>
+          )}
+        </div>
+      )}
       <BottomLayout
         customButtonText="Upload Bulk Order"
         callApi={() => {

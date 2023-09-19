@@ -30,7 +30,7 @@ import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { toast } from "react-toastify";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
 import { useSelector } from "react-redux";
@@ -290,7 +290,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   return (
     <div>
       <div>
-        <Breadcum label="Add New Order" />
+        <Breadcrum label="Add New Order" />
         <div className="lg:mb-8">
           <Stepper steps={steps} />
         </div>

@@ -53,7 +53,7 @@ import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import NavBar from "../../../layout/Old_NavBar";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { toast } from "react-toastify";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import LandmarkContent from "./landmarkContent";
 import CustomBrandingContent from "./CustomBrandingContent";
@@ -784,7 +784,7 @@ const Index = () => {
 
   return (
     <div className="w-full">
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

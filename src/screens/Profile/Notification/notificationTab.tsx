@@ -10,7 +10,7 @@ import {
   UPDATE_PROFILE_NOTIFICATION,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { toast } from "react-toastify";
 import downArrowIcon from "../../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../../assets/Filter/upArrow.svg";
@@ -383,7 +383,7 @@ export const ProfileNotificationTab = () => {
 
   return (
     <div className="h-full">
-      <Breadcum label="Notification" />
+      <Breadcrum label="Notification" />
       <div className="mx-4 overflow-y-auto h-[calc(100%-35px)] ">
         <div className="flex flex-col">{render()}</div>
 

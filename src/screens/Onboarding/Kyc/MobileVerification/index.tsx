@@ -23,6 +23,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import { error } from "console";
 
 interface ITypeProps {}
 
@@ -182,6 +183,7 @@ const Index = (props: ITypeProps) => {
             panVerifyNavigate: false,
           })
         );
+        setLoading(false);
         toast.error(response?.message);
       }
     } catch (error) {
@@ -254,10 +256,11 @@ const Index = (props: ITypeProps) => {
         };
         const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
         if (response?.success) {
-          setLoading(false);
+          // setLoading(false);
           verifyPAN(panCard);
         } else {
           setLoading(false);
+          toast.error(response?.message);
         }
       }
     } catch (error) {

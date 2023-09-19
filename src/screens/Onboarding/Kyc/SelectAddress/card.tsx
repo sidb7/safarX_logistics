@@ -10,6 +10,7 @@ interface ITypesProps {
   cardClassName?: string;
   doctype?: string;
   onClick?: (e: any) => void;
+  required?: boolean;
 }
 
 const card = (props: ITypesProps) => {
@@ -23,6 +24,7 @@ const card = (props: ITypesProps) => {
     cardClassName,
     doctype,
     onClick,
+    required,
   } = props;
 
   return (
@@ -37,6 +39,7 @@ const card = (props: ITypesProps) => {
             value={value}
             style={{ accentColor: "black" }}
             inputClassName="cursor-pointer"
+            checked={required}
           />
           {doctype && (
             <p className="text-[10px] font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md">

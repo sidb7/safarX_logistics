@@ -315,7 +315,7 @@ export const data = [
         id: "49",
         name: "Recharge Wallet",
         isActive: false,
-        path: "/wallet/recharge-wallet",
+        path: "/wallet/view-wallet",
         menu: [],
         pages: [
           {
@@ -384,7 +384,7 @@ export const data = [
         id: "50",
         name: "Plans",
         isActive: false,
-        path: "/plans",
+        path: "/plans/view-plans",
         menu: [],
         pages: [
           {
@@ -414,7 +414,7 @@ export const data = [
         id: "50",
         name: "Plan Details",
         isActive: false,
-        path: "/plan-details",
+        path: "/plans/plan-details",
         menu: [],
         pages: [
           {

@@ -14,7 +14,7 @@ import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import UpiPayment from "./upiPayment";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
-import Toast from "./toast";
+// import Toast from "./toast";
 import { useSelector, useDispatch } from "react-redux";
 import "react-tooltip/dist/react-tooltip.css";
 import BackArrowIcon from "../../../assets/backArrow.svg";
@@ -33,7 +33,10 @@ import CustomCenterModal from "../../../components/CustomModal/customCenterModal
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { POST } from "../../../utils/webService";
+import { POST_PLACE_ORDER } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 
 const steps = [
   {
@@ -73,8 +76,8 @@ const Index = () => {
   const navigate = useNavigate();
   const [payment, setPayment] = useState(false);
   const [modal, setModal] = useState(false);
-  const [toast, setToast] = useState(false);
-  const [placeOrder, setPlaceOrder] = useState(true);
+  // const [toast, setToast] = useState(false);
+  // const [placeOrder, setPlaceOrder] = useState(true);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [footer, setFooter] = useState(true);
   const [isLabelRightModal, setIsLabelRightModal] = useState(false);
@@ -113,16 +116,16 @@ const Index = () => {
     }
   });
 
-  useEffect(() => {
-    if (checkBoolean === true) {
-      setToast(true);
-      setPlaceOrder(true);
-      setTimeout(() => {
-        setToast(false);
-        dispatch(paymentState(false));
-      }, 5000);
-    }
-  }, [checkBoolean]);
+  // useEffect(() => {
+  //   if (checkBoolean === true) {
+  //     setToast(true);
+  //     setPlaceOrder(true);
+  //     setTimeout(() => {
+  //       setToast(false);
+  //       dispatch(paymentState(false));
+  //     }, 5000);
+  //   }
+  // }, [checkBoolean]);
 
   const ModalContent = () => {
     return (
@@ -155,9 +158,28 @@ const Index = () => {
     );
   };
 
+  const placeOrder = async () => {
+    const placeOrderPromise = await POST(POST_PLACE_ORDER);
+    let promisePlaceOrder = new Promise(function (resolve, reject) {
+      resolve(placeOrderPromise);
+    });
+    promisePlaceOrder
+      .then((orderPlaceResponse: any) => {
+        if (orderPlaceResponse?.success) {
+          toast.success(orderPlaceResponse?.data?.message);
+          navigate("/orders/view-orders");
+        } else {
+          toast.error(orderPlaceResponse?.data?.message);
+        }
+      })
+      .catch(function (errorResponse) {
+        toast.error(errorResponse?.data?.message);
+      });
+  };
+
   return (
     <div>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
@@ -481,7 +503,7 @@ const Index = () => {
         </div>
       </div>
 
-      {toast && <Toast />}
+      {/* {toast && <Toast />} */}
 
       <CustomBottomModal isOpen={modalIsOpen} onRequestClose={closeModal}>
         <UpiPayment closeModal={closeModal} />
@@ -501,14 +523,19 @@ const Index = () => {
                   window.history.back();
                 }}
               />
-              {placeOrder ? (
+              <ServiceButton
+                text="PLACE ORDER"
+                className="bg-[#1C1C1C] text-[#FFFFFF] text-[14px] border-none lg:!py-2 lg:!px-4"
+                onClick={() => placeOrder()}
+              />
+              {/* {placeOrder ? (
                 <ServiceButton
                   text="PLACE ORDER"
                   className="bg-[#1C1C1C] text-[#FFFFFF] text-[14px] border-none lg:!py-2 lg:!px-4"
                   onClick={() => {
                     isItLgScreen
                       ? setIsLabelRightModal(true)
-                      : navigate("/neworder/label");
+                      : navigate("/orders/view-orders");
                   }}
                 />
               ) : (
@@ -517,7 +544,7 @@ const Index = () => {
                   className="bg-[#E8E8E8] text-[#BBBBBB] text-[14px] border-none lg:!py-2 lg:!px-4"
                   onClick={() => {}}
                 />
-              )}
+              )} */}
             </div>
           </footer>
         </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CustomTable } from "../../../../components/Table";
-import { Breadcum } from "../../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../../components/Button";
 import { SearchBox } from "../../../../components/SearchBox";
@@ -196,7 +196,7 @@ function RoleManagement() {
 
   return (
     <div>
-      <Breadcum label="Role Management" component={Buttons()} />
+      <Breadcrum label="Role Management" component={Buttons()} />
       <div className=" my-3 mx-6">
         <div className=" flex justify-end">
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">

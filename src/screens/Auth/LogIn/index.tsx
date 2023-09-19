@@ -212,6 +212,16 @@ const Index = () => {
                   </div>
                 )}
               </div>
+              <div className="mt-[-15px]">
+                {" "}
+                <button
+                  type="button"
+                  onClick={() => setForgotPasswordModal(true)}
+                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                >
+                  Forgot Password
+                </button>
+              </div>
 
               <CustomButton
                 onClick={(e: any) => logInOnClick(loginCredentials)}
@@ -243,7 +253,7 @@ const Index = () => {
                 </button>
               </div>
 
-              <div className="flex justify-center">
+              {/* <div className="flex justify-center">
                 <button
                   type="button"
                   onClick={() => setForgotPasswordModal(true)}
@@ -251,7 +261,7 @@ const Index = () => {
                 >
                   Forgot Password
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

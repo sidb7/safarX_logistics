@@ -84,7 +84,7 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
             {expandedBox === index && (
               <div className="flex flex-col gap-y-2 mb-10">
                 <p className="text-[12px] font-medium ml-[25px] mt-[15px] font-Open lg:text-[16px] ">
-                  Box Weight: {box?.deadWeight} {box?.weightUnit}
+                  Box Weight: {box?.appliedWeight} {box?.weightUnit}
                 </p>
                 <hr></hr>
                 {box?.products?.map((product: any, productIndex: any) => (
@@ -93,14 +93,21 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
                       Product Name: {product?.name}
                     </p>
                     <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
-                      Product Weight: {product?.deadWeight}{" "}
+                      Dead Weight: {product?.deadWeight} {product?.weightUnit}
+                    </p>
+                    <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
+                      Applied Weight: {product?.appliedWeight}{" "}
+                      {product?.weightUnit}
+                    </p>
+                    <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
+                      Volumentric Weight: {product?.volumetricWeight}{" "}
                       {product?.weightUnit}
                     </p>
                     <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
                       Product Dimensions: {product?.length} x {product?.breadth}{" "}
                       x {product?.height} {product?.measureUnit}
                     </p>
-                    <hr></hr>
+                    <hr className="mt-2"></hr>
                   </div>
                 ))}
               </div>

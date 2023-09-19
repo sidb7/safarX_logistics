@@ -183,7 +183,7 @@ const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
 const LANDMARK_API= `${LANDMARK_URL}/api/v1/landmark/landmark`
 
 //BulkUpload
-const BULK_UPLOAD=`${SELLER_BASE_URL}/order/bulkOrder`
+const BULK_UPLOAD=`${SELLER_BASE_URL}/order/placeBulkOrder`
 
 
 //Forgot Password

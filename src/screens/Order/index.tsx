@@ -29,7 +29,7 @@ import { POST } from "../../utils/webService";
 import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
 
@@ -269,7 +269,7 @@ const Index = () => {
 
   return (
     <div>
-      <Breadcum label="Orders" component={Buttons()} />
+      <Breadcrum label="Orders" component={Buttons()} />
       {isLgScreen && (
         <div className="pl-5 pr-6">
           <OrderStatus

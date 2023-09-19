@@ -51,14 +51,25 @@ const PickUp = (props: ITypeProps) => {
   }, []);
 
   const onSubmit = async () => {
-    const payload = { addressId: defaultAddressSelect, isDefault: true };
-    const { data: responses } = await POST(POST_UPDATE_COMPANY_URL, payload);
-    if (responses?.success) {
-      toast.success(responses?.message);
-      navigate("/onboarding/wallet-recharge");
-      //Navigate Url's go here
-    } else {
-      toast.error(responses?.message);
+    try {
+      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
+        const payload = { addressId: defaultAddressSelect, isDefault: true };
+        const { data: responses } = await POST(
+          POST_UPDATE_COMPANY_URL,
+          payload
+        );
+        if (responses?.success) {
+          toast.success(responses?.message);
+          navigate("/onboarding/wallet-recharge");
+          //Navigate Url's go here
+        } else {
+          toast.error(responses?.message);
+        }
+      } else {
+        toast.error("Please Select Address");
+      }
+    } catch (error) {
+      return error;
     }
   };
 

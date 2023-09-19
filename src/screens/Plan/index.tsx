@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PlanCard from "./planCard";
 import { CustomTable } from "../../components/Table";
-import { Breadcum } from "../../components/Layout/breadcrum";
+import { Breadcrum } from "../../components/Layout/breadcrum";
 
 import "../../styles/plan.css";
 
@@ -231,7 +231,7 @@ const Index = (props: ITypeProps) => {
     <>
       <div className="mr-6">
         <div className="mb-6">
-          <Breadcum label="Plans" />
+          <Breadcrum label="Plans" />
         </div>
 
         {/* Plan Cards */}

@@ -26,7 +26,7 @@ import CustomCenterModal from "../../../components/CustomModal/customCenterModal
 import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import GiftIcon from "../../../assets/Gift.svg";
@@ -175,7 +175,7 @@ const WalletRecharge = () => {
         </div>
       ) : (
         <div className="w-full">
-          <Breadcum label="Recharge Wallet" />
+          <Breadcrum label="Recharge Wallet" />
           <div className="inline-flex space-x-2 items-center px-5">
             <img src={Moneylogo} alt="" />
             <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">

@@ -8,7 +8,7 @@ import {
   POST_PLACE_ORDER,
 } from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
@@ -123,16 +123,21 @@ const Summary = (props: Props) => {
       });
 
       promiseSetOrderId
-        .then(function (successMessage: any) {
+        .then((orderIdResponse: any) => {
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
-            .then(function (successResponse: any) {
-              const requiredBalance =
-                successResponse?.data?.data[0]?.requiredBalance;
-              toast.error(successResponse?.data?.message);
-              navigate("/orders/add-order/payment", {
-                state: { requiredBalance: requiredBalance },
-              });
+            .then((orderPlaceResponse: any) => {
+              if (orderPlaceResponse?.success) {
+                toast.success(orderPlaceResponse?.data?.message);
+                navigate("/orders/view-orders");
+              } else {
+                const requiredBalance =
+                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+
+                navigate("/orders/add-order/payment", {
+                  state: { requiredBalance: requiredBalance },
+                });
+              }
             })
             .catch(function (errorResponse) {
               toast.error(errorResponse?.data?.message);
@@ -163,7 +168,7 @@ const Summary = (props: Props) => {
 
   return (
     <div>
-      <Breadcum label="Add New Order" />
+      <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>

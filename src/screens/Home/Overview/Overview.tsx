@@ -1,7 +1,7 @@
 import * as React from "react";
 import CompanyImage from "../../../assets/Shipyaari_full_color rgb.svg";
 import { ScrollNav } from "../../../components/ScrollNav";
-import { Breadcum } from "../../../components/Layout/breadcrum";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomDropDown from "../../../components/DropDown";
 import CalenderIcon from "../../../assets/calendar.svg";
 import GreenEllipse from "../../../assets/greenEllipse.svg";

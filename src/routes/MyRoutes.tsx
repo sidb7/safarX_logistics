@@ -434,7 +434,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/wallet/recharge-wallet"
+                path="/wallet/view-wallet"
                 element={
                   <ProtectedRoute>
                     <WalletRecharge />
@@ -688,8 +688,8 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             <Route>
-              <Route path="/plans" element={<NewUserPlanScreen />} />
-              <Route path="/plan-details" element={<PlanDetails />} />
+              <Route path="/plans/view-plans" element={<NewUserPlanScreen />} />
+              <Route path="/plans/plan-details" element={<PlanDetails />} />
             </Route>
             <Route>
               <Route path="/tracking/shipyaari" element={<Tracking />} />
@@ -699,12 +699,16 @@ const MyRoutes: React.FC = () => {
               />
             </Route>
             <Route>
-              <Route path="/notifications" element={<Notifications />} />
+              <Route
+                path="notifications/notifications"
+                element={<Notifications />}
+              />
             </Route>
 
             {/* Help Screen Routes */}
 
-            <Route path="/help" element={<HelpScreen />} />
+            <Route path="/help/faqs" element={<HelpScreen />} />
+            <Route path="/help/ticket" element={<HelpScreen />} />
 
             <Route path="/system-log" element={<SystemLog />} />
 
