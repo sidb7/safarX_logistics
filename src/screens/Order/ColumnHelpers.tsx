@@ -351,7 +351,6 @@ export const ColumnHelperForBookedAndReadyToPicked = () => {
         );
       },
       cell: (info: any) => {
-        console.log("info", info.row.original);
         const { otherDetails = {} } = info?.row?.original;
         const { label = [] } = otherDetails;
         const fileUrl = label[0] || "";
@@ -362,11 +361,6 @@ export const ColumnHelperForBookedAndReadyToPicked = () => {
             ) : (
               <div className="text-[grey]">No Label Found</div>
             )}
-
-            {/* <div className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer">
-              VIEW LABEL
-              
-            </div> */}
           </>
         );
       },
