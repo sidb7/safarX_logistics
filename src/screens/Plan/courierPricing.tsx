@@ -59,25 +59,25 @@ const CourierPricing = () => {
         );
       },
     }),
-    columnsHelper.accessor("partnerServiceName", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Partner Service Name
-            </p>
-          </div>
-        );
-      },
+    // columnsHelper.accessor("partnerServiceName", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+    //           Partner Service Name
+    //         </p>
+    //       </div>
+    //     );
+    //   },
 
-      cell: (info: any) => {
-        return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {capitalizeFirstLetter(info.row.original.partnerServiceName)}
-          </p>
-        );
-      },
-    }),
+    //   cell: (info: any) => {
+    //     return (
+    //       <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+    //         {capitalizeFirstLetter(info.row.original.partnerServiceName)}
+    //       </p>
+    //     );
+    //   },
+    // }),
     columnsHelper.accessor("transit", {
       header: () => {
         return (

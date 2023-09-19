@@ -3,7 +3,7 @@ let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
-let LANDMARK_URL ="";
+let LANDMARK_URL = "";
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
@@ -24,7 +24,6 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
-    
 
     break;
 
@@ -158,7 +157,7 @@ const POST_GET_ALL_ROLES_DATA = `${SELLER_BASE_URL}/sellerRole/fetchAllSellerRol
 const POST_GET_ALL_INITIAL_MENU = `${SELLER_BASE_URL}/sellerMenu/getSellerMenus`;
 const POST_UPDATE_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/updateSellerRole`;
 const POST_DELETE_ROLE_DATA = `${SELLER_BASE_URL}/sellerRole/deleteSellerRole`;
-const POST_FETCH_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/fetchSellerRole`
+const POST_FETCH_SELLER_ROLE = `${SELLER_BASE_URL}/sellerRole/fetchSellerRole`;
 
 //User Management
 const POST_CREATE_NEW_USER = `${SELLER_BASE_URL}/sellerUser/createSellerUser`;
@@ -170,31 +169,31 @@ const POST_UPDATE_USER_DATA = `${SELLER_BASE_URL}/sellerUser/updateSellerUser`;
 const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates`;
 
 // CREATE BULK PRODUCT
-const CREATE_BULK_PRODUCT = `${SELLER_BASE_URL}/product/createBulkProduct`
-const GET_PRODUCTS = `${SELLER_BASE_URL}/product/getProduct`
+const CREATE_BULK_PRODUCT = `${SELLER_BASE_URL}/product/createBulkProduct`;
+const GET_PRODUCTS = `${SELLER_BASE_URL}/product/getProduct`;
 
 //COMBO PRODUCTS
 //create combo
-const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct`
+const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct`;
 //get combo
-const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`
+const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`;
 
 //Landmark endpoint
-const LANDMARK_API= `${LANDMARK_URL}/api/v1/landmark/landmark`
+const LANDMARK_API = `${LANDMARK_URL}/api/v1/landmark/landmark`;
 
 //BulkUpload
-const BULK_UPLOAD=`${SELLER_BASE_URL}/order/placeBulkOrder`
-
+const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 
 //Forgot Password
-const FORGOT_PASSWORD=`${SELLER_BASE_URL}/seller/forgotPassword`
-const VERIFY_FORGET_PASSWORD=`${SELLER_BASE_URL}/seller/verifyForgotPassword`
+const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
+const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
 
-
+const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
 export {
   SELLER_URL,
   ADD_BOX_INFO,
+  GET_SINGLE_FILE,
   GET_SELLER_ORDER,
   ADD_COD_INFO,
   POST_SIGN_IN_URL,
@@ -279,5 +278,5 @@ export {
   LANDMARK_API,
   BULK_UPLOAD,
   FORGOT_PASSWORD,
-  VERIFY_FORGET_PASSWORD
+  VERIFY_FORGET_PASSWORD,
 };

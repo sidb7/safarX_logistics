@@ -18,6 +18,7 @@ interface ITypeProps {}
 
 export const GSTComponent = (props: ITypeProps) => {
   const singUpState = useSelector((state: any) => state?.signup);
+  const signInState = useSelector((state: any) => state?.signin);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export const GSTComponent = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
   const [userState, setIsUserState] = useState<any>();
+
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -133,11 +135,19 @@ export const GSTComponent = (props: ITypeProps) => {
                   </ol>
 
                   <p>
-                    I/We{" "}
+                    I/We
                     <b className="uppercase">
                       {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
-                      {userState?.firstName + " " + userState?.lastName}
-                    </b>{" "}
+                      {/* {userState?.firstName + " " + userState?.lastName} */}
+                      {/*This will work when user login but didn't work when user signup as the line 144 is commented */}
+                      {" " + signInState?.name + " "}
+                      {/*at the time of signup and signin rendering is different so tried with the condition*/}
+                      {/* {(userState?.firstName &&
+                        userState.lastName === undefined) ||
+                      (userState?.firstName && userState.lastName === "")
+                        ? signInState?.name
+                        : userState?.firstName + " " + userState?.lastName} */}
+                    </b>
                     (Name of the service provider/business entity), do hereby
                     declare that:
                   </p>

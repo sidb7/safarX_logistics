@@ -678,7 +678,7 @@ const MyRoutes: React.FC = () => {
             {/* Wallet Routes */}
             <Route>
               <Route
-                path="wallet/transactions"
+                path="wallet/transaction-history"
                 element={
                   <ProtectedRoute>
                     <Transaction />
@@ -688,7 +688,7 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             <Route>
-              <Route path="/plans/view-plans" element={<NewUserPlanScreen />} />
+              <Route path="/plans/plans" element={<NewUserPlanScreen />} />
               <Route path="/plans/plan-details" element={<PlanDetails />} />
             </Route>
             <Route>
@@ -713,7 +713,10 @@ const MyRoutes: React.FC = () => {
             <Route path="/system-log" element={<SystemLog />} />
 
             {/* Weight Management */}
-            <Route path="/weight-freeze" element={<WeightFreeze />} />
+            <Route
+              path="/weight-management/weight-freeze"
+              element={<WeightFreeze />}
+            />
 
             <Route path="*" element={<NotFound />} />
           </Route>

@@ -38,7 +38,7 @@ const Index = () => {
 
   const [showBootScreen, setShowBootScreen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
-  const [loginCredentials, setLoginCredentials] = useState({
+  const [loginCredentials, setLoginCredentials] = useState<any>({
     email: "",
     password: "",
   });
@@ -50,7 +50,15 @@ const Index = () => {
 
   const logInOnClick = async (value: any) => {
     const { data: response } = await POST(POST_SIGN_IN_URL, value);
-    dispatch(signInUser(loginCredentials));
+
+    let signInUserReducerDetails = {
+      email: loginCredentials.email,
+      name: response?.data[0]?.name,
+    };
+    //commented as passing the name at signin time
+    // dispatch(signInUser(loginCredentials));
+    dispatch(signInUser(signInUserReducerDetails));
+
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
 
@@ -80,6 +88,7 @@ const Index = () => {
       POST_SIGN_IN_WITH_GOOGLE_URL,
       payload
     );
+
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
@@ -138,7 +147,7 @@ const Index = () => {
                 Welcome to Shipyaari
               </p>
               <p className="text-center font-Open font-light text-sm leading-[22px]">
-                Fast and Easy Shipping from your doorstep to your customer's.{" "}
+                Fast and Easy Shipping from your doorstep to your customer's.
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
