@@ -143,11 +143,10 @@ const Index: React.FC = () => {
   const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
-  console.log("selectedService", selectedService);
+
   const [response, setResponse] = useState<any>();
   const [serviceOptions, setServiceOptions] = useState<any>([]);
-  console.log("serviceOptions", serviceOptions);
-  console.log("============>", response);
+
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [companyServiceId, setCompanyServiceId] = useState<any>();
@@ -246,8 +245,6 @@ const Index: React.FC = () => {
       }
     } catch (error) {
       setLoading(false);
-
-      console.error("Error in API call:", error);
     }
   };
 
@@ -256,8 +253,6 @@ const Index: React.FC = () => {
   }, []);
 
   const postServiceDetails = async () => {
-    console.log("selectedService", selectedService);
-
     if (selectedService === null) {
       toast.error("Please Select a Service");
       return;
@@ -287,7 +282,6 @@ const Index: React.FC = () => {
         toast.success(response?.message);
         navigate("/orders/add-order/summary");
       } else {
-        console.error("Service error");
         toast.error(response?.message);
       }
     } catch (error) {
@@ -325,8 +319,6 @@ const Index: React.FC = () => {
     setPartnerServiceName(CardInfo[0].partnerServiceName);
     setCardInfo(CardInfo[0]);
   };
-
-  console.log("cardInfo", cardInfo?.insurance);
 
   const steps = [
     {
@@ -388,7 +380,7 @@ const Index: React.FC = () => {
         <>
           <div className="flex gap-4 p-2">
             <div>
-              <h1 className="font-Lato">Shipyaari Service</h1>
+              {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox
                 options={serviceOptions}
                 selectedValue={setSelectedService}

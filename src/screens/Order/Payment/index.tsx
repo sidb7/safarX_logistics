@@ -228,7 +228,7 @@ const Payment = () => {
       paymentObject: {
         upiId: upiValue,
         amount: String(walletValue),
-        callbackUrl: "http://helloWorld",
+        callbackUrl: "/orders/add-order/payment",
       },
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);

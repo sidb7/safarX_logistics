@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 interface ISummaryData {
   companyServiceName?: string;
+  partnerName?: string;
   add?: any;
   base?: any;
   cod?: any;
@@ -33,6 +34,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   invoiceValue = "",
   partnerServiceId = "",
   partnerServiceName = "",
+  partnerName = "",
   productWeightUnit = "",
   productDimensionLength = "",
   productDimensionBreadth = "",
@@ -64,10 +66,10 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
         </div>
         <div className="flex flex-col gap-y-1  ml-[25px] mb-10 ">
           <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold">
-            {companyServiceName}
+            {partnerName}
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
-            {partnerServiceName}
+            {companyServiceName}
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">
             {baseWeight} kg

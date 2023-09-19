@@ -348,6 +348,7 @@ const Summary = (props: Props) => {
                 gst={serviceDetails?.gst}
                 invoiceValue={serviceDetails?.invoiceValue}
                 partnerServiceName={serviceDetails?.partnerServiceName}
+                partnerName={serviceDetails?.partnerName}
                 baseWeight={serviceDetails?.appliedWeight}
               />
             </div>
