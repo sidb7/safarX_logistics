@@ -281,14 +281,14 @@ const MyRoutes: React.FC = () => {
             <Route path="map" element={<Map />} />
             <Route path="label" element={<LabelScreen />} />
             <Route path="filter" element={<FilterScreen />} />
-            <Route
+            {/* <Route
               path="returninguserpickup"
               element={
                 <ProtectedRoute>
                   <ReturningUserPickup />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route
               path="returninguserdelivery"
               element={

@@ -35,33 +35,29 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
             {label}
           </p>
         </div>
-        <div>
+        {/* <div>
           <img src={EditImageWithBlack} alt="" onClick={() => navigate("")} />
-        </div>
+        </div> */}
       </div>
 
-      {address && (
-        <p className="px-4 w-[250px] lg:w-[280px] text-[16px] font-Open font-semibold leading-6 capatalize">
-          {address}
-        </p>
-      )}
+      <p className="px-4 w-[250px] lg:w-[280px] text-[16px] font-Open font-semibold leading-6 capatalize">
+        {address}
+      </p>
 
-      {name && (
-        <div className="flex flex-col gap-y-4 px-4 w-[250px] lg:w-[280px]">
-          <div className="flex gap-x-2 ">
-            <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
-            <p className="text-[14px] font-semibold font-Open leading-[18px]">
-              {name}
-            </p>
-          </div>
-          <div className="flex gap-x-2">
-            <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
-            <p className="text-xs font-semibold font-Open leading-[18px]">
-              +91 {phoneNumber}
-            </p>
-          </div>
+      <div className="flex flex-col gap-y-4 px-4 w-[250px] lg:w-[280px] mt-4">
+        <div className="flex gap-x-2 ">
+          <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
+          <p className="text-[14px] font-semibold font-Open leading-[18px]">
+            {name}
+          </p>
         </div>
-      )}
+        <div className="flex gap-x-2">
+          <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
+          <p className="text-xs font-semibold font-Open leading-[18px]">
+            +91 {phoneNumber}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
