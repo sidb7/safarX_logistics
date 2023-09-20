@@ -10,7 +10,7 @@ interface ITypesProps {
   cardClassName?: string;
   doctype?: string;
   onClick?: (e: any) => void;
-  required?: boolean;
+  checked?: boolean;
 }
 
 const card = (props: ITypesProps) => {
@@ -23,23 +23,27 @@ const card = (props: ITypesProps) => {
     isSubContent,
     cardClassName,
     doctype,
-    onClick,
-    required,
+    onClick = () => {},
+    checked,
   } = props;
 
   return (
     <>
       <div
-        className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow border-[#E8E8E8] w-full lg:!w-[320px] relative`}
-        onClick={onClick}
+        className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow ${
+          !checked ? "border-[#E8E8E8]" : "border-[#004EFF]"
+        } w-full lg:!w-[320px] relative`}
+        onClick={(e: any) => {
+          onClick(value);
+        }}
       >
         <div className="flex items-center   gap-x-3 ">
           <CustomRadioButton
             name={name}
             value={value}
-            style={{ accentColor: "black" }}
+            style={{ accentColor: "#004EFF" }}
             inputClassName="cursor-pointer"
-            checked={required}
+            checked={checked}
           />
           {doctype && (
             <p className="text-[10px] font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md">
