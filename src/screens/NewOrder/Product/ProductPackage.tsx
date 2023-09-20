@@ -693,7 +693,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         </RightSideModal>
       </div>
       <div>
-        <BottomLayout callApi={() => setBoxAndCODInfo()} />
+        <BottomLayout
+          finalButtonText="NEXT"
+          callApi={() => setBoxAndCODInfo()}
+        />
       </div>
       {products.length > 0 && (
         <AddPackageDetails
