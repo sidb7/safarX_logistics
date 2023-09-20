@@ -195,6 +195,10 @@ const GET_ALL_STORES = `${SELLER_BASE_URL}/shopify/getStores`;
 const GET_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/getSingleStore`;
 const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/updateStore`;
 
+//Returing User
+const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
+
 export {
   SELLER_URL,
   ADD_BOX_INFO,
@@ -288,4 +292,6 @@ export {
   GET_ALL_STORES,
   GET_SINGLE_STORE,
   UPDATE_SINGLE_STORE,
+  RETURNING_USER_PICKUP,
+  RETURNING_USER_DELIVERY,
 };

@@ -200,7 +200,7 @@ const Summary = (props: Props) => {
               imageClassName="!h-[12px] !w-[113px] !top-[40%] "
               value={orderId}
               maxLength={12}
-              label="Generate order ID"
+              label="Order ID"
               onChange={(e) => {
                 setOrderId(e.target.value);
               }}

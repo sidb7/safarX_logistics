@@ -403,7 +403,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       </div>
       <div>
         {/* <BottomLayout backButtonText="BACK" nextButtonText="NEXT" /> */}
-        <BottomLayout callApi={() => addProductInfo()} />
+        <BottomLayout finalButtonText="NEXT" callApi={() => addProductInfo()} />
       </div>
     </>
   );

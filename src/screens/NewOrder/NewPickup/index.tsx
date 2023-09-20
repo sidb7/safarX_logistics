@@ -3,6 +3,7 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
 import { v4 as uuidv4 } from "uuid";
+import ReturningUserPickup from "../ReturningUser/PickUp";
 
 //Icons
 import TickLogo from "../../../assets/common/Tick.svg";
@@ -11,9 +12,14 @@ import CustomBranding from "./CustomBranding/customBranding";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { toast } from "react-toastify";
 import { POST } from "../../../utils/webService";
-import { ADD_PICKUP_LOCATION, GET_LATEST_ORDER } from "../../../utils/ApiUrls";
+import {
+  ADD_PICKUP_LOCATION,
+  GET_LATEST_ORDER,
+  RETURNING_USER_PICKUP,
+} from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
+import { useSelector } from "react-redux";
 
 const steps = [
   {
@@ -130,6 +136,10 @@ const PickupLocation = () => {
       isActive: false,
     },
   });
+  const userType = useSelector((state: any) => state.user.isReturningUser);
+  const [loading, setLoading] = useState(true);
+  const [returningUserData, setReturningUserData] = useState<any>([]);
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   const postPickupOrderDetails = async () => {
     try {
@@ -248,6 +258,31 @@ const PickupLocation = () => {
     })();
   }, []);
 
+  const getReturningUserPickupDetails = async () => {
+    try {
+      setLoading(true);
+
+      const { data: response } = await POST(RETURNING_USER_PICKUP);
+
+      if (response?.success) {
+        setReturningUserData(response);
+      } else {
+        setReturningUserData([]);
+      }
+    } catch (error) {
+      console.error("Error in Returning User API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userType) {
+      getReturningUserPickupDetails();
+    }
+  }, [userType]);
+  console.log("returningUserData", returningUserData);
+
   return (
     <div className="w-full">
       <Breadcrum label="Add New Order" />
@@ -256,6 +291,28 @@ const PickupLocation = () => {
       </div>
 
       {/* PICKUP ADDRESS */}
+
+      {userType && (
+        <ReturningUserPickup
+          data={{
+            returningUserData,
+            setReturningUserData,
+            onAddressSelect: (selectedAddress: any) => {
+              setPickupAddress((prevPickupAddress: any) => ({
+                ...prevPickupAddress,
+                pickupAddress: {
+                  ...prevPickupAddress.pickupAddress,
+                  ...selectedAddress,
+                },
+                returnAddress: {
+                  ...prevPickupAddress.returnAddress,
+                  ...selectedAddress,
+                },
+              }));
+            },
+          }}
+        />
+      )}
 
       <PickupAddress
         data={{

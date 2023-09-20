@@ -308,7 +308,38 @@ export const columnHelperForNewOrder = (navigate: any) => {
         );
       },
       cell: (info: any) => {
-        return <span>Actions</span>;
+        //Status is hardcode now
+        const {
+          payment,
+          boxInfo,
+          codInfo,
+          tempOrderId = "-",
+          sellerId = "-",
+          status,
+        } = info?.row?.original;
+        const { AWB } = status[0] ?? "";
+        const copyString = `
+          Order Id: ${tempOrderId} 
+          Shipyaari Id: ${sellerId}
+          Tracking Id: ${AWB}
+          Package Details: ${ boxInfo.length > 0 && boxInfo[0].name} ${(boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""}
+          Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
+          Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
+          Status: Success
+          Payment: ${
+            payment?.amount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "INR",
+            }) ?? "0"
+          } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
+
+        `;
+
+        return (
+          <>
+            <CopyTooltip stringToBeCopied={copyString} />
+          </>
+        );
       },
     }),
   ];

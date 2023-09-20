@@ -1759,13 +1759,6 @@ const Index = () => {
         </>
       )}
 
-      {!userType && (
-        <>
-          {/*   <p>Returning User Component</p> */}
-          <ReturningUserPickup />
-        </>
-      )}
-
       <CommonBottomModal
         icon={MapIcon}
         label="Enter Landmark as"

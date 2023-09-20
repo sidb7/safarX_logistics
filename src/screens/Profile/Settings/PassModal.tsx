@@ -6,10 +6,17 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { toast } from "react-toastify";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 
 interface PassModalProps {
   isPassModalOpen: boolean;
   setIsPassModalOpen: React.Dispatch<React.SetStateAction<any>>;
+}
+interface PasswordVisibility {
+  oldPassword: boolean;
+  newPassword: boolean;
+  confirmNewPassword: boolean;
 }
 
 function PassModal(props: PassModalProps) {
@@ -20,10 +27,16 @@ function PassModal(props: PassModalProps) {
     confirmNewPassword: "",
   });
 
+  const [viewPassword, setViewPassword] = useState<PasswordVisibility>({
+    oldPassword: false,
+    newPassword: false,
+    confirmNewPassword: false,
+  });
+
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
       return toast.error(
-        "Please enter a new password and re-enter the same password !"
+        "Please enter a new password and re-enter the same password!"
       );
     }
     const { data }: any = await POST(UPDATE_PASSWORD, {
@@ -37,7 +50,14 @@ function PassModal(props: PassModalProps) {
       toast.error(data?.message);
     }
   };
-  console.log("password", password);
+
+  const togglePasswordVisibility = (field: keyof PasswordVisibility) => {
+    setViewPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
   return (
     <RightSideModal
       isOpen={isPassModalOpen}
@@ -49,10 +69,17 @@ function PassModal(props: PassModalProps) {
       <div className="flex flex-col w-full p-4 mt-5 ">
         <div className="flex justify-between w-full ">
           <div className="text-[24px] font-normal">Change Password</div>
-          <div>
+          <div className="cursor-pointer">
             <img
               src={CrossIcon}
-              onClick={() => setIsPassModalOpen(false)}
+              onClick={() => {
+                setIsPassModalOpen(false);
+                setViewPassword({
+                  oldPassword: false,
+                  newPassword: false,
+                  confirmNewPassword: false,
+                });
+              }}
               alt="close Icon"
               width="25px"
             />{" "}
@@ -61,21 +88,36 @@ function PassModal(props: PassModalProps) {
         <div className="flex flex-col mx-4 mt-4 gap-y-4">
           <CustomInputBox
             label="Old Password"
-            inputType="password"
+            inputType={viewPassword.oldPassword ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassword.oldPassword}
+            rightIcon={viewPassword.oldPassword ? CrossEyeIcon : EyeIcon}
+            setVisibility={() => togglePasswordVisibility("oldPassword")}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, oldPassword: e.target.value })
             }
           />
           <CustomInputBox
             label="New Password"
-            inputType="password"
+            inputType={viewPassword.newPassword ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassword.newPassword}
+            rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+            setVisibility={() => togglePasswordVisibility("newPassword")}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, newPassword: e.target.value })
             }
           />
           <CustomInputBox
             label="Re-enter New Password"
-            inputType="password"
+            inputType={viewPassword.confirmNewPassword ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassword.confirmNewPassword}
+            rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
+            setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, confirmNewPassword: e.target.value })
             }
