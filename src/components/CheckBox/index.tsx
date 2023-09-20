@@ -38,7 +38,7 @@ const Checkbox: React.FC<IProps> = ({
         onChange={onChange}
         title="Checkbox"
         style={style}
-        className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out`}
+        className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <span className={`ml-2 ${labelClassName} text-sm`}>{label}</span>
     </div>

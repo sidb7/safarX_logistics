@@ -71,7 +71,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                   return (
                     <Checkbox
                       key={index}
-                      disabled={true}
+                      // disabled={true}
                       checked={true}
                       onChange={(element) => {
                         handleCheckBox(element.target.checked, index);

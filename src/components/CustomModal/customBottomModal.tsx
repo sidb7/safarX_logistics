@@ -27,7 +27,7 @@ const MyModal: FC<ModalProps> = ({
       isOpen={isOpen}
       onRequestClose={onRequestClose}
       overlayClassName={`fixed inset-0  bg-black bg-opacity-50 flex items-end justify-center ${overlayClassName} `}
-      className={`bg-white rounded-t p-4 w-full  z-[9999] ${className}`}
+      className={`bg-white rounded p-4 w-full  z-[9999] ${className}`}
       contentLabel={contentLabel || "Modal"}
     >
       {children}
