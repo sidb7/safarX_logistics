@@ -88,10 +88,11 @@ const Billing = (props: ITypeProps) => {
           />
 
           <div className="w-full lg:flex lg:justify-center">
-            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0 mt-1 mb-6  lg:w-[320px] ">
-              <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
+            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0   lg:w-[320px] ">
+              {/*commented as instructed */}
+              {/* <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
-              </p>
+              </p> */}
 
               {/* <AddButton
                 onClick={() => {}}
@@ -104,7 +105,7 @@ const Billing = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:px-5 lg:h-[300px] lg:overflow-y-scroll ">
+          <div className="flex flex-col items-center lg:px-5 lg:h-[390px] lg:overflow-y-scroll ">
             <div className="  space-y-3 mb-6 ">
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4">
                 {defaultAddress?.map((el: any, i: number) => {
@@ -112,13 +113,12 @@ const Billing = (props: ITypeProps) => {
                     <div key={i}>
                       {el?.fullAddress !== "" && (
                         <Card
-                          onClick={(e) =>
-                            setDefaultAddressSelect(e.target.value)
-                          }
+                          onClick={setDefaultAddressSelect}
                           name="address"
-                          cardClassName="!mt-6"
+                          cardClassName="!mt-6 !cursor-pointer"
                           value={el?.addressId}
                           title={el?.fullAddress}
+                          checked={defaultAddressSelect === el?.addressId}
                           doctype={el?.doctype}
                           titleClassName="!font-normal !text-[12px]"
                         />
@@ -130,7 +130,7 @@ const Billing = (props: ITypeProps) => {
             </div>
           </div>
           {isLgScreen && (
-            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+            <div className="flex mt-8  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT"
                 className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px]"

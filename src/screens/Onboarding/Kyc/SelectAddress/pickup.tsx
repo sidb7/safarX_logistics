@@ -87,10 +87,11 @@ const PickUp = (props: ITypeProps) => {
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">
           <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0  mt-2 mb-4  lg:w-[320px] ">
-              <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
+            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0   lg:w-[320px] ">
+              {/*commented as instructed */}
+              {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
-              </p>
+              </p> */}
 
               {/* <AddButton
                 onClick={() => {}}
@@ -103,20 +104,22 @@ const PickUp = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:px-5 lg:h-[300px] lg:overflow-y-scroll ">
+          <div className="flex flex-col items-center lg:px-5 lg:h-[390px] lg:overflow-y-scroll ">
             <div className="  space-y-3 mb-6 ">
               {defaultAddress?.map((el: any, i: number) => {
                 return (
                   <div key={i}>
                     {el?.fullAddress !== "" && (
                       <Card
-                        onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                        // onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                        onClick={setDefaultAddressSelect}
                         name="address"
                         value={el?.addressId}
                         title={el?.fullAddress}
+                        checked={defaultAddressSelect === el?.addressId}
                         doctype={el?.doctype}
                         titleClassName="!font-normal !text-[12px]"
-                        cardClassName="!mt-6"
+                        cardClassName="!mt-6 !cursor-pointer"
                       />
                     )}
                   </div>

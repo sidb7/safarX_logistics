@@ -33,6 +33,7 @@ const BusinessType = (props: ITypeProps) => {
   const [loading, setLoading] = useState(false);
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
+
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const initialAddressCall = async () => {
@@ -170,8 +171,8 @@ const BusinessType = (props: ITypeProps) => {
 
         <div>
           <div className="flex flex-col justify-center items-center  lg:px-5 ">
-            <div className="flex items-center justify-between w-full  mt-1   lg:!w-[320px] ">
-              <p>Default</p>
+            <div className="flex items-center justify-between w-full    lg:!w-[320px] ">
+              {/* <p>Default</p> */}
               {/*commented as instructed by akshay */}
               {/* <div className="flex gap-x-2">
                 <img src={PlusIcon} alt="" />
@@ -196,13 +197,14 @@ const BusinessType = (props: ITypeProps) => {
                     return (
                       <Card
                         key={i}
-                        onClick={(e) => setDefaultAddressSelect(el)}
+                        onClick={setDefaultAddressSelect}
                         name="address"
-                        value={el?.fullAddress}
+                        value={el?.addressId}
                         title={el?.fullAddress}
                         doctype={el?.doctype}
+                        checked={defaultAddressSelect === el?.addressId}
                         titleClassName="!font-normal !text-[12px]"
-                        cardClassName="!mt-4"
+                        cardClassName="!mt-4 !cursor-pointer"
                       />
                     );
                   })}
@@ -224,13 +226,14 @@ const BusinessType = (props: ITypeProps) => {
                       <div key={i}>
                         {el?.fullAddress !== "" && (
                           <Card
-                            onClick={(e) => setDefaultAddressSelect(el)}
+                            onClick={setDefaultAddressSelect}
                             name="address"
-                            value={el?.fullAddress}
+                            value={el?.addressId}
                             title={el?.fullAddress}
                             doctype={el?.doctype}
+                            checked={defaultAddressSelect === el?.addressId}
                             titleClassName="!font-normal !text-[12px]"
-                            cardClassName="!mt-4"
+                            cardClassName="!mt-4 !cursor-pointer"
                           />
                         )}
                       </div>
