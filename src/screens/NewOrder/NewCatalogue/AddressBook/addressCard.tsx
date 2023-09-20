@@ -28,28 +28,35 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
       key={key}
     >
       <div className="flex justify-between">
-        <p className="text-[#004EFF] text-[16px] font-medium cursor-pointer">
+        <p className="text-[#004EFF] text-[16px] font-Open font-semibold leading-5 capitalize">
           {addressLabel}
         </p>
         <img
           src={EditImageWithBlack}
           alt=""
+          className="cursor-pointer"
           onClick={() =>
-            navigate("/catalogue/edit-address", {
+            navigate("/catalogues/catalogue/edit-address", {
               state: { addressData, activeTab },
             })
           }
         />
       </div>
-      <p className="text-[16px] font-medium mt-2 w-[250px]">{address}</p>
+      <p className="text-[16px] font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
+        {address}
+      </p>
 
-      <div className="flex gap-x-2 mt-1">
+      <div className="flex items-center gap-x-2 mt-2">
         <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
-        <p className="text-[16px] font-medium">{name}</p>
+        <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
+          {name}
+        </p>
       </div>
-      <div className="flex gap-x-2 mt-1">
+      <div className="flex items-center gap-x-2 mt-2">
         <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
-        <p className="text-[16px] font-medium">{phoneNumber}</p>
+        <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
+          {phoneNumber}
+        </p>
       </div>
     </div>
   );

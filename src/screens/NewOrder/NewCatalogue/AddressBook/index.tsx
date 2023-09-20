@@ -39,8 +39,9 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
         address?.state,
         address?.country,
       ].join(","),
-      name: address?.contactName,
-      phoneNumber: address?.mobileNo || address?.alternateMobileNo || "",
+      name: address?.contact?.name,
+      phoneNumber:
+        address?.contact?.mobileNo || address?.contact?.alternateMobileNo || "",
     };
   };
 
@@ -105,8 +106,12 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
                 label: "Domestic",
                 value: "Domestic",
               },
+              {
+                label: "International",
+                value: "International",
+              },
             ]}
-            selectClassName="rounded-md bg-[#FEFEFE] h-9"
+            selectClassName="rounded-md bg-[#FEFEFE] !h-[45px]"
           />
         </div>
       </div>
@@ -124,7 +129,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
           {filterComponent()}
 
           {/* Display Address */}
-          <div className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-0 mt-4">
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-0 mt-4">
             {address?.map((data: any, index: any) => {
               return (
                 <AddressCard
