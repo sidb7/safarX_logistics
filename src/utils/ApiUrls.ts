@@ -189,11 +189,15 @@ const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
-
+//Channel Store
+const POST_CREATE_STORE = `${SELLER_BASE_URL}/shopify/createShopifyStore`;
+const GET_ALL_STORES = `${SELLER_BASE_URL}/shopify/getStores`;
+const GET_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/getSingleStore`;
+const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/updateStore`;
 
 //Returing User
-const RETURNING_USER_PICKUP=`${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
-const RETURNING_USER_DELIVERY=`${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
+const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 export {
   SELLER_URL,
@@ -284,6 +288,10 @@ export {
   BULK_UPLOAD,
   FORGOT_PASSWORD,
   VERIFY_FORGET_PASSWORD,
+  POST_CREATE_STORE,
+  GET_ALL_STORES,
+  GET_SINGLE_STORE,
+  UPDATE_SINGLE_STORE,
   RETURNING_USER_PICKUP,
-  RETURNING_USER_DELIVERY
+  RETURNING_USER_DELIVERY,
 };

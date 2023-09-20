@@ -677,31 +677,31 @@ export const ChannelIntegrationCarts = {
       icon: ShopifyIcon,
       iconLg: ShopifyLg,
     },
-    {
-      name: "Woo",
-      icon: WooIcon,
-      iconLg: ShopifyLg,
-    },
-    {
-      name: "Woo",
-      icon: WooIcon,
-      iconLg: ShopifyLg,
-    },
-    {
-      name: "Shopify",
-      icon: ShopifyIcon,
-      iconLg: ShopifyLg,
-    },
-    {
-      name: "Woo",
-      icon: WooIcon,
-      iconLg: ShopifyLg,
-    },
-    {
-      name: "Woo",
-      icon: WooIcon,
-      iconLg: ShopifyLg,
-    },
+    // {
+    //   name: "Woo",
+    //   icon: WooIcon,
+    //   iconLg: ShopifyLg,
+    // },
+    // {
+    //   name: "Woo",
+    //   icon: WooIcon,
+    //   iconLg: ShopifyLg,
+    // },
+    // {
+    //   name: "Shopify",
+    //   icon: ShopifyIcon,
+    //   iconLg: ShopifyLg,
+    // },
+    // {
+    //   name: "Woo",
+    //   icon: WooIcon,
+    //   iconLg: ShopifyLg,
+    // },
+    // {
+    //   name: "Woo",
+    //   icon: WooIcon,
+    //   iconLg: ShopifyLg,
+    // },
   ],
 };
 
@@ -767,14 +767,10 @@ export const ChannelIntegrationInventory = {
   title: "Inventory Management System",
   channels: [
     {
-      name: "Salesforce",
-      icon: SalesforceIcon,
-      integrated: false,
-    },
-    {
       name: "Shopify",
       icon: ShopifyIcon,
       integrated: false,
+      iconLg: ShopifyLg,
     },
   ],
 };
@@ -1341,16 +1337,15 @@ export const filterItems = [
   },
 ];
 
-
-export const ticketTypeOptions=[
-{
+export const ticketTypeOptions = [
+  {
     label: "Support Type",
-   
+
     selected: true,
   },
   {
     label: "Other Type",
-   
+
     selected: false,
   },
-]
+];
