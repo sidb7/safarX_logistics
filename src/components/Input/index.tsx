@@ -20,6 +20,7 @@ interface propTypes {
   visibility?: any;
   onClick?: any;
   imageClassName?: string;
+  tempLabel?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -27,13 +28,14 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 ) => {
   const {
     label,
-    value,
+    value = undefined,
     inputMode = "",
-    onChange,
+    onChange = () => {},
     onClick,
     placeholder = "",
     className,
     containerStyle,
+    tempLabel,
     inputClassName,
     labelClassName,
     name,
@@ -48,16 +50,18 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     imageClassName,
   } = props;
 
+  console.log("tempLabel", tempLabel);
+
   return (
     <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>
         <input
           name={name}
           type={inputType}
-          placeholder={placeholder || ""}
+          placeholder={placeholder}
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
-          onChange={onChange}
+          onChange={(e: any) => onChange(e)}
           value={value}
           disabled={isDisabled}
           inputMode={inputMode}
@@ -65,8 +69,8 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         />
         <label
           className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
-            value && "filled"
-          } `}
+            value && tempLabel && "filled"
+          }  ${tempLabel ? "filled" : ""}`}
         >
           {label}
         </label>

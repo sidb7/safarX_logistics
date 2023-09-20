@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 const BottomLayout = ({
   callApi,
   Button2Name,
-  customButtonText = undefined,
+  customButtonText,
+  finalButtonText = "SAVE",
   className = "",
 }: any) => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const BottomLayout = ({
               ? "LOADING"
               : Button2Name
               ? `${customButtonText ? customButtonText : "NEXT"}`
-              : "SAVE"
+              : finalButtonText
           }
           className={`bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px] ${className}`}
           onClick={async () => {

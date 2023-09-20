@@ -327,6 +327,7 @@ const DeliveryLocation = () => {
       <BottomLayout
         callApi={() => postDeliveryOrderDetails()}
         // Button2Name={true}
+        finalButtonText="NEXT"
       />
     </div>
   );

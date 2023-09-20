@@ -478,6 +478,7 @@ const Index: React.FC = () => {
       )}
 
       <BottomLayout
+        finalButtonText="NEXT"
         callApi={() => {
           postServiceDetails();
         }}
