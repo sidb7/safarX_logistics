@@ -6,6 +6,8 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { toast } from "react-toastify";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 
 interface PassModalProps {
   isPassModalOpen: boolean;
@@ -19,7 +21,7 @@ function PassModal(props: PassModalProps) {
     newPassword: "",
     confirmNewPassword: "",
   });
-
+  const [viewPassWord, setViewPassWord] = useState(false);
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
       return toast.error(
@@ -49,7 +51,7 @@ function PassModal(props: PassModalProps) {
       <div className="flex flex-col w-full p-4 mt-5 ">
         <div className="flex justify-between w-full ">
           <div className="text-[24px] font-normal">Change Password</div>
-          <div>
+          <div className="cursor-pointer">
             <img
               src={CrossIcon}
               onClick={() => setIsPassModalOpen(false)}
@@ -61,21 +63,36 @@ function PassModal(props: PassModalProps) {
         <div className="flex flex-col mx-4 mt-4 gap-y-4">
           <CustomInputBox
             label="Old Password"
-            inputType="password"
+            inputType={viewPassWord ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassWord}
+            rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+            setVisibility={setViewPassWord}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, oldPassword: e.target.value })
             }
           />
           <CustomInputBox
             label="New Password"
-            inputType="password"
+            inputType={viewPassWord ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassWord}
+            rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+            setVisibility={setViewPassWord}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, newPassword: e.target.value })
             }
           />
           <CustomInputBox
             label="Re-enter New Password"
-            inputType="password"
+            inputType={viewPassWord ? "text" : "password"}
+            isRightIcon={true}
+            visibility={viewPassWord}
+            rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+            setVisibility={setViewPassWord}
+            onClick={() => {}}
             onChange={(e) =>
               setPassword({ ...password, confirmNewPassword: e.target.value })
             }
