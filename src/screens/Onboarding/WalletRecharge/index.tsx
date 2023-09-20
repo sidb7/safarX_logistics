@@ -109,7 +109,7 @@ const OnBoundingWalletRecharge = () => {
     const datas = await POST(POST_ADD_BANK_DETAILS, payload);
 
     if (datas?.data?.success) {
-      toast.success(datas?.data?.message);
+      toast.success("Bank Details verified successfully");
       setWalletRechargeModalOpen(true);
     } else {
       toast.error(datas?.data?.message);
