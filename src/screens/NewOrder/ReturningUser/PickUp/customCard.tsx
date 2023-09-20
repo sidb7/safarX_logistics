@@ -27,8 +27,8 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
   } bg-white w-[372px] h-[252px] ${checked ? "bg-gray-100" : "bg-white"}`;
   return (
     <div className={cardClasses} key={key}>
-      <div className="flex justify-between">
-        <div className="flex space-x-2">
+      <div className="flex justify-between ml-3 mb-1">
+        <div className="flex items-center space-x-2">
           <CustomCheckbox
             checked={checked}
 
