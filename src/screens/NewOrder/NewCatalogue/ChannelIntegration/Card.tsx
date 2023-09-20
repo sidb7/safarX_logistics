@@ -1,5 +1,10 @@
 const Card = (props: any) => {
-  const { channel, key } = props;
+  const { channel, key, setModalData, setIndexNum, index } = props;
+
+  const handleIntegration = (e: any) => {
+    if (setModalData) setModalData({ isOpen: true, modalData: channel });
+    if (setIndexNum) setIndexNum(index);
+  };
 
   return (
     <div className="relative z-1  mt-5" key={key}>
@@ -14,8 +19,17 @@ const Card = (props: any) => {
             {channel.name}
           </p>
         </div>
-        <div className="border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]">
-          <p className="font-semibold text-[14px] text-[#1C1C1C] uppercase">
+        <div
+          onClick={handleIntegration}
+          className={` ${
+            channel.integrated ? " bg-black" : ""
+          }  border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]`}
+        >
+          <p
+            className={` ${
+              channel.integrated ? "text-white" : ""
+            } font-semibold cursor-pointer text-[14px] text-[#1C1C1C] uppercase`}
+          >
             {channel.integrated ? "Integrated" : "Integrate"}
           </p>
         </div>
@@ -23,7 +37,9 @@ const Card = (props: any) => {
 
       {channel.integrated && (
         <p className="absolute -top-3 left-5  z-2 bg-[#4D83FF] flex items-center px-3 py-1 h-[24px] font-semibold text-[12px] rounded text-white">
-          {`${channel.storesIntegrated} Active Stores`}
+          {`${
+            channel.storesIntegrated ? channel.storesIntegrated : 1
+          }  Active Stores`}
         </p>
       )}
     </div>
