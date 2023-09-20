@@ -12,9 +12,12 @@ import { POST } from "../../../utils/webService";
 import {
   ADD_DELIVERY_LOCATION,
   GET_LATEST_ORDER,
+  RETURNING_USER_DELIVERY,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import RecipientType from "./Recipient/recipient";
+import { useSelector } from "react-redux";
+import ReturningDelivery from "../ReturningUser/Delivery";
 
 const steps = [
   {
@@ -57,6 +60,8 @@ const steps = [
 
 const DeliveryLocation = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
@@ -122,6 +127,10 @@ const DeliveryLocation = () => {
     orderType: "B2B",
     gstNumber: "",
   });
+  const userType = useSelector((state: any) => state.user.isReturningUser);
+
+  const [returningUserDeliveryData, setReturningUserDeliveryData] =
+    useState<any>([]);
 
   const postDeliveryOrderDetails = async () => {
     try {
@@ -230,6 +239,30 @@ const DeliveryLocation = () => {
     })();
   }, []);
 
+  const getReturningUserDeliveryDetails = async () => {
+    try {
+      setLoading(true);
+
+      const { data: response } = await POST(RETURNING_USER_DELIVERY);
+
+      if (response?.success) {
+        setReturningUserDeliveryData(response);
+      } else {
+        setReturningUserDeliveryData([]);
+      }
+    } catch (error) {
+      console.error("Error in Returning User API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userType) {
+      getReturningUserDeliveryDetails();
+    }
+  }, [userType]);
+
   return (
     <div className="w-full mb-24">
       <Breadcrum label="Add New Order" />
@@ -241,6 +274,27 @@ const DeliveryLocation = () => {
 
       {/* DELIVERY ADDRESS */}
 
+      {userType && (
+        <ReturningDelivery
+          data={{
+            returningUserDeliveryData,
+            setReturningUserDeliveryData,
+            onAddressSelect: (selectedAddress: any) => {
+              setDeliveryAddress((prevDeliveryAddress: any) => ({
+                ...prevDeliveryAddress,
+                deliveryAddress: {
+                  ...prevDeliveryAddress.deliveryAddress,
+                  ...selectedAddress,
+                },
+                billingAddress: {
+                  ...prevDeliveryAddress.billingAddress,
+                  ...selectedAddress,
+                },
+              }));
+            },
+          }}
+        />
+      )}
       <DeliveryAddress
         data={{
           deliveryAddress,

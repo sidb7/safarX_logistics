@@ -1,69 +1,80 @@
-import { useState } from "react";
+import LocationIcon from "../../../../assets/PickUp/Location.svg";
+// import CustomPickupLocation from "./customPickupLocation";
+// import EditIcon from "../../../../assets/PickUp/Edit.svg";
 import PlusIcon from "../../../../assets/ReturningUser/plusIcon.svg";
 import ProfileIcon from "../../../../assets/ReturningUser/profileIcon.svg";
-import LocationIcon from "../../../../assets/PickUp/Location.svg";
+// import CustomContact from "./customContact";
+// import PhoneIcon from "../../../../assets/ReturningUser/phoneIcon.svg";
+// import DatePicker from "../../../../components/Datepicker/customDatePicker";
+// import Switch from "react-switch";
+import { useState } from "react";
+// import { customContactData } from "../../../../utils/dummyData";
+// import { customPickUpData } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";
 import PickupCard from "../PickUp/customCard";
-import CustomCheckbox from "../../../../components/CheckBox";
 
-const ReturningDelivery = () => {
-  //   const [selectRecipient, setSelectRecipient] = useState({
-  //     business: true,
-  //     consumer: false,
-  //   });
-  const [returningAddress, setReturningAddress] = useState([
-    {
-      label: "Jhindal Warehouse",
-      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
-    },
-    {
-      label: "Jhindal Warehouse",
-      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
-    },
-    {
-      label: "Jhindal Warehouse",
-      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
-    },
-    {
-      label: "Jhindal Warehouse",
-      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
-    },
-    {
-      label: "Jhindal Warehouse",
-      address: "Plot no. ICICI Bank, Andheri, Maharastra 422012",
-    },
-  ]);
-  const [contactInfo, setContactInfo] = useState([
-    {
-      label: "Warehouse Associate",
-      name: "Anish Sharma ",
-      phoneNumber: "9969401238",
-    },
-    {
-      label: "Warehouse Associate",
-      name: "Anish Sharma ",
-      phoneNumber: "9969401238",
-    },
-    {
-      label: "Warehouse Associate",
-      name: "Anish Sharma ",
-      phoneNumber: "9969401238",
-    },
-    {
-      label: "Warehouse Associate",
-      name: "Anish Sharma ",
-      phoneNumber: "9969401238",
-    },
-    {
-      label: "Warehouse Associate",
-      name: "Anish Sharma ",
-      phoneNumber: "9969401238",
-    },
-  ]);
-  const navigate = useNavigate();
-  const handleNavgigate = () => {
-    navigate("/neworder/delivery");
+interface IReturningUserDeliveryAddress {
+  data: {
+    returningUserDeliveryData: any;
+    setReturningUserDeliveryData: any;
+    label?: string;
+    onAddressSelect: any;
   };
+}
+const ReturningDelivery: React.FunctionComponent<
+  IReturningUserDeliveryAddress
+> = ({
+  data: {
+    returningUserDeliveryData,
+    setReturningUserDeliveryData,
+    label,
+    onAddressSelect,
+  },
+}) => {
+  const [selectedCardID, setSelectedCardID] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  console.log("returningUserDataForCard", returningUserDeliveryData);
+  console.log("selectedcardId", selectedCardID);
+  console.log("selectedAddress", selectedAddress);
+
+  // const [toggleStatus, setToggleStatus] = useState(false);
+  const returningUserAddressData = returningUserDeliveryData?.data;
+
+  const returningUserAddress = returningUserAddressData?.map(
+    (addressData: any) => ({
+      label: addressData?.addressType,
+      address: addressData?.fullAddress,
+      name: addressData?.contact?.name,
+      phoneNumber: addressData?.contact?.mobileNo,
+      addressID: addressData?.deliveryAddressId,
+    })
+  );
+
+  const handleCardSelect = (selectedCardId: string) => {
+    setSelectedCardID(selectedCardId);
+
+    const selected = returningUserAddressData.find(
+      (addressData: any) => addressData.deliveryAddressId === selectedCardId
+    );
+
+    if (selected) {
+      setSelectedAddress(selected);
+      onAddressSelect(selected);
+    }
+  };
+
+  // const contactInfoData = returningUserData?.data;
+
+  // const contactInfo = contactInfoData?.map((contactData: any) => ({
+  //   label: contactData?.contact?.type,
+  //   name: contactData?.contact?.name,
+  //   phoneNumber: contactData?.contact?.mobileNo,
+  // }));
+  // const navigate = useNavigate();
+
+  // const handleNavgigate = () => {
+  //   navigate("/neworder/pickup");
+  // };
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start px-5">
@@ -76,13 +87,21 @@ const ReturningDelivery = () => {
 
       {/* address data  */}
 
-      <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2">
-        {returningAddress?.map((data: any, index: any) => {
-          return <PickupCard cardData={data} key={index} />;
+      <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2 scrollbar-thin scrollbar-thumb-black-400 scrollbar-track-black-200 ml-1 mb-1">
+        {returningUserAddress?.map((data: any, index: any) => {
+          // console.log("cardDaata", data);
+          return (
+            <div key={index} onClick={() => handleCardSelect(data?.addressID)}>
+              <PickupCard
+                cardData={data}
+                checked={data?.addressID === selectedCardID}
+              />
+            </div>
+          );
         })}
       </div>
 
-      <div className="flex justify-between mx-5 mt-2">
+      {/* <div className="flex justify-between mx-5 mt-2">
         <div
           className="flex items-center gap-x-2 mt-2"
           onClick={handleNavgigate}
@@ -95,19 +114,11 @@ const ReturningDelivery = () => {
         <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
           CHANGE
         </p>
-      </div>
-
-      <div className="flex flex-row items-center mx-4 mt-2">
-        <CustomCheckbox />
-        <p className="text-[14px] font-medium uppercase leading-5 text-[#004EFF] lg:font-semibold font-Open">
-          INCLUDE MY WAREHOUSE
-        </p>
-      </div>
-
-      <div className="flex items-center mt-5 mx-5 gap-x-2">
+      </div> */}
+      {/* <div className="flex items-center mt-3 mx-5 gap-x-2">
         <img src={ProfileIcon} alt="" />
         <p className="font-Lato text-2xl font-normal leading-8 text-[#323232]">
-          Your Top Delivery Address
+          Your Top Contact Address
         </p>
       </div>
 
@@ -130,7 +141,7 @@ const ReturningDelivery = () => {
         <p className="mt-2 border-b-2 border-[#004EFF] text-[#004EFF] text-[14px]">
           CHANGE
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

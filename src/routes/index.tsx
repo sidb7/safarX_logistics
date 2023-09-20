@@ -289,14 +289,14 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             /> */}
-            <Route
+            {/* <Route
               path="returninguserdelivery"
               element={
                 <ProtectedRoute>
                   <ReturningDelivery />
                 </ProtectedRoute>
               }
-            />
+            /> */}
             <Route
               path="returningservice"
               element={

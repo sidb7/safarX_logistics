@@ -193,6 +193,7 @@ const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 
 //Returing User
 const RETURNING_USER_PICKUP=`${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const RETURNING_USER_DELIVERY=`${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 export {
   SELLER_URL,
@@ -283,5 +284,6 @@ export {
   BULK_UPLOAD,
   FORGOT_PASSWORD,
   VERIFY_FORGET_PASSWORD,
-  RETURNING_USER_PICKUP
+  RETURNING_USER_PICKUP,
+  RETURNING_USER_DELIVERY
 };
