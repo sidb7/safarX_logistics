@@ -116,7 +116,7 @@ const Catalogue = () => {
           text={"ADD ADDRESS"}
           className="!p-3"
           onClick={() =>
-            navigate("/catalogue/add-address", {
+            navigate("/catalogues/catalogue/add-address", {
               state: { activeTab: addressTab },
             })
           }
