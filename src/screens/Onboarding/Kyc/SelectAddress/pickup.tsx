@@ -10,7 +10,6 @@ import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
 import {
   GET_DEFAULT_ADDRESS,
-  POST_UPDATE_COMPANY_URL,
   POST_UPDATE_DEFAULT_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
@@ -53,9 +52,12 @@ const PickUp = (props: ITypeProps) => {
   const onSubmit = async () => {
     try {
       if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
-        const payload = { addressId: defaultAddressSelect, isDefault: true };
+        const payload = {
+          addressId: defaultAddressSelect?.addressId,
+          isDefault: true,
+        };
         const { data: responses } = await POST(
-          POST_UPDATE_COMPANY_URL,
+          POST_UPDATE_DEFAULT_ADDRESS,
           payload
         );
         if (responses?.success) {
@@ -114,9 +116,11 @@ const PickUp = (props: ITypeProps) => {
                         // onClick={(e) => setDefaultAddressSelect(e.target.value)}
                         onClick={setDefaultAddressSelect}
                         name="address"
-                        value={el?.addressId}
+                        value={el}
                         title={el?.fullAddress}
-                        checked={defaultAddressSelect === el?.addressId}
+                        checked={
+                          defaultAddressSelect?.addressId === el?.addressId
+                        }
                         doctype={el?.doctype}
                         titleClassName="!font-normal !text-[12px]"
                         cardClassName="!mt-6 !cursor-pointer"
