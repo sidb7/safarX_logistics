@@ -193,17 +193,19 @@ const Tracking = () => {
           price: "500",
         },
       ],
-      isTrackingOpen: false,
-      isProductItemsOpen: false,
+      // isTrackingOpen: false,
+      // isProductItemsOpen: false,
     },
   ];
 
   const [trackingState, setTrackingState] = useState<any>([...tracking]);
 
-  const handleDropdown = (key: any, index: any) => {
-    let tempArr = trackingState;
-    tempArr[index][`${key}`] = !tempArr[index][`${key}`];
-    setTrackingState([...tempArr]);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection((prevOpenSection) =>
+      prevOpenSection === section ? null : section
+    );
   };
 
   return (
@@ -277,9 +279,7 @@ const Tracking = () => {
                           {/*tracking cycle details*/}
                           <div
                             className="flex justify-between cursor-pointer"
-                            onClick={() =>
-                              handleDropdown("isTrackingOpen", indexTracking)
-                            }
+                            onClick={() => toggleSection("tracking")}
                           >
                             <div className="flex gap-x-1 ">
                               <img src={TrackingMenu} alt="" />
@@ -290,14 +290,14 @@ const Tracking = () => {
 
                             <img
                               src={
-                                each?.isTrackingOpen
+                                openSection === "tracking"
                                   ? UpwardArrow
                                   : DownwardArrow
                               }
                               alt=""
                             />
                           </div>
-                          {each?.isTrackingOpen &&
+                          {openSection === "tracking" &&
                             each?.trackingDetails?.map(
                               (each: any, index: number) => {
                                 return (
@@ -319,7 +319,7 @@ const Tracking = () => {
                                       </p>
                                       <div className="flex pt-1 gap-x-2">
                                         <img
-                                          src={each?.locationImage}
+                                          src={Location}
                                           alt=""
                                           className="w-4 h- 4"
                                         />
@@ -338,12 +338,7 @@ const Tracking = () => {
                           </div>
                           <div
                             className="flex justify-between cursor-pointer"
-                            onClick={() =>
-                              handleDropdown(
-                                "isProductItemsOpen",
-                                indexTracking
-                              )
-                            }
+                            onClick={() => toggleSection("product")}
                           >
                             <div className="flex gap-x-1 ">
                               <img src={Product} alt="" />
@@ -353,7 +348,7 @@ const Tracking = () => {
                             </div>
                             <img
                               src={
-                                each?.isProductItemsOpen
+                                openSection === "product"
                                   ? UpwardArrow
                                   : DownwardArrow
                               }
@@ -362,13 +357,13 @@ const Tracking = () => {
                           </div>
                           <div
                             className={
-                              each?.isProductItemsOpen
+                              openSection === "product"
                                 ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
                                 : "grid grid-cols-2 "
                             }
                           >
                             {/*mapping product details */}
-                            {each?.isProductItemsOpen &&
+                            {openSection === "product" &&
                               each?.productDetails?.map(
                                 (each: any, index: number) => {
                                   return (
@@ -376,7 +371,7 @@ const Tracking = () => {
                                       key={index}
                                       className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
                                     >
-                                      <img src={each?.galleryImage} alt="" />
+                                      <img src={GalleryIcon} alt="" />
                                       <div>
                                         <p className="text-sm font-Open font-semibold">
                                           {each?.productheading}
@@ -410,8 +405,16 @@ const Tracking = () => {
               })}
             </div>
             <div className="flex flex-col gap-y-4 pl-10">
-              <img src={trackingIcon} alt="" />
-              <img src={trackingIcon2} alt="" />
+              <img
+                src={trackingIcon}
+                alt=""
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+              <img
+                src={trackingIcon2}
+                alt=""
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
             </div>
           </div>
         </div>
