@@ -198,6 +198,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       role="menuitem"
                       onClick={() => {
                         clearLocalStorage();
+                        sessionStorage.clear();
                         navigate("/");
                       }}
                     >

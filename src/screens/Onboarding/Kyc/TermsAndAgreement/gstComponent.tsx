@@ -32,8 +32,10 @@ export const GSTComponent = (props: ITypeProps) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("userInfo") as any);
-    setIsUserState(data);
+    let data = JSON.parse(sessionStorage.getItem("userInfo") as any);
+    if (data !== "" && data !== null) {
+      setIsUserState(data);
+    }
   }, []);
 
   const acceptStatus = async () => {
@@ -137,10 +139,15 @@ export const GSTComponent = (props: ITypeProps) => {
                   <p>
                     I/We
                     <b className="uppercase">
-                      {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
+                      {userState !== "" &&
+                        userState !== undefined &&
+                        userState !== null &&
+                        ` ${userState?.firstName} ${userState?.lastName} `}
                       {/* {userState?.firstName + " " + userState?.lastName} */}
                       {/*This will work when user login but didn't work when user signup as the line 144 is commented */}
-                      {" " + signInState?.name + " "}
+                      {signInState &&
+                        signInState?.name !== undefined &&
+                        ` ${signInState?.name} `}
                       {/*at the time of signup and signin rendering is different so tried with the condition*/}
                       {/* {(userState?.firstName &&
                         userState.lastName === undefined) ||
