@@ -464,8 +464,8 @@ const Tracking = () => {
             </div>
           </div>
         </div>
-        <div className="pt-12">
-          <div className="flex justify-evenly lg:gap-x-96 xl:justify-center xl:gap-x-[306px]">
+        <div className="mt-[150px]">
+          <div className="flex justify-end gap-x-5">
             <div className="flex gap-x-2">
               <img src={telephoneIcon} alt="" />
               <p className="text-base font-semibold font-Open whitespace-nowrap">
