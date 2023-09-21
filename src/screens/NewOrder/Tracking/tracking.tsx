@@ -20,6 +20,7 @@ import { GET, POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
 import CustomButton from "../../../components/Button";
 import { TRACKING } from "../../../utils/ApiUrls";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
 
 const Tracking = () => {
   // let tracking = [
@@ -126,12 +127,13 @@ const Tracking = () => {
   console.log("trackingState", trackingState);
   return (
     <>
-      <div className="mx-5">
+      <div className="mx-5 w-full">
+        <Breadcrum label="Tracking" />
         {/*shipyaari icon */}
-        <div className="flex justify-center p-3">
+        {/* <div className="flex justify-center p-3">
           <img src={shipyaari} alt="Shipyaari" />
-        </div>
-        <div className="flex gap-x-5 justify-around flex-row  ">
+        </div> */}
+        <div className="flex gap-x-5 flex-row ml-5 ">
           <div className="flex gap-5 basis-3/4">
             {/*tracking ID Box */}
             <div className="flex flex-col basis-3/4">
@@ -144,7 +146,7 @@ const Tracking = () => {
                 />
                 <CustomButton
                   text="Track Order"
-                  className="!p-5 !ml-2 !w-1/4"
+                  className="!ml-2 !w-1/4 h-full"
                   onClick={handleTrackOrderClick}
                 />
               </div>
