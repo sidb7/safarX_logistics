@@ -50,8 +50,6 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     imageClassName,
   } = props;
 
-  console.log("tempLabel", tempLabel);
-
   return (
     <div className="flex justify-center items-center w-full">
       <div className={`relative w-[100%] ${containerStyle}`}>

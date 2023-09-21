@@ -108,9 +108,14 @@ const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/product/getProduct`;
 const GET_SELLER_BOX = `${SELLER_URL}/api/v1/box/getSellerBox`;
-const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 const ADD_BOX_INFO = `${SELLER_URL}/api/v1/order/setBoxAndCODInfo`;
+
+//BOX URLs (Seller & Company Box)
+const CREATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/createSellerBox`;
+const UPDATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/updateSellerBox`;
+const DELETE_SELLER_BOX = `${SELLER_URL}/api/v1/box/deleteSellerBox`;
+const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
@@ -200,8 +205,11 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 export {
+  UPDATE_SELLER_BOX,
   SELLER_URL,
   ADD_BOX_INFO,
+  DELETE_SELLER_BOX,
+  CREATE_SELLER_BOX,
   GET_SINGLE_FILE,
   GET_SELLER_ORDER,
   ADD_COD_INFO,

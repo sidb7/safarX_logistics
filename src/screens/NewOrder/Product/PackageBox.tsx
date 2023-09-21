@@ -1,4 +1,6 @@
 import "../../../styles/packageStyle.css";
+import EditIcon from "../../../assets/Product/Edit.svg";
+import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
 interface IPackageBoxProps {
   recommended?: boolean;
   packageType: string;
@@ -9,6 +11,9 @@ interface IPackageBoxProps {
   breadth?: string;
   length?: string;
   selected?: boolean;
+  showAction?: boolean;
+  handleAction?: any;
+  deleteSellerBox?: any;
 }
 
 const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -20,13 +25,16 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   height = "",
   breadth = "",
   length = "",
+  showAction = true,
+  handleAction,
+  deleteSellerBox,
 }) => {
   return (
     <div className={recommended ? "relative py-2" : "py-2"}>
       <div
-        className={`flex flex-col  py-2 justify-center !w-64  ${
+        className={`flex flex-col py-3 px-4 justify-center !w-64  ${
           selected ? "border-[#004EFF]" : ""
-        }  lg:w-full border-2 rounded-md px-4 package-box`}
+        }  lg:w-full border-2 rounded-md  package-box `}
       >
         {recommended ? (
           <span
@@ -37,10 +45,27 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
         ) : (
           ""
         )}
-        <span className="font-bold leading-6 py-1 font-Open">
+        <div className="flex justify-between font-bold leading-6 py-1 font-Open">
           {packageType}
-        </span>
-        <div className="flex">
+
+          {showAction && (
+            <div className="cursor-pointer flex">
+              <img
+                src={EditIcon}
+                alt=""
+                onClick={handleAction}
+                className="w-4 mx-2"
+              />
+              <img
+                src={DeleteIcon}
+                alt=""
+                onClick={deleteSellerBox}
+                className="w-4 mx-2"
+              />
+            </div>
+          )}
+        </div>
+        <div className="flex text-sm">
           <span className="leading-6  font-Open">{`${volumetricWeight} Kg`}</span>
           <span className="leading-6  font-Open pl-1">{` |  ${height} x ${breadth} x ${length} cm`}</span>
         </div>
