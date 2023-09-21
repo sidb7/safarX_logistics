@@ -131,11 +131,11 @@ const Tracking = () => {
         <div className="flex justify-center p-3">
           <img src={shipyaari} alt="Shipyaari" />
         </div>
-        <div className="flex gap-x-5 justify-around flex-row flex-auto ">
+        <div className="flex gap-x-5 justify-around flex-row  ">
           <div className="flex gap-5 basis-3/4">
             {/*tracking ID Box */}
             <div className="flex flex-col basis-3/4">
-              <div className="flex ">
+              <div className="flex items-center">
                 <InputBox
                   label="Enter tracking ID"
                   value={trackingNo}
@@ -229,18 +229,18 @@ const Tracking = () => {
                                 (each: any, index: number) => {
                                   return (
                                     <div
-                                      className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                      className="flex  gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
                                       key={index}
                                     >
-                                      <div className="pt-1   ">
-                                        <p className="text-xs font-Open font-normal mr-3">
+                                      <div className="pt-1 flex-initial w-20  ">
+                                        <p className="text-xs font-Open font-normal ">
                                           {each?.date}
                                         </p>
-                                        <p className="text-xs font-Open font-normal mr-1	">
+                                        <p className="text-xs font-Open font-normal 	">
                                           {each?.time}
                                         </p>
                                       </div>
-                                      <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
+                                      <div className=" pt-1 flex-initial w-80	border-l-4 border-l-[#80A7FF] pl-5 border-dotted ">
                                         <p className="text-xs font-Open  font-normal">
                                           {each?.heading}
                                         </p>
@@ -248,13 +248,13 @@ const Tracking = () => {
                                           <img
                                             src={Location}
                                             alt=""
-                                            className="w-4 h- 4"
+                                            className="w-4 h-4"
                                           />
                                           <p className="text-xs font-Open font-normal">
                                             {each?.location}
                                           </p>
                                         </div>
-                                        <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[93px]"></div>
+                                        <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[98px]"></div>
                                       </div>
                                     </div>
                                   );
@@ -330,6 +330,12 @@ const Tracking = () => {
                     </div>
                   );
                 })}
+
+              {loading && (
+                <div className="fixed top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
+                  <Spinner />
+                </div>
+              )}
             </div>
             <div className="flex flex-col gap-y-4 pl-10">
               <img
