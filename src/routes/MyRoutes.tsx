@@ -516,7 +516,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/settings/settings"
+                path="/settings"
                 element={
                   <ProtectedRoute>
                     <SettingTab />
@@ -688,7 +688,7 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             <Route>
-              <Route path="/plans/plans" element={<NewUserPlanScreen />} />
+              <Route path="/plans" element={<NewUserPlanScreen />} />
               <Route path="/plans/plan-details" element={<PlanDetails />} />
             </Route>
             <Route>
