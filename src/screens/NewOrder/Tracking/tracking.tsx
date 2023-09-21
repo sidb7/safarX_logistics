@@ -16,195 +16,76 @@ import Product from "../../../assets/layer.svg";
 import GalleryIcon from "../../../assets/galleryIcon.svg";
 import Location from "../../../assets/other.png";
 import StarRating from "./starRating";
-import { POST } from "../../../utils/webService";
+import { GET, POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
 import CustomButton from "../../../components/Button";
+import { TRACKING } from "../../../utils/ApiUrls";
 
 const Tracking = () => {
-  let tracking = [
-    {
-      partner: {
-        partnerIcon: DelhiveryIcon,
-        partnerID: 0,
-        etaDate: "18 Jun 2023",
-        trackingNo: "GYSH23678119",
-        orderID: "GYSH23678119",
-        status: "Booked",
-        orderPlaced: "14 Jun",
-      },
+  // let tracking = [
+  //   {
+  //     partner: {
+  //       partnerIcon: DelhiveryIcon,
+  //       partnerID: 0,
+  //       etaDate: "18 Jun 2023",
+  //       trackingNo: "GYSH23678119",
+  //       orderID: "GYSH23678119",
+  //       status: "Booked",
+  //       orderPlaced: "14 Jun",
+  //     },
 
-      trackingDetails: [
-        {
-          date: "18 Jul, 2023",
-          time: "11:00  am",
-          heading: "Pick-up assigned",
-          locationImage: Location,
-          location: "Mumbai",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Reached Warehouse",
-          locationImage: Location,
-          location: "Bhiwandi",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Delivery assigned",
-          locationImage: telephoneIcon,
-          location: "+91 12345 12345",
-        },
-      ],
-      productDetails: [
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-      ],
-      isTrackingOpen: false,
-      isProductItemsOpen: false,
-    },
-    {
-      partner: {
-        partnerIcon: DelhiveryIcon,
-        partnerID: 1,
-        etaDate: "18 Jun 2023",
-        trackingNo: "GYSH23678119",
-        orderID: "GYSH23678119",
-        status: "Booked",
-        orderPlaced: "14 Jun",
-      },
+  //     trackingDetails: [
+  //       {
+  //         date: "18 Jul, 2023",
+  //         time: "11:00  am",
+  //         heading: "Pick-up assigned",
+  //         locationImage: Location,
+  //         location: "Mumbai",
+  //       },
+  //       {
+  //         date: "18 Jul, 2023",
+  //         time: "15:20",
+  //         heading: "Reached Warehouse",
+  //         locationImage: Location,
+  //         location: "Bhiwandi",
+  //       },
+  //       {
+  //         date: "18 Jul, 2023",
+  //         time: "15:20",
+  //         heading: "Delivery assigned",
+  //         locationImage: telephoneIcon,
+  //         location: "+91 12345 12345",
+  //       },
+  //     ],
+  //     productDetails: [
+  //       {
+  //         galleryImage: GalleryIcon,
+  //         productheading: "Lev's V necked T-shirt",
+  //         price: "500",
+  //       },
+  //       {
+  //         galleryImage: GalleryIcon,
+  //         productheading: "Lev's V necked T-shirt",
+  //         price: "500",
+  //       },
+  //       {
+  //         galleryImage: GalleryIcon,
+  //         productheading: "Lev's V necked T-shirt",
+  //         price: "500",
+  //       },
+  //       {
+  //         galleryImage: GalleryIcon,
+  //         productheading: "Lev's V necked T-shirt",
+  //         price: "500",
+  //       },
+  //     ],
+  //   },
+  // ];
 
-      trackingDetails: [
-        {
-          date: "18 Jul, 2023",
-          time: "11:00  am",
-          heading: "Pick-up assigned",
-          locationImage: Location,
-          location: "Mumbai",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Reached Warehouse",
-          locationImage: Location,
-          location: "Bhiwandi",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Delivery assigned",
-          locationImage: telephoneIcon,
-          location: "+91 12345 12345",
-        },
-      ],
-      productDetails: [
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-      ],
-      isTrackingOpen: false,
-      isProductItemsOpen: false,
-    },
-    {
-      partner: {
-        partnerIcon: DelhiveryIcon,
-        partnerID: 2,
-        etaDate: "18 Jun 2023",
-        trackingNo: "GYSH23678119",
-        orderID: "GYSH23678119",
-        status: "Booked",
-        orderPlaced: "14 Jun",
-      },
-
-      trackingDetails: [
-        {
-          date: "18 Jul, 2023",
-          time: "11:00  am",
-          heading: "Pick-up assigned",
-          locationImage: Location,
-          location: "Mumbai",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Reached Warehouse",
-          locationImage: Location,
-          location: "Bhiwandi",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Delivery assigned",
-          locationImage: telephoneIcon,
-          location: "+91 12345 12345",
-        },
-      ],
-      productDetails: [
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-      ],
-      // isTrackingOpen: false,
-      // isProductItemsOpen: false,
-    },
-  ];
-
-  const [trackingState, setTrackingState] = useState<any>([...tracking]);
-
+  // const [trackingState, setTrackingState] = useState<any>([...tracking]);
+  const [trackingState, setTrackingState] = useState<any>(null);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const [trackingNo, settrackingNo] = useState<string>("");
+  const [trackingNo, setTrackingNo] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const toggleSection = (section: string) => {
@@ -215,19 +96,22 @@ const Tracking = () => {
   const handletrackingNoChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    settrackingNo(event.target.value);
+    setTrackingNo(event.target.value);
   };
+  console.log("trackingUrl", TRACKING);
+  const handleTrackOrderClick = async () => {
+    if (trackingNo.trim() === "") {
+      return;
+    }
 
-  const getTrackingDetails = async () => {
     try {
       setLoading(true);
-      let payload = {
-        trackingNo: trackingNo,
-      };
-      const { data: response } = await POST("");
+
+      const urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`;
+      const { data: response } = await GET(urlWithTrackingNo);
 
       if (response?.success) {
-        setTrackingState(response);
+        setTrackingState(response?.data);
       } else {
         setTrackingState([]);
       }
@@ -238,11 +122,8 @@ const Tracking = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getTrackingDetails();
-  // }, []);
-
   console.log("trackingNo", trackingNo);
+  console.log("trackingState", trackingState);
   return (
     <>
       <div className="mx-5">
@@ -264,14 +145,14 @@ const Tracking = () => {
                 <CustomButton
                   text="Track Order"
                   className="!p-5 !ml-2 !w-1/4"
-                  onClick={() => {}}
+                  onClick={handleTrackOrderClick}
                 />
               </div>
               {/* <p className="text-[10px] py-2 font-Open font-bold">
                   For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
                 </p> */}
 
-              {loading &&
+              {!loading &&
                 trackingState?.map((each: any, indexTracking: number) => {
                   return (
                     <div key={indexTracking}>
@@ -281,9 +162,9 @@ const Tracking = () => {
                           <>
                             <div className="flex justify-between">
                               <img src={each?.partner?.partnerIcon} alt="" />
-                              <p className="text-sm font-semibold font-Open">
+                              {/* <p className="text-sm font-semibold font-Open">
                                 {each?.partner?.etaDate}
-                              </p>
+                              </p> */}
                             </div>
 
                             <div className="flex justify-between pt-2">
@@ -291,7 +172,7 @@ const Tracking = () => {
                                 <p className="text-xs font-normal font-Open">
                                   Tracking ID:
                                   <span className="font-bold">
-                                    {each?.partner?.trackingNo}
+                                    {each?.partner?.trackingID}
                                   </span>
                                 </p>
                                 <p className="text-xs font-normal font-Open">
@@ -351,11 +232,11 @@ const Tracking = () => {
                                       className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
                                       key={index}
                                     >
-                                      <div className="pt-1">
-                                        <p className="text-xs font-Open font-normal">
+                                      <div className="pt-1   ">
+                                        <p className="text-xs font-Open font-normal mr-3">
                                           {each?.date}
                                         </p>
-                                        <p className="text-xs font-Open font-normal">
+                                        <p className="text-xs font-Open font-normal mr-1	">
                                           {each?.time}
                                         </p>
                                       </div>
@@ -373,7 +254,7 @@ const Tracking = () => {
                                             {each?.location}
                                           </p>
                                         </div>
-                                        <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[83px]"></div>
+                                        <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[93px]"></div>
                                       </div>
                                     </div>
                                   );

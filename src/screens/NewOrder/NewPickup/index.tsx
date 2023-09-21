@@ -20,6 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
+import ModalContent from "./RightModal/ModalContent";
 
 const steps = [
   {
@@ -64,6 +66,8 @@ const PickupLocation = () => {
   const navigate = useNavigate();
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
+  const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
@@ -351,6 +355,21 @@ const PickupLocation = () => {
           setPickupAddress,
         }}
       />
+
+      {/* <RightSideModal
+        isOpen={isRightLandmarkModal}
+        onClose={() => setIsRightLandmarkModal(false)}
+        className="!w-[389px]"
+      >
+        <ModalContent
+          title="Save Landmark as"
+          // stitleIcon={MapIcon}
+          buttonText="CONFIRM"
+          inputLabel="Type landmark"
+          onClick={() => setIsRightLandmarkModal(false)}
+          onCustomLandmarkSelection={handleLandmarkSelected}
+        />
+      </RightSideModal> */}
 
       <BottomLayout
         callApi={() => postPickupOrderDetails()}
