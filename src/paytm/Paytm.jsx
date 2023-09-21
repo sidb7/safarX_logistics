@@ -8,7 +8,7 @@ import {
 } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
 
-function Paytm({ text, amt }) {
+function Paytm({ text, amt, navigate="" }) {
   let urlLink = "";
   let mid = "";
   let website = "";
@@ -33,6 +33,7 @@ function Paytm({ text, amt }) {
     });
     if (data?.success) {
       // setShowCheckout(false);
+      window.location.href = navigate;
       toast.success("Successfully Done");
     }
   };
