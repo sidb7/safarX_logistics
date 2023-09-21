@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 
@@ -10,7 +10,7 @@ interface ITypeProps {
   inputLabel?: string;
   buttonText?: string;
   onClick?: () => void;
-  onCustomLandmarkSelection: (customLandmark: string) => void;
+  onCustomAddressTypeSelection: (customLandmark: string) => void;
 }
 
 const ModalContent = (props: ITypeProps) => {
@@ -20,19 +20,21 @@ const ModalContent = (props: ITypeProps) => {
     inputLabel,
     buttonText,
     onClick,
-    onCustomLandmarkSelection,
+    onCustomAddressTypeSelection,
   } = props;
 
-  const [customLandmark, setCustomLandmark] = useState("");
+  const [customAddressType, setCustomAddressType] = useState("");
 
-  const handleLandmarkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomLandmark(event.target.value);
+  const handleAddressTypeSelected = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCustomAddressType(event.target.value);
   };
 
   const handleButtonClick = () => {
-    onCustomLandmarkSelection(customLandmark);
+    onCustomAddressTypeSelection(customAddressType);
 
-    setCustomLandmark("");
+    setCustomAddressType("");
 
     if (onClick) {
       onClick();
@@ -55,12 +57,14 @@ const ModalContent = (props: ITypeProps) => {
           />
         </div>
       </div>
-      <CustomInputBox
-        label={inputLabel}
-        className="px-5"
-        value={customLandmark}
-        onChange={handleLandmarkChange}
-      />
+      <div className="mt-5 ml-5">
+        <CustomInputBox
+          label={inputLabel}
+          className="  !w-[350px]"
+          value={customAddressType}
+          onChange={handleAddressTypeSelected}
+        />
+      </div>
       <div
         className="hidden lg:flex justify-end shadow-lg border-[1px] bg-[#FFFFFF] p-6 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
         style={{ width: "-webkit-fill-available" }}

@@ -356,21 +356,6 @@ const PickupLocation = () => {
         }}
       />
 
-      {/* <RightSideModal
-        isOpen={isRightLandmarkModal}
-        onClose={() => setIsRightLandmarkModal(false)}
-        className="!w-[389px]"
-      >
-        <ModalContent
-          title="Save Landmark as"
-          // stitleIcon={MapIcon}
-          buttonText="CONFIRM"
-          inputLabel="Type landmark"
-          onClick={() => setIsRightLandmarkModal(false)}
-          onCustomLandmarkSelection={handleLandmarkSelected}
-        />
-      </RightSideModal> */}
-
       <BottomLayout
         callApi={() => postPickupOrderDetails()}
         Button2Name={true}
