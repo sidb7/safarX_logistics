@@ -584,7 +584,11 @@ const Payment = () => {
               <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
                 <div className="flex flex-col items-center gap-y-2">
                   <img src={upiIcon} alt="" className="ml-0 object-contain" />
-                  <Paytm text={"Paytm"} amt={walletValue} />
+                  <Paytm
+                    text={"Paytm"}
+                    amt={walletValue}
+                    navigate="/orders/add-order/payment"
+                  />
                   {/* <p className="text-[12px]">UPI</p> */}
                 </div>
                 {/* <div className="flex flex-col items-center gap-y-2">
