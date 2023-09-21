@@ -10,7 +10,6 @@ import AddButton from "../../../../components/Button/addButton";
 import PlusIcon from "../../../../assets/plusIcon.svg";
 import {
   GET_DEFAULT_ADDRESS,
-  POST_UPDATE_COMPANY_URL,
   POST_UPDATE_DEFAULT_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
@@ -53,10 +52,13 @@ const Billing = (props: ITypeProps) => {
   const onSubmit = async () => {
     try {
       if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
-        const payload = { addressId: defaultAddressSelect, isBilling: true };
+        const payload = {
+          addressId: defaultAddressSelect?.addressId,
+          isBilling: true,
+        };
 
         const { data: responses } = await POST(
-          POST_UPDATE_COMPANY_URL,
+          POST_UPDATE_DEFAULT_ADDRESS,
           payload
         );
         if (responses?.success) {
@@ -116,9 +118,11 @@ const Billing = (props: ITypeProps) => {
                           onClick={setDefaultAddressSelect}
                           name="address"
                           cardClassName="!mt-6 !cursor-pointer"
-                          value={el?.addressId}
+                          value={el}
                           title={el?.fullAddress}
-                          checked={defaultAddressSelect === el?.addressId}
+                          checked={
+                            defaultAddressSelect?.addressId === el?.addressId
+                          }
                           doctype={el?.doctype}
                           titleClassName="!font-normal !text-[12px]"
                         />
