@@ -37,7 +37,7 @@ const CopyTooltip: React.FC<CopyTooltipProps> = ({ stringToBeCopied }) => {
 
       {isTooltipVisible && (
         <div className="bg-gray-800 text-white text-xs rounded-md px-2 py-1 absolute bottom-full left-1/2 transform -translate-x-1/2 transition-opacity duration-300 opacity-100 pointer-events-none">
-          {`${isCopied ? "Copied to Clipboard" : "Copy to Clipboard"}`}
+          {`${isCopied ? "Copied" : "Copy"}`}
         </div>
       )}
     </div>
