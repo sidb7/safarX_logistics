@@ -4,6 +4,8 @@ let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
 let LANDMARK_URL = "";
+let TRACKING_URL = "";
+
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
@@ -15,6 +17,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
 
     break;
 
@@ -24,7 +27,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
-
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
     break;
 
   case "production":
@@ -33,6 +36,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
 
     break;
 
@@ -42,6 +46,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
 
     break;
 }
@@ -204,6 +209,10 @@ const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/updateStore`;
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
+//Tracking
+const TRACKING= `${TRACKING_URL}/api/v1/tracking/getTracking`;
+
+
 export {
   UPDATE_SELLER_BOX,
   SELLER_URL,
@@ -302,4 +311,5 @@ export {
   UPDATE_SINGLE_STORE,
   RETURNING_USER_PICKUP,
   RETURNING_USER_DELIVERY,
+  TRACKING
 };

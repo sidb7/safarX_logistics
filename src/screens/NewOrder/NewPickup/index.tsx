@@ -20,6 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
+import ModalContent from "./RightModal/ModalContent";
 
 const steps = [
   {
@@ -64,6 +66,8 @@ const PickupLocation = () => {
   const navigate = useNavigate();
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
+  const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
+
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",

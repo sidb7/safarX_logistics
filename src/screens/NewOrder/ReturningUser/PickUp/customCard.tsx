@@ -22,7 +22,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
   checked,
 }) => {
   const navigate = useNavigate();
-  const cardClasses = `p-4 shadow-lg rounded-lg ${
+  const cardClasses = `p-4 shadow-lg rounded-lg cursor-pointer ${
     checked ? "border-[2px] border-green-500" : "border-[1px] border-[#E8E8E8]"
   } bg-white w-[372px] h-[252px] ${checked ? "bg-gray-100" : "bg-white"}`;
   return (
