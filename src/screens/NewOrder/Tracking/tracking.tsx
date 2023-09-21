@@ -394,14 +394,14 @@ const Tracking = () => {
                       </div>
                     </div>
                     <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
-                      <div className="flex gap-x-2 px-2">
+                      <div className="flex gap-x-2 px-2 ml-9">
                         <img src={Star} alt="" />
                         <p className="font-Lato text-lg font-semibold xl:max-w-[358px]">
                           How much would you recommend a product to your friends
                           and family?
                         </p>
                       </div>
-                      <div className="px-3  pt-2">
+                      <div className="px-3  pt-2 ml-16 mt-2">
                         <StarRating />
                       </div>
                     </div>
