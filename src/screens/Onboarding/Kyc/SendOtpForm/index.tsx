@@ -44,8 +44,8 @@ const Index = (props: ITypeProps) => {
   const gstNumber = useSelector((state: any) => state?.onboarding.gstNumber);
   const panNumber = useSelector((state: any) => state?.onboarding.panNumber);
 
-  const aadharNumber = useSelector(
-    (state: any) => state?.onboarding.aadharNumber
+  const aadharNumber = useSelector((state: any) =>
+    state?.onboarding.aadharNumber === 0 ? "" : state?.onboarding.aadharNumber
   );
 
   const { gstError, panError, aadharError } = useSelector(
