@@ -22,6 +22,7 @@ import CustomButton from "../../../components/Button";
 import { TRACKING } from "../../../utils/ApiUrls";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { getQueryJson } from "../../../utils/utility";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
 const Tracking = () => {
   // let tracking = [
@@ -179,18 +180,24 @@ const Tracking = () => {
                             </div>
 
                             <div className="flex justify-between pt-2">
-                              <div className="flex gap-x-8 items-end xl:pr-4">
+                              <div className="flex gap-x-8 items-end items-center xl:pr-4">
                                 <p className="text-xs font-normal font-Open">
                                   Tracking ID:
                                   <span className="font-bold pl-1">
                                     {each?.partner?.trackingID}
                                   </span>
+                                  <CopyTooltip
+                                    stringToBeCopied={each?.partner?.trackingID}
+                                  />
                                 </p>
                                 <p className="text-xs font-normal font-Open">
                                   Order ID:
                                   <span className="font-bold pl-1">
                                     {each?.partner?.orderID}
                                   </span>
+                                  <CopyTooltip
+                                    stringToBeCopied={each?.partner?.orderID}
+                                  />
                                 </p>
                               </div>
 
