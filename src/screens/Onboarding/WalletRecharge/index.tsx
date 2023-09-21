@@ -435,7 +435,11 @@ const OnBoundingWalletRecharge = () => {
                   alt=""
                   className="ml-0 object-contain"
                 />
-                <Paytm text={"Paytm"} amt={money} />
+                <Paytm
+                  text={"Paytm"}
+                  amt={money}
+                  navigate="/dashboard/overview"
+                />
                 {/* <p className="text-[12px]">UPI</p> */}
               </div>
 
