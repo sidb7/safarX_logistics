@@ -21,6 +21,7 @@ import { Spinner } from "../../../components/Spinner";
 import CustomButton from "../../../components/Button";
 import { TRACKING } from "../../../utils/ApiUrls";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
+import { getQueryJson } from "../../../utils/utility";
 
 const Tracking = () => {
   // let tracking = [
@@ -88,7 +89,8 @@ const Tracking = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<string>("");
   const [loading, setLoading] = useState(false);
-
+  const params = getQueryJson();
+  const trackingNoFromUrl = params?.trackingNo;
   const toggleSection = (section: string) => {
     setOpenSection((prevOpenSection) =>
       prevOpenSection === section ? null : section
@@ -122,6 +124,13 @@ const Tracking = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (trackingNoFromUrl) {
+      setTrackingNo(trackingNoFromUrl);
+      handleTrackOrderClick();
+    }
+  }, [trackingNoFromUrl]);
 
   console.log("trackingNo", trackingNo);
   console.log("trackingState", trackingState);
