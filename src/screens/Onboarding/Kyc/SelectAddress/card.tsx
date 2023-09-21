@@ -8,8 +8,9 @@ interface ITypesProps {
   subContent?: string;
   isSubContent?: boolean;
   cardClassName?: string;
+
   doctype?: string;
-  onClick?: (e: any) => void;
+  onClick?: (e?: any) => void;
   checked?: boolean;
 }
 
@@ -23,6 +24,7 @@ const card = (props: ITypesProps) => {
     isSubContent,
     cardClassName,
     doctype,
+
     onClick = () => {},
     checked,
   } = props;
