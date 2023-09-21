@@ -171,13 +171,13 @@ const Tracking = () => {
                               <div className="flex gap-x-8 items-end xl:pr-4">
                                 <p className="text-xs font-normal font-Open">
                                   Tracking ID:
-                                  <span className="font-bold">
+                                  <span className="font-bold pl-1">
                                     {each?.partner?.trackingID}
                                   </span>
                                 </p>
                                 <p className="text-xs font-normal font-Open">
                                   Order ID:
-                                  <span className="font-bold">
+                                  <span className="font-bold pl-1">
                                     {each?.partner?.orderID}
                                   </span>
                                 </p>
@@ -193,7 +193,7 @@ const Tracking = () => {
                             <div>
                               <p className="text-xs font-Open font-normal pt-2">
                                 Order Placed:
-                                <span className="font-bold">
+                                <span className="font-bold pl-1">
                                   {each?.partner?.orderPlaced}
                                 </span>
                               </p>
