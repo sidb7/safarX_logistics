@@ -169,6 +169,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     setIsSearchProductRightModalOpen(false);
   };
 
+  const handlePackageDetailsForCombo = (comboData: any) => {
+    console.log("handlePackageDetailsForCombo", combo);
+  };
+
   const handleOpenPackageDetails = (boxIndex: any) => {
     const { products } = packages[boxIndex];
     setSelectedProductsOfPackage([...products]);
@@ -705,6 +709,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           isSearchProductRightModalOpen={isSearchProductRightModalOpen}
           setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
           handlePackageDetails={handlePackageDetailsForProduct}
+          handleComboToPackageDetails={handlePackageDetailsForCombo}
         />
       )}
       ;
