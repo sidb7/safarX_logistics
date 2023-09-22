@@ -46,42 +46,35 @@ export const CustomTable = (props: ITablePropTypes) => {
           ))}
         </thead>
         <tbody className="section ">
-          {table.getRowModel().rows?.length > 0 ? (
-            table.getRowModel().rows?.map((row: any) => (
-              <tr
-                key={row.id}
-                className={`shadow-md rounded-lg	hover:bg-slate-100 ${trclassName}`}
-              >
-                {row.getVisibleCells()?.map((cell: any) => (
-                  <td key={cell.id} className={`px-4 text-left ${tdclassName}`}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))
-          ) : (
-            <tr className="w-full text-center flex justify-center items-center font-Open text-base font-semibold text-[#1C1C1C]">
-              No Data
-            </tr>
-          )}
-        </tbody>
-        {/* <tfoot>
-          {table.getFooterGroups()?.map((footerGroup: any) => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers?.map((header: any) => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.footer,
-                        header.getContext()
+          {table.getRowModel().rows?.length > 0
+            ? table.getRowModel().rows?.map((row: any) => (
+                <tr
+                  key={row.id}
+                  className={`shadow-md rounded-lg	hover:bg-slate-100 ${trclassName}`}
+                >
+                  {row.getVisibleCells()?.map((cell: any) => (
+                    <td
+                      key={cell.id}
+                      className={`px-4 text-left ${tdclassName}`}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
                       )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot> */}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            : ""}
+        </tbody>
       </table>
+      <div>
+        {table.getRowModel().rows?.length === 0 && (
+          <div className="w-full h-52 bg-[#e8e8e8] hover:bg-[#eeeeee] flex rounded-lg justify-center items-center">
+            No Data Found
+          </div>
+        )}
+      </div>
     </div>
   );
 };

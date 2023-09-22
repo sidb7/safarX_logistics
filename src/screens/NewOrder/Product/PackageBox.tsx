@@ -25,7 +25,7 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   height = "",
   breadth = "",
   length = "",
-  showAction = true,
+  showAction = false,
   handleAction,
   deleteSellerBox,
 }) => {
