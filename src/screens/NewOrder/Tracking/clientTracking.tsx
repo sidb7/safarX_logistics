@@ -201,10 +201,12 @@ const Tracking = () => {
 
   const [trackingState, setTrackingState] = useState<any>([...tracking]);
 
-  const handleDropdown = (key: any, index: any) => {
-    let tempArr = trackingState;
-    tempArr[index][`${key}`] = !tempArr[index][`${key}`];
-    setTrackingState([...tempArr]);
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection((prevOpenSection) =>
+      prevOpenSection === section ? null : section
+    );
   };
 
   return (
@@ -279,9 +281,7 @@ const Tracking = () => {
                           <div
                             className="flex justify-between cursor-pointer"
                             // onClick={() => setOpenTracking(!openTracking)}
-                            onClick={() =>
-                              handleDropdown("isTrackingOpen", indexTracking)
-                            }
+                            onClick={() => toggleSection("tracking")}
                           >
                             <div className="flex gap-x-1 ">
                               <img src={TrackingMenu} alt="" />
@@ -292,14 +292,14 @@ const Tracking = () => {
 
                             <img
                               src={
-                                each?.isTrackingOpen
+                                openSection === "tracking"
                                   ? UpwardArrow
                                   : DownwardArrow
                               }
                               alt=""
                             />
                           </div>
-                          {each?.isTrackingOpen &&
+                          {openSection === "tracking" &&
                             each?.trackingDetails?.map(
                               (each: any, index: number) => {
                                 return (
@@ -340,12 +340,7 @@ const Tracking = () => {
                           </div>
                           <div
                             className="flex justify-between cursor-pointer"
-                            onClick={() =>
-                              handleDropdown(
-                                "isProductItemsOpen",
-                                indexTracking
-                              )
-                            }
+                            onClick={() => toggleSection("product")}
                           >
                             <div className="flex gap-x-1 ">
                               <img src={Product} alt="" />
@@ -355,7 +350,7 @@ const Tracking = () => {
                             </div>
                             <img
                               src={
-                                each?.isProductItemsOpen
+                                openSection === "product"
                                   ? UpwardArrow
                                   : DownwardArrow
                               }
@@ -364,13 +359,13 @@ const Tracking = () => {
                           </div>
                           <div
                             className={
-                              each?.isProductItemsOpen
+                              openSection === "product"
                                 ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
                                 : "grid grid-cols-2 "
                             }
                           >
                             {/*mapping product details */}
-                            {each?.isProductItemsOpen &&
+                            {openSection === "product" &&
                               each?.productDetails?.map(
                                 (each: any, index: number) => {
                                   return (

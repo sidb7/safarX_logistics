@@ -692,7 +692,9 @@ const MyRoutes: React.FC = () => {
               <Route path="/plans/plan-details" element={<PlanDetails />} />
             </Route>
             <Route>
-              <Route path="/tracking/shipyaari" element={<Tracking />} />
+              <Route path="/tracking" element={<Tracking />} />
+
+              {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
               <Route
                 path="/tracking/clientTracking"
                 element={<ClientTracking />}
