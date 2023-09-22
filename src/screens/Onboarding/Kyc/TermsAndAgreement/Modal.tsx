@@ -1,19 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopUpModal from "../../../../components/CustomModal/customBottomModal";
 // import TickIcon from "../../../../assets/Payment/Done.gif";
 import TickGif from "../../../../assets/tick.gif";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 interface ITypesProps {}
 
 const Modal = (props: ITypesProps) => {
   const [showModal, setShowModal] = useState(true);
+  const [businessType, setBusinessType] = useState<any>();
 
-  const businessType = useSelector(
-    (state: any) => state?.onboarding.businessType
-  );
+  useEffect(() => {
+    let localbtype = sessionStorage.getItem("businessType");
+    setBusinessType(localbtype);
+  }, []);
+
   const navigate = useNavigate();
 
   return (

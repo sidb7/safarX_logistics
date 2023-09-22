@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { POST } from "../../../../utils/webService";
 import { POST_GET_SINGLE_FILE } from "../../../../utils/ApiUrls";
+import LogisticsServicesAgreement from "./LogisticsServicesAgreement";
 
 interface ITypesProps {
   title?: string;
@@ -10,22 +11,22 @@ interface ITypesProps {
 
 const Card = (props: ITypesProps) => {
   const { title, titleClassName } = props;
-  const [pdfUrl, setPdfUrl] = useState("");
+  // const [pdfUrl, setPdfUrl] = useState("");
 
-  async function fetchPdf() {
-    try {
-      const payload = { fileName: "SERVICE_AGREEMENT" };
-      const { data: response } = await POST(POST_GET_SINGLE_FILE, payload);
+  // async function fetchPdf() {
+  //   try {
+  //     const payload = { fileName: "SERVICE_AGREEMENT" };
+  //     const { data: response } = await POST(POST_GET_SINGLE_FILE, payload);
 
-      setPdfUrl(response.data[0]);
-    } catch (error) {
-      return error;
-    }
-  }
+  //     setPdfUrl(response.data[0]);
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchPdf();
-  }, []);
+  // useEffect(() => {
+  //   fetchPdf();
+  // }, []);
 
   return (
     <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-4">
@@ -36,8 +37,9 @@ const Card = (props: ITypesProps) => {
           {title}
         </p>
         <div className="px-8 flex flex-col gap-y-2">
-          <div className="h-[370px] overflow-y-scroll">
-            <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe>
+          <div className="h-[370px] w-full overflow-y-scroll">
+            {/* <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe> */}
+            <LogisticsServicesAgreement />
           </div>
         </div>
       </div>
