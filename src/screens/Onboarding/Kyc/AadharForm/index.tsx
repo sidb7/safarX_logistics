@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WelcomeHeader from "../welcomeHeader";
 import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
@@ -24,22 +24,35 @@ const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
-  const dispatch = useDispatch();
-  const { aadharNumber, otpBtnStatus, aadharError } = useSelector(
-    (state: any) => state?.onboarding.aadharNumberProprietor
-  );
+
+  const [aadharNumber, setAadharNumber] = useState<any>();
+  const [aadharError, setAadharError] = useState<any>();
+  const [otpBtnStatus, setOtpBtnStatus] = useState<any>(false);
+
+  // const dispatch = useDispatch();
+  // const { aadharNumber, otpBtnStatus, aadharError } = useSelector(
+  //   (state: any) => state?.onboarding.aadharNumberProprietor
+  // );
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
 
+  useEffect(() => {
+    console.log("aadharNumber", aadharNumber);
+    if (aadharNumber !== 0 && aadharNumber !== undefined) {
+      if (aadharRegex.test(aadharNumber)) {
+        setAadharError("");
+        setOtpBtnStatus(true);
+      } else {
+        setAadharError("Enter Valid Aadhar Number");
+        setOtpBtnStatus(false);
+      }
+    }
+  }, [aadharNumber]);
+
   const onSendOtp = async (e: any) => {
     try {
       e.preventDefault();
-      if (aadharNumber === 0) {
-        dispatch(
-          setAadharNumberProprietor({ aadharError: "Enter Aadhar Number" })
-        );
-      }
 
       //API Call
       const payload = { adhaar_no: aadharNumber };
@@ -47,7 +60,8 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response?.message);
-        dispatch(setOnOtpClientId(response.data.data.client_id));
+        sessionStorage.setItem("aadharNumber", aadharNumber);
+        sessionStorage.setItem("client_id", response.data.data.client_id);
         navigate("/onboarding/kyc-mobile-verify", {
           state: { path: "aadhar-form" },
         });
@@ -79,42 +93,18 @@ const Index = (props: ITypeProps) => {
                 containerStyle={`lg:!w-auto`}
                 label="Aadhar Number"
                 inputType="text"
+                maxLength={12}
                 className={`  ${
-                  aadharError !== "" && "!border-[#F35838]"
+                  aadharError !== "" &&
+                  aadharError !== undefined &&
+                  "!border-[#F35838]"
                 }  lg:!w-[320px] !font-Open`}
                 onChange={(e) => {
-                  if (!aadharRegex.test(e.target.value)) {
-                    dispatch(
-                      setAadharNumberProprietor({
-                        aadharError: "Enter Valid Aadhar Number",
-                      })
-                    );
-
-                    dispatch(
-                      setAadharNumberProprietor({
-                        otpBtnStatus: false,
-                      })
-                    );
-                  } else {
-                    dispatch(
-                      setAadharNumberProprietor({
-                        aadharError: "",
-                      })
-                    );
-                    dispatch(
-                      setAadharNumberProprietor({
-                        otpBtnStatus: true,
-                      })
-                    );
-                  }
-
-                  dispatch(
-                    setAadharNumberProprietor({ aadharNumber: +e.target.value })
-                  );
+                  setAadharNumber(e.target.value);
                 }}
               />
               {/* To display error */}
-              {aadharError !== "" && (
+              {aadharError !== "" && aadharError !== undefined && (
                 <div className="flex items-center    gap-x-1 mt-1   ">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal font-Open  text-[#F35838] text-[10px]">
