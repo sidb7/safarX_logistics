@@ -369,7 +369,7 @@ const Tracking = () => {
             </div>
           </div>
         </div>
-        <div className="mt-[150px] ">
+        <div className="mt-[150px] ml-5 ">
           <div className="flex  gap-x-5">
             <div className="flex gap-x-2">
               <img src={telephoneIcon} alt="" />
