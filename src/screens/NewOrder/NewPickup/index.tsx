@@ -141,6 +141,7 @@ const PickupLocation = () => {
       isActive: false,
     },
   });
+
   const userType = useSelector((state: any) => state.user.isReturningUser);
   const [loading, setLoading] = useState(true);
   const [returningUserData, setReturningUserData] = useState<any>([]);
@@ -287,6 +288,7 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
+  console.log("pickupAddress", pickupAddress);
   return (
     <div className="w-full">
       <Breadcrum label="Add New Order" />

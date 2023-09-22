@@ -10,7 +10,8 @@ interface ITypeProps {
   inputLabel?: string;
   buttonText?: string;
   onClick?: () => void;
-  onCustomAddressTypeSelection: (customLandmark: string) => void;
+  onCustomAddressTypeSelection: (addressType: string) => void;
+  handlePickupAddressChange: (fieldName: string, value: string) => void;
 }
 
 const ModalContent = (props: ITypeProps) => {
@@ -21,6 +22,7 @@ const ModalContent = (props: ITypeProps) => {
     buttonText,
     onClick,
     onCustomAddressTypeSelection,
+    handlePickupAddressChange,
   } = props;
 
   const [customAddressType, setCustomAddressType] = useState("");
@@ -33,8 +35,8 @@ const ModalContent = (props: ITypeProps) => {
 
   const handleButtonClick = () => {
     onCustomAddressTypeSelection(customAddressType);
-
-    setCustomAddressType("");
+    handlePickupAddressChange("addressType", customAddressType);
+    setCustomAddressType(customAddressType);
 
     if (onClick) {
       onClick();

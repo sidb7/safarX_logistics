@@ -120,7 +120,7 @@ const Index = (props: ITypeProps) => {
   };
 
   const resendOtp = async () => {
-    if (businessType === "individual") {
+    if (businessType === "individual" || businessType === "business") {
       resentAadharOtp();
     } else {
       resentGstOtp();
@@ -174,74 +174,81 @@ const Index = (props: ITypeProps) => {
   const onVerifyOtp = async (e: any) => {
     try {
       e.preventDefault();
+      console.log("otpNumber", typeof otpNumber);
 
-      if (businessType === "individual") {
-        const payload = { client_id: clientId, otp: otpNumber };
-        setLoading(true);
-        const { data: response } = await POST(
-          POST_VERIFY_AADHAR_OTP_URL,
-          payload
-        );
-        if (response?.success) {
-          verifyPAN(panCard);
-
-          toast.success(response?.message);
-          //Navigate Url's go here
-        } else {
-          toast.error(response?.message);
-          setLoading(false);
-        }
-      } else if (businessType === "business") {
-        if (location?.state?.path === "aadhar-form") {
-          const payload = { client_id: clientId, otp: otpNumber };
+      if (Number(otpNumber) !== 0) {
+        if (businessType === "individual") {
+          const payload = { client_id: clientId, otp: Number(otpNumber) };
           setLoading(true);
           const { data: response } = await POST(
             POST_VERIFY_AADHAR_OTP_URL,
             payload
           );
           if (response?.success) {
-            // setLoading(false);
             verifyPAN(panCard);
-            // toast.success(response?.message);
+
+            toast.success(response?.message);
             //Navigate Url's go here
           } else {
-            setLoading(false);
             toast.error(response?.message);
+            setLoading(false);
           }
-        } else {
+        } else if (businessType === "business") {
+          if (location?.state?.path === "aadhar-form") {
+            const payload = { client_id: clientId, otp: Number(otpNumber) };
+            setLoading(true);
+            const { data: response } = await POST(
+              POST_VERIFY_AADHAR_OTP_URL,
+              payload
+            );
+            if (response?.success) {
+              // setLoading(false);
+              verifyPAN(panCard);
+              // toast.success(response?.message);
+              //Navigate Url's go here
+            } else {
+              setLoading(false);
+              setOTPNumber("");
+              toast.error(response?.message);
+            }
+          } else {
+            const payload = {
+              gstIn: gstNo,
+              client_id: clientId,
+              otp: Number(otpNumber),
+            };
+
+            setLoading(true);
+            const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+            if (response?.success) {
+              setLoading(false);
+              if (location?.state?.path === "otp-form") {
+                navigate("/onboarding/kyc-aadhar-form");
+              }
+            } else {
+              setLoading(false);
+              setOTPNumber("");
+              toast.error(response?.message);
+            }
+          }
+        } else if (businessType === "company") {
+          setLoading(true);
           const payload = {
             gstIn: gstNo,
             client_id: clientId,
-            otp: otpNumber,
+            otp: Number(otpNumber),
           };
-
-          setLoading(true);
           const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
           if (response?.success) {
-            setLoading(false);
-            if (location?.state?.path === "otp-form") {
-              navigate("/onboarding/kyc-aadhar-form");
-            }
+            // setLoading(false);
+            verifyPAN(panCard);
           } else {
             setLoading(false);
             toast.error(response?.message);
           }
         }
-      } else if (businessType === "company") {
-        setLoading(true);
-        const payload = {
-          gstIn: gstNo,
-          client_id: clientId,
-          otp: otpNumber,
-        };
-        const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
-        if (response?.success) {
-          // setLoading(false);
-          verifyPAN(panCard);
-        } else {
-          setLoading(false);
-          toast.error(response?.message);
-        }
+      } else {
+        toast.error("Enter OTP");
       }
     } catch (error) {
       return error;
@@ -284,7 +291,7 @@ const Index = (props: ITypeProps) => {
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    setOTPNumber(+e.target.value);
+                    setOTPNumber(e.target.value);
                   }}
                 />
               </div>
