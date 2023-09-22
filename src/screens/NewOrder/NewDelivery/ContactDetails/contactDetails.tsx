@@ -138,12 +138,12 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               : "border-gray-300 text-[#1C1C1C]"
           }`}
           onClick={() => {
-            handleContactChange("type", "dispatcher");
+            handleContactChange("type", "recipient");
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
-            Dispatcher
+            Recipient
           </p>
         </div>
       </div>
