@@ -11,6 +11,11 @@ import SampleProduct from "../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { filterItems } from "../../../utils/dummyData";
 import { searchResults } from "../../../utils/utility";
+import ComboProductBox from "../../../components/ComboProductBox";
+import { POST } from "../../../utils/webService";
+import { GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import StackLogo from "../../../assets/Catalogue/StackIcon.svg";
 
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
@@ -18,6 +23,7 @@ interface ISearchProductProps {
   productsFromLatestOrder?: any;
   selectedProducts?: any;
   handlePackageDetails?: any;
+  handleComboToPackageDetails?: any;
 }
 
 const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
@@ -29,6 +35,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     productsFromLatestOrder,
     selectedProducts,
     handlePackageDetails,
+    handleComboToPackageDetails,
   } = props;
 
   const [searchedProduct, setSearchedProduct] = useState("");
@@ -36,6 +43,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [searchResult, setSearchResult] = useState<any>([]);
   const [products, setProducts] = useState<any>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
+  const [comboProducts, setComboProducts] = useState<any>([]);
 
   useEffect(() => {
     if (productsFromLatestOrder) {
@@ -62,6 +70,24 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     }
   }, [isSearchProductRightModalOpen, selectedProducts]);
 
+  const getComboProducts = async () => {
+    const { data } = await POST(GET_COMBO_PRODUCT);
+    if (data?.success) {
+      let tempArr = data?.data;
+      tempArr?.forEach((combo: any) => {
+        combo.selected = false;
+      });
+      console.log("tempArr", tempArr);
+      setComboProducts([...tempArr]);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+  useEffect(() => {
+    getComboProducts();
+  }, []);
+
   const sortOnSelected = (products: any) => {
     return products.sort((a: any, b: any) => {
       // Sorting in descending order (selected: true comes first)
@@ -79,10 +105,15 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const productsDetailsTobeSend = () => {
     let tempArr = products.filter((product: any) => product.selected);
     handlePackageDetails(tempArr);
+    console.log("comboProducts", comboProducts);
+    let tempComboArr = comboProducts.filter((combo: any) => combo.selected);
+    if (tempComboArr.length > 0) {
+      handleComboToPackageDetails(tempComboArr);
+    }
   };
 
   const selectProduct = (product: any, index: number) => {
-    const allreadySelected = isProductSelected(index);
+    const allreadySelected = isProductSelected(index, products);
     let tempArr: any = products;
     if (allreadySelected) {
       tempArr[index].selected = false;
@@ -92,9 +123,20 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       setProducts([...sortOnSelected(tempArr)]);
     }
   };
+  const selectComboProduct = (combo: any, index: number) => {
+    const allreadyComboSelected = isProductSelected(index, comboProducts);
+    let tempArr: any = comboProducts;
+    if (allreadyComboSelected) {
+      tempArr[index].selected = false;
+      setComboProducts([...sortOnSelected(tempArr)]);
+    } else {
+      tempArr[index].selected = true;
+      setComboProducts([...sortOnSelected(tempArr)]);
+    }
+  };
 
-  const isProductSelected = (index: any) => {
-    return products[index]?.selected === true ? true : false;
+  const isProductSelected = (index: any, arr: any) => {
+    return arr[index]?.selected === true ? true : false;
   };
 
   const searchProductContent = () => {
@@ -136,7 +178,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             />
           </div>
           {/* Filter */}
-          <div className="mb-8">
+          {/* <div className="mb-8">
             <div className="flex  items-center gap-x-2 mb-4">
               <img src={ProductIcon} alt="Product" />
               <div className="font-Lato font-normal text-2xl leading-8">
@@ -145,9 +187,9 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             </div>
 
             <SearchProductFilterItems filterItems={filterItems} />
-          </div>
+          </div> */}
 
-          <div className="flex  items-center gap-x-2 mb-4">
+          <div className="flex  items-center gap-x-2 py-2">
             <img src={ProductIcon} alt="Product" />
             <div className="font-Lato font-normal text-2xl leading-8">
               Top Added
@@ -166,7 +208,33 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                   height={eachProduct?.height || 0}
                   className="!w-72 cursor-pointer "
                   onClick={() => selectProduct(eachProduct, index)}
-                  isSelected={isProductSelected(index)}
+                  isSelected={isProductSelected(index, products)}
+                />
+              );
+            })}
+          </div>
+          <div className="flex  items-center gap-x-2 py-2">
+            <img src={ProductIcon} alt="Product" />
+            <div className="font-Lato font-normal text-2xl leading-8">
+              Top Added
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
+            {comboProducts.map((combo: any, index: number) => {
+              return (
+                <ComboProductBox
+                  image={StackLogo}
+                  productName={combo?.name}
+                  weight={`${combo?.totalDeadWeight} ${combo?.weightUnit}`}
+                  Value={combo?.totalValue}
+                  dimension={`${combo?.totalPrice}`}
+                  className={`cursor-pointer`}
+                  label={`Product: ${combo?.products?.length}`}
+                  selectMode={true}
+                  data={combo}
+                  onClick={() => selectComboProduct(combo, index)}
+                  isSelected={isProductSelected(index, comboProducts)}
+                  index={index}
                 />
               );
             })}
