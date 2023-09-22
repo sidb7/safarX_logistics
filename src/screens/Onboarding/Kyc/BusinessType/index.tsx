@@ -20,18 +20,14 @@ const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const [loading, setLoading] = useState(false);
-  // const closeModal = () => setOpenModal(true);
-  // const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const { isLgScreen } = ResponsiveState();
-  const businessType = useSelector(
-    (state: any) => state?.onboarding.businessType
-  );
 
   //Calling API on Submit
 
-  const onSubmitBusinessType = async (value: any) => {
+  const onSubmitBusinessType = async () => {
     try {
-      const payload = { businessType: value };
+      let businessType = sessionStorage.getItem("businessType");
+      const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
@@ -101,7 +97,7 @@ const BusinessType = (props: ITypeProps) => {
                   text="PROCEED FOR KYC"
                   className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
                   onClick={() => {
-                    onSubmitBusinessType(businessType);
+                    onSubmitBusinessType();
                   }}
                 />
 

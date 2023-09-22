@@ -237,6 +237,11 @@ const DeliveryLocation = () => {
         }
       }
     })();
+    // This snippet will scroll the page to top
+    const container = document.getElementById("scrollDiv");
+    if (container) {
+      container.scrollIntoView({ block: "start" });
+    }
   }, []);
 
   const getReturningUserDeliveryDetails = async () => {
@@ -264,7 +269,7 @@ const DeliveryLocation = () => {
   }, [userType]);
 
   return (
-    <div className="w-full mb-24">
+    <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
@@ -309,8 +314,8 @@ const DeliveryLocation = () => {
             setIsBillingAddress(e.target.checked);
           }}
         />
-        <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
-          BILLING DETAILS IS SAME AS DELIVERY
+        <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+          Billing Details Is Same As Delivery
         </p>
       </div>
 

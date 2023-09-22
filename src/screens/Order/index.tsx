@@ -90,7 +90,7 @@ const Buttons = (className?: string) => {
 
 const tabs = [
   {
-    statusName: "New",
+    statusName: "Draft",
     value: "newOrder",
     orderNumber: 0,
   },
@@ -110,7 +110,7 @@ const tabs = [
     orderNumber: 0,
   },
   {
-    statusName: "In transit",
+    statusName: "In Transit",
     value: "inTransit",
     orderNumber: 0,
   },
