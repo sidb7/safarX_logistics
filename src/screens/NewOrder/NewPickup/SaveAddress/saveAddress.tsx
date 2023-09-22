@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import OfficeIcon from "../../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
+import RightSideModal from "../../../../components/CustomModal/customRightModal";
+import ModalContent from "../RightModal/ModalContent";
 
 interface ISaveAddressProps {
   data: {
@@ -14,6 +16,9 @@ interface ISaveAddressProps {
 const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   data: { pickupAddress, setPickupAddress, addressLabel },
 }) => {
+  const [customAddressType, setCustomAddressType] = useState("");
+  const [isRightAddressTypeModal, setIsRightAddressTypeModal] = useState(false);
+  console.log("addressName", customAddressType);
   const address =
     addressLabel === "Return Address"
       ? pickupAddress.returnAddress
@@ -29,6 +34,10 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
+  };
+
+  const handleAddressTypeSelected = (addressName: string) => {
+    setCustomAddressType(addressName);
   };
 
   return (
@@ -71,19 +80,42 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           </p>
         </div>
         <div
-          className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] lg:w-[172px] px-4 py-2 ${
+          className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px] rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] ${
+            customAddressType === "" ? "lg:w-[auto] min-w-[172px]" : "lg:w-auto"
+          } px-4 py-2 ${
             address.addressType === "other"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300  text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            handlePickupAddressChange("addressType", "other");
+            handlePickupAddressChange(
+              "addressType",
+              customAddressType || "other"
+            );
+            setIsRightAddressTypeModal(true);
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
-          <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">Other</p>
+          <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">
+            {customAddressType || "Other"}
+          </p>
         </div>
       </div>
+
+      <RightSideModal
+        isOpen={isRightAddressTypeModal}
+        onClose={() => setIsRightAddressTypeModal(false)}
+        className="!w-[389px]"
+      >
+        <ModalContent
+          title="Save Address Type as"
+          // stitleIcon={MapIcon}
+          buttonText="CONFIRM"
+          inputLabel="Address type"
+          onClick={() => setIsRightAddressTypeModal(false)}
+          onCustomAddressTypeSelection={handleAddressTypeSelected}
+        />
+      </RightSideModal>
     </div>
   );
 };
