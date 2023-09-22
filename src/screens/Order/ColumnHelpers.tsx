@@ -132,7 +132,7 @@ const idHelper = [
     cell: (info: any) => {
       const {
         tempOrderId = "-",
-        sellerId = "-",
+        orderId = "-",
         status = [],
       } = info?.row?.original;
 
@@ -142,19 +142,19 @@ const idHelper = [
         <div className="py-3">
           {tempOrderId && (
             <div className="">
-              <span className=" text-sm font-light">Order :</span>
+              <span className=" text-sm font-light">Shipyaari ID :</span>
               <div className=" flex text-base items-center font-medium">
                 <span className="">{tempOrderId}</span>
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
           )}
-          {sellerId && (
+          {orderId && (
             <div className="">
-              <span className=" text-sm font-light">Shipyaari :</span>
+              <span className=" text-sm font-light">Order ID :</span>
               <div className=" flex text-base items-center font-medium">
-                <span className="">{sellerId}</span>
-                <CopyTooltip stringToBeCopied={sellerId} />
+                <span className="">{orderId}</span>
+                <CopyTooltip stringToBeCopied={orderId} />
               </div>
             </div>
           )}
@@ -162,7 +162,9 @@ const idHelper = [
             <div className="">
               <span className=" text-sm font-light">Tracking :</span>
               <div className=" flex text-base items-center font-medium">
-                <span className="">{AWB}</span>
+                <span className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer">
+                  {AWB}
+                </span>
                 <CopyTooltip stringToBeCopied={AWB} />
               </div>
             </div>
@@ -322,7 +324,9 @@ export const columnHelperForNewOrder = (navigate: any) => {
           Order Id: ${tempOrderId} 
           Shipyaari Id: ${sellerId}
           Tracking Id: ${AWB}
-          Package Details: ${ boxInfo.length > 0 && boxInfo[0].name} ${(boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""}
+          Package Details: ${boxInfo.length > 0 && boxInfo[0].name} ${
+          (boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""
+        }
           Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
           Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
           Status: Success

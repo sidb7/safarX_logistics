@@ -15,10 +15,10 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   return (
     <div className="relative">
       <input
-        placeholder={label}
+        // placeholder={label}
         type="text"
-        className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[10px] !pl-[36px] w-[174px] h-[36px] font-normal text-[12px] text-[#A4A4A4] `}
-        value={value}
+        className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[10px] !pl-[36px] w-[174px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
+        // value={value}
         onChange={onChange}
         title="searchBox"
       />
