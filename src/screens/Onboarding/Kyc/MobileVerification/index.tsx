@@ -7,12 +7,6 @@ import MobileVerificationIcon from "../../../../assets/common/MobileVerify.gif";
 import { useLocation, useNavigate } from "react-router-dom";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import CustomInputBox from "../../../../components/Input";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  setNavigateOnOtpFormVerify,
-  setOTPNumber,
-  setOnOtpClientId,
-} from "../../../../redux/reducers/onboarding";
 import { POST } from "../../../../utils/webService";
 import {
   POST_VERIFY_AADHAR_OTP_URL,
@@ -23,24 +17,22 @@ import {
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
-import { error } from "console";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
-  const businessType = useSelector(
-    (state: any) => state?.onboarding.businessType
-  );
+  const [businessType, setBusinessType] = useState<any>();
+  const [aadharNo, setAadharNo] = useState<any>();
+  const [clientId, setClientId] = useState<any>();
 
-  const clientId = useSelector((state: any) => state?.onboarding.onOtpClientId);
-  const otp = useSelector((state: any) => state?.onboarding.otp);
-  const panCard = useSelector((state: any) => state?.onboarding.panNumber);
-  const gstNo = useSelector((state: any) => state?.onboarding.gstNumber);
-  const aadharNo = useSelector((state: any) => state?.onboarding?.aadharNumber);
+  const [otpNumber, setOTPNumber] = useState<any>();
+  const [panCard, setPanCard] = useState<any>();
+
+  const [gstNo, setGSTNo] = useState<any>();
+
   const [loading, setLoading] = useState<any>(false);
 
   const location = useLocation();
-  const dispatch = useDispatch();
 
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
@@ -61,6 +53,21 @@ const Index = (props: ITypeProps) => {
       setHeading("GST Verification");
     }
   }, []);
+
+  useEffect(() => {
+    let localbtype = sessionStorage.getItem("businessType");
+    let localaadharno = sessionStorage.getItem("aadharNumber");
+    let localclient_id = sessionStorage.getItem("client_id");
+    let localpanNumber = sessionStorage.getItem("panNumber");
+    let localgstNo = sessionStorage.getItem("gstNumber");
+
+    setBusinessType(localbtype);
+    setAadharNo(localaadharno);
+    setClientId(localclient_id);
+    setPanCard(localpanNumber);
+    setGSTNo(localgstNo);
+  }, [clientId]);
+
   const resendOtpTimer = () => {
     const minute = minutes < 10 ? `0${minutes}` : minutes;
     const second = seconds < 10 ? `0${seconds}` : seconds;
@@ -83,19 +90,11 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         setMinutes(0);
         setSeconds(30);
-        dispatch(setOnOtpClientId(response.data.data.client_id));
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            aadharVerifyNavigate: true,
-          })
-        );
+        sessionStorage.setItem("client_id", response.data.data.client_id);
+        setClientId(response.data.data.client_id);
+
         toast.success("Aadhar OTP resent Successfully");
       } else {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            aadharVerifyNavigate: false,
-          })
-        );
         toast.error("Aadhar OTP resent Failed!");
       }
     } catch (error) {
@@ -109,19 +108,10 @@ const Index = (props: ITypeProps) => {
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            gstVerifyNavigate: true,
-          })
-        );
-        dispatch(setOnOtpClientId(response.data[0].data.client_id));
+        sessionStorage.setItem("client_id", response.data[0].data.client_id);
+        setClientId(response.data[0].data.client_id);
         toast.success("GST OTP resent Successfully");
       } else {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            gstVerifyNavigate: false,
-          })
-        );
         toast.error("GST Verification Failed!");
       }
     } catch (error) {
@@ -166,11 +156,6 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         toast.success(response?.message);
         setLoading(false);
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            panVerifyNavigate: true,
-          })
-        );
 
         if (businessType === "business" || businessType === "company") {
           navigate("/onboarding/kyc-terms/service-agreement");
@@ -178,11 +163,6 @@ const Index = (props: ITypeProps) => {
           navigate("/onboarding/kyc-terms/gst-agreement");
         }
       } else {
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            panVerifyNavigate: false,
-          })
-        );
         setLoading(false);
         toast.error(response?.message);
       }
@@ -196,7 +176,7 @@ const Index = (props: ITypeProps) => {
       e.preventDefault();
 
       if (businessType === "individual") {
-        const payload = { client_id: clientId, otp: otp };
+        const payload = { client_id: clientId, otp: otpNumber };
         setLoading(true);
         const { data: response } = await POST(
           POST_VERIFY_AADHAR_OTP_URL,
@@ -213,14 +193,14 @@ const Index = (props: ITypeProps) => {
         }
       } else if (businessType === "business") {
         if (location?.state?.path === "aadhar-form") {
-          const payload = { client_id: clientId, otp: otp };
+          const payload = { client_id: clientId, otp: otpNumber };
           setLoading(true);
           const { data: response } = await POST(
             POST_VERIFY_AADHAR_OTP_URL,
             payload
           );
           if (response?.success) {
-            setLoading(false);
+            // setLoading(false);
             verifyPAN(panCard);
             // toast.success(response?.message);
             //Navigate Url's go here
@@ -232,7 +212,7 @@ const Index = (props: ITypeProps) => {
           const payload = {
             gstIn: gstNo,
             client_id: clientId,
-            otp: otp,
+            otp: otpNumber,
           };
 
           setLoading(true);
@@ -252,7 +232,7 @@ const Index = (props: ITypeProps) => {
         const payload = {
           gstIn: gstNo,
           client_id: clientId,
-          otp: otp,
+          otp: otpNumber,
         };
         const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
         if (response?.success) {
@@ -304,7 +284,7 @@ const Index = (props: ITypeProps) => {
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    dispatch(setOTPNumber(+e.target.value));
+                    setOTPNumber(+e.target.value);
                   }}
                 />
               </div>

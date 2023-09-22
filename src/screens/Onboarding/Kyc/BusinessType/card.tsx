@@ -1,6 +1,4 @@
 import CustomRadioButton from "../../../../components/RadioButton/Index";
-import { useDispatch } from "react-redux";
-import { setBusinessType } from "../../../../redux/reducers/onboarding";
 
 interface ITypesProps {
   name: string;
@@ -11,7 +9,6 @@ interface ITypesProps {
 
 const Card = (props: ITypesProps) => {
   const { name, value, title, subTitle } = props;
-  const dispatch = useDispatch();
 
   return (
     <>
@@ -24,7 +21,7 @@ const Card = (props: ITypesProps) => {
               style={{ accentColor: "black" }}
               inputClassName="cursor-pointer"
               onChange={(e) => {
-                dispatch(setBusinessType(e.target.value));
+                sessionStorage.setItem("businessType", e.target.value);
               }}
             />
             <p className="font-semibold font-Open text-base text-[#1C1C1C] leading-[22px]">

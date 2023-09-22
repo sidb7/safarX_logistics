@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WelcomeHeader from "../welcomeHeader";
 import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
@@ -33,53 +33,40 @@ interface ITypeProps {}
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
-  // const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/gm;
-  // const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/gm;
   const [loading, setLoading] = useState(false);
+  const [businessType, setBusinessType] = useState<any>();
 
-  const businessType = useSelector(
-    (state: any) => state?.onboarding.businessType
-  );
-  const gstNumber = useSelector((state: any) => state?.onboarding.gstNumber);
-  const panNumber = useSelector((state: any) => state?.onboarding.panNumber);
+  const [aadharNumber, setAadharNumber] = useState<any>();
+  const [aadharNumberError, setAadharNumberError] = useState<any>();
 
-  const aadharNumber = useSelector((state: any) =>
-    state?.onboarding.aadharNumber === 0 ? "" : state?.onboarding.aadharNumber
-  );
+  const [panNumber, setPanNumber] = useState<any>();
+  const [panNumberError, setPanNumberError] = useState<any>();
 
-  const { gstError, panError, aadharError } = useSelector(
-    (state: any) => state?.onboarding.errorDetails
-  );
-  const { aadharVerify, gstVerify, panVerify } = useSelector(
-    (state: any) => state?.onboarding.verifyForOtpBtn
-  );
+  const [gstNumber, setGSTNumber] = useState<any>();
+  const [gstError, setgstError] = useState<any>();
 
-  const { aadharVerifyNavigate, gstVerifyNavigate, panVerifyNavigate } =
-    useSelector((state: any) => state?.onboarding.navigateOnOtpFormVerify);
+  const [otpFormBtnStatus, setOtpFormBtnStatus] = useState(false);
 
-  const otpFormBtnStatus = useSelector(
-    (state: any) => state?.onboarding.otpFormBtnStatus
-  );
+  useEffect(() => {
+    let btype = sessionStorage.getItem("businessType");
+    setBusinessType(btype);
+  }, []);
+
+  useEffect(() => {
+    if (
+      (aadharNumberError === "" && gstError === "") ||
+      panNumberError === ""
+    ) {
+      setOtpFormBtnStatus(true);
+    } else {
+      setOtpFormBtnStatus(false);
+    }
+  }, [aadharNumberError, panNumberError, gstError]);
 
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-
-  if (businessType === "individual") {
-    if (aadharVerify === true && panVerify === true) {
-      dispatch(setOtpFormBtnStatus(true));
-    } else {
-      dispatch(setOtpFormBtnStatus(false));
-    }
-  } else {
-    if (gstVerify === true && panVerify === true) {
-      dispatch(setOtpFormBtnStatus(true));
-    } else {
-      dispatch(setOtpFormBtnStatus(false));
-    }
-  }
 
   const verifyAadhar = async (value: any) => {
     try {
@@ -90,7 +77,10 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         setLoading(false);
         toast.success(response?.message);
-        dispatch(setOnOtpClientId(response.data.data.client_id));
+        sessionStorage.setItem("aadharNumber", value);
+        sessionStorage.setItem("panNumber", panNumber);
+
+        sessionStorage.setItem("client_id", response.data.data.client_id);
         dispatch(
           setNavigateOnOtpFormVerify({
             aadharVerifyNavigate: true,
@@ -125,11 +115,9 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         setLoading(false);
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            gstVerifyNavigate: true,
-          })
-        );
+        sessionStorage.setItem("gstNumber", value);
+        sessionStorage.setItem("panNumber", panNumber);
+
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
@@ -139,14 +127,10 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
-        dispatch(setOnOtpClientId(response.data[0].data.client_id));
+        sessionStorage.setItem("client_id", response.data[0].data.client_id);
       } else {
         setLoading(false);
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            gstVerifyNavigate: false,
-          })
-        );
+
         toast.error(response?.message);
       }
     } catch (error) {
@@ -159,34 +143,11 @@ const Index = (props: ITypeProps) => {
       e.preventDefault();
       //Individual
       if (businessType === "individual") {
-        if (aadharNumber === 0) {
-          dispatch(setErrorDetails({ aadharError: "Enter Aadhar Number" }));
-        }
         verifyAadhar(aadharNumber);
-        if (panNumber === "") {
-          dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
-        }
-
-        if (businessType === "business") {
-          navigate("/onboarding/kyc-mobile-verify", {
-            state: { path: "otp-form" },
-          });
-        } else if (businessType === "company") {
-          navigate("/onboarding/kyc-mobile-verify", {
-            state: { path: "gst-verification" },
-          });
-        }
       }
       //Proprietor,Company
       else if (businessType === "business") {
-        if (gstNumber === "") {
-          dispatch(setErrorDetails({ gstError: "Enter GST Number" }));
-        }
         verifyGST(gstNumber);
-
-        // if (panNumber === "") {
-        //   dispatch(setErrorDetails({ panError: "Enter PAN Number" }));
-        // }
       } else if (businessType === "company") {
         navigate("/onboarding/kyc-mobile-verify", {
           state: { path: "otp-form" },
@@ -223,47 +184,35 @@ const Index = (props: ITypeProps) => {
                   value={aadharNumber}
                   maxLength={12}
                   labelClassName="!font-Open"
-                  className={` ${aadharError !== "" && "!border-[#F35838]"}
+                  className={` ${
+                    aadharNumberError !== "" &&
+                    aadharNumberError !== undefined &&
+                    "!border-[#F35838]"
+                  }
                   lg:!w-[320px]   !font-Open`}
                   onChange={(e: any) => {
-                    if (!aadharRegex.test(e.target.value)) {
-                      dispatch(
-                        setErrorDetails({
-                          aadharError: "Enter Valid Aadhar Number",
-                        })
-                      );
-
-                      dispatch(
-                        setVerifyDetailsForOtpBtn({
-                          aadharVerify: false,
-                        })
-                      );
+                    if (aadharRegex.test(e.target.value)) {
+                      console.log("ad no .", e.target.value);
+                      setAadharNumberError("");
                     } else {
-                      dispatch(
-                        setErrorDetails({
-                          aadharError: "",
-                        })
-                      );
-                      dispatch(
-                        setVerifyDetailsForOtpBtn({
-                          aadharVerify: true,
-                        })
-                      );
+                      setAadharNumberError("Enter Valid Aadhar Number");
                     }
-
-                    dispatch(setAadharNumber(e.target.value));
+                    setAadharNumber(e.target.value);
                   }}
                 />
 
                 {/* To display error */}
-                {aadharError !== "" && (
-                  <div className="flex items-center gap-x-1 mt-1 ">
-                    <img src={ErrorIcon} alt="" width={10} height={10} />
-                    <span className="font-normal font-Open  text-[#F35838] text-[10px]">
-                      {aadharError}
-                    </span>
-                  </div>
-                )}
+
+                {aadharNumberError !== "" &&
+                  aadharNumberError !== undefined && (
+                    <div className="flex items-center gap-x-1 mt-1 ">
+                      <img src={ErrorIcon} alt="" width={10} height={10} />
+
+                      <span className="font-normal font-Open  text-[#F35838] text-[10px]">
+                        {aadharNumberError}
+                      </span>
+                    </div>
+                  )}
               </div>
             ) : (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
@@ -273,36 +222,22 @@ const Index = (props: ITypeProps) => {
                   value={gstNumber}
                   maxLength={15}
                   className={` ${
-                    gstError !== "" && "border-[#F35838]"
+                    gstError !== "" &&
+                    gstError !== undefined &&
+                    "border-[#F35838]"
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    dispatch(setGSTNumber(e.target.value));
-                    if (!gstRegex.test(e.target.value)) {
-                      dispatch(
-                        setErrorDetails({
-                          gstError: "Enter Valid GST Number",
-                        })
-                      );
-
-                      dispatch(
-                        setVerifyDetailsForOtpBtn({
-                          gstVerify: false,
-                        })
-                      );
+                    if (gstRegex.test(e.target.value)) {
+                      setGSTNumber(e.target.value);
+                      setgstError("");
                     } else {
-                      dispatch(
-                        setErrorDetails({
-                          gstError: "",
-                        })
-                      );
-
-                      dispatch(setVerifyDetailsForOtpBtn({ gstVerify: true }));
+                      setgstError("Enter Valid GST Number");
                     }
                   }}
                 />
                 {/* To display error */}
-                {gstError !== "" && (
+                {gstError !== "" && gstError !== undefined && (
                   <div className="flex items-center gap-x-1 mt-1 ">
                     <img src={ErrorIcon} alt="" width={10} height={10} />
                     <span className="font-normal font-Open text-[#F35838] text-[10px]">
@@ -319,39 +254,26 @@ const Index = (props: ITypeProps) => {
                 value={panNumber}
                 maxLength={10}
                 className={`${
-                  panError !== "" && "border-[#F35838]"
+                  panNumberError !== "" &&
+                  panNumberError !== undefined &&
+                  "border-[#F35838]"
                 }   lg:!w-[320px] !font-Open`}
                 labelClassName="!font-Open"
                 onChange={(e) => {
-                  dispatch(setPANNumber(e.target.value.toUpperCase()));
-                  if (!panRegex.test(e.target.value.toUpperCase())) {
-                    dispatch(
-                      setErrorDetails({
-                        panError: "Enter Valid PAN Number",
-                      })
-                    );
-
-                    dispatch(
-                      setVerifyDetailsForOtpBtn({
-                        panVerify: false,
-                      })
-                    );
+                  if (panRegex.test(e.target.value.toUpperCase())) {
+                    setPanNumberError("");
                   } else {
-                    dispatch(
-                      setErrorDetails({
-                        panError: "",
-                      })
-                    );
-                    dispatch(setVerifyDetailsForOtpBtn({ panVerify: true }));
+                    setPanNumberError("Enter Valid PAN Number");
                   }
+                  setPanNumber(e.target.value.toUpperCase());
                 }}
               />
               {/* To display error */}
-              {panError !== "" && (
+              {panNumberError !== "" && panNumberError !== undefined && (
                 <div className="flex items-center gap-x-1 mt-1 ">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {panError}
+                    {panNumberError}
                   </span>
                 </div>
               )}
