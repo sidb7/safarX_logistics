@@ -26,6 +26,7 @@ import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { Spinner } from "flowbite-react";
+import ServiceButton from "../../../components/Button/ServiceButton";
 
 type Props = {};
 
@@ -372,10 +373,9 @@ const Summary = (props: Props) => {
       )}
 
       <BottomLayout
-        customButtonText="PLACE ORDER"
+        finalButtonText="PLACE ORDER"
         callApi={() => setOrderIdApi()}
         className="lg:w-[120px]"
-        Button2Name={true}
       />
     </div>
   );
