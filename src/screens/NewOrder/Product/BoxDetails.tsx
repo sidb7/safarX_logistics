@@ -6,7 +6,7 @@ import subtractIcon from "../../../assets/Product/subtract-circle.svg";
 import addIcon from "../../../assets/Product/addCircle.svg";
 import ProductIcon from "../../../assets/Product/Product.svg";
 import EditIcon from "../../../assets/Product/Edit.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AddButton from "../../../components/Button/addButton";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
@@ -35,6 +35,8 @@ const BoxDetails = (props: IBoxdetails) => {
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
+
+  const boxDetails: any = useRef(null);
 
   useEffect(() => {
     setAllProducts([...products]);
@@ -123,7 +125,9 @@ const BoxDetails = (props: IBoxdetails) => {
         </h1>
       </div>
       <div
-        className="flex flex-col h-[500px] lg:gap-y-2 lg:rounded-lg p-5 "
+        className={`flex flex-col h-[${
+          allProducts.length * 80 + 270
+        }px] lg:gap-y-2 lg:rounded-lg p-5`}
         style={{
           boxShadow:
             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -202,8 +206,8 @@ const BoxDetails = (props: IBoxdetails) => {
             );
           })}
         </div>
-        <hr />
-        <div className="flex items-center justify-center">
+
+        <div className="flex items-center justify-center mb-2">
           <AddButton
             text="ADD PRODUCT"
             onClick={() => {
@@ -215,6 +219,7 @@ const BoxDetails = (props: IBoxdetails) => {
             alt="Add Product"
           />
         </div>
+        <hr />
         {Object.keys(selectedBox).length > 0 ? (
           <>
             <span className="text-base text-slate-600 mt-2 pl-4">
