@@ -237,6 +237,11 @@ const DeliveryLocation = () => {
         }
       }
     })();
+    // This snippet will scroll the page to top
+    const container = document.getElementById("scrollDiv");
+    if (container) {
+      container.scrollIntoView({ block: "start" });
+    }
   }, []);
 
   const getReturningUserDeliveryDetails = async () => {
@@ -264,7 +269,7 @@ const DeliveryLocation = () => {
   }, [userType]);
 
   return (
-    <div className="w-full mb-24">
+    <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
