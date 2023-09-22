@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import OfficeIcon from "../../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
@@ -16,7 +16,7 @@ interface ISaveAddressProps {
 const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   data: { pickupAddress, setPickupAddress, addressLabel },
 }) => {
-  const [customAddressType, setCustomAddressType] = useState("");
+  const [customAddressType, setCustomAddressType] = useState("Other");
   const [isRightAddressTypeModal, setIsRightAddressTypeModal] = useState(false);
   console.log("addressName", customAddressType);
   const address =
@@ -39,6 +39,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   const handleAddressTypeSelected = (addressName: string) => {
     setCustomAddressType(addressName);
   };
+  console.log("pickupAddressmodal", pickupAddress);
 
   return (
     <div>
@@ -81,23 +82,25 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         </div>
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px] rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] ${
-            customAddressType === "" ? "lg:w-[auto] min-w-[172px]" : "lg:w-auto"
+            address.addressType === ""
+              ? "lg:w-[auto] min-w-[172px]"
+              : "lg:w-auto"
           } px-4 py-2 ${
-            address.addressType === "other"
+            address.addressType !== "office" &&
+            address.addressType !== "warehouse"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300  text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            handlePickupAddressChange(
-              "addressType",
-              customAddressType || "other"
-            );
+            // handlePickupAddressChange("addressType", customAddressType);
             setIsRightAddressTypeModal(true);
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">
-            {customAddressType || "Other"}
+            {customAddressType !== "office" && customAddressType !== "warehouse"
+              ? address?.addressType
+              : customAddressType}
           </p>
         </div>
       </div>
@@ -114,6 +117,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           inputLabel="Address type"
           onClick={() => setIsRightAddressTypeModal(false)}
           onCustomAddressTypeSelection={handleAddressTypeSelected}
+          handlePickupAddressChange={handlePickupAddressChange}
         />
       </RightSideModal>
     </div>
