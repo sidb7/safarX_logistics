@@ -33,6 +33,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
+    setCustomAddressType(address?.addressType);
   };
 
   const handleAddressTypeSelected = (addressName: string) => {
@@ -90,13 +91,14 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
               : "border-gray-300  text-[#1C1C1C]"
           }`}
           onClick={(e) => {
-            // handlePickupAddressChange("addressType", selectedAddressType);
+            handlePickupAddressChange("addressType", customAddressType);
             setIsRightAddressTypeModal(true);
           }}
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">
-            {customAddressType !== "office" && customAddressType !== "warehouse"
+            {address?.addressType !== "office" &&
+            address?.addressType !== "warehouse"
               ? address?.addressType
               : customAddressType}
           </p>
