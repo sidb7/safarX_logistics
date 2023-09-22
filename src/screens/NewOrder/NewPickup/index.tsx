@@ -22,6 +22,7 @@ import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ModalContent from "./RightModal/ModalContent";
+import { anyCaseToPascal } from "../../../utils/utility";
 
 const steps = [
   {
@@ -285,7 +286,6 @@ const PickupLocation = () => {
       getReturningUserPickupDetails();
     }
   }, [userType]);
-  console.log("returningUserData", returningUserData);
 
   return (
     <div className="w-full">
@@ -332,8 +332,8 @@ const PickupLocation = () => {
             setIsReturnAddress(e.target.checked);
           }}
         />
-        <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
-          RETURN ADDRESS SAME AS PICKUP
+        <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+          Return Address Same As Pickup
         </p>
       </div>
 
