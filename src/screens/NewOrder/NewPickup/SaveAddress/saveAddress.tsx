@@ -4,7 +4,6 @@ import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
 import ModalContent from "../RightModal/ModalContent";
-import { add } from "date-fns";
 
 interface ISaveAddressProps {
   data: {
@@ -35,7 +34,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
-    setCustomAddressType(address?.addressType);
   };
 
   const handleAddressTypeSelected = (addressName: string) => {

@@ -33,7 +33,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
-    setCustomAddressType(address?.addressType);
   };
 
   const handleAddressTypeSelected = (addressName: string) => {
