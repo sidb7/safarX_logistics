@@ -16,13 +16,13 @@ interface ISaveAddressProps {
 const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   data: { pickupAddress, setPickupAddress, addressLabel },
 }) => {
-  const [customAddressType, setCustomAddressType] = useState("Other");
   const [isRightAddressTypeModal, setIsRightAddressTypeModal] = useState(false);
-  console.log("addressName", customAddressType);
+
   const address =
     addressLabel === "Return Address"
       ? pickupAddress.returnAddress
       : pickupAddress.pickupAddress;
+  const [customAddressType, setCustomAddressType] = useState("Other");
 
   const handlePickupAddressChange = (
     fieldName: keyof typeof pickupAddress,
@@ -39,12 +39,18 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   const handleAddressTypeSelected = (addressName: string) => {
     setCustomAddressType(addressName);
   };
-  console.log("pickupAddressmodal", pickupAddress);
 
-  // useEffect(() => {
-  //   if (customAddressType !== "warehouse" && customAddressType !== "office")
-  //     setCustomAddressType(address?.addressType);
-  // }, []);
+  console.log("addressName", customAddressType);
+
+  useEffect(() => {
+    if (
+      address?.addressType &&
+      address?.addressType !== "office" &&
+      address?.addressType !== "warehouse"
+    ) {
+      setCustomAddressType(address?.addressType);
+    }
+  }, [address?.addressType]);
 
   return (
     <div>
@@ -63,12 +69,12 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           }`}
           onClick={(e) => {
             handlePickupAddressChange("addressType", "office");
-            if (
-              address?.addressName !== "warehouse" &&
-              address?.addressName !== "office"
-            ) {
-              setCustomAddressType(address?.addressType);
-            }
+            // if (
+            //   address?.addressName !== "warehouse" &&
+            //   address?.addressName !== "office"
+            // ) {
+            //   setCustomAddressType(address?.addressType);
+            // }
           }}
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
@@ -84,12 +90,12 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           }`}
           onClick={(e) => {
             handlePickupAddressChange("addressType", "warehouse");
-            if (
-              address?.addressName !== "warehouse" &&
-              address?.addressName !== "office"
-            ) {
-              setCustomAddressType(address?.addressType);
-            }
+            // if (
+            //   address?.addressName !== "warehouse" &&
+            //   address?.addressName !== "office"
+            // ) {
+            //   setCustomAddressType(address?.addressType);
+            // }
           }}
         >
           <img src={LocationIcon} alt="Other" />
@@ -103,8 +109,8 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
               ? "lg:w-[auto] min-w-[172px]"
               : "lg:w-auto"
           } px-4 py-2 ${
-            address.addressType !== "office" &&
-            address.addressType !== "warehouse"
+            address?.addressType !== "office" &&
+            address?.addressType !== "warehouse"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300  text-[#1C1C1C]"
           }`}
@@ -115,10 +121,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">
-            {address?.addressType !== "office" &&
-            address?.addressType !== "warehouse"
-              ? address?.addressType
-              : customAddressType}
+            {customAddressType}
           </p>
         </div>
       </div>

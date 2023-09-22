@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import OfficeIcon from "../../../../assets/PickUp/Office.svg";
 import LocationIcon from "../../../../assets/PickUp/Location.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
@@ -16,7 +16,7 @@ interface ISaveAddressProps {
 const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   data: { deliveryAddress, setDeliveryAddress, addressLabel },
 }) => {
-  const [customAddressType, setCustomAddressType] = useState("");
+  const [customAddressType, setCustomAddressType] = useState("Other");
   const [isRightAddressTypeModal, setIsRightAddressTypeModal] = useState(false);
   const address =
     addressLabel === "Billing Address"
@@ -38,6 +38,15 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   const handleAddressTypeSelected = (addressName: string) => {
     setCustomAddressType(addressName);
   };
+  useEffect(() => {
+    if (
+      address?.addressType &&
+      address?.addressType !== "office" &&
+      address?.addressType !== "warehouse"
+    ) {
+      setCustomAddressType(address?.addressType);
+    }
+  }, [address?.addressType]);
 
   return (
     <div>
@@ -56,12 +65,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           }`}
           onClick={(e) => {
             handlePickupAddressChange("addressType", "office");
-            if (
-              address?.addressName !== "warehouse" &&
-              address?.addressName !== "office"
-            ) {
-              setCustomAddressType(address?.addressType);
-            }
           }}
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
@@ -77,12 +80,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           }`}
           onClick={(e) => {
             handlePickupAddressChange("addressType", "warehouse");
-            if (
-              address?.addressName !== "warehouse" &&
-              address?.addressName !== "office"
-            ) {
-              setCustomAddressType(address?.addressType);
-            }
           }}
         >
           <img src={LocationIcon} alt="Other" />
@@ -108,10 +105,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">
-            {address?.addressType !== "office" &&
-            address?.addressType !== "warehouse"
-              ? address?.addressType
-              : customAddressType}
+            {customAddressType}
           </p>
         </div>
       </div>

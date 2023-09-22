@@ -712,7 +712,10 @@ const MyRoutes: React.FC = () => {
             <Route path="/help/faqs" element={<HelpScreen />} />
             <Route path="/help/ticket" element={<HelpScreen />} />
 
-            <Route path="/system-log" element={<SystemLog />} />
+            <Route
+              path="/profile/settings/system-logs"
+              element={<SystemLog />}
+            />
 
             {/* Weight Management */}
             <Route
