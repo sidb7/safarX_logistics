@@ -153,11 +153,19 @@ const ServicabilityPincode = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex flex-col">
+            {displayTableField("COD", info.row.original.cod ? "Yes" : "No")}
             {displayTableField(
-              "Prepaid",
+              "Insurance",
+              info.row.original.insurance ? "Yes" : "No"
+            )}
+            {displayTableField(
+              "Pickup",
               info.row.original.pickup ? "Yes" : "No"
             )}
-            {displayTableField("COD", info.row.original.cod ? "Yes" : "No")}
+            {displayTableField(
+              "Delivery",
+              info.row.original.delivery ? "Yes" : "No"
+            )}
           </div>
         );
       },
