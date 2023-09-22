@@ -46,7 +46,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
-  return (
+  return deliveryAddress?.orderType === "B2B" ? (
     <div>
       <div className="lg:col-span-3 mb-[12px] lg:mb-[18px] ">
         <p className="text-[18px] font-semibold font-Lato lg:text-[20px] lg:text-[#323232] ">
@@ -86,7 +86,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default AddressTiming;
