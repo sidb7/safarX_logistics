@@ -4,10 +4,8 @@ import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
-import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
-import { setAcceptTnCStatus } from "../../../../redux/reducers/onboarding";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
@@ -17,7 +15,6 @@ import { Spinner } from "../../../../components/Spinner";
 interface ITypeProps {}
 
 export const GSTComponent = (props: ITypeProps) => {
-  const singUpState = useSelector((state: any) => state?.signup);
   const signInState = useSelector((state: any) => state?.signin);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -26,8 +23,6 @@ export const GSTComponent = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
   const [userState, setIsUserState] = useState<any>();
-
-  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +41,7 @@ export const GSTComponent = (props: ITypeProps) => {
     try {
       if (responses?.success) {
         setLoading(false);
-        dispatch(setAcceptTnCStatus(true));
+        sessionStorage.setItem("setAcceptTnCStatus", JSON.stringify(true));
         navigate("/onboarding/kyc-terms/service-agreement");
       } else {
         setLoading(false);
