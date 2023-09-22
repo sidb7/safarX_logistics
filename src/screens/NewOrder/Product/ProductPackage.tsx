@@ -20,6 +20,7 @@ import shieldcross from "../../../assets/shieldcross.svg";
 import Checkbox from "../../../components/CheckBox";
 import { POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
+import Switch from "react-switch";
 import {
   ADD_BOX_INFO,
   GET_SELLER_COMPANY_BOX,
@@ -111,6 +112,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     iwillTakeRisk: false,
   });
   const [showAddBox, setShowAddBox] = useState<any>(true);
+  const [isFragile, setIsFragile] = useState<any>(false);
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
     isCod: orderType === "B2C",
@@ -123,7 +125,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     (state: any) => state?.user.isReturningUser
   );
   const isOrderTypeB2B = orderType === "B2B";
-  console.log("codData", codData);
   useEffect(() => {
     let totalInvoiceValue = 0;
     let tempArr = packages;
@@ -319,13 +320,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   Product
                 </h1>
               )}
-            </div>
-            <div className="hidden  lg:flex whitespace-nowrap gap-x-32 bg-[#FFFFFF] shadow-sm p-2  ">
-              <p>Handle with care</p>
-              <div className="border-2 border-[#F35838] bg-[#F35838] flex  items-center rounded-md gap-x-3 px-2">
-                <img src={toggle} alt="toggle" />
-                <p className="text-[14px] text-white">DEACTIVATE</p>
-              </div>
             </div>
           </div>
           <div className="flex justify-between py-4 lg:justify-start lg:gap-x-4">
@@ -560,6 +554,57 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     setCodData({ ...codData, invoiceValue: e.target.value })
                   }
                 />
+              </div>
+
+              <div className="w-full flex justify-between pt-6 ">
+                <div className="flex gap-x-2 items-center">
+                  <img src={CodIcon} alt="" />
+                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                    Fragile?
+                  </h1>
+                </div>
+              </div>
+
+              <div
+                className={`flex gap-x-[5rem] mt-[1rem] mb-[2rem] p-2 bg-[#E8E8E8] rounded w-[372px] h-[44px]  border-[1px]`}
+              >
+                <h1 className="self-center justify-start text-[14px] font-semibold font-Open text-[#1C1C1C] lg:text-base ">
+                  Handle With Care
+                </h1>
+
+                <div
+                  className={`flex ${
+                    isFragile ? "justify-start" : "justify-end"
+                  } items-center gap-x-1`}
+                >
+                  <button
+                    className={`${
+                      isFragile ? "bg-[#7CCA62]" : "bg-[#F35838]"
+                    } flex justify-end items-center gap-x-1 rounded w-[123px] h-[30px] px-[12px] py-[8px]`}
+                    onClick={() => {
+                      setIsFragile(!isFragile);
+                    }}
+                  >
+                    <Switch
+                      onChange={() => {
+                        setIsFragile(!isFragile);
+                      }}
+                      checked={isFragile}
+                      onColor="#FFFFF"
+                      onHandleColor="#7CCA62"
+                      offColor="#FFFFF"
+                      offHandleColor="#F35838"
+                      handleDiameter={4}
+                      uncheckedIcon={false}
+                      checkedIcon={false}
+                      height={8}
+                      width={14}
+                    />
+                    <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
+                      {isFragile ? "ACTIVE" : "DEACTIVE"}
+                    </p>
+                  </button>
+                </div>
               </div>
             </div>
           </div>

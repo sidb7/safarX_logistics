@@ -314,8 +314,8 @@ const DeliveryLocation = () => {
             setIsBillingAddress(e.target.checked);
           }}
         />
-        <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
-          BILLING DETAILS IS SAME AS DELIVERY
+        <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+          Billing Details Is Same As Delivery
         </p>
       </div>
 
