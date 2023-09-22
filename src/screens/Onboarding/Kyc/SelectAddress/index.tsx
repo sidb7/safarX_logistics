@@ -53,49 +53,53 @@ const BusinessType = (props: ITypeProps) => {
   }, []);
   console.log(defaultAddressSelect);
   const onSubmitForm = async () => {
+    console.log("brandName", defaultAddressSelect.hasOwnProperty("addressId"));
+
     try {
-      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
-        const payload = { data: defaultAddressSelect?.fullAddress };
-        setLoading(true);
-        const { data: responses } = await POST(MAGIC_ADDRESS, payload);
-        setLoading(false);
-
-        if (responses?.success) {
-          let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
-          const companyObj = {
-            companyInfo: {
-              address: combineAdd,
-              pincode: +responses?.data?.message?.pincode,
-              city: responses?.data?.message?.city_name,
-              state: responses?.data?.message?.state_name,
-              name: brandName || "",
-              logoUrl: "brandLogo",
-            },
-            addressId: defaultAddressSelect?.addressId,
-            isDefault: true,
-          };
-          setLoading(true);
-
-          const { data: response } = await POST(
-            POST_UPDATE_COMPANY_URL,
-            companyObj
-          );
-          if (response?.success) {
-            setLoading(false);
-            toast.success(responses?.message);
-
-            navigate("/onboarding/wallet-recharge");
-          } else {
-            setLoading(false);
-            toast.error(response.message);
-          }
-        } else {
-          toast.error("Something Went Wrong!");
-        }
-
-        //
-      } else {
+      if (brandName === "" || brandName === undefined) {
+        toast.error("Enter Brand Name");
+        return;
+      } else if (defaultAddressSelect.hasOwnProperty("addressId") !== true) {
         toast.error("Please Select Address");
+        return;
+      }
+
+      const payload = { data: defaultAddressSelect?.fullAddress };
+      setLoading(true);
+      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
+      setLoading(false);
+
+      if (responses?.success) {
+        let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
+        const companyObj = {
+          companyInfo: {
+            address: combineAdd,
+            pincode: +responses?.data?.message?.pincode,
+            city: responses?.data?.message?.city_name,
+            state: responses?.data?.message?.state_name,
+            name: brandName || "",
+            logoUrl: "brandLogo",
+          },
+          addressId: defaultAddressSelect?.addressId,
+          isDefault: true,
+        };
+        setLoading(true);
+
+        const { data: response } = await POST(
+          POST_UPDATE_COMPANY_URL,
+          companyObj
+        );
+        if (response?.success) {
+          setLoading(false);
+          toast.success(responses?.message);
+
+          navigate("/onboarding/wallet-recharge");
+        } else {
+          setLoading(false);
+          toast.error(response.message);
+        }
+      } else {
+        toast.error("Something Went Wrong!");
       }
     } catch (error) {
       return error;

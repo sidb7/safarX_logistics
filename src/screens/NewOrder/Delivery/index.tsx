@@ -1100,8 +1100,8 @@ const Index = () => {
               checked={isChecked}
               onChange={handleCheckboxChange}
             />
-            <p className="text-[14px] font-medium uppercase text-[#004EFF] lg:font-semibold lg:font-Open">
-              BILLING DETAILS IS SAME AS DELIVERY
+            <p className="text-[14px] font-medium text-[#004EFF] lg:font-semibold lg:font-Open">
+              Billing Details Is Same As Delivery
             </p>
           </div>
 

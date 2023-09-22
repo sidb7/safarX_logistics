@@ -111,3 +111,9 @@ export const titleCase = (str: string) => {
 
   return str[0].charAt(0).toUpperCase() + str.substring(1, str.length);
 };
+
+export const anyCaseToPascal = (str: string) => {
+  return str.replace(/\b\w/g, function (match) {
+    return match.toUpperCase();
+  });
+};

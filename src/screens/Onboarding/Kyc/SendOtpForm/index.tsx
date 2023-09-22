@@ -7,15 +7,6 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setGSTNumber,
-  setAadharNumber,
-  setPANNumber,
-  setErrorDetails,
-  setVerifyDetailsForOtpBtn,
-  setOtpFormBtnStatus,
-  setNavigateOnOtpFormVerify,
-} from "../../../../redux/reducers/onboarding";
 import { POST } from "../../../../utils/webService";
 import {
   POST_VERIFY_AADHAR_URL,
@@ -43,7 +34,7 @@ const Index = (props: ITypeProps) => {
   const [panNumberError, setPanNumberError] = useState<any>();
 
   const [gstNumber, setGSTNumber] = useState<any>();
-  const [gstError, setgstError] = useState<any>();
+  const [gstError, setgstError] = useState<any>("");
 
   const [otpFormBtnStatus, setOtpFormBtnStatus] = useState(false);
 
@@ -53,15 +44,52 @@ const Index = (props: ITypeProps) => {
   }, []);
 
   useEffect(() => {
+    console.log("useEffect :", gstNumber, aadharNumber, panNumber);
+
+    // if (
+    //   (aadharNumber !== undefined || gstNumber !== undefined) &&
+    //   panNumber !== undefined
+    // ) {
+    // if (
+    //   (aadharNumberError === "" || gstError === "") &&
+    //   panNumberError === ""
+    // ) {
     if (
-      (aadharNumberError === "" && gstError === "") ||
+      ((aadharNumber &&
+        aadharNumber?.length !== 0 &&
+        aadharNumberError === "") ||
+        (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
+      panNumber &&
+      panNumber?.length !== 0 &&
       panNumberError === ""
     ) {
       setOtpFormBtnStatus(true);
     } else {
       setOtpFormBtnStatus(false);
     }
-  }, [aadharNumberError, panNumberError, gstError]);
+    // }
+  }, [
+    aadharNumberError,
+    panNumberError,
+    gstError,
+    aadharNumber,
+    gstNumber,
+    panNumber,
+  ]);
+
+  function validateGST(gstNo: any) {
+    return gstRegex.test(gstNo);
+  }
+
+  useEffect(() => {
+    if (gstNumber !== "" && gstNumber !== undefined) {
+      if (validateGST(gstNumber)) {
+        setgstError("");
+      } else {
+        setgstError("Enter Valid GST Number");
+      }
+    }
+  }, [gstNumber]);
 
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
@@ -81,11 +109,7 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("panNumber", panNumber);
 
         sessionStorage.setItem("client_id", response.data.data.client_id);
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            aadharVerifyNavigate: true,
-          })
-        );
+
         if (businessType === "individual") {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify", {
@@ -94,11 +118,6 @@ const Index = (props: ITypeProps) => {
         }
       } else {
         setLoading(false);
-        dispatch(
-          setNavigateOnOtpFormVerify({
-            aadharVerifyNavigate: false,
-          })
-        );
 
         toast.error(response?.message);
       }
@@ -120,6 +139,7 @@ const Index = (props: ITypeProps) => {
 
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
+          sessionStorage.setItem("client_id", response.data[0].data.client_id);
           navigate("/onboarding/kyc-mobile-verify", {
             state: { path: "otp-form" },
           });
@@ -127,7 +147,6 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
-        sessionStorage.setItem("client_id", response.data[0].data.client_id);
       } else {
         setLoading(false);
 
@@ -192,7 +211,6 @@ const Index = (props: ITypeProps) => {
                   lg:!w-[320px]   !font-Open`}
                   onChange={(e: any) => {
                     if (aadharRegex.test(e.target.value)) {
-                      console.log("ad no .", e.target.value);
                       setAadharNumberError("");
                     } else {
                       setAadharNumberError("Enter Valid Aadhar Number");
@@ -228,15 +246,11 @@ const Index = (props: ITypeProps) => {
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    if (gstRegex.test(e.target.value)) {
-                      setGSTNumber(e.target.value);
-                      setgstError("");
-                    } else {
-                      setgstError("Enter Valid GST Number");
-                    }
+                    setGSTNumber(e.target.value.toUpperCase());
                   }}
                 />
                 {/* To display error */}
+                {console.log("gstError ", gstError) as any}
                 {gstError !== "" && gstError !== undefined && (
                   <div className="flex items-center gap-x-1 mt-1 ">
                     <img src={ErrorIcon} alt="" width={10} height={10} />

@@ -1109,8 +1109,8 @@ const Index = () => {
                 checked={isChecked}
                 onChange={handleCheckboxChange}
               />
-              <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
-                RETURN ADDRESS SAME AS PICKUP
+              <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+                Return Address Same As Pickup
               </p>
             </div>
 
