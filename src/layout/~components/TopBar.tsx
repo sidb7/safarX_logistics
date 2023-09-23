@@ -120,14 +120,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               className="relative cursor-pointer col-span-1 flex gap-x-4"
               ref={dropdownRef}
             >
-              <img
+              {/* <img
                 src={locationImage}
                 width={"22px"}
                 height={"22px"}
                 alt=""
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
-              />
+              /> */}
               <div ref={dropdownQuickRef}>
                 <img
                   src={PowerBoosterlogo}
@@ -152,7 +152,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 onClick={() => setIsOpen(!isOpen)}
                 showIcon={true}
                 onlyIcon={true}
-                className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
+                className="bg-white !w-6 !h-6 !p-0 lg:w-fit"
                 text={""}
               />
 
@@ -323,7 +323,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Sync Order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/orders/add-bulk")}
+                      >
                         <img
                           src={AddBulkIcon}
                           alt=""
@@ -335,7 +338,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Add Bulk
                         </span>
                       </div>
-                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => setIsModalOpen(true)}
+                      >
                         <img
                           src={PinCodeIcon}
                           alt=""

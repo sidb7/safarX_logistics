@@ -55,17 +55,17 @@ const Buttons = (className?: string) => {
         />
       </div>
 
-      <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
+      {/* <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
         <img src={SyncIcon} alt="" width="16px" />
         <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
           SYNC CHANNEL
         </span>
-      </div>
+      </div> */}
 
       <div
         className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
         // onClick={() => setIsModalOpen(true)}
-        onClick={() => navigate("/orders/bulk-upload")}
+        onClick={() => navigate("/orders/add-bulk")}
       >
         <img src={BlukOrderIcon} alt="" width="16px" />
         <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">

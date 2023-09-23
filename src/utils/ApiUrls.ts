@@ -6,7 +6,6 @@ let PAYMENT_URL = "";
 let LANDMARK_URL = "";
 let TRACKING_URL = "";
 
-
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
 
@@ -198,6 +197,9 @@ const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
 
+// System Logs
+const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
+
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/shopify/createShopifyStore`;
@@ -210,8 +212,7 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING= `${TRACKING_URL}/api/v1/tracking/getTracking`;
-
+const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 export {
   UPDATE_SELLER_BOX,
@@ -311,5 +312,6 @@ export {
   UPDATE_SINGLE_STORE,
   RETURNING_USER_PICKUP,
   RETURNING_USER_DELIVERY,
-  TRACKING
+  TRACKING,
+  GET_SYSTEM_LOG,
 };

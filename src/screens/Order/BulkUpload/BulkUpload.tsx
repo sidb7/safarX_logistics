@@ -187,7 +187,7 @@ const BulkUpload = (props: ITypeProps) => {
               or Drop files here
             </p>
             <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-              excels files are supported
+              only CSV files are supported
             </p>
           </div>
 

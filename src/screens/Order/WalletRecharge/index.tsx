@@ -496,13 +496,33 @@ const WalletRecharge = () => {
 
                 <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
                   <div className="flex flex-col items-center gap-y-2">
-                    <img src={upiIcon} alt="" className="ml-0 object-contain" />
+                    <img
+                      src={
+                        "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
+                      }
+                      alt=""
+                      className="ml-0 object-contain w-20 h-20"
+                    />
                     <Paytm
                       text={"Paytm"}
                       amt={walletValue}
                       navigate="/wallet/view-wallet"
                     />
                   </div>
+                  {/* <div className="flex flex-col items-center gap-y-2">
+                    <img
+                      src={
+                        "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                      }
+                      alt=""
+                      className="ml-0 object-contain w-20 h-20"
+                    />
+                    <Paytm
+                      text={"Phonepe"}
+                      amt={walletValue}
+                      navigate="/wallet/view-wallet"
+                    />
+                  </div> */}
                 </div>
               </div>
             </div>

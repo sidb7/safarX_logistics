@@ -368,7 +368,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="orders/bulk-upload"
+                path="orders/add-bulk"
                 element={
                   <ProtectedRoute>
                     <BulkUpload />
