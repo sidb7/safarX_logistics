@@ -513,7 +513,7 @@ function AddRole() {
 
       const { data } = await POST(POST_CREATE_NEW_ROLL, reqBody);
       if (data?.success) {
-        navigate("/profile/settings/role-management");
+        navigate("/settings/role-management");
       } else {
         toast.error(data?.message);
       }

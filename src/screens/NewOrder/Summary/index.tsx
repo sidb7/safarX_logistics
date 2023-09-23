@@ -132,6 +132,7 @@ const Summary = (props: Props) => {
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
+                toast.warning(orderPlaceResponse?.data?.message);
                 const requiredBalance =
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;
 

@@ -199,7 +199,6 @@ const DeliveryLocation = () => {
                 emailId: orderData?.deliveryAddress?.contact?.emailId,
                 type: orderData?.deliveryAddress?.contact?.type,
               },
-              pickupDate: 0,
             },
             billingAddress: {
               fullAddress: orderData?.billingAddress?.fullAddress,

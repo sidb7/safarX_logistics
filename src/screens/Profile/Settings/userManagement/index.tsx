@@ -30,13 +30,13 @@ const Buttons = (className?: string, usersData?: any) => {
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
           text="ADD ROLE"
-          onClick={() => navigate("/profile/settings/role-management/add-role")}
+          onClick={() => navigate("/settings/role-management/add-role")}
         />
 
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
           text="ADD USER"
-          onClick={() => navigate("/profile/settings/user-management/add-user")}
+          onClick={() => navigate("/settings/user-management/add-user")}
         />
       </div>
     </div>

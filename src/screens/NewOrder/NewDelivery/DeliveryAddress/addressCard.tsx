@@ -302,6 +302,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="GST No."
+                maxLength={15}
                 value={deliveryAddress.gstNumber}
                 onChange={(e) =>
                   setDeliveryAddress((prevData: any) => ({

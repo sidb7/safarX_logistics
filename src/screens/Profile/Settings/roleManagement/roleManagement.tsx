@@ -30,13 +30,13 @@ const Buttons = (className?: string) => {
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
           text="ADD USER"
-          onClick={() => navigate(`/profile/settings/user-management/add-user`)}
+          onClick={() => navigate(`/settings/user-management/add-user`)}
         />
 
         <CustomButton
           className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
           text="ADD ROLE"
-          onClick={() => navigate("/profile/settings/role-management/add-role")}
+          onClick={() => navigate("/settings/role-management/add-role")}
           showIcon={false}
         />
       </div>
@@ -103,7 +103,7 @@ function RoleManagement() {
             <div
               className="cursor-pointer"
               onClick={() =>
-                navigate(`/profile/settings/role-management/userslist`, {
+                navigate(`/settings/role-management/userslist`, {
                   state: { data: data.users },
                 })
               }
@@ -126,7 +126,7 @@ function RoleManagement() {
                 text="UPDATE"
                 onClick={() =>
                   navigate(
-                    `/profile/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
+                    `/settings/role-management/update-role?roleId=${data?.roleId}&roleName=${data?.roleName}`
                   )
                 }
                 // showIcon={true}

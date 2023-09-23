@@ -211,14 +211,18 @@ const Payment = () => {
   };
 
   const placeOrderApi = async () => {
-    const { data } = await POST(POST_PLACE_ORDER, {});
+    try {
+      const { data } = await POST(POST_PLACE_ORDER, {});
 
-    if (data?.success) {
-      // toast.success(data?.message);
-      setIsLabelRightModal(true);
-      // navigate("/orders/add-order/level");
-    } else {
-      toast.error(data?.message);
+      if (data?.success) {
+        toast.success(data?.message);
+        // setIsLabelRightModal(true);
+        navigate("/orders/view-orders");
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -619,7 +623,7 @@ const Payment = () => {
                   <p className="text-[12px]">Netbanking</p>
                 </div> */}
               </div>
-              {upiText && (
+              {/* {upiText && (
                 <div className="flex items-center mt-4">
                   <div>
                     <CustomInputBox
@@ -636,7 +640,7 @@ const Payment = () => {
                     <CustomButton text={"PAY NOW"} onClick={() => paynow()} />
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

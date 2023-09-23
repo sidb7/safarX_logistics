@@ -111,7 +111,7 @@ export const SettingTab = () => {
 
           <div
             className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-            onClick={() => navigate(`/profile/settings/role-management`)}
+            onClick={() => navigate(`/settings/role-management`)}
             style={{
               boxShadow:
                 "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -131,7 +131,7 @@ export const SettingTab = () => {
 
           <div
             className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-            onClick={() => navigate(`/profile/settings/user-management`)}
+            onClick={() => navigate(`/settings/user-management`)}
             style={{
               boxShadow:
                 "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -151,7 +151,7 @@ export const SettingTab = () => {
 
           <div
             className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-            onClick={() => navigate(`/profile/settings/system-logs`)}
+            onClick={() => navigate(`/settings/system-logs`)}
             style={{
               boxShadow:
                 "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
