@@ -23,7 +23,7 @@ import PinCodeIcon from "../../assets/quickAction/pin.svg";
 import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
-import { GET_PROFILE_URL } from "../../utils/ApiUrls";
+import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -68,13 +68,33 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   }, []);
 
   const openQuickAction = async () => {
-    const { data } = await POST(GET_PROFILE_URL);
-    if (data?.success) {
-      setQuickData(data?.data[0]);
-      setIsQuick(!isQuick);
-    } else {
-      toast.error(data?.message);
+    try {
+      const { data } = await POST(GET_PROFILE_URL);
+      if (data?.success) {
+        setQuickData(data?.data[0]);
+        setIsQuick(!isQuick);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const { data } = await POST(LOGOUT);
+      if (data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    clearLocalStorage();
+    sessionStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -196,11 +216,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <button
                       className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      onClick={() => {
-                        clearLocalStorage();
-                        sessionStorage.clear();
-                        navigate("/");
-                      }}
+                      onClick={() => logoutHandler()}
                     >
                       Sign out
                     </button>

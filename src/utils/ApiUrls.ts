@@ -196,6 +196,7 @@ const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 //Forgot Password
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
+const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
 
 // System Logs
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
@@ -314,4 +315,5 @@ export {
   RETURNING_USER_DELIVERY,
   TRACKING,
   GET_SYSTEM_LOG,
+  LOGOUT,
 };
