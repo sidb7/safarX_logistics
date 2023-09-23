@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomDropDown from "../../../../components/DropDown";
 import CustomInputBox from "../../../../components/Input";
 import AudioInputBox from "../../../../components/AudioInput/AudioInputBox";
@@ -21,7 +21,10 @@ import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
 import AiIcon from "../../../../assets/Buttons.svg";
 import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
-import { titleCase } from "../../../../utils/utility";
+import { anyCaseToPascal, titleCase } from "../../../../utils/utility";
+
+//GST Json Data
+import gstJsonData from "../../../../data/gstStateCode.json";
 
 interface IAddressCardProps {
   data: {
@@ -46,6 +49,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
   const [locateAddress, setLocateAddress] = useState("");
   const [customLandmark, setCustomLandmark] = useState("");
+  const [validGstStateCode, setValidGstStateCode] = useState("");
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
 
   const [isAudioModal, setIsAudioModal] = useState(false);
@@ -111,7 +115,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           landmark: address.landmark,
           pincode: parsedData.pincode || "",
           city: parsedData.city_name || "",
-          state: parsedData.state_name || "",
+          state: anyCaseToPascal(parsedData.state_name) || "",
           country: parsedData.country_name || "India",
           addressType: address.addressType || "warehouse",
         },
@@ -132,6 +136,19 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       setPrevPastedData(trimmedData);
     }
   };
+
+  useEffect(() => {
+    let gstObject = gstJsonData.find(
+      (elem) => elem.States === deliveryAddress.deliveryAddress.state
+    );
+    if (gstObject && deliveryAddress.orderType === "B2B") {
+      setDeliveryAddress((prevData: any) => ({
+        ...prevData,
+        gstNumber: gstObject?.["GST State Code"],
+      }));
+      setValidGstStateCode(gstObject?.["GST State Code"]);
+    }
+  }, [deliveryAddress.deliveryAddress.state]);
 
   return (
     <div>
@@ -285,11 +302,17 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             <div className="mb-4 lg:mb-6 lg:mr-6">
               <CustomInputBox
                 label="GST No."
+                maxLength={15}
                 value={deliveryAddress.gstNumber}
                 onChange={(e) =>
                   setDeliveryAddress((prevData: any) => ({
                     ...prevData,
-                    gstNumber: e.target.value,
+                    gstNumber:
+                      validGstStateCode.length === 0
+                        ? e.target.value
+                        : deliveryAddress.gstNumber.includes(validGstStateCode)
+                        ? `${e.target.value}`
+                        : `${validGstStateCode}${e.target.value}`,
                   }))
                 }
               />

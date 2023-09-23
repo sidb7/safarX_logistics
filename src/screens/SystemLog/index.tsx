@@ -6,24 +6,13 @@ import {
   capitalizeFirstLetter,
   convertEpochToDateTime,
 } from "../../utils/utility";
+import { POST } from "../../utils/webService";
+import { GET_SYSTEM_LOG } from "../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 const SystemLog = () => {
   const columnsHelper = createColumnHelper<any>();
-
-  let systemLogData = [
-    {
-      companyId: "00a8dd6f-9a70-497e-b7bd-2c149521fdad",
-      privateCompanyId: "100009",
-      eventName: "Seller_Login",
-      userId: 1009,
-      userName: "tanmay mungekar",
-      ipAddress: "::1",
-      status: true,
-      logType: "SUCCESS",
-      createdAt: 1694500565220,
-      userType: "SELLER",
-    },
-  ];
+  const [systemLogData, setSystemLogData] = React.useState<any>([]);
 
   const systemLogColumns = [
     columnsHelper.accessor("companyId", {
@@ -177,6 +166,21 @@ const SystemLog = () => {
       },
     }),
   ];
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await POST(GET_SYSTEM_LOG, {});
+        if (data?.success) {
+          setSystemLogData(data?.data);
+        } else {
+          toast.error(data?.message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <>

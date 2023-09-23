@@ -94,7 +94,7 @@ function AddUser() {
         addUserData
       );
       if (response?.success) {
-        navigate("/profile/settings/user-management");
+        navigate("/settings/user-management");
         toast.success(response?.message || "N/A");
       } else {
         toast.error(response?.message || "N/A");

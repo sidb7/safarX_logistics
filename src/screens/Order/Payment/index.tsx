@@ -211,14 +211,18 @@ const Payment = () => {
   };
 
   const placeOrderApi = async () => {
-    const { data } = await POST(POST_PLACE_ORDER, {});
+    try {
+      const { data } = await POST(POST_PLACE_ORDER, {});
 
-    if (data?.success) {
-      // toast.success(data?.message);
-      setIsLabelRightModal(true);
-      // navigate("/orders/add-order/level");
-    } else {
-      toast.error(data?.message);
+      if (data?.success) {
+        toast.success(data?.message);
+        // setIsLabelRightModal(true);
+        navigate("/orders/view-orders");
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -583,10 +587,29 @@ const Payment = () => {
 
               <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
                 <div className="flex flex-col items-center gap-y-2">
-                  <img src={upiIcon} alt="" className="ml-0 object-contain" />
-                  <Paytm text={"Paytm"} amt={walletValue} />
-                  {/* <p className="text-[12px]">UPI</p> */}
+                  <img
+                    src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
+                    alt=""
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <Paytm
+                    text={"Paytm"}
+                    amt={walletValue}
+                    navigate="/orders/add-order/payment"
+                  />
                 </div>
+                {/* <div className="flex flex-col items-center gap-y-2">
+                  <img
+                    src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                    alt=""
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <Paytm
+                    text={"Phonepe"}
+                    amt={walletValue}
+                    navigate="/orders/add-order/payment"
+                  />
+                </div> */}
                 {/* <div className="flex flex-col items-center gap-y-2">
                   <img src={cardPayment} alt="" className="object-contain" />
                   <p className="text-[12px]">Cardpayment</p>
@@ -600,7 +623,7 @@ const Payment = () => {
                   <p className="text-[12px]">Netbanking</p>
                 </div> */}
               </div>
-              {upiText && (
+              {/* {upiText && (
                 <div className="flex items-center mt-4">
                   <div>
                     <CustomInputBox
@@ -617,7 +640,7 @@ const Payment = () => {
                     <CustomButton text={"PAY NOW"} onClick={() => paynow()} />
                   </div>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

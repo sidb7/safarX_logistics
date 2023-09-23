@@ -131,7 +131,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       const { data } = await POST(GET_LATEST_ORDER);
       if (data?.success) {
         setProductPayload(data?.data[0]?.products);
-        setProductInputState([...data?.data[0]?.products, initialUserData]);
+        if (data?.data[0]?.products.length < 1) {
+          setProductInputState([...data?.data[0]?.products, initialUserData]);
+        } else {
+          setProductInputState([...data?.data[0]?.products]);
+        }
       } else {
         toast.error(data?.message);
         navigate("/orders/add-order/pickup");
@@ -286,7 +290,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     label="Product tax"
                     name="unitTax"
                     inputMode="numeric"
-                    value={productInputState[index].unitTax || ""}
+                    value={
+                      isNaN(productInputState[index].unitTax) === true
+                        ? ""
+                        : productInputState[index].unitTax
+                    }
                     onChange={(e: any) =>
                       handleProductInputChange(
                         { name: e.target.name, value: +e.target.value },
@@ -296,10 +304,14 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   />
                   <div className="flex gap-x-3 w-full">
                     <CustomInputBox
-                      label="Length (CM)"
+                      label="Length (cm)"
                       inputType="number"
                       name="length"
-                      value={productInputState[index]?.length || ""}
+                      value={
+                        productInputState[index]?.length < 0
+                          ? ""
+                          : productInputState[index]?.length
+                      }
                       onChange={(e: any) => {
                         handleProductInputChange(
                           { name: e.target.name, value: +e.target.value },
@@ -310,10 +322,14 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     />
 
                     <CustomInputBox
-                      label="Breadth (CM)"
+                      label="Breadth (cm)"
                       name="breadth"
                       inputType="number"
-                      value={productInputState[index].breadth || ""}
+                      value={
+                        productInputState[index].breadth < 0
+                          ? ""
+                          : productInputState[index].breadth
+                      }
                       onChange={(e: any) => {
                         handleProductInputChange(
                           { name: e.target.name, value: +e.target.value },
@@ -323,10 +339,14 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       }}
                     />
                     <CustomInputBox
-                      label="Height (CM)"
+                      label="Height (cm)"
                       inputType="number"
                       name="height"
-                      value={productInputState[index].height || ""}
+                      value={
+                        productInputState[index].height < 0
+                          ? ""
+                          : productInputState[index].height
+                      }
                       onChange={(e: any) => {
                         handleProductInputChange(
                           { name: e.target.name, value: +e.target.value },
@@ -339,7 +359,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   <div className="flex gap-x-5">
                     <CustomInputBox
                       placeholder="Volumetric Weight (Kg)"
-                      label="Volumetric Weight (Kg)"
+                      label="Volumetric Weight (kg)"
                       isDisabled={true}
                       value={
                         productInputState[index]?.volumetricWeight ||
@@ -355,10 +375,14 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     />
                   </div>
                   <CustomInputBox
-                    label="Weight (Kg)"
+                    label="Weight (kg)"
                     inputType="number"
                     name="deadWeight"
-                    value={productInputState[index]?.deadWeight || ""}
+                    value={
+                      productInputState[index]?.deadWeight < 0
+                        ? ""
+                        : productInputState[index]?.deadWeight
+                    }
                     onChange={(e: any) =>
                       handleProductInputChange(
                         { name: e.target.name, value: +e.target.value },

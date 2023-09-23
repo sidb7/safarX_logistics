@@ -84,7 +84,14 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
             {expandedBox === index && (
               <div className="flex flex-col gap-y-2 mb-10">
                 <p className="text-[12px] font-medium ml-[25px] mt-[15px] font-Open lg:text-[16px] ">
-                  Box Weight: {box?.appliedWeight} {box?.weightUnit}
+                  Box Applied Weight: {box?.appliedWeight} {box?.weightUnit}
+                </p>
+                <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
+                  Box Dead Weight: {box?.deadWeight} {box?.weightUnit}
+                </p>
+                <p className="text-[12px] font-medium font-Open ml-[25px] lg:text-[16px] ">
+                  Box Volumentric Weight: {box?.volumetricWeight}{" "}
+                  {box?.weightUnit}
                 </p>
                 <hr></hr>
                 {box?.products?.map((product: any, productIndex: any) => (

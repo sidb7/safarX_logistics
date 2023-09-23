@@ -1,0 +1,192 @@
+[
+  {
+    "States": "Himachal Pradesh",
+    "GST State Code": "02",
+    "Alpha Code": "HP"
+  },
+  {
+    "States": "Punjab",
+    "GST State Code": "03",
+    "Alpha Code": "PB"
+  },
+  {
+    "States": "Chandigarh",
+    "GST State Code": "04",
+    "Alpha Code": "CH"
+  },
+  {
+    "States": "Uttarakhand",
+    "GST State Code": "05",
+    "Alpha Code": "UA"
+  },
+  {
+    "States": "Haryana",
+    "GST State Code": "06",
+    "Alpha Code": "HR"
+  },
+  {
+    "States": "Delhi",
+    "GST State Code": "07",
+    "Alpha Code": "DL"
+  },
+  {
+    "States": "Rajasthan",
+    "GST State Code": "08",
+    "Alpha Code": "RJ"
+  },
+  {
+    "States": "Uttar Pradesh",
+    "GST State Code": "09",
+    "Alpha Code": "UP"
+  },
+  {
+    "States": "Bihar",
+    "GST State Code": "10",
+    "Alpha Code": "BR"
+  },
+  {
+    "States": "Sikkim",
+    "GST State Code": "11",
+    "Alpha Code": "SK"
+  },
+  {
+    "States": "Arunanchal Pradesh",
+    "GST State Code": "12",
+    "Alpha Code": "AP"
+  },
+  {
+    "States": "Nagaland",
+    "GST State Code": "13",
+    "Alpha Code": "NL"
+  },
+  {
+    "States": "Manipur",
+    "GST State Code": "14",
+    "Alpha Code": "MN"
+  },
+  {
+    "States": "Mizoram",
+    "GST State Code": "15",
+    "Alpha Code": "MZ"
+  },
+  {
+    "States": "Tripura",
+    "GST State Code": "16",
+    "Alpha Code": "TR"
+  },
+  {
+    "States": "Meghalaya",
+    "GST State Code": "17",
+    "Alpha Code": "ML"
+  },
+  {
+    "States": "Assam",
+    "GST State Code": "18",
+    "Alpha Code": "AS"
+  },
+  {
+    "States": "West Bengal",
+    "GST State Code": "19",
+    "Alpha Code": "WB"
+  },
+  {
+    "States": "Jharkhand",
+    "GST State Code": "20",
+    "Alpha Code": "JH"
+  },
+  {
+    "States": "Odisha",
+    "GST State Code": "21",
+    "Alpha Code": "OR"
+  },
+  {
+    "States": "Chattisgarh",
+    "GST State Code": "22",
+    "Alpha Code": "CG"
+  },
+  {
+    "States": "Madhya Pradesh",
+    "GST State Code": "23",
+    "Alpha Code": "MP"
+  },
+  {
+    "States": "Gujarat",
+    "GST State Code": "24",
+    "Alpha Code": "GJ"
+  },
+  {
+    "States": "Daman And Diu",
+    "GST State Code": "26",
+    "Alpha Code": "DD"
+  },
+  {
+    "States": "Dadra And Nagar Haveli",
+    "GST State Code": "26",
+    "Alpha Code": "DN"
+  },
+  {
+    "States": "Maharashtra",
+    "GST State Code": "27",
+    "Alpha Code": "MH"
+  },
+  {
+    "States": "Andhra Pradesh",
+    "GST State Code": "28",
+    "Alpha Code": "AP"
+  },
+  {
+    "States": "Karnataka",
+    "GST State Code": "29",
+    "Alpha Code": "KA"
+  },
+  {
+    "States": "Goa",
+    "GST State Code": "30",
+    "Alpha Code": "GA"
+  },
+  {
+    "States": "Lakshadweep",
+    "GST State Code": "31",
+    "Alpha Code": "LD"
+  },
+  {
+    "States": "Kerela",
+    "GST State Code": "32",
+    "Alpha Code": "KL"
+  },
+  {
+    "States": "Tamil Nadu",
+    "GST State Code": "33",
+    "Alpha Code": "TN"
+  },
+  {
+    "States": "Puducherry",
+    "GST State Code": "34",
+    "Alpha Code": "PY"
+  },
+  {
+    "States": "Andaman and Nicobar Islands",
+    "GST State Code": "35",
+    "Alpha Code": "AN"
+  },
+  {
+    "States": "Telangana",
+    "GST State Code": "36",
+    "Alpha Code": "TS"
+  },
+  {
+    "States": "Andhra Pradesh",
+    "GST State Code": "37",
+    "Alpha Code": "AP"
+  },
+  {
+    "States": "Ladakh",
+    "GST State Code": "38",
+    "Alpha Code": "LA"
+  },
+  {
+    "States": "Other Territory",
+    "GST State Code": "97",
+    "Alpha Code": "0T"
+  }
+]

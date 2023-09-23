@@ -422,22 +422,34 @@ const OnBoundingWalletRecharge = () => {
             </div>
 
             <div className="flex mt-4   justify-between lg:mb-0 ml-4 mr-5">
-              {/* <PaytmButton /> */}
-
-              <div
-                className="flex flex-col items-center gap-y-2"
-                onClick={() => {}}
-              >
+              <div className="flex flex-col items-center gap-y-2">
                 <img
-                  src={upiIcon}
-                  // onClick={() => setUpiText(true)}
-                  // onClick={() => paytmHandler()}
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
+                  }
                   alt=""
-                  className="ml-0 object-contain"
+                  className="ml-0 object-contain w-20 h-20"
                 />
-                <Paytm text={"Paytm"} amt={money} />
-                {/* <p className="text-[12px]">UPI</p> */}
+                <Paytm
+                  text={"Paytm"}
+                  amt={money}
+                  navigate="/dashboard/overview"
+                />
               </div>
+              {/* <div className="flex flex-col items-center gap-y-2">
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                  }
+                  alt=""
+                  className="ml-0 object-contain w-20 h-20"
+                />
+                <Paytm
+                  text={"Phonepe"}
+                  amt={money}
+                  navigate="/wallet/view-wallet"
+                />
+              </div> */}
 
               {/* <div className="flex flex-col items-center gap-y-2">
                 <img src={cardPayment} alt="" className="object-contain" />

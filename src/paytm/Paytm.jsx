@@ -8,7 +8,7 @@ import {
 } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
 
-function Paytm({ text, amt }) {
+function Paytm({ text, amt, navigate }) {
   let urlLink = "";
   let mid = "";
   let website = "";
@@ -33,6 +33,7 @@ function Paytm({ text, amt }) {
     });
     if (data?.success) {
       // setShowCheckout(false);
+      window.location.href = navigate;
       toast.success("Successfully Done");
     }
   };
@@ -88,7 +89,7 @@ function Paytm({ text, amt }) {
           rechargeStatus(paymentStatus);
           setMConfig(null);
           // setShowCheckout(false);
-          document.getElementById("paytm-checkoutjs").style.display = "none";
+          // document.getElementById("paytm-checkoutjs").style.display = "none";
         }
       },
       notifyMerchant: function notifyMerchant(eventName, data) {
@@ -104,7 +105,7 @@ function Paytm({ text, amt }) {
     const { data } = await POST(INITIAL_RECHARGE, {
       paymentObject: {
         amount: String(amt),
-        callbackUrl: "/orders/add-order/payment",
+        callbackUrl: navigate,
       },
       paymentGateway: "PAYTM",
     });

@@ -26,6 +26,7 @@ import editIcon from "../../../assets/serv/edit.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { Spinner } from "flowbite-react";
+import ServiceButton from "../../../components/Button/ServiceButton";
 
 type Props = {};
 
@@ -131,6 +132,7 @@ const Summary = (props: Props) => {
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
+                toast.warning(orderPlaceResponse?.data?.message);
                 const requiredBalance =
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
@@ -372,10 +374,9 @@ const Summary = (props: Props) => {
       )}
 
       <BottomLayout
-        customButtonText="PLACE ORDER"
+        finalButtonText="PLACE ORDER"
         callApi={() => setOrderIdApi()}
         className="lg:w-[120px]"
-        Button2Name={true}
       />
     </div>
   );

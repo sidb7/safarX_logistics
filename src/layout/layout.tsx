@@ -9,6 +9,9 @@ import InputWithImage from "../components/InputWithImage/InputWithImage";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { POST } from "../utils/webService";
+import { LOGOUT } from "../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 type Props = {};
 
@@ -23,6 +26,22 @@ export const CommonLayout = (props: Props) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
     }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const { data } = await POST(LOGOUT);
+      if (data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    clearLocalStorage();
+    sessionStorage.clear();
+    navigate("/");
   };
 
   useEffect(() => {
@@ -741,10 +760,7 @@ export const CommonLayout = (props: Props) => {
                             <button
                               className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                               role="menuitem"
-                              onClick={() => {
-                                clearLocalStorage();
-                                navigate("/");
-                              }}
+                              onClick={() => logoutHandler()}
                             >
                               Sign out
                             </button>

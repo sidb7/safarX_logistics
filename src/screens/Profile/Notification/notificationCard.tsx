@@ -6,7 +6,7 @@ export const ProfileNotification = () => {
   const navigate = useNavigate();
   return (
     <div
-      className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer`}
+      className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100 `}
       onClick={() => navigate("/profile/notification")}
     >
       <div className={`flex justify-between items-center h-[44px]`}>

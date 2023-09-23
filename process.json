@@ -1,0 +1,17 @@
+{
+  "script": "serve",
+  "watch": true,
+  "ignore_watch": ["node_modules"],
+  "watch_options": {
+    "followSymlinks": false
+  },
+  "instances": "1",
+  "exec_mode": "cluster",
+  "env": {
+    "PM2_SERVE_PATH": "build",
+    "PM2_SERVE_PORT": 3000,
+    "PM2_SERVE_SPA": "true",
+    "PM2_SERVE_HOMEPAGE": "/index.html"
+  },
+  "name": "seller-react"
+}

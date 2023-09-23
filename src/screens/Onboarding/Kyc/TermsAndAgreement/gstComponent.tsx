@@ -4,10 +4,8 @@ import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomCheckBox from "../../../../components/CheckBox";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
-import Card from "./Card";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useNavigate } from "react-router-dom";
-import { setAcceptTnCStatus } from "../../../../redux/reducers/onboarding";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
@@ -17,7 +15,6 @@ import { Spinner } from "../../../../components/Spinner";
 interface ITypeProps {}
 
 export const GSTComponent = (props: ITypeProps) => {
-  const singUpState = useSelector((state: any) => state?.signup);
   const signInState = useSelector((state: any) => state?.signin);
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -27,13 +24,13 @@ export const GSTComponent = (props: ITypeProps) => {
   const [checkbox, setCheckbox] = useState();
   const [userState, setIsUserState] = useState<any>();
 
-  const dispatch = useDispatch();
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem("userInfo") as any);
-    setIsUserState(data);
+    let data = JSON.parse(sessionStorage.getItem("userInfo") as any);
+    if (data !== "" && data !== null) {
+      setIsUserState(data);
+    }
   }, []);
 
   const acceptStatus = async () => {
@@ -44,7 +41,7 @@ export const GSTComponent = (props: ITypeProps) => {
     try {
       if (responses?.success) {
         setLoading(false);
-        dispatch(setAcceptTnCStatus(true));
+        sessionStorage.setItem("setAcceptTnCStatus", JSON.stringify(true));
         navigate("/onboarding/kyc-terms/service-agreement");
       } else {
         setLoading(false);
@@ -137,10 +134,15 @@ export const GSTComponent = (props: ITypeProps) => {
                   <p>
                     I/We
                     <b className="uppercase">
-                      {/* {`${singUpState?.firstName} ${singUpState?.lastName}`} */}
+                      {userState !== "" &&
+                        userState !== undefined &&
+                        userState !== null &&
+                        ` ${userState?.firstName} ${userState?.lastName} `}
                       {/* {userState?.firstName + " " + userState?.lastName} */}
                       {/*This will work when user login but didn't work when user signup as the line 144 is commented */}
-                      {" " + signInState?.name + " "}
+                      {signInState &&
+                        signInState?.name !== undefined &&
+                        ` ${signInState?.name} `}
                       {/*at the time of signup and signin rendering is different so tried with the condition*/}
                       {/* {(userState?.firstName &&
                         userState.lastName === undefined) ||

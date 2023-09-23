@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import WelcomeHeader from "../welcomeHeader";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -20,10 +20,12 @@ export const ServiceComponent = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
+  const [acceptTnC, setAcceptTnC] = useState<any>();
 
-  const acceptTnC = useSelector(
-    (state: any) => state?.onboarding.acceptTnCStatus
-  );
+  useEffect(() => {
+    const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus");
+    setAcceptTnC(localAcceptTnC);
+  }, []);
 
   const acceptService = async () => {
     try {

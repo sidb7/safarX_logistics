@@ -45,13 +45,26 @@ const ServicabilityPincode = (props: ITypeProps) => {
     }
   };
 
+  const displayTableField = (name: string, value: string) => {
+    return (
+      <>
+        <p className="mt-2 text-[#1C1C1C] font-Open text-xs font-normal">
+          {capitalizeFirstLetter(name)}:
+        </p>
+        <p className="text-[#1C1C1C] font-Open text-sm font-semibold">
+          {typeof value === "string" ? capitalizeFirstLetter(value) : value}
+        </p>
+      </>
+    );
+  };
+
   const columns = [
     columnsHelper.accessor("accountName", {
       header: () => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Account Name
+              Partner Details
             </p>
           </div>
         );
@@ -59,9 +72,10 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className="text-[#1C1C1C] font-Open text-sm font-semibold ">
-            {info.row.original.accountName}
-          </p>
+          <div className="flex flex-col">
+            {displayTableField("Name", info.row.original.partnerName)}
+            {displayTableField("ID", info.row.original.partnerId)}
+          </div>
         );
       },
     }),
@@ -70,7 +84,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Partner Name
+              Account Details
             </p>
           </div>
         );
@@ -78,9 +92,10 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.partnerName}
-          </p>
+          <div className="flex flex-col">
+            {displayTableField("Name", info.row.original.accountName)}
+            {displayTableField("ID", info.row.original.accountId)}
+          </div>
         );
       },
     }),
@@ -89,7 +104,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Pincode
+              Pincode Details
             </p>
           </div>
         );
@@ -97,9 +112,9 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.pincode}
-          </p>
+          <div className="flex flex-col">
+            {displayTableField("Pincode", info.row.original.pincode)}
+          </div>
         );
       },
     }),
@@ -108,7 +123,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              City
+              Location Details
             </p>
           </div>
         );
@@ -116,9 +131,11 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.city}
-          </p>
+          <div className="flex flex-col">
+            {displayTableField("City", info.row.original.city)}
+            {displayTableField("State", info.row.original.state)}
+            {displayTableField("Country", info.row.original.country)}
+          </div>
         );
       },
     }),
@@ -127,7 +144,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              State
+              Payment Details
             </p>
           </div>
         );
@@ -135,101 +152,28 @@ const ServicabilityPincode = (props: ITypeProps) => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold  ">
-            {info.row.original.state}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("cod", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              COD
-            </p>
+          <div className="flex flex-col">
+            {displayTableField("COD", info.row.original.cod ? "Yes" : "No")}
+            {displayTableField(
+              "Insurance",
+              info.row.original.insurance ? "Yes" : "No"
+            )}
+            {displayTableField(
+              "Pickup",
+              info.row.original.pickup ? "Yes" : "No"
+            )}
+            {displayTableField(
+              "Delivery",
+              info.row.original.delivery ? "Yes" : "No"
+            )}
           </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p
-            className={`flex items-center text-[#1C1C1C] font-Open text-sm font-semibold`}
-          >
-            {info.row.original.cod ? "Yes" : "No"}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("delivery", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Delivery
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p
-            className={`flex items-center text-[#1C1C1C] font-Open text-sm font-semibold`}
-          >
-            {info.row.original.delivery ? "Yes" : "No"}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("insurance", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Insurance
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p
-            className={`flex items-center text-[#1C1C1C] font-Open text-sm font-semibold`}
-          >
-            {info.row.original.insurance ? "Yes" : "No"}
-          </p>
-        );
-      },
-    }),
-
-    columnsHelper.accessor("pickup", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Pickup
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p
-            className={`flex items-center text-[#1C1C1C] font-Open text-sm font-semibold`}
-          >
-            {info.row.original.pickup ? "Yes" : "No"}
-          </p>
         );
       },
     }),
   ];
 
   return (
-    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5">
+    <div className="flex flex-col lg:h-screen lg:w-full lg:py-5">
       <div className="flex justify-between lg:mb-10 lg:px-5">
         <div className="flex gap-x-2 lg:gap-x-3 ">
           <h3 className="lg:font-Lato lg:text-2xl lg:text-[#323232] ml-4">
@@ -246,7 +190,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         </div>
       </div>
 
-      <div className="mb-4 lg:mb-6 lg:mr-10 ml-10 w-[20%]">
+      <div className="mb-4 lg:mr-10 ml-10 w-[20%]">
         <CustomInputBox
           label="Enter Pincode"
           value={pincode}
@@ -254,7 +198,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         />
       </div>
 
-      <div className="w-[20%] ml-10">
+      <div className="mb-6 w-[20%] ml-10">
         <AddButton
           text="Check Availability"
           onClick={() => {

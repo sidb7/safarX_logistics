@@ -12,9 +12,12 @@ import { POST } from "../../../utils/webService";
 import {
   ADD_DELIVERY_LOCATION,
   GET_LATEST_ORDER,
+  RETURNING_USER_DELIVERY,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import RecipientType from "./Recipient/recipient";
+import { useSelector } from "react-redux";
+import ReturningDelivery from "../ReturningUser/Delivery";
 
 const steps = [
   {
@@ -57,6 +60,8 @@ const steps = [
 
 const DeliveryLocation = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
@@ -122,6 +127,10 @@ const DeliveryLocation = () => {
     orderType: "B2B",
     gstNumber: "",
   });
+  const userType = useSelector((state: any) => state.user.isReturningUser);
+
+  const [returningUserDeliveryData, setReturningUserDeliveryData] =
+    useState<any>([]);
 
   const postDeliveryOrderDetails = async () => {
     try {
@@ -190,7 +199,6 @@ const DeliveryLocation = () => {
                 emailId: orderData?.deliveryAddress?.contact?.emailId,
                 type: orderData?.deliveryAddress?.contact?.type,
               },
-              pickupDate: 0,
             },
             billingAddress: {
               fullAddress: orderData?.billingAddress?.fullAddress,
@@ -228,10 +236,39 @@ const DeliveryLocation = () => {
         }
       }
     })();
+    // This snippet will scroll the page to top
+    const container = document.getElementById("scrollDiv");
+    if (container) {
+      container.scrollIntoView({ block: "start" });
+    }
   }, []);
 
+  const getReturningUserDeliveryDetails = async () => {
+    try {
+      setLoading(true);
+
+      const { data: response } = await POST(RETURNING_USER_DELIVERY);
+
+      if (response?.success) {
+        setReturningUserDeliveryData(response);
+      } else {
+        setReturningUserDeliveryData([]);
+      }
+    } catch (error) {
+      console.error("Error in Returning User API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userType) {
+      getReturningUserDeliveryDetails();
+    }
+  }, [userType]);
+
   return (
-    <div className="w-full mb-24">
+    <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />
@@ -241,6 +278,27 @@ const DeliveryLocation = () => {
 
       {/* DELIVERY ADDRESS */}
 
+      {userType && (
+        <ReturningDelivery
+          data={{
+            returningUserDeliveryData,
+            setReturningUserDeliveryData,
+            onAddressSelect: (selectedAddress: any) => {
+              setDeliveryAddress((prevDeliveryAddress: any) => ({
+                ...prevDeliveryAddress,
+                deliveryAddress: {
+                  ...prevDeliveryAddress.deliveryAddress,
+                  ...selectedAddress,
+                },
+                billingAddress: {
+                  ...prevDeliveryAddress.billingAddress,
+                  ...selectedAddress,
+                },
+              }));
+            },
+          }}
+        />
+      )}
       <DeliveryAddress
         data={{
           deliveryAddress,
@@ -255,8 +313,8 @@ const DeliveryLocation = () => {
             setIsBillingAddress(e.target.checked);
           }}
         />
-        <p className="text-[14px] font-Open uppercase text-[#004EFF] lg:font-semibold">
-          BILLING DETAILS IS SAME AS DELIVERY
+        <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+          Billing Details Is Same As Delivery
         </p>
       </div>
 

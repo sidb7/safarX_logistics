@@ -32,7 +32,7 @@ const BusinessType = (props: ITypeProps) => {
   const [defaultAddress, setDefaultAddress] = useState<any>();
   const [loading, setLoading] = useState(false);
 
-  const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
+  const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>({});
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -51,14 +51,25 @@ const BusinessType = (props: ITypeProps) => {
   useEffect(() => {
     initialAddressCall();
   }, []);
-
+  console.log(defaultAddressSelect);
   const onSubmitForm = async () => {
+    console.log("brandName", defaultAddressSelect.hasOwnProperty("addressId"));
+
     try {
-      if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
-        const payload = { data: defaultAddressSelect?.fullAddress };
-        setLoading(true);
-        const { data: responses } = await POST(MAGIC_ADDRESS, payload);
-        setLoading(false);
+      if (brandName === "" || brandName === undefined) {
+        toast.error("Enter Brand Name");
+        return;
+      } else if (defaultAddressSelect.hasOwnProperty("addressId") !== true) {
+        toast.error("Please Select Address");
+        return;
+      }
+
+      const payload = { data: defaultAddressSelect?.fullAddress };
+      setLoading(true);
+      const { data: responses } = await POST(MAGIC_ADDRESS, payload);
+      setLoading(false);
+
+      if (responses?.success) {
         let combineAdd = `${responses?.data?.message?.house_number} ${responses?.data?.message?.floor} ${responses?.data?.message?.building_name} ${responses?.data?.message?.locality_name} ${responses?.data?.message?.subcity_name}`;
         const companyObj = {
           companyInfo: {
@@ -73,6 +84,7 @@ const BusinessType = (props: ITypeProps) => {
           isDefault: true,
         };
         setLoading(true);
+
         const { data: response } = await POST(
           POST_UPDATE_COMPANY_URL,
           companyObj
@@ -86,9 +98,8 @@ const BusinessType = (props: ITypeProps) => {
           setLoading(false);
           toast.error(response.message);
         }
-        //
       } else {
-        toast.error("Please Select Address");
+        toast.error("Something Went Wrong!");
       }
     } catch (error) {
       return error;
@@ -112,6 +123,7 @@ const BusinessType = (props: ITypeProps) => {
               city: responses?.data?.message?.city_name,
               state: responses?.data?.message?.state_name,
             },
+            addressId: defaultAddressSelect?.addressId,
             isDefault: true,
           };
           // setLoading(false);
@@ -199,10 +211,12 @@ const BusinessType = (props: ITypeProps) => {
                         key={i}
                         onClick={setDefaultAddressSelect}
                         name="address"
-                        value={el?.addressId}
+                        value={el}
                         title={el?.fullAddress}
                         doctype={el?.doctype}
-                        checked={defaultAddressSelect === el?.addressId}
+                        checked={
+                          defaultAddressSelect?.addressId === el?.addressId
+                        }
                         titleClassName="!font-normal !text-[12px]"
                         cardClassName="!mt-4 !cursor-pointer"
                       />
@@ -228,10 +242,12 @@ const BusinessType = (props: ITypeProps) => {
                           <Card
                             onClick={setDefaultAddressSelect}
                             name="address"
-                            value={el?.addressId}
+                            value={el}
                             title={el?.fullAddress}
                             doctype={el?.doctype}
-                            checked={defaultAddressSelect === el?.addressId}
+                            checked={
+                              defaultAddressSelect?.addressId === el?.addressId
+                            }
                             titleClassName="!font-normal !text-[12px]"
                             cardClassName="!mt-4 !cursor-pointer"
                           />

@@ -1,6 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
-import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useState } from "react";
 import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
 import AddressBook from "./AddressBook";
@@ -10,16 +9,19 @@ import CustomButton from "../../../components/Button";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import CreateCombo from "./ProductCatalogue/createCombo";
 import addIcon from "../../../assets/Catalogue/add.svg";
-import AddOrder from "../../../assets/Catalogue/add_order.svg";
+import AddPlus from "../../../assets/Catalogue/add.svg";
 import { POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
 import { GET_PRODUCTS, GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
 
 const Catalogue = () => {
   const navigate = useNavigate();
+  const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("catalogueTab") || "Channel Integration"
   );
+  const BoxCataloague: any = useRef();
+
   const [tabNameFromUrl, setTabNameFromUrl] = useState();
   const listTab = [
     {
@@ -55,7 +57,13 @@ const Catalogue = () => {
         <ProductCatalogue setProductCatalogueTab={setProductCatalogueTab} />
       );
     } else if (tabName === "Box Catalogue") {
-      return <BoxCatalogue />;
+      return (
+        <BoxCatalogue
+          ref={BoxCataloague}
+          filterId={filterId}
+          setFilterId={setFilterId}
+        />
+      );
     }
   };
 
@@ -116,7 +124,7 @@ const Catalogue = () => {
           text={"ADD ADDRESS"}
           className="!p-3"
           onClick={() =>
-            navigate("/catalogue/add-address", {
+            navigate("/catalogues/catalogue/add-address", {
               state: { activeTab: addressTab },
             })
           }
@@ -156,13 +164,19 @@ const Catalogue = () => {
       }
     } else if (tabName === "Box Catalogue") {
       return (
-        <CustomButton
-          icon={AddOrder}
-          showIcon={true}
-          text={"UPLOAD"}
-          className="!p-4"
-          onClick={() => {}}
-        />
+        <>
+          {filterId === 0 && (
+            <CustomButton
+              icon={AddPlus}
+              showIcon={true}
+              text={"CREATE BOX"}
+              className="!p-4"
+              onClick={() => {
+                BoxCataloague.current.openModal();
+              }}
+            />
+          )}
+        </>
       );
     }
   };
@@ -215,7 +229,6 @@ const Catalogue = () => {
             />
           </RightSideModal>
         </div>
-        <BottomLayout callApi={() => {}} />
       </div>
     </>
   );

@@ -8,8 +8,9 @@ interface ITypesProps {
   subContent?: string;
   isSubContent?: boolean;
   cardClassName?: string;
+
   doctype?: string;
-  onClick?: (e: any) => void;
+  onClick?: (e?: any) => void;
   checked?: boolean;
 }
 
@@ -23,6 +24,7 @@ const card = (props: ITypesProps) => {
     isSubContent,
     cardClassName,
     doctype,
+
     onClick = () => {},
     checked,
   } = props;
@@ -31,7 +33,7 @@ const card = (props: ITypesProps) => {
     <>
       <div
         className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow ${
-          !checked ? "border-[#E8E8E8]" : "border-[#004EFF]"
+          !checked ? "border-[#E8E8E8]" : "border-[black]"
         } w-full lg:!w-[320px] relative`}
         onClick={(e: any) => {
           onClick(value);
@@ -41,7 +43,7 @@ const card = (props: ITypesProps) => {
           <CustomRadioButton
             name={name}
             value={value}
-            style={{ accentColor: "#004EFF" }}
+            style={{ accentColor: "black" }}
             inputClassName="cursor-pointer"
             checked={checked}
           />

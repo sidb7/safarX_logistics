@@ -9,9 +9,12 @@ import { POST } from "../../utils/webService";
 import { GET_PROFILE_URL } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Breadcrum } from "../../components/Layout/breadcrum";
+import { Spinner } from "../../components/Spinner";
 
 export const Profile = () => {
   const [profileData, setProfileData]: any = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       const { data } = await POST(GET_PROFILE_URL, {});
@@ -20,6 +23,7 @@ export const Profile = () => {
       } else {
         toast.error(data?.message);
       }
+      setIsLoading(false);
     })();
   }, []);
   return (
@@ -27,19 +31,28 @@ export const Profile = () => {
       <div className="">
         <Breadcrum label="Profile" />
       </div>
-      <ProfileCard ProfileDetails={profileData} />
-      <ProfileKycCard KycDetails={profileData?.kycDetails} />
-      <ProfileBankCard BankDetails={profileData?.bankDetails} />
-      <div className="lg:grid lg:grid-cols-2 gap-4">
-        <ProfileNotification />
-        <ProfileReferEarn
-          ReferData={{
-            referCode: profileData?.refferalCode,
-            referImage: profileData?.refferalCodeImageUrl,
-          }}
-        />
-        <ProfileSetting ProfileDetails={profileData} />
-      </div>
+      {isLoading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          {" "}
+          <ProfileCard ProfileDetails={profileData} />
+          <ProfileKycCard KycDetails={profileData?.kycDetails} />
+          <ProfileBankCard BankDetails={profileData?.bankDetails} />
+          <div className="lg:grid lg:grid-cols-2 gap-4">
+            <ProfileNotification />
+            <ProfileReferEarn
+              ReferData={{
+                referCode: profileData?.refferalCode,
+                referImage: profileData?.refferalCodeImageUrl,
+              }}
+            />
+            <ProfileSetting ProfileDetails={profileData} />
+          </div>
+        </>
+      )}
     </div>
   );
 };

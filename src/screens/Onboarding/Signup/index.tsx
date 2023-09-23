@@ -60,7 +60,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
-        localStorage.setItem("userInfo", JSON.stringify(sellerData));
+        sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
         setLoading(false);
         navigate("/onboarding/sendotp");
       } else {

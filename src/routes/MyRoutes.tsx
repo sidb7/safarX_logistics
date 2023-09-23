@@ -368,7 +368,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="orders/bulk-upload"
+                path="orders/add-bulk"
                 element={
                   <ProtectedRoute>
                     <BulkUpload />
@@ -516,7 +516,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/settings/settings"
+                path="/settings"
                 element={
                   <ProtectedRoute>
                     <SettingTab />
@@ -524,7 +524,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
-                path="/profile/settings/role-management"
+                path="/settings/role-management"
                 element={
                   <ProtectedRoute>
                     <RoleManagement />
@@ -533,7 +533,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/role-management/add-role"
+                path="/settings/role-management/add-role"
                 element={
                   <ProtectedRoute>
                     <AddRole />
@@ -542,7 +542,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/role-management/update-role"
+                path="/settings/role-management/update-role"
                 element={
                   <ProtectedRoute>
                     <UpdateRole />
@@ -551,7 +551,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/user-management"
+                path="/settings/user-management"
                 element={
                   <ProtectedRoute>
                     <UserManagement />
@@ -560,7 +560,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/user-management/add-user"
+                path="/settings/user-management/add-user"
                 element={
                   <ProtectedRoute>
                     <AddUser />
@@ -569,7 +569,7 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/user-management/update-user"
+                path="/settings/user-management/update-user"
                 element={
                   <ProtectedRoute>
                     <UpdateUser />
@@ -578,13 +578,23 @@ const MyRoutes: React.FC = () => {
               />
 
               <Route
-                path="/profile/settings/role-management/userslist"
+                path="/settings/role-management/userslist"
                 element={
                   <ProtectedRoute>
                     <UsersList />
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path="/settings/system-logs"
+                element={
+                  <ProtectedRoute>
+                    <SystemLog />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route
                 path="/profile/refer-earn"
                 element={
@@ -671,7 +681,11 @@ const MyRoutes: React.FC = () => {
               />
               <Route
                 path="/catalogues/catalogue/add-product"
-                element={<CatalogueAddProduct />}
+                element={
+                  <ProtectedRoute>
+                    <CatalogueAddProduct />
+                  </ProtectedRoute>
+                }
               />
             </Route>
 
@@ -688,14 +702,41 @@ const MyRoutes: React.FC = () => {
             </Route>
 
             <Route>
-              <Route path="/plans/plans" element={<NewUserPlanScreen />} />
-              <Route path="/plans/plan-details" element={<PlanDetails />} />
+              <Route
+                path="/plans"
+                element={
+                  <ProtectedRoute>
+                    <NewUserPlanScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/plans/plan-details"
+                element={
+                  <ProtectedRoute>
+                    <PlanDetails />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
             <Route>
-              <Route path="/tracking/shipyaari" element={<Tracking />} />
+              <Route
+                path="/tracking"
+                element={
+                  <ProtectedRoute>
+                    <Tracking />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
               <Route
                 path="/tracking/clientTracking"
-                element={<ClientTracking />}
+                element={
+                  <ProtectedRoute>
+                    <ClientTracking />
+                  </ProtectedRoute>
+                }
               />
             </Route>
             <Route>
@@ -710,12 +751,14 @@ const MyRoutes: React.FC = () => {
             <Route path="/help/faqs" element={<HelpScreen />} />
             <Route path="/help/ticket" element={<HelpScreen />} />
 
-            <Route path="/system-log" element={<SystemLog />} />
-
             {/* Weight Management */}
             <Route
               path="/weight-management/weight-freeze"
-              element={<WeightFreeze />}
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
             />
 
             <Route path="*" element={<NotFound />} />

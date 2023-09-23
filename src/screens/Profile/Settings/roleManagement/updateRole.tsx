@@ -520,7 +520,7 @@ function UpdateRole() {
 
       const { data } = await POST(POST_UPDATE_SELLER_ROLE, reqBody);
       if (data?.success) {
-        navigate("/profile/settings/role-management");
+        navigate("/settings/role-management");
       } else {
         toast.error(data?.message);
       }

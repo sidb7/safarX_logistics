@@ -23,7 +23,7 @@ import PinCodeIcon from "../../assets/quickAction/pin.svg";
 import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
-import { GET_PROFILE_URL } from "../../utils/ApiUrls";
+import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -68,13 +68,33 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   }, []);
 
   const openQuickAction = async () => {
-    const { data } = await POST(GET_PROFILE_URL);
-    if (data?.success) {
-      setQuickData(data?.data[0]);
-      setIsQuick(!isQuick);
-    } else {
-      toast.error(data?.message);
+    try {
+      const { data } = await POST(GET_PROFILE_URL);
+      if (data?.success) {
+        setQuickData(data?.data[0]);
+        setIsQuick(!isQuick);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
+
+  const logoutHandler = async () => {
+    try {
+      const { data } = await POST(LOGOUT);
+      if (data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    clearLocalStorage();
+    sessionStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -120,14 +140,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               className="relative cursor-pointer col-span-1 flex gap-x-4"
               ref={dropdownRef}
             >
-              <img
+              {/* <img
                 src={locationImage}
                 width={"22px"}
                 height={"22px"}
                 alt=""
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
-              />
+              /> */}
               <div ref={dropdownQuickRef}>
                 <img
                   src={PowerBoosterlogo}
@@ -152,7 +172,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 onClick={() => setIsOpen(!isOpen)}
                 showIcon={true}
                 onlyIcon={true}
-                className="bg-white !w-6 !h-6 !p-0 lg:w-fit "
+                className="bg-white !w-6 !h-6 !p-0 lg:w-fit"
                 text={""}
               />
 
@@ -189,17 +209,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      onClick={() => navigate("/settings/settings")}
+                      onClick={() => navigate("/settings")}
                     >
                       Settings
                     </button>
                     <button
                       className="block w-full text-left px-4 py-2 cursor-pointer  text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      onClick={() => {
-                        clearLocalStorage();
-                        navigate("/");
-                      }}
+                      onClick={() => logoutHandler()}
                     >
                       Sign out
                     </button>
@@ -267,7 +284,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                       </div>
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/tracking/shipyaari")}
+                        onClick={() => navigate("/tracking")}
                       >
                         <img
                           src={TrackOrderIcon}
@@ -322,7 +339,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Sync Order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => navigate("/orders/add-bulk")}
+                      >
                         <img
                           src={AddBulkIcon}
                           alt=""
@@ -334,7 +354,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Add Bulk
                         </span>
                       </div>
-                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
+                      <div
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        onClick={() => setIsModalOpen(true)}
+                      >
                         <img
                           src={PinCodeIcon}
                           alt=""

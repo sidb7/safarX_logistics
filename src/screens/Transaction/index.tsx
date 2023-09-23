@@ -44,6 +44,7 @@ export const Transaction = () => {
           setLoading(false);
         } else {
           toast.error(data?.message);
+          setLoading(false);
         }
       })();
     }

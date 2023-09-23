@@ -4,6 +4,7 @@ let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
 let LANDMARK_URL = "";
+let TRACKING_URL = "";
 
 // Environment Declaration
 Enviornment = process.env.REACT_APP_ENV || "development";
@@ -15,6 +16,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
 
     break;
 
@@ -24,7 +26,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
-
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
     break;
 
   case "production":
@@ -33,6 +35,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
 
     break;
 
@@ -42,6 +45,7 @@ switch (Enviornment) {
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
+    TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
 
     break;
 }
@@ -108,9 +112,14 @@ const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
 const GET_LATEST_ORDER = `${SELLER_URL}/api/v1/order/getLatestOrder`;
 const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/product/getProduct`;
 const GET_SELLER_BOX = `${SELLER_URL}/api/v1/box/getSellerBox`;
-const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 const ADD_BOX_INFO = `${SELLER_URL}/api/v1/order/setBoxAndCODInfo`;
+
+//BOX URLs (Seller & Company Box)
+const CREATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/createSellerBox`;
+const UPDATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/updateSellerBox`;
+const DELETE_SELLER_BOX = `${SELLER_URL}/api/v1/box/deleteSellerBox`;
+const GET_SELLER_COMPANY_BOX = `${SELLER_URL}/api/v1/box/getCompanyBox`;
 
 //Combo Product URL
 const GET_COMBO_PRODUCT_URL = `${SELLER_URL}/api/v1/newComboProduct/getComboProduct`;
@@ -187,12 +196,31 @@ const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 //Forgot Password
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
+const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
+
+// System Logs
+const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
+//Channel Store
+const POST_CREATE_STORE = `${SELLER_BASE_URL}/shopify/createShopifyStore`;
+const GET_ALL_STORES = `${SELLER_BASE_URL}/shopify/getStores`;
+const GET_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/getSingleStore`;
+const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/updateStore`;
+
+//Returing User
+const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
+
+//Tracking
+const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 export {
+  UPDATE_SELLER_BOX,
   SELLER_URL,
   ADD_BOX_INFO,
+  DELETE_SELLER_BOX,
+  CREATE_SELLER_BOX,
   GET_SINGLE_FILE,
   GET_SELLER_ORDER,
   ADD_COD_INFO,
@@ -279,4 +307,13 @@ export {
   BULK_UPLOAD,
   FORGOT_PASSWORD,
   VERIFY_FORGET_PASSWORD,
+  POST_CREATE_STORE,
+  GET_ALL_STORES,
+  GET_SINGLE_STORE,
+  UPDATE_SINGLE_STORE,
+  RETURNING_USER_PICKUP,
+  RETURNING_USER_DELIVERY,
+  TRACKING,
+  GET_SYSTEM_LOG,
+  LOGOUT,
 };

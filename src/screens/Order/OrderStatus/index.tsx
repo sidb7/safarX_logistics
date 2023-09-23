@@ -152,12 +152,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         })}
       </div>
 
-      <div className="grid grid-cols-2 justify-center my-8 h-[46px] lg:flex lg:justify-between">
+      <div className="grid grid-cols-2 items-center justify-center my-8 h-[46px] lg:flex lg:justify-between">
         <div className="lg:flex lg:gap-x-4">
           <div className="flex items-center">
-            <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
+            {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
-            </span>
+            </span> */}
           </div>
           {filterComponent("!hidden lg:!flex lg:!mt-0")}
         </div>
