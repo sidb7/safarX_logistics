@@ -102,7 +102,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   const renderHeaderComponent = () => {
     const downloadUrl =
-      "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SY_BULK_Order_CSV.csv";
+      "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SY_BULK_ORDER.xlsx";
 
     // const downloadUrlB2B = `${baseUrl}B2B_SAMPLE.csv`;
     // const downloadUrlB2C = `${baseUrl}B2C_SAMPLE.csv`;
@@ -113,7 +113,7 @@ const BulkUpload = (props: ITypeProps) => {
     return (
       <a
         href={downloadUrl}
-        download="SY_BULK_Order_CSV.csv"
+        download="SY_BULK_ORDER.xlsx"
         className="flex items-center"
       >
         <CustomButton
