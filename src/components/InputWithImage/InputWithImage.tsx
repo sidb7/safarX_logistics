@@ -37,21 +37,24 @@ const InputWithImage = (props: IInputProps) => {
   } = props;
 
   const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
+  const inputPaddingClass = value ? "pl-[42px]" : "pl-[9px]";
 
   return (
     <div
-      className={`${inputClassName} relative block flex items-center justify-center `}
+      className={`${inputClassName} relative flex items-center justify-center `}
     >
-      {!value && imgSrc && (
-        <span className="absolute inset-y-0 left-0 flex items-center pl-5">
-          <img src={imgSrc} alt="" className="h-5 w-5 text-slate-300" />
-        </span>
+      {imgSrc && (
+        <img
+          src={imgSrc ? imgSrc : dummyImage}
+          alt=""
+          className="absolute z-2 left-[18px]"
+        />
       )}
 
       <input
         placeholder={placeholder}
         type="text"
-        className=" block rounded py-2 pl-12   border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white text-[12px] text-[#1C1C1C] outline-none  "
+        className={`rounded border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white text-[12px] text-[#1C1C1C] outline-none ${inputPaddingClass}`}
         required={isRequired}
         onChange={onChange}
         onClick={onClick}
