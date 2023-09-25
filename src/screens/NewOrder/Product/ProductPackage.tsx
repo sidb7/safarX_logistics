@@ -523,23 +523,23 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
 
               <div className="flex w-fit gap-x-8 py-2 pb-8">
-                {paymentMode === "cod" && !isOrderTypeB2B && (
-                  <CustomInputBox
-                    label={"COD Amount to Collect From Buyer"}
-                    value={codData?.collectableAmount}
-                    inputType="text"
-                    className="!w-60"
-                    onChange={(e) => {
-                      setCodData({
-                        ...codData,
-                        collectableAmount:
-                          e.target.value > codData.invoiceValue
-                            ? codData.invoiceValue
-                            : e.target.value,
-                      });
-                    }}
-                  />
-                )}
+                {/* paymentMode === "cod" && !isOrderTypeB2B */}
+                <CustomInputBox
+                  label={"COD Amount to Collect From Buyer"}
+                  value={codData?.collectableAmount}
+                  inputType="text"
+                  className="!w-60"
+                  isDisabled={paymentMode !== "cod" || isOrderTypeB2B}
+                  onChange={(e) => {
+                    setCodData({
+                      ...codData,
+                      collectableAmount:
+                        e.target.value > codData.invoiceValue
+                          ? codData.invoiceValue
+                          : e.target.value,
+                    });
+                  }}
+                />
                 <CustomInputBox
                   inputType="text"
                   label={"Total invoice value"}
