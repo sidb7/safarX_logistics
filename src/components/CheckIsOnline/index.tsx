@@ -7,25 +7,31 @@ interface ICheckIsOnlineProps {}
 
 const CheckIsOnline: React.FunctionComponent<ICheckIsOnlineProps> = (props) => {
   const [isOnline, setIsOnline] = React.useState(navigator.onLine);
-  const [closeModal, setCloseModal] = React.useState(false);
 
   React.useEffect(() => {
-    const handleStatusChange = () => {
-      setIsOnline(navigator.onLine);
+    // Add event listeners to track online/offline status
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      // Remove event listeners when component unmounts
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
-
-    if (navigator.onLine === false) {
-      setCloseModal(true);
-    }
-
-    window.addEventListener("online", handleStatusChange);
-    window.addEventListener("offline", handleStatusChange);
   }, [isOnline]);
+
+  const handleOnline = () => {
+    setIsOnline(true);
+  };
+
+  const handleOffline = () => {
+    setIsOnline(false);
+  };
 
   return (
     <CenterModal
-      isOpen={closeModal}
-      onRequestClose={() => setCloseModal(false)}
+      isOpen={!isOnline}
+      onRequestClose={() => {}}
       className="min-w-0 max-w-lg min-h-0 max-h-[30%]"
     >
       <div className="relative h-full w-full">
@@ -39,7 +45,7 @@ const CheckIsOnline: React.FunctionComponent<ICheckIsOnlineProps> = (props) => {
             className="my-auto mr-6"
             src={CloseIcon}
             alt="Close"
-            onClick={() => setCloseModal(false)}
+            onClick={() => {}}
           />
         </div>
         <div className="flex flex-col items-center h-[calc(100%-60px)]">
