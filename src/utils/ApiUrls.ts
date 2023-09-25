@@ -92,7 +92,8 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
-const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+// const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
