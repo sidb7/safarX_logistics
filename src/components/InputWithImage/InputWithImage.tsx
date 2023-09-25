@@ -37,12 +37,14 @@ const InputWithImage = (props: IInputProps) => {
   } = props;
 
   const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
+  const inputPaddingClass = value ? "pl-[42px]" : "pl-[9px] ";
+  const caretColor = value ? "text-[#1C1C1C]" : "transparent";
 
   return (
     <div
       className={`${inputClassName} relative flex items-center justify-center `}
     >
-      {!value && imgSrc && (
+      {imgSrc && (
         <img
           src={imgSrc ? imgSrc : dummyImage}
           alt=""
@@ -53,11 +55,12 @@ const InputWithImage = (props: IInputProps) => {
       <input
         placeholder={placeholder}
         type="text"
-        className="rounded  border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open  bg-white text-[12px] text-[#1C1C1C] outline-none  "
+        className={`rounded border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
         required={isRequired}
         onChange={onChange}
         onClick={onClick}
         value={value}
+        style={{ caretColor }}
       />
     </div>
   );

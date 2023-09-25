@@ -189,12 +189,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
       )}
 
       <div className="lg:hidden">
-        <Button
-          text="Save"
-          onClick={() => {
-            alert("Hello");
-          }}
-        />
+        <Button text="Save" onClick={onClick} />
       </div>
 
       <div
