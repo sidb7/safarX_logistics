@@ -170,10 +170,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     setIsSearchProductRightModalOpen(false);
   };
 
-  const handlePackageDetailsForCombo = (comboData: any) => {
-    console.log("handlePackageDetailsForCombo", combo);
-  };
-
   const handleOpenPackageDetails = (boxIndex: any) => {
     const { products } = packages[boxIndex];
     setSelectedProductsOfPackage([...products]);
@@ -343,7 +339,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   <ProductBox
                     key={index}
                     image={SampleProduct}
-                    weight={`${e?.deadWeight} Kg`}
+                    weight={`${e?.appliedWeight} Kg`}
                     productName={e?.name || 0}
                     breadth={e?.breadth || 0}
                     length={e?.length || 0}
@@ -682,7 +678,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               <div className="flex py-5 gap-2">
                 <img src={ProductIcon} alt="Package Icon" />
                 <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                  Company Box Types
+                  Shipyaari Box Types
                 </h1>
               </div>
               <div className="flex w-full items-center flex-col gap-3 justify-center">
@@ -754,7 +750,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           isSearchProductRightModalOpen={isSearchProductRightModalOpen}
           setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
           handlePackageDetails={handlePackageDetailsForProduct}
-          handleComboToPackageDetails={handlePackageDetailsForCombo}
         />
       )}
       ;

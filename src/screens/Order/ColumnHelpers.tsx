@@ -130,11 +130,7 @@ const idHelper = [
       );
     },
     cell: (info: any) => {
-      const {
-        tempOrderId = "-",
-        orderId = "-",
-        status = [],
-      } = info?.row?.original;
+      const { tempOrderId, orderId, status = [] } = info?.row?.original;
 
       const { AWB } = status[0] ?? "";
 

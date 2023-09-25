@@ -33,9 +33,6 @@ const ReturningDelivery: React.FunctionComponent<
 }) => {
   const [selectedCardID, setSelectedCardID] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(null);
-  console.log("returningUserDataForCard", returningUserDeliveryData);
-  console.log("selectedcardId", selectedCardID);
-  console.log("selectedAddress", selectedAddress);
 
   // const [toggleStatus, setToggleStatus] = useState(false);
   const returningUserAddressData = returningUserDeliveryData?.data;

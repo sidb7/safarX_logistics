@@ -3,11 +3,16 @@
   background-repeat: no-repeat;
   background-position: left center;
   /* padding-left: 30px !important; */
-      background-position-x: 10px;
+      /* background-position-x: 10px; */
 }
 
-.datePickerWithLogo::placeholder {
-  color: #a4a4a4; /* change as needed */
+/* .cursor-style:focus{
+ 
+      outline: none;
+   
+} */
+/* .datePickerWithLogo::placeholder {
+  color: #a4a4a4; 
   font-size: 16px;
   padding-left: 30px; 
 }
@@ -16,3 +21,7 @@
 .input-container-aligned input {
   left: calc(18px + 20%);
 }
+
+.cursor-position{
+    text-align: left;
+} */

@@ -1,5 +1,3 @@
-import React from "react";
-
 interface IProps {
   onClick: (time: string) => void;
   items: any[];
@@ -17,13 +15,16 @@ const index = (props: IProps) => {
         <button
           key={index}
           className={`flex items-center justify-center border-[1px] w-[168px] h-[35px] rounded text-[14px] font-semibold ${
-            selectedDay === "today" || selectedDay === "tomorrow"
+            !selectedDay
+              ? "text-[#A4A4A4] border-[#A4A4A4] bg-[#FEFEFE] cursor-not-allowed"
+              : selectedDay === "today" || selectedDay === "tomorrow"
               ? "text-[#1C1C1C] border-[#A4A4A4] bg-[#FEFEFE]"
               : "text-[#A4A4A4] border-[#A4A4A4] bg-[#FEFEFE]"
           } ${
             selectedTime === item.label ? "border-blue-500 text-blue-500" : ""
           }`}
-          onClick={() => onClick(item.label)}
+          onClick={() => selectedDay && onClick(item.label)}
+          disabled={!selectedDay}
         >
           {item?.label}
         </button>
