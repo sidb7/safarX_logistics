@@ -70,7 +70,7 @@ export const CustomTable = (props: ITablePropTypes) => {
       </table>
       <div>
         {table.getRowModel().rows?.length === 0 && (
-          <div className="w-full h-52 bg-[#e8e8e8] hover:bg-[#eeeeee] flex rounded-lg justify-center items-center">
+          <div className="w-full h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
             No Data Found
           </div>
         )}
