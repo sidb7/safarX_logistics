@@ -91,7 +91,7 @@ const Buttons = (className?: string) => {
 const tabs = [
   {
     statusName: "Draft",
-    value: "newOrder",
+    value: "draft",
     orderNumber: 0,
   },
   {
@@ -188,9 +188,8 @@ const Index = () => {
   const currentSettings = isMobileView ? mobileSettings : desktopSettings;
 
   const getSellerOrderByStatus = async (
-    orderStatus = "newOrder",
+    currentStatus = "draft",
     pageNo?: 1,
-    select?: {},
     sort?: { _id: -1 },
     skip?: 0,
     limit?: 100
@@ -198,12 +197,11 @@ const Index = () => {
     try {
       setIsLoading(true);
       const { data } = await POST(GET_SELLER_ORDER, {
-        pageNo,
-        select,
-        sort,
         skip,
         limit,
-        orderStatus,
+        pageNo,
+        sort,
+        currentStatus,
       });
 
       if (data?.status) {
@@ -226,12 +224,10 @@ const Index = () => {
 
   const handleTabChanges = async (index: any = 0) => {
     try {
-      const { pendingOrder, successFullOrder, statusList } =
-        await getSellerOrderByStatus(statusData[index].value);
-
-      const { data = [] } = successFullOrder;
-      let orderListTobeSet: any = [];
-      orderListTobeSet = data;
+      const { OrderData, statusList } = await getSellerOrderByStatus(
+        statusData[index].value
+      );
+      setOrders(OrderData);
 
       statusList.forEach((e1: any) => {
         const matchingStatus = statusData.find((e: any) => e.value === e1._id);
@@ -244,24 +240,19 @@ const Index = () => {
       });
 
       switch (tabs[index].value) {
-        case "newOrder":
+        case "draft":
           setColumnhelper(columnHelperForNewOrder(navigate));
-          orderListTobeSet = pendingOrder;
           break;
         case "booked":
           setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
           break;
         case "readyToPick":
           setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
-          orderListTobeSet = [];
           break;
         default:
           setColumnhelper(columnHelpersForRest);
-          orderListTobeSet = [];
           break;
       }
-
-      setOrders(orderListTobeSet);
     } catch (error) {
       console.error("An error occurred in handleTabChanges function:", error);
     }

@@ -45,7 +45,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
         </div> */}
       </div>
 
-      <p className="px-4 w-[250px] lg:w-[280px] text-[16px] font-Open font-semibold leading-6 capatalize">
+      <p className="px-4 w-[250px] lg:w-[95%] text-[16px] font-Open font-semibold leading-6 capatalize">
         {address}
       </p>
 

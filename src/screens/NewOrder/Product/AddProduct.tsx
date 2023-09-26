@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
+import CustomInputWithDropDown from "../../../components/CategoriesDropDown/CategoriesDropDown";
 
 interface IProductFilledProps {}
 const steps = [
@@ -263,7 +264,17 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       )
                     }
                   />
-                  <CustomInputBox
+                  <CustomInputWithDropDown
+                    value={productInputState[index].category}
+                    initValue={productInputState[index].name}
+                    onChange={(e: any) =>
+                      handleProductInputChange(
+                        { name: "category", value: e },
+                        index
+                      )
+                    }
+                  />
+                  {/* <CustomInputBox
                     label="Product category"
                     name="category"
                     value={productInputState[index].category}
@@ -273,7 +284,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         index
                       )
                     }
-                  />
+                  /> */}
                   <CustomInputBox
                     label="Product Price"
                     name="unitPrice"

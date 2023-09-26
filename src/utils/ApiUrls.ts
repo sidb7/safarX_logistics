@@ -92,7 +92,8 @@ const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
-const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+// const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -114,7 +115,7 @@ const GET_PRODUCT_URL = `${SELLER_URL}/api/v1/product/getProduct`;
 const GET_SELLER_BOX = `${SELLER_URL}/api/v1/box/getSellerBox`;
 const POST_ADD_PRODUCT = `${SELLER_URL}/api/v1/newProduct/addNewProduct`;
 const ADD_BOX_INFO = `${SELLER_URL}/api/v1/order/setBoxAndCODInfo`;
-
+const GET_CATEGOROIES = `${SELLER_URL}/api/v1/categories/getCategories`;
 //BOX URLs (Seller & Company Box)
 const CREATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/createSellerBox`;
 const UPDATE_SELLER_BOX = `${SELLER_URL}/api/v1/box/updateSellerBox`;
@@ -222,6 +223,7 @@ const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 export {
   UPDATE_SELLER_BOX,
+  GET_CATEGOROIES,
   SELLER_URL,
   ADD_BOX_INFO,
   DELETE_SELLER_BOX,

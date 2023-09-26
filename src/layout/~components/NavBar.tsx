@@ -150,7 +150,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         key="1"
         onMouseEnter={handleOpner}
         onMouseLeave={handleClose}
-        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-50 rounded-r-lg overflow-scroll`}
+        className={`hidden absolute cursor-pointer lg:flex flex-col h-full gap-2 p-4 font-Open items-center bg-white z-20 rounded-r-lg overflow-scroll`}
         style={{
           boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
           transition: `all .2s `,
@@ -260,7 +260,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       {/* Mobile Nav Bar */}
       <>
         <nav
-          className={`lg:hidden absolute  h-full font-Open bg-white z-50 overflow-scroll`}
+          className={`lg:hidden absolute  h-full font-Open bg-white z-20 overflow-scroll`}
           style={{
             boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
             transition: `all .2s `,

@@ -52,12 +52,12 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const calcAllTotalProductWeight: any = () => {
-    let totalWeight = 0;
+    let totalAppliedWeight = 0;
     allProducts?.forEach((e: any) => {
-      const { deadWeight } = e;
-      totalWeight += +deadWeight * +e.qty || 0;
+      const { appliedWeight } = e;
+      totalAppliedWeight += +appliedWeight * +e.qty || 0;
     });
-    return totalWeight;
+    return totalAppliedWeight;
   };
   const percentage = (partialValue: any, totalValue: any) => {
     let percentage = (100 * +partialValue) / +totalValue;
@@ -125,9 +125,7 @@ const BoxDetails = (props: IBoxdetails) => {
         </h1>
       </div>
       <div
-        className={`flex flex-col h-[${
-          allProducts.length * 80 + 270
-        }px] lg:gap-y-2 lg:rounded-lg p-5`}
+        className={`flex flex-col max-h-[560px] lg:gap-y-2 lg:rounded-lg p-5`}
         style={{
           boxShadow:
             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -165,7 +163,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   <ProductBox
                     key={index}
                     image={ItemIcon}
-                    weight={`${e?.deadWeight} Kg`}
+                    weight={`${e?.appliedWeight} Kg`}
                     productName={e?.name || 0}
                     breadth={e?.breadth || 0}
                     length={e?.length || 0}
@@ -223,8 +221,9 @@ const BoxDetails = (props: IBoxdetails) => {
         {Object.keys(selectedBox).length > 0 ? (
           <>
             <span className="text-base text-slate-600 mt-2 pl-4">
-              Products dead weight is {calcAllTotalProductWeight().toFixed(2)}{" "}
-              Kg
+              {`Products Applied weight is ${calcAllTotalProductWeight().toFixed(
+                2
+              )} Kg`}
             </span>
             <div className="relative">
               <div className="h-[6px] bg-[#CBEAC0] mt-2 ml- mr-16">
