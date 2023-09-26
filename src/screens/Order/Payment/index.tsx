@@ -42,9 +42,17 @@ import {
   PLACE_ORDER,
   RECHARGE_STATUS,
   POST_PLACE_ORDER,
+  PHONEPE_TRANSACTION_STATUS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
+import {
+  getLocalStorage,
+  loadPhonePeTransaction,
+  loadRazorPayTransaction,
+  removeLocalStorage,
+} from "../../../utils/utility";
+import useRazorpay from "react-razorpay";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -66,6 +74,7 @@ const Payment = () => {
   const [upiText, setUpiText] = useState<boolean>();
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const requiredBalance = location?.state?.requiredBalance;
+  const [Razorpay] = useRazorpay();
 
   let myInterval: number | any;
 
@@ -83,8 +92,21 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    fetchCurrentWallet();
-    setWalletValue(requiredBalance);
+    (async () => {
+      try {
+        fetchCurrentWallet();
+        setWalletValue(requiredBalance);
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+          removeLocalStorage("phonePeTransactionId");
+        }
+      } catch (error) {}
+    })();
   }, []);
 
   const steps = [
@@ -136,6 +158,7 @@ const Payment = () => {
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
   );
+  const userDetails = useSelector((state: any) => state.signin);
 
   const moneyArr = [
     {
@@ -267,6 +290,34 @@ const Payment = () => {
     } catch (error) {
       return error;
     }
+  };
+
+  const handleRazorPayTransaction = async () => {
+    const options: any = loadRazorPayTransaction(
+      "rzp_test_03BJrYhr9s8YHM",
+      walletValue,
+      "SHIPYAARI",
+      " ",
+      " ",
+      "order_Mgy2g884Mo7J7I",
+      userDetails.name,
+      userDetails.email,
+      ""
+    );
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+
+    rzp1.open();
   };
 
   return (
@@ -584,8 +635,7 @@ const Payment = () => {
                     : "Recharge with payment gateway"}
                 </p>
               </div>
-
-              <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+              <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
                 <div className="flex flex-col items-center gap-y-2">
                   <img
                     src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
@@ -597,6 +647,48 @@ const Payment = () => {
                     amt={walletValue}
                     navigate="/orders/add-order/payment"
                   />
+                </div>
+                <div className="flex flex-col items-center gap-y-2">
+                  <img
+                    src={
+                      "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                    }
+                    alt=""
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <button
+                    type="button"
+                    className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={() =>
+                      loadPhonePeTransaction(
+                        walletValue,
+                        "http://localhost:3000/orders/add-order/payment",
+                        "http://localhost:3000/orders/add-order/payment"
+                      )
+                    }
+                  >
+                    <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                      PhonePe
+                    </p>
+                  </button>
+                </div>
+                <div className="flex flex-col items-center gap-y-2">
+                  <div className="w-20 h-20 flex justify-center items-center">
+                    <img
+                      src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                      alt=""
+                      className="ml-0 object-contain"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={handleRazorPayTransaction}
+                  >
+                    <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                      RazorPay
+                    </p>
+                  </button>
                 </div>
                 {/* <div className="flex flex-col items-center gap-y-2">
                   <img

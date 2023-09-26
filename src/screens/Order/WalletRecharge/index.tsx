@@ -39,15 +39,27 @@ import {
   INITIAL_RECHARGE,
   PLACE_ORDER,
   RECHARGE_STATUS,
+  PHONEPE_TRANSACTION_STATUS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 import { Spinner } from "../../../components/Spinner";
+import PhonePeModal from "../../../components/CustomModal/PhonePeModal";
+import {
+  getLocalStorage,
+  loadPhonePeTransaction,
+  loadRazorPayTransaction,
+  removeLocalStorage,
+  setLocalStorage,
+} from "../../../utils/utility";
+// import Razorpay from "razorpay";
+import useRazorpay from "react-razorpay";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [payment, setPayment] = useState(false);
+  const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
   const [modal, setModal] = useState(false);
   // const [toast, setToast] = useState(false);
   const [placeOrder, setPlaceOrder] = useState(true);
@@ -63,6 +75,8 @@ const WalletRecharge = () => {
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
+  const [Razorpay] = useRazorpay();
+  const userDetails = useSelector((state: any) => state.signin);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -80,7 +94,22 @@ const WalletRecharge = () => {
   };
 
   useEffect(() => {
-    fetchCurrentWallet();
+    (async () => {
+      try {
+        fetchCurrentWallet();
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+          removeLocalStorage("phonePeTransactionId");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, []);
 
   const checkYaariPoints = useSelector(
@@ -165,6 +194,44 @@ const WalletRecharge = () => {
     } else {
       toast.error(data?.message);
     }
+  };
+
+  const handlePhonePeTransaction = async () => {
+    setLoading(true);
+    await loadPhonePeTransaction(
+      walletValue,
+      "http://localhost:3000/wallet/view-wallet",
+      "http://localhost:3000/wallet/view-wallet"
+    );
+    setLoading(false);
+  };
+
+  const handleRazorPayTransaction = async () => {
+    const options: any = loadRazorPayTransaction(
+      "rzp_test_03BJrYhr9s8YHM",
+      walletValue,
+      "SHIPYAARI",
+      " ",
+      " ",
+      "order_MgzIAtqo93guX3",
+      userDetails.name,
+      userDetails.email,
+      ""
+    );
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+
+    rzp1.open();
   };
 
   return (
@@ -494,7 +561,7 @@ const WalletRecharge = () => {
                   </p>
                 </div>
 
-                <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+                <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
                   <div className="flex flex-col items-center gap-y-2">
                     <img
                       src={
@@ -509,7 +576,7 @@ const WalletRecharge = () => {
                       navigate="/wallet/view-wallet"
                     />
                   </div>
-                  {/* <div className="flex flex-col items-center gap-y-2">
+                  <div className="flex flex-col items-center gap-y-2">
                     <img
                       src={
                         "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
@@ -517,16 +584,54 @@ const WalletRecharge = () => {
                       alt=""
                       className="ml-0 object-contain w-20 h-20"
                     />
-                    <Paytm
-                      text={"Phonepe"}
-                      amt={walletValue}
-                      navigate="/wallet/view-wallet"
-                    />
-                  </div> */}
+                    <button
+                      type="button"
+                      className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      onClick={handlePhonePeTransaction}
+                    >
+                      <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                        PhonePe
+                      </p>
+                    </button>
+                  </div>
+                  <div className="flex flex-col items-center gap-y-2">
+                    <div className="w-20 h-20 flex justify-center items-center">
+                      <img
+                        src="https://cdn-images-1.medium.com/max/1200/1*NKfnk1UF9xGoR0URBEc6mw.png"
+                        alt=""
+                        className="ml-0 object-contain w-[55px]"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      onClick={handleRazorPayTransaction}
+                    >
+                      <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                        RazorPay
+                      </p>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {/* Need to implement this on Modal hence Kept as comment for future modification */}
+          {/* <PhonePeModal
+            isOpen={isPhonePeOpen}
+            onRequestClose={() => setIsPhonePeOpen(false)}
+          >
+            <div style={{ height: "100%", width: "100%" }}>
+              <iframe
+                ref={iframeRef}
+                style={{ height: "100%", width: "100%" }}
+                src="https://mercury-uat.phonepe.com/transact/simulator?token=uEgTvahncWFGEtfQl3xvnO3vDkfIKFyr3or104c69JU"
+                // frameBorder="0"
+                // scrolling="no"
+                width="100%"
+              ></iframe>
+            </div>
+          </PhonePeModal> */}
         </div>
       )}
     </>

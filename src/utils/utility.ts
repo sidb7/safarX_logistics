@@ -1,3 +1,6 @@
+import { INITIAL_RECHARGE } from "./ApiUrls";
+import { POST } from "./webService";
+
 export const setLocalStorage = (key: string, value: any) => {
   return localStorage.setItem(key, value);
 };
@@ -116,4 +119,85 @@ export const anyCaseToPascal = (str: string) => {
   return str.replace(/\b\w/g, function (match) {
     return match.toUpperCase();
   });
+};
+
+export const loadPhonePeTransaction = async (
+  walletValue: number,
+  redirectUrl: string,
+  callbackUrl: string
+) => {
+  try {
+    const payload = {
+      paymentObject: {
+        amount: (walletValue * 100).toString(),
+        redirectUrl,
+        callbackUrl,
+      },
+      paymentGateway: "PHONEPE",
+    };
+    const { data } = await POST(INITIAL_RECHARGE, payload);
+    const phonePayTransactionPage =
+      data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    setLocalStorage(
+      "phonePeTransactionId",
+      data?.data[0]?.data?.merchantTransactionId
+    );
+
+    window.location.href = phonePayTransactionPage;
+  } catch (error: any) {
+    console.log("PhonePe Error: ", error.message);
+  }
+};
+
+export const loadRazorPayTransaction = (
+  key: string,
+  amount: number,
+  companyName: string,
+  description: string,
+  logo: string,
+  orderId: string,
+  userName: string,
+  email: string,
+  contact: string
+) => {
+  try {
+    const script = document.createElement("script");
+
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.type = "application/javascript";
+
+    document.body.appendChild(script);
+
+    const options: any = {
+      key,
+      amount: (amount * 100).toString(),
+      currency: "INR",
+      name: companyName,
+      description,
+      image: logo,
+      order_id: orderId,
+      handler: (response: any) => {
+        console.log("response: ", response);
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature);
+      },
+      prefill: {
+        name: userName,
+        email: email,
+        contact: contact,
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    return options;
+  } catch (error: any) {
+    console.log("RazorPay Error: ", error.message);
+    return null;
+  }
 };

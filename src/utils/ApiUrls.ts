@@ -130,10 +130,15 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
-//paytm
+
+// PAYMENT GATEWAYS
+// Paytm
 const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
+//PhonePe
+const PHONEPE_INIT_TRANSACTION = `${SELLER_URL}/api/v1/phonepay/initTransaction`;
+const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
@@ -316,4 +321,6 @@ export {
   TRACKING,
   GET_SYSTEM_LOG,
   LOGOUT,
+  PHONEPE_INIT_TRANSACTION,
+  PHONEPE_TRANSACTION_STATUS,
 };

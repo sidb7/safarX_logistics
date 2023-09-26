@@ -1,5 +1,6 @@
 import NavBar from "../../../layout/Old_NavBar";
 import Checkbox from "../../../components/CheckBox";
+import { useSelector, useDispatch } from "react-redux";
 import CustomButton from "../../../components/Button";
 import BannerPagination from "../../../assets/Banner pagination.svg";
 import { useNavigate } from "react-router-dom";
@@ -27,6 +28,11 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 // import { PaytmButton } from "../../../utils/payPaytm";
 import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
+import {
+  loadPhonePeTransaction,
+  loadRazorPayTransaction,
+} from "../../../utils/utility";
+import useRazorpay from "react-razorpay";
 
 const OnBoundingWalletRecharge = () => {
   const navigate = useNavigate();
@@ -45,6 +51,8 @@ const OnBoundingWalletRecharge = () => {
   const [ifscCode, setIfscCode] = useState<any>();
   const [accountType, setAccountType] = useState<any>();
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
+  const [Razorpay] = useRazorpay();
+  const userDetails = useSelector((state: any) => state.signin);
 
   let myInterval: number | any;
 
@@ -342,6 +350,34 @@ const OnBoundingWalletRecharge = () => {
   };
 
   const walletRechargeDetails = () => {
+    const handleRazorPayTransaction = () => {
+      const options: any = loadRazorPayTransaction(
+        "rzp_test_03BJrYhr9s8YHM",
+        money,
+        "SHIPYAARI",
+        " ",
+        " ",
+        "order_MguXDpdBpHc478",
+        userDetails.name,
+        userDetails.email,
+        ""
+      );
+
+      const rzp1: any = new Razorpay(options);
+
+      rzp1.on("payment.failed", (response: any) => {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+
+      rzp1.open();
+    };
+
     return (
       <div className="h-full w-full">
         <div className="product-box flex justify-between items-center w-full h-[60px] top-0">
@@ -421,7 +457,7 @@ const OnBoundingWalletRecharge = () => {
               </p>
             </div>
 
-            <div className="flex mt-4   justify-between lg:mb-0 ml-4 mr-5">
+            <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
               <div className="flex flex-col items-center gap-y-2">
                 <img
                   src={
@@ -435,6 +471,48 @@ const OnBoundingWalletRecharge = () => {
                   amt={money}
                   navigate="/dashboard/overview"
                 />
+              </div>
+              <div className="flex flex-col items-center gap-y-2">
+                <img
+                  src={
+                    "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                  }
+                  alt=""
+                  className="ml-0 object-contain w-20 h-20"
+                />
+                <button
+                  type="button"
+                  className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                  onClick={() =>
+                    loadPhonePeTransaction(
+                      money,
+                      "http://localhost:3000/dashboard/overview",
+                      "http://localhost:3000/dashboard/overview"
+                    )
+                  }
+                >
+                  <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                    PhonePe
+                  </p>
+                </button>
+              </div>
+              <div className="flex flex-col items-center gap-y-2">
+                <div className="w-20 h-20 flex justify-center items-center">
+                  <img
+                    src="https://cdn-images-1.medium.com/max/1200/1*NKfnk1UF9xGoR0URBEc6mw.png"
+                    alt=""
+                    className="ml-0 object-contain w-[55px]"
+                  />
+                </div>
+                <button
+                  type="button"
+                  className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                  onClick={handleRazorPayTransaction}
+                >
+                  <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                    RazorPay
+                  </p>
+                </button>
               </div>
               {/* <div className="flex flex-col items-center gap-y-2">
                 <img
