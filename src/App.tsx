@@ -3,6 +3,7 @@ import { io } from "socket.io-client";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyRoutes from "./routes/MyRoutes";
+import CheckIsOnline from "./components/CheckIsOnline";
 
 // const socket = io(
 //   "http://localhost:8010"
@@ -25,6 +26,7 @@ const App = (props: any) => {
     <div>
       {/* <Routes /> */}
       <MyRoutes />
+      <CheckIsOnline />
       <ToastContainer
         position="top-right"
         autoClose={5000}
