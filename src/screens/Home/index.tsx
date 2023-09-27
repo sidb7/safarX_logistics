@@ -12,11 +12,14 @@ import CustomDropDown from "../../components/DropDown";
 import Orders from "./Orders";
 import Exception from "./Exception";
 import SyPerfromance from "./SyPerformance";
+import { useSelector } from "react-redux";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
+  const roles = useSelector((state: any) => state?.roles);
+  console.log("Roles..", roles);
 
   const arrayData = [
     { index: 0, label: "Overview" },
