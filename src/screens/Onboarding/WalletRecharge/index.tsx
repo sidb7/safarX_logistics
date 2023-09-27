@@ -33,6 +33,7 @@ import {
   loadRazorPayTransaction,
 } from "../../../utils/utility";
 import useRazorpay from "react-razorpay";
+import { SELLER_WEB_URL } from "../../../utils/ApiUrls";
 
 const OnBoundingWalletRecharge = () => {
   const navigate = useNavigate();
@@ -481,8 +482,8 @@ const OnBoundingWalletRecharge = () => {
                   onClick={() =>
                     loadPhonePeTransaction(
                       money,
-                      "http://localhost:3000/dashboard/overview",
-                      "http://localhost:3000/dashboard/overview"
+                      `${SELLER_WEB_URL}/dashboard/overview`,
+                      `${SELLER_WEB_URL}/dashboard/overview`
                     )
                   }
                 >
