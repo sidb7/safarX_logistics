@@ -70,8 +70,7 @@ const Catalogue = () => {
   const getProductDetails = async () => {
     try {
       const { data: response } = await POST(GET_PRODUCTS);
-
-      if (response?.success) {
+      if (response?.success && !productList) {
         setProductList(response.data);
       }
     } catch (error) {}

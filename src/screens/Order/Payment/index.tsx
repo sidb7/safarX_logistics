@@ -106,6 +106,7 @@ const Payment = () => {
             paymentGateway: "PHONEPE",
           });
           removeLocalStorage("phonePeTransactionId");
+          window.location.reload();
         }
       } catch (error) {}
     })();
