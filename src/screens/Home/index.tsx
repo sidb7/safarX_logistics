@@ -13,6 +13,9 @@ import Orders from "./Orders";
 import Exception from "./Exception";
 import SyPerfromance from "./SyPerformance";
 import { useSelector } from "react-redux";
+import { getLocalStorage, removeLocalStorage } from "../../utils/utility";
+import { POST } from "../../utils/webService";
+import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
 
 interface IOverview {}
 
@@ -86,6 +89,22 @@ export const Home = (props: IOverview) => {
       setRenderingComponents(3);
     }
   });
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+          removeLocalStorage("phonePeTransactionId");
+        }
+      } catch (error) {}
+    })();
+  }, []);
 
   return (
     <div className="m-4">
