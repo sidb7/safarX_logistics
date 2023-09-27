@@ -1,3 +1,6 @@
+import { INITIAL_RECHARGE, RECHARGE_STATUS } from "./ApiUrls";
+import { POST } from "./webService";
+
 export const setLocalStorage = (key: string, value: any) => {
   return localStorage.setItem(key, value);
 };
@@ -112,8 +115,94 @@ export const titleCase = (str: string) => {
   return str[0].charAt(0).toUpperCase() + str.substring(1, str.length);
 };
 
-export const anyCaseToPascal = (str: string) => {
-  return str.replace(/\b\w/g, function (match) {
-    return match.toUpperCase();
-  });
+export const loadPhonePeTransaction = async (
+  walletValue: number,
+  redirectUrl: string,
+  callbackUrl: string
+) => {
+  try {
+    const payload = {
+      paymentObject: {
+        amount: (walletValue * 100).toString(),
+        redirectUrl,
+        callbackUrl,
+      },
+      paymentGateway: "PHONEPE",
+    };
+    const { data } = await POST(INITIAL_RECHARGE, payload);
+    const phonePayTransactionPage =
+      data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    setLocalStorage(
+      "phonePeTransactionId",
+      data?.data[0]?.data?.merchantTransactionId
+    );
+
+    window.location.href = phonePayTransactionPage;
+  } catch (error: any) {
+    console.log("PhonePe Error: ", error.message);
+  }
+};
+
+export const loadRazorPayTransaction = async (
+  amount: number,
+  companyName: string,
+  userName: string,
+  email: string
+) => {
+  try {
+    const key = "rzp_test_03BJrYhr9s8YHM";
+    const payload = {
+      paymentObject: {
+        amount: (amount * 100).toString(),
+        callbackUrl: " ",
+      },
+      paymentGateway: "RAZORPE",
+    };
+    const { data } = await POST(INITIAL_RECHARGE, payload);
+
+    let orderId = data?.data?.[0]?.id;
+    let transactionId = data?.data?.[0]?.receipt;
+
+    const script = document.createElement("script");
+
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    script.type = "application/javascript";
+
+    document.body.appendChild(script);
+
+    const options: any = {
+      key,
+      amount: (amount * 100).toString(),
+      currency: "INR",
+      name: companyName,
+      description: "",
+      image: "",
+      order_id: orderId,
+      handler: async (response: any) => {
+        let body = {
+          orderId: response.razorpay_payment_id,
+          transactionId: transactionId,
+          paymentGateway: "RAZORPE",
+        };
+        await POST(RECHARGE_STATUS, body);
+        window.location.reload();
+      },
+      prefill: {
+        name: userName,
+        email: email,
+        contact: "",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+    return options;
+  } catch (error: any) {
+    console.log("RazorPay Error: ", error.message);
+    return null;
+  }
 };

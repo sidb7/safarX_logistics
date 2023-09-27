@@ -21,7 +21,7 @@ import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
 import AiIcon from "../../../../assets/Buttons.svg";
 import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
-import { anyCaseToPascal, titleCase } from "../../../../utils/utility";
+import { capitalizeFirstLetter, titleCase } from "../../../../utils/utility";
 
 import "../../../../styles/magicAddressInput.css";
 
@@ -111,7 +111,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           landmark: address.landmark,
           pincode: parsedData.pincode || "",
           city: parsedData.city_name || "",
-          state: anyCaseToPascal(parsedData.state_name) || "",
+          state: capitalizeFirstLetter(parsedData.state_name) || "",
           country: parsedData.country_name || "India",
           addressType: address.addressType || "warehouse",
         },

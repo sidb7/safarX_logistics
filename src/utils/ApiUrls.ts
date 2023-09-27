@@ -1,4 +1,5 @@
 export let Enviornment = "";
+export let SELLER_WEB_URL = "";
 let SELLER_URL = "";
 let PARTNER_URL = "";
 let FILE_SERVER_URL = "";
@@ -17,6 +18,7 @@ switch (Enviornment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
+    SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
 
     break;
 
@@ -27,6 +29,7 @@ switch (Enviornment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
+    SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_TEST}`;
     break;
 
   case "production":
@@ -36,6 +39,7 @@ switch (Enviornment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
+    SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_PROD}`;
 
     break;
 
@@ -46,6 +50,7 @@ switch (Enviornment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
+    SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_LOCAL}`;
 
     break;
 }
@@ -131,10 +136,15 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
-//paytm
+
+// PAYMENT GATEWAYS
+// Paytm
 const INITIAL_RECHARGE = `${SELLER_URL}/api/v1/walletRecharge/initRecharge`;
 const RECHARGE_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 const POST_ADD_BANK_DETAILS = `${SELLER_URL}/api/v1/seller/verifyBankAccount`;
+//PhonePe
+const PHONEPE_INIT_TRANSACTION = `${SELLER_URL}/api/v1/phonepay/initTransaction`;
+const PHONEPE_TRANSACTION_STATUS = `${SELLER_URL}/api/v1/walletRecharge/getRechargeStatus`;
 
 // Wallet
 const GET_CURRENT_WALLET = `${SELLER_URL}/api/v1/wallet/getWallet`;
@@ -318,4 +328,6 @@ export {
   TRACKING,
   GET_SYSTEM_LOG,
   LOGOUT,
+  PHONEPE_INIT_TRANSACTION,
+  PHONEPE_TRANSACTION_STATUS,
 };

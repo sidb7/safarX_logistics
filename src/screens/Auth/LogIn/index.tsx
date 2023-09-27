@@ -135,6 +135,10 @@ const Index = () => {
     );
   };
 
+  const handleEnterLogin = (e: any) => {
+    if (e.key === "Enter") logInOnClick(loginCredentials);
+  };
+
   const loginComponent = () => {
     return (
       <div className="relative h-full w-full overflow-y-auto hide-scrollbar">
@@ -196,6 +200,7 @@ const Index = () => {
               <div>
                 <CustomInputBox
                   inputType={viewPassWord ? "text" : "password"}
+                  onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
                   tempLabel={true}
                   isRightIcon={true}
