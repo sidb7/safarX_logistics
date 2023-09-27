@@ -21,6 +21,7 @@ interface propTypes {
   onClick?: any;
   imageClassName?: string;
   tempLabel?: any;
+  onKeyDown?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -48,6 +49,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     setVisibility,
     maxLength,
     imageClassName,
+    onKeyDown,
   } = props;
 
   return (
@@ -64,6 +66,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           disabled={isDisabled}
           inputMode={inputMode}
           maxLength={maxLength}
+          onKeyDown={onKeyDown}
         />
         <label
           className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
