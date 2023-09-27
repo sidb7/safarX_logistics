@@ -51,13 +51,17 @@ const BoxDetails = (props: IBoxdetails) => {
     return volume / 5000;
   };
 
-  const calcAllTotalProductWeight: any = () => {
-    let totalAppliedWeight = 0;
+  const calcAllTotalProductVolumetricWeight: any = () => {
+    let MasterValueForProgressBar: number = 0;
+
     allProducts?.forEach((e: any) => {
-      const { appliedWeight } = e;
-      totalAppliedWeight += +appliedWeight * +e.qty || 0;
+      let totalVolumetricWeight = 0;
+      const { qty, length, breadth, height } = e;
+      totalVolumetricWeight =
+        ((length * breadth * height) / 5000) * Math.pow(+qty, 3);
+      MasterValueForProgressBar += totalVolumetricWeight;
     });
-    return totalAppliedWeight;
+    return MasterValueForProgressBar;
   };
   const percentage = (partialValue: any, totalValue: any) => {
     let percentage = (100 * +partialValue) / +totalValue;
@@ -96,12 +100,8 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const calcBillableWeight = () => {
-    let billableWeight = calcAllTotalProductWeight();
-    return (
-      billableWeight > +selectedBox.volumetricWeight
-        ? calcAllTotalProductWeight()
-        : +selectedBox.volumetricWeight
-    ).toFixed(2);
+    let billableWeight = calcAllTotalProductVolumetricWeight();
+    return billableWeight.toFixed(2);
   };
 
   const calcTotalProducts = (arr: any) => {
@@ -125,7 +125,7 @@ const BoxDetails = (props: IBoxdetails) => {
         </h1>
       </div>
       <div
-        className={`flex flex-col max-h-[560px] lg:gap-y-2 lg:rounded-lg p-5`}
+        className={`flex flex-col  lg:gap-y-2 lg:rounded-lg p-5`}
         style={{
           boxShadow:
             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -221,7 +221,7 @@ const BoxDetails = (props: IBoxdetails) => {
         {Object.keys(selectedBox).length > 0 ? (
           <>
             <span className="text-base text-slate-600 mt-2 pl-4">
-              {`Products Applied weight is ${calcAllTotalProductWeight().toFixed(
+              {`Products Applied weight is ${calcAllTotalProductVolumetricWeight().toFixed(
                 2
               )} Kg`}
             </span>
@@ -229,14 +229,15 @@ const BoxDetails = (props: IBoxdetails) => {
               <div className="h-[6px] bg-[#CBEAC0] mt-2 ml- mr-16">
                 <div
                   className={`h-[6px] ${
-                    calcAllTotalProductWeight() > +selectedBox.volumetricWeight
+                    calcAllTotalProductVolumetricWeight() >
+                    +selectedBox.appliedWeight
                       ? "bg-[red]"
                       : "bg-[#7CCA62]"
                   } p-0 m-0 transition-all duration-700 ease-in-out`}
                   style={{
                     width: `${percentage(
-                      calcAllTotalProductWeight() || 0,
-                      +selectedBox.volumetricWeight || 0
+                      calcAllTotalProductVolumetricWeight() || 0,
+                      +selectedBox.appliedWeight || 0
                     )}%`,
                   }}
                 ></div>
@@ -249,16 +250,19 @@ const BoxDetails = (props: IBoxdetails) => {
               </div>
             </div>
             {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
-            {calcAllTotalProductWeight() > +selectedBox.volumetricWeight ? (
+            {calcAllTotalProductVolumetricWeight() >
+            +selectedBox.volumetricWeight ? (
               <span className="text-base text-slate-600  mt-4 pl-4">
                 {` Your billable weight is  ${calcBillableWeight()} KG. ( You are ${(
-                  calcAllTotalProductWeight() - +selectedBox.volumetricWeight
+                  calcAllTotalProductVolumetricWeight() -
+                  +selectedBox.volumetricWeight
                 ).toFixed(2)} KG over your box capacity/volumetric weight )`}
               </span>
             ) : (
               <span className="text-base text-slate-600  mt-4 pl-4">
                 {`Your billable weight is ${calcBillableWeight()} KG. You can add more products up to ${(
-                  +selectedBox.volumetricWeight - calcAllTotalProductWeight()
+                  +selectedBox.volumetricWeight -
+                  calcAllTotalProductVolumetricWeight()
                 ).toFixed(2)} KG`}
               </span>
             )}
