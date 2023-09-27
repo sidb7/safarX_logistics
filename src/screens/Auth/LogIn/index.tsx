@@ -92,7 +92,14 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/dashboard/overview");
+      // redirect based on qna and kyc done or not
+      if (response?.data?.[0]?.nextStep?.qna === false) {
+        navigate("/onboarding/questionnaire/question1");
+      } else if (response?.data?.[0]?.nextStep?.kyc === false) {
+        navigate("/onboarding/kyc-type");
+      } else {
+        navigate("/dashboard/overview");
+      }
     } else {
       toast.error(response?.message);
     }
