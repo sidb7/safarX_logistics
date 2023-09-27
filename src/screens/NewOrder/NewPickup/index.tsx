@@ -22,7 +22,6 @@ import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ModalContent from "./RightModal/ModalContent";
-import { anyCaseToPascal } from "../../../utils/utility";
 
 const steps = [
   {

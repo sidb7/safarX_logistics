@@ -44,7 +44,7 @@ import {
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 import { Spinner } from "../../../components/Spinner";
-import PhonePeModal from "../../../components/CustomModal/PhonePeModal";
+// import PhonePeModal from "../../../components/CustomModal/PhonePeModal";
 import {
   getLocalStorage,
   loadPhonePeTransaction,
@@ -77,6 +77,7 @@ const WalletRecharge = () => {
   let myInterval: number | any;
   const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -207,32 +208,26 @@ const WalletRecharge = () => {
   };
 
   const handleRazorPayTransaction = async () => {
-    const options: any = loadRazorPayTransaction(
-      "rzp_test_03BJrYhr9s8YHM",
+    const options: any = await loadRazorPayTransaction(
       walletValue,
       "SHIPYAARI",
-      " ",
-      " ",
-      "order_MgzIAtqo93guX3",
       userDetails.name,
-      userDetails.email,
-      ""
+      userDetails.email
     );
 
     const rzp1: any = new Razorpay(options);
 
     rzp1.on("payment.failed", (response: any) => {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
+      console.log("response: ", response);
     });
 
     rzp1.open();
   };
+
+  useEffect(() => {
+    if (walletValue < 1) setIsDisabled(true);
+    else setIsDisabled(false);
+  }, [walletValue]);
 
   return (
     <>
@@ -264,28 +259,28 @@ const WalletRecharge = () => {
           </div>
           <div className="mx-5 ">
             <div className="grid lg:grid-cols-2 gap-x-[27px]">
-              <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[174px]">
+              <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                 <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
                   <img src={Accountlogo} alt="" />
                   <p className="text-[#1C1C1C]">Your wallet balance</p>
-                  <p className="text-[#1C1C1C]">₹{currentWalletValue}</p>
+                  <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
                 </div>
                 <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                   Endless wallet balance with automatic add money
                 </p>
                 <p
                   onClick={() => convertToEdit()}
-                  className="text-[1rem] flex items-center lg:font-semibold lg:text-[#1C1C1C]"
+                  className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
                 >
                   <span>₹</span>
                   <input
-                    type={`${isEdit ? "text" : ""}`}
+                    type={`number`}
                     className="text-lg p-1 border-none"
                     value={walletValue}
                     onChange={(e) => setWalletValue(e.target.value)}
                   />
                 </p>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 gap-8 text-center">
                   {moneyArr?.map((el: any, i: number) => {
                     return (
                       <div
@@ -316,7 +311,7 @@ const WalletRecharge = () => {
               {/*Second */}
 
               <div className="hidden lg:block">
-                <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[174px]  ">
+                <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
                   {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
@@ -571,6 +566,7 @@ const WalletRecharge = () => {
                       className="ml-0 object-contain w-20 h-20"
                     />
                     <Paytm
+                      isDisabled={isDisabled}
                       text={"Paytm"}
                       amt={walletValue}
                       navigate="/wallet/view-wallet"
@@ -585,11 +581,16 @@ const WalletRecharge = () => {
                       className="ml-0 object-contain w-20 h-20"
                     />
                     <button
+                      disabled={isDisabled}
                       type="button"
-                      className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      className={`${
+                        !isDisabled
+                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                          : "!bg-opacity-50"
+                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                       onClick={handlePhonePeTransaction}
                     >
-                      <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                      <p className=" buttonClassName lg:text-[14px] whitespace-nowrap">
                         PhonePe
                       </p>
                     </button>
@@ -597,14 +598,19 @@ const WalletRecharge = () => {
                   <div className="flex flex-col items-center gap-y-2">
                     <div className="w-20 h-20 flex justify-center items-center">
                       <img
-                        src="https://cdn-images-1.medium.com/max/1200/1*NKfnk1UF9xGoR0URBEc6mw.png"
+                        src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
                         alt=""
-                        className="ml-0 object-contain w-[55px]"
+                        className="ml-0 object-contain"
                       />
                     </div>
                     <button
+                      disabled={isDisabled}
                       type="button"
-                      className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      className={`${
+                        !isDisabled
+                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                          : "!bg-opacity-50"
+                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                       onClick={handleRazorPayTransaction}
                     >
                       <p className="buttonClassName lg:text-[14px] whitespace-nowrap">

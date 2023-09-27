@@ -1,4 +1,4 @@
-import { INITIAL_RECHARGE } from "./ApiUrls";
+import { INITIAL_RECHARGE, RECHARGE_STATUS } from "./ApiUrls";
 import { POST } from "./webService";
 
 export const setLocalStorage = (key: string, value: any) => {
@@ -115,12 +115,6 @@ export const titleCase = (str: string) => {
   return str[0].charAt(0).toUpperCase() + str.substring(1, str.length);
 };
 
-export const anyCaseToPascal = (str: string) => {
-  return str.replace(/\b\w/g, function (match) {
-    return match.toUpperCase();
-  });
-};
-
 export const loadPhonePeTransaction = async (
   walletValue: number,
   redirectUrl: string,
@@ -149,18 +143,26 @@ export const loadPhonePeTransaction = async (
   }
 };
 
-export const loadRazorPayTransaction = (
-  key: string,
+export const loadRazorPayTransaction = async (
   amount: number,
   companyName: string,
-  description: string,
-  logo: string,
-  orderId: string,
   userName: string,
-  email: string,
-  contact: string
+  email: string
 ) => {
   try {
+    const key = "rzp_test_03BJrYhr9s8YHM";
+    const payload = {
+      paymentObject: {
+        amount: (amount * 100).toString(),
+        callbackUrl: " ",
+      },
+      paymentGateway: "RAZORPE",
+    };
+    const { data } = await POST(INITIAL_RECHARGE, payload);
+
+    let orderId = data?.data?.[0]?.id;
+    let transactionId = data?.data?.[0]?.receipt;
+
     const script = document.createElement("script");
 
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -174,19 +176,21 @@ export const loadRazorPayTransaction = (
       amount: (amount * 100).toString(),
       currency: "INR",
       name: companyName,
-      description,
-      image: logo,
+      description: "",
+      image: "",
       order_id: orderId,
-      handler: (response: any) => {
-        console.log("response: ", response);
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+      handler: async (response: any) => {
+        let body = {
+          orderId: response.razorpay_payment_id,
+          transactionId: transactionId,
+          paymentGateway: "RAZORPE",
+        };
+        await POST(RECHARGE_STATUS, body);
       },
       prefill: {
         name: userName,
         email: email,
-        contact: contact,
+        contact: "",
       },
       notes: {
         address: "Razorpay Corporate Office",
