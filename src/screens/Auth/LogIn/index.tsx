@@ -92,7 +92,14 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
-      navigate("/dashboard/overview");
+      // redirect based on qna and kyc done or not
+      if (response?.data?.[0]?.nextStep?.qna === false) {
+        navigate("/onboarding/questionnaire/question1");
+      } else if (response?.data?.[0]?.nextStep?.kyc === false) {
+        navigate("/onboarding/kyc-type");
+      } else {
+        navigate("/dashboard/overview");
+      }
     } else {
       toast.error(response?.message);
     }
@@ -150,122 +157,122 @@ const Index = () => {
                 Fast and Easy Shipping from your doorstep to your customer's.
               </p>
             </div>
-              <div className=" flex flex-col mx-4 gap-y-6">
-                <div>
-                  <CustomInputBox
-                    containerStyle="mt-[17px]"
-                    label="Email"
-                    tempLabel={true}
-                    inputType="email"
-                    value={loginCredentials.email}
-                    onChange={(e) => {
-                      //
-                      setLoginCredentials({
-                        ...loginCredentials,
-                        email: e.target.value,
+            <div className=" flex flex-col mx-4 gap-y-6">
+              <div>
+                <CustomInputBox
+                  containerStyle="mt-[17px]"
+                  label="Email"
+                  tempLabel={true}
+                  inputType="email"
+                  value={loginCredentials.email}
+                  onChange={(e) => {
+                    //
+                    setLoginCredentials({
+                      ...loginCredentials,
+                      email: e.target.value,
+                    });
+                    if (!emailRegex.test(e.target.value)) {
+                      setLoginError({
+                        ...loginError,
+                        email: "Incorrect Email",
                       });
-                      if (!emailRegex.test(e.target.value)) {
-                        setLoginError({
-                          ...loginError,
-                          email: "Incorrect Email",
-                        });
-                      } else {
-                        setLoginError({
-                          ...loginError,
-                          email: "",
-                        });
-                      }
-                    }}
-                  />
-                  {loginError.email !== "" && (
-                    <div className="flex items-center gap-x-1 mt-1">
-                      <img src={InfoCircle} alt="" width={10} height={10} />
-                      <span className="font-normal text-[#F35838] text-xs leading-3">
-                        {loginError.email}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <CustomInputBox
-                    inputType={viewPassWord ? "text" : "password"}
-                    label="Password"
-                    tempLabel={true}
-                    isRightIcon={true}
-                    value={loginCredentials.password}
-                    visibility={viewPassWord}
-                    onClick={() => {}}
-                    rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
-                    setVisibility={setViewPassWord}
-                    onChange={(e) => {
-                      setLoginCredentials({
-                        ...loginCredentials,
-                        password: e.target.value,
+                    } else {
+                      setLoginError({
+                        ...loginError,
+                        email: "",
                       });
-                      if (!strongpasswordRegex.test(e.target.value)) {
-                        setLoginError({
-                          ...loginError,
-                          password: "Incorrect Password",
-                        });
-                      } else {
-                        setLoginError({
-                          ...loginError,
-                          password: "",
-                        });
-                      }
-                    }}
-                  />
-                  {loginError.password !== "" && (
-                    <div className="flex items-center gap-x-1 mt-1">
-                      <img src={InfoCircle} alt="" width={10} height={10} />
-                      <span className="font-normal text-[#F35838] text-xs leading-3">
-                        {loginError.password}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="mt-[-15px]">
-                  {" "}
-                  <button
-                    type="button"
-                    onClick={() => setForgotPasswordModal(true)}
-                    className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
-                  >
-                    Forgot Password
-                  </button>
-                </div>
-
-                <CustomButton
-                  onClick={(e: any) => logInOnClick(loginCredentials)}
-                  text="LOG IN"
+                    }
+                  }}
                 />
-                <hr className="mb-[-30px] mt-2" />
-                <div className="flex justify-center my-[-4px]">
-                  <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
-                    OR
-                  </button>
-                </div>
-                <div className="flex justify-center">
-                  <GoogleLogin
-                    onSuccess={(googleData) => signInWithGoogle(googleData)}
-                    onError={() => {}}
-                  />
-                </div>
+                {loginError.email !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {loginError.email}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div>
+                <CustomInputBox
+                  inputType={viewPassWord ? "text" : "password"}
+                  label="Password"
+                  tempLabel={true}
+                  isRightIcon={true}
+                  value={loginCredentials.password}
+                  visibility={viewPassWord}
+                  onClick={() => {}}
+                  rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                  setVisibility={setViewPassWord}
+                  onChange={(e) => {
+                    setLoginCredentials({
+                      ...loginCredentials,
+                      password: e.target.value,
+                    });
+                    if (!strongpasswordRegex.test(e.target.value)) {
+                      setLoginError({
+                        ...loginError,
+                        password: "Incorrect Password",
+                      });
+                    } else {
+                      setLoginError({
+                        ...loginError,
+                        password: "",
+                      });
+                    }
+                  }}
+                />
+                {loginError.password !== "" && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={InfoCircle} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      {loginError.password}
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className="mt-[-15px]">
+                {" "}
+                <button
+                  type="button"
+                  onClick={() => setForgotPasswordModal(true)}
+                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                >
+                  Forgot Password
+                </button>
+              </div>
 
-                <div className="flex justify-center">
-                  <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
-                    Don't have an account ?
-                  </p>
-                  <button
-                    type="button"
-                    onClick={signUpOnClick}
-                    className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
-                  >
-                    Sign Up
-                  </button>
-                </div>
+              <CustomButton
+                onClick={(e: any) => logInOnClick(loginCredentials)}
+                text="LOG IN"
+              />
+              <hr className="mb-[-30px] mt-2" />
+              <div className="flex justify-center my-[-4px]">
+                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
+                  OR
+                </button>
+              </div>
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={(googleData) => signInWithGoogle(googleData)}
+                  onError={() => {}}
+                />
+              </div>
 
-                {/* <div className="flex justify-center">
+              <div className="flex justify-center">
+                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
+                  Don't have an account ?
+                </p>
+                <button
+                  type="button"
+                  onClick={signUpOnClick}
+                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                >
+                  Sign Up
+                </button>
+              </div>
+
+              {/* <div className="flex justify-center">
                 <button
                   type="button"
                   onClick={() => setForgotPasswordModal(true)}
@@ -274,7 +281,7 @@ const Index = () => {
                   Forgot Password
                 </button>
               </div> */}
-              </div>
+            </div>
           </div>
         </div>
       </div>

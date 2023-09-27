@@ -230,9 +230,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Locality"
-            value={address.sector}
+            value={address.locality}
             onChange={(e) =>
-              handlePickupAddressChange("sector", e.target.value)
+              handlePickupAddressChange("locality", e.target.value)
             }
           />
         </div>
@@ -255,6 +255,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onChange={(e) =>
               handlePickupAddressChange("pincode", e.target.value)
             }
+            maxLength={6}
           />
         </div>
 

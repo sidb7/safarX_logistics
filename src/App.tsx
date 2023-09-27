@@ -4,26 +4,30 @@ import "react-toastify/dist/ReactToastify.css";
 import MyRoutes from "./routes/MyRoutes";
 import { socketCallbacks } from "./Socket";
 import { useSelector } from "react-redux";
+import CheckIsOnline from "./components/CheckIsOnline";
 
 const App = () => {
-  const roomName = useSelector(
-    (state: any) => state?.roles?.roles[0]?.roleName
-  );
-  console.log("userType", roomName);
+  /* Socket code */
 
-  useEffect(() => {
-    if (roomName) {
-      socketCallbacks.connectSocket(roomName);
-    }
+  // const roomName = useSelector(
+  //   (state: any) => state?.roles?.roles[0]?.roleName
+  // );
+  // console.log("userType", roomName);
 
-    return () => {
-      socketCallbacks.disconnectSocket();
-    };
-  }, [roomName]);
+  // useEffect(() => {
+  //   if (roomName) {
+  //     socketCallbacks.connectSocket(roomName);
+  //   }
+
+  //   return () => {
+  //     socketCallbacks.disconnectSocket();
+  //   };
+  // }, [roomName]);
 
   return (
     <div>
       <MyRoutes />
+      <CheckIsOnline />
       <ToastContainer
         position="top-right"
         autoClose={5000}

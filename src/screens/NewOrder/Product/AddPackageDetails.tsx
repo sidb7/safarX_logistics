@@ -9,7 +9,6 @@ import ProductBox from "./ProductBox";
 import { searchProductData } from "../../../utils/dummyData";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { filterItems } from "../../../utils/dummyData";
 import { searchResults } from "../../../utils/utility";
 import ComboProductBox from "../../../components/ComboProductBox";
 import { POST } from "../../../utils/webService";
@@ -23,7 +22,6 @@ interface ISearchProductProps {
   productsFromLatestOrder?: any;
   selectedProducts?: any;
   handlePackageDetails?: any;
-  handleComboToPackageDetails?: any;
 }
 
 const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
@@ -35,9 +33,9 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     productsFromLatestOrder,
     selectedProducts,
     handlePackageDetails,
-    handleComboToPackageDetails,
   } = props;
 
+  const [isAddProductMode, setIsAddProductMode] = useState<any>(false);
   const [searchedProduct, setSearchedProduct] = useState("");
   const [clearIconVisible, setClearIconVisible] = useState(false);
   const [searchResult, setSearchResult] = useState<any>([]);
@@ -45,19 +43,28 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboProducts, setComboProducts] = useState<any>([]);
 
+
   useEffect(() => {
     if (productsFromLatestOrder) {
       setProducts([]);
-      let tempArr = JSON.parse(JSON.stringify(productsFromLatestOrder));
+      // getComboProducts();
+
+      //coping arr
+      let tempArrProducts = JSON.parse(JSON.stringify(productsFromLatestOrder)); //productsFromLatestOrder => will be replaced by seller's products api
+      let tempArrCombos = JSON.parse(JSON.stringify(comboProducts));
       let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
 
-      tempArr?.forEach((product: any) => {
+      //add product mode when adding new or editing product inisde package
+      setIsAddProductMode(tempSelectedArr.length > 0 ? true : false);
+
+      tempArrProducts?.forEach((product: any) => {
         product.selected = false;
       });
 
+      //preselect products which are allready selected, when adding a product inside a package(BOX)
       if (tempSelectedArr.length > 0) {
         tempSelectedArr?.forEach((selectedProduct: any) => {
-          tempArr?.forEach((products: any) => {
+          tempArrProducts?.forEach((products: any) => {
             if (selectedProduct.productId === products.productId) {
               products.selected = true;
               products.qty = selectedProduct.qty;
@@ -66,10 +73,12 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         });
       }
 
-      setProducts([...sortOnSelected(tempArr)]);
+      setProducts([...sortOnSelected(tempArrProducts)]);
+      setComboProducts([...sortOnSelected(tempArrCombos)]);
     }
   }, [isSearchProductRightModalOpen, selectedProducts]);
 
+  //get combo products
   const getComboProducts = async () => {
     const { data } = await POST(GET_COMBO_PRODUCT);
     if (data?.success) {
@@ -88,6 +97,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     getComboProducts();
   }, []);
 
+  //sort an arr acceending which are selected
   const sortOnSelected = (products: any) => {
     return products.sort((a: any, b: any) => {
       // Sorting in descending order (selected: true comes first)
@@ -102,17 +112,30 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     });
   };
 
-  const productsDetailsTobeSend = () => {
-    let tempArr = products.filter((product: any) => product.selected);
-    handlePackageDetails(tempArr);
-    console.log("comboProducts", comboProducts);
-    let tempComboArr = comboProducts.filter((combo: any) => combo.selected);
-    if (tempComboArr.length > 0) {
-      handleComboToPackageDetails(tempComboArr);
-    }
+  //send selected products data to parent component for package details
+  const productsAndComboDetailsTobeSend = () => {
+    let tempArrProducts = products.filter((product: any) => product.selected);
+    let tempArrCombo = comboProducts.filter((combo: any) => combo.selected);
+    const selectedCombo = tempArrCombo.flatMap((combo: any) => combo.products);
+
+    //handlePackageDetails => props function from parents
+    handlePackageDetails([...tempArrProducts, ...selectedCombo]);
   };
 
+  //desselect an arr (selected:false)
+  const DeSelectArr = (arr: any = []) =>
+    arr.map((arr: any) => {
+      return { ...arr, selected: false };
+    }) || [];
+
+  //Select Product for package
   const selectProduct = (product: any, index: number) => {
+    //deselect or enable multile select when addproductmode is enable
+    console.log("isAddProductMode product", isAddProductMode);
+    if (comboProducts.length > 0 && !isAddProductMode) {
+      setComboProducts(DeSelectArr(comboProducts));
+    }
+
     const allreadySelected = isProductSelected(index, products);
     let tempArr: any = products;
     if (allreadySelected) {
@@ -123,23 +146,28 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       setProducts([...sortOnSelected(tempArr)]);
     }
   };
+
+  //Select Combo for package
   const selectComboProduct = (combo: any, index: number) => {
-    const allreadyComboSelected = isProductSelected(index, comboProducts);
-    let tempArr: any = comboProducts;
-    if (allreadyComboSelected) {
-      tempArr[index].selected = false;
-      setComboProducts([...sortOnSelected(tempArr)]);
-    } else {
-      tempArr[index].selected = true;
-      setComboProducts([...sortOnSelected(tempArr)]);
+    console.log("isAddProductMode product", isAddProductMode);
+    if (products.length > 0 && !isAddProductMode) {
+      setProducts(DeSelectArr(products));
     }
+    const allreadySelected = isProductSelected(index, comboProducts);
+    const tempArr = comboProducts;
+    // const tempArr = DeSelectArr(comboProducts);
+    allreadySelected
+      ? (tempArr[index].selected = false)
+      : (tempArr[index].selected = true);
+    setComboProducts([...sortOnSelected(tempArr)]);
   };
 
+  //returns true if element is selected in that particuler arr
   const isProductSelected = (index: any, arr: any) => {
     return arr[index]?.selected === true ? true : false;
   };
 
-  const searchProductContent = () => {
+  const ProductDetails = () => {
     return (
       <div>
         <div className="p-5 ">
@@ -216,7 +244,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
           <div className="flex  items-center gap-x-2 py-2">
             <img src={ProductIcon} alt="Product" />
             <div className="font-Lato font-normal text-2xl leading-8">
-              Top Added
+              Combo Products
             </div>
           </div>
           <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
@@ -253,7 +281,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
           />
           <ServiceButton
             text={"SAVE"}
-            onClick={() => productsDetailsTobeSend()}
+            onClick={() => productsAndComboDetailsTobeSend()}
             className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
           />
         </div>
@@ -269,7 +297,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         onClose={() => setIsSearchProductRightModalOpen(false)}
         className="lg:w-[52%] rounded-l-xl"
       >
-        {searchProductContent()}
+        <ProductDetails />
       </CustomRightModal>
     </>
   );
