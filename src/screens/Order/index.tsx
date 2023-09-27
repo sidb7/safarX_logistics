@@ -244,10 +244,10 @@ const Index = () => {
           setColumnhelper(columnHelperForNewOrder(navigate));
           break;
         case "booked":
-          setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
+          setColumnhelper(ColumnHelperForBookedAndReadyToPicked(navigate));
           break;
         case "readyToPick":
-          setColumnhelper(ColumnHelperForBookedAndReadyToPicked());
+          setColumnhelper(ColumnHelperForBookedAndReadyToPicked(navigate));
           break;
         default:
           setColumnhelper(columnHelpersForRest);
