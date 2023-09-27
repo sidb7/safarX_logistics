@@ -39,15 +39,27 @@ import {
   INITIAL_RECHARGE,
   PLACE_ORDER,
   RECHARGE_STATUS,
+  PHONEPE_TRANSACTION_STATUS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 import { Spinner } from "../../../components/Spinner";
+// import PhonePeModal from "../../../components/CustomModal/PhonePeModal";
+import {
+  getLocalStorage,
+  loadPhonePeTransaction,
+  loadRazorPayTransaction,
+  removeLocalStorage,
+  setLocalStorage,
+} from "../../../utils/utility";
+// import Razorpay from "razorpay";
+import useRazorpay from "react-razorpay";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [payment, setPayment] = useState(false);
+  const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
   const [modal, setModal] = useState(false);
   // const [toast, setToast] = useState(false);
   const [placeOrder, setPlaceOrder] = useState(true);
@@ -63,6 +75,9 @@ const WalletRecharge = () => {
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
+  const [Razorpay] = useRazorpay();
+  const userDetails = useSelector((state: any) => state.signin);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -80,7 +95,22 @@ const WalletRecharge = () => {
   };
 
   useEffect(() => {
-    fetchCurrentWallet();
+    (async () => {
+      try {
+        fetchCurrentWallet();
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+          removeLocalStorage("phonePeTransactionId");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
   }, []);
 
   const checkYaariPoints = useSelector(
@@ -167,6 +197,38 @@ const WalletRecharge = () => {
     }
   };
 
+  const handlePhonePeTransaction = async () => {
+    setLoading(true);
+    await loadPhonePeTransaction(
+      walletValue,
+      "http://localhost:3000/wallet/view-wallet",
+      "http://localhost:3000/wallet/view-wallet"
+    );
+    setLoading(false);
+  };
+
+  const handleRazorPayTransaction = async () => {
+    const options: any = await loadRazorPayTransaction(
+      walletValue,
+      "SHIPYAARI",
+      userDetails.name,
+      userDetails.email
+    );
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {
+      console.log("response: ", response);
+    });
+
+    rzp1.open();
+  };
+
+  useEffect(() => {
+    if (walletValue < 1) setIsDisabled(true);
+    else setIsDisabled(false);
+  }, [walletValue]);
+
   return (
     <>
       {loading ? (
@@ -197,28 +259,28 @@ const WalletRecharge = () => {
           </div>
           <div className="mx-5 ">
             <div className="grid lg:grid-cols-2 gap-x-[27px]">
-              <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[174px]">
+              <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                 <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
                   <img src={Accountlogo} alt="" />
                   <p className="text-[#1C1C1C]">Your wallet balance</p>
-                  <p className="text-[#1C1C1C]">₹{currentWalletValue}</p>
+                  <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
                 </div>
                 <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                   Endless wallet balance with automatic add money
                 </p>
                 <p
                   onClick={() => convertToEdit()}
-                  className="text-[1rem] flex items-center lg:font-semibold lg:text-[#1C1C1C]"
+                  className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
                 >
                   <span>₹</span>
                   <input
-                    type={`${isEdit ? "text" : ""}`}
+                    type={`number`}
                     className="text-lg p-1 border-none"
                     value={walletValue}
                     onChange={(e) => setWalletValue(e.target.value)}
                   />
                 </p>
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-4 gap-8 text-center">
                   {moneyArr?.map((el: any, i: number) => {
                     return (
                       <div
@@ -249,7 +311,7 @@ const WalletRecharge = () => {
               {/*Second */}
 
               <div className="hidden lg:block">
-                <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[174px]  ">
+                <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
                   {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
@@ -494,7 +556,7 @@ const WalletRecharge = () => {
                   </p>
                 </div>
 
-                <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+                <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
                   <div className="flex flex-col items-center gap-y-2">
                     <img
                       src={
@@ -504,12 +566,13 @@ const WalletRecharge = () => {
                       className="ml-0 object-contain w-20 h-20"
                     />
                     <Paytm
+                      isDisabled={isDisabled}
                       text={"Paytm"}
                       amt={walletValue}
                       navigate="/wallet/view-wallet"
                     />
                   </div>
-                  {/* <div className="flex flex-col items-center gap-y-2">
+                  <div className="flex flex-col items-center gap-y-2">
                     <img
                       src={
                         "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
@@ -517,16 +580,64 @@ const WalletRecharge = () => {
                       alt=""
                       className="ml-0 object-contain w-20 h-20"
                     />
-                    <Paytm
-                      text={"Phonepe"}
-                      amt={walletValue}
-                      navigate="/wallet/view-wallet"
-                    />
-                  </div> */}
+                    <button
+                      disabled={isDisabled}
+                      type="button"
+                      className={`${
+                        !isDisabled
+                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                          : "!bg-opacity-50"
+                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      onClick={handlePhonePeTransaction}
+                    >
+                      <p className=" buttonClassName lg:text-[14px] whitespace-nowrap">
+                        PhonePe
+                      </p>
+                    </button>
+                  </div>
+                  <div className="flex flex-col items-center gap-y-2">
+                    <div className="w-20 h-20 flex justify-center items-center">
+                      <img
+                        src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                        alt=""
+                        className="ml-0 object-contain"
+                      />
+                    </div>
+                    <button
+                      disabled={isDisabled}
+                      type="button"
+                      className={`${
+                        !isDisabled
+                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                          : "!bg-opacity-50"
+                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                      onClick={handleRazorPayTransaction}
+                    >
+                      <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                        RazorPay
+                      </p>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {/* Need to implement this on Modal hence Kept as comment for future modification */}
+          {/* <PhonePeModal
+            isOpen={isPhonePeOpen}
+            onRequestClose={() => setIsPhonePeOpen(false)}
+          >
+            <div style={{ height: "100%", width: "100%" }}>
+              <iframe
+                ref={iframeRef}
+                style={{ height: "100%", width: "100%" }}
+                src="https://mercury-uat.phonepe.com/transact/simulator?token=uEgTvahncWFGEtfQl3xvnO3vDkfIKFyr3or104c69JU"
+                // frameBorder="0"
+                // scrolling="no"
+                width="100%"
+              ></iframe>
+            </div>
+          </PhonePeModal> */}
         </div>
       )}
     </>
