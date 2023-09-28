@@ -24,7 +24,8 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     { label: "Seller Box", isActive: false },
     { label: "Company Box", isActive: false },
   ]);
-  const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] = useState<any>(false);
+  const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
+    useState<any>(false);
 
   useImperativeHandle(ref, () => ({
     openModal() {
@@ -136,7 +137,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
                     breadth={data?.breadth || 0}
                     length={data?.length || 0}
                     height={data?.height || 0}
-                    showAction={true}
+                    showAction={filterId === 0 && true}
                     deleteSellerBox={() => deleteSellerBox(data, index)}
                     handleAction={() => handlUpdateSellerBox(data)}
                   />
