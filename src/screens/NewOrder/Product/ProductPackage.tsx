@@ -256,7 +256,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const setBoxAndCODInfo = async () => {
     let codDataInfo = {
       ...codData,
-      isCod: orderType === "B2B" ? false : true,
+      isCod: orderType === "B2B" || paymentMode !== "cod" ? false : true,
     };
     let payload = {
       boxInfo: packages,
@@ -266,6 +266,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         amount: 0,
       },
     };
+
+
+    if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
+      toast.error("COD collectable Amount Cannot Be Zero");
+      return;
+    }
 
     const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
@@ -284,8 +290,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       }, 0) || 0
     );
   };
-
-  const isOrderTypeB2C = () => {};
 
   return (
     <div>

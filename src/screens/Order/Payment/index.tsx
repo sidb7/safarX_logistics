@@ -43,6 +43,7 @@ import {
   RECHARGE_STATUS,
   POST_PLACE_ORDER,
   PHONEPE_TRANSACTION_STATUS,
+  SELLER_WEB_URL,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -105,6 +106,7 @@ const Payment = () => {
             paymentGateway: "PHONEPE",
           });
           removeLocalStorage("phonePeTransactionId");
+          window.location.reload();
         }
       } catch (error) {}
     })();
@@ -668,8 +670,8 @@ const Payment = () => {
                     onClick={() =>
                       loadPhonePeTransaction(
                         walletValue,
-                        "http://localhost:3000/orders/add-order/payment",
-                        "http://localhost:3000/orders/add-order/payment"
+                        `${SELLER_WEB_URL}/orders/add-order/payment`,
+                        `${SELLER_WEB_URL}/orders/add-order/payment`
                       )
                     }
                   >

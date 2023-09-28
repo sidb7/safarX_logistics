@@ -120,7 +120,7 @@ const commonColumnHelper = [
   }),
 ];
 
-const idHelper = [
+const idHelper = (navigate: any = "") => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
       return (
@@ -131,7 +131,6 @@ const idHelper = [
     },
     cell: (info: any) => {
       const { tempOrderId, orderId, status = [] } = info?.row?.original;
-
       const { AWB } = status[0] ?? "";
 
       return (
@@ -158,7 +157,15 @@ const idHelper = [
             <div className="">
               <span className=" text-sm font-light">Tracking :</span>
               <div className=" flex text-base items-center font-medium">
-                <span className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer">
+                <span
+                  onClick={() =>
+                    navigate({
+                      pathname: "/tracking",
+                      search: `?trackingNo=${AWB}`,
+                    })
+                  }
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                >
                   {AWB}
                 </span>
                 <CopyTooltip stringToBeCopied={AWB} />
@@ -176,7 +183,7 @@ export const columnHelperForPendingOrder = [];
 
 export const columnHelperForNewOrder = (navigate: any) => {
   return [
-    ...idHelper,
+    ...idHelper(),
     ColumnsHelper.accessor(".", {
       header: () => {
         return (
@@ -253,30 +260,30 @@ export const columnHelperForNewOrder = (navigate: any) => {
         );
       },
     }),
-    ColumnsHelper.accessor("orderStatus", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <h1>Status</h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex justify-center items-center gap-x-2 p-2 bg-[#F2FAEF] rounded-md border-[1px] border-[#7CCA62] whitespace-nowrap h-[28px] w-[93px]">
-            <img src={Delivery} alt="" className="w-[12px]" />
-            <span className="text-[#7CCA62] text-[12px] font-semibold  ">
-              Sucsess
-            </span>
-          </div>
-        );
-      },
-    }),
+    // ColumnsHelper.accessor("orderStatus", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <h1>Status</h1>
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="flex justify-center items-center gap-x-2 p-2 bg-[#f6eddf] rounded-md border-[1px] border-[#e5a235] whitespace-nowrap h-[28px] w-[93px]">
+    //         <img src={Delivery} alt="" className="w-[12px]" />
+    //         <span className="text-[#F0AE47] text-[12px] font-semibold  ">
+    //           Success
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    // }),
     ColumnsHelper.accessor("Payment", {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Payment</h1>
+            <h1>Charges</h1>
           </div>
         );
       },
@@ -345,7 +352,7 @@ export const columnHelperForNewOrder = (navigate: any) => {
   ];
 };
 
-export const ColumnHelperForBookedAndReadyToPicked = () => {
+export const ColumnHelperForBookedAndReadyToPicked = (navigate: any) => {
   return [
     // ...commonColumnHelper,
     ColumnsHelper.accessor("Pick up Expected", {
@@ -371,7 +378,7 @@ export const ColumnHelperForBookedAndReadyToPicked = () => {
         );
       },
     }),
-    ...idHelper,
+    ...idHelper(navigate),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
       header: () => {
@@ -437,6 +444,6 @@ export const columnHelpersForRest = [
       );
     },
   }),
-  ...idHelper,
+  ...idHelper(),
   ...MainCommonHelper(),
 ];

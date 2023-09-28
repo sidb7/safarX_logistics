@@ -40,6 +40,7 @@ import {
   PLACE_ORDER,
   RECHARGE_STATUS,
   PHONEPE_TRANSACTION_STATUS,
+  SELLER_WEB_URL,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -106,6 +107,7 @@ const WalletRecharge = () => {
             paymentGateway: "PHONEPE",
           });
           removeLocalStorage("phonePeTransactionId");
+          window.location.reload();
         }
       } catch (error) {
         console.log(error);
@@ -201,8 +203,8 @@ const WalletRecharge = () => {
     setLoading(true);
     await loadPhonePeTransaction(
       walletValue,
-      "http://localhost:3000/wallet/view-wallet",
-      "http://localhost:3000/wallet/view-wallet"
+      `${SELLER_WEB_URL}/wallet/view-wallet`,
+      `${SELLER_WEB_URL}/wallet/view-wallet`
     );
     setLoading(false);
   };
