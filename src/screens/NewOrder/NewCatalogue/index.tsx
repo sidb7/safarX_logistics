@@ -108,7 +108,7 @@ const Catalogue = () => {
     } else if (data[1] === "box-catalogue") {
       setTabName("Box Catalogue");
     }
-  }, [renderComponent]);
+  }, [tabName]);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");

@@ -12,13 +12,10 @@ import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
 import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
 import { POST } from "../../../../utils/webService";
-import {
-  GET_COMBO_PRODUCT,
-  GET_PRODUCTS,
-} from "../../../../utils/ApiUrls";
+import { GET_COMBO_PRODUCT, GET_PRODUCTS } from "../../../../utils/ApiUrls";
 import ComboProductBox from "../../../../components/ComboProductBox";
 import { toast } from "react-toastify";
-import { Spinner } from "../../../../components/Spinner";
+import EditProduct from "./editProduct";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -28,10 +25,12 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   setProductCatalogueTab,
 }) => {
   const [productData, setProductData] = useState([]);
+  const [editProductData, setEditProductData] = useState();
   const [filterId, setFilterId] = useState(0);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [viewed, setViewed] = useState(-1);
-  const [showComboProductList, setShowComboProductList] = useState(false)
+  const [showComboProductList, setShowComboProductList] = useState(false);
+  const [editAddressModal, setEditAddressModal] = useState<any>(false);
 
   const [filterData, setFilterData] = useState([
     { label: "Single Product", isActive: false },
@@ -39,10 +38,10 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   ]);
 
   //on page change index
-  const onPageIndexChange = () => { };
+  const onPageIndexChange = () => {};
 
   // on per page item change
-  const onPerPageItemChange = () => { };
+  const onPerPageItemChange = () => {};
 
   useEffect(() => {
     (async () => {
@@ -62,7 +61,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
         toast.error(data?.message);
       }
     })();
-  }, [filterId]);
+  }, [filterId, editAddressModal]);
 
   const filterComponent = (className?: string) => {
     return (
@@ -73,13 +72,15 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           return (
             <span
               key={index}
-              className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] cursor-pointer ${filterId === index
-                ? `${index === filterData.length - 1
-                  ? "rounded-r-md"
-                  : "rounded-l-md"
-                } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
-                : ""
-                }`}
+              className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] cursor-pointer ${
+                filterId === index
+                  ? `${
+                      index === filterData.length - 1
+                        ? "rounded-r-md"
+                        : "rounded-l-md"
+                    } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
+                  : ""
+              }`}
               onClick={() => {
                 setFilterId(index);
                 if (index === 0) {
@@ -99,7 +100,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
 
   return (
     <>
-
       <div>
         {filterComponent()}
 
@@ -166,7 +166,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
               <img src={DeliveryIcon} alt="" className="mr-2" />
               Most Viewed
-
             </h1>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
               {productData?.map((data: any, index: number) => {
@@ -175,21 +174,27 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     <div
                       key={index}
                       className="w-[272px] h-[76px]"
-                    // onClick={() => setViewed(index)}
+                      // onClick={() => setViewed(index)}
                     >
                       <ProductBox
                         image={
-                          (data?.images?.length > 0 && data?.images[0].url) || ""
+                          (data?.images?.length > 0 && data?.images[0].url) ||
+                          ""
                         }
                         productName={data?.name}
                         weight={`${data?.appliedWeight} ${data?.weightUnit}`}
                         height={data?.height}
                         breadth={data?.breadth}
                         length={data?.length}
-                        className={`cursor-pointer p-[16px] ${viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                          }`}
+                        className={`cursor-pointer p-[16px] ${
+                          viewed === index
+                            ? "border-2 border-solid border-[#004EFF]"
+                            : ""
+                        }`}
+                        onClickEdit={() => {
+                          setEditAddressModal(true);
+                          setEditProductData(data);
+                        }}
                       />
                     </div>
                   );
@@ -205,10 +210,11 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                         weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
                         Value={data?.totalValue}
                         dimension={`${data?.totalPrice}`}
-                        className={`cursor-pointer p-[16px] ${viewed === index
-                          ? "border-2 border-solid border-[#004EFF]"
-                          : ""
-                          }`}
+                        className={`cursor-pointer p-[16px] ${
+                          viewed === index
+                            ? "border-2 border-solid border-[#004EFF]"
+                            : ""
+                        }`}
                         label={`Product: ${data?.products?.length}`}
                         data={data}
                         index={index}
@@ -231,6 +237,14 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           )}
         </div>
       </div>
+
+      {editAddressModal && (
+        <EditProduct
+          editAddressModal={editAddressModal}
+          setEditAddressModal={setEditAddressModal}
+          editProductData={editProductData}
+        />
+      )}
 
       {/* <div className="mt-[26px]">
         <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">

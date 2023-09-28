@@ -131,6 +131,7 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
+const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
 
 // PAYMENT GATEWAYS
 // Paytm
@@ -325,4 +326,5 @@ export {
   LOGOUT,
   PHONEPE_INIT_TRANSACTION,
   PHONEPE_TRANSACTION_STATUS,
+  POST_UPDATE_PRODUCT,
 };
