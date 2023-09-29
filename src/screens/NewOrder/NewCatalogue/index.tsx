@@ -77,8 +77,7 @@ const Catalogue = () => {
   const getProductDetails = async () => {
     try {
       const { data: response } = await POST(GET_PRODUCTS);
-
-      if (response?.success) {
+      if (response?.success && !productList) {
         setProductList(response.data);
       }
     } catch (error) {}
@@ -119,7 +118,7 @@ const Catalogue = () => {
       setTabName("Box Catalogue");
       setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
     }
-  }, [renderComponent]);
+  }, [tabName]);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");

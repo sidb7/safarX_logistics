@@ -111,6 +111,7 @@ const WalletRecharge = () => {
             paymentGateway: "PHONEPE",
           });
           removeLocalStorage("phonePeTransactionId");
+          window.location.reload();
         }
       } catch (error) {
         console.log(error);

@@ -186,6 +186,7 @@ export const loadRazorPayTransaction = async (
           paymentGateway: "RAZORPE",
         };
         await POST(RECHARGE_STATUS, body);
+        window.location.reload();
       },
       prefill: {
         name: userName,

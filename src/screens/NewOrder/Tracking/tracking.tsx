@@ -132,11 +132,14 @@ const Tracking = () => {
   };
 
   useEffect(() => {
-    if (trackingNoFromUrl) {
+    if (trackingNoFromUrl !== "") {
       setTrackingNo(trackingNoFromUrl);
-      handleTrackOrderClick();
     }
   }, [trackingNoFromUrl]);
+
+  useEffect(() => {
+    handleTrackOrderClick();
+  }, [trackingNo]);
 
   console.log("trackingNo", trackingNo);
   console.log("trackingState", trackingState);
