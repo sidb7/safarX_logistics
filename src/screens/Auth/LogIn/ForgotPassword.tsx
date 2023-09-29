@@ -275,6 +275,7 @@ const ForgotPassword = (props: ITypeProps) => {
             <CustomInputBox
               label="New Password"
               inputType="password"
+              maxLength={12}
               onChange={(e) =>
                 setPassword({ ...password, newPassword: e.target.value })
               }
@@ -282,6 +283,7 @@ const ForgotPassword = (props: ITypeProps) => {
             <CustomInputBox
               label="Re-enter New Password"
               inputType="password"
+              maxLength={12}
               onChange={(e) =>
                 setPassword({ ...password, confirmNewPassword: e.target.value })
               }
