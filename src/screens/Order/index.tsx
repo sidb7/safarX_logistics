@@ -363,6 +363,8 @@ const Index = () => {
             setFilterId={setFilterId}
             handleTabChange={handleTabChanges}
             statusData={statusData}
+            orders={orders}
+            setOrders={setOrders}
           />
           {isLoading ? (
             <div>

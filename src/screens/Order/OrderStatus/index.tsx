@@ -8,12 +8,15 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
+import { POST } from "../../../utils/webService";
 
 interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
   statusData: any;
   handleTabChange: Function;
+  orders: any;
+  setOrders: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -38,12 +41,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setFilterId,
   statusData,
   handleTabChange,
+  setOrders,
 }) => {
   const navigate = useNavigate();
-
+  let debounceTimer: any;
   const { isLgScreen } = ResponsiveState();
   const [statusId, setStatusId] = useState(0);
   const [filterModal, setFilterModal] = useState(false);
+  const [searchedText, setSearchedText] = useState("");
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
@@ -75,12 +80,23 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     );
   };
 
+  const handleSearchOrder = (e: any) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(async () => {}, 2000);
+  };
+
   const filterButton = () => {
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <SearchBox
+              label="Search"
+              value={searchedText}
+              onChange={(e: any) => {
+                handleSearchOrder(e);
+              }}
+            />
           </div>
           <div
             className="flex justify-between items-center p-2 gap-x-2"
