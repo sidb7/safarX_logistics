@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CancelIcon from "../../../assets/common/cancel.svg";
 import AddButton from "../../../components/Button";
 import CustomInputBox from "../../../components/Input";
@@ -16,6 +16,8 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import { BULK_UPLOAD } from "../../../utils/ApiUrls";
 import { Spinner } from "../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../../components/AccessDenied";
 
 interface ITypeProps {
   onClick?: any;
@@ -23,6 +25,8 @@ interface ITypeProps {
 
 const BulkUpload = (props: ITypeProps) => {
   const { onClick } = props;
+  const roles = useSelector((state: any) => state?.roles);
+
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
   const [file, setFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("B2B");
@@ -32,6 +36,8 @@ const BulkUpload = (props: ITypeProps) => {
   const [uploadFile, setUploadFile]: any = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
 
   // console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {
@@ -128,29 +134,34 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
-      <Breadcrum label="Add Bulk Upload" component={renderHeaderComponent()} />
+    <>
+      {isActive ? (
+        <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full lg:py-5 ">
+          <Breadcrum
+            label="Add Bulk Upload"
+            component={renderHeaderComponent()}
+          />
 
-      <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
-        <div className="flex flex-row  items-center   ">
-          <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
-            Order Type:
-          </p>
-          <Checkbox
-            checked={selectedOption === "B2B"}
-            onChange={() => handleOptionSelect("B2B")}
-          />
-          <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
-            B2B
-          </p>
-          <Checkbox
-            checked={selectedOption === "B2C"}
-            onChange={() => handleOptionSelect("B2C")}
-          />
-          <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
-            B2C
-          </p>
-          {/* <div className="w-[20%] ml-[250px]">
+          <div className="m-5  lg:font-semibold lg:font-Open lg:text-sm">
+            <div className="flex flex-row  items-center   ">
+              <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
+                Order Type:
+              </p>
+              <Checkbox
+                checked={selectedOption === "B2B"}
+                onChange={() => handleOptionSelect("B2B")}
+              />
+              <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
+                B2B
+              </p>
+              <Checkbox
+                checked={selectedOption === "B2C"}
+                onChange={() => handleOptionSelect("B2C")}
+              />
+              <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
+                B2C
+              </p>
+              {/* <div className="w-[20%] ml-[250px]">
             <AddButton
               text={`Download ${selectedOption} Sample`}
               showIcon={true}
@@ -159,65 +170,69 @@ const BulkUpload = (props: ITypeProps) => {
               className=""
             />
           </div> */}
-        </div>
-      </div>
-
-      {isLoading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        <div className="flex flex-col justify-center items-center mt-[155px]">
-          <CustomBulkOrderUploadButton
-            className="!mt-[5rem]"
-            setDisabled={setDisabled}
-            setAddButton={setAddButton}
-            setUploadFile={setUploadFile}
-          />
-
-          {/* <p className="text-[16px] mt-1 font-semibold font-Open">
-          or Drop files here  ; 
-        </p> */}
-          <div
-            className="flex flex-col justify-center items-center mt-5"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={handleDrop}
-          >
-            <p className="text-[16px] mt-1 font-semibold font-Open">
-              or Drop files here
-            </p>
-            <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
-              only CSV files are supported
-            </p>
+            </div>
           </div>
 
-          {addButton && (
-            <>
-              <p className="text-[16px] mt-5 font-semibold font-Open lg:text-[16px]">
-                <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
-                  Selected File:
-                </span>{" "}
-                {uploadFile?.name || null}
-              </p>
-              {/* <button
+          {isLoading ? (
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex flex-col justify-center items-center mt-[155px]">
+              <CustomBulkOrderUploadButton
+                className="!mt-[5rem]"
+                setDisabled={setDisabled}
+                setAddButton={setAddButton}
+                setUploadFile={setUploadFile}
+              />
+
+              {/* <p className="text-[16px] mt-1 font-semibold font-Open">
+          or Drop files here  ; 
+        </p> */}
+              <div
+                className="flex flex-col justify-center items-center mt-5"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={handleDrop}
+              >
+                <p className="text-[16px] mt-1 font-semibold font-Open">
+                  or Drop files here
+                </p>
+                <p className="text-[12px] mt-1 text-black text-opacity-30 font-Open">
+                  only CSV files are supported
+                </p>
+              </div>
+
+              {addButton && (
+                <>
+                  <p className="text-[16px] mt-5 font-semibold font-Open lg:text-[16px]">
+                    <span className="font-semibold font-Open text-[12px] text-[#004EFF] lg:text-[16px]">
+                      Selected File:
+                    </span>{" "}
+                    {uploadFile?.name || null}
+                  </p>
+                  {/* <button
               onClick={handleFileUpload}
               className="bg-blue-500 text-white px-4 py-2 rounded-lg mt-4"
             >
               Upload File
             </button> */}
-            </>
+                </>
+              )}
+            </div>
           )}
+          <BottomLayout
+            customButtonText="Upload Bulk Order"
+            callApi={() => {
+              handleFileUpload();
+            }}
+            className="lg:w-[150px]"
+            Button2Name={true}
+          />
         </div>
+      ) : (
+        <AccessDenied />
       )}
-      <BottomLayout
-        customButtonText="Upload Bulk Order"
-        callApi={() => {
-          handleFileUpload();
-        }}
-        className="lg:w-[150px]"
-        Button2Name={true}
-      />
-    </div>
+    </>
   );
 };
 
