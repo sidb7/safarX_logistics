@@ -13,16 +13,24 @@ import Orders from "./Orders";
 import Exception from "./Exception";
 import SyPerfromance from "./SyPerformance";
 import { useSelector } from "react-redux";
-import { getLocalStorage, removeLocalStorage } from "../../utils/utility";
+import {
+  GetCurrentPath,
+  getLocalStorage,
+  removeLocalStorage,
+} from "../../utils/utility";
 import { POST } from "../../utils/webService";
 import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
+import AccessDenied from "../../components/AccessDenied";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
-  const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   const roles = useSelector((state: any) => state?.roles);
-  console.log("Roles..", roles);
+
+  const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
+  const isActive =
+    roles?.roles?.[0]?.menu?.[0]?.menu?.[renderingComponents]?.pages?.[0]
+      ?.isActive;
 
   const arrayData = [
     { index: 0, label: "Overview" },
@@ -107,34 +115,42 @@ export const Home = (props: IOverview) => {
   }, []);
 
   return (
-    <div className="m-4">
-      <div>
-        <Breadcrum label="Home" />
-      </div>
-      <div className="flex justify-between">
-        {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
-        <div>
-          <ScrollNav
-            arrayData={arrayData}
-            showNumber={false}
-            setScrollIndex={setScrollIndex}
-          />
-        </div>
-        {renderingComponents === 0 && (
+    <>
+      {isActive ? (
+        <div className="m-4">
           <div>
-            <CustomDropDown
-              onChange={(e) => {}}
-              options={yearArr}
-              heading="Select Filter"
-            />
+            <Breadcrum label="Home" />
           </div>
-        )}
-      </div>
-      {renderingComponents === 0 && <Overview />}
-      {renderingComponents === 1 && <Orders />}
-      {renderingComponents === 2 && <Exception />}
-      {renderingComponents === 3 && <SyPerfromance />}
-    </div>
+          <div className="flex justify-between">
+            {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
+            <div>
+              <ScrollNav
+                arrayData={arrayData}
+                showNumber={false}
+                setScrollIndex={setScrollIndex}
+              />
+            </div>
+            {renderingComponents === 0 && (
+              <div>
+                <CustomDropDown
+                  onChange={(e) => {}}
+                  options={yearArr}
+                  heading="Select Filter"
+                />
+              </div>
+            )}
+          </div>
+          {renderingComponents === 0 && <Overview />}
+          {renderingComponents === 1 && <Orders />}
+          {renderingComponents === 2 && <Exception />}
+          {renderingComponents === 3 && <SyPerfromance />}
+        </div>
+      ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
+    </>
   );
 };
 

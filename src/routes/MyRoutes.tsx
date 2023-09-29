@@ -750,10 +750,37 @@ const MyRoutes: React.FC = () => {
 
             <Route path="/help/faqs" element={<HelpScreen />} />
             <Route path="/help/ticket" element={<HelpScreen />} />
+            <Route path="/help/agreements" element={<HelpScreen />} />
 
             {/* Weight Management */}
             <Route
               path="/weight-management/weight-freeze"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/weight-management/new-discrepancy"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/weight-management/pending-dispute"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/weight-management/completed"
               element={
                 <ProtectedRoute>
                   <WeightFreeze />

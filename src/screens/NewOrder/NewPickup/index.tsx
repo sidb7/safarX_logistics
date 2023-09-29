@@ -22,6 +22,7 @@ import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ModalContent from "./RightModal/ModalContent";
+import AccessDenied from "../../../components/AccessDenied";
 
 const steps = [
   {
@@ -64,6 +65,9 @@ const steps = [
 
 const PickupLocation = () => {
   const navigate = useNavigate();
+  const roles = useSelector((state: any) => state?.roles);
+  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[1]?.pages?.[0]?.isActive;
+
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
@@ -289,79 +293,85 @@ const PickupLocation = () => {
 
   console.log("pickupAddress", pickupAddress);
   return (
-    <div className="w-full">
-      <Breadcrum label="Add New Order" />
-      <div className="lg:mb-8">
-        <Stepper steps={steps} />
-      </div>
+    <>
+      {isActive ? (
+        <div className="w-full">
+          <Breadcrum label="Add New Order" />
+          <div className="lg:mb-8">
+            <Stepper steps={steps} />
+          </div>
 
-      {/* PICKUP ADDRESS */}
+          {/* PICKUP ADDRESS */}
 
-      {userType && (
-        <ReturningUserPickup
-          data={{
-            returningUserData,
-            setReturningUserData,
-            onAddressSelect: (selectedAddress: any) => {
-              setPickupAddress((prevPickupAddress: any) => ({
-                ...prevPickupAddress,
-                pickupAddress: {
-                  ...prevPickupAddress.pickupAddress,
-                  ...selectedAddress,
+          {userType && (
+            <ReturningUserPickup
+              data={{
+                returningUserData,
+                setReturningUserData,
+                onAddressSelect: (selectedAddress: any) => {
+                  setPickupAddress((prevPickupAddress: any) => ({
+                    ...prevPickupAddress,
+                    pickupAddress: {
+                      ...prevPickupAddress.pickupAddress,
+                      ...selectedAddress,
+                    },
+                    returnAddress: {
+                      ...prevPickupAddress.returnAddress,
+                      ...selectedAddress,
+                    },
+                  }));
                 },
-                returnAddress: {
-                  ...prevPickupAddress.returnAddress,
-                  ...selectedAddress,
-                },
-              }));
-            },
-          }}
-        />
+              }}
+            />
+          )}
+
+          <PickupAddress
+            data={{
+              pickupAddress,
+              setPickupAddress,
+            }}
+          />
+
+          <div className="flex flex-row items-center px-5 gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
+            <CustomCheckbox
+              checked={isReturnAddress}
+              onChange={(e) => {
+                setIsReturnAddress(e.target.checked);
+              }}
+            />
+            <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
+              Return Address Same As Pickup
+            </p>
+          </div>
+
+          {!isReturnAddress && (
+            <PickupAddress
+              data={{
+                pickupAddress,
+                setPickupAddress,
+                label: "return",
+              }}
+            />
+          )}
+
+          <PickupDate epochPickupDate={setPickupDate} />
+
+          <CustomBranding
+            data={{
+              pickupAddress,
+              setPickupAddress,
+            }}
+          />
+
+          <BottomLayout
+            callApi={() => postPickupOrderDetails()}
+            Button2Name={true}
+          />
+        </div>
+      ) : (
+        <AccessDenied />
       )}
-
-      <PickupAddress
-        data={{
-          pickupAddress,
-          setPickupAddress,
-        }}
-      />
-
-      <div className="flex flex-row items-center px-5 gap-x-[8px] mb-11 lg:col-span-3 lg:mb-5">
-        <CustomCheckbox
-          checked={isReturnAddress}
-          onChange={(e) => {
-            setIsReturnAddress(e.target.checked);
-          }}
-        />
-        <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
-          Return Address Same As Pickup
-        </p>
-      </div>
-
-      {!isReturnAddress && (
-        <PickupAddress
-          data={{
-            pickupAddress,
-            setPickupAddress,
-            label: "return",
-          }}
-        />
-      )}
-
-      <PickupDate epochPickupDate={setPickupDate} />
-
-      <CustomBranding
-        data={{
-          pickupAddress,
-          setPickupAddress,
-        }}
-      />
-
-      <BottomLayout
-        callApi={() => postPickupOrderDetails()}
-        Button2Name={true}
-      />
-    </div>
+    </>
   );
 };
 

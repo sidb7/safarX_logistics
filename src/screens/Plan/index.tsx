@@ -10,11 +10,17 @@ import Checkbox from "../../components/CheckBox";
 import { GET_ALL_PLANS, POST_CREATE_PLAN } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../components/AccessDenied";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const roles = useSelector((state: any) => state?.roles);
+
+  const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
+
   const [allPlans, setAllPlans] = useState<any>([]);
   const [activePlanId, setActivePlanId] = useState<string>("");
 
@@ -229,37 +235,41 @@ const Index = (props: ITypeProps) => {
 
   return (
     <>
-      <div className="mr-6">
-        <div className="mb-6">
-          <Breadcrum label="Plans" />
-        </div>
+      {isActive ? (
+        <div className="mr-6">
+          <div className="mb-6">
+            <Breadcrum label="Plans" />
+          </div>
 
-        {/* Plan Cards */}
-        <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly  mb-[60px] ">
-          {allPlans.map((eachPlan: any, index: any) => {
-            return (
-              <PlanCard
-                planId={eachPlan.planId}
-                planName={eachPlan.planName}
-                price={eachPlan.price}
-                validity={eachPlan.validity}
-                description={eachPlan.description}
-                onClick={() => createPlan(eachPlan)}
-                activePlanId={activePlanId}
-              />
-            );
-          })}
+          {/* Plan Cards */}
+          <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly  mb-[60px] ">
+            {allPlans.map((eachPlan: any, index: any) => {
+              return (
+                <PlanCard
+                  planId={eachPlan.planId}
+                  planName={eachPlan.planName}
+                  price={eachPlan.price}
+                  validity={eachPlan.validity}
+                  description={eachPlan.description}
+                  onClick={() => createPlan(eachPlan)}
+                  activePlanId={activePlanId}
+                />
+              );
+            })}
+          </div>
+          {/* Table */}
+          <div className="ml-5 ">
+            <CustomTable
+              columns={columns}
+              data={data}
+              tdclassName={"def"}
+              thclassName={"bg-white"}
+            />
+          </div>
         </div>
-        {/* Table */}
-        <div className="ml-5 ">
-          <CustomTable
-            columns={columns}
-            data={data}
-            tdclassName={"def"}
-            thclassName={"bg-white"}
-          />
-        </div>
-      </div>
+      ) : (
+        <AccessDenied />
+      )}
     </>
   );
 };
