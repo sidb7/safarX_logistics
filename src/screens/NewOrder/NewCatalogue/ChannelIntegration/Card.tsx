@@ -1,21 +1,24 @@
 const Card = (props: any) => {
-  const { channel, key, setModalData, setIndexNum, index } = props;
+  const { channel, key, setModalData, setIndexNum, index, setIntegrate } =
+    props;
 
   const handleIntegration = (e: any) => {
     if (setModalData) setModalData({ isOpen: true, modalData: channel });
     if (setIndexNum) setIndexNum(index);
+    setIntegrate(false);
   };
 
   return (
-    <div className="relative z-1  mt-5" key={key}>
-      <div
-        className={`border-[1px] border-[#A4A4A4] rounded py-[14px] px-[16px] w-[248px] `}
-      >
+    <div
+      className="border-[1px] border-[#A4A4A4] rounded relative z-1  mt-5"
+      key={key}
+    >
+      <div className={`py-[14px] px-[16px] w-[248px] `}>
         <div className="flex lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 w-[118px]">
           <img src={channel.icon} alt="" className="lg:hidden" />
           <img src={channel.iconLg} alt="" className="hidden lg:block" />
 
-          <p className="font-semibold text-[12px] text-[#323232]">
+          <p className="font-semibold text-[12px] text-[#323232] line-clamp-1 ">
             {channel.name}
           </p>
         </div>

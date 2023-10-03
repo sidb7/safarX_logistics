@@ -54,7 +54,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
   return (
     <div className="flex justify-center items-center w-full">
-      <div className={`relative w-[100%] ${containerStyle}`}>
+      <div className={`relative w-[100%]  ${containerStyle}`}>
         <input
           name={name}
           type={inputType}
