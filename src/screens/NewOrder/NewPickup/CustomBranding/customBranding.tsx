@@ -40,7 +40,7 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
         <div
           className={`grid grid-cols-2 p-2 ${
             isActive
-              ? "bg-[#E8E8E8] rounded-tr-lg w-[372px] h-[44px] rounded-tl-lg border-[1px]"
+              ? "bg-[#E8E8E8] rounded-tr-lg  lg:w-[372px] h-[44px] rounded-tl-lg border-[1px]"
               : "shadow-md rounded "
           }`}
         >

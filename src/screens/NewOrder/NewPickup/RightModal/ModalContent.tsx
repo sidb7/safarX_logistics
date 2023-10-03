@@ -44,7 +44,7 @@ const ModalContent = (props: ITypeProps) => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-full relative pt-5">
+    <div className="flex flex-col h-screen px-1  w-full relative pt-5">
       <div className="flex items-center justify-between mb-5 px-5">
         <div className="flex items-center gap-x-3">
           <img src={titleIcon} alt="" />
@@ -59,10 +59,10 @@ const ModalContent = (props: ITypeProps) => {
           />
         </div>
       </div>
-      <div className="mt-5 ml-5">
+      <div className="mt-5 mx-5">
         <CustomInputBox
           label={inputLabel}
-          className="  !w-[350px]"
+          className="  md:!w-[350px]"
           value={customAddressType}
           onChange={handleAddressTypeSelected}
         />
