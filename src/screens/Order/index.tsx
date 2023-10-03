@@ -258,10 +258,10 @@ const Index = () => {
     try {
       setIsLoading(true);
       const { data } = await POST(GET_SELLER_ORDER, {
-        skip,
-        limit,
-        pageNo,
-        sort,
+        pageNo: 1, //temp
+        sort: { _id: -1 }, //temp
+        skip: 0, //temp
+        limit: 10, //temp
         currentStatus,
       });
 

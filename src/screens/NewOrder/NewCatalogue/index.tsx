@@ -159,6 +159,13 @@ const Catalogue = () => {
               className="!p-3 ml-4"
               onClick={() => navigate("/catalogues/catalogue/add-product")}
             />
+            <CustomButton
+              icon={addIcon}
+              showIcon={true}
+              text={"ADD BULK PRODUCTS"}
+              className="!p-3 ml-4 !px-4"
+              onClick={() => navigate("/catalogues/catalogue/add-bulk-product")}
+            />
           </div>
         );
       } else if (productCatalogueTab === "comboProduct") {

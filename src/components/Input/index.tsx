@@ -54,7 +54,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
   return (
     <div className="flex justify-center items-center w-full">
-      <div className={`relative w-[100%] ${containerStyle}`}>
+      <div className={`relative w-[100%]  ${containerStyle}`}>
         <input
           name={name}
           type={inputType}
@@ -69,7 +69,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           onKeyDown={onKeyDown}
         />
         <label
-          className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
+          className={`text-[10px] lg:text-xs text-[#777777]  absolute  font-Open custom-label ${
             value && tempLabel && "filled"
           }  ${tempLabel ? "filled" : ""}`}
         >

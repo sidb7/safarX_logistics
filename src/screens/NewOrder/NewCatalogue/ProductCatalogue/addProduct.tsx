@@ -27,6 +27,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
+import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
 
 interface IProductFilledProps {}
 
@@ -49,6 +50,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     volumetricWeight: "",
     appliedWeight: "",
     divisor: "",
+    sku: "",
     images: [],
   };
 
@@ -165,6 +167,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     }
   };
 
+  
+
   return (
     <>
       <Breadcrum label="Add New Product" />
@@ -179,9 +183,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                 <div className="py-4" key={index}>
                   <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
                     <div>
-                      <h2 className="text-[#004EFF] text-base items-center font-bold leading-18px font-Lato">
+                      <h1 className="text-[#004EFF] text-  items-center font-bold leading-18px font-Lato">
                         Product {index + 1}
-                      </h2>
+                      </h1>
                     </div>
                     <div className="flex">
                       <img
@@ -193,131 +197,163 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     </div>
                   </div>
 
-                  <div className="flex flex-col justify-between gap-y-4 mt-4 lg:gap-x-6 lg:grid grid-cols-4">
-                    <CustomInputBox
-                      label="Product name"
-                      name="name"
-                      value={productInputState[index].name}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: e.target.name, value: e.target.value },
-                          index
-                        )
-                      }
-                    />
-                    <CustomInputBox
-                      label="Product category"
-                      name="category"
-                      value={productInputState[index].category}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: e.target.name, value: e.target.value },
-                          index
-                        )
-                      }
-                    />
-                    <CustomInputBox
-                      label="Product Price"
-                      name="unitPrice"
-                      inputMode="numeric"
-                      value={productInputState[index].unitPrice || ""}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: e.target.name, value: +e.target.value },
-                          index
-                        )
-                      }
-                    />
-                    <CustomInputBox
-                      label="Product tax"
-                      name="unitTax"
-                      inputMode="numeric"
-                      value={productInputState[index].unitTax || ""}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: e.target.name, value: +e.target.value },
-                          index
-                        )
-                      }
-                    />
-                    <div className="flex gap-x-3 w-full">
-                      <CustomInputBox
-                        label="Length (CM)"
-                        inputType="number"
-                        name="length"
-                        value={productInputState[index]?.length || ""}
-                        onChange={(e: any) => {
-                          handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
-                            index
-                          );
-                          handleVolumCalc(index);
-                        }}
-                      />
-
-                      <CustomInputBox
-                        label="Breadth (CM)"
-                        name="breadth"
-                        inputType="number"
-                        value={productInputState[index].breadth || ""}
-                        onChange={(e: any) => {
-                          handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
-                            index
-                          );
-                          handleVolumCalc(index);
-                        }}
-                      />
-                      <CustomInputBox
-                        label="Height (CM)"
-                        inputType="number"
-                        name="height"
-                        value={productInputState[index].height || ""}
-                        onChange={(e: any) => {
-                          handleProductInputChange(
-                            { name: e.target.name, value: +e.target.value },
-                            index
-                          );
-                          handleVolumCalc(index);
-                        }}
-                      />
+                  <div className="pt-4">
+                    <div className="w-full lg:w-3/4">
+                      <span className="text-base">Product Details</span>
+                      <div className="flex gap-6 py-4">
+                        <CustomInputBox
+                          label="Product name"
+                          name="name"
+                          value={productInputState[index].name}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: e.target.name, value: e.target.value },
+                              index
+                            )
+                          }
+                        />
+                        <CustomInputWithDropDown
+                          value={productInputState[index].category}
+                          initValue={productInputState[index].name}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: "category", value: e },
+                              index
+                            )
+                          }
+                        />
+                        <CustomInputBox
+                          label="SKU"
+                          name="sku"
+                          value={productInputState[index].sku}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: e.target.name, value: e.target.value },
+                              index
+                            )
+                          }
+                        />
+                      </div>
                     </div>
-                    <div className="flex gap-x-5">
-                      <CustomInputBox
-                        placeholder="Volumetric Weight (Kg)"
-                        label="Volumetric Weight (Kg)"
-                        isDisabled={true}
-                        value={
-                          productInputState[index]?.volumetricWeight ||
-                          volumetricWeight
-                        }
-                      />
-                      <CustomInputBox
-                        placeholder="Divisor"
-                        label="Divisor"
-                        inputMode="numeric"
-                        isDisabled={true}
-                        value={divisor}
-                      />
-                    </div>
-                    <CustomInputBox
-                      label="Weight (Kg)"
-                      inputType="number"
-                      name="deadWeight"
-                      value={productInputState[index]?.deadWeight || ""}
-                      onChange={(e: any) =>
-                        handleProductInputChange(
-                          { name: e.target.name, value: +e.target.value },
-                          index
-                        )
-                      }
-                    />
+                    <div className="w-full lg:w-3/4">
+                      <span className=""> Measurement </span>
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
+                        <div className="flex gap-4 w-full">
+                          <CustomInputBox
+                            label="Length (CM)"
+                            inputType="number"
+                            name="length"
+                            value={productInputState[index]?.length || ""}
+                            onChange={(e: any) => {
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              );
+                              handleVolumCalc(index);
+                            }}
+                          />
 
-                    <div>
-                      <InputWithFileUpload
-                        type="file"
-                        onChange={(e: any) => uploadedInputFile(e, index)}
-                      />
+                          <CustomInputBox
+                            label="Breadth (CM)"
+                            name="breadth"
+                            inputType="number"
+                            value={productInputState[index].breadth || ""}
+                            onChange={(e: any) => {
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              );
+                              handleVolumCalc(index);
+                            }}
+                          />
+                          <CustomInputBox
+                            label="Height (CM)"
+                            inputType="number"
+                            name="height"
+                            value={productInputState[index].height || ""}
+                            onChange={(e: any) => {
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              );
+                              handleVolumCalc(index);
+                            }}
+                          />
+                          <CustomInputBox
+                            placeholder="Divisor"
+                            label="Divisor"
+                            inputMode="numeric"
+                            isDisabled={true}
+                            value={divisor}
+                          />
+                        </div>
+                        <div className="flex w-full gap-6">
+                          <CustomInputBox
+                            label="Weight (Kg)"
+                            inputType="number"
+                            name="deadWeight"
+                            value={productInputState[index]?.deadWeight || ""}
+                            onChange={(e: any) =>
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              )
+                            }
+                          />
+                          <CustomInputBox
+                            placeholder="Volumetric Weight (Kg)"
+                            label="Volumetric Weight (Kg)"
+                            isDisabled={true}
+                            value={
+                              productInputState[index]?.volumetricWeight ||
+                              volumetricWeight
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-3/4">
+                      <span className="text-base">Cost</span>
+                      <div className="grid grid-cols-3 gap-6 py-4">
+                        <div className="w-full flex gap-6">
+                          <CustomInputBox
+                            label="Product Price"
+                            name="unitPrice"
+                            inputMode="numeric"
+                            value={productInputState[index].unitPrice || ""}
+                            onChange={(e: any) =>
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              )
+                            }
+                          />
+                          <CustomInputBox
+                            label="Product tax"
+                            name="unitTax"
+                            inputMode="numeric"
+                            value={productInputState[index].unitTax || ""}
+                            onChange={(e: any) =>
+                              handleProductInputChange(
+                                { name: e.target.name, value: +e.target.value },
+                                index
+                              )
+                            }
+                          />
+                        </div>
+                        <div className="w-full"></div>
+                      </div>
+                    </div>
+                    <div className="w-full lg:w-3/4">
+                      <span className=""> Product Images </span>
+                      <div className="grid grid-cols-3 gap-6 py-4 ">
+                        <div className="">
+                          <InputWithFileUpload
+                            type="file"
+                            onChange={(e: any) => uploadedInputFile(e, index)}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -332,7 +368,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
             <p>Volumetric weight includes dimensions of the product</p>
           </div>
 
-          <div className="inline-flex cursor-pointer mt-6 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
+          <div className="inline-flex cursor-pointer mt-2 bg-[#F2F6FF] rounded-[4px] shadow-sm p-2 justify-center items-center ">
             <img src={ButtonIcon} alt="Add Product" width="16px" />
 
             <button
