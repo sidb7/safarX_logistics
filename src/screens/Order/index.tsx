@@ -422,6 +422,8 @@ const Index = () => {
                 setFilterId={setFilterId}
                 handleTabChange={handleTabChanges}
                 statusData={statusData}
+                setOrders={setOrders}
+                currentStatus={tabs[globalIndex].value}
               />
               {isLoading ? (
                 <div>
