@@ -159,7 +159,7 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
       <RightSideModal
         isOpen={customBrandingRightModal}
         onClose={() => setCustomBrandingRightModal(false)}
-        className="!w-[389px]"
+        className="w-full md:!w-[389px]"
       >
         <CustomBrandingContent
           title="Custom Branding"
