@@ -9,14 +9,15 @@ import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
+import { GET_ORDER_BY_ID, GET_SELLER_ORDER } from "../../../utils/ApiUrls";
 
 interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
   statusData: any;
   handleTabChange: Function;
-  orders: any;
   setOrders: any;
+  currentStatus: string;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -42,6 +43,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   statusData,
   handleTabChange,
   setOrders,
+  currentStatus,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -81,8 +83,34 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const handleSearchOrder = (e: any) => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {}, 2000);
+    try {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        if (e.target.value.length > 0) {
+          const { data } = await POST(GET_ORDER_BY_ID, {
+            id: e.target.value,
+            currentStatus,
+          });
+          setOrders(data.data);
+        } else {
+          let payload = {
+            skip: 0,
+            limit: 10,
+            pageNo: 1,
+            sort: { _id: -1 },
+            currentStatus,
+          };
+          const { data } = await POST(GET_SELLER_ORDER, payload);
+
+          const { OrderData } = data?.data?.[0];
+          setOrders(OrderData);
+
+          clearTimeout(debounceTimer);
+        }
+      }, 800);
+    } catch (error: any) {
+      console.log("Error in OrderStatus Debouncing: ", error.message);
+    }
   };
 
   const filterButton = () => {
