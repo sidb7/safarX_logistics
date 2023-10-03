@@ -270,7 +270,7 @@ const DeliveryLocation = () => {
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
-      <div className="lg:mb-8">
+      <div className=" p-2 mb-4 lg:mb-8">
         <Stepper steps={steps} />
       </div>
 

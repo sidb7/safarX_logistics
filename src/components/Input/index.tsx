@@ -59,7 +59,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           name={name}
           type={inputType}
           placeholder={placeholder}
-          className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
+          className={` rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           value={value}
@@ -68,10 +68,18 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           maxLength={maxLength}
           onKeyDown={onKeyDown}
         />
-        <label
+        {/* <label
           className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
             value && tempLabel && "filled"
           }  ${tempLabel ? "filled" : ""}`}
+        >
+          {label}
+        </label> */}
+
+        <label
+          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label ${
+            (value || tempLabel) && "filled"
+          }`}
         >
           {label}
         </label>
