@@ -9,12 +9,14 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 interface CustomInputWithDropDownProps {
   value?: any;
   initValue?: any;
+  className?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   value,
   initValue,
+  className,
   onChange = () => {},
 }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
@@ -69,7 +71,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
 
   return (
     <div
-      className="relative"
+      className="relative w-full"
       onClick={(e) => {
         e.stopPropagation();
         setIsDropdownOpen(!isDropdownOpen);
@@ -84,7 +86,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
           if (!isDropdownOpen) setIsDropdownOpen(true);
           setInputValueInfo(e.target.value);
         }}
-        className="downarrowImage"
+        className={`${className} w-full downarrowImage`}
       />
 
       {isDropdownOpen && (
