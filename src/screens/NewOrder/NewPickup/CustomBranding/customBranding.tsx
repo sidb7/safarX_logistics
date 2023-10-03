@@ -31,8 +31,12 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
   });
 
   return (
-    <div className={` ${isActive && "!mb-[130px]"} lg:col-span-3 px-5`}>
-      <div className="flex flex-col  w-[372px] h-[134px] ">
+    <div
+      className={` ${
+        isActive && "!mb-[130px]"
+      } grid grid-cols-1 lg:col-span-3 px-5`}
+    >
+      <div className="flex flex-col  lg:w-[372px] h-[134px] ">
         <div
           className={`grid grid-cols-2 p-2 ${
             isActive
