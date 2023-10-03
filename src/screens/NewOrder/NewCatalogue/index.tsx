@@ -13,9 +13,16 @@ import AddPlus from "../../../assets/Catalogue/add.svg";
 import { POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
 import { GET_PRODUCTS, GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../../components/AccessDenied";
 
 const Catalogue = () => {
   const navigate = useNavigate();
+  const roles = useSelector((state: any) => state?.roles);
+  const [isActive, setIsActive] = useState(
+    roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive
+  );
+
   const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("catalogueTab") || "Channel Integration"
@@ -100,12 +107,16 @@ const Catalogue = () => {
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[1]?.pages?.[0]?.isActive);
     } else if (data[1] === "channel-integration") {
       setTabName("Channel Integration");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive);
     } else if (data[1] === "product-catalogue") {
       setTabName("Product Catalogue");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[2]?.pages?.[0]?.isActive);
     } else if (data[1] === "box-catalogue") {
       setTabName("Box Catalogue");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
     }
   }, [tabName]);
 
@@ -182,53 +193,61 @@ const Catalogue = () => {
 
   return (
     <>
-      <Breadcrum
-        label="Catalogue"
-        component={renderHeaderComponent(setShowCombo)}
-      />
-      <div className="lg:mb-24">
-        <div className="mt-4 px-5 ">
-          <div className="flex flex-row  whitespace-nowrap mt-2 lg:h-[34px]">
-            {listTab?.map(({ statusName }, index) => {
-              return (
-                <div
-                  className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 
+      {isActive ? (
+        <div>
+          <Breadcrum
+            label="Catalogue"
+            component={renderHeaderComponent(setShowCombo)}
+          />
+          <div className="lg:mb-24">
+            <div className="mt-4 px-5 ">
+              <div className="flex flex-row  whitespace-nowrap mt-2 lg:h-[34px]">
+                {listTab?.map(({ statusName }, index) => {
+                  return (
+                    <div
+                      className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 
                   ${tabName === statusName && "!border-[#004EFF]"}
                   `}
-                  onClick={() => {
-                    sessionStorage.setItem("catalogueTab", statusName);
-                    changeUrl(statusName);
-                    setTabName(statusName);
-                  }}
-                  key={index}
-                >
-                  <span
-                    className={`text-[#777777] text-[14px] lg:text-[18px]
+                      onClick={() => {
+                        sessionStorage.setItem("catalogueTab", statusName);
+                        changeUrl(statusName);
+                        setTabName(statusName);
+                      }}
+                      key={index}
+                    >
+                      <span
+                        className={`text-[#777777] text-[14px] lg:text-[18px]
                     ${
                       tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
                     }`}
-                  >
-                    {statusName}
-                  </span>
-                </div>
-              );
-            })}
+                      >
+                        {statusName}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {renderComponent()}
+
+              <RightSideModal
+                isOpen={showCombo}
+                onClose={() => setShowCombo(false)}
+              >
+                <CreateCombo
+                  isSearchProductRightModalOpen={showCombo}
+                  setIsSearchProductRightModalOpen={setShowCombo}
+                  productsData={productList}
+                />
+              </RightSideModal>
+            </div>
           </div>
-
-          {renderComponent()}
-
-          <RightSideModal
-            isOpen={showCombo}
-            onClose={() => setShowCombo(false)}
-          >
-            <CreateCombo
-              isSearchProductRightModalOpen={showCombo}
-              setIsSearchProductRightModalOpen={setShowCombo}
-              productsData={productList}
-            />
-          </RightSideModal>
         </div>
-      </div>
+      ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
     </>
   );
 };

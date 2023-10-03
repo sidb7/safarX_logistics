@@ -55,10 +55,14 @@ import {
 } from "../../../utils/utility";
 // import Razorpay from "razorpay";
 import useRazorpay from "react-razorpay";
+import AccessDenied from "../../../components/AccessDenied";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const roles = useSelector((state: any) => state?.roles);
+  const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
+
   const [payment, setPayment] = useState(false);
   const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -233,88 +237,89 @@ const WalletRecharge = () => {
 
   return (
     <>
-      {loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        <div className="w-full">
-          <Breadcrum label="Recharge Wallet" />
-          <div className="inline-flex space-x-2 items-center px-5">
-            <img src={Moneylogo} alt="" />
-            <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
-              Payment
-            </p>
+      {isActive ? (
+        loading ? (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Spinner />
           </div>
-          <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
-            <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
-              <p
-                className={`${
-                  isItLgScreen
-                    ? "px-[16px] py-[13px] text-[16px] font-semibold"
-                    : ""
-                }`}
-              >
-                Get welcome gift of 100 bonus point with wallet payments
+        ) : (
+          <div className="w-full">
+            <Breadcrum label="Recharge Wallet" />
+            <div className="inline-flex space-x-2 items-center px-5">
+              <img src={Moneylogo} alt="" />
+              <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
+                Payment
               </p>
             </div>
-          </div>
-          <div className="mx-5 ">
-            <div className="grid lg:grid-cols-2 gap-x-[27px]">
-              <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
-                <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
-                  <img src={Accountlogo} alt="" />
-                  <p className="text-[#1C1C1C]">Your wallet balance</p>
-                  <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
-                </div>
-                <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
-                  Endless wallet balance with automatic add money
-                </p>
+            <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
+              <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
                 <p
-                  onClick={() => convertToEdit()}
-                  className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
+                  className={`${
+                    isItLgScreen
+                      ? "px-[16px] py-[13px] text-[16px] font-semibold"
+                      : ""
+                  }`}
                 >
-                  <span>₹</span>
-                  <input
-                    type={`number`}
-                    className="text-lg p-1 border-none"
-                    value={walletValue}
-                    onChange={(e) => setWalletValue(e.target.value)}
-                  />
+                  Get welcome gift of 100 bonus point with wallet payments
                 </p>
-                <div className="grid grid-cols-4 gap-8 text-center">
-                  {moneyArr?.map((el: any, i: number) => {
-                    return (
-                      <div
-                        key={i}
-                        onClick={() => setWalletValue(el?.value)}
-                        className={`${
-                          walletValue === el?.value
-                            ? "border-[#004EFF]"
-                            : "border-[#000000]"
-                        } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
-                        // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
-                      >
-                        <p
-                          className={`text-[16px] ${
-                            walletValue === el?.value
-                              ? "!text-[#004EFF]"
-                              : "text-[#000000]"
-                          } lg:font-semibold lg:text-[14px] `}
-                        >
-                          ₹{el?.value}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
+            </div>
+            <div className="mx-5 ">
+              <div className="grid lg:grid-cols-2 gap-x-[27px]">
+                <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
+                  <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
+                    <img src={Accountlogo} alt="" />
+                    <p className="text-[#1C1C1C]">Your wallet balance</p>
+                    <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
+                  </div>
+                  <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
+                    Endless wallet balance with automatic add money
+                  </p>
+                  <p
+                    onClick={() => convertToEdit()}
+                    className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
+                  >
+                    <span>₹</span>
+                    <input
+                      type={`number`}
+                      className="text-lg p-1 border-none"
+                      value={walletValue}
+                      onChange={(e) => setWalletValue(e.target.value)}
+                    />
+                  </p>
+                  <div className="grid grid-cols-4 gap-8 text-center">
+                    {moneyArr?.map((el: any, i: number) => {
+                      return (
+                        <div
+                          key={i}
+                          onClick={() => setWalletValue(el?.value)}
+                          className={`${
+                            walletValue === el?.value
+                              ? "border-[#004EFF]"
+                              : "border-[#000000]"
+                          } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
+                          // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
+                        >
+                          <p
+                            className={`text-[16px] ${
+                              walletValue === el?.value
+                                ? "!text-[#004EFF]"
+                                : "text-[#000000]"
+                            } lg:font-semibold lg:text-[14px] `}
+                          >
+                            ₹{el?.value}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
-              {/*Second */}
+                {/*Second */}
 
-              <div className="hidden lg:block">
-                <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
-                  {/* {checkYaariPoints ? (
+                <div className="hidden lg:block">
+                  <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
+                    {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
                       <div className="flex ">
@@ -355,277 +360,277 @@ const WalletRecharge = () => {
                     />
                   </div>
                 ) : ( */}
-                  <div className="flex flex-col h-full ">
-                    <div className="flex flex-col mb-12">
-                      <p className="text-[1rem] font-semibold text-[#1C1C1C]">
-                        Yaari points are availed after first
+                    <div className="flex flex-col h-full ">
+                      <div className="flex flex-col mb-12">
+                        <p className="text-[1rem] font-semibold text-[#1C1C1C]">
+                          Yaari points are availed after first
+                        </p>
+                        <p className="text-[1rem] font-semibold text-[#1C1C1C]">
+                          order is placed
+                        </p>
+                      </div>
+
+                      <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                        Tap to know how it works
                       </p>
-                      <p className="text-[1rem] font-semibold text-[#1C1C1C]">
-                        order is placed
+                    </div>
+                    {/* )} */}
+                    <div>
+                      <img
+                        src={YaariPointsIcon}
+                        alt=""
+                        className="object-contain"
+                        height={170}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center lg:mb-2">
+                <Checkbox />
+                <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#CCDCFF]">
+                  INSTANT RECHARGE WITH COD
+                </p>
+              </div>
+
+              <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
+                Add money to wallet with COD
+              </p>
+
+              {/* Available Offers Mobile */}
+              <div className="flex  gap-2 lg:hidden">
+                <img src={discountIcon} alt="" />
+                <p className="text-lg font-semibold">Available offers</p>
+              </div>
+              <div className="flex flex-nowwrap overflow-x-scroll space-x-4 mb-7 lg:hidden">
+                <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
+                  <p className="text-[1rem] font-semibold">
+                    10% EXTRA up to ₹1000
+                  </p>
+                  <p className="mt-[7px] text-[0.875rem] text-[#606060]">
+                    Use standard charter Digismart credit card
+                  </p>
+                  <div className="w-[245px] flex flex-row justify-between my-3">
+                    <p className="text-[12px] text-[#004EFF] mt-1">
+                      Save up to ₹500 with this code
+                    </p>
+                    <p className="text-[16px]">Apply</p>
+                  </div>
+                </div>
+                <div className="bg-[#FDF6EA] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
+                  <p className="text-[1rem] font-semibold">
+                    10% EXTRA up to ₹1000
+                  </p>
+                  <p className="mt-[7px] text-[0.875rem] text-[#606060]">
+                    Use standard charter Digismart credit card
+                  </p>
+                  <div className="w-[245px] flex flex-row justify-between my-3">
+                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                      Save up to ₹500 with this code
+                    </p>
+                    <p className="text-[16px]">Apply</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Available Offers Web */}
+              <div className=" gap-2 hidden lg:flex ">
+                <img src={discountIcon} alt="" />
+                <p className="text-lg font-semibold  lg:font-normal lg:text-2xl lg:text-[#323232]">
+                  Available offers
+                </p>
+              </div>
+              <div className="lg:flex flex-nowrap w-full overflow-x-scroll gap-x-4 hidden lg:mb-5">
+                <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[33.33%]">
+                  <p className="text-[1rem] font-semibold">
+                    10% EXTRA up to ₹1000
+                  </p>
+                  <p className="mt-[7px] text-[0.875rem] text-[#606060]">
+                    Use standard charter Digismart credit card
+                  </p>
+                  <div className="flex flex-row justify-between my-3">
+                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                      Save up to ₹500 with this code
+                    </p>
+                    <p className="text-[16px]">Apply</p>
+                  </div>
+                </div>
+                <div className="bg-[#FDF6EA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
+                  <p className="text-[1rem] font-semibold">
+                    10% EXTRA up to ₹1000
+                  </p>
+                  <p className="mt-[7px] text-[0.875rem] text-[#606060]">
+                    Use standard charter Digismart credit card
+                  </p>
+                  <div className="flex flex-row justify-between my-3">
+                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                      Save up to ₹500 with this code
+                    </p>
+                    <p className="text-[16px]">Apply</p>
+                  </div>
+                </div>
+
+                <div className="bg-[#FDEDEA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
+                  <p className="text-[1rem] font-semibold">
+                    10% EXTRA up to ₹1000
+                  </p>
+                  <p className="mt-[7px] text-[0.875rem] text-[#606060]">
+                    Use standard charter Digismart credit card
+                  </p>
+                  <div className="flex flex-row justify-between my-3">
+                    <p className="text-[0.875rem] text-[#004EFF] mt-1">
+                      Save up to ₹500 with this code
+                    </p>
+                    <p className="text-[16px]">Apply</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className=" mb-7 lg:mb-6 lg:w-1/3">
+                <CustomInputWithImage
+                  placeholder="Have a gift card?"
+                  imgSrc={GiftIcon}
+
+                  // value={locateAddress}
+                />
+              </div>
+              {/* Yaari Points Mobile */}
+              <div className=" lg:hidden  grid grid-cols-2 w-100%  mb-7 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
+                {checkYaariPoints ? (
+                  <div className="w-[200px] flex flex-col justify-between">
+                    <div>
+                      <div className="flex ">
+                        <div className="flex flex-col mt-4">
+                          <span
+                            className="font-medium"
+                            data-tooltip-id="my-tooltip-inline"
+                            data-tooltip-content="Welcome 100 yaari points has been added"
+                          >
+                            Yaari Points
+                          </span>
+                          <span className="text-center text-[16px] font-bold">
+                            100
+                          </span>
+                        </div>
+                        <Tooltip
+                          id="my-tooltip-inline"
+                          style={{
+                            backgroundColor: "#4D83FF",
+                            color: "#FFFFFF",
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-center items-center mt-12">
+                      <Checkbox />
+                      <p className="text-[14px] font-medium uppercase text-[#004EFF]">
+                        REDEEM ON EVERY ORDER
                       </p>
                     </div>
 
-                    <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                    <Tooltip
+                      id="my-tooltip"
+                      style={{
+                        backgroundColor: "rgb(0, 255, 30)",
+                        color: "#222",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-[200px] flex flex-col justify-between gap-y-5">
+                    <p className="text-[12px]">
+                      Yaari points are availed after first order is placed
+                    </p>
+                    <p className="text-[12px] text-[#004EFF]">
                       Tap to know how it works
                     </p>
                   </div>
-                  {/* )} */}
-                  <div>
-                    <img
-                      src={YaariPointsIcon}
-                      alt=""
-                      className="object-contain"
-                      height={170}
-                    />
-                  </div>
+                )}
+                <div className="col-end-7">
+                  <img src={customerReward} alt="" className="object-contain" />
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center lg:mb-2">
-              <Checkbox />
-              <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#CCDCFF]">
-                INSTANT RECHARGE WITH COD
-              </p>
-            </div>
-
-            <p className="mt-3 text-[12px] text-[#BBBBBB] mb-10 lg:font-normal lg:mb-5">
-              Add money to wallet with COD
-            </p>
-
-            {/* Available Offers Mobile */}
-            <div className="flex  gap-2 lg:hidden">
-              <img src={discountIcon} alt="" />
-              <p className="text-lg font-semibold">Available offers</p>
-            </div>
-            <div className="flex flex-nowwrap overflow-x-scroll space-x-4 mb-7 lg:hidden">
-              <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
-                <p className="text-[1rem] font-semibold">
-                  10% EXTRA up to ₹1000
-                </p>
-                <p className="mt-[7px] text-[0.875rem] text-[#606060]">
-                  Use standard charter Digismart credit card
-                </p>
-                <div className="w-[245px] flex flex-row justify-between my-3">
-                  <p className="text-[12px] text-[#004EFF] mt-1">
-                    Save up to ₹500 with this code
-                  </p>
-                  <p className="text-[16px]">Apply</p>
-                </div>
-              </div>
-              <div className="bg-[#FDF6EA] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
-                <p className="text-[1rem] font-semibold">
-                  10% EXTRA up to ₹1000
-                </p>
-                <p className="mt-[7px] text-[0.875rem] text-[#606060]">
-                  Use standard charter Digismart credit card
-                </p>
-                <div className="w-[245px] flex flex-row justify-between my-3">
-                  <p className="text-[0.875rem] text-[#004EFF] mt-1">
-                    Save up to ₹500 with this code
-                  </p>
-                  <p className="text-[16px]">Apply</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Available Offers Web */}
-            <div className=" gap-2 hidden lg:flex ">
-              <img src={discountIcon} alt="" />
-              <p className="text-lg font-semibold  lg:font-normal lg:text-2xl lg:text-[#323232]">
-                Available offers
-              </p>
-            </div>
-            <div className="lg:flex flex-nowrap w-full overflow-x-scroll gap-x-4 hidden lg:mb-5">
-              <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[33.33%]">
-                <p className="text-[1rem] font-semibold">
-                  10% EXTRA up to ₹1000
-                </p>
-                <p className="mt-[7px] text-[0.875rem] text-[#606060]">
-                  Use standard charter Digismart credit card
-                </p>
-                <div className="flex flex-row justify-between my-3">
-                  <p className="text-[0.875rem] text-[#004EFF] mt-1">
-                    Save up to ₹500 with this code
-                  </p>
-                  <p className="text-[16px]">Apply</p>
-                </div>
-              </div>
-              <div className="bg-[#FDF6EA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
-                <p className="text-[1rem] font-semibold">
-                  10% EXTRA up to ₹1000
-                </p>
-                <p className="mt-[7px] text-[0.875rem] text-[#606060]">
-                  Use standard charter Digismart credit card
-                </p>
-                <div className="flex flex-row justify-between my-3">
-                  <p className="text-[0.875rem] text-[#004EFF] mt-1">
-                    Save up to ₹500 with this code
-                  </p>
-                  <p className="text-[16px]">Apply</p>
-                </div>
-              </div>
-
-              <div className="bg-[#FDEDEA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
-                <p className="text-[1rem] font-semibold">
-                  10% EXTRA up to ₹1000
-                </p>
-                <p className="mt-[7px] text-[0.875rem] text-[#606060]">
-                  Use standard charter Digismart credit card
-                </p>
-                <div className="flex flex-row justify-between my-3">
-                  <p className="text-[0.875rem] text-[#004EFF] mt-1">
-                    Save up to ₹500 with this code
-                  </p>
-                  <p className="text-[16px]">Apply</p>
-                </div>
-              </div>
-            </div>
-
-            <div className=" mb-7 lg:mb-6 lg:w-1/3">
-              <CustomInputWithImage
-                placeholder="Have a gift card?"
-                imgSrc={GiftIcon}
-
-                // value={locateAddress}
-              />
-            </div>
-            {/* Yaari Points Mobile */}
-            <div className=" lg:hidden  grid grid-cols-2 w-100%  mb-7 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
-              {checkYaariPoints ? (
-                <div className="w-[200px] flex flex-col justify-between">
-                  <div>
-                    <div className="flex ">
-                      <div className="flex flex-col mt-4">
-                        <span
-                          className="font-medium"
-                          data-tooltip-id="my-tooltip-inline"
-                          data-tooltip-content="Welcome 100 yaari points has been added"
-                        >
-                          Yaari Points
-                        </span>
-                        <span className="text-center text-[16px] font-bold">
-                          100
-                        </span>
-                      </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "#4D83FF",
-                          color: "#FFFFFF",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex justify-center items-center mt-12">
-                    <Checkbox />
-                    <p className="text-[14px] font-medium uppercase text-[#004EFF]">
-                      REDEEM ON EVERY ORDER
+              {/* Payment Gateway */}
+              <div className="lg:grid grid-cols-2 mb-[130px]">
+                <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
+                  <div className="flex  gap-x-2 text-[14px]">
+                    <img src={rechargeIcon} alt="" className="object-contain" />
+                    <p className="  font-semibold text-sm lg:text-lg lg:text-[#1C1C1C]">
+                      {isItLgScreen
+                        ? "Payment gateway"
+                        : "Recharge with payment gateway"}
                     </p>
                   </div>
 
-                  <Tooltip
-                    id="my-tooltip"
-                    style={{
-                      backgroundColor: "rgb(0, 255, 30)",
-                      color: "#222",
-                    }}
-                  />
-                </div>
-              ) : (
-                <div className="w-[200px] flex flex-col justify-between gap-y-5">
-                  <p className="text-[12px]">
-                    Yaari points are availed after first order is placed
-                  </p>
-                  <p className="text-[12px] text-[#004EFF]">
-                    Tap to know how it works
-                  </p>
-                </div>
-              )}
-              <div className="col-end-7">
-                <img src={customerReward} alt="" className="object-contain" />
-              </div>
-            </div>
-            {/* Payment Gateway */}
-            <div className="lg:grid grid-cols-2 mb-[130px]">
-              <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
-                <div className="flex  gap-x-2 text-[14px]">
-                  <img src={rechargeIcon} alt="" className="object-contain" />
-                  <p className="  font-semibold text-sm lg:text-lg lg:text-[#1C1C1C]">
-                    {isItLgScreen
-                      ? "Payment gateway"
-                      : "Recharge with payment gateway"}
-                  </p>
-                </div>
-
-                <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
-                  <div className="flex flex-col items-center gap-y-2">
-                    <img
-                      src={
-                        "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
-                      }
-                      alt=""
-                      className="ml-0 object-contain w-20 h-20"
-                    />
-                    <Paytm
-                      isDisabled={isDisabled}
-                      text={"Paytm"}
-                      amt={walletValue}
-                      navigate="/wallet/view-wallet"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center gap-y-2">
-                    <img
-                      src={
-                        "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
-                      }
-                      alt=""
-                      className="ml-0 object-contain w-20 h-20"
-                    />
-                    <button
-                      disabled={isDisabled}
-                      type="button"
-                      className={`${
-                        !isDisabled
-                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                          : "!bg-opacity-50"
-                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                      onClick={handlePhonePeTransaction}
-                    >
-                      <p className=" buttonClassName lg:text-[14px] whitespace-nowrap">
-                        PhonePe
-                      </p>
-                    </button>
-                  </div>
-                  <div className="flex flex-col items-center gap-y-2">
-                    <div className="w-20 h-20 flex justify-center items-center">
+                  <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
+                    <div className="flex flex-col items-center gap-y-2">
                       <img
-                        src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                        src={
+                          "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
+                        }
                         alt=""
-                        className="ml-0 object-contain"
+                        className="ml-0 object-contain w-20 h-20"
+                      />
+                      <Paytm
+                        isDisabled={isDisabled}
+                        text={"Paytm"}
+                        amt={walletValue}
+                        navigate="/wallet/view-wallet"
                       />
                     </div>
-                    <button
-                      disabled={isDisabled}
-                      type="button"
-                      className={`${
-                        !isDisabled
-                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                          : "!bg-opacity-50"
-                      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                      onClick={handleRazorPayTransaction}
-                    >
-                      <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                        RazorPay
-                      </p>
-                    </button>
+                    <div className="flex flex-col items-center gap-y-2">
+                      <img
+                        src={
+                          "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                        }
+                        alt=""
+                        className="ml-0 object-contain w-20 h-20"
+                      />
+                      <button
+                        disabled={isDisabled}
+                        type="button"
+                        className={`${
+                          !isDisabled
+                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                            : "!bg-opacity-50"
+                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                        onClick={handlePhonePeTransaction}
+                      >
+                        <p className=" buttonClassName lg:text-[14px] whitespace-nowrap">
+                          PhonePe
+                        </p>
+                      </button>
+                    </div>
+                    <div className="flex flex-col items-center gap-y-2">
+                      <div className="w-20 h-20 flex justify-center items-center">
+                        <img
+                          src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                          alt=""
+                          className="ml-0 object-contain"
+                        />
+                      </div>
+                      <button
+                        disabled={isDisabled}
+                        type="button"
+                        className={`${
+                          !isDisabled
+                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                            : "!bg-opacity-50"
+                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                        onClick={handleRazorPayTransaction}
+                      >
+                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                          RazorPay
+                        </p>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          {/* Need to implement this on Modal hence Kept as comment for future modification */}
-          {/* <PhonePeModal
+            {/* Need to implement this on Modal hence Kept as comment for future modification */}
+            {/* <PhonePeModal
             isOpen={isPhonePeOpen}
             onRequestClose={() => setIsPhonePeOpen(false)}
           >
@@ -640,6 +645,11 @@ const WalletRecharge = () => {
               ></iframe>
             </div>
           </PhonePeModal> */}
+          </div>
+        )
+      ) : (
+        <div>
+          <AccessDenied />
         </div>
       )}
     </>
