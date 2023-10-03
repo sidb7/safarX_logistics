@@ -11,16 +11,14 @@
 
 label {
   position: absolute;
-  font-size: 0.8rem;
   left: 0;
   top: 50%;
-  line-height: normal;
   transform: translateY(-50%);
   background-color: transparent;
   color: gray;
   padding: 0 0.3rem;
   margin: 0 0.5rem;
-  transition: 0.1s ease-in-out;
+  transition: 0.2s ease-in-out;
   transform-origin: left top;
   pointer-events: none;
 }
@@ -33,7 +31,7 @@ input {
   border-radius: 5px !important;
   padding: 1rem 0.7rem;
   color: black;
-  transition: 0.1s ease-out;
+  transition: 0.2s ease-out;
 }
 
 input:focus {

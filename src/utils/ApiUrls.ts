@@ -1,4 +1,4 @@
-export let Enviornment = "";
+export let Environment = "";
 export let SELLER_WEB_URL = "";
 let SELLER_URL = "";
 let PARTNER_URL = "";
@@ -8,9 +8,9 @@ let LANDMARK_URL = "";
 let TRACKING_URL = "";
 
 // Environment Declaration
-Enviornment = process.env.REACT_APP_ENV || "development";
+Environment = process.env.REACT_APP_ENV || "development";
 
-switch (Enviornment) {
+switch (Environment) {
   case "development":
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
@@ -99,6 +99,7 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
+const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -205,6 +206,10 @@ const LANDMARK_API = `${LANDMARK_URL}/api/v1/landmark/landmark`;
 //BulkUpload
 const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 
+//bulk upload products
+const BULK_PRODUCT_UPLOAD = `${SELLER_BASE_URL}/product/uploadBulkProduct`;
+const DOWNLOAD_SAMPLE_PRODUCT = `${SELLER_BASE_URL}/product/downloadSampleProduct`;
+
 //Forgot Password
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
@@ -228,11 +233,13 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 export {
+  DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
   GET_CATEGOROIES,
   SELLER_URL,
   ADD_BOX_INFO,
   DELETE_SELLER_BOX,
+  BULK_PRODUCT_UPLOAD,
   CREATE_SELLER_BOX,
   GET_SINGLE_FILE,
   GET_SELLER_ORDER,
@@ -332,4 +339,5 @@ export {
   PHONEPE_INIT_TRANSACTION,
   PHONEPE_TRANSACTION_STATUS,
   POST_UPDATE_PRODUCT,
+  GET_ORDER_BY_ID,
 };

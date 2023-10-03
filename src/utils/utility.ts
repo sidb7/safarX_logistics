@@ -1,4 +1,4 @@
-import { INITIAL_RECHARGE, RECHARGE_STATUS } from "./ApiUrls";
+import { Environment, INITIAL_RECHARGE, RECHARGE_STATUS } from "./ApiUrls";
 import { POST } from "./webService";
 
 export const setLocalStorage = (key: string, value: any) => {
@@ -150,7 +150,8 @@ export const loadRazorPayTransaction = async (
   email: string
 ) => {
   try {
-    const key = "rzp_test_03BJrYhr9s8YHM";
+    let key = "rzp_test_03BJrYhr9s8YHM";
+    if (Environment === "production") key = "rzp_test_03BJrYhr9s8YHM";
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),

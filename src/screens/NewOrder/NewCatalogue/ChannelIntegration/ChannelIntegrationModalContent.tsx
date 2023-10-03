@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { POST } from "../../../../utils/webService";
 import {
+  GET_ALL_STORES,
   GET_SINGLE_STORE,
   POST_CREATE_STORE,
   UPDATE_SINGLE_STORE,
@@ -14,8 +15,9 @@ import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 
 function ChannelIntegrationModalContent(props: any) {
-  const { setModalData, channelData, setChannelData, indexNum } = props;
-  let isUpdateModal = channelData.channels[indexNum]?.integrated;
+  const { setModalData, channelData, setChannelData, indexNum, integrate } =
+    props;
+  let isUpdateModal = !integrate;
   const [storeData, setStoreData]: any = useState({
     storeName: "",
     storeUrl: "",
@@ -23,7 +25,7 @@ function ChannelIntegrationModalContent(props: any) {
     storeLogo: "",
   });
 
-  const storeId = channelData.channels[indexNum]?.storeId;
+  const storeId = channelData?.channels?.[indexNum]?.storeId;
 
   const addStore = async () => {
     try {
@@ -37,7 +39,7 @@ function ChannelIntegrationModalContent(props: any) {
             icon: ShopifyIcon,
             iconLg: ShopifyLg,
             integrated: true,
-            storeId,
+            storeId: data?.data?.storeId,
           },
         ];
         newStore = [...newStore, ...channelData.channels];

@@ -43,7 +43,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboProducts, setComboProducts] = useState<any>([]);
 
-
   useEffect(() => {
     if (productsFromLatestOrder) {
       setProducts([]);
@@ -295,7 +294,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         wrapperClassName="rounded"
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className="lg:w-[52%] rounded-l-xl"
+        className=" w-full lg:w-[52%] rounded-l-xl"
       >
         <ProductDetails />
       </CustomRightModal>

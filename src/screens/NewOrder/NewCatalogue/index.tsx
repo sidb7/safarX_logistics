@@ -14,6 +14,7 @@ import { POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
 import { GET_PRODUCTS, GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
+import ChannelIntegrationModalContent from "./ChannelIntegration/ChannelIntegrationModalContent";
 import AccessDenied from "../../../components/AccessDenied";
 
 const Catalogue = () => {
@@ -27,7 +28,14 @@ const Catalogue = () => {
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("catalogueTab") || "Channel Integration"
   );
+  const [modalData, setModalData]: any = useState({
+    isOpen: false,
+    modalData: [],
+  });
+  const [channelData, setChannelData]: any = useState([]);
+  const [indexNum, setIndexNum] = useState(0);
   const BoxCataloague: any = useRef();
+  const [integrate, setIntegrate] = useState(false);
 
   const [tabNameFromUrl, setTabNameFromUrl] = useState();
   const listTab = [
@@ -56,7 +64,15 @@ const Catalogue = () => {
 
   const renderComponent = () => {
     if (tabName === "Channel Integration") {
-      return <ChannelIntegration />;
+      return (
+        <ChannelIntegration
+          setChannelData={setChannelData}
+          channelData={channelData}
+          setModalData={setModalData}
+          setIndexNum={setIndexNum}
+          setIntegrate={setIntegrate}
+        />
+      );
     } else if (tabName === "Address Book") {
       return <AddressBook setAddressTab={setAddressTab} />;
     } else if (tabName === "Product Catalogue") {
@@ -126,7 +142,20 @@ const Catalogue = () => {
   };
 
   const renderHeaderComponent = (setShowCombo?: any) => {
-    if (tabName === "Address Book") {
+    if (tabName === "Channel Integration") {
+      return (
+        <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"INTEGRATE"}
+          className="!p-3"
+          onClick={() => {
+            setModalData({ isOpen: true });
+            setIntegrate(true);
+          }}
+        />
+      );
+    } else if (tabName === "Address Book") {
       return (
         <CustomButton
           icon={addIcon}
@@ -158,6 +187,13 @@ const Catalogue = () => {
               text={"ADD PRODUCT"}
               className="!p-3 ml-4"
               onClick={() => navigate("/catalogues/catalogue/add-product")}
+            />
+            <CustomButton
+              icon={addIcon}
+              showIcon={true}
+              text={"ADD BULK PRODUCTS"}
+              className="!p-3 ml-4 !px-4"
+              onClick={() => navigate("/catalogues/catalogue/add-bulk-product")}
             />
           </div>
         );
@@ -205,7 +241,8 @@ const Catalogue = () => {
                 {listTab?.map(({ statusName }, index) => {
                   return (
                     <div
-                      className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4 
+                      style={{ borderBottomWidth: "3px" }}
+                      className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
                   ${tabName === statusName && "!border-[#004EFF]"}
                   `}
                       onClick={() => {
@@ -216,7 +253,7 @@ const Catalogue = () => {
                       key={index}
                     >
                       <span
-                        className={`text-[#777777] text-[14px] lg:text-[18px]
+                        className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
                     ${
                       tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
                     }`}
@@ -238,6 +275,19 @@ const Catalogue = () => {
                   isSearchProductRightModalOpen={showCombo}
                   setIsSearchProductRightModalOpen={setShowCombo}
                   productsData={productList}
+                />
+              </RightSideModal>
+
+              <RightSideModal
+                isOpen={modalData.isOpen}
+                onClose={() => setModalData({ ...modalData, isOpen: false })}
+              >
+                <ChannelIntegrationModalContent
+                  setModalData={setModalData}
+                  channelData={channelData}
+                  setChannelData={setChannelData}
+                  indexNum={indexNum}
+                  integrate={integrate}
                 />
               </RightSideModal>
             </div>
