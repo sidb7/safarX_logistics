@@ -202,6 +202,7 @@ const Index = () => {
                   inputType={viewPassWord ? "text" : "password"}
                   onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
+                  maxLength={12}
                   tempLabel={true}
                   isRightIcon={true}
                   value={loginCredentials.password}

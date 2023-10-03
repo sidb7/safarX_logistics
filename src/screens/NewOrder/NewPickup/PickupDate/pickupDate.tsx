@@ -33,8 +33,8 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
   };
 
   return (
-    <div className="grid grid-cols-3 my-5 px-5">
-      <div className="mr-6">
+    <div className="grid grid-cols-1 lg:grid-cols-3 my-5 px-5">
+      <div className="lg:mr-5">
         <CustomInputWithImage
           placeholder="Pickup Date"
           imgSrc={CalenderIcon}
@@ -46,7 +46,7 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
       <RightSideModal
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
-        className="!w-[389px]"
+        className="w-full md:!w-[389px]"
       >
         <SelectDateModalContent
           onClick={() => setIsDateRightModal(false)}

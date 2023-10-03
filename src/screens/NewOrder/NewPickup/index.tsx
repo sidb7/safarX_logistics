@@ -297,7 +297,7 @@ const PickupLocation = () => {
       {isActive ? (
         <div className="w-full">
           <Breadcrum label="Add New Order" />
-          <div className="lg:mb-8">
+          <div className=" p-2 mb-4 lg:mb-8">
             <Stepper steps={steps} />
           </div>
 

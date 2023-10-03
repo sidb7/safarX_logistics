@@ -267,7 +267,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       },
     };
 
-
     if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
       toast.error("COD collectable Amount Cannot Be Zero");
       return;
@@ -610,7 +609,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
         </div>
         <RightSideModal
-          className="w-[400px]"
+          className=" w-full lg:w-[400px]"
           wrapperClassName="rounded-l-xl"
           isOpen={boxTypeModal}
           onClose={() => setBoxTypeModal(false)}
