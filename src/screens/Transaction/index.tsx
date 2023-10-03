@@ -56,10 +56,10 @@ export const Transaction = () => {
   }, []);
 
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = () => { };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = () => { };
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
@@ -71,11 +71,11 @@ export const Transaction = () => {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <SearchBox label="Search" value="" onChange={() => { }} />
           </div>
           <div
             className="flex justify-between items-center p-2 gap-x-2"
-            // onClick={() => setFilterModal(true)}
+          // onClick={() => setFilterModal(true)}
           >
             <img src={FilterIcon} alt="" />
             <span className="text-[#004EFF] text-[14px] font-semibold">
@@ -166,21 +166,25 @@ export const Transaction = () => {
                 </div>
 
                 <div className="lg:hidden">
-                  <div className="mt-4">
-                    <PassbookHistory
-                      data={{
-                        title: "Shipyaari - 438473",
-                        rupee: "500",
-                        date: "July 9, 2023",
-                        credited: "378",
-                        debited: "7879",
-                        balance: "84263627",
-                        slabAmount: "0",
-                        redeemAmount: "0",
-                        redeemPoint: "0",
-                      }}
-                    />
-                  </div>
+                  {
+                    data.length && data.map((passbookData: any, index) => (
+                      <div className="mt-4">
+                        <PassbookHistory
+                          data={{
+                            title: `Shipyaari - ${passbookData.transactionId}`,
+                            rupee: "500",
+                            date: "July 9, 2023",
+                            credited: passbookData.type === "credit" ? passbookData.amount : "0",
+                            debited: passbookData.type === "credit" ? "0" : passbookData.amount,
+                            balance: passbookData.balance,
+                            slabAmount: "0",
+                            redeemAmount: "0",
+                            redeemPoint: "0",
+                          }}
+                        />
+                      </div>
+                    ))
+                  }
 
                   <div className="mt-4">
                     <CashbackHistory
@@ -201,12 +205,14 @@ export const Transaction = () => {
                   )}
                 </div>
                 {totalItemCount > 0 && (
-                  <PaginationComponent
-                    totalItems={totalItemCount}
-                    itemsPerPageOptions={[10, 20, 30, 50]}
-                    onPageChange={onPageIndexChange}
-                    onItemsPerPageChange={onPerPageItemChange}
-                  />
+                  <div className="max-sm:hidden">
+                    <PaginationComponent
+                      totalItems={totalItemCount}
+                      itemsPerPageOptions={[10, 20, 30, 50]}
+                      onPageChange={onPageIndexChange}
+                      onItemsPerPageChange={onPerPageItemChange}
+                    />
+                  </div>
                 )}
               </div>
             </div>

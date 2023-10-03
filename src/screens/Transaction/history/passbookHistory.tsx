@@ -35,24 +35,20 @@ export const PassbookColumns = () => {
     return (
       <div>
         <div
-          className={`inline-flex justify-center gap-x-1 ${
-            status.toUpperCase() === "SUCCESS" ? "bg-[#F2FAEF]" : "bg-[#FEEEEB]"
-          }  rounded-sm border-[0.5px]${
-            status === "SUCCESS" ? " border-[#7CCA62]" : "border-[#F35838]"
-          } px-3 py-[6px]`}
+          className={`inline-flex justify-center gap-x-1 ${status.toUpperCase() === "SUCCESS" ? "bg-[#F2FAEF]" : "bg-[#FEEEEB]"
+            }  rounded-sm border-[0.5px]${status === "SUCCESS" ? " border-[#7CCA62]" : "border-[#F35838]"
+            } px-3 py-[6px]`}
         >
           <img
-            src={`${
-              status.toUpperCase() === "SUCCESS" ? bookedIcon : cancelledicon
-            }`}
+            src={`${status.toUpperCase() === "SUCCESS" ? bookedIcon : cancelledicon
+              }`}
             alt=""
           />
           <span
-            className={`text-xs font-semibold ${
-              status.toUpperCase() === "SUCCESS"
-                ? "text-[#7CCA62]"
-                : "text-[#F35838]"
-            }  items-center`}
+            className={`text-xs font-semibold ${status.toUpperCase() === "SUCCESS"
+              ? "text-[#7CCA62]"
+              : "text-[#F35838]"
+              }  items-center`}
           >
             {status.toUpperCase()}
           </span>
@@ -227,24 +223,22 @@ export const PassbookColumns = () => {
 };
 
 export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
-  data,
-}) => {
+  data
+}: any) => {
   const [onOpen, setOnOpen] = useState(false);
 
   const header = () => {
     return (
       <div
-        className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden ${
-          onOpen ? "grid grid-rows-1" : "grid h-[44px]"
-        }`}
+        className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden ${onOpen ? "grid grid-rows-1" : "grid h-[44px]"
+          }`}
       >
         <div
-          className={`flex justify-between items-center h-[44px] ${
-            onOpen ? "bg-[#E8E8E8]" : "bg-white"
-          }`}
+          className={`flex justify-between items-center h-[44px] ${onOpen ? "bg-[#E8E8E8]" : "bg-white"
+            }`}
         >
           <div>
-            <span className="text-base font-semibold text-[#1C1C1C] ml-4">
+            <span className="text-base font-semibold text-[#1C1C1C] ml-4 border max-w-[400px] truncate">
               {data?.title}
             </span>
           </div>
@@ -252,7 +246,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
             <div>
               <CustomButton
                 text={data?.rupee}
-                onClick={() => {}}
+                onClick={() => { }}
                 className="p-2 !bg-[#004EFF] text-white text-[12p] h-[28px]"
                 showIcon={true}
                 icon={RupeeIcon}
@@ -274,13 +268,13 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
           <div className="flex flex-col ml-4 mt-4">
             <span className="text-[10px] text-[#777777] font-normal">Date</span>
             <span className="text-xs text-[#1C1C1C] font-semibold">
-              {data?.date}
+              {date_DD_MMM_YYY(data?.date)}
             </span>
           </div>
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
+              <span className="text-[10px] text-[#95d47f] font-semibold">
                 Credited
               </span>
               <div className="flex">
@@ -292,7 +286,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+              <span className="ml-3 text-[10px] text-[#f35838] font-semibold">
                 Debited
               </span>
               <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">

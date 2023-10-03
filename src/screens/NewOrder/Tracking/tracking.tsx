@@ -109,7 +109,7 @@ const Tracking = () => {
   };
   console.log("trackingUrl", TRACKING);
   const handleTrackOrderClick = async () => {
-    if (trackingNo.trim() === "") {
+    if (trackingNo?.trim() === "") {
       return;
     }
 
