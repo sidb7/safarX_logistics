@@ -37,7 +37,7 @@ import { ServiceComponent } from "../screens/Onboarding/Kyc/TermsAndAgreement/in
 import KycCompanyDetailsScreen from "../screens/Onboarding/Kyc/CompanyDetails";
 import KycModalScreen from "../screens/Onboarding/Kyc/TermsAndAgreement/Modal";
 import KycAadharForm from "../screens/Onboarding/Kyc/AadharForm";
-
+import BulkProducts from "../screens/NewOrder/NewCatalogue/ProductCatalogue/BulkProducts";
 import SelectAddress from "../screens/Onboarding/Kyc/SelectAddress/index";
 import SelectAddressBilling from "../screens/Onboarding/Kyc/SelectAddress/billing";
 import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup";
@@ -664,6 +664,14 @@ const MyRoutes: React.FC = () => {
                 }
               />
               <Route
+                path="/catalogues/catalogue/add-bulk-product/"
+                element={
+                  <ProtectedRoute>
+                    <BulkProducts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
                 path="/catalogues/catalogue/edit-address"
                 element={
                   <ProtectedRoute>
@@ -750,10 +758,37 @@ const MyRoutes: React.FC = () => {
 
             <Route path="/help/faqs" element={<HelpScreen />} />
             <Route path="/help/ticket" element={<HelpScreen />} />
+            <Route path="/help/agreements" element={<HelpScreen />} />
 
             {/* Weight Management */}
             <Route
               path="/weight-management/weight-freeze"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/weight-management/new-discrepancy"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/weight-management/pending-dispute"
+              element={
+                <ProtectedRoute>
+                  <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/weight-management/completed"
               element={
                 <ProtectedRoute>
                   <WeightFreeze />

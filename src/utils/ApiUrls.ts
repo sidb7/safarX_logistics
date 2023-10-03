@@ -206,6 +206,10 @@ const LANDMARK_API = `${LANDMARK_URL}/api/v1/landmark/landmark`;
 //BulkUpload
 const BULK_UPLOAD = `${SELLER_BASE_URL}/order/placeBulkOrder`;
 
+//bulk upload products
+const BULK_PRODUCT_UPLOAD = `${SELLER_BASE_URL}/product/uploadBulkProduct`;
+const DOWNLOAD_SAMPLE_PRODUCT = `${SELLER_BASE_URL}/product/downloadSampleProduct`;
+
 //Forgot Password
 const FORGOT_PASSWORD = `${SELLER_BASE_URL}/seller/forgotPassword`;
 const VERIFY_FORGET_PASSWORD = `${SELLER_BASE_URL}/seller/verifyForgotPassword`;
@@ -229,11 +233,13 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 export {
+  DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
   GET_CATEGOROIES,
   SELLER_URL,
   ADD_BOX_INFO,
   DELETE_SELLER_BOX,
+  BULK_PRODUCT_UPLOAD,
   CREATE_SELLER_BOX,
   GET_SINGLE_FILE,
   GET_SELLER_ORDER,

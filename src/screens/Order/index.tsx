@@ -32,6 +32,8 @@ import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 
 const Buttons = (className?: string) => {
@@ -139,10 +141,8 @@ const tabs = [
 
 const Index = () => {
   const [filterId, setFilterId] = useState(0);
-  const navigate = useNavigate();
   const [statusData, setStatusData]: any = useState(tabs);
-  const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
-  const { isLgScreen } = ResponsiveState();
+
   const [orders, setOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
@@ -164,8 +164,66 @@ const Index = () => {
     },
     { label: "Sucsess Rate", value: "sucsessRate", number: "5%", gif: false },
   ]);
-  //  settings for desktop view
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const roles = useSelector((state: any) => state?.roles);
+  const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
+  const { isLgScreen } = ResponsiveState();
+  const navigate = useNavigate();
+
+  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
+  const Buttons = (className?: string) => {
+    return (
+      <div
+        className={
+          className
+            ? className
+            : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+        }
+      >
+        <div className="grid col-span-2">
+          <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+            text="ADD ORDER"
+            onClick={() => navigate("/orders/add-order/pickup")}
+            showIcon={true}
+            icon={AddOrderIcon}
+          />
+        </div>
+
+        {/* <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
+        <img src={SyncIcon} alt="" width="16px" />
+        <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
+          SYNC CHANNEL
+        </span>
+      </div> */}
+
+        <div
+          className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+          // onClick={() => setIsModalOpen(true)}
+          onClick={() => navigate("/orders/add-bulk")}
+        >
+          <img src={BlukOrderIcon} alt="" width="16px" />
+          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
+            BULK UPLOAD
+          </span>
+        </div>
+        {isModalOpen && (
+          <CenterModal
+            isOpen={isModalOpen}
+            onRequestClose={() => setIsModalOpen(false)}
+          >
+            <BulkUpload
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            />
+          </CenterModal>
+        )}
+      </div>
+    );
+  };
+  //  settings for desktop view
   const desktopSettings = {
     dots: true,
     infinite: true,
@@ -200,10 +258,10 @@ const Index = () => {
     try {
       setIsLoading(true);
       const { data } = await POST(GET_SELLER_ORDER, {
-        skip,
-        limit,
-        pageNo,
-        sort,
+        pageNo: 1, //temp
+        sort: { _id: -1 }, //temp
+        skip: 0, //temp
+        limit: 10, //temp
         currentStatus,
       });
 
@@ -226,10 +284,6 @@ const Index = () => {
       return false;
     }
   };
-
-  useEffect(() => {
-    handleTabChanges();
-  }, []);
 
   const handleTabChanges = async (index: any = 0) => {
     try {
@@ -268,6 +322,9 @@ const Index = () => {
     }
   };
 
+  useEffect(() => {
+    handleTabChanges();
+  }, []);
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
     let limit: any = 0;
@@ -354,61 +411,67 @@ const Index = () => {
   };
 
   return (
-    <div>
-      <Breadcrum label="Orders" component={Buttons()} />
-      {isLgScreen && (
-        <div className="pl-5 pr-6">
-          <OrderStatus
-            filterId={filterId}
-            setFilterId={setFilterId}
-            handleTabChange={handleTabChanges}
-            statusData={statusData}
-            setOrders={setOrders}
-            currentStatus={tabs[globalIndex].value}
-          />
-          {isLoading ? (
-            <div>
-              <div className="flex items-stretch h-16 rounded-xl">
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-              </div>
-              <div className="flex items-stretch h-44 rounded-xl">
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-              </div>
-              <div className="flex items-stretch h-44 rounded-xl">
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-                <div className="flex-1 m-2 animated rounded-xl"></div>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <CustomTable data={orders} columns={columnHelper || []} />
-              {totalCount > 0 && (
-                <Pagination
-                  totalItems={totalCount}
-                  itemsPerPageOptions={[10, 20, 30, 50]}
-                  onPageChange={onPageIndexChange}
-                  onItemsPerPageChange={onPerPageItemChange}
-                />
+    <>
+      {isActive ? (
+        <div>
+          <Breadcrum label="Orders" component={Buttons()} />
+          {isLgScreen && (
+            <div className="pl-5 pr-6">
+              <OrderStatus
+                filterId={filterId}
+                setFilterId={setFilterId}
+                handleTabChange={handleTabChanges}
+                statusData={statusData}
+                setOrders={setOrders}
+                currentStatus={tabs[globalIndex].value}
+              />
+              {isLoading ? (
+                <div>
+                  <div className="flex items-stretch h-16 rounded-xl">
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                  </div>
+                  <div className="flex items-stretch h-44 rounded-xl">
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                  </div>
+                  <div className="flex items-stretch h-44 rounded-xl">
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <CustomTable data={orders} columns={columnHelper || []} />
+                  {totalCount > 0 && (
+                    <Pagination
+                      totalItems={totalCount}
+                      itemsPerPageOptions={[10, 20, 30, 50]}
+                      onPageChange={onPageIndexChange}
+                      onItemsPerPageChange={onPerPageItemChange}
+                    />
+                  )}
+                </div>
               )}
             </div>
           )}
         </div>
+      ) : (
+        <AccessDenied />
       )}
-    </div>
+    </>
   );
 };
 

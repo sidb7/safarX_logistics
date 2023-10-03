@@ -11,10 +11,8 @@
 
 label {
   position: absolute;
-  font-size: 0.8rem;
   left: 0;
   top: 50%;
-  line-height: normal;
   transform: translateY(-50%);
   background-color: transparent;
   color: gray;

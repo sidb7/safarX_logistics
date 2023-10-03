@@ -12,13 +12,18 @@ import addIcon from "../../../assets/Catalogue/add.svg";
 import AddPlus from "../../../assets/Catalogue/add.svg";
 import { POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
-import { GET_ALL_STORES, GET_PRODUCTS } from "../../../utils/ApiUrls";
+import { GET_PRODUCTS, GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
+import { useSelector } from "react-redux";
 import ChannelIntegrationModalContent from "./ChannelIntegration/ChannelIntegrationModalContent";
-import ShopifyLg from "../../../assets/Catalogue/shopifyLg.svg";
-import ShopifyIcon from "../../../assets/Catalogue/shopify.svg";
+import AccessDenied from "../../../components/AccessDenied";
 
 const Catalogue = () => {
   const navigate = useNavigate();
+  const roles = useSelector((state: any) => state?.roles);
+  const [isActive, setIsActive] = useState(
+    roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive
+  );
+
   const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("catalogueTab") || "Channel Integration"
@@ -118,12 +123,16 @@ const Catalogue = () => {
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[1]?.pages?.[0]?.isActive);
     } else if (data[1] === "channel-integration") {
       setTabName("Channel Integration");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive);
     } else if (data[1] === "product-catalogue") {
       setTabName("Product Catalogue");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[2]?.pages?.[0]?.isActive);
     } else if (data[1] === "box-catalogue") {
       setTabName("Box Catalogue");
+      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
     }
   }, [tabName]);
 
@@ -179,6 +188,13 @@ const Catalogue = () => {
               className="!p-3 ml-4"
               onClick={() => navigate("/catalogues/catalogue/add-product")}
             />
+            <CustomButton
+              icon={addIcon}
+              showIcon={true}
+              text={"ADD BULK PRODUCTS"}
+              className="!p-3 ml-4 !px-4"
+              onClick={() => navigate("/catalogues/catalogue/add-bulk-product")}
+            />
           </div>
         );
       } else if (productCatalogueTab === "comboProduct") {
@@ -213,67 +229,75 @@ const Catalogue = () => {
 
   return (
     <>
-      <Breadcrum
-        label="Catalogue"
-        component={renderHeaderComponent(setShowCombo)}
-      />
-      <div className="lg:mb-24">
-        <div className="mt-4 px-5 ">
-          <div className="flex flex-row  whitespace-nowrap mt-2 lg:h-[34px]">
-            {listTab?.map(({ statusName }, index) => {
-              return (
-                <div
-                  style={{ borderBottomWidth: "3px" }}
-                  className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
+      {isActive ? (
+        <div>
+          <Breadcrum
+            label="Catalogue"
+            component={renderHeaderComponent(setShowCombo)}
+          />
+          <div className="lg:mb-24">
+            <div className="mt-4 px-5 ">
+              <div className="flex flex-row  whitespace-nowrap mt-2 lg:h-[34px]">
+                {listTab?.map(({ statusName }, index) => {
+                  return (
+                    <div
+                      style={{ borderBottomWidth: "3px" }}
+                      className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
                   ${tabName === statusName && "!border-[#004EFF]"}
                   `}
-                  onClick={() => {
-                    sessionStorage.setItem("catalogueTab", statusName);
-                    changeUrl(statusName);
-                    setTabName(statusName);
-                  }}
-                  key={index}
-                >
-                  <span
-                    className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
+                      onClick={() => {
+                        sessionStorage.setItem("catalogueTab", statusName);
+                        changeUrl(statusName);
+                        setTabName(statusName);
+                      }}
+                      key={index}
+                    >
+                      <span
+                        className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
                     ${
                       tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
                     }`}
-                  >
-                    {statusName}
-                  </span>
-                </div>
-              );
-            })}
+                      >
+                        {statusName}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {renderComponent()}
+
+              <RightSideModal
+                isOpen={showCombo}
+                onClose={() => setShowCombo(false)}
+              >
+                <CreateCombo
+                  isSearchProductRightModalOpen={showCombo}
+                  setIsSearchProductRightModalOpen={setShowCombo}
+                  productsData={productList}
+                />
+              </RightSideModal>
+
+              <RightSideModal
+                isOpen={modalData.isOpen}
+                onClose={() => setModalData({ ...modalData, isOpen: false })}
+              >
+                <ChannelIntegrationModalContent
+                  setModalData={setModalData}
+                  channelData={channelData}
+                  setChannelData={setChannelData}
+                  indexNum={indexNum}
+                  integrate={integrate}
+                />
+              </RightSideModal>
+            </div>
           </div>
-
-          {renderComponent()}
-
-          <RightSideModal
-            isOpen={showCombo}
-            onClose={() => setShowCombo(false)}
-          >
-            <CreateCombo
-              isSearchProductRightModalOpen={showCombo}
-              setIsSearchProductRightModalOpen={setShowCombo}
-              productsData={productList}
-            />
-          </RightSideModal>
-
-          <RightSideModal
-            isOpen={modalData.isOpen}
-            onClose={() => setModalData({ ...modalData, isOpen: false })}
-          >
-            <ChannelIntegrationModalContent
-              setModalData={setModalData}
-              channelData={channelData}
-              setChannelData={setChannelData}
-              indexNum={indexNum}
-              integrate={integrate}
-            />
-          </RightSideModal>
         </div>
-      </div>
+      ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
     </>
   );
 };

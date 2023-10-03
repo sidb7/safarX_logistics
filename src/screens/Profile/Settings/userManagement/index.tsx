@@ -14,6 +14,8 @@ import {
   POST_GET_ALL_USER_DATA,
   POST_DELETE_USER_DATA,
 } from "../../../../utils/ApiUrls";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../../../components/AccessDenied";
 
 const Buttons = (className?: string, usersData?: any) => {
   const navigate = useNavigate();
@@ -45,6 +47,9 @@ const Buttons = (className?: string, usersData?: any) => {
 
 function UserManagement() {
   const navigate = useNavigate();
+  const roles = useSelector((state: any) => state?.roles);
+  const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[2]?.isActive;
+
   const [usersData, setUsersData] = useState([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [isModalOpen, setIsModalOpen]: any = useState(false);
@@ -228,43 +233,54 @@ function UserManagement() {
   }, []);
 
   return (
-    <div>
-      <Breadcrum label="User Management" component={Buttons("", usersData)} />
-      <div className=" my-3 mx-6">
-        <div className=" flex justify-end">
-          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
-            <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+    <>
+      {isActive ? (
+        <div>
+          <Breadcrum
+            label="User Management"
+            component={Buttons("", usersData)}
+          />
+          <div className=" my-3 mx-6">
+            <div className=" flex justify-end">
+              <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+                <div>
+                  <SearchBox label="Search" value="" onChange={() => {}} />
+                </div>
+                <div
+                  className="flex justify-between items-center p-2 gap-x-2"
+                  // onClick={() => setFilterModal(true)}
+                >
+                  <span className="text-[#004EFF] text-[14px] font-semibold">
+                    FILTER
+                  </span>
+                </div>
+              </div>
             </div>
-            <div
-              className="flex justify-between items-center p-2 gap-x-2"
-              // onClick={() => setFilterModal(true)}
+
+            <div className=" mt-6">
+              <CustomTable data={usersData || []} columns={columns || []} />
+            </div>
+
+            <CenterModal
+              isOpen={isModalOpen}
+              onRequestClose={() => setIsModalOpen(false)}
+              className="!h-[340px] !w-[480px]"
             >
-              <span className="text-[#004EFF] text-[14px] font-semibold">
-                FILTER
-              </span>
-            </div>
+              <DeleteConfirmModale
+                userInfo={deleteUser}
+                setIsModalOpen={setIsModalOpen}
+                deleteRoleApiCall={deleteUserApiCall}
+                title="user"
+              />
+            </CenterModal>
           </div>
         </div>
-
-        <div className=" mt-6">
-          <CustomTable data={usersData || []} columns={columns || []} />
+      ) : (
+        <div>
+          <AccessDenied />
         </div>
-
-        <CenterModal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          className="!h-[340px] !w-[480px]"
-        >
-          <DeleteConfirmModale
-            userInfo={deleteUser}
-            setIsModalOpen={setIsModalOpen}
-            deleteRoleApiCall={deleteUserApiCall}
-            title="user"
-          />
-        </CenterModal>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

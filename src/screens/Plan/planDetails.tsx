@@ -18,11 +18,15 @@ import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 import { GET_ALL_PLANS } from "../../utils/ApiUrls";
 import { ScrollNav } from "../../components/ScrollNav";
 import CourierPricing from "./courierPricing";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../components/AccessDenied";
 
 interface ITypeProps {}
 
 const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const roles = useSelector((state: any) => state?.roles);
+  const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[1]?.pages?.[0]?.isActive;
 
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
@@ -659,140 +663,150 @@ const PlanDetails = (props: ITypeProps) => {
 
   return (
     <>
-      <div className="mr-4">
-        <div className="mb-5">
-          <Breadcrum label="Plans" />
-        </div>
-        {/* Plan Upgradation */}
-        <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
-          <div className="flex items-center">
-            <img
-              src={PlanDetailsGif}
-              alt=""
-              height={124}
-              width={124}
-              className="lg:mr-8"
-            />
-            <div className="flex flex-col justify-center gap-y-2  h-[120px]   lg:mr-5">
-              <p className="font-Lato text-[#004EFF] font-semibold text-[22px] leading-7  ">
-                PLATINUM PLAN
-              </p>
-              <p className="font-Lato font-semibold text-lg leading-6 text-[#323232]">
-                Built exclusively for your needs
-              </p>
-              <p className="font-Lato font-normal text-lg leading-6 text-[#777777]">
-                Get extra 8% off on all your orders. International shipping,
-                label customization and more
-              </p>
+      {isActive ? (
+        <div className="mr-4">
+          <div className="mb-5">
+            <Breadcrum label="Plans" />
+          </div>
+          {/* Plan Upgradation */}
+          <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
+            <div className="flex items-center">
+              <img
+                src={PlanDetailsGif}
+                alt=""
+                height={124}
+                width={124}
+                className="lg:mr-8"
+              />
+              <div className="flex flex-col justify-center gap-y-2  h-[120px]   lg:mr-5">
+                <p className="font-Lato text-[#004EFF] font-semibold text-[22px] leading-7  ">
+                  PLATINUM PLAN
+                </p>
+                <p className="font-Lato font-semibold text-lg leading-6 text-[#323232]">
+                  Built exclusively for your needs
+                </p>
+                <p className="font-Lato font-normal text-lg leading-6 text-[#777777]">
+                  Get extra 8% off on all your orders. International shipping,
+                  label customization and more
+                </p>
+              </div>
+            </div>
+            <div className="justify-end">
+              <ServiceButton
+                onClick={() => {}}
+                text="UPGRADE"
+                className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+              />
             </div>
           </div>
-          <div className="justify-end">
-            <ServiceButton
-              onClick={() => {}}
-              text="UPGRADE"
-              className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+          {/* Plan Details */}
+          <div className="ml-[30px] mb-9">
+            <PlanDetailsCard planDetails={planData} />
+          </div>
+          {/* Pricing Details */}
+          <div className="ml-[30px] mb-4">
+            <ScrollNav
+              arrayData={arrayData}
+              showNumber={false}
+              setScrollIndex={setScrollIndex}
             />
           </div>
-        </div>
-        {/* Plan Details */}
-        <div className="ml-[30px] mb-9">
-          <PlanDetailsCard planDetails={planData} />
-        </div>
-        {/* Pricing Details */}
-        <div className="ml-[30px] mb-4">
-          <ScrollNav
-            arrayData={arrayData}
-            showNumber={false}
-            setScrollIndex={setScrollIndex}
-          />
-        </div>
-        {renderingComponents === 0 && <CourierPricing />}
+          {renderingComponents === 0 && <CourierPricing />}
 
-        {/* Info Cards */}
-        <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
-          <InfoCards title="Custom Label Usage" numerator={3} denominator={5} />
-          <InfoCards
-            title="Total Shipments"
-            numerator={250}
-            isShipments={true}
-          />
-          <InfoCards
-            title="Utilized Courier Partners"
-            numerator={23}
-            denominator={30}
-          />
-          <InfoCards
-            title="Integrated Channels"
-            numerator={23}
-            denominator={30}
-          />
-        </div>
-        {/*Active Recommended */}
+          {/* Info Cards */}
+          <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
+            <InfoCards
+              title="Custom Label Usage"
+              numerator={3}
+              denominator={5}
+            />
+            <InfoCards
+              title="Total Shipments"
+              numerator={250}
+              isShipments={true}
+            />
+            <InfoCards
+              title="Utilized Courier Partners"
+              numerator={23}
+              denominator={30}
+            />
+            <InfoCards
+              title="Integrated Channels"
+              numerator={23}
+              denominator={30}
+            />
+          </div>
+          {/*Active Recommended */}
 
-        <div className="ml-[30px] ">
-          <CustomTable
-            data={activeData}
-            columns={activeColumns}
-            thclassName={"border-none bg-white"}
-            tdclassName={"border-none "}
-            trclassName={"shadow-none"}
-          />
-        </div>
-        {/*Pricing Table */}
-        <div className="ml-[30px] ">
-          <CustomTable
-            columns={pricingColumns}
-            data={pricingData}
-            tdclassName={"def"}
-            thclassName={"bg-white"}
-          />
-        </div>
-        {/* Change-Upgrade Plans */}
+          <div className="ml-[30px] ">
+            <CustomTable
+              data={activeData}
+              columns={activeColumns}
+              thclassName={"border-none bg-white"}
+              tdclassName={"border-none "}
+              trclassName={"shadow-none"}
+            />
+          </div>
+          {/*Pricing Table */}
+          <div className="ml-[30px] ">
+            <CustomTable
+              columns={pricingColumns}
+              data={pricingData}
+              tdclassName={"def"}
+              thclassName={"bg-white"}
+            />
+          </div>
+          {/* Change-Upgrade Plans */}
 
-        <div className="ml-[30px]">
-          <CustomTable
-            data={changePlansData}
-            columns={changePlansColumns}
-            thclassName={"border-none bg-white"}
-            tdclassName={"border-none "}
-            trclassName={"shadow-none"}
-          />
-        </div>
-        {/* Features Table */}
-        <div className="ml-[30px] mb-[68px] ">
-          <CustomTable
-            columns={featuresColumns}
-            data={featuresData}
-            tdclassName={"def"}
-            thclassName={"border-none bg-white"}
-          />
-        </div>
-        <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF] ml-[30px] mb-6">
-          <p className="font-Lato font-semibold text-xl leading-[26px] text-[#494949]">
-            Not sure which plan to choose?
-          </p>
-          <ServiceButton
-            className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
-            text="TALK TO OUR SUPPORT"
-            onClick={() => {}}
-          />
-        </div>
+          <div className="ml-[30px]">
+            <CustomTable
+              data={changePlansData}
+              columns={changePlansColumns}
+              thclassName={"border-none bg-white"}
+              tdclassName={"border-none "}
+              trclassName={"shadow-none"}
+            />
+          </div>
+          {/* Features Table */}
+          <div className="ml-[30px] mb-[68px] ">
+            <CustomTable
+              columns={featuresColumns}
+              data={featuresData}
+              tdclassName={"def"}
+              thclassName={"border-none bg-white"}
+            />
+          </div>
+          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF] ml-[30px] mb-6">
+            <p className="font-Lato font-semibold text-xl leading-[26px] text-[#494949]">
+              Not sure which plan to choose?
+            </p>
+            <ServiceButton
+              className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+              text="TALK TO OUR SUPPORT"
+              onClick={() => {}}
+            />
+          </div>
 
-        {/* Terms & Conditions */}
+          {/* Terms & Conditions */}
 
-        <div className="ml-[30px]">
-          <CustomAccordianWithTable
-            dummyDatas={DummyData}
-            title="Terms & Conditions"
-            isIcon={true}
-            icon={TermsAndConditionsIcon}
-            data={termsAndConditionsData}
-            columns={termsAndConditionsColumns}
-          />
+          <div className="ml-[30px]">
+            <CustomAccordianWithTable
+              dummyDatas={DummyData}
+              title="Terms & Conditions"
+              isIcon={true}
+              icon={TermsAndConditionsIcon}
+              data={termsAndConditionsData}
+              columns={termsAndConditionsColumns}
+            />
+          </div>
+
+          {/* end here */}
         </div>
-
-        {/* end here */}
-      </div>
+      ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
     </>
   );
 };
