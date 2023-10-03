@@ -7,7 +7,7 @@ import { SignupSlice } from "./reducers/signUpReducer";
 import { SignInSlice } from "./reducers/signInReducer";
 import { catalogueSlice } from "./reducers/catalogue";
 import { onboardingSlice } from "./reducers/onboarding";
-import { Enviornment } from "../utils/ApiUrls";
+import { Environment } from "../utils/ApiUrls";
 
 export const store = configureStore({
   reducer: {
@@ -20,7 +20,7 @@ export const store = configureStore({
     catalogue: catalogueSlice.reducer,
     onboarding: onboardingSlice.reducer,
   },
-  devTools: Enviornment !== "production" ? true : false,
+  devTools: Environment !== "production" ? true : false,
 });
 
 export type RootState = ReturnType<typeof store.getState>;

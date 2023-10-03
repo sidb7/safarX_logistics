@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CheckoutProvider, Checkout } from "paytm-blink-checkout-react";
 import { POST } from "../utils/webService";
 import {
-  Enviornment,
+  Environment,
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
 } from "../utils/ApiUrls";
@@ -13,7 +13,7 @@ function Paytm({ text, amt, navigate, isDisabled }) {
   let mid = "";
   let website = "";
   let env = "";
-  if (Enviornment === "production") {
+  if (Environment === "production") {
     urlLink = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
     mid = "Shipya54880889423475";
     website = "DEFAULT";

@@ -1,4 +1,4 @@
-export let Enviornment = "";
+export let Environment = "";
 export let SELLER_WEB_URL = "";
 let SELLER_URL = "";
 let PARTNER_URL = "";
@@ -8,9 +8,9 @@ let LANDMARK_URL = "";
 let TRACKING_URL = "";
 
 // Environment Declaration
-Enviornment = process.env.REACT_APP_ENV || "development";
+Environment = process.env.REACT_APP_ENV || "development";
 
-switch (Enviornment) {
+switch (Environment) {
   case "development":
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
