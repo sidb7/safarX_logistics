@@ -25,15 +25,21 @@ export const SettingTab = () => {
   const [isPassModalOpen, setIsPassModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // const navigateTo = (text?: string) => {
+  //   if (!isItLgScreen) {
+  //     if (text === "settings")
+  //       navigate("/profile/profile-setting-change-password");
+  //     else navigate("/profile/profile-setting-edit-profile");
+  //   } else {
+  //     if (text === "settings") {
+  //       setIsPassModalOpen(true);
+  //     } else setIsProfileModalOpen(true);
+  //   }
+  // };
+
   const navigateTo = (text?: string) => {
-    if (!isItLgScreen) {
-      if (text === "settings")
-        navigate("/profile/profile-setting-change-password");
-      else navigate("/profile/profile-setting-edit-profile");
-    } else {
-      if (text === "settings") {
-        setIsPassModalOpen(true);
-      } else setIsProfileModalOpen(true);
+    if (text === "settings") {
+      setIsPassModalOpen(true);
     }
   };
 

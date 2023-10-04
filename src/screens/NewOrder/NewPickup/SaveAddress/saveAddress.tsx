@@ -129,8 +129,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
       <RightSideModal
         isOpen={isRightAddressTypeModal}
         onClose={() => setIsRightAddressTypeModal(false)}
-        className="top-[70%] w-full md:!w-[389px] 	;
-"
+        className="top-[70%] w-full md:!w-[389px];"
       >
         <ModalContent
           title="Save Address Type as"

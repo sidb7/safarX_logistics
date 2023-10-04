@@ -22,9 +22,14 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import "../../../styles/signupPages.css";
 import { Spinner } from "flowbite-react";
-
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 interface ITypeProps {
   onClick?: any;
+}
+interface PasswordVisibility {
+  newPassword: boolean;
+  confirmNewPassword: boolean;
 }
 
 const ForgotPassword = (props: ITypeProps) => {
@@ -46,6 +51,11 @@ const ForgotPassword = (props: ITypeProps) => {
     oldPassword: "",
     newPassword: "",
     confirmNewPassword: "",
+  });
+
+  const [viewPassword, setViewPassword] = useState<PasswordVisibility>({
+    newPassword: false,
+    confirmNewPassword: false,
   });
 
   const [mobileNumber, setMobileNumber] = useState({
@@ -202,6 +212,13 @@ const ForgotPassword = (props: ITypeProps) => {
     );
   };
 
+  const togglePasswordVisibility = (field: keyof PasswordVisibility) => {
+    setViewPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
   return (
     <div className="flex flex-col gap-y-8 mx-5 lg:h-screen lg:w-full  overflow-auto">
       {modalTitle()}
@@ -287,21 +304,34 @@ const ForgotPassword = (props: ITypeProps) => {
           <>
             <CustomInputBox
               label="New Password"
-              inputType="password"
               maxLength={12}
+              inputType={viewPassword.newPassword ? "text" : "password"}
+              isRightIcon={true}
+              visibility={viewPassword.newPassword}
+              setVisibility={() => togglePasswordVisibility("newPassword")}
+              rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+              onClick={() => {}}
               onChange={(e) =>
                 setPassword({ ...password, newPassword: e.target.value })
               }
             />
             <CustomInputBox
               label="Re-enter New Password"
-              inputType="password"
+              inputType={viewPassword.confirmNewPassword ? "text" : "password"}
+              isRightIcon={true}
               maxLength={12}
+              visibility={viewPassword.confirmNewPassword}
+              rightIcon={
+                viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon
+              }
+              setVisibility={() =>
+                togglePasswordVisibility("confirmNewPassword")
+              }
+              onClick={() => {}}
               onChange={(e) =>
                 setPassword({ ...password, confirmNewPassword: e.target.value })
               }
             />
-
             <CustomButton
               onClick={updatePasswordData}
               text="Update Password"
