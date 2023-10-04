@@ -326,7 +326,7 @@ const Payment = () => {
   return (
     <div className="w-full">
       <Breadcrum label="Add New Order" />
-      <div className="lg:mb-8">
+      <div className=" mb-4 lg:mb-8">
         <Stepper steps={steps} />
       </div>
       <div className="inline-flex space-x-2 items-center px-5">
@@ -393,7 +393,7 @@ const Payment = () => {
                       // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
                     >
                       <p
-                        className={`text-[16px] ${
+                        className={`text-[12px] ${
                           walletValue === el?.value
                             ? "!text-[#004EFF]"
                             : "text-[#000000]"

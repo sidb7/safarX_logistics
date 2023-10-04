@@ -34,7 +34,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
 }) => {
   return (
     <div
-      className={` ${className} product-box flex items-center border-2 rounded-md h-20 relative ${
+      className={` ${className} product-box flex items-center border-2 rounded-md h-20 min-w-[200px] relative ${
         isSelected && "border-[#004EFF]"
       }`}
       onClick={onClick}
@@ -63,7 +63,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
             className="w-4 mx-2"
           />
         </div>
-        <span className="flex ">
+        <span className="flex text-[12px] lg:text-[14px] ">
           {`${weight} | ${length} x ${breadth} x ${height} cm`}
         </span>
       </div>

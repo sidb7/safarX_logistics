@@ -378,7 +378,7 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="flex gap-4 p-2">
+          <div className="flex gap-4 p-2 mb-[20%]">
             <div>
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox

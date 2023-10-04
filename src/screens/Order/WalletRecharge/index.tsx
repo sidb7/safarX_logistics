@@ -301,7 +301,7 @@ const WalletRecharge = () => {
                           // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
                         >
                           <p
-                            className={`text-[16px] ${
+                            className={`text-[12px] ${
                               walletValue === el?.value
                                 ? "!text-[#004EFF]"
                                 : "text-[#000000]"

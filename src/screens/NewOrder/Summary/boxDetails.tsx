@@ -46,7 +46,7 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
           </div>
         </div>
         <div className="ml-[25px] mb-[10px]">
-          <p className="text-[12px] font-medium  font-Open lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium  font-Open lg:text-[16px] font-semibold">
             Box Count: {boxInfo.length}
           </p>
         </div>
@@ -61,7 +61,7 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
               }`}
               onClick={() => toggleBox(index)}
             >
-              <p className="text-[12px] font-medium ml-[5px] font-Open lg:text-[16px] lg:font-semibold">
+              <p className="text-[12px] font-medium ml-[5px] font-Open lg:text-[16px] font-semibold">
                 Box Name: {box?.name}
               </p>
               <svg
