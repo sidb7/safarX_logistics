@@ -415,7 +415,7 @@ const Index = () => {
       {isActive ? (
         <div>
           <Breadcrum label="Orders" component={Buttons()} />
-          {isLgScreen && (
+          {
             <div className="pl-5 pr-6">
               <OrderStatus
                 filterId={filterId}
@@ -466,7 +466,7 @@ const Index = () => {
                 </div>
               )}
             </div>
-          )}
+          }
         </div>
       ) : (
         <AccessDenied />
