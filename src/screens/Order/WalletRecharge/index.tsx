@@ -626,7 +626,7 @@ const WalletRecharge = () => {
                 </div>
               </div>
               <div
-                className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[100px] font-medium max-sm:font-normal"
+                className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[40px] font-medium max-sm:font-normal"
                 onClick={() => navigate('/wallet/transaction-history')}
               >
                 <p className="text-[24px] max-sm:text-[20px]"> View Transaction History</p>
@@ -634,7 +634,6 @@ const WalletRecharge = () => {
                   src={leftArrow}
                   alt=""
                   className="lg:w-[28px] cursor-pointer"
-                  onClick={() => navigate(-1)}
                 />
               </div>
             </div>

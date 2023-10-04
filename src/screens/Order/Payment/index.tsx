@@ -108,7 +108,9 @@ const Payment = () => {
           removeLocalStorage("phonePeTransactionId");
           window.location.reload();
         }
-      } catch (error) { }
+      } catch (error: any) {
+        console.log(error.message)
+      }
     })();
   }, []);
 

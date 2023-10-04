@@ -168,25 +168,33 @@ export const Transaction = () => {
                 <div className="lg:hidden">
                   {
                     data.length && data.map((passbookData: any, index) => (
-                      <div className="mt-4">
+                      <div className="mt-4" key={`${index}_${passbookData?.transactionId}`}>
                         <PassbookHistory
                           data={{
-                            title: `Shipyaari - ${passbookData.transactionId}`,
+                            title: passbookData.transactionId,
                             rupee: "500",
                             date: "July 9, 2023",
-                            credited: passbookData.type === "credit" ? passbookData.amount : "0",
-                            debited: passbookData.type === "credit" ? "0" : passbookData.amount,
-                            balance: passbookData.balance,
+                            credited: passbookData?.type === "credit" ? passbookData.amount : "0",
+                            debited: passbookData?.type === "credit" ? "0" : passbookData.amount,
+                            balance: passbookData?.balance,
+                            status: passbookData?.status,
+                            paymentGatewayName: passbookData?.paymentGatewayName,
+                            privateCompanyId: passbookData?.privateCompanyId,
+                            remark: passbookData.remark,
+                            discription: passbookData.description,
+                            orderId: passbookData.orderId,
+                            amount: passbookData.amount,
                             slabAmount: "0",
                             redeemAmount: "0",
                             redeemPoint: "0",
+                            type: passbookData?.type,
                           }}
                         />
                       </div>
                     ))
                   }
 
-                  <div className="mt-4">
+                  {/* <div className="mt-4">
                     <CashbackHistory
                       data={{
                         title: "May 23- 2023 COUPON",
@@ -197,7 +205,7 @@ export const Transaction = () => {
                           "Rs. 3000 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
                       }}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div>
                   {isLgScreen && (
