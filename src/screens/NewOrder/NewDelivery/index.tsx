@@ -267,6 +267,7 @@ const DeliveryLocation = () => {
     }
   }, [userType]);
 
+  console.log("deliverypayload", deliveryAddress);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
