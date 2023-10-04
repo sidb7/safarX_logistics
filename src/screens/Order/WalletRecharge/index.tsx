@@ -12,6 +12,7 @@ import CustomInputBox from "../../../components/Input";
 import discountIcon from "../../../assets/Payment/discount-shape.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import leftArrow from "../../../assets/leftArrow.svg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -45,6 +46,7 @@ import {
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 import { Spinner } from "../../../components/Spinner";
+// import BackArrowIcon from "../../../assets/backArrow.svg";
 // import PhonePeModal from "../../../components/CustomModal/PhonePeModal";
 import {
   getLocalStorage,
@@ -251,7 +253,7 @@ const WalletRecharge = () => {
                 Payment
               </p>
             </div>
-            <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
+            <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] max-sm:rounded-none flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
               <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
                 <p
                   className={`${
@@ -287,7 +289,7 @@ const WalletRecharge = () => {
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
                   </p>
-                  <div className="grid grid-cols-4 gap-8 text-center">
+                  <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                     {moneyArr?.map((el: any, i: number) => {
                       return (
                         <div
@@ -552,7 +554,7 @@ const WalletRecharge = () => {
                 </div>
               </div>
               {/* Payment Gateway */}
-              <div className="lg:grid grid-cols-2 mb-[130px]">
+              <div className="lg:grid grid-cols-2 mb-[30px]">
                 <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
                   <div className="flex  gap-x-2 text-[14px]">
                     <img src={rechargeIcon} alt="" className="object-contain" />
@@ -597,7 +599,7 @@ const WalletRecharge = () => {
                         } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                         onClick={handlePhonePeTransaction}
                       >
-                        <p className=" buttonClassName lg:text-[14px] whitespace-nowrap">
+                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
                           PhonePe
                         </p>
                       </button>
@@ -627,6 +629,20 @@ const WalletRecharge = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div
+                className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[40px] font-medium max-sm:font-normal"
+                onClick={() => navigate("/wallet/transaction-history")}
+              >
+                <p className="text-[24px] max-sm:text-[20px]">
+                  {" "}
+                  View Transaction History
+                </p>
+                <img
+                  src={leftArrow}
+                  alt=""
+                  className="lg:w-[28px] cursor-pointer"
+                />
               </div>
             </div>
             {/* Need to implement this on Modal hence Kept as comment for future modification */}
