@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import CustomInputWithImage from "../../../../components/InputWithImage/InputWithImage";
 import { parse } from "date-fns";
-
-//Icon
+import { useMediaQuery } from "react-responsive";
+import "../../../../styles/bottomSheetForMobile.css";
+// Icon
 import CalenderIcon from "../../../../assets/calendar.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
 import SelectDateModalContent from "../../PickUp/selectDateModal";
-import CustomInputWithIcon from "../../../../components/CustomInputWithIcon/CustomInputWithIcon";
 
 interface IPickupDateProps {
   epochPickupDate: any;
@@ -15,8 +15,11 @@ interface IPickupDateProps {
 const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
   epochPickupDate,
 }) => {
+  const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
+
   const [isDateRightModal, setIsDateRightModal] = useState(false);
   const [pickupDate, setPickupDate] = useState("");
+
   function convertToEpoch(dateTimeString: any) {
     const parsedDateTime = parse(
       dateTimeString,
@@ -46,7 +49,9 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
       <RightSideModal
         isOpen={isDateRightModal}
         onClose={() => setIsDateRightModal(false)}
-        className="w-full md:!w-[389px]"
+        className={`w-full ${
+          isLgScreen ? "md:!w-[389px]" : "mobile-modal-styles"
+        }`}
       >
         <SelectDateModalContent
           onClick={() => setIsDateRightModal(false)}
