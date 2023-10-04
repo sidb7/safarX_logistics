@@ -104,6 +104,7 @@ function PassModal(props: PassModalProps) {
             label="New Password"
             inputType={viewPassword.newPassword ? "text" : "password"}
             isRightIcon={true}
+            maxLength={12}
             visibility={viewPassword.newPassword}
             rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
@@ -116,6 +117,7 @@ function PassModal(props: PassModalProps) {
             label="Re-enter New Password"
             inputType={viewPassword.confirmNewPassword ? "text" : "password"}
             isRightIcon={true}
+            maxLength={12}
             visibility={viewPassword.confirmNewPassword}
             rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
