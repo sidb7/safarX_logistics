@@ -60,6 +60,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
             setDeliveryAddress((prevData: any) => ({
               ...prevData,
               orderType: "B2C",
+              gstNumber: "",
               deliveryAddress: {
                 ...prevData.deliveryAddress,
                 recipientType: "consumer",

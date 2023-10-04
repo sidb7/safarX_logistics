@@ -173,7 +173,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
       </div>
 
       {showDatePicker ? (
-        <div className=" lg:block mb-7 w-full lg:ml-5">
+        <div className=" lg:block  w-full lg:ml-5">
           <CustomDatePicker onSelect={handleScheduleDateTimeChange} />
         </div>
       ) : (
@@ -188,7 +188,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
         </div>
       )}
 
-      <div className="lg:hidden">
+      <div className="lg:hidden ">
         <Button text="Save" onClick={onClick} />
       </div>
 

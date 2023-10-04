@@ -139,7 +139,7 @@ const Tracking = () => {
 
   useEffect(() => {
     handleTrackOrderClick();
-  }, [trackingNo]);
+  }, []);
 
   console.log("trackingNo", trackingNo);
   console.log("trackingState", trackingState);

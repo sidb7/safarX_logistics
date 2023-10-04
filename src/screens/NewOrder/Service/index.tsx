@@ -227,10 +227,10 @@ const Index: React.FC = () => {
       if (response?.success) {
         setResponse(response);
 
-        let options = response?.data.map((service: any) => {
+        let options = response?.data.map((service: any, index: number) => {
           return {
             text: service,
-            value: service?.companyServiceId,
+            value: index,
           };
         });
 
@@ -258,16 +258,12 @@ const Index: React.FC = () => {
       return;
     }
 
-    let tempPayalod = response.data?.filter(
-      (service: any) => service?.companyServiceId === selectedService
-    );
-
     let {
       partnerServiceId,
       partnerServiceName,
       companyServiceId,
       companyServiceName,
-    } = tempPayalod[0];
+    } = response.data[selectedService];
 
     const payload = {
       partnerServiceId,
@@ -275,6 +271,7 @@ const Index: React.FC = () => {
       companyServiceId,
       companyServiceName,
     };
+
     try {
       const { data: response } = await POST(SET_PARTNER_SERVICE_INFO, payload);
 
@@ -378,7 +375,7 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="flex gap-4 p-2">
+          <div className="flex gap-4 p-2 mb-[20%]">
             <div>
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox
