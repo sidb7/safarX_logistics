@@ -105,6 +105,7 @@ const Index = (props: ITypeProps) => {
   const resentGstOtp = async () => {
     try {
       const payload = { gstIn: gstNo };
+      console.log("resendpayload", payload);
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {

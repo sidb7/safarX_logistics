@@ -57,7 +57,7 @@ const Index = (props: ITypeProps) => {
       return null;
     }
 
-    const panNumber = gstNumber.substring(2, 12);
+    const panNumber = gstNumber.substring(2, 13);
     setPanNumber(panNumber);
     return panNumber;
   }
@@ -66,7 +66,6 @@ const Index = (props: ITypeProps) => {
     if (gstNumber !== "" && gstNumber !== undefined) {
       if (validateGST(gstNumber)) {
         extractPANFromGST(gstNumber);
-
         setgstError("");
       } else {
         setgstError("Enter Valid GST Number");
@@ -125,6 +124,7 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
+        setgstError("");
       } else {
         setLoading(false);
 
