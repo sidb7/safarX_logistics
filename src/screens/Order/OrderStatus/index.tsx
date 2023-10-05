@@ -109,7 +109,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         }
       }, 800);
     } catch (error: any) {
-      console.log("Error in OrderStatus Debouncing: ", error.message);
+      console.warn("Error in OrderStatus Debouncing: ", error.message);
     }
   };
 

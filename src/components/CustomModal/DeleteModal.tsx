@@ -7,7 +7,7 @@ import { useState } from "react";
 
 interface IDeleteProps {
   isOpen: boolean;
-  setModal: any;
+  setModalClose: any;
   deleteTextMessage?: string;
   deleteURL?: any;
   payloadBody?: any;
@@ -15,31 +15,31 @@ interface IDeleteProps {
 }
 
 const DeleteModal = (props: IDeleteProps) => {
-  const { isOpen, setModal, deleteTextMessage, deleteURL, payloadBody } = props;
+  const { isOpen, setModalClose, deleteTextMessage, deleteURL, payloadBody } =
+    props;
   const [loading, setLoading] = useState(false);
 
   const deleteApi = async () => {
     setLoading(true);
-    const { data } = await POST(deleteURL, payloadBody);
+    const { data } = await POST(deleteURL, { awbNo: payloadBody });
     if (data?.success) {
-      // toast.success(data?.message);
-      setModal(false);
     } else {
       toast.error(data?.message);
     }
     setLoading(false);
+    setModalClose();
   };
 
   return (
     <div>
       <CustomeBottomModal
         isOpen={isOpen}
-        onRequestClose={() => setModal(false)}
+        onRequestClose={() => setModalClose()}
         overlayClassName="flex p-5 items-center outline-none"
         className="!w-[600px] !px-4 !py-6"
       >
         <div className="flex justify-end cursor-pointer">
-          <img src={CloseIcon} alt="" onClick={() => setModal(false)} />
+          <img src={CloseIcon} alt="" onClick={() => setModalClose()} />
         </div>
         <div className="flex justify-center">
           <img src={DeleteGif} alt="" />
@@ -50,7 +50,7 @@ const DeleteModal = (props: IDeleteProps) => {
           </p>
           <div className="flex justify-center gap-x-6 my-6">
             <button
-              onClick={() => setModal(false)}
+              onClick={() => setModalClose()}
               type="submit"
               className="bg-white border-2 border-[#A4A4A4] text-[#1C1C1C] px-4 py-2 text-sm font-semibold rounded shadow-md"
             >

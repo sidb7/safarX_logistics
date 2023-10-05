@@ -26,7 +26,7 @@ import { insufficientBalance } from "../../utils/dummyData";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
-import { GET_SELLER_ORDER } from "../../utils/ApiUrls";
+import { CANCEL_WAY_BILL, GET_SELLER_ORDER } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../components/Layout/breadcrum";
@@ -35,6 +35,7 @@ import BulkUpload from "./BulkUpload/BulkUpload";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
+import DeleteModal from "../../components/CustomModal/DeleteModal";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -94,47 +95,52 @@ const Buttons = (className?: string) => {
 const tabs = [
   {
     statusName: "Draft",
-    value: "draft",
+    value: "DRAFT",
     orderNumber: 0,
   },
   {
     statusName: "Booked",
-    value: "booked",
+    value: "BOOKED",
     orderNumber: 0,
   },
   {
     statusName: "Ready to Pick",
-    value: "readyToPick",
+    value: "READYTOPICK",
     orderNumber: 0,
   },
   {
     statusName: "Picked Up",
-    value: "pickedUp",
+    value: "PICKEDUP",
     orderNumber: 0,
   },
   {
     statusName: "In Transit",
-    value: "inTransit",
+    value: "INTRANSIT",
     orderNumber: 0,
   },
   {
     statusName: "Destination City",
-    value: "destinationCity",
+    value: "DESTINATIONCITY",
     orderNumber: 0,
   },
   {
     statusName: "Out of Delivery",
-    value: "outOfDelivery",
+    value: "OUTOFDELIVERY",
     orderNumber: 0,
   },
   {
     statusName: "Delivered",
-    value: "delivered",
+    value: "DELIVERED",
     orderNumber: 0,
   },
   {
     statusName: "Return",
-    value: "return",
+    value: "RETURN",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Cancelled",
+    value: "CANCELLED",
     orderNumber: 0,
   },
 ];
@@ -148,6 +154,10 @@ const Index = () => {
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
+  const [cancellationModal, setCancellationModal]: any = useState({
+    isOpen: false,
+    awbNo: "",
+  });
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -249,7 +259,7 @@ const Index = () => {
   const currentSettings = isMobileView ? mobileSettings : desktopSettings;
 
   const getSellerOrderByStatus = async (
-    currentStatus = "draft",
+    currentStatus = "DRAFT",
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
@@ -294,7 +304,9 @@ const Index = () => {
       setGlobalIndex(index);
 
       statusList.forEach((e1: any) => {
-        const matchingStatus = statusData.find((e: any) => e.value === e1._id);
+        const matchingStatus = statusData.find(
+          (e: any) => e.value === e1._id.toUpperCase()
+        );
         if (matchingStatus) {
           matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
@@ -304,13 +316,18 @@ const Index = () => {
       });
 
       switch (tabs[index].value) {
-        case "draft":
+        case "DRAFT":
           setColumnhelper(columnHelperForNewOrder(navigate));
           break;
-        case "booked":
-          setColumnhelper(ColumnHelperForBookedAndReadyToPicked(navigate));
+        case "BOOKED":
+          setColumnhelper(
+            ColumnHelperForBookedAndReadyToPicked(
+              navigate,
+              setCancellationModal
+            )
+          );
           break;
-        case "readyToPick":
+        case "READYTOPICK":
           setColumnhelper(ColumnHelperForBookedAndReadyToPicked(navigate));
           break;
         default:
@@ -378,7 +395,7 @@ const Index = () => {
   };
 
   const getSellerOrder = async (
-    currentStatus = "draft",
+    currentStatus = "DRAFT",
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
@@ -395,7 +412,9 @@ const Index = () => {
 
       const { statusList } = data?.data?.[0];
 
-      let countObj = statusList.find((elem: any) => elem._id === currentStatus);
+      let countObj = statusList.find(
+        (elem: any) => elem._id.toUpperCase() === currentStatus
+      );
 
       setTotalcount(countObj ? countObj.count : 0);
 
@@ -471,6 +490,15 @@ const Index = () => {
       ) : (
         <AccessDenied />
       )}
+      <DeleteModal
+        isOpen={cancellationModal.isOpen}
+        setModalClose={() =>
+          setCancellationModal({ ...cancellationModal, isOpen: false })
+        }
+        deleteTextMessage="Are You Sure You Want To Cancel This Order?"
+        payloadBody={cancellationModal.awbNo}
+        deleteURL={CANCEL_WAY_BILL}
+      />
     </>
   );
 };
