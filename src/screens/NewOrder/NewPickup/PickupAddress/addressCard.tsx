@@ -145,12 +145,30 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     pincode: address.pincode,
   };
 
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   const postServicablePincode = async (payload: any) => {
     try {
       const { data: response } = await POST(GET_PINCODE_DATA, payload);
 
       if (response?.success) {
         console.log("pincodeResponse", response);
+
+        const pincodeData = response.data[0];
+
+        const addressName: any =
+          addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+        setPickupAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            city: toPascalCase(pincodeData.city) || "",
+            state: toPascalCase(pincodeData.state) || "",
+            country: "India",
+          },
+        }));
       }
     } catch (error) {
       console.error("Error in ServicablePincode API", error);

@@ -166,7 +166,7 @@ const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocat
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
 //Pincode Data for Address
-const GET_PINCODE_DATA = `${PARTNER_BASE_URL}/pincodes/getPincodeDetails`;
+const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
 
 
 //Plan
