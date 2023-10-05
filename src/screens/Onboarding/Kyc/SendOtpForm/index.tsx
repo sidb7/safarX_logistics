@@ -63,13 +63,9 @@ const Index = (props: ITypeProps) => {
   }
 
   useEffect(() => {
-    if (gstNumber !== "" && gstNumber !== undefined) {
-      if (validateGST(gstNumber)) {
-        extractPANFromGST(gstNumber);
-        setgstError("");
-      } else {
-        setgstError("Enter Valid GST Number");
-      }
+    if (gstNumber) {
+      extractPANFromGST(gstNumber);
+      setgstError("");
     }
   }, [gstNumber]);
 
@@ -124,7 +120,7 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
-        setgstError("");
+        // setgstError("");
       } else {
         setLoading(false);
 
@@ -248,6 +244,11 @@ const Index = (props: ITypeProps) => {
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
+                    if (gstRegex.test(e.target.value.toUpperCase())) {
+                      setgstError("");
+                    } else {
+                      setgstError("Enter Valid GST Number");
+                    }
                     setGSTNumber(e.target.value.toUpperCase());
                   }}
                 />
@@ -312,6 +313,8 @@ const Index = (props: ITypeProps) => {
     );
   };
 
+  console.log("gstNo", gstNumber);
+  console.log("panNO", panNumber);
   return (
     <div>
       {!isBigScreen && sendOtpFormComponent()}
