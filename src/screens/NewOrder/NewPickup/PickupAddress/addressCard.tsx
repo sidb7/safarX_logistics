@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomDropDown from "../../../../components/DropDown";
 import CustomInputBox from "../../../../components/Input";
 import AudioInputBox from "../../../../components/AudioInput/AudioInputBox";
@@ -8,7 +8,7 @@ import CustomInputWithDropDown from "../../../../components/LandmarkDropdown/Lan
 import Map from "../../../NewOrder/Map";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router";
-import { VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
+import { GET_PINCODE_DATA, VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { dummyStateDropdownData } from "../../../../utils/dummyData";
 import { CommonBottomModal } from "../../../../components/CustomModal/commonBottomModal";
@@ -71,6 +71,14 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       ...prevData,
       [addressName]: { ...prevData[addressName], [fieldName]: value },
     }));
+
+    if (fieldName === "pincode" && value.length === 6) {
+      const payload = {
+        pincode: value,
+      };
+
+      postServicablePincode(payload);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +138,41 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
       getVerifyAddress(verifyAddressPayload);
       setPrevPastedData(trimmedData);
+    }
+  };
+
+  const payload = {
+    pincode: address.pincode,
+  };
+
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
+  const postServicablePincode = async (payload: any) => {
+    try {
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.success) {
+        console.log("pincodeResponse", response);
+
+        const pincodeData = response.data[0];
+
+        const addressName: any =
+          addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+        setPickupAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            city: toPascalCase(pincodeData.city) || "",
+            state: toPascalCase(pincodeData.state) || "",
+            country: "India",
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error in ServicablePincode API", error);
+      return error;
     }
   };
 

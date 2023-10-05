@@ -107,7 +107,8 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-
+  const invoiceValue = latestOrder?.data?.[0]?.service?.total;
+  console.log("invoiceValue", invoiceValue);
   const setOrderIdApi = async () => {
     try {
       let payload = { orderId: orderId, ewaybillNumber: ewaybillNumber };
@@ -122,6 +123,11 @@ const Summary = (props: Props) => {
       let promisePlaceOrder = new Promise(function (resolve, reject) {
         resolve(placeOrderPromise);
       });
+
+      if (invoiceValue >= 50000) {
+        toast.error("Please enter eway-bill No.");
+        return;
+      }
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
