@@ -267,7 +267,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       },
     };
 
-
     if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
       toast.error("COD collectable Amount Cannot Be Zero");
       return;
@@ -336,7 +335,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex  gap-x-3 ">
+          <div className="flex  gap-x-3 flex-nowrap overflow-x-scroll ">
             {products.length > 0 ? (
               products?.map((e: any, index: number) => {
                 return (
@@ -409,7 +408,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   </div>
                 </div>
                 <div
-                  className="flex justify-center items-center w-full p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
                   style={{
                     boxShadow:
                       "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -445,7 +444,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
             <div className="flex gap-x-3  ">
               <div
-                className={`relative border-[1px] p-16 rounded ${
+                className={`relative z-1 border-[1px] p-16 rounded ${
                   selectInsurance.isInsurance === true
                     ? "border-[#1C1C1C]"
                     : "border-[#EAEAEA]"
@@ -610,7 +609,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
         </div>
         <RightSideModal
-          className="w-[400px]"
+          className=" w-full lg:w-[400px]"
           wrapperClassName="rounded-l-xl"
           isOpen={boxTypeModal}
           onClose={() => setBoxTypeModal(false)}
@@ -720,14 +719,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   onClick={() => {
                     setBoxTypeModal(false);
                   }}
-                  className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+                  className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4 "
                 />
                 <ServiceButton
                   text={"SAVE"}
                   onClick={() => {
                     handleBoxType();
                   }}
-                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
+                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
                 />
               </div>
             </div>

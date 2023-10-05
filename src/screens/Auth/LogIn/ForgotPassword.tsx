@@ -21,9 +21,15 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import "../../../styles/signupPages.css";
-
+import { Spinner } from "flowbite-react";
+import EyeIcon from "../../../assets/Login/eye.svg";
+import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 interface ITypeProps {
   onClick?: any;
+}
+interface PasswordVisibility {
+  newPassword: boolean;
+  confirmNewPassword: boolean;
 }
 
 const ForgotPassword = (props: ITypeProps) => {
@@ -47,12 +53,19 @@ const ForgotPassword = (props: ITypeProps) => {
     confirmNewPassword: "",
   });
 
+  const [viewPassword, setViewPassword] = useState<PasswordVisibility>({
+    newPassword: false,
+    confirmNewPassword: false,
+  });
+
   const [mobileNumber, setMobileNumber] = useState({
     mobileNo: 0,
   });
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(30);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -63,6 +76,7 @@ const ForgotPassword = (props: ITypeProps) => {
 
   const postForgotPasswordData = async () => {
     try {
+      setLoading(true);
       const { data: response } = await POST(FORGOT_PASSWORD, formData);
 
       if (response?.success) {
@@ -76,6 +90,8 @@ const ForgotPassword = (props: ITypeProps) => {
     } catch (error) {
       console.error("Error in ForgotPasswordAPI", error);
       return error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,6 +185,7 @@ const ForgotPassword = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response.message);
+        onClick();
       } else {
         toast.error(response?.message);
       }
@@ -195,16 +212,23 @@ const ForgotPassword = (props: ITypeProps) => {
     );
   };
 
+  const togglePasswordVisibility = (field: keyof PasswordVisibility) => {
+    setViewPassword((prevState) => ({
+      ...prevState,
+      [field]: !prevState[field],
+    }));
+  };
+
   return (
-    <div className="flex flex-col gap-y-8 lg:h-screen lg:w-full  overflow-auto">
-      {isLgScreen && modalTitle()}
-      <div className="product-box flex items-center lg:hidden">
+    <div className="flex flex-col gap-y-8 mx-5 lg:h-screen lg:w-full  overflow-auto">
+      {modalTitle()}
+      {/* <div className="product-box flex items-center lg:hidden">
         <img
           className="m-4 h-[25px] object-contain"
           src={CompanyLogo}
           alt="CompanyLogo"
         />
-      </div>
+      </div> */}
 
       <div className="flex flex-col  mx-4 gap-y-8">
         <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
@@ -215,7 +239,7 @@ const ForgotPassword = (props: ITypeProps) => {
         </p>
       </div>
 
-      <div className="flex flex-col ml-40 mt-4 w-[70%] gap-y-4">
+      <div className="flex flex-col md:ml-40 md:mt-4 md:w-[70%] gap-y-4">
         <CustomInputBox
           label="Enter Email"
           name="email"
@@ -229,68 +253,89 @@ const ForgotPassword = (props: ITypeProps) => {
           className={`mt-4 ${emailVerified ? "bg-gray-300" : ""}`}
           disabled={emailVerified}
         />
-        {emailVerified && (
-          <>
-            <CustomInputBox
-              value={otp.forgotPasswordOtp}
-              maxLength={6}
-              containerStyle="mt-[32px]"
-              label="Enter OTP"
-              onChange={(e: any) => {
-                setOtp({ ...otp, forgotPasswordOtp: e.target.value });
-              }}
-            />
-
-            <p className="mt-1 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
-              {resendOtpTimer()}
-            </p>
-
-            <p className="text-[#494949] font-Open font-normal text-xs leading-4">
-              Didn't Receive Code ?
-              <span
-                className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-                  (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-                  "text-[#494949]"
-                }`}
-                onClick={() => {
-                  if (seconds === 0 && minutes === 0) {
-                    resendOtp();
-                  }
+        {loading ? (
+          <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Spinner />
+          </div>
+        ) : (
+          emailVerified && (
+            <>
+              <CustomInputBox
+                value={otp.forgotPasswordOtp}
+                maxLength={6}
+                containerStyle="mt-[32px]"
+                label="Enter OTP"
+                onChange={(e: any) => {
+                  setOtp({ ...otp, forgotPasswordOtp: e.target.value });
                 }}
-              >
-                Resend
-              </span>
-            </p>
+              />
 
-            {/* <CustomButton
+              <p className="mt-1 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
+                {resendOtpTimer()}
+              </p>
+
+              <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+                Didn't Receive Code ?
+                <span
+                  className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
+                    (seconds > 0 || (seconds > 0 && minutes === 0)) &&
+                    "text-[#494949]"
+                  }`}
+                  onClick={() => {
+                    if (seconds === 0 && minutes === 0) {
+                      resendOtp();
+                    }
+                  }}
+                >
+                  Resend
+                </span>
+              </p>
+
+              {/* <CustomButton
               onClick={onClickVerifyOtp}
               text="Submit Otp"
               className="mt-2"
             /> */}
-          </>
+            </>
+          )
         )}
 
         {emailVerified && (
           <>
             <CustomInputBox
               label="New Password"
-              inputType="password"
+              maxLength={12}
+              inputType={viewPassword.newPassword ? "text" : "password"}
+              isRightIcon={true}
+              visibility={viewPassword.newPassword}
+              setVisibility={() => togglePasswordVisibility("newPassword")}
+              rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+              onClick={() => {}}
               onChange={(e) =>
                 setPassword({ ...password, newPassword: e.target.value })
               }
             />
             <CustomInputBox
               label="Re-enter New Password"
-              inputType="password"
+              inputType={viewPassword.confirmNewPassword ? "text" : "password"}
+              isRightIcon={true}
+              maxLength={12}
+              visibility={viewPassword.confirmNewPassword}
+              rightIcon={
+                viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon
+              }
+              setVisibility={() =>
+                togglePasswordVisibility("confirmNewPassword")
+              }
+              onClick={() => {}}
               onChange={(e) =>
                 setPassword({ ...password, confirmNewPassword: e.target.value })
               }
             />
-
             <CustomButton
               onClick={updatePasswordData}
               text="Update Password"
-              className="mt-4"
+              className="mt-1"
             />
           </>
         )}

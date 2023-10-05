@@ -116,7 +116,7 @@ const CustomBrandingContent = (props: ITypeProps) => {
       </div>
 
       <div
-        className="hidden lg:flex justify-end shadow-lg border-[1px] bg-[#FFFFFF] p-6 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+        className=" flex justify-end lg:flex md:justify-end shadow-lg border-[1px] bg-[#FFFFFF] p-6 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton

@@ -183,8 +183,8 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-5">
-          <div className="!w-[372px]">
-            <div className="!w-[372px]">
+          <div className="md:!w-[372px]">
+            <div className="md:!w-[372px]">
               <CustomInputBox
                 label="Enter Eway Bill No."
                 value={ewaybillNumber}
@@ -193,7 +193,7 @@ const Summary = (props: Props) => {
             </div>
           </div>
 
-          <div className="!w-[372px]">
+          <div className="md:!w-[372px]">
             <CustomInputBox
               isRightIcon={true}
               containerStyle=""
@@ -221,7 +221,7 @@ const Summary = (props: Props) => {
           <Spinner />
         </div>
       ) : (
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
             {/* Pickup Details */}
             <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
@@ -337,7 +337,7 @@ const Summary = (props: Props) => {
             </div>
 
             {/* Product Details */}
-            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
+            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 mb-4 md:pb-20 max-w-screen-md	">
               <BoxDetails boxInfo={boxInfo} />
 
               {/* Service Details */}
@@ -356,7 +356,7 @@ const Summary = (props: Props) => {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row mr-5 ">
+          <div className="flex flex-col lg:flex-row mr-5 gap-y-5 px-5  pb-20 max-w-screen-md">
             {/* Pricing Details */}
             <PricingDetails
               appliedWeight={serviceDetails?.appliedWeight}

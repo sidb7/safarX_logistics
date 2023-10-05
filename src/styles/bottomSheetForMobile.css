@@ -1,0 +1,12 @@
+@media (max-width: 639px) {
+    .mobile-modal-styles {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 40%;
+        max-height: 80vh;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+}

@@ -28,6 +28,7 @@ import {
 } from "../../../utils/utility";
 import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
 import ForgotPassword from "./ForgotPassword";
+import RightSideModal from "../../../components/CustomModal/customRightModal";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -202,6 +203,7 @@ const Index = () => {
                   inputType={viewPassWord ? "text" : "password"}
                   onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
+                  maxLength={12}
                   tempLabel={true}
                   isRightIcon={true}
                   value={loginCredentials.password}
@@ -325,6 +327,16 @@ const Index = () => {
         >
           <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
         </CenterModal>
+      )}
+      {!isLgScreen && (
+        <RightSideModal
+          isOpen={forgotPasswordModal}
+          onClose={() => setForgotPasswordModal(false)}
+          className={`w-full "md:!w-[389px]"
+          }`}
+        >
+          <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
+        </RightSideModal>
       )}
     </>
   );

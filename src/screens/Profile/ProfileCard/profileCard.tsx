@@ -58,8 +58,8 @@ export const ProfileCard = (props: ProfileCardProps) => {
           <div className="flex flex-col col-span-1 items-start py-2 pr-4 pl-3 ">
             <div
               style={{
-                width: "82px",
-                height: "82px",
+                width: "auto",
+                height: "auto",
                 overflow: "hidden",
                 borderRadius: "50%",
               }}

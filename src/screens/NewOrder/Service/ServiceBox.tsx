@@ -38,13 +38,13 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     selectedValue(e);
   };
 
-
+  console.log("optioons", options);
   return (
-    <div className="flex items-center cursor-pointer px-4 gap-4">
+    <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
       {options?.map((option: any) => (
         <div
           key={option?.value}
-          className="flex items-center p-2 shadow-md border border-[#c1c1c1] rounded-lg w-72"
+          className="flex items-center p-2 shadow-md border border-[#c1c1c1] rounded-lg w-72 mb-4 md:mb-0"
           onClick={(e: any) => handleOnChange(option.value)}
         >
           <div className="self-start px-2">

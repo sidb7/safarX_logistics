@@ -108,7 +108,9 @@ const Payment = () => {
           removeLocalStorage("phonePeTransactionId");
           window.location.reload();
         }
-      } catch (error) {}
+      } catch (error: any) {
+        console.log(error.message);
+      }
     })();
   }, []);
 
@@ -326,17 +328,17 @@ const Payment = () => {
   return (
     <div className="w-full">
       <Breadcrum label="Add New Order" />
-      <div className="lg:mb-8">
+      <div className=" mb-4 lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="inline-flex space-x-2 items-center px-5">
+      <div className="inline-flex space-x-2 items-center px-5 max-sm:mt-4">
         <img src={Moneylogo} alt="" />
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Payment
         </p>
       </div>
-      <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
-        <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
+      <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center max-sm:rounded-none items-center mt-5 lg:mx-5  lg:justify-start">
+        <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF] leading-5">
           <p
             className={`${
               isItLgScreen
@@ -379,7 +381,7 @@ const Payment = () => {
                   onChange={(e) => setWalletValue(e.target.value)}
                 />
               </p>
-              <div className="grid grid-cols-4 gap-8 text-center">
+              <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                 {moneyArr?.map((el: any, i: number) => {
                   return (
                     <div
@@ -389,11 +391,11 @@ const Payment = () => {
                         walletValue === el?.value
                           ? "border-[#004EFF]"
                           : "border-[#000000]"
-                      } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
+                      } border-[1.5px] p-2 rounded-lg items-center border-solid max-sm:text-[14px] cursor-pointer`}
                       // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
                     >
                       <p
-                        className={`text-[16px] ${
+                        className={`text-[12px] ${
                           walletValue === el?.value
                             ? "!text-[#004EFF]"
                             : "text-[#000000]"
@@ -756,21 +758,22 @@ const Payment = () => {
       </CustomBottomModal> */}
 
       <footer className="w-full fixed bottom-0">
-        <div className="grid grid-cols-2 shadow-lg border-[1px] bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
-          <button
-            onClick={() => navigate(-1)}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center lg:w-[100px]"
-          >
-            {" "}
-            BACK
-          </button>
-          <button
-            onClick={() => placeOrderApi()}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
-          >
-            {" "}
-            PLACE ORDER
-          </button>
+        <div className="flex items-center justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
+          <div className="flex">
+            <button
+              onClick={() => navigate(-1)}
+              className="  flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] text-sm font-semibold text-[#1C1C1C] text-center w-[100px] lg:w-[110px]"
+            >
+              BACK
+            </button>
+            <button
+              onClick={() => placeOrderApi()}
+              className="mx-4 flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
+            >
+              {" "}
+              PLACE ORDER
+            </button>
+          </div>
         </div>
       </footer>
 
