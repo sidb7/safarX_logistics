@@ -110,15 +110,14 @@ const Tracking = () => {
 
   const handleTrackOrderClick = async (trackingNoFromUrl?: any) => {
 
-    if (trackingNo?.trim() === "") {
-      return;
-    }
+    // if (trackingNo?.trim() === "") {
+    //   return;
+    // }
 
     let urlWithTrackingNo;
     try {
       setLoading(true);
       if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-        // setTrackingNo(trackingNoFromUrl)
         urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNoFromUrl}`
       } else {
         urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`
@@ -144,10 +143,10 @@ const Tracking = () => {
 
   useEffect(() => {
     if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+      setTrackingNo(trackingNoFromUrl)
       handleTrackOrderClick(trackingNoFromUrl);
-      // setTrackingNo(trackingNoFromUrl);
     }
-  }, []);
+  }, [trackingNoFromUrl]);
 
   // useEffect(() => {
   //   handleTrackOrderClick();
