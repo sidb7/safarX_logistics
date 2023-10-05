@@ -59,7 +59,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           name={name}
           type={inputType}
           placeholder={placeholder}
-          className={` rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
+          className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           value={value}

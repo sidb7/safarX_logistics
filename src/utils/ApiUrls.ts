@@ -166,6 +166,10 @@ const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocat
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 
+//Pincode Data for Address
+const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
+
+
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
@@ -341,5 +345,6 @@ export {
   PHONEPE_TRANSACTION_STATUS,
   POST_UPDATE_PRODUCT,
   GET_ORDER_BY_ID,
+  GET_PINCODE_DATA,
   CANCEL_WAY_BILL,
 };

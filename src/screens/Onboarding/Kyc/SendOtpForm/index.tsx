@@ -38,63 +38,36 @@ const Index = (props: ITypeProps) => {
 
   const [otpFormBtnStatus, setOtpFormBtnStatus] = useState(false);
 
+  const [openModal, setOpenModal] = useState(true);
+  const closeModal = () => setOpenModal(true);
+
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
   useEffect(() => {
     let btype = sessionStorage.getItem("businessType");
     setBusinessType(btype);
   }, []);
 
-  useEffect(() => {
-    console.log("useEffect :", gstNumber, aadharNumber, panNumber);
-
-    // if (
-    //   (aadharNumber !== undefined || gstNumber !== undefined) &&
-    //   panNumber !== undefined
-    // ) {
-    // if (
-    //   (aadharNumberError === "" || gstError === "") &&
-    //   panNumberError === ""
-    // ) {
-    if (
-      ((aadharNumber &&
-        aadharNumber?.length !== 0 &&
-        aadharNumberError === "") ||
-        (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
-      panNumber &&
-      panNumber?.length !== 0 &&
-      panNumberError === ""
-    ) {
-      setOtpFormBtnStatus(true);
-    } else {
-      setOtpFormBtnStatus(false);
-    }
-    // }
-  }, [
-    aadharNumberError,
-    panNumberError,
-    gstError,
-    aadharNumber,
-    gstNumber,
-    panNumber,
-  ]);
-
   function validateGST(gstNo: any) {
     return gstRegex.test(gstNo);
   }
 
+  function extractPANFromGST(gstNumber: any) {
+    if (!gstNumber || gstNumber.length !== 15) {
+      return null;
+    }
+
+    const panNumber = gstNumber.substring(2, 13);
+    setPanNumber(panNumber);
+    return panNumber;
+  }
+
   useEffect(() => {
-    if (gstNumber !== "" && gstNumber !== undefined) {
-      if (validateGST(gstNumber)) {
-        setgstError("");
-      } else {
-        setgstError("Enter Valid GST Number");
-      }
+    if (gstNumber) {
+      extractPANFromGST(gstNumber);
+      setgstError("");
     }
   }, [gstNumber]);
-
-  const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(true);
-
-  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const verifyAadhar = async (value: any) => {
     try {
@@ -147,6 +120,7 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
+        // setgstError("");
       } else {
         setLoading(false);
 
@@ -156,6 +130,30 @@ const Index = (props: ITypeProps) => {
       return error;
     }
   };
+
+  useEffect(() => {
+    console.log("useEffect :", gstNumber, aadharNumber, panNumber);
+
+    if (
+      ((aadharNumber &&
+        aadharNumber?.length !== 0 &&
+        aadharNumberError === "") ||
+        (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
+      panNumber
+    ) {
+      setOtpFormBtnStatus(true);
+    } else {
+      setOtpFormBtnStatus(false);
+    }
+    // }
+  }, [
+    aadharNumberError,
+    panNumberError,
+    gstError,
+    aadharNumber,
+    gstNumber,
+    panNumber,
+  ]);
 
   const onSendOtp = (e: any) => {
     try {
@@ -246,6 +244,11 @@ const Index = (props: ITypeProps) => {
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
+                    if (gstRegex.test(e.target.value.toUpperCase())) {
+                      setgstError("");
+                    } else {
+                      setgstError("Enter Valid GST Number");
+                    }
                     setGSTNumber(e.target.value.toUpperCase());
                   }}
                 />
@@ -310,6 +313,8 @@ const Index = (props: ITypeProps) => {
     );
   };
 
+  console.log("gstNo", gstNumber);
+  console.log("panNO", panNumber);
   return (
     <div>
       {!isBigScreen && sendOtpFormComponent()}
