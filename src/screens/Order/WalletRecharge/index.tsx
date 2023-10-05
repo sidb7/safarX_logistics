@@ -12,7 +12,7 @@ import CustomInputBox from "../../../components/Input";
 import discountIcon from "../../../assets/Payment/discount-shape.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import leftArrow from "../../../assets/leftArrow.svg"
+import leftArrow from "../../../assets/leftArrow.svg";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -256,10 +256,11 @@ const WalletRecharge = () => {
             <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] max-sm:rounded-none flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
               <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
                 <p
-                  className={`${isItLgScreen
-                    ? "px-[16px] py-[13px] text-[16px] font-semibold"
-                    : ""
-                    }`}
+                  className={`${
+                    isItLgScreen
+                      ? "px-[16px] py-[13px] text-[16px] font-semibold"
+                      : ""
+                  }`}
                 >
                   Get welcome gift of 100 bonus point with wallet payments
                 </p>
@@ -294,17 +295,19 @@ const WalletRecharge = () => {
                         <div
                           key={i}
                           onClick={() => setWalletValue(el?.value)}
-                          className={`${walletValue === el?.value
-                            ? "border-[#004EFF]"
-                            : "border-[#000000]"
-                            } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
-                        // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
+                          className={`${
+                            walletValue === el?.value
+                              ? "border-[#004EFF]"
+                              : "border-[#000000]"
+                          } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
+                          // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
                         >
                           <p
-                            className={`text-[16px] ${walletValue === el?.value
-                              ? "!text-[#004EFF]"
-                              : "text-[#000000]"
-                              } lg:font-semibold lg:text-[14px] max-sm:text-[14px]`}
+                            className={`text-[12px] ${
+                              walletValue === el?.value
+                                ? "!text-[#004EFF]"
+                                : "text-[#000000]"
+                            } lg:font-semibold lg:text-[14px] `}
                           >
                             ₹{el?.value}
                           </p>
@@ -491,7 +494,7 @@ const WalletRecharge = () => {
                   placeholder="Have a gift card?"
                   imgSrc={GiftIcon}
 
-                // value={locateAddress}
+                  // value={locateAddress}
                 />
               </div>
               {/* Yaari Points Mobile */}
@@ -589,10 +592,11 @@ const WalletRecharge = () => {
                       <button
                         disabled={isDisabled}
                         type="button"
-                        className={`${!isDisabled
-                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                          : "!bg-opacity-50"
-                          } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                        className={`${
+                          !isDisabled
+                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                            : "!bg-opacity-50"
+                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                         onClick={handlePhonePeTransaction}
                       >
                         <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
@@ -611,10 +615,11 @@ const WalletRecharge = () => {
                       <button
                         disabled={isDisabled}
                         type="button"
-                        className={`${!isDisabled
-                          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                          : "!bg-opacity-50"
-                          } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                        className={`${
+                          !isDisabled
+                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                            : "!bg-opacity-50"
+                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                         onClick={handleRazorPayTransaction}
                       >
                         <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
@@ -627,9 +632,12 @@ const WalletRecharge = () => {
               </div>
               <div
                 className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[40px] font-medium max-sm:font-normal"
-                onClick={() => navigate('/wallet/transaction-history')}
+                onClick={() => navigate("/wallet/transaction-history")}
               >
-                <p className="text-[24px] max-sm:text-[20px]"> View Transaction History</p>
+                <p className="text-[24px] max-sm:text-[20px]">
+                  {" "}
+                  View Transaction History
+                </p>
                 <img
                   src={leftArrow}
                   alt=""

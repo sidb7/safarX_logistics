@@ -38,6 +38,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     selectedValue(e);
   };
 
+  console.log("optioons", options);
   return (
     <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
       {options?.map((option: any) => (
