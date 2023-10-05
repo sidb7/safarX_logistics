@@ -38,7 +38,7 @@ const ShowLabel: React.FunctionComponent<IShowLabelProps> = (props) => {
         alt=""
         onMouseOver={showTooltip}
         onMouseOut={hideTooltip}
-        className="w-6 h-6 cursor-pointer text-[#004EFF] underline-offset-4 underline  decoration-2 "
+        className="w-6 h-6 cursor-pointer text-[#004EFF] underline-offset-4 underline  decoration-2 hover:-translate-y-[0.1rem] hover:scale-110 duration-300 "
         onClick={() => getSingleFile(fileUrl)}
       />
       {isTooltipVisible && (

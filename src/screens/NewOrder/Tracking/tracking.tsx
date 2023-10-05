@@ -92,7 +92,7 @@ const Tracking = () => {
   const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
 
   const [trackingState, setTrackingState] = useState<any>(null);
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [openSection, setOpenSection] = useState<string | null>("tracking");
   const [trackingNo, setTrackingNo] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const params = getQueryJson();
@@ -107,20 +107,27 @@ const Tracking = () => {
   ) => {
     setTrackingNo(event.target.value);
   };
-  console.log("trackingUrl", TRACKING);
-  const handleTrackOrderClick = async () => {
-    if (trackingNo?.trim() === "") {
-      return;
-    }
 
+  const handleTrackOrderClick = async (trackingNoFromUrl?: any) => {
+
+    // if (trackingNo?.trim() === "") {
+    //   return;
+    // }
+
+    let urlWithTrackingNo;
     try {
       setLoading(true);
+      if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNoFromUrl}`
+      } else {
+        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`
+      }
 
-      const urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`;
       const { data: response } = await GET(urlWithTrackingNo);
 
       if (response?.success) {
         setTrackingState(response?.data);
+        setTrackingNo("")
       } else {
         setTrackingState([]);
       }
@@ -131,42 +138,44 @@ const Tracking = () => {
     }
   };
 
+
+
+
   useEffect(() => {
-    if (trackingNoFromUrl !== "") {
-      setTrackingNo(trackingNoFromUrl);
+    if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+      setTrackingNo(trackingNoFromUrl)
+      handleTrackOrderClick(trackingNoFromUrl);
     }
   }, [trackingNoFromUrl]);
 
-  useEffect(() => {
-    handleTrackOrderClick();
-  }, []);
+  // useEffect(() => {
+  //   handleTrackOrderClick();
+  // }, [trackingNo]);
 
-  console.log("trackingNo", trackingNo);
-  console.log("trackingState", trackingState);
   return (
     <>
       {isActive ? (
-        <div className="mx-5 w-full">
+        <div className=" w-full">
           <Breadcrum label="Tracking" />
           {/*shipyaari icon */}
           {/* <div className="flex justify-center p-3">
           <img src={shipyaari} alt="Shipyaari" />
         </div> */}
-          <div className="flex gap-x-5 flex-row ml-5 ">
-            <div className="flex gap-5 basis-3/4">
+          <div className="flex mx-5 md:my-5 ">
+            <div className="flex w-[100%] max-w-[1300px] gap-5 max-md:flex-col">
               {/*tracking ID Box */}
               <div className="flex flex-col basis-3/4">
                 <div className="flex items-center">
                   <InputBox
                     label="Enter tracking ID"
                     value={trackingNo}
-                    onChange={handletrackingNoChange}
+                    onChange={(event) => handletrackingNoChange(event)}
                     className=""
                   />
                   <CustomButton
                     text="Track Order"
-                    className="!ml-2 !w-1/4 h-full"
-                    onClick={handleTrackOrderClick}
+                    className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px]  h-full "
+                    onClick={() => handleTrackOrderClick()}
                   />
                 </div>
                 {/* <p className="text-[10px] py-2 font-Open font-bold">
@@ -177,44 +186,49 @@ const Tracking = () => {
                   trackingState?.map((each: any, indexTracking: number) => {
                     return (
                       <div key={indexTracking}>
+                        {/* <div className="border min-h-[454px]"> */}
                         <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4 ">
                           <div className="border-l-[24px]  border-l-[#80A7FF] py-4 px-5 rounded-lg">
                             {/*delhivery details */}
                             <>
-                              <div className="flex justify-between">
+                              <div className="flex justify-between w-[100%] max-w-[150px]">
                                 <img src={each?.partner?.partnerIcon} alt="" />
                                 {/* <p className="text-sm font-semibold font-Open">
                                 {each?.partner?.etaDate}
                               </p> */}
                               </div>
 
-                              <div className="flex justify-between pt-2">
-                                <div className="flex gap-x-8 items-end items-center xl:pr-4">
-                                  <p className="text-xs font-normal font-Open">
-                                    Tracking ID:
-                                    <span className="font-bold pl-1">
-                                      {each?.partner?.trackingID}
-                                    </span>
-                                    <CopyTooltip
-                                      stringToBeCopied={
-                                        each?.partner?.trackingID
-                                      }
-                                    />
+                              <div className="flex items-center justify-between pt-2 mt-4">
+                                <div className="flex flex-col md:flex-row gap-x-8 items-start md:items-center xl:pr-4">
+                                  <p className=" flex flex-col sm:flex-row text-xs font-normal font-Open">
+                                    <span>  Tracking ID: </span>
+                                    <div className="flex font-bold pl-1">
+                                      <span className="mt-1 sm:mt-0">
+                                        {each?.partner?.trackingID}
+                                      </span>
+                                      <CopyTooltip
+                                        stringToBeCopied={
+                                          each?.partner?.trackingID
+                                        }
+                                      />
+                                    </div>
                                   </p>
-                                  <p className="text-xs font-normal font-Open">
-                                    Order ID:
-                                    <span className="font-bold pl-1">
-                                      {each?.partner?.orderID}
-                                    </span>
-                                    <CopyTooltip
-                                      stringToBeCopied={each?.partner?.orderID}
-                                    />
+                                  <p className="flex items-center  text-xs mt-2 md:mt-0 font-normal font-Open">
+                                    <span> Order ID: </span>
+                                    <div className="flex items-center">
+                                      <span className="font-bold pl-1">
+                                        {each?.partner?.orderID}
+                                      </span>
+                                      <CopyTooltip
+                                        stringToBeCopied={each?.partner?.orderID}
+                                      />
+                                    </div>
                                   </p>
                                 </div>
 
                                 <div className="inline-flex justify-center gap-x-1 bg-[#F2FAEF] rounded-sm border-[0.5px] border-[#7CCA62] px-3 py-[6px]">
                                   <img src={bookedIcon} alt="" />
-                                  <span className="text-xs font-semibold text-[#7CCA62] items-center ">
+                                  <span className="text-xs font-semibold text-[#7CCA62] items-center">
                                     {each?.partner?.status}
                                   </span>
                                 </div>
@@ -344,7 +358,8 @@ const Tracking = () => {
                             </>
                           </div>
                         </div>
-                        <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
+                        {/* </div> */}
+                        {/* <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
                           <div className="flex gap-x-2 px-2 ml-9">
                             <img src={Star} alt="" />
                             <p className="font-Lato text-lg font-semibold xl:max-w-[358px]">
@@ -355,40 +370,40 @@ const Tracking = () => {
                           <div className="px-3  pt-2 ml-16 mt-2">
                             <StarRating />
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     );
                   })}
 
                 {loading && (
-                  <div className="fixed top-1/2 left-1/3 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="w-[100%] flex justify-center items-center h-[200px]  md:h-[100%]">
                     <Spinner />
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-y-4 pl-10">
+              <div className="flex flex-row gap-x-4 pl-10 md:flex-col md:gap-y-4 max-lg:pl-0 max-lg:justify-between">
                 <img
                   src={trackingIcon}
                   alt=""
-                  style={{ maxWidth: "100%", height: "auto" }}
+                  style={{ minWidth: "30%", height: "auto" }}
                 />
                 <img
                   src={trackingIcon2}
                   alt=""
-                  style={{ maxWidth: "100%", height: "auto" }}
+                  style={{ minWidth: "30%", height: "auto" }}
                 />
               </div>
             </div>
           </div>
-          <div className="mt-[150px] ml-5 ">
-            <div className="flex  gap-x-5">
-              <div className="flex gap-x-2">
+          <div className="my-4 md:my-0 ml-5">
+            <div className="flex flex-col md:flex-row md:gap-x-5">
+              <div className="flex gap-x-2 my-3">
                 <img src={telephoneIcon} alt="" />
                 <p className="text-base font-semibold font-Open whitespace-nowrap">
                   Call at 9989245464, if have some issue
                 </p>
               </div>
-              <div className="flex gap-x-4">
+              <div className="flex gap-x-4 my-3">
                 <p className="text-[#004EFF] text-lg font-semibold">
                   Follow us on{" "}
                 </p>

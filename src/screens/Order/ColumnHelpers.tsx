@@ -7,6 +7,8 @@ import { date_DD_MMM_YYY } from "../../utils/dateFormater";
 import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
+import CrossIcon from "../../assets/cross.svg";
+
 const ColumnsHelper = createColumnHelper<any>();
 
 const ProductBox = ({ name = "", dimension = "" }: any) => {
@@ -352,7 +354,13 @@ export const columnHelperForNewOrder = (navigate: any) => {
   ];
 };
 
-export const ColumnHelperForBookedAndReadyToPicked = (navigate: any) => {
+export const ColumnHelperForBookedAndReadyToPicked = (
+  navigate: any,
+  setCancellationModal?: any
+) => {
+  const handleCancellationModal = (awbNo: any) => {
+    setCancellationModal({ isOpen: true, awbNo });
+  };
   return [
     // ...commonColumnHelper,
     ColumnsHelper.accessor("Pick up Expected", {
@@ -365,14 +373,16 @@ export const ColumnHelperForBookedAndReadyToPicked = (navigate: any) => {
       },
       cell: (info: any) => {
         const { pickupAddress, service } = info?.row?.original;
-        const { pickupDate } = pickupAddress;
-        const { partnerName } = service;
         return (
           <div className=" ">
-            <p className="">{date_DD_MMM_YYY(pickupDate * 1000)}</p>
+            <p className="">
+              {pickupAddress?.pickupDate
+                ? date_DD_MMM_YYY(pickupAddress?.pickupDate * 1000)
+                : null}
+            </p>
             <div className="py-2 flex flex-col">
               <span className="text-sm font-light">Delivery Partner</span>
-              <div className="font-semibold">{partnerName}</div>
+              <div className="font-semibold">{service?.partnerName}</div>
             </div>
           </div>
         );
@@ -389,16 +399,32 @@ export const ColumnHelperForBookedAndReadyToPicked = (navigate: any) => {
         );
       },
       cell: (info: any) => {
+        const { original } = info.cell.row;
+        const data = original;
+
         const { otherDetails = {} } = info?.row?.original;
         const { label = [] } = otherDetails;
         const fileUrl = label[0] || "";
         return (
           <>
-            {fileUrl !== "" ? (
-              <ShowLabel fileUrl={fileUrl} />
-            ) : (
-              <div className="text-[grey]">No Label Found</div>
-            )}
+            <div className="flex items-center ">
+              {fileUrl !== "" ? (
+                <ShowLabel fileUrl={fileUrl} />
+              ) : (
+                <div className="text-[grey]">No Label Found</div>
+              )}
+              {setCancellationModal && (
+                <img
+                  src={CrossIcon}
+                  width={"35px"}
+                  alt="Cancel Order"
+                  className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                  onClick={() =>
+                    handleCancellationModal(data.wayBillObject.AWBNo)
+                  }
+                />
+              )}
+            </div>
           </>
         );
       },
@@ -406,44 +432,47 @@ export const ColumnHelperForBookedAndReadyToPicked = (navigate: any) => {
   ];
 };
 export const columnHelpersForRest = [
-  ...commonColumnHelper,
-  ColumnsHelper.accessor("createdAt", {
-    header: () => {
-      return (
-        <div className="flex justify-between">
-          <h1>ETA</h1>
-        </div>
-      );
-    },
-    cell: (info: any) => {
-      return (
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex gap-x-2">
-            <img src={BlackShipIcon} alt="" />
-            <span className="text-[14px]">04 Jun 2023</span>
-          </div>
-        </div>
-      );
-    },
-  }),
-  ColumnsHelper.accessor("createdAt", {
-    header: () => {
-      return (
-        <div className="flex justify-between">
-          <h1>Remark</h1>
-        </div>
-      );
-    },
-    cell: (info: any) => {
-      return (
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex gap-x-2">
-            <span className="text-[14px]">Remarks</span>
-          </div>
-        </div>
-      );
-    },
-  }),
   ...idHelper(),
+  // ColumnsHelper.accessor("createdAt", {
+  //   header: () => {
+  //     return (
+  //       <div className="flex justify-between">
+  //         <h1>ETA</h1>
+  //       </div>
+  //     );
+  //   },
+  //   cell: (info: any) => {
+  //     const { original } = info.cell.row;
+  //     console.log("original: ", original);
+
+  //     return (
+  //       <div className="flex flex-col whitespace-nowrap">
+  //         <div className="flex gap-x-2">
+  //           <img src={BlackShipIcon} alt="" />
+  //           <span className="text-[14px]">04 Jun 2023</span>
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // }),
+  ...commonColumnHelper,
+  // ColumnsHelper.accessor("createdAt", {
+  //   header: () => {
+  //     return (
+  //       <div className="flex justify-between">
+  //         <h1>Remark</h1>
+  //       </div>
+  //     );
+  //   },
+  //   cell: (info: any) => {
+  //     return (
+  //       <div className="flex flex-col whitespace-nowrap">
+  //         <div className="flex gap-x-2">
+  //           <span className="text-[14px]">Remarks</span>
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // }),
   ...MainCommonHelper(),
 ];

@@ -100,6 +100,7 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
+const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -344,5 +345,6 @@ export {
   PHONEPE_TRANSACTION_STATUS,
   POST_UPDATE_PRODUCT,
   GET_ORDER_BY_ID,
-  GET_PINCODE_DATA
+  GET_PINCODE_DATA,
+  CANCEL_WAY_BILL,
 };
