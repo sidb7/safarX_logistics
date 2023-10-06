@@ -10,6 +10,7 @@ interface ITypeProps {
   planId: string;
   onClick: any;
   activePlanId: string;
+  isSelected: boolean;
 }
 
 const PlanCard = (props: ITypeProps) => {
@@ -21,11 +22,12 @@ const PlanCard = (props: ITypeProps) => {
     onClick,
     activePlanId,
     planId,
+    isSelected,
   } = props;
 
   return (
     <div>
-      {planName.toUpperCase() === "GOLD" ? (
+      {planName.toUpperCase() === "PLATINUM" ? (
         <div className="p-3  border-[1px] rounded-t-lg  bg-[#004EFF] w-[273px] h-[44px] ">
           <p className="text-[#FFFFFF] font-Lato text-base font-bold leading-5 text-center  ">
             MOST POPULAR
@@ -35,11 +37,23 @@ const PlanCard = (props: ITypeProps) => {
         <div></div>
       )}
 
+      {isSelected === true ? (
+        <div className="p-3  border-[1px] border-[#004EFF] rounded-t-lg  bg-[#004EFF] w-[273px] h-[44px] ">
+          <p className="text-[#FFFFFF] font-Lato text-base font-bold leading-5 text-center  ">
+            ACTIVE
+          </p>
+        </div>
+      ) : (
+        <div></div>
+      )}
+
       <div
         className={`flex flex-col  items-center  ${
-          planName.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
+          planName.toUpperCase() === "GOLD"
+            ? "rounded-t-none"
+            : "rounded-t-none rounded-b-lg"
         } ${
-          activePlanId === planId && "!border-[#004EFF]"
+          isSelected && "!border-[#004EFF]"
         } py-5 px-4 shadow-sm border-[1px] border-t-[0px] border-[#E8E8E8] bg-[#FFFFFF]  h-[433px] w-[273px]`}
       >
         <img
@@ -80,21 +94,20 @@ const PlanCard = (props: ITypeProps) => {
           </div>
         )}
 
-        <p className="font-Open text-sm font-normal leading-[18px] text-[#1C1C1C] text-start mb-4">
+        <p className="font-Open text-sm font-normal h-[35px] overflow-y-auto leading-[18px] text-[#1C1C1C] text-start mb-4">
           {description}
         </p>
 
         <AddButton
-          text={activePlanId === planId ? "SELECTED" : "SELECT"}
+          text={isSelected ? "SELECTED" : "SELECT"}
           onClick={onClick}
+          disabled={isSelected}
           className={`!py-2 !px-4 !w-[209px]  !font-Open !border-[1px] !border-black ${
-            activePlanId === planId
+            isSelected
               ? "!bg-[#1C1C1C] !text-white "
               : "!text-black !bg-transparent"
           } `}
-          textClassName={`${
-            activePlanId === planId ? "!text-white" : "!text-black"
-          }`}
+          textClassName={`${isSelected ? "!text-white" : "!text-black"}`}
         />
       </div>
     </div>

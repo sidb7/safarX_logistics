@@ -208,6 +208,7 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         setActivePlanId(payload?.planId);
+
         toast.success(response?.message);
       } else {
         toast.error(response?.message);
@@ -231,7 +232,7 @@ const Index = (props: ITypeProps) => {
         return error;
       }
     })();
-  }, []);
+  }, [activePlanId]);
 
   return (
     <>
@@ -253,12 +254,13 @@ const Index = (props: ITypeProps) => {
                   description={eachPlan.description}
                   onClick={() => createPlan(eachPlan)}
                   activePlanId={activePlanId}
+                  isSelected={eachPlan.isSelected}
                 />
               );
             })}
           </div>
           {/* Table */}
-          <div className="ml-5 ">
+          <div className="ml-5  overflow-x-scroll">
             <CustomTable
               columns={columns}
               data={data}
