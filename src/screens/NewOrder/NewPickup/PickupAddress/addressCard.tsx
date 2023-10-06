@@ -67,10 +67,37 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   ) => {
     const addressName: string =
       addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
-    setPickupAddress((prevData: any) => ({
-      ...prevData,
-      [addressName]: { ...prevData[addressName], [fieldName]: value },
-    }));
+
+    setPickupAddress((prevData: any) => {
+      const updatedData = {
+        ...prevData,
+        [addressName]: { ...prevData[addressName], [fieldName]: value },
+      };
+
+      if (
+        fieldName === "flatNo" ||
+        fieldName === "locality" ||
+        fieldName === "landmark" ||
+        fieldName === "city" ||
+        fieldName === "state" ||
+        fieldName === "country"
+      ) {
+        const { flatNo, locality, landmark, city, state, country } =
+          updatedData[addressName];
+        updatedData[addressName].fullAddress = [
+          flatNo,
+          locality,
+          landmark,
+          city,
+          state,
+          country,
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      return updatedData;
+    });
 
     if (fieldName === "pincode" && value.length === 6) {
       const payload = {
@@ -80,7 +107,6 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       postServicablePincode(payload);
     }
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
