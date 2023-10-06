@@ -272,18 +272,18 @@ const Tracking = () => {
                                   (each: any, index: number) => {
                                     return (
                                       <div
-                                        className="flex  gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                        className="flex  gap-x-5 mt-1 h-16  overflow-y-scroll"
                                         key={index}
                                       >
                                         <div className="pt-1 flex-initial w-20  ">
                                           <p className="text-xs font-Open font-normal ">
                                             {each?.date}
                                           </p>
-                                          <p className="text-xs font-Open font-normal 	">
+                                          <p className="text-xs font-Open font-normal">
                                             {each?.time}
                                           </p>
                                         </div>
-                                        <div className=" pt-1 flex-initial w-80	border-l-4 border-l-[#80A7FF] pl-5 border-dotted ">
+                                        <div className="relative pt-1 flex-initial w-80	border-l-4 border-l-[#80A7FF] pl-5 border-dotted ">
                                           <p className="text-xs font-Open  font-normal">
                                             {each?.heading}
                                           </p>
@@ -297,7 +297,7 @@ const Tracking = () => {
                                               {each?.location}
                                             </p>
                                           </div>
-                                          <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[98px]"></div>
+                                          <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[-6px]"></div>
                                         </div>
                                       </div>
                                     );
