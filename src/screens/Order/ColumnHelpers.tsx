@@ -8,7 +8,7 @@ import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
-import { Tooltip } from "../../components/Tooltip/Tooltip";
+import { Tooltip } from "react-tooltip";
 
 
 const ColumnsHelper = createColumnHelper<any>();
@@ -161,20 +161,29 @@ const idHelper = (navigate: any = "") => [
             <div className="">
               <span className=" text-sm font-light">Tracking :</span>
               <div className="flex text-base items-center font-medium">
-                <Tooltip position="top" content="Track">
-                  <span
-                    onClick={() =>
-                      navigate({
-                        pathname: "/tracking",
-                        search: `?trackingNo=${AWB}`,
-                      })
-                    }
-                    className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
-                  >
-                    {AWB}
-                  </span>
-
-                </Tooltip>
+                <span
+                  onClick={() =>
+                    navigate({
+                      pathname: "/tracking",
+                      search: `?trackingNo=${AWB}`,
+                    })
+                  }
+                  className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Track"
+                >
+                  {AWB}
+                </span>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
                 <CopyTooltip stringToBeCopied={AWB} />
               </div>
             </div>
