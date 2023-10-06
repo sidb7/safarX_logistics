@@ -10,7 +10,6 @@ import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import { Tooltip } from "react-tooltip";
 
-
 const ColumnsHelper = createColumnHelper<any>();
 
 const ProductBox = ({ name = "", dimension = "" }: any) => {
@@ -343,15 +342,17 @@ export const columnHelperForNewOrder = (navigate: any) => {
           Order Id: ${tempOrderId} 
           Shipyaari Id: ${sellerId}
           Tracking Id: ${AWB}
-          Package Details: ${boxInfo.length > 0 && boxInfo[0].name} ${(boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""
-          }
+          Package Details: ${boxInfo.length > 0 && boxInfo[0].name} ${
+          (boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""
+        }
           Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
           Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
           Status: Success
-          Payment: ${payment?.amount.toLocaleString("en-US", {
-            style: "currency",
-            currency: "INR",
-          }) ?? "0"
+          Payment: ${
+            payment?.amount.toLocaleString("en-US", {
+              style: "currency",
+              currency: "INR",
+            }) ?? "0"
           } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
 
         `;
