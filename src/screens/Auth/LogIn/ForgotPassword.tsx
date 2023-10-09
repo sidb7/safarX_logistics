@@ -198,12 +198,12 @@ const ForgotPassword = (props: ITypeProps) => {
     return (
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
-          className="my-auto ml-6  h-[25px] object-contain"
+          className="my-auto lg:ml-6  h-[25px] object-contain"
           src={CompanyLogo}
           alt="Company Logo"
         />
         <img
-          className="my-auto mr-6 cursor-pointer"
+          className="my-auto lg:mr-6 cursor-pointer"
           src={CloseIcon}
           alt="Close"
           onClick={onClick}
@@ -220,8 +220,26 @@ const ForgotPassword = (props: ITypeProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-y-8 mx-5 lg:h-screen lg:w-full  overflow-auto">
-      {modalTitle()}
+    <div className="flex flex-col gap-y-9 lg:h-screen lg:w-full overflow-auto">
+      {isLgScreen && modalTitle()}
+      <div className="lg:mx-24 lg:mt-[25px]">
+        <div className="flex flex-col gap-y-8 w-full">
+          <div className="product-box flex justify-between items-center lg:hidden">
+            <img
+              className="m-4 h-[25px] object-contain"
+              src={CompanyLogo}
+              alt="Company Logo"
+            />
+            <img
+              className="my-auto mr-4 cursor-pointer"
+              src={CloseIcon}
+              alt="Close"
+              onClick={onClick}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* <div className="product-box flex items-center lg:hidden">
         <img
           className="m-4 h-[25px] object-contain"
@@ -230,7 +248,7 @@ const ForgotPassword = (props: ITypeProps) => {
         />
       </div> */}
 
-      <div className="flex flex-col  mx-4 gap-y-8">
+      <div className="flex flex-col mx-4  gap-y-4 lg:gap-y-8 mt-11 lg:mt-0 ">
         <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
           Reset Password
         </p>
@@ -239,7 +257,7 @@ const ForgotPassword = (props: ITypeProps) => {
         </p>
       </div>
 
-      <div className="flex flex-col md:ml-40 md:mt-4 md:w-[70%] gap-y-4">
+      <div className="flex flex-col mx-4 lg:mx-24 gap-y-4">
         <CustomInputBox
           label="Enter Email"
           name="email"

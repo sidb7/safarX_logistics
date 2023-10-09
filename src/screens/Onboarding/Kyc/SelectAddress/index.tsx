@@ -177,14 +177,14 @@ const BusinessType = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
-          // className="!mt-[58px]"
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Tell us more about your company"
         />
 
         <div>
-          <div className="flex flex-col justify-center items-center  lg:px-5 ">
-            <div className="flex items-center justify-between w-full    lg:!w-[320px] ">
+          <div className="flex flex-col justify-center items-center px-5 ">
+            <div className="flex items-center justify-between w-full lg:!w-[320px] ">
               {/* <p>Default</p> */}
               {/*commented as instructed by akshay */}
               {/* <div className="flex gap-x-2">
@@ -235,7 +235,7 @@ const BusinessType = (props: ITypeProps) => {
               </>
             ) : (
               <>
-                <div className="mb-4 h-[200px]  overflow-auto">
+                <div className="mb-4 lg:h-[250px]  overflow-auto">
                   {defaultAddress?.map((el: any, i: number) => {
                     return (
                       <div key={i}>
@@ -258,7 +258,9 @@ const BusinessType = (props: ITypeProps) => {
                   })}
                 </div>
 
-                <div className={` ${!isLgScreen && "w-full"}  mb-4   `}>
+                <div
+                  className={` ${!isLgScreen && "w-full"} mb-6 md:mt-5 lg:mt-4`}
+                >
                   <CustomInputBox
                     label="Brand Name"
                     className="font-Open !w-full lg:!w-[320px]"
@@ -295,7 +297,13 @@ const BusinessType = (props: ITypeProps) => {
 
   return (
     <div>
-      {!isLgScreen && addressComponent()}
+      {!isLgScreen && loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      )}
 
       {isLgScreen && (
         <div className="mx-4 hidden lg:block ">

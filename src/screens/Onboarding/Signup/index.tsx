@@ -121,11 +121,11 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="flex flex-col mt-7 mx-4 gap-y-3">
+                <div className="flex flex-col mt-12 mx-4 gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                     Welcome to Shipyaari
                   </p>
-                  <p className="text-center font-Open font-light text-sm leading-[22px] mb-3 lg:mb-0">
+                  <p className="text-center font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
                     Fast and Easy Shipping from your doorstep to your
                     customer's.{" "}
                   </p>
@@ -369,7 +369,13 @@ const Index = () => {
         </CenterModal>
       )}
 
-      {!isLgScreen && signUp()}
+      {!isLgScreen && loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        signUp()
+      )}
     </>
   );
 };
