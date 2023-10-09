@@ -9,6 +9,7 @@ import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -140,9 +141,14 @@ const idHelper = (navigate: any = "") => [
         <div className="py-3">
           {tempOrderId && (
             <div className="">
-              <span className=" text-sm font-light">Shipyaari ID :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{tempOrderId}</span>
+              <span className="text-sm font-light">Shipyaari ID :</span>
+              <div className="flex text-base items-center font-medium">
+                <Link
+                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}`}
+                  className="underline text-blue-500 cursor-pointer"
+                >
+                  <span className="clickable-span">{tempOrderId}</span>
+                </Link>
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>

@@ -17,12 +17,13 @@ import {
   GET_LATEST_ORDER,
   RETURNING_USER_PICKUP,
 } from "../../../utils/ApiUrls";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PickupDate from "./PickupDate/pickupDate";
 import { useSelector } from "react-redux";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ModalContent from "./RightModal/ModalContent";
 import AccessDenied from "../../../components/AccessDenied";
+import { getQueryJson } from "../../../utils/utility";
 
 const steps = [
   {
@@ -65,8 +66,10 @@ const steps = [
 
 const PickupLocation = () => {
   const navigate = useNavigate();
+
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[1]?.pages?.[0]?.isActive;
+  const params = getQueryJson();
 
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
@@ -150,6 +153,8 @@ const PickupLocation = () => {
   const [returningUserData, setReturningUserData] = useState<any>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
+  const shipyaari_id = params?.shipyaari_id;
+
   const postPickupOrderDetails = async () => {
     try {
       let payload = {};
@@ -175,7 +180,7 @@ const PickupLocation = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/orders/add-order/delivery");
+        navigate(`/orders/add-order/delivery?shipyaari_id=${shipyaari_id}`);
       } else {
         toast.error(response?.message);
       }
@@ -184,9 +189,13 @@ const PickupLocation = () => {
     }
   };
 
+  console.log("shipyaariId", shipyaari_id);
+
   useEffect(() => {
     (async () => {
-      const { data } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id || "" };
+      console.log("latestOrderPayload", payload);
+      const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data.success && data?.data.length > 0) {
         const orderData = data?.data[0];
         setPickupAddress({
@@ -265,7 +274,7 @@ const PickupLocation = () => {
         });
       }
     })();
-  }, []);
+  }, [shipyaari_id]); //useLocation hook can be used here with location as dependency if other params are added in url.
 
   const getReturningUserPickupDetails = async () => {
     try {
