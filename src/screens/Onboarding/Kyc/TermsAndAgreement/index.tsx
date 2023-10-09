@@ -85,6 +85,7 @@ export const ServiceComponent = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Terms & Agreement"
         />

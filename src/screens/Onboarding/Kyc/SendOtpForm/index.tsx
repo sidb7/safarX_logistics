@@ -5,7 +5,7 @@ import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import {
@@ -24,6 +24,9 @@ interface ITypeProps {}
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const state = location.state || {};
+
   const [loading, setLoading] = useState(false);
   const [businessType, setBusinessType] = useState<any>();
 
@@ -44,6 +47,16 @@ const Index = (props: ITypeProps) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   useEffect(() => {
+    if (Object.keys(state).length > 0 && state) {
+      setAadharNumber(state.aadharNo);
+      setPanNumber(state.panCard);
+      setGSTNumber(state.gstNo);
+      setAadharNumberError("");
+      setPanNumberError("");
+      setgstError("");
+    }
+  }, [state]);
+  useEffect(() => {
     let btype = sessionStorage.getItem("businessType");
     setBusinessType(btype);
   }, []);
@@ -57,7 +70,7 @@ const Index = (props: ITypeProps) => {
       return null;
     }
 
-    const panNumber = gstNumber.substring(2, 13);
+    const panNumber = gstNumber.substring(2, 12);
     setPanNumber(panNumber);
     return panNumber;
   }
@@ -66,6 +79,7 @@ const Index = (props: ITypeProps) => {
     if (gstNumber) {
       extractPANFromGST(gstNumber);
       setgstError("");
+      setPanNumberError("");
     }
   }, [gstNumber]);
 
@@ -139,7 +153,9 @@ const Index = (props: ITypeProps) => {
         aadharNumber?.length !== 0 &&
         aadharNumberError === "") ||
         (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
-      panNumber
+      panNumber &&
+      panNumber?.length !== 0 &&
+      panNumberError === ""
     ) {
       setOtpFormBtnStatus(true);
     } else {
@@ -184,13 +200,13 @@ const Index = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
-          // className="!mt-[78px]"
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <form onSubmit={onSendOtp}>
-          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[160px] px-5 lg:px-0 gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
             {businessType === "individual" ? (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
                 <CustomInputBox

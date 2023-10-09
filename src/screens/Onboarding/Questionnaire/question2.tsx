@@ -68,11 +68,11 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4 lg:mt-[18px]">
               <div>
-                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
                   {question}
                 </span>
               </div>
-              <div className="flex flex-col items-start mt-4">
+              <div className="flex flex-col items-start mt-4 capitalize font-Open text-base font-normal leading-[22px]">
                 {questionsData[1]?.options?.map((element: any, index: any) => {
                   return (
                     <Checkbox
@@ -82,7 +82,6 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                         handleCheckBox(element.target.checked, index);
                       }}
                       label={element.value}
-                      className="text-base font-Open font-normal leading-[22px]"
                       style={{ accentColor: "black" }}
                     />
                   );

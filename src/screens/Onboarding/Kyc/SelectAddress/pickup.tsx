@@ -82,14 +82,14 @@ const PickUp = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
-          // className="!mt-[58px]"
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Select your Pickup Address"
         />
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">
           <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0   lg:w-[320px] ">
+            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0 lg:w-[320px] ">
               {/*commented as instructed */}
               {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
@@ -106,51 +106,51 @@ const PickUp = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:px-5 lg:h-[390px] lg:overflow-y-scroll ">
-            <div className="  space-y-3 mb-6 ">
-              {defaultAddress?.map((el: any, i: number) => {
-                return (
-                  <div key={i}>
-                    {el?.fullAddress !== "" && (
-                      <Card
-                        // onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                        onClick={setDefaultAddressSelect}
-                        name="address"
-                        value={el}
-                        title={el?.fullAddress}
-                        checked={
-                          defaultAddressSelect?.addressId === el?.addressId
-                        }
-                        doctype={el?.doctype}
-                        titleClassName="!font-normal !text-[12px]"
-                        cardClassName="!mt-6 !cursor-pointer"
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+          <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3 ">
+            {/* <div className="  space-y-3 mb-6 "> */}
+            {defaultAddress?.map((el: any, i: number) => {
+              return (
+                <div key={i}>
+                  {el?.fullAddress !== "" && (
+                    <Card
+                      // onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                      onClick={setDefaultAddressSelect}
+                      name="address"
+                      value={el}
+                      title={el?.fullAddress}
+                      checked={
+                        defaultAddressSelect?.addressId === el?.addressId
+                      }
+                      doctype={el?.doctype}
+                      titleClassName="!font-normal !text-[12px]"
+                      cardClassName="!mt-1 !cursor-pointer"
+                    />
+                  )}
+                </div>
+              );
+            })}
+            {/* </div> */}
           </div>
 
           {/* {isLgScreen && ( */}
-          <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+          {/* <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
             <ServiceButton
               text="SUBMIT"
               className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
               onClick={() => onSubmit()}
             />
-          </div>
+          </div> */}
           {/* )} */}
 
-          {/* {isLgScreen && (
-              <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
-                <ServiceButton
-                  text="SUBMIT"
-                  className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
-                  onClick={() => {}}
-                />
-              </div>
-            )} */}
+          {isLgScreen && (
+            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+              <ServiceButton
+                text="SUBMIT"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
+                onClick={() => {}}
+              />
+            </div>
+          )}
           {/* </div> */}
           {!isLgScreen && (
             <div
@@ -188,7 +188,7 @@ const PickUp = (props: ITypeProps) => {
 
   return (
     <div>
-      {/* {!isLgScreen && addressComponent()} */}
+      {!isLgScreen && addressComponent()}
 
       {isLgScreen && (
         <div className="mx-4 hidden lg:block ">

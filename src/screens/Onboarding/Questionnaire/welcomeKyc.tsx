@@ -36,7 +36,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
   const note = () => {
     return (
-      <div className=" ml-6 text-[#494949] text-xs mt-7 leading-4 font-Open">
+      <div className=" absolute bottom-[-250px] md:left-[170px] lg:relative lg:top-7 lg:left-[-15px]  ml-6 text-[#494949] text-xs leading-4 font-Open md:text-center">
         NOTE: KYC is mandatory for shipping orders and identification.
       </div>
     );
@@ -62,11 +62,11 @@ export const WelcomeKyc: React.FunctionComponent = () => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px] lg:mt-0">
               <div>
-                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
                   {question}
                 </span>
               </div>
-              <div className="flex flex-col items-start mt-4">
+              <div className="flex flex-col items-start mt-4 capitalize font-Open text-xs font-normal leading-[22px]">
                 {questionsData[4]?.options?.map((element: any, index: any) => {
                   return (
                     <Checkbox
@@ -77,7 +77,6 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                         handleCheckBox(element.target.checked, index);
                       }}
                       label={element.value}
-                      className="text-base font-Open font-normal leading-[22px]"
                       style={{ accentColor: "black" }}
                     />
                   );

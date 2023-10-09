@@ -40,7 +40,7 @@ const BusinessType = (props: ITypeProps) => {
         // toast.success(response?.message);
         //Navigate Url' go here
       } else {
-        toast.error(response?.message);
+        toast.error("Please Select One Of The Above Business Type");
         setLoading(false);
       }
     } catch (error) {
@@ -62,7 +62,7 @@ const BusinessType = (props: ITypeProps) => {
               </div>
 
               <WelcomeHeader
-                // className="!mt-[85px]"
+                className="!mt-[44px] lg:!mt-6"
                 title="Welcome to Shipyaari"
                 content="Kindly complete your KYC"
               />
