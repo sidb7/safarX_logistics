@@ -50,6 +50,13 @@ export const WelcomeKyc: React.FunctionComponent = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
+        <div className="product-box flex items-center lg:hidden">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
         <div className="flex flex-col mx-4 mt-10 lg:grid lg:grid-cols-2 lg:mt-[100px] lg:gap-x-4">
           <div>
             <WelcomeHeader

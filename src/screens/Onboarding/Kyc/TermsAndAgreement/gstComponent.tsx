@@ -231,7 +231,13 @@ export const GSTComponent = (props: ITypeProps) => {
 
   return (
     <div>
-      {!isBigScreen && gstCommonComponent()}
+      {!isBigScreen && loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        gstCommonComponent()
+      )}
 
       {isBigScreen && (
         <CustomBottomModal

@@ -166,7 +166,13 @@ const Billing = (props: ITypeProps) => {
 
   return (
     <div>
-      {!isLgScreen && addressComponent()}
+      {!isLgScreen && loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      )}
 
       {isLgScreen && (
         <div className="mx-4 hidden lg:block ">

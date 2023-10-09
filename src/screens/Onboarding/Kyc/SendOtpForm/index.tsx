@@ -182,9 +182,9 @@ const Index = (props: ITypeProps) => {
       else if (businessType === "business") {
         verifyGST(gstNumber);
       } else if (businessType === "company") {
-        navigate("/onboarding/kyc-mobile-verify", {
-          state: { path: "otp-form" },
-        });
+        // navigate("/onboarding/kyc-mobile-verify", {
+        //   state: { path: "otp-form" },
+        // });
         verifyGST(gstNumber);
       } else {
         toast.error("Something Went Wrong!!");
@@ -333,7 +333,13 @@ const Index = (props: ITypeProps) => {
   console.log("panNO", panNumber);
   return (
     <div>
-      {!isBigScreen && sendOtpFormComponent()}
+      {!isBigScreen && loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        sendOtpFormComponent()
+      )}
 
       {isBigScreen && (
         <CustomBottomModal

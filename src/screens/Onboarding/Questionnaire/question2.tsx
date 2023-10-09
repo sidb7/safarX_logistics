@@ -58,7 +58,14 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
-        <div className="flex flex-col mx-4 mt-10 lg:grid lg:grid-cols-2 lg:mt-[80px] lg:gap-x-4">
+        <div className="product-box flex items-center lg:hidden">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
+        <div className="flex flex-col mx-4 mt-[68px] lg:grid lg:grid-cols-2 lg:mt-[80px] lg:gap-x-4">
           <div>
             <WelcomeHeader welcomeClassName="!mt-4" className="hidden" />
             <div className="flex justify-center">
