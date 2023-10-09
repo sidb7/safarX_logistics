@@ -10,6 +10,7 @@ import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import NavBar from "../../../layout/Old_NavBar";
+import { Spinner } from "../../../components/Spinner";
 
 const modalTitle = () => {
   return (
@@ -26,17 +27,19 @@ const modalTitle = () => {
 const WalletDetails = () => {
   const { isLgScreen } = ResponsiveState();
   const [openModal, setOpenModal] = useState(true);
+  const [loading, setLoading] = useState<any>(false);
+  const navigate = useNavigate();
+  const [accountName, setAccountName] = useState<any>();
+  const [bankName, setBankName] = useState<any>();
+  const [branchName, setBranchName] = useState<any>();
+  const [accountType, setAccountType] = useState<any>();
+  const [ifscCode, setIfscCode] = useState<any>();
   const WalletBankDetails = () => {
-    const navigate = useNavigate();
-    const [accountName, setAccountName] = useState<any>();
-    const [bankName, setBankName] = useState<any>();
-    const [branchName, setBranchName] = useState<any>();
-    const [accountType, setAccountType] = useState<any>();
-    const [ifscCode, setIfscCode] = useState<any>();
-    const [walletRechargeModalOpen, setWalletRechargeModalOpen] =
-      useState(false);
+    // const [walletRechargeModalOpen, setWalletRechargeModalOpen] =
+    //   useState(false);
 
     const postAccountDetails = async () => {
+      setLoading(true);
       const payload = {
         bankName: bankName,
         branchName: branchName,
@@ -45,14 +48,17 @@ const WalletDetails = () => {
         accountType: accountType,
         bankAccountNumber: accountName,
       };
+
       const datas = await POST(POST_ADD_BANK_DETAILS, payload);
 
       if (datas?.data?.success) {
         toast.success("Bank Details verified successfully");
-        setWalletRechargeModalOpen(true);
+        // setWalletRechargeModalOpen(true);
+        setLoading(false);
         navigate("/onboarding/wallet-payment");
       } else {
         toast.error(datas?.data?.message);
+        setLoading(false);
       }
     };
 
@@ -148,7 +154,12 @@ const WalletDetails = () => {
   };
   return (
     <>
-      {isLgScreen && openModal && (
+      {/* {isLgScreen && openModal && ( */}
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={openModal}
@@ -158,7 +169,9 @@ const WalletDetails = () => {
           {WalletBankDetails()}
         </CenterModal>
       )}
-      {!isLgScreen && WalletBankDetails()}
+
+      {/* )} */}
+      {/* {!isLgScreen && WalletBankDetails()} */}
     </>
   );
 };

@@ -23,11 +23,10 @@ const modalTitle = () => {
 const WalletMain = () => {
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const navigate = useNavigate();
+
+  const [isRechargeModalOpen, setIsRechargeModalOpen] = useState(false);
   const WalletRechargeMain = () => {
-    const navigate = useNavigate();
-
-    const [isRechargeModalOpen, setIsRechargeModalOpen] = useState(false);
-
     const handleRechargeNow = () => {
       navigate("/onboarding/wallet-details");
       setIsRechargeModalOpen(true);
