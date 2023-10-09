@@ -114,6 +114,7 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
+import ComparePlans from "../screens/Plan/comparePlans";
 import AddRole from "../screens/Profile/Settings/roleManagement/addRole";
 import UpdateRole from "../screens/Profile/Settings/roleManagement/updateRole";
 import UserManagement from "../screens/Profile/Settings/userManagement";
@@ -708,7 +709,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
             </Route>
-
+            {/* Plan Routes */}
             <Route>
               <Route
                 path="/plans"
@@ -723,6 +724,14 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <PlanDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/plans/compare-plans"
+                element={
+                  <ProtectedRoute>
+                    <ComparePlans />
                   </ProtectedRoute>
                 }
               />

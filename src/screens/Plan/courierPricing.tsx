@@ -3,9 +3,7 @@ import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { POST } from "../../utils/webService";
 import { COURIER_PRICING } from "../../utils/ApiUrls";
-import { capitalizeFirstLetter } from "../../utils/utility";
 import { ScrollNav } from "../../components/ScrollNav";
-
 import upArrowBlue from "../../assets/upArrorwBlue.svg";
 
 const CourierPricing = () => {
@@ -222,7 +220,7 @@ const CourierPricing = () => {
 
   return (
     <div>
-      <div className="ml-[30px]">
+      <div className="mx-5 lg:ml-[30px]">
         <ScrollNav
           arrayData={arrayData}
           showNumber={false}
@@ -230,7 +228,7 @@ const CourierPricing = () => {
         />
       </div>
 
-      <div className="ml-[30px] mb-[68px] overflow-x-scroll ">
+      <div className="mx-5 lg:ml-[30px] mb-[68px] overflow-x-scroll ">
         <CustomTable
           columns={columns}
           data={data[renderingComponents]?.rates || []}
