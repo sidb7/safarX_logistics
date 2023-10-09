@@ -82,6 +82,7 @@ const BusinessType = (props: ITypeProps) => {
           },
           addressId: defaultAddressSelect?.addressId,
           isDefault: true,
+          magicObject: responses?.data?.message || {},
         };
         setLoading(true);
 
