@@ -27,17 +27,17 @@ const modalTitle = () => {
 const WalletDetails = () => {
   const { isLgScreen } = ResponsiveState();
   const [openModal, setOpenModal] = useState(true);
-  const [loading, setLoading] = useState<any>(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [accountName, setAccountName] = useState<any>();
   const [bankName, setBankName] = useState<any>();
   const [branchName, setBranchName] = useState<any>();
   const [accountType, setAccountType] = useState<any>();
   const [ifscCode, setIfscCode] = useState<any>();
-  const WalletBankDetails = () => {
-    // const [walletRechargeModalOpen, setWalletRechargeModalOpen] =
-    //   useState(false);
 
+  const [walletRechargeModalOpen, setWalletRechargeModalOpen] = useState(false);
+
+  const WalletBankDetails = () => {
     const postAccountDetails = async () => {
       setLoading(true);
       const payload = {
@@ -53,7 +53,7 @@ const WalletDetails = () => {
 
       if (datas?.data?.success) {
         toast.success("Bank Details verified successfully");
-        // setWalletRechargeModalOpen(true);
+        setWalletRechargeModalOpen(true);
         setLoading(false);
         navigate("/onboarding/wallet-payment");
       } else {
@@ -154,12 +154,11 @@ const WalletDetails = () => {
   };
   return (
     <>
-      {/* {isLgScreen && openModal && ( */}
       {loading ? (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
-      ) : (
+      ) : isLgScreen ? (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={openModal}
@@ -168,10 +167,9 @@ const WalletDetails = () => {
         >
           {WalletBankDetails()}
         </CenterModal>
+      ) : (
+        WalletBankDetails()
       )}
-
-      {/* )} */}
-      {/* {!isLgScreen && WalletBankDetails()} */}
     </>
   );
 };
