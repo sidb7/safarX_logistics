@@ -1,205 +1,70 @@
 import React, { useEffect, useState } from "react";
 import PlanCard from "./planCard";
-import { CustomTable } from "../../components/Table";
 import { Breadcrum } from "../../components/Layout/breadcrum";
-
 import "../../styles/plan.css";
-
-import { createColumnHelper } from "@tanstack/react-table";
-import Checkbox from "../../components/CheckBox";
 import { GET_ALL_PLANS, POST_CREATE_PLAN } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import ComparePlans from "./comparePlans";
+import { useNavigate } from "react-router-dom";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import WebCrossIcon from "../../assets/PickUp/ModalCrossWeb.svg";
+import ServiceButton from "../../components/Button/ServiceButton";
+import { BottomNavBar } from "../../components/BottomNavBar";
 
 interface ITypeProps {}
 
 const Index = (props: ITypeProps) => {
-  const columnsHelper = createColumnHelper<any>();
+  const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
 
   const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
 
   const [allPlans, setAllPlans] = useState<any>([]);
   const [activePlanId, setActivePlanId] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [onSelectPlan, setOnSelectPlan] = useState<any>();
 
-  //Table Data
-
-  const data = [
-    {
-      overview: "Shared Support Team",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Account Manager",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Multiple Carrier Partner",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Channel Integration",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-
-    {
-      overview: "Label Customization",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Domestic International Shipping",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Complementary NDR Support",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Exception Management Support",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-    {
-      overview: "Customized Reporting & Analytical Solution",
-
-      freemium: true,
-      silver: true,
-      gold: true,
-      platinum: true,
-    },
-  ];
-
-  //Table Columns
-
-  const columns = [
-    columnsHelper.accessor("overview", {
-      header: () => {
-        return (
-          <p className=" flex items-center justify-start font-Open text-sm font-semibold leading-[18px] text-[#004EFF] whitespace-nowrap lg:w-[642px] ">
-            Overview
-          </p>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.overview}
-          </p>
-        );
-      },
-    }),
-    columnsHelper.accessor("freemium", {
-      header: () => {
-        return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            {allPlans[0]?.planName || "FREEMIUM"}
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center ">
-            <Checkbox
-              checked={info.row.original.freemium}
-              style={{ accentColor: "black" }}
-            />
+  const ModalContent = () => {
+    return (
+      <div className="flex flex-col  w-full h-full p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsModalOpen(false)}
+          />
+        </div>
+        <div className="flex flex-col  mt-16">
+          <div className="flex flex-col  items-center  ">
+            <p className="font-Open text-sm md:text-base font-semibold text-center">
+              Are you sure you want to select
+              <span className="text-[#004EFF]"> {onSelectPlan?.planName} </span>
+              plan?
+            </p>
+            <div className="flex  items-center gap-x-4 mt-10">
+              <ServiceButton
+                text="Yes"
+                className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
+                onClick={() => {
+                  createPlan(onSelectPlan);
+                  setIsModalOpen(false);
+                }}
+              />
+              <ServiceButton
+                text="No"
+                className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+                onClick={() => setIsModalOpen(false)}
+              />
+            </div>
           </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("silver", {
-      header: () => {
-        return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            {allPlans[1]?.planName || "SILVER"}
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center ">
-            <Checkbox
-              checkboxClassName="!text-black"
-              checked={info.row.original.silver}
-              style={{ accentColor: "black" }}
-            />
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("gold", {
-      header: () => {
-        return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            {allPlans[2]?.planName || "GOLD"}
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center ">
-            <Checkbox
-              checked={info.row.original.gold}
-              style={{ accentColor: "black" }}
-            />
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("platinum", {
-      header: () => {
-        return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            {allPlans[3]?.planName || "PLATINUM"}
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center ">
-            <Checkbox
-              checked={info.row.original.platinum}
-              style={{ accentColor: "black" }}
-            />
-          </div>
-        );
-      },
-    }),
-  ];
+        </div>
+      </div>
+    );
+  };
 
   const createPlan = async (payload: any) => {
     try {
@@ -208,6 +73,7 @@ const Index = (props: ITypeProps) => {
 
       if (response?.success) {
         setActivePlanId(payload?.planId);
+
         toast.success(response?.message);
       } else {
         toast.error(response?.message);
@@ -224,48 +90,71 @@ const Index = (props: ITypeProps) => {
         const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
 
         if (response?.success) {
-          setAllPlans(response?.data.reverse());
+          setAllPlans(response?.data?.reverse());
         }
       } catch (error) {
         console.error("GET PLAN API ERROR", error);
         return error;
       }
     })();
-  }, []);
+  }, [activePlanId]);
 
   return (
     <>
       {isActive ? (
-        <div className="mr-6">
-          <div className="mb-6">
-            <Breadcrum label="Plans" />
-          </div>
+        <div>
+          <div className="ml-5 lg:mr-6">
+            <div className="lg:mb-6">
+              <Breadcrum label="Plans" />
+            </div>
 
-          {/* Plan Cards */}
-          <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly  mb-[60px] ">
-            {allPlans.map((eachPlan: any, index: any) => {
-              return (
-                <PlanCard
-                  planId={eachPlan.planId}
-                  planName={eachPlan.planName}
-                  price={eachPlan.price}
-                  validity={eachPlan.validity}
-                  description={eachPlan.description}
-                  onClick={() => createPlan(eachPlan)}
-                  activePlanId={activePlanId}
-                />
-              );
-            })}
+            {/* Plan Cards */}
+            <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly mb-8 lg:mb-[60px] ">
+              {allPlans.map((eachPlan: any, index: any) => {
+                return (
+                  <PlanCard
+                    planId={eachPlan?.planId}
+                    planName={eachPlan?.planName}
+                    price={eachPlan?.price}
+                    validity={eachPlan?.validity}
+                    description={eachPlan?.description}
+                    onClick={() => {
+                      setIsModalOpen(true);
+                      setOnSelectPlan(eachPlan);
+                    }}
+                    activePlanId={activePlanId}
+                    isSelected={eachPlan?.isSelected}
+                  />
+                );
+              })}
+            </div>
+            {/*Compare Button */}
+            <div className="flex justify-center ml-5  lg:hidden">
+              <ServiceButton
+                text="COMPARE"
+                className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
+                onClick={() => {
+                  navigate("/plans/compare-plans");
+                }}
+              />
+            </div>
+            {/* Table */}
+            <div className="hidden lg:block">
+              <ComparePlans />
+            </div>
           </div>
-          {/* Table */}
-          <div className="ml-5 ">
-            <CustomTable
-              columns={columns}
-              data={data}
-              tdclassName={"def"}
-              thclassName={"bg-white"}
-            />
+          {/* Bottom NavBar */}
+          <div className="lg:hidden">
+            <BottomNavBar />
           </div>
+          {/* Modal */}
+          <CenterModal
+            isOpen={isModalOpen}
+            className=" !flex !justify-center !items-center !w-[320px] !h-[320px]  lg:!w-[500px] lg:!h-[320px]"
+            onRequestClose={() => setIsModalOpen(false)}
+          >
+            {ModalContent()}
+          </CenterModal>
         </div>
       ) : (
         <AccessDenied />

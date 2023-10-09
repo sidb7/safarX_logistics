@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PickUpScreen from "../screens/NewOrder/PickUp";
+import PickupLocationUpdatedUI from "../screens/NewOrder/NewPickupCopyForNewUI";
 import DeliveryScreen from "../screens/NewOrder/Delivery";
 // import ProductScreen from "../screens/NewOrder/Product";
 import AddProductOrder from "../screens/NewOrder/Product/AddProduct";
@@ -44,7 +45,7 @@ import SelectAddressPickUp from "../screens/Onboarding/Kyc/SelectAddress/pickup"
 
 import TransactionLayout from "../layout/TransactionLayout";
 // import WalletRecharge from "../screens/NewOrder/WalletRecharge";
-import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
+// import OnBoundingWalletRecharge from "../screens/Onboarding/WalletRecharge";
 import RechargePayment from "../screens/NewOrder/WalletRecharge/rechargePayment";
 import ProfileLayout from "../layout/ProfileLayout";
 import ReturningUserPickup from "../screens/NewOrder/ReturningUser/PickUp";
@@ -92,6 +93,10 @@ import Service from "../screens/Order/Service";
 import Summary from "../screens/Order/Summary";
 import Payment from "../screens/Order/Payment";
 import WalletRecharge from "../screens/Order/WalletRecharge";
+import WalletMain from "../../src/screens/Onboarding/WalletRecharge/walletMain";
+import WalletDetails from "../../src/screens/Onboarding/WalletRecharge/walletDetails";
+import WalletPayment from "../screens/Onboarding/WalletRecharge/walletPayment";
+
 // import Layout from "../layout";
 // import { CommonLayout } from "../layout/layout";
 
@@ -114,6 +119,7 @@ import NotFound from "../components/404NotFound/NotFound";
 import { Profile } from "../screens/Profile";
 import PlanDetails from "../screens/Plan/planDetails";
 import NewUserPlanScreen from "../screens/Plan";
+import ComparePlans from "../screens/Plan/comparePlans";
 import AddRole from "../screens/Profile/Settings/roleManagement/addRole";
 import UpdateRole from "../screens/Profile/Settings/roleManagement/updateRole";
 import UserManagement from "../screens/Profile/Settings/userManagement";
@@ -300,14 +306,45 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+
+            {/**wallet recharge main page */}
             <Route
+              path="/onboarding/wallet-main"
+              element={
+                <ProtectedRoute>
+                  <WalletMain />
+                </ProtectedRoute>
+              }
+            />
+            {/**wallet details page */}
+            <Route
+              path="/onboarding/wallet-details"
+              element={
+                <ProtectedRoute>
+                  <WalletDetails />
+                </ProtectedRoute>
+              }
+            />
+            {/**wallet payment page */}
+
+            <Route
+              path="/onboarding/wallet-payment"
+              element={
+                <ProtectedRoute>
+                  <WalletPayment />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* <Route
               path="/onboarding/wallet-recharge"
               element={
                 <ProtectedRoute>
                   <OnBoundingWalletRecharge />
                 </ProtectedRoute>
               }
-            />
+            /> */}
+
             <Route
               path="/onboarding/recharge-payment"
               element={
@@ -381,6 +418,7 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <PickupLocationNew />
+                    {/* <PickupLocationUpdatedUI /> */}
                   </ProtectedRoute>
                 }
               />
@@ -708,7 +746,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
             </Route>
-
+            {/* Plan Routes */}
             <Route>
               <Route
                 path="/plans"
@@ -723,6 +761,14 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <PlanDetails />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/plans/compare-plans"
+                element={
+                  <ProtectedRoute>
+                    <ComparePlans />
                   </ProtectedRoute>
                 }
               />

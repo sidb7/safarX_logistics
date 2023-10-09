@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../components/Input";
 import CustomInputWithDropDown from "../../../components/CategoriesDropDown/CategoriesDropDown";
+import { getQueryJson } from "../../../utils/utility";
 
 interface IProductFilledProps {}
 const steps = [
@@ -70,6 +71,8 @@ const steps = [
 
 const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id || "";
   const initialUserData = {
     productId: "",
     name: "",
@@ -96,12 +99,17 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const [divisor, setDivisor] = useState<any>(5000);
 
   const addProductInfo = async () => {
-    const { data: response } = await POST(POST_PRODUCT_URL, {
+    const payload = {
+      tempOrderId: +shipyaari_id,
       products: productPayload,
-    });
+    };
+    console.log("productpayload", payload);
+    const { data: response } = await POST(POST_PRODUCT_URL, payload);
     if (response?.success) {
       toast.success(response?.message);
-      navigate("/orders/add-order/product-package");
+      navigate(
+        `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}`
+      );
     } else {
       toast.error("Failed To Upload!");
     }
@@ -129,7 +137,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   const getOrderProductDetails = async () => {
     try {
-      const { data } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id };
+      const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data?.success) {
         setProductPayload(data?.data[0]?.products);
         if (data?.data[0]?.products.length < 1) {
@@ -139,7 +148,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         }
       } else {
         toast.error(data?.message);
-        navigate("/orders/add-order/pickup");
+        navigate("/orders/add-order/delivery");
         throw new Error(data?.message);
       }
     } catch (error) {

@@ -62,7 +62,7 @@ const PickUp = (props: ITypeProps) => {
         );
         if (responses?.success) {
           toast.success(responses?.message);
-          navigate("/onboarding/wallet-recharge");
+          navigate("/onboarding/wallet-main");
           //Navigate Url's go here
         } else {
           toast.error(responses?.message);

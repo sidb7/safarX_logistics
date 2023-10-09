@@ -94,7 +94,7 @@ const BusinessType = (props: ITypeProps) => {
           setLoading(false);
           toast.success(responses?.message);
 
-          navigate("/onboarding/wallet-recharge");
+          navigate("/onboarding/wallet-main");
         } else {
           setLoading(false);
           toast.error(response.message);
