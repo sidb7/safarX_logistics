@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -21,6 +21,14 @@ const BusinessType = (props: ITypeProps) => {
   const [openModal, setOpenModal] = useState(true);
   const [loading, setLoading] = useState(false);
   const { isLgScreen } = ResponsiveState();
+  const [checked, setChecked] = useState<any>({
+    individual: false,
+    bussiness: false,
+    company: false,
+  });
+  useEffect(() => {
+    setChecked({ [`${sessionStorage.getItem("businessType")}`]: true });
+  }, []);
 
   //Calling API on Submit
 
@@ -76,6 +84,9 @@ const BusinessType = (props: ITypeProps) => {
                   value="individual"
                   title="Individual"
                   subTitle="Shipper not having GST"
+                  checked={checked.individual}
+                  setChecked={setChecked}
+                  onClick={setChecked}
                 />
 
                 <Card
@@ -83,6 +94,9 @@ const BusinessType = (props: ITypeProps) => {
                   value="business"
                   title="Business"
                   subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
+                  checked={checked.business}
+                  setChecked={setChecked}
+                  onClick={setChecked}
                 />
 
                 <Card
@@ -90,6 +104,9 @@ const BusinessType = (props: ITypeProps) => {
                   value="company"
                   title="Company"
                   subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
+                  checked={checked.company}
+                  setChecked={setChecked}
+                  onClick={setChecked}
                 />
               </div>
               <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
