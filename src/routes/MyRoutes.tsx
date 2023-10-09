@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PickUpScreen from "../screens/NewOrder/PickUp";
+import PickupLocationUpdatedUI from "../screens/NewOrder/NewPickupCopyForNewUI";
 import DeliveryScreen from "../screens/NewOrder/Delivery";
 // import ProductScreen from "../screens/NewOrder/Product";
 import AddProductOrder from "../screens/NewOrder/Product/AddProduct";
@@ -417,6 +418,7 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <PickupLocationNew />
+                    {/* <PickupLocationUpdatedUI /> */}
                   </ProtectedRoute>
                 }
               />

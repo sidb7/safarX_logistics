@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import RecipientType from "./Recipient/recipient";
 import { useSelector } from "react-redux";
 import ReturningDelivery from "../ReturningUser/Delivery";
+import { getQueryJson } from "../../../utils/utility";
 
 const steps = [
   {
@@ -61,6 +62,8 @@ const steps = [
 const DeliveryLocation = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id;
 
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
@@ -126,6 +129,7 @@ const DeliveryLocation = () => {
     },
     orderType: "B2B",
     gstNumber: "",
+    tempOrderId: shipyaari_id || "",
   });
   const userType = useSelector((state: any) => state.user.isReturningUser);
 
@@ -153,7 +157,7 @@ const DeliveryLocation = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/orders/add-order/add-product");
+        navigate(`/orders/add-order/add-product?shipyaari_id=${shipyaari_id}`);
       } else {
         toast.error(response?.message);
       }
@@ -164,7 +168,9 @@ const DeliveryLocation = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id || "" };
+
+      const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data.success && data?.data.length > 0) {
         const orderData = data?.data[0];
 
@@ -232,6 +238,7 @@ const DeliveryLocation = () => {
             },
             orderType: orderData?.orderType,
             gstNumber: orderData?.gstNumber,
+            tempOrderId: orderData?.tempOrderId || "",
           });
         }
       }
