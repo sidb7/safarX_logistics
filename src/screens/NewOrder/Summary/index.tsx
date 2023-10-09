@@ -131,7 +131,7 @@ const Summary = (props: Props) => {
         resolve(placeOrderPromise);
       });
 
-      if (invoiceValue >= 50000) {
+      if (invoiceValue >= 50000 && ewaybillNumber === "") {
         toast.error("Please enter eway-bill No.");
         return;
       }
