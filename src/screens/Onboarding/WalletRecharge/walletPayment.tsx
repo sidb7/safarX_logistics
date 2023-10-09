@@ -32,15 +32,14 @@ const WalletPayment = () => {
   const { isLgScreen } = ResponsiveState();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
+  const navigate = useNavigate();
+  const [Razorpay] = useRazorpay();
+  const [money, setMoney] = useState<any>(2000);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [isEdit, setIsedit] = useState<any>();
+
+  const userDetails = useSelector((state: any) => state.signin);
   const WalletRechargePaymentDetails = () => {
-    const navigate = useNavigate();
-    const [Razorpay] = useRazorpay();
-    const [money, setMoney] = useState<any>(2000);
-    const [isDisabled, setIsDisabled] = useState(false);
-    const [isEdit, setIsedit] = useState<any>();
-
-    const userDetails = useSelector((state: any) => state.signin);
-
     const convertToEdit = () => {
       setIsedit(true);
     };
