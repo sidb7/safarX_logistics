@@ -38,6 +38,7 @@ import { useSelector } from "react-redux";
 import AddPackageDetails from "./AddPackageDetails";
 import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { getQueryJson } from "../../../utils/utility";
 
 interface IPackageProps {}
 const steps = [
@@ -119,6 +120,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     collectableAmount: 0,
     invoiceValue: 0,
   });
+  const params = getQueryJson();
+  let shipyaari_id = params?.shipyaari_id || "";
+
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
   const isReturningUser = useSelector(
@@ -228,7 +232,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   const getOrderProductDetails = async () => {
     try {
-      const { data } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id };
+      const { data } = await POST(GET_LATEST_ORDER, payload);
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
@@ -237,7 +242,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setProducts(resProduct);
       } else {
         toast.error(data?.message);
-        navigate("/orders/add-order/pickup");
+        navigate(`/orders/add-order/product-package`);
         return;
       }
       if (boxData?.success) {
@@ -265,6 +270,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         status: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
+      tempOrderId: +shipyaari_id,
     };
 
     if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
@@ -275,7 +281,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
       toast.success(data?.message);
-      navigate("/orders/add-order/service");
+      navigate(`/orders/add-order/service?shipyaari_id=${shipyaari_id}`);
     } else {
       toast.error(data?.message);
     }
