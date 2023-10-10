@@ -91,10 +91,12 @@ const Summary = (props: Props) => {
   const navigate = useNavigate();
   const params = getQueryJson();
   const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
+
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
-      const payload = { tempOrderId: shipyaari_id };
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data: response } = await POST(GET_LATEST_ORDER, payload);
 
       if (response?.success) {
@@ -109,18 +111,19 @@ const Summary = (props: Props) => {
     }
   };
   const invoiceValue = latestOrder?.data?.[0]?.service?.total;
-  console.log("invoiceValue", invoiceValue);
   const setOrderIdApi = async () => {
     try {
       let payload = {
         orderId: orderId,
         ewaybillNumber: ewaybillNumber,
         tempOrderId: +shipyaari_id,
+        source: orderSource,
       };
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
       const placeOrderPromise = await POST(POST_PLACE_ORDER, {
         tempOrderId: +shipyaari_id,
+        source: orderSource,
       });
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
@@ -150,7 +153,7 @@ const Summary = (props: Props) => {
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
                 navigate(
-                  `orders/add-order/payment?shipyaari_id=${shipyaari_id}`,
+                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
                   {
                     state: { requiredBalance: requiredBalance },
                   }
