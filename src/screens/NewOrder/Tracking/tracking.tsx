@@ -182,7 +182,7 @@ const Tracking = () => {
           {/* <div className="flex justify-center p-3">
           <img src={shipyaari} alt="Shipyaari" />
         </div> */}
-          <div className="flex mx-5 md:my-5 ">
+          <div className="flex mx-3 md:mx-5 md:my-5 ">
             <div className="flex w-[100%] max-w-[1300px] gap-5 max-md:flex-col">
               {/*tracking ID Box */}
               <div className="flex flex-col basis-3/4">
