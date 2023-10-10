@@ -26,7 +26,11 @@ import { insufficientBalance } from "../../utils/dummyData";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
-import { CANCEL_WAY_BILL, GET_SELLER_ORDER } from "../../utils/ApiUrls";
+import {
+  CANCEL_TEMP_SELLER_ORDER,
+  CANCEL_WAY_BILL,
+  GET_SELLER_ORDER,
+} from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../components/Layout/breadcrum";
@@ -36,7 +40,7 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
-
+import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -157,6 +161,10 @@ const Index = () => {
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
+  });
+  const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
+    isOpen: false,
+    payload: "",
   });
   const [sellerOverview, setSellerOverview]: any = useState([
     {
@@ -317,7 +325,9 @@ const Index = () => {
 
       switch (tabs[index].value) {
         case "DRAFT":
-          setColumnhelper(columnHelperForNewOrder(navigate));
+          setColumnhelper(
+            columnHelperForNewOrder(navigate, setDeleteModalDraftOrder)
+          );
           break;
         case "BOOKED":
           setColumnhelper(
@@ -341,7 +351,7 @@ const Index = () => {
 
   useEffect(() => {
     handleTabChanges();
-  }, []);
+  }, [deleteModalDraftOrder]);
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
     let limit: any = 0;
@@ -498,6 +508,16 @@ const Index = () => {
         deleteTextMessage="Are You Sure You Want To Cancel This Order?"
         payloadBody={cancellationModal.awbNo}
         deleteURL={CANCEL_WAY_BILL}
+      />
+
+      <DeleteModalDraftOrder
+        url={CANCEL_TEMP_SELLER_ORDER}
+        postData={deleteModalDraftOrder.payload}
+        isOpen={deleteModalDraftOrder.isOpen}
+        closeModal={() => {
+          setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
+        }}
+        title="Are You Sure You Want To Cancel This Order?"
       />
     </>
   );

@@ -8,9 +8,16 @@ import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
+import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
+import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
+
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
 import CustomButton from "../../components/Button";
+import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
+import { toast } from "react-toastify";
+import { useMediaQuery } from "react-responsive";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -205,11 +212,12 @@ export const columnHelperForPendingOrder = [];
 
 export const columnHelperForNewOrder = (
   navigate: any,
-  setCancellationModal?: any
+  setDeleteModalDraftOrder: any
 ) => {
-  const handleCancellationModal = (tempOrderId: any) => {
-    setCancellationModal({ isOpen: true, tempOrderId });
+  const handleDeleteModalDraftOrder = (payload: any) => {
+    setDeleteModalDraftOrder({ isOpen: true, payload });
   };
+
   return [
     ...idHelper(),
     ColumnsHelper.accessor(".", {
@@ -232,10 +240,10 @@ export const columnHelperForNewOrder = (
               </div>
             ) : (
               <div
-                onClick={() => navigate("/orders/add-order/product-package")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/product-package")}
+                className="  decoration-2 cursor-pointer"
               >
-                ADD PACKAGE DETAILS
+                No Data Found
               </div>
             )}
           </div>
@@ -349,6 +357,7 @@ export const columnHelperForNewOrder = (
           tempOrderId = "-",
           sellerId = "-",
           status,
+          source,
         } = info?.row?.original;
         const { AWB } = status[0] ?? "";
         const copyString = `
@@ -369,20 +378,23 @@ export const columnHelperForNewOrder = (
           } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
 
         `;
-
+        let draftOrderPayload = {
+          tempOrderId: tempOrderId,
+          source: source,
+        };
         return (
-          <>
+          <div className="flex items-center">
             <CopyTooltip stringToBeCopied={copyString} />
-            {setCancellationModal && (
-              <img
-                src={CrossIcon}
-                width={"35px"}
-                alt="Cancel Order"
-                className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                onClick={() => handleCancellationModal(tempOrderId)}
-              />
-            )}
-          </>
+
+            <img
+              src={DeleteIconForLg}
+              alt="Delete "
+              onClick={() => {
+                handleDeleteModalDraftOrder(draftOrderPayload);
+              }}
+              className="w-5 h-5 cursor-pointer"
+            />
+          </div>
         );
       },
     }),
