@@ -146,8 +146,6 @@ const Index = (props: ITypeProps) => {
   };
 
   useEffect(() => {
-    console.log("useEffect :", gstNumber, aadharNumber, panNumber);
-
     if (
       ((aadharNumber &&
         aadharNumber?.length !== 0 &&
@@ -269,7 +267,7 @@ const Index = (props: ITypeProps) => {
                   }}
                 />
                 {/* To display error */}
-                {console.log("gstError ", gstError) as any}
+
                 {gstError !== "" && gstError !== undefined && (
                   <div className="flex items-center gap-x-1 mt-1 ">
                     <img src={ErrorIcon} alt="" width={10} height={10} />
@@ -329,19 +327,9 @@ const Index = (props: ITypeProps) => {
     );
   };
 
-  console.log("gstNo", gstNumber);
-  console.log("panNO", panNumber);
-  return (
-    <div>
-      {!isBigScreen && loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        sendOtpFormComponent()
-      )}
-
-      {isBigScreen && (
+  const renderSendOtpFormComponent = () => {
+    if (isBigScreen && openModal) {
+      return (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
@@ -356,9 +344,18 @@ const Index = (props: ITypeProps) => {
             sendOtpFormComponent()
           )}
         </CustomBottomModal>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        sendOtpFormComponent()
+      );
+    }
+  };
+  return <div>{renderSendOtpFormComponent()}</div>;
 };
 
 export default Index;

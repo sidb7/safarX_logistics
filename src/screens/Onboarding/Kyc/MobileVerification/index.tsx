@@ -359,17 +359,9 @@ const Index = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        mobileVerificationComponent()
-      )}
-
-      {isLgScreen && (
+  const renderMobileVerificationComponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
@@ -384,9 +376,18 @@ const Index = (props: ITypeProps) => {
             mobileVerificationComponent()
           )}
         </CustomBottomModal>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        mobileVerificationComponent()
+      );
+    }
+  };
+  return <div>{renderMobileVerificationComponent()}</div>;
 };
 
 export default Index;

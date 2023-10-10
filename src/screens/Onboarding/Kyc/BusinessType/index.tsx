@@ -121,7 +121,7 @@ const BusinessType = (props: ITypeProps) => {
                 <ServiceButton
                   text="SKIP FOR NOW"
                   className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
-                  onClick={() => navigate("/onboarding/wallet-recharge")}
+                  onClick={() => navigate("/onboarding/wallet-main")}
                 />
               </div>
             </div>
@@ -142,9 +142,10 @@ const BusinessType = (props: ITypeProps) => {
       </div>
     );
   };
-  return (
-    <>
-      {isLgScreen && openModal && (
+
+  const renderBusinessType = () => {
+    if (isLgScreen && openModal) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={openModal}
@@ -153,17 +154,18 @@ const BusinessType = (props: ITypeProps) => {
         >
           {businessTypeComponent()}
         </CenterModal>
-      )}
-
-      {!isLgScreen && loading ? (
+      );
+    } else {
+      return loading ? (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (
         businessTypeComponent()
-      )}
-    </>
-  );
+      );
+    }
+  };
+  return <>{renderBusinessType()}</>;
 };
 
 export default BusinessType;
