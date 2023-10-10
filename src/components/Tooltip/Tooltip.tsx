@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { classNames } from "./classNames";
 
 export const Tooltip = ({ position, content, children }: any) => (
-  <div id="tooltip" className="relative cursor-pointer group">
+  <div id="tooltip" className="relative cursor-pointer group my-2 w-fit">
     <div className=" my-1">{children}</div>
     <span
       className={classNames(
