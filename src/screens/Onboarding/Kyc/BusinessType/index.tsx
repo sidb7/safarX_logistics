@@ -142,9 +142,10 @@ const BusinessType = (props: ITypeProps) => {
       </div>
     );
   };
-  return (
-    <>
-      {isLgScreen && openModal && (
+
+  const renderBusinessType = () => {
+    if (isLgScreen && openModal) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={openModal}
@@ -153,17 +154,18 @@ const BusinessType = (props: ITypeProps) => {
         >
           {businessTypeComponent()}
         </CenterModal>
-      )}
-
-      {!isLgScreen && loading ? (
+      );
+    } else {
+      return loading ? (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (
         businessTypeComponent()
-      )}
-    </>
-  );
+      );
+    }
+  };
+  return <>{renderBusinessType()}</>;
 };
 
 export default BusinessType;

@@ -27,6 +27,7 @@ import {
   referalRegex,
 } from "../../../utils/regexCheck";
 import { text } from "stream/consumers";
+import { sign } from "crypto";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -357,9 +358,9 @@ const Index = () => {
     );
   };
 
-  return (
-    <>
-      {isLgScreen && isModalOpen && (
+  const renderSignUp = () => {
+    if (isLgScreen && isModalOpen) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
@@ -367,17 +368,18 @@ const Index = () => {
         >
           {signUp()}
         </CenterModal>
-      )}
-
-      {!isLgScreen && loading ? (
+      );
+    } else {
+      return loading ? (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (
         signUp()
-      )}
-    </>
-  );
+      );
+    }
+  };
+  return <>{renderSignUp()}</>;
 };
 
 export default Index;

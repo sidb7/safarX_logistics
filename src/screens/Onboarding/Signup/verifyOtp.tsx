@@ -64,13 +64,12 @@ const Index = () => {
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
       if (response?.success === true) {
-        setLoading(false);
         setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");
       } else {
-        setLoading(false);
         toast.error(response?.message);
       }
+      setLoading(false);
     } catch (error) {
       return error;
     }
@@ -211,9 +210,9 @@ const Index = () => {
     );
   };
 
-  return (
-    <>
-      {isLgScreen && isModalOpen && (
+  const renderVerifyOtp = () => {
+    if (isLgScreen && isModalOpen) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
@@ -227,17 +226,19 @@ const Index = () => {
             verifyOtp()
           )}
         </CenterModal>
-      )}
-
-      {!isLgScreen && loading ? (
+      );
+    } else {
+      return loading ? (
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (
         verifyOtp()
-      )}
-    </>
-  );
+      );
+    }
+  };
+
+  return <>{renderVerifyOtp()}</>;
 };
 
 export default Index;
