@@ -52,6 +52,7 @@ function ChannelIntegrationModalContent(props: any) {
           newStore = [...newStore, ...channelData.channels];
           console.log("Setting channel");
           setChannelData({ channels: newStore });
+          setModalData({ isOpen: false });
         } else if (channel === "WOOCOMMERCE") {
           let userId = Date.now();
           let wooCommerceContents = {
@@ -90,8 +91,8 @@ function ChannelIntegrationModalContent(props: any) {
         tempArr.splice(indexNum, 1);
         newStore = [...newStore, ...tempArr];
         setChannelData({ channels: newStore });
+        setModalData({ isOpen: false });
       }
-      setModalData({ isOpen: false });
     } catch (error) {}
   };
 
