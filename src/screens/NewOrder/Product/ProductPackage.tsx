@@ -233,7 +233,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   const getOrderProductDetails = async () => {
     try {
-      const payload = { tempOrderId: shipyaari_id };
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data } = await POST(GET_LATEST_ORDER, payload);
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
@@ -272,6 +272,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         amount: 0,
       },
       tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
 
     if (paymentMode === "cod" && +codData.collectableAmount <= 0) {

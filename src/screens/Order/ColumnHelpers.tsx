@@ -286,10 +286,10 @@ export const columnHelperForNewOrder = (
           <div className="text-base  py-3 text-[#8D8D8D]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
-                onClick={() => navigate("/orders/add-order/delivery")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="  decoration-2 cursor-pointer text-[black]"
               >
-                ADD DELIVERY ADDRESS
+                No Data Found
               </div>
             )}
           </div>

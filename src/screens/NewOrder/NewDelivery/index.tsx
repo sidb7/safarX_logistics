@@ -131,6 +131,7 @@ const DeliveryLocation = () => {
     orderType: "B2B",
     gstNumber: "",
     tempOrderId: shipyaari_id || "",
+    source: orderSource || "",
   });
   const userType = useSelector((state: any) => state.user.isReturningUser);
 
@@ -171,78 +172,83 @@ const DeliveryLocation = () => {
 
   useEffect(() => {
     (async () => {
-      const payload = { tempOrderId: shipyaari_id || "" };
+      {
+        const payload = { tempOrderId: +shipyaari_id, source: orderSource };
 
-      const { data } = await POST(GET_LATEST_ORDER, payload);
-      if (data.success && data?.data.length > 0) {
-        const orderData = data?.data[0];
+        const { data } = await POST(GET_LATEST_ORDER, payload);
+        if (data.success && data?.data.length > 0) {
+          const orderData = data?.data[0];
 
-        if (orderData?.deliveryAddress && orderData?.billingAddress) {
-          setDeliveryAddress({
-            deliveryAddress: {
-              fullAddress: orderData?.deliveryAddress?.fullAddress,
-              flatNo: orderData?.deliveryAddress?.flatNo,
-              locality: orderData?.deliveryAddress?.locality,
-              sector: orderData?.deliveryAddress?.sector,
-              landmark: orderData?.deliveryAddress?.landmark,
-              pincode: orderData?.deliveryAddress?.pincode,
-              city: orderData?.deliveryAddress?.city,
-              state: orderData?.deliveryAddress?.state,
-              country: orderData?.deliveryAddress?.country,
-              addressType: orderData?.deliveryAddress?.addressType,
-              workingDays: {
-                monday: orderData?.deliveryAddress?.workingDays?.monday,
-                tuesday: orderData?.deliveryAddress?.workingDays?.tuesday,
-                wednesday: orderData?.deliveryAddress?.workingDays?.wednesday,
-                thursday: orderData?.deliveryAddress?.workingDays?.thursday,
-                friday: orderData?.deliveryAddress?.workingDays?.friday,
-                saturday: orderData?.deliveryAddress?.workingDays?.saturday,
-                sunday: orderData?.deliveryAddress?.workingDays?.sunday,
+          if (orderData?.deliveryAddress && orderData?.billingAddress) {
+            setDeliveryAddress({
+              deliveryAddress: {
+                fullAddress: orderData?.deliveryAddress?.fullAddress,
+                flatNo: orderData?.deliveryAddress?.flatNo,
+                locality: orderData?.deliveryAddress?.locality,
+                sector: orderData?.deliveryAddress?.sector,
+                landmark: orderData?.deliveryAddress?.landmark,
+                pincode: orderData?.deliveryAddress?.pincode,
+                city: orderData?.deliveryAddress?.city,
+                state: orderData?.deliveryAddress?.state,
+                country: orderData?.deliveryAddress?.country,
+                addressType: orderData?.deliveryAddress?.addressType,
+                workingDays: {
+                  monday: orderData?.deliveryAddress?.workingDays?.monday,
+                  tuesday: orderData?.deliveryAddress?.workingDays?.tuesday,
+                  wednesday: orderData?.deliveryAddress?.workingDays?.wednesday,
+                  thursday: orderData?.deliveryAddress?.workingDays?.thursday,
+                  friday: orderData?.deliveryAddress?.workingDays?.friday,
+                  saturday: orderData?.deliveryAddress?.workingDays?.saturday,
+                  sunday: orderData?.deliveryAddress?.workingDays?.sunday,
+                },
+                workingHours:
+                  orderData?.deliveryAddress?.workingHours || "09:00",
+                contact: {
+                  name: orderData?.deliveryAddress?.contact?.name,
+                  mobileNo: orderData?.deliveryAddress?.contact?.mobileNo,
+                  alternateMobileNo:
+                    orderData?.deliveryAddress?.contact?.alternateMobileNo,
+                  emailId: orderData?.deliveryAddress?.contact?.emailId,
+                  type: orderData?.deliveryAddress?.contact?.type,
+                },
               },
-              workingHours: orderData?.deliveryAddress?.workingHours || "09:00",
-              contact: {
-                name: orderData?.deliveryAddress?.contact?.name,
-                mobileNo: orderData?.deliveryAddress?.contact?.mobileNo,
-                alternateMobileNo:
-                  orderData?.deliveryAddress?.contact?.alternateMobileNo,
-                emailId: orderData?.deliveryAddress?.contact?.emailId,
-                type: orderData?.deliveryAddress?.contact?.type,
+              billingAddress: {
+                fullAddress: orderData?.billingAddress?.fullAddress,
+                flatNo: orderData?.billingAddress?.flatNo,
+                locality: orderData?.billingAddress?.locality,
+                sector: orderData?.billingAddress?.sector,
+                landmark: orderData?.billingAddress?.landmark,
+                pincode: orderData?.billingAddress?.pincode,
+                city: orderData?.billingAddress?.city,
+                state: orderData?.billingAddress?.state,
+                country: orderData?.billingAddress?.country,
+                addressType: orderData?.billingAddress?.addressType,
+                workingDays: {
+                  monday: orderData?.billingAddress?.workingDays?.monday,
+                  tuesday: orderData?.billingAddress?.workingDays?.tuesday,
+                  wednesday: orderData?.billingAddress?.workingDays?.wednesday,
+                  thursday: orderData?.billingAddress?.workingDays?.thursday,
+                  friday: orderData?.billingAddress?.workingDays?.friday,
+                  saturday: orderData?.billingAddress?.workingDays?.saturday,
+                  sunday: orderData?.billingAddress?.workingDays?.sunday,
+                },
+                workingHours:
+                  orderData?.billingAddress?.workingHours || "09:00",
+                contact: {
+                  name: orderData?.billingAddress?.contact?.name,
+                  mobileNo: orderData?.billingAddress?.contact?.mobileNo,
+                  alternateMobileNo:
+                    orderData?.billingAddress?.contact?.alternateMobileNo,
+                  emailId: orderData?.billingAddress?.contact?.emailId,
+                  type: orderData?.billingAddress?.contact?.type,
+                },
               },
-            },
-            billingAddress: {
-              fullAddress: orderData?.billingAddress?.fullAddress,
-              flatNo: orderData?.billingAddress?.flatNo,
-              locality: orderData?.billingAddress?.locality,
-              sector: orderData?.billingAddress?.sector,
-              landmark: orderData?.billingAddress?.landmark,
-              pincode: orderData?.billingAddress?.pincode,
-              city: orderData?.billingAddress?.city,
-              state: orderData?.billingAddress?.state,
-              country: orderData?.billingAddress?.country,
-              addressType: orderData?.billingAddress?.addressType,
-              workingDays: {
-                monday: orderData?.billingAddress?.workingDays?.monday,
-                tuesday: orderData?.billingAddress?.workingDays?.tuesday,
-                wednesday: orderData?.billingAddress?.workingDays?.wednesday,
-                thursday: orderData?.billingAddress?.workingDays?.thursday,
-                friday: orderData?.billingAddress?.workingDays?.friday,
-                saturday: orderData?.billingAddress?.workingDays?.saturday,
-                sunday: orderData?.billingAddress?.workingDays?.sunday,
-              },
-              workingHours: orderData?.billingAddress?.workingHours || "09:00",
-              contact: {
-                name: orderData?.billingAddress?.contact?.name,
-                mobileNo: orderData?.billingAddress?.contact?.mobileNo,
-                alternateMobileNo:
-                  orderData?.billingAddress?.contact?.alternateMobileNo,
-                emailId: orderData?.billingAddress?.contact?.emailId,
-                type: orderData?.billingAddress?.contact?.type,
-              },
-            },
-            orderType: orderData?.orderType,
-            gstNumber: orderData?.gstNumber,
-            tempOrderId: orderData?.tempOrderId || "",
-          });
+              orderType: orderData?.orderType,
+              gstNumber: orderData?.gstNumber,
+              tempOrderId: orderData?.tempOrderId || "",
+              source: orderData?.source || "",
+            });
+          }
         }
       }
     })();
