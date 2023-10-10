@@ -144,7 +144,6 @@ const idHelper = (navigate: any = "") => [
     cell: (info: any) => {
       const { tempOrderId, orderId, status = [], source } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-      console.log("info.row", info?.row?.original);
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -157,6 +156,7 @@ const idHelper = (navigate: any = "") => [
                 >
                   <span className="">{tempOrderId}</span>
                 </Link>
+
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
