@@ -12,10 +12,11 @@ import addIcon from "../../../assets/Catalogue/add.svg";
 import AddPlus from "../../../assets/Catalogue/add.svg";
 import { POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
-import { GET_PRODUCTS, GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
+import { GET_PRODUCTS, UPDATE_WOOCOMMERCE_STORE } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import ChannelIntegrationModalContent from "./ChannelIntegration/ChannelIntegrationModalContent";
 import AccessDenied from "../../../components/AccessDenied";
+import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const Catalogue = () => {
   const [isActive, setIsActive] = useState(
     roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive
   );
-
+  let wooCommerceContents = getLocalStorage("wooCommerceContents");
   const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("catalogueTab") || "Channel Integration"
@@ -226,6 +227,23 @@ const Catalogue = () => {
       );
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (wooCommerceContents) {
+        const { storeUrl, userId } = JSON.parse(wooCommerceContents);
+
+        const storeDetails = await POST(UPDATE_WOOCOMMERCE_STORE, {
+          storeUrl,
+          userId,
+        });
+
+        setChannelData({ ...channelData, channels: storeDetails[0] });
+
+        removeLocalStorage("wooCommerceContents");
+      }
+    })();
+  }, [wooCommerceContents]);
 
   return (
     <>
