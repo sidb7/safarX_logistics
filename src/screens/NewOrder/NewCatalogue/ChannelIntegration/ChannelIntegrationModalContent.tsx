@@ -184,6 +184,13 @@ function ChannelIntegrationModalContent(props: any) {
                 setStoreData({ ...storeData, storeUrl: e.target.value })
               }
             />
+            <CustomInputBox
+              label="Store Name"
+              value={storeData.storeName}
+              onChange={(e) =>
+                setStoreData({ ...storeData, storeName: e.target.value })
+              }
+            />
           </div>
         ) : null}
       </div>
