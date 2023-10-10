@@ -56,7 +56,7 @@ const Billing = (props: ITypeProps) => {
           addressId: defaultAddressSelect?.addressId,
           isBilling: true,
         };
-
+        setLoading(true);
         const { data: responses } = await POST(
           POST_UPDATE_DEFAULT_ADDRESS,
           payload
@@ -65,11 +65,14 @@ const Billing = (props: ITypeProps) => {
           toast.success(responses?.message);
           navigate("/onboarding/select-address-pickup");
           //Navigate Url's go here
+          setLoading(false);
         } else {
           toast.error(responses?.message);
+          setLoading(false);
         }
       } else {
         toast.error("Please Select Address");
+        setLoading(false);
       }
     } catch (error) {
       return error;

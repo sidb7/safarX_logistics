@@ -56,6 +56,7 @@ const PickUp = (props: ITypeProps) => {
           addressId: defaultAddressSelect?.addressId,
           isDefault: true,
         };
+        setLoading(true);
         const { data: responses } = await POST(
           POST_UPDATE_DEFAULT_ADDRESS,
           payload
@@ -65,11 +66,14 @@ const PickUp = (props: ITypeProps) => {
           sessionStorage.setItem("setKycValue", "true");
           navigate("/onboarding/wallet-main");
           //Navigate Url's go here
+          setLoading(false);
         } else {
           toast.error(responses?.message);
+          setLoading(false);
         }
       } else {
         toast.error("Please Select Address");
+        setLoading(false);
       }
     } catch (error) {
       return error;
