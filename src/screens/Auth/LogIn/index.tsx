@@ -52,6 +52,8 @@ const Index = () => {
   const logInOnClick = async (value: any) => {
     const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
+    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
     let signInUserReducerDetails = {
       email: loginCredentials.email,
       name: response?.data[0]?.name,
@@ -89,6 +91,8 @@ const Index = () => {
       POST_SIGN_IN_WITH_GOOGLE_URL,
       payload
     );
+
+    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
     dispatch(signInUser(loginCredentials));
     if (response?.success) {

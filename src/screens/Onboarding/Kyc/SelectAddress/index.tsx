@@ -51,7 +51,7 @@ const BusinessType = (props: ITypeProps) => {
   useEffect(() => {
     initialAddressCall();
   }, []);
-  console.log(defaultAddressSelect);
+
   const onSubmitForm = async () => {
     console.log("brandName", defaultAddressSelect.hasOwnProperty("addressId"));
 
@@ -91,6 +91,7 @@ const BusinessType = (props: ITypeProps) => {
           companyObj
         );
         if (response?.success) {
+          sessionStorage.setItem("setKycValue", "true");
           setLoading(false);
           toast.success(responses?.message);
 

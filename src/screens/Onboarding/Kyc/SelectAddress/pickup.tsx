@@ -62,6 +62,7 @@ const PickUp = (props: ITypeProps) => {
         );
         if (responses?.success) {
           toast.success(responses?.message);
+          sessionStorage.setItem("setKycValue", "true");
           navigate("/onboarding/wallet-main");
           //Navigate Url's go here
         } else {
@@ -132,27 +133,15 @@ const PickUp = (props: ITypeProps) => {
             {/* </div> */}
           </div>
 
-          {/* {isLgScreen && ( */}
-          {/* <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
-              onClick={() => onSubmit()}
-            />
-          </div> */}
-          {/* )} */}
-
-          {isLgScreen && (
+          {isLgScreen ? (
             <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT"
                 className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
-                onClick={() => {}}
+                onClick={() => onSubmit()}
               />
             </div>
-          )}
-          {/* </div> */}
-          {!isLgScreen && (
+          ) : (
             <div
               className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
               style={{ width: "-webkit-fill-available" }}
@@ -161,27 +150,42 @@ const PickUp = (props: ITypeProps) => {
                 text="SUBMIT"
                 className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
                 onClick={() => {
-                  navigate("/account/kyc-photo");
+                  // navigate("/account/kyc-photo");
+                  onSubmit();
                 }}
               />
             </div>
           )}
+
+          {/* {isLgScreen && (
+            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+              <ServiceButton
+                text="SUBMIT 3"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
+                onClick={() => {}}
+              />
+            </div>
+          )} */}
+          {/* </div> */}
+          {/* {!isLgScreen && ( */}
+
+          {/* )} */}
         </div>
 
-        {!isLgScreen && (
-          <div
-            className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
-            style={{ width: "-webkit-fill-available" }}
-          >
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
-              onClick={() => {
-                onSubmit();
-              }}
-            />
-          </div>
-        )}
+        {/* {!isLgScreen && ( */}
+        {/* <div
+          className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
+          style={{ width: "-webkit-fill-available" }}
+        >
+          <ServiceButton
+            text="SUBMIT 2"
+            className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
+            onClick={() => {
+              onSubmit();
+            }}
+          />
+        </div> */}
+        {/* )} */}
       </div>
     );
   };
