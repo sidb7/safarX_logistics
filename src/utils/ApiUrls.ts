@@ -169,7 +169,6 @@ const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
 //Pincode Data for Address
 const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
 
-
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
@@ -225,10 +224,12 @@ const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
 //Channel Store
-const POST_CREATE_STORE = `${SELLER_BASE_URL}/shopify/createShopifyStore`;
-const GET_ALL_STORES = `${SELLER_BASE_URL}/shopify/getStores`;
-const GET_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/getSingleStore`;
-const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/shopify/updateStore`;
+const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
+const GET_ALL_STORES = `${SELLER_BASE_URL}/channel/getStores`;
+const GET_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/getSingleStore`;
+const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/updateStore`;
+const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createWCStore`;
+const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -347,5 +348,7 @@ export {
   GET_ORDER_BY_ID,
   GET_PINCODE_DATA,
   CANCEL_WAY_BILL,
-  CANCEL_TEMP_SELLER_ORDER
+  CREATE_WOOCOMMERCE_STORE,
+  UPDATE_WOOCOMMERCE_STORE,
+  CANCEL_TEMP_SELLER_ORDER,
 };
