@@ -10,6 +10,7 @@ import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
+import CustomButton from "../../components/Button";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -134,9 +135,9 @@ const idHelper = (navigate: any = "") => [
       );
     },
     cell: (info: any) => {
-      const { tempOrderId, orderId, status = [] } = info?.row?.original;
+      const { tempOrderId, orderId, status = [], source } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-
+      console.log("info.row", info?.row?.original);
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -144,10 +145,10 @@ const idHelper = (navigate: any = "") => [
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
                 <Link
-                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}`}
+                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
                   className="underline text-blue-500 cursor-pointer"
                 >
-                  <span className="clickable-span">{tempOrderId}</span>
+                  <span className="">{tempOrderId}</span>
                 </Link>
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
@@ -202,7 +203,13 @@ const idHelper = (navigate: any = "") => [
 // table for draft/pending order
 export const columnHelperForPendingOrder = [];
 
-export const columnHelperForNewOrder = (navigate: any) => {
+export const columnHelperForNewOrder = (
+  navigate: any,
+  setCancellationModal?: any
+) => {
+  const handleCancellationModal = (tempOrderId: any) => {
+    setCancellationModal({ isOpen: true, tempOrderId });
+  };
   return [
     ...idHelper(),
     ColumnsHelper.accessor(".", {
@@ -366,6 +373,15 @@ export const columnHelperForNewOrder = (navigate: any) => {
         return (
           <>
             <CopyTooltip stringToBeCopied={copyString} />
+            {setCancellationModal && (
+              <img
+                src={CrossIcon}
+                width={"35px"}
+                alt="Cancel Order"
+                className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                onClick={() => handleCancellationModal(tempOrderId)}
+              />
+            )}
           </>
         );
       },

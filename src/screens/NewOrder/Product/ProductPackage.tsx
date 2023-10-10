@@ -122,6 +122,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   });
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
@@ -281,7 +282,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
       toast.success(data?.message);
-      navigate(`/orders/add-order/service?shipyaari_id=${shipyaari_id}`);
+      navigate(
+        `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+      );
     } else {
       toast.error(data?.message);
     }
