@@ -12,7 +12,7 @@ const modalTitle = () => {
   return (
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
-        className="my-auto ml-6  h-[25px] object-contain"
+        className=" ml-6  h-[25px] object-contain"
         src={CompanyLogo}
         alt="Company Logo"
       />
@@ -46,100 +46,96 @@ const WalletMain = () => {
     };
 
     return (
-      <div className="relative h-full">
-        {!isLgScreen ? (
-          <header className="fixed top-0 z-50 w-full ">
-            <NavBar />
-          </header>
-        ) : (
-          modalTitle()
-        )}
-        <div className="lg:grid lg:grid-cols-2">
-          <div className="lg:grid">
-            <div className="mx-5  mt-[148px] lg:mt-[110px]">
-              <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
-                Welcome to Shipyaari
-              </h1>
-              {/* Temporary Comment */}
-              {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
+      <div>
+        {modalTitle()}
+        <div className="relative h-full">
+          <div className="lg:grid lg:grid-cols-2">
+            <div className="lg:grid">
+              <div className="mx-5  mt-[148px] lg:mt-[110px]">
+                <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
+                  Welcome to Shipyaari
+                </h1>
+                {/* Temporary Comment */}
+                {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">
                 Recharge your wallet with minimum of
                 <span className="text-[#323232] font-medium lg:block">
                   {" "}
                   ₹100
                 </span>
               </p> */}
-              <div className="flex justify-center items-center">
-                <img src={YaariPointsIcon} alt="" />
-              </div>
-              {isLgScreen && note("text-left")}
-            </div>
-          </div>
-          <div className="lg:grid">
-            <div className="mx-5 lg:mt-24 rounded-lg border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
-              <div className="lg:space-y-4">
-                <h1 className="ml-2 font-Lato font-semibold text-[20px] text-[#1C1C1C] leading-[26px]">
-                  Benefits of shipyaari wallet
-                </h1>
-                <div className="flex mt-[26px]">
-                  <Checkbox
-                    checked={true}
-                    checkboxClassName="text-black"
-                    style={{ accentColor: "black" }}
-                  />
-                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
-                    Get Discounts/Offers on Recharge
-                  </p>
+                <div className="flex justify-center items-center">
+                  <img src={YaariPointsIcon} alt="" />
                 </div>
-                <div className="flex">
-                  <Checkbox
-                    checked={true}
-                    checkboxClassName="text-black"
-                    style={{ accentColor: "black" }}
-                  />
-                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
-                    Faster order processing
-                  </p>
-                </div>
-                <div className="flex">
-                  <Checkbox
-                    checked={true}
-                    checkboxClassName="text-black"
-                    style={{ accentColor: "black" }}
-                  />
-                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
-                    Instant Payment Processing
-                  </p>
-                </div>
-                <div className="flex">
-                  <Checkbox
-                    checked={true}
-                    checkboxClassName="text-black"
-                    style={{ accentColor: "black" }}
-                  />
-                  <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
-                    Simplified Accounting
-                  </p>
-                </div>
+                {isLgScreen && note("text-left")}
               </div>
             </div>
-            <div className="mx-5 mt-[50px] lg:mt-4">
-              <CustomButton
-                text={"VERIFY BANK"}
-                // onClick={() => }
-                onClick={() => handleRechargeNow()}
-              />
-            </div>
+            <div className="lg:grid">
+              <div className="mx-5 lg:mt-24 rounded-lg border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
+                <div className="lg:space-y-4">
+                  <h1 className="ml-2 font-Lato font-semibold text-[20px] text-[#1C1C1C] leading-[26px]">
+                    Benefits of shipyaari wallet
+                  </h1>
+                  <div className="flex mt-[26px]">
+                    <Checkbox
+                      checked={true}
+                      checkboxClassName="text-black"
+                      style={{ accentColor: "black" }}
+                    />
+                    <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      Get Discounts/Offers on Recharge
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <Checkbox
+                      checked={true}
+                      checkboxClassName="text-black"
+                      style={{ accentColor: "black" }}
+                    />
+                    <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      Faster order processing
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <Checkbox
+                      checked={true}
+                      checkboxClassName="text-black"
+                      style={{ accentColor: "black" }}
+                    />
+                    <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      Instant Payment Processing
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <Checkbox
+                      checked={true}
+                      checkboxClassName="text-black"
+                      style={{ accentColor: "black" }}
+                    />
+                    <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      Simplified Accounting
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="mx-5 mt-[50px] lg:mt-4">
+                <CustomButton
+                  text={"VERIFY BANK"}
+                  // onClick={() => }
+                  onClick={() => handleRechargeNow()}
+                />
+              </div>
 
-            <div
-              className="flex justify-center mt-4 cursor-pointer"
-              onClick={() => navigate("/dashboard/overview")}
-            >
-              <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
-                SKIP FOR NOW{" "}
-              </p>
+              <div
+                className="flex justify-center mt-4 cursor-pointer"
+                onClick={() => navigate("/dashboard/overview")}
+              >
+                <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
+                  SKIP FOR NOW{" "}
+                </p>
+              </div>
             </div>
+            {!isLgScreen && note()}
           </div>
-          {!isLgScreen && note()}
         </div>
       </div>
     );
