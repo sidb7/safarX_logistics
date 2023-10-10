@@ -21,10 +21,16 @@ import {
 import { POST } from "../../utils/webService";
 import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
 import AccessDenied from "../../components/AccessDenied";
+import infoIcon from "../../assets/info.svg";
+import { useNavigate } from "react-router-dom";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
+  const navigate = useNavigate();
+
+  const kycValue = sessionStorage.getItem("setKycValue");
+
   const roles = useSelector((state: any) => state?.roles);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
@@ -118,6 +124,25 @@ export const Home = (props: IOverview) => {
     <>
       {isActive ? (
         <div className="m-4">
+          <div>
+            {kycValue === "true" ? (
+              <></>
+            ) : (
+              <div className="flex justify-between bg-[#F5BE6D] p-2">
+                <div className="flex gap-x-2">
+                  <img src={infoIcon} alt="" />
+                  <p className="text-base font-normal">KYC Pending</p>
+                </div>
+
+                <p
+                  className="text-base text-[#004EFF] font-normal cursor-pointer"
+                  onClick={() => navigate("/onboarding/kyc-type")}
+                >
+                  Click Here
+                </p>
+              </div>
+            )}
+          </div>
           <div>
             <Breadcrum label="Home" />
           </div>

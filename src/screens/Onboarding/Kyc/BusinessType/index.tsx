@@ -121,7 +121,7 @@ const BusinessType = (props: ITypeProps) => {
                 <ServiceButton
                   text="SKIP FOR NOW"
                   className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
-                  onClick={() => navigate("/onboarding/wallet-recharge")}
+                  onClick={() => navigate("/onboarding/wallet-main")}
                 />
               </div>
             </div>

@@ -46,6 +46,7 @@ const Index = () => {
 
   const resendOtp = async () => {
     const { data: response } = await POST(POST_SEND_OTP_URL, state);
+
     if (response?.success === true) {
       toast.success("OTP resent Successfully");
       setMinutes(0);
@@ -63,6 +64,8 @@ const Index = () => {
       };
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
+
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       if (response?.success === true) {
         setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");

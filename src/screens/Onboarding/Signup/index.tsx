@@ -59,6 +59,8 @@ const Index = () => {
       };
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
+
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
         sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
@@ -84,6 +86,7 @@ const Index = () => {
         payload
       );
       if (response?.success === true) {
+        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
         navigate("/onboarding/sendotp");
       } else {
