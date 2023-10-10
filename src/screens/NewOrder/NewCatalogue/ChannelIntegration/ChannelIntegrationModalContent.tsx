@@ -15,6 +15,7 @@ import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import CustomDropDown from "../../../../components/DropDown";
 import { setLocalStorage } from "../../../../utils/utility";
+import axios from "axios";
 
 function ChannelIntegrationModalContent(props: any) {
   const { setModalData, channelData, setChannelData, indexNum, integrate } =
@@ -65,9 +66,11 @@ function ChannelIntegrationModalContent(props: any) {
 
           const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}`;
 
-          const { data } = await GET(reqUrl);
-
-          console.log("data: ", data);
+          try {
+            await axios.get(reqUrl);
+          } catch (error: any) {
+            window.location.href = error?.config?.url;
+          }
         }
       } else {
         let payload = { ...storeData, storeId };
