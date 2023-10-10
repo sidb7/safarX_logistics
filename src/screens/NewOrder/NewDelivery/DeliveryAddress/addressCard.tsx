@@ -8,7 +8,7 @@ import CustomInputWithDropDown from "../../../../components/LandmarkDropdown/Lan
 import Map from "../../../NewOrder/Map";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router";
-import { VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
+import { GET_PINCODE_DATA, VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { dummyStateDropdownData } from "../../../../utils/dummyData";
 import { CommonBottomModal } from "../../../../components/CustomModal/commonBottomModal";
@@ -69,10 +69,44 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   ) => {
     const addressName: string =
       addressLabel === "Billing Address" ? "billingAddress" : "deliveryAddress";
-    setDeliveryAddress((prevData: any) => ({
-      ...prevData,
-      [addressName]: { ...prevData[addressName], [fieldName]: value },
-    }));
+    setDeliveryAddress((prevData: any) => {
+      const updatedData = {
+        ...prevData,
+        [addressName]: { ...prevData[addressName], [fieldName]: value },
+      };
+
+      if (
+        fieldName === "flatNo" ||
+        fieldName === "locality" ||
+        fieldName === "landmark" ||
+        fieldName === "city" ||
+        fieldName === "state" ||
+        fieldName === "country"
+      ) {
+        const { flatNo, locality, landmark, city, state, country } =
+          updatedData[addressName];
+        updatedData[addressName].fullAddress = [
+          flatNo,
+          locality,
+          landmark,
+          city,
+          state,
+          country,
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      return updatedData;
+    });
+
+    if (fieldName === "pincode" && value.length === 6) {
+      const payload = {
+        pincode: value,
+      };
+
+      postServicablePincode(payload);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -150,6 +184,37 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   }, [deliveryAddress.deliveryAddress.state]);
 
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+  const postServicablePincode = async (payload: any) => {
+    try {
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.success) {
+        console.log("pincodeResponse", response);
+
+        const pincodeData = response.data[0];
+
+        const addressName: any =
+          addressLabel === "Billing Address"
+            ? "billingAddress"
+            : "deliveryAddress";
+        setDeliveryAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            city: toPascalCase(pincodeData.city) || "",
+            state: toPascalCase(pincodeData.state) || "",
+            country: "India",
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error in ServicablePincode API", error);
+      return error;
+    }
+  };
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">

@@ -92,6 +92,7 @@ export const GSTComponent = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Terms & Agreement"
         />
@@ -104,11 +105,19 @@ export const GSTComponent = (props: ITypeProps) => {
             <div className="px-8 flex flex-col gap-y-2">
               <div className="h-[400px] overflow-y-scroll">
                 {/* <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe> */}
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                  <h2>(to be printed on Letterhead of the business entity)</h2>
+                <div
+                  style={{ textAlign: "center", marginBottom: "20px" }}
+                  className="font-Open text-sm font-normal leading-5"
+                >
+                  <h2 className="font-Open text-sm font-normal leading-5">
+                    (to be printed on Letterhead of the business entity)
+                  </h2>
                 </div>
 
-                <div style={{ textAlign: "center" }}>
+                <div
+                  style={{ textAlign: "center" }}
+                  className="font-Open text-base font-semibold leading-[22px]"
+                >
                   <p>DECLARATION OF GST NON-ENROLMENT</p>
                   <p>To AVN Business Solutions Pvt. Ltd.</p>
                   <p>12A, 3rd Floor, Techniplex - II,</p>
@@ -117,7 +126,10 @@ export const GSTComponent = (props: ITypeProps) => {
                   <p>Mumbai, Maharashtra 400062</p>
                 </div>
 
-                <div style={{ marginTop: "20px" }}>
+                <div
+                  style={{ marginTop: "20px" }}
+                  className="font-Open text-sm font-normal leading-5"
+                >
                   <p>Dear Sir/Madam,</p>
                   <p>Sub: Declaration of:</p>
                   <ol>
@@ -131,7 +143,7 @@ export const GSTComponent = (props: ITypeProps) => {
                     <li>Goods having no commercial value</li>
                   </ol>
 
-                  <p>
+                  <p className="font-Open text-sm font-normal leading-5">
                     I/We
                     <b className="uppercase">
                       {userState !== "" &&
@@ -153,7 +165,7 @@ export const GSTComponent = (props: ITypeProps) => {
                     (Name of the service provider/business entity), do hereby
                     declare that:
                   </p>
-                  <ul>
+                  <ul className="font-Open text-sm font-normal leading-5">
                     <li>
                       I/we am/are not registered under the Goods and Services
                       Tax Act, 2017 as (select and fill below for the relevant
@@ -198,7 +210,10 @@ export const GSTComponent = (props: ITypeProps) => {
                   </ul>
                 </div>
 
-                <div style={{ marginTop: "40px" }}>
+                <div
+                  style={{ marginTop: "40px" }}
+                  className="font-Open text-base font-semibold leading-[22px]"
+                >
                   <p>Signature of Authorised Signatory</p>
                   <p>Name of the Authorised Signatory:</p>
                   <p>Name of Business:</p>
@@ -214,11 +229,9 @@ export const GSTComponent = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isBigScreen && gstCommonComponent()}
-
-      {isBigScreen && (
+  const renderGstCommonComponent = () => {
+    if (isBigScreen && openModal) {
+      return (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
@@ -233,7 +246,16 @@ export const GSTComponent = (props: ITypeProps) => {
             gstCommonComponent()
           )}
         </CustomBottomModal>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        gstCommonComponent()
+      );
+    }
+  };
+  return <div>{renderGstCommonComponent()}</div>;
 };

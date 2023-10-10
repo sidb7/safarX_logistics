@@ -52,6 +52,8 @@ const Index = () => {
   const logInOnClick = async (value: any) => {
     const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
+    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
     let signInUserReducerDetails = {
       email: loginCredentials.email,
       name: response?.data[0]?.name,
@@ -90,6 +92,8 @@ const Index = () => {
       payload
     );
 
+    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       setLocalStorage(tokenKey, response?.data[0]?.token);
@@ -127,7 +131,7 @@ const Index = () => {
           alt="Company Logo"
         />
         <img
-          className="my-auto mr-6"
+          className="my-auto mr-6 cursor-pointer"
           src={CloseIcon}
           alt="Close"
           onClick={() => setIsModalOpen(false)}
@@ -144,7 +148,7 @@ const Index = () => {
     return (
       <div className="relative h-full w-full overflow-y-auto hide-scrollbar">
         {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[50px]">
+        <div className="lg:mx-24 lg:mt-[25px]">
           <div className="flex flex-col gap-y-8 w-full">
             <div className="product-box flex items-center lg:hidden">
               <img
@@ -154,7 +158,7 @@ const Index = () => {
               />
             </div>
 
-            <div className="flex flex-col mt-7 mx-4 gap-y-6">
+            <div className="flex flex-col mt-4 mx-4 gap-y-6">
               <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
                 Welcome to Shipyaari
               </p>

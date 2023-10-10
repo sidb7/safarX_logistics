@@ -25,6 +25,10 @@ import { getQueryJson } from "../../../utils/utility";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
+import alertInfoIcon from "../../../assets/info-circle.svg"
+import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { toast } from "react-toastify";
+import { Tooltip } from "../../../components/Tooltip/Tooltip"
 
 const Tracking = () => {
   // let tracking = [
@@ -91,9 +95,13 @@ const Tracking = () => {
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
 
-  const [trackingState, setTrackingState] = useState<any>(null);
+  const [trackingState, setTrackingState] = useState<any>([]);
+  const [inValidTrackingState, setInValidTrackingState] = useState<any>([]);
+
   const [openSection, setOpenSection] = useState<string | null>("tracking");
   const [trackingNo, setTrackingNo] = useState<string>("");
+  const [invalidTrackingModal, setInvalidTrackingModal] = useState<boolean>(false);
+
   const [loading, setLoading] = useState(false);
   const params = getQueryJson();
   const trackingNoFromUrl = params?.trackingNo;
@@ -109,16 +117,15 @@ const Tracking = () => {
   };
 
   const handleTrackOrderClick = async (trackingNoFromUrl?: any) => {
+    let urlWithTrackingNo;
 
-    if (trackingNo?.trim() === "") {
-      return;
+    if (!urlWithTrackingNo && trackingNo === "") {
+      return toast.warning("Please Enter Tracking Number")
     }
 
-    let urlWithTrackingNo;
     try {
       setLoading(true);
       if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-        // setTrackingNo(trackingNoFromUrl)
         urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNoFromUrl}`
       } else {
         urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`
@@ -127,31 +134,44 @@ const Tracking = () => {
       const { data: response } = await GET(urlWithTrackingNo);
 
       if (response?.success) {
-        setTrackingState(response?.data);
+        const { invalidTrackingInfo, trackingInfo } = response?.data?.[0]
+
+        setTrackingState(trackingInfo);
+        setInValidTrackingState(invalidTrackingInfo)
         setTrackingNo("")
       } else {
         setTrackingState([]);
+        toast.error(response?.message)
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error in API call:", error);
     } finally {
       setLoading(false);
+
     }
   };
+
+  const InvalidTrackingListHover = (inValidTrackingState: any) => {
+    return (
+      <div className="flex items-center flex-wrap">
+        {
+          inValidTrackingState.map((inValidTravkingNumber: any, index: any) => (
+            <span key={`${inValidTravkingNumber}_${index}`} className="mx-1">{inValidTravkingNumber}</span>
+          ))
+        }
+      </div>
+    )
+  }
 
 
 
 
   useEffect(() => {
     if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+      setTrackingNo(trackingNoFromUrl)
       handleTrackOrderClick(trackingNoFromUrl);
-      // setTrackingNo(trackingNoFromUrl);
     }
-  }, []);
-
-  // useEffect(() => {
-  //   handleTrackOrderClick();
-  // }, [trackingNo]);
+  }, [trackingNoFromUrl]);
 
   return (
     <>
@@ -162,7 +182,7 @@ const Tracking = () => {
           {/* <div className="flex justify-center p-3">
           <img src={shipyaari} alt="Shipyaari" />
         </div> */}
-          <div className="flex mx-5 md:my-5 ">
+          <div className="flex mx-3 md:mx-5 md:my-5 ">
             <div className="flex w-[100%] max-w-[1300px] gap-5 max-md:flex-col">
               {/*tracking ID Box */}
               <div className="flex flex-col basis-3/4">
@@ -179,9 +199,23 @@ const Tracking = () => {
                     onClick={() => handleTrackOrderClick()}
                   />
                 </div>
-                {/* <p className="text-[10px] py-2 font-Open font-bold">
-                  For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
-                </p> */}
+
+                {
+                  inValidTrackingState.length > 0 && (
+                    <Tooltip position="right" content={InvalidTrackingListHover(inValidTrackingState)}>
+                      <div
+                        className="text-[#d72323] bg-[#FDEDEA] max-w-[200px] rounded-lg cursor-pointer shadow-md my-2 flex text-[11px]"
+                        onClick={() => setInvalidTrackingModal(!invalidTrackingModal)}
+                      >
+                        <div className="flex py-2 px-4" >
+                          <img src={alertInfoIcon} alt="" />
+                          <span className="ml-1">INVALIDE TRACKING NUMBER </span>
+                        </div>
+                      </div>
+                    </Tooltip>
+
+                  )
+                }
 
                 {!loading &&
                   trackingState?.map((each: any, indexTracking: number) => {
@@ -273,18 +307,18 @@ const Tracking = () => {
                                   (each: any, index: number) => {
                                     return (
                                       <div
-                                        className="flex  gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                        className="flex  gap-x-5 mt-1 h-16  overflow-y-scroll"
                                         key={index}
                                       >
                                         <div className="pt-1 flex-initial w-20  ">
                                           <p className="text-xs font-Open font-normal ">
                                             {each?.date}
                                           </p>
-                                          <p className="text-xs font-Open font-normal 	">
+                                          <p className="text-xs font-Open font-normal">
                                             {each?.time}
                                           </p>
                                         </div>
-                                        <div className=" pt-1 flex-initial w-80	border-l-4 border-l-[#80A7FF] pl-5 border-dotted ">
+                                        <div className="relative pt-1 flex-initial w-80	border-l-4 border-l-[#80A7FF] pl-5 border-dotted ">
                                           <p className="text-xs font-Open  font-normal">
                                             {each?.heading}
                                           </p>
@@ -298,7 +332,7 @@ const Tracking = () => {
                                               {each?.location}
                                             </p>
                                           </div>
-                                          <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[98px]"></div>
+                                          <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[-6px]"></div>
                                         </div>
                                       </div>
                                     );
@@ -382,7 +416,7 @@ const Tracking = () => {
                   </div>
                 )}
               </div>
-              <div className="flex flex-row gap-x-4 pl-10 md:flex-col md:gap-y-4 max-lg:pl-0 max-lg:justify-between">
+              <div className="flex flex-row gap-x-4 pl-10 md:flex-col md:gap-y-4 max-lg:pl-0 max-md:justify-between">
                 <img
                   src={trackingIcon}
                   alt=""

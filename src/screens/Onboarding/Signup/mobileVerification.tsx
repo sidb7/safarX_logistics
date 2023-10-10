@@ -69,7 +69,7 @@ const Index = () => {
               />
             </div>
 
-            <div className="flex flex-col mt-7 mx-4 gap-y-6">
+            <div className="flex flex-col mt-4 mx-4 gap-y-6">
               <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
                 Mobile Verification
               </p>

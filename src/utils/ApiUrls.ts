@@ -101,7 +101,7 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
-
+const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 
@@ -165,6 +165,9 @@ const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocat
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
+
+//Pincode Data for Address
+const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
 
 //Plan
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
@@ -343,7 +346,9 @@ export {
   PHONEPE_TRANSACTION_STATUS,
   POST_UPDATE_PRODUCT,
   GET_ORDER_BY_ID,
+  GET_PINCODE_DATA,
   CANCEL_WAY_BILL,
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_WOOCOMMERCE_STORE,
+  CANCEL_TEMP_SELLER_ORDER,
 };

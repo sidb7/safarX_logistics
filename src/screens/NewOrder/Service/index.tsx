@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";
 import CustomDropDown from "../../../components/DropDown";
 import ServiceBox from "./ServiceBox";
+import { getQueryJson } from "../../../utils/utility";
 
 export const RecommendedServiceData = [
   {
@@ -167,6 +168,9 @@ const Index: React.FC = () => {
   // });
 
   const navigate = useNavigate();
+  const params = getQueryJson();
+  let shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   //
 
@@ -216,12 +220,17 @@ const Index: React.FC = () => {
   // };
 
   const getCourierPartnerService = async () => {
+    const payload = {
+      tempOrderId: +shipyaari_id,
+      source: orderSource,
+    };
+
     try {
       setLoading(true);
 
       const { data: response } = await POST(
         GET_COURIER_PARTNER_SERVICE,
-        getServicePayload
+        payload
       );
 
       if (response?.success) {
@@ -270,6 +279,8 @@ const Index: React.FC = () => {
       partnerServiceName,
       companyServiceId,
       companyServiceName,
+      tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
 
     try {
@@ -277,7 +288,9 @@ const Index: React.FC = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/orders/add-order/summary");
+        navigate(
+          `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
       } else {
         toast.error(response?.message);
       }

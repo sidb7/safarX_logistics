@@ -105,6 +105,7 @@ const Index = (props: ITypeProps) => {
   const resentGstOtp = async () => {
     try {
       const payload = { gstIn: gstNo };
+      console.log("resendpayload", payload);
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
@@ -165,6 +166,13 @@ const Index = (props: ITypeProps) => {
       } else {
         setLoading(false);
         toast.error(response?.message);
+        navigate("/onboarding/kyc-form", {
+          state: {
+            aadharNo,
+            panCard,
+            gstNo,
+          },
+        });
       }
     } catch (error) {
       return error;
@@ -258,8 +266,12 @@ const Index = (props: ITypeProps) => {
   const mobileVerificationComponent = () => {
     return (
       <div className=" lg:px-0 ">
-        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6  mb-6 ">
-          <img src={CompanyLogo} alt="" />
+        <div className="product-box flex  items-center w-full h-[60px] mb-6 ">
+          <img
+            className="my-auto ml-6  h-[25px] object-contain"
+            src={CompanyLogo}
+            alt=""
+          />
         </div>
         {heading === "Aadhaar Verification" ? (
           <p className="flex justify-center">
@@ -332,18 +344,24 @@ const Index = (props: ITypeProps) => {
           <ServiceButton
             text="BACK"
             className="!bg-[#E8E8E8] !text-black !h-[36px] !font-Open  lg:!w-[320px] mb-5"
-            onClick={() => navigate(-1)}
+            onClick={() =>
+              navigate("/onboarding/kyc-form", {
+                state: {
+                  aadharNo,
+                  panCard,
+                  gstNo,
+                },
+              })
+            }
           />
         </div>
       </div>
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && mobileVerificationComponent()}
-
-      {isLgScreen && (
+  const renderMobileVerificationComponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
@@ -358,9 +376,18 @@ const Index = (props: ITypeProps) => {
             mobileVerificationComponent()
           )}
         </CustomBottomModal>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        mobileVerificationComponent()
+      );
+    }
+  };
+  return <div>{renderMobileVerificationComponent()}</div>;
 };
 
 export default Index;

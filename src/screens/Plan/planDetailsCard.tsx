@@ -28,9 +28,9 @@ const PlanDetailsCard = (props: ITypeProps) => {
           {planDetails && planDetails.length > 0 ? (
             planDetails?.map((eachPlan: any, index: any) => {
               return (
-                <div className="grid grid-cols-1 gap-y-2 md:grid-cols-2 lg:grid-cols-5 py-4  lg:h-[70px]">
+                <div className="grid  gap-y-2 grid-cols-2 lg:grid-cols-5 py-4  lg:h-[70px]">
                   {/*Plan Name*/}
-                  <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
+                  <div className=" flex flex-col col-span-2 lg:col-span-1  border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                     <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
                       {"Plan Name"}
                     </span>
@@ -38,6 +38,7 @@ const PlanDetailsCard = (props: ITypeProps) => {
                       {eachPlan?.planName}
                     </span>
                   </div>
+
                   {/*Purchase Date */}
                   <div className="flex flex-col border-[1px] px-8 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                     <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">

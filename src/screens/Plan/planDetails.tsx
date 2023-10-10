@@ -20,6 +20,8 @@ import { ScrollNav } from "../../components/ScrollNav";
 import CourierPricing from "./courierPricing";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import { ResponsiveState } from "../../utils/responsiveState";
+import { BottomNavBar } from "../../components/BottomNavBar";
 
 interface ITypeProps {}
 
@@ -32,6 +34,7 @@ const PlanDetails = (props: ITypeProps) => {
   const [allPlans, setAllPlans] = useState<any>([]);
 
   const [renderingComponents, setRenderingComponents] = React.useState(0);
+  const { isLgScreen } = ResponsiveState();
 
   const arrayData = [
     { index: 0, label: "Courier Pricing" },
@@ -106,7 +109,7 @@ const PlanDetails = (props: ITypeProps) => {
           <p
             className={`font-Open  
                text-base leading-[22px] text-[#004EFF]
-             font-semibold   text-start  whitespace-nowrap  lg:min-w-[642px] lg:max-w-[642px]`}
+             font-semibold   text-start  whitespace-nowrap  lg:w-[642px]`}
           >
             Pricing
           </p>
@@ -189,6 +192,13 @@ const PlanDetails = (props: ITypeProps) => {
   ];
 
   const featuresData = [
+    {
+      overview: "Pricing(per month)",
+      freemium: "Free",
+      silver: "₹ 500",
+      gold: "₹999",
+      platinum: "On request",
+    },
     {
       overview: "Shared Support Team",
 
@@ -346,7 +356,13 @@ const PlanDetails = (props: ITypeProps) => {
   ];
 
   const activeData = [
-    { pricing: "", freemium: "", silver: "", gold: "", platinum: "" },
+    {
+      pricing: "",
+      silver: allPlans[0]?.planName,
+      freemium: allPlans[1]?.planName,
+      gold: allPlans[2]?.planName,
+      platinum: allPlans[3]?.planName,
+    },
   ];
   const activeColumns = [
     columnsHelper.accessor("pricing", {
@@ -363,23 +379,25 @@ const PlanDetails = (props: ITypeProps) => {
       },
     }),
 
-    columnsHelper.accessor("freemium", {
-      header: () => {
-        return <></>;
-      },
-      cell: (info: any) => {
-        return (
-          planData[0]?.planName.toUpperCase() === "FREEMIUM" && activeElement()
-        );
-      },
-    }),
     columnsHelper.accessor("silver", {
       header: () => {
         return <></>;
       },
       cell: (info: any) => {
         return (
-          planData[0]?.planName.toUpperCase() === "SILVER" && activeElement()
+          planData[0]?.planName.toUpperCase() === info.row.original.silver &&
+          activeElement()
+        );
+      },
+    }),
+    columnsHelper.accessor("freemium", {
+      header: () => {
+        return <></>;
+      },
+      cell: (info: any) => {
+        return (
+          planData[0]?.planName.toUpperCase() === info.row.original.freemium &&
+          activeElement()
         );
       },
     }),
@@ -389,7 +407,8 @@ const PlanDetails = (props: ITypeProps) => {
       },
       cell: (info: any) => {
         return (
-          planData[0]?.planName.toUpperCase() === "GOLD" && activeElement()
+          planData[0]?.planName.toUpperCase() === info.row.original.gold &&
+          activeElement()
         );
       },
     }),
@@ -398,7 +417,8 @@ const PlanDetails = (props: ITypeProps) => {
         return <></>;
       },
       cell: (info: any) => {
-        return planData[0]?.planName.toUpperCase() === "PLATINUM" ? (
+        return planData[0]?.planName.toUpperCase() ===
+          info.row.original.platinum ? (
           activeElement()
         ) : (
           <div className="flex items-center justify-center">
@@ -427,7 +447,13 @@ const PlanDetails = (props: ITypeProps) => {
   ];
 
   const changePlansData = [
-    { pricing: "", freemium: "", silver: "", gold: "", platinum: "" },
+    {
+      pricing: "",
+      silver: allPlans[0]?.planName,
+      freemium: allPlans[1]?.planName,
+      gold: allPlans[2]?.planName,
+      platinum: allPlans[3]?.planName,
+    },
   ];
   const changePlansColumns = [
     columnsHelper.accessor("pricing", {
@@ -440,39 +466,50 @@ const PlanDetails = (props: ITypeProps) => {
       },
     }),
 
-    columnsHelper.accessor("freemium", {
-      header: () => {
+    columnsHelper.accessor("silver", {
+      header: (info: any) => {
+        return <></>;
+      },
+      cell: (info: any) => {
         return (
           <div className="flex justify-center">
-            {planData[0]?.planName.toUpperCase() !== "FREEMIUM" &&
+            {planData[0]?.planName.toUpperCase() !== info.row.original.silver &&
               changeButton()}
           </div>
         );
       },
-      cell: (info: any) => {},
     }),
-    columnsHelper.accessor("silver", {
+    columnsHelper.accessor("freemium", {
       header: () => {
+        return <></>;
+      },
+      cell: (info: any) => {
         return (
           <div className="flex justify-center">
-            {planData[0]?.planName.toUpperCase() !== "SILVER" && changeButton()}
+            {planData[0]?.planName.toUpperCase() !==
+              info.row.original.freemium && changeButton()}
           </div>
         );
       },
-      cell: (info: any) => {},
     }),
     columnsHelper.accessor("gold", {
       header: () => {
+        return <></>;
+      },
+      cell: (info: any) => {
         return (
           <div className="flex justify-center">
-            {planData[0]?.planName.toUpperCase() !== "GOLD" && changeButton()}
+            {planData[0]?.planName.toUpperCase() !== info.row.original.gold &&
+              changeButton()}
           </div>
         );
       },
-      cell: (info: any) => {},
     }),
     columnsHelper.accessor("platinum", {
       header: () => {
+        return <></>;
+      },
+      cell: (info: any) => {
         return (
           <div className="flex justify-center">
             {planData[0]?.planName.toUpperCase() !== "PLATINUM" && (
@@ -487,7 +524,6 @@ const PlanDetails = (props: ITypeProps) => {
           </div>
         );
       },
-      cell: (info: any) => {},
     }),
   ];
 
@@ -571,7 +607,7 @@ const PlanDetails = (props: ITypeProps) => {
     columnsHelper.accessor("termType", {
       header: () => {
         return (
-          <div className="flex justify-between items-center max-w-[266px]">
+          <div className="flex justify-between items-center lg:w-[266px]">
             <div>
               <h1 className="text-sm font-Open leading-5 font-semibold text-[#1C1C1C]">
                 Term Type
@@ -633,6 +669,10 @@ const PlanDetails = (props: ITypeProps) => {
     );
   };
 
+  const setScrollIndex = (id: number) => {
+    setRenderingComponents(id);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -657,54 +697,51 @@ const PlanDetails = (props: ITypeProps) => {
     })();
   }, []);
 
-  const setScrollIndex = (id: number) => {
-    setRenderingComponents(id);
-  };
-
   return (
     <>
       {isActive ? (
-        <div className="mr-4">
-          <div className="mb-5">
+        <div className="">
+          <div className="lg:mb-5">
             <Breadcrum label="Plans" />
           </div>
           {/* Plan Upgradation */}
-          <div className="flex items-center  rounded-lg border-[1px] p-4 border-[#E8E8E8] bg-[#F2F6FF] xl:justify-between   ml-[30px] mb-7">
-            <div className="flex items-center">
+          <div className="flex  items-center h-[124px]  rounded-lg border-[1px] p-1 md:p-4 border-[#E8E8E8] bg-[#F2F6FF] justify-between    mb-7  mx-5 lg:ml-[30px]">
+            <div className="flex    items-center justify-between ">
               <img
                 src={PlanDetailsGif}
                 alt=""
-                height={124}
-                width={124}
+                height={isLgScreen ? 124 : 90}
+                width={isLgScreen ? 124 : 90}
                 className="lg:mr-8"
               />
-              <div className="flex flex-col justify-center gap-y-2  h-[120px]   lg:mr-5">
-                <p className="font-Lato text-[#004EFF] font-semibold text-[22px] leading-7  ">
+              <div className="flex flex-col   justify-center gap-y-1 lg:gap-y-2  lg:h-[120px]  lg:mr-5">
+                <p className="font-Open lg:font-Lato text-[#004EFF] font-semibold text-sm lg:text-[22px] leading-5 lg:leading-7  ">
                   PLATINUM PLAN
                 </p>
-                <p className="font-Lato font-semibold text-lg leading-6 text-[#323232]">
+                <p className="font-Open lg:font-Lato font-semibold text-sm lg:text-lg leading-4 lg:leading-6 text-[#323232]">
                   Built exclusively for your needs
                 </p>
-                <p className="font-Lato font-normal text-lg leading-6 text-[#777777]">
-                  Get extra 8% off on all your orders. International shipping,
-                  label customization and more
+                <p className="font-Open  lg:font-Lato font-normal text-sm lg:text-lg leading-4 lg:leading-6 text-[#777777]">
+                  Get extra 8% off on all your orders
+                  {isLgScreen &&
+                    "International shipping,label customization and more."}
                 </p>
               </div>
             </div>
-            <div className="justify-end">
+            <div className="flex   items-center justify-end ">
               <ServiceButton
                 onClick={() => {}}
                 text="UPGRADE"
-                className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+                className="lg:!w-full !w-[80px]  !h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  !font-Open"
               />
             </div>
           </div>
           {/* Plan Details */}
-          <div className="ml-[30px] mb-9">
+          <div className=" mb-9 mx-5 lg:ml-[30px]">
             <PlanDetailsCard planDetails={planData} />
           </div>
           {/* Pricing Details */}
-          <div className="ml-[30px] mb-4">
+          <div className="mb-4 mx-5 lg:ml-[30px]">
             <ScrollNav
               arrayData={arrayData}
               showNumber={false}
@@ -714,7 +751,7 @@ const PlanDetails = (props: ITypeProps) => {
           {renderingComponents === 0 && <CourierPricing />}
 
           {/* Info Cards */}
-          <div className="flex items-center overflow-x-scroll  gap-x-6  ml-[30px] mb-2 xl:justify-between ">
+          <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-2 mx-5 lg:ml-[30px] ">
             <InfoCards
               title="Custom Label Usage"
               numerator={3}
@@ -738,7 +775,7 @@ const PlanDetails = (props: ITypeProps) => {
           </div>
           {/*Active Recommended */}
 
-          <div className="ml-[30px] ">
+          <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
             <CustomTable
               data={activeData}
               columns={activeColumns}
@@ -748,7 +785,7 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div>
           {/*Pricing Table */}
-          <div className="ml-[30px] ">
+          <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
             <CustomTable
               columns={pricingColumns}
               data={pricingData}
@@ -758,7 +795,7 @@ const PlanDetails = (props: ITypeProps) => {
           </div>
           {/* Change-Upgrade Plans */}
 
-          <div className="ml-[30px]">
+          <div className="overflow-x-scroll mx-5 lg:ml-[30px]">
             <CustomTable
               data={changePlansData}
               columns={changePlansColumns}
@@ -768,7 +805,7 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div>
           {/* Features Table */}
-          <div className="ml-[30px] mb-[68px] ">
+          <div className=" mb-[68px] overflow-x-scroll mx-5 lg:ml-[30px]">
             <CustomTable
               columns={featuresColumns}
               data={featuresData}
@@ -776,12 +813,12 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div>
-          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF] ml-[30px] mb-6">
-            <p className="font-Lato font-semibold text-xl leading-[26px] text-[#494949]">
+          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+            <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
             <ServiceButton
-              className="!h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !mr-5 !font-Open"
+              className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
               text="TALK TO OUR SUPPORT"
               onClick={() => {}}
             />
@@ -789,10 +826,11 @@ const PlanDetails = (props: ITypeProps) => {
 
           {/* Terms & Conditions */}
 
-          <div className="ml-[30px]">
+          <div className="mx-5 lg:ml-[30px]">
             <CustomAccordianWithTable
               dummyDatas={DummyData}
               title="Terms & Conditions"
+              titleForMobile="Our Terms"
               isIcon={true}
               icon={TermsAndConditionsIcon}
               data={termsAndConditionsData}
@@ -800,6 +838,10 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div>
 
+          {/* Bottom NavBar for Mobile */}
+          <div className="lg:hidden mt-24">
+            <BottomNavBar />
+          </div>
           {/* end here */}
         </div>
       ) : (
