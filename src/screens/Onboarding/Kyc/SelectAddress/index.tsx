@@ -295,17 +295,9 @@ const BusinessType = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        addressComponent()
-      )}
-
-      {isLgScreen && (
+  const renderAddresscomponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <div className="mx-4 hidden lg:block ">
           <CustomBottomModal
             isOpen={openModal}
@@ -322,9 +314,18 @@ const BusinessType = (props: ITypeProps) => {
             )}
           </CustomBottomModal>
         </div>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      );
+    }
+  };
+  return <div>{renderAddresscomponent()}</div>;
 };
 
 export default BusinessType;
