@@ -56,7 +56,7 @@ const Billing = (props: ITypeProps) => {
           addressId: defaultAddressSelect?.addressId,
           isBilling: true,
         };
-
+        setLoading(true);
         const { data: responses } = await POST(
           POST_UPDATE_DEFAULT_ADDRESS,
           payload
@@ -65,11 +65,14 @@ const Billing = (props: ITypeProps) => {
           toast.success(responses?.message);
           navigate("/onboarding/select-address-pickup");
           //Navigate Url's go here
+          setLoading(false);
         } else {
           toast.error(responses?.message);
+          setLoading(false);
         }
       } else {
         toast.error("Please Select Address");
+        setLoading(false);
       }
     } catch (error) {
       return error;
@@ -164,17 +167,9 @@ const Billing = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Spinner />
-        </div>
-      ) : (
-        addressComponent()
-      )}
-
-      {isLgScreen && (
+  const renderAddresscomponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <div className="mx-4 hidden lg:block ">
           <CustomBottomModal
             isOpen={openModal}
@@ -191,9 +186,18 @@ const Billing = (props: ITypeProps) => {
             )}
           </CustomBottomModal>
         </div>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      );
+    }
+  };
+  return <div>{renderAddresscomponent()}</div>;
 };
 
 export default Billing;
