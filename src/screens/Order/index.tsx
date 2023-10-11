@@ -512,12 +512,12 @@ const Index = () => {
 
       <DeleteModalDraftOrder
         url={CANCEL_TEMP_SELLER_ORDER}
-        postData={deleteModalDraftOrder.payload}
-        isOpen={deleteModalDraftOrder.isOpen}
+        postData={deleteModalDraftOrder?.payload}
+        isOpen={deleteModalDraftOrder?.isOpen}
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title="Are You Sure You Want To Cancel This Order?"
+        title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
       />
     </>
   );
