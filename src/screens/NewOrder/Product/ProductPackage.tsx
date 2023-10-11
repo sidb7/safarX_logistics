@@ -275,10 +275,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       source: orderSource,
     };
 
-    if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
-      toast.error("COD collectable Amount Cannot Be Zero");
-      return;
-    }
+    // if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
+    //   toast.error("COD collectable Amount Cannot Be Zero");
+    //   return;
+    // }
 
     const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
