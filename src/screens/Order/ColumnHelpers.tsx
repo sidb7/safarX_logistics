@@ -243,7 +243,7 @@ export const columnHelperForNewOrder = (
                 // onClick={() => navigate("/orders/add-order/product-package")}
                 className="  decoration-2 cursor-pointer"
               >
-                No Data Found
+                No Package Details Found
               </div>
             )}
           </div>
@@ -289,7 +289,7 @@ export const columnHelperForNewOrder = (
                 // onClick={() => navigate("/orders/add-order/delivery")}
                 className="  decoration-2 cursor-pointer text-[black]"
               >
-                No Data Found
+                No Delivery Address Found
               </div>
             )}
           </div>
@@ -392,7 +392,7 @@ export const columnHelperForNewOrder = (
               onClick={() => {
                 handleDeleteModalDraftOrder(draftOrderPayload);
               }}
-              className="w-5 h-5 cursor-pointer"
+              className="w-5 h-5 cursor-pointer "
             />
           </div>
         );
