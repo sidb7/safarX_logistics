@@ -12,6 +12,7 @@ import CustomAccordian from "../../../components/CustomAccordian";
 import { BottomNavBar } from "../../../components/BottomNavBar";
 
 import ServiceButton from "../../../components/Button/ServiceButton";
+import BackArrowIcon from "../../../assets/backArrow.svg";
 
 interface ITypeProps {}
 
@@ -53,12 +54,22 @@ const ViewAllTickets = (props: ITypeProps) => {
 
   const FilterComponent = () => {
     return (
-      <div className="flex flex-col w-full h-full relative  ">
-        <div className="flex items-center justify-between mr-5 mb-5">
-          <Breadcrum label="Filter" />
+      <div className="flex flex-col w-full h-full relative   ">
+        <div className="flex items-center justify-between  mb-5 mt-5 mx-5 ">
+          <div className="flex items-center space-x-2">
+            <img
+              src={BackArrowIcon}
+              alt=""
+              className="cursor-pointer"
+              onClick={() => {}}
+            />
+
+            <p className=" text-base font-bold  text-[#1C1C1C] ">{"Filter"}</p>
+          </div>
           <img
             src={CrossIcon}
             alt=""
+            className="cursor-pointer"
             onClick={() => {
               setIsFilterModalOpen(false);
             }}
