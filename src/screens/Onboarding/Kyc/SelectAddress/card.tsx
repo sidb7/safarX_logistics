@@ -1,4 +1,6 @@
+import { useRef, useState } from "react";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
+import EditIcon from "../../../../assets/OrderDetails/EditIcon.svg";
 interface ITypesProps {
   name: string;
   value: string;
@@ -8,13 +10,15 @@ interface ITypesProps {
   subContent?: string;
   isSubContent?: boolean;
   cardClassName?: string;
+  index?: number;
+  updatedAddress?: any;
 
   doctype?: string;
   onClick?: (e?: any) => void;
   checked?: boolean;
 }
 
-const card = (props: ITypesProps) => {
+const Card = (props: ITypesProps) => {
   const {
     name,
     value,
@@ -24,10 +28,25 @@ const card = (props: ITypesProps) => {
     isSubContent,
     cardClassName,
     doctype,
+    index,
+    updatedAddress,
 
     onClick = () => {},
     checked,
   } = props;
+  const [editAdd, setEditAdd] = useState<number>();
+  const [updateTempAdd, setUpdateTempAdd] = useState<any>(title);
+  const boxRef = useRef<any>();
+
+  const editAddress = (id: any) => {
+    console.log("id :", id);
+    setEditAdd(id);
+  };
+
+  const blurFunction = () => {
+    setEditAdd(-1);
+    updatedAddress(updateTempAdd, index);
+  };
 
   return (
     <>
@@ -63,13 +82,24 @@ const card = (props: ITypesProps) => {
 
           <p
             className={`${titleClassName} font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
+            ref={boxRef}
           >
-            {title}
+            {editAdd === index ? (
+              <input
+                type="text"
+                value={updateTempAdd}
+                onChange={(e) => setUpdateTempAdd(e.target.value)}
+                onBlur={() => blurFunction()}
+              />
+            ) : (
+              updateTempAdd
+            )}
           </p>
+          <img src={EditIcon} onClick={() => editAddress(index)} alt="edit" />
         </div>
       </div>
     </>
   );
 };
 
-export default card;
+export default Card;

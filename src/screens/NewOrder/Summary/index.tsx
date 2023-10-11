@@ -110,7 +110,7 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-  const invoiceValue = latestOrder?.data?.[0]?.service?.total;
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
       let payload = {
@@ -141,6 +141,7 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
+          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
@@ -148,16 +149,21 @@ const Summary = (props: Props) => {
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
-                toast.warning(orderPlaceResponse?.data?.message);
-                const requiredBalance =
-                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+                let errorText = orderPlaceResponse?.data?.message;
+                if (errorText.startsWith("Wallet")) {
+                  toast.warning(orderPlaceResponse?.data?.message);
+                  const requiredBalance =
+                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate(
-                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
-                  {
-                    state: { requiredBalance: requiredBalance },
-                  }
-                );
+                  navigate(
+                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                    {
+                      state: { requiredBalance: requiredBalance },
+                    }
+                  );
+                } else {
+                  toast.error(orderPlaceResponse?.data?.message);
+                }
               }
             })
             .catch(function (errorResponse) {
