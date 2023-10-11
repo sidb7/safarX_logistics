@@ -111,7 +111,6 @@ const Summary = (props: Props) => {
     }
   };
   const invoiceValue = latestOrder?.data?.[0]?.service?.total;
-  console.log("invoiceValue", invoiceValue);
   const setOrderIdApi = async () => {
     try {
       let payload = {
@@ -154,7 +153,7 @@ const Summary = (props: Props) => {
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
                 navigate(
-                  `orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
                   {
                     state: { requiredBalance: requiredBalance },
                   }
