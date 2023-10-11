@@ -18,6 +18,7 @@ import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
+import { stat } from "fs";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -154,8 +155,24 @@ const idHelper = (navigate: any = "") => [
                   to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
                   className="underline text-blue-500 cursor-pointer"
                 >
-                  <span className="">{tempOrderId}</span>
+                  <span
+                    className=""
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Complete Order"
+                  >
+                    {tempOrderId}
+                  </span>
                 </Link>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
 
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
@@ -201,6 +218,33 @@ const idHelper = (navigate: any = "") => [
               </div>
             </div>
           )}
+        </div>
+      );
+    },
+  }),
+  //STATUS
+  ColumnsHelper.accessor("Status", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>Status</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      const { status } = info?.row?.original;
+      console.log("status", status?.[0]?.currentStatus);
+      const renderStatus = status?.[0]?.currentStatus || "Draft";
+      console.log("renderStatus", renderStatus);
+      return (
+        <div className="py-3">
+          {
+            <div className="">
+              <div className="flex text-base items-center font-medium">
+                <p>{renderStatus}</p>
+              </div>
+            </div>
+          }
         </div>
       );
     },
@@ -393,6 +437,18 @@ export const columnHelperForNewOrder = (
                 handleDeleteModalDraftOrder(draftOrderPayload);
               }}
               className="w-5 h-5 cursor-pointer "
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content="Delete Order"
+            />
+            <Tooltip
+              id="my-tooltip-inline"
+              style={{
+                backgroundColor: "bg-neutral-900",
+                color: "#FFFFFF",
+                width: "fit-content",
+                fontSize: "14px",
+                lineHeight: "16px",
+              }}
             />
           </div>
         );
