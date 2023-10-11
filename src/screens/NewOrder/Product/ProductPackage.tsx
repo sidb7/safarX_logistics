@@ -243,7 +243,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setProducts(resProduct);
       } else {
         toast.error(data?.message);
-        navigate(`/orders/add-order/product-package`);
+        navigate(
+          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
         return;
       }
       if (boxData?.success) {
@@ -371,7 +373,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD PRODUCT"
               onClick={() => {
-                navigate("/orders/add-order/add-product");
+                navigate(
+                  `/orders/add-order/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                );
               }}
               showIcon={true}
               icon={ButtonIcon}
