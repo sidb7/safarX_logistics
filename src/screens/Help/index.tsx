@@ -10,9 +10,15 @@ import RaiseTickets from "./Tickets/raiseTicket";
 import AccessDenied from "../../components/AccessDenied";
 import { useSelector } from "react-redux";
 import { GetCurrentPath } from "../../utils/utility";
+import { ResponsiveState } from "../../utils/responsiveState";
+
+import { BottomNavBar } from "../../components/BottomNavBar";
+import { useNavigate } from "react-router-dom";
 
 const HelpScreen = () => {
   const roles = useSelector((state: any) => state?.roles);
+  const { isLgScreen } = ResponsiveState();
+  const navigate = useNavigate();
 
   const [tabName, setTabName] = useState(
     sessionStorage.getItem("helpTab") || "FAQs"
@@ -90,25 +96,15 @@ const HelpScreen = () => {
             icon={addIcon}
             showIcon={true}
             text={"VIEW ALL TICKETS"}
-            className="!p-3"
+            className="!p-3 text-sm"
             onClick={() => {
-              setShowTable(true);
+              isLgScreen
+                ? setShowTable(true)
+                : navigate("/help/ticket/view-all");
             }}
           />
         );
       }
-    } else {
-      return (
-        <CustomButton
-          icon={addIcon}
-          showIcon={true}
-          text={"CLOSE TICKET"}
-          className="!p-3"
-          onClick={() => {
-            setShowRaiseTicket(true);
-          }}
-        />
-      );
     }
   };
   const data = GetCurrentPath() as any;
@@ -133,7 +129,7 @@ const HelpScreen = () => {
           <Breadcrum label="Help" component={renderHeaderComponent()} />
           <div className="lg:mb-24">
             <div className="mt-4 px-5 ">
-              <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+              <div className="flex flex-row whitespace-nowrap mt-2 mb-[32px] lg:mb-[34px] lg:h-[34px]">
                 {listTab?.map(({ statusName }, index) => {
                   return (
                     <div
@@ -148,7 +144,7 @@ ${renderingComponents === index && "!border-[#004EFF]"}
                       key={index}
                     >
                       <span
-                        className={`text-[#777777] text-[14px] lg:text-[18px]
+                        className={`text-[#777777] font-Open  leading-[18px]   lg:leading-6  font-semibold text-sm lg:text-[18px]
 ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
                       >
                         {statusName}
@@ -161,7 +157,12 @@ ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
               {renderComponent()}
               {/* {showRaiseTicket && <RaiseTickets />} */}
             </div>
-            <BottomLayout callApi={() => {}} />
+            <div className="hidden lg:block">
+              <BottomLayout callApi={() => {}} />
+            </div>
+            <div className="lg:hidden mt-24">
+              <BottomNavBar />
+            </div>
           </div>
         </div>
       ) : (

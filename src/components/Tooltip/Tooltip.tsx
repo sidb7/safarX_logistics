@@ -2,7 +2,25 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { classNames } from "./classNames";
 
-export const Tooltip = ({ position, content, children, showOnHover = false, showOnClick = false, className }: any) => {
+interface TooltipPropTypes {
+  position: any;
+  content: React.ReactNode;
+  children?: React.ReactNode;
+  showOnHover?: boolean;
+  showOnClick?: boolean;
+  className?: any;
+}
+
+export const Tooltip = (props: TooltipPropTypes) => {
+  const {
+    position,
+    content,
+    children,
+    showOnHover = false,
+    showOnClick = false,
+    className,
+  } = props;
+
   const [showTooltip, setShowTooltip] = useState(false);
 
   const handleHover = () => {

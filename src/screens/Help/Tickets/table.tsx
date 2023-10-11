@@ -215,7 +215,13 @@ const TicketsTable = () => {
       },
     }),
   ];
-  return <CustomTable columns={TicketsHeading} data={TicketsData} />;
+  return (
+    <div>
+      <div className="hidden lg:block">
+        <CustomTable columns={TicketsHeading} data={TicketsData} />;
+      </div>
+    </div>
+  );
 };
 
 export default TicketsTable;
