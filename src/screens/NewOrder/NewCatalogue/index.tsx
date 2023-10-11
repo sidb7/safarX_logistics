@@ -249,12 +249,6 @@ const Catalogue = () => {
           },
         ];
 
-        let channels: any = getLocalStorage("channelData");
-
-        channels = channels && JSON.parse(channels);
-
-        newAddedChannel = [...newAddedChannel, ...channels];
-
         removeLocalStorage("channelData");
         removeLocalStorage("wooCommerceContents");
 
