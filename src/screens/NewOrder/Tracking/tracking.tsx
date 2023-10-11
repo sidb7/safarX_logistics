@@ -25,7 +25,7 @@ import { getQueryJson } from "../../../utils/utility";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
-import alertInfoIcon from "../../../assets/info-circle.svg"
+import alertInfoIcon from "../../../assets/info-circle-outline.svg"
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { toast } from "react-toastify";
 import { Tooltip } from "../../../components/Tooltip/Tooltip"
@@ -153,18 +153,25 @@ const Tracking = () => {
 
   const InvalidTrackingListHover = (inValidTrackingState: any) => {
     return (
-      <div className="flex items-center flex-wrap">
-        {
-          inValidTrackingState.map((inValidTravkingNumber: any, index: any) => (
-            <span key={`${inValidTravkingNumber}_${index}`} className="mx-1">{inValidTravkingNumber}</span>
-          ))
-        }
+      <div className="max-w-[200px] h-fit">
+        <div className="border-b  font-semibold py-1 my-2 ">
+          INVALID TRACKING NUMBER
+        </div>
+
+        <div className="flex items-start max-w-[400px]">
+          <span>  The tracking IDs:</span>
+          <div className="flex flex-wrap items-start">
+            {
+              inValidTrackingState.map((inValidTravkingNumber: any, index: any) => (
+                <span key={`${inValidTravkingNumber}_${index}`} className="mx-1 font-semibold">{inValidTravkingNumber}</span>
+              ))
+            }
+          </div>
+
+        </div>
       </div>
     )
   }
-
-
-
 
   useEffect(() => {
     if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
@@ -202,14 +209,14 @@ const Tracking = () => {
 
                 {
                   inValidTrackingState.length > 0 && (
-                    <Tooltip position="right" content={InvalidTrackingListHover(inValidTrackingState)}>
+                    <Tooltip position="bottom" content={InvalidTrackingListHover(inValidTrackingState)} showOnClick={true} >
                       <div
-                        className="text-[#d72323] bg-[#FDEDEA] max-w-[200px] rounded-lg cursor-pointer shadow-md my-2 flex text-[11px]"
+                        className="text-[#d72323] bg-[#FDEDEA] max-w-[250px] rounded-lg cursor-pointer shadow-md my-2 flex text-[11px]"
                         onClick={() => setInvalidTrackingModal(!invalidTrackingModal)}
                       >
                         <div className="flex py-2 px-4" >
-                          <img src={alertInfoIcon} alt="" />
                           <span className="ml-1">INVALIDE TRACKING NUMBER </span>
+                          <img src={alertInfoIcon} alt="" className="mx-2 w-[12px]" />
                         </div>
                       </div>
                     </Tooltip>
