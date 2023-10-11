@@ -91,10 +91,12 @@ const Summary = (props: Props) => {
   const navigate = useNavigate();
   const params = getQueryJson();
   const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
+
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
-      const payload = { tempOrderId: shipyaari_id };
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data: response } = await POST(GET_LATEST_ORDER, payload);
 
       if (response?.success) {
@@ -108,19 +110,20 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-  const invoiceValue = latestOrder?.data?.[0]?.service?.total;
-  console.log("invoiceValue", invoiceValue);
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
       let payload = {
         orderId: orderId,
         ewaybillNumber: ewaybillNumber,
         tempOrderId: +shipyaari_id,
+        source: orderSource,
       };
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
       const placeOrderPromise = await POST(POST_PLACE_ORDER, {
         tempOrderId: +shipyaari_id,
+        source: orderSource,
       });
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
@@ -138,6 +141,7 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
+          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
@@ -145,16 +149,21 @@ const Summary = (props: Props) => {
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
-                toast.warning(orderPlaceResponse?.data?.message);
-                const requiredBalance =
-                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+                let errorText = orderPlaceResponse?.data?.message;
+                if (errorText.startsWith("Wallet")) {
+                  toast.warning(orderPlaceResponse?.data?.message);
+                  const requiredBalance =
+                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate(
-                  `orders/add-order/payment?shipyaari_id=${shipyaari_id}`,
-                  {
-                    state: { requiredBalance: requiredBalance },
-                  }
-                );
+                  navigate(
+                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                    {
+                      state: { requiredBalance: requiredBalance },
+                    }
+                  );
+                } else {
+                  toast.error(orderPlaceResponse?.data?.message);
+                }
               }
             })
             .catch(function (errorResponse) {

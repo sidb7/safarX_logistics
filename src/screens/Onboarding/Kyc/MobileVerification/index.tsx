@@ -105,7 +105,7 @@ const Index = (props: ITypeProps) => {
   const resentGstOtp = async () => {
     try {
       const payload = { gstIn: gstNo };
-      console.log("resendpayload", payload);
+
       const { data: response } = await POST(POST_VERIFY_GST_URL, payload);
 
       if (response?.success) {
@@ -154,6 +154,7 @@ const Index = (props: ITypeProps) => {
       const payload = { pan_no: value };
       const { data: response } = await POST(POST_VERIFY_PAN_URL, payload);
 
+      sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         toast.success(response?.message);
         setLoading(false);
@@ -182,7 +183,6 @@ const Index = (props: ITypeProps) => {
   const onVerifyOtp = async (e: any) => {
     try {
       e.preventDefault();
-      console.log("otpNumber", typeof otpNumber);
 
       if (Number(otpNumber) !== 0) {
         if (businessType === "individual") {
@@ -302,8 +302,10 @@ const Index = (props: ITypeProps) => {
                   containerStyle="lg:!w-auto"
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
+                  maxLength={businessType === "individual" ? 6 : 4}
+                  value={otpNumber || ""}
                   onChange={(e) => {
-                    setOTPNumber(e.target.value);
+                    setOTPNumber(+e.target.value);
                   }}
                 />
               </div>

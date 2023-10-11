@@ -154,7 +154,7 @@ const PickupLocation = () => {
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
 
   let shipyaari_id = params?.shipyaari_id || "";
-
+  let orderSource = params?.source || "";
   const postPickupOrderDetails = async () => {
     try {
       let payload = {};
@@ -182,8 +182,11 @@ const PickupLocation = () => {
         toast.success(response?.message);
         const tempOrderId = response?.data[0]?.tempOrderId;
         shipyaari_id = params?.shipyaari_id || tempOrderId || "";
-
-        navigate(`/orders/add-order/delivery?shipyaari_id=${shipyaari_id}`);
+        const orderTypeForNeworder = response?.data[0]?.source;
+        orderSource = params?.source || orderTypeForNeworder || "";
+        navigate(
+          `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
       } else {
         toast.error(response?.message);
       }
@@ -193,11 +196,12 @@ const PickupLocation = () => {
   };
 
   console.log("shipyaariId", shipyaari_id);
+  console.log("orderSource", orderSource);
 
   useEffect(() => {
     (async () => {
       if (shipyaari_id) {
-        const payload = { tempOrderId: shipyaari_id };
+        const payload = { tempOrderId: shipyaari_id, source: orderSource };
         console.log("latestOrderPayload", payload);
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {

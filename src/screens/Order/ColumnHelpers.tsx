@@ -8,8 +8,17 @@ import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
+import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
+import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
+
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
+import CustomButton from "../../components/Button";
+import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
+import { toast } from "react-toastify";
+import { useMediaQuery } from "react-responsive";
+import { stat } from "fs";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -134,9 +143,8 @@ const idHelper = (navigate: any = "") => [
       );
     },
     cell: (info: any) => {
-      const { tempOrderId, orderId, status = [] } = info?.row?.original;
+      const { tempOrderId, orderId, status = [], source } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -144,11 +152,28 @@ const idHelper = (navigate: any = "") => [
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
                 <Link
-                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}`}
+                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
                   className="underline text-blue-500 cursor-pointer"
                 >
-                  <span className="clickable-span">{tempOrderId}</span>
+                  <span
+                    className=""
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Complete Order"
+                  >
+                    {tempOrderId}
+                  </span>
                 </Link>
+                <Tooltip
+                  id="my-tooltip-inline"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
+
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
@@ -197,12 +222,46 @@ const idHelper = (navigate: any = "") => [
       );
     },
   }),
+  //STATUS
+  ColumnsHelper.accessor("Status", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>Status</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      const { status } = info?.row?.original;
+      console.log("status", status?.[0]?.currentStatus);
+      const renderStatus = status?.[0]?.currentStatus || "Draft";
+      console.log("renderStatus", renderStatus);
+      return (
+        <div className="py-3">
+          {
+            <div className="">
+              <div className="flex text-base items-center font-medium">
+                <p>{renderStatus}</p>
+              </div>
+            </div>
+          }
+        </div>
+      );
+    },
+  }),
 ];
 
 // table for draft/pending order
 export const columnHelperForPendingOrder = [];
 
-export const columnHelperForNewOrder = (navigate: any) => {
+export const columnHelperForNewOrder = (
+  navigate: any,
+  setDeleteModalDraftOrder: any
+) => {
+  const handleDeleteModalDraftOrder = (payload: any) => {
+    setDeleteModalDraftOrder({ isOpen: true, payload });
+  };
+
   return [
     ...idHelper(),
     ColumnsHelper.accessor(".", {
@@ -225,10 +284,10 @@ export const columnHelperForNewOrder = (navigate: any) => {
               </div>
             ) : (
               <div
-                onClick={() => navigate("/orders/add-order/product-package")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/product-package")}
+                className="  decoration-2 "
               >
-                ADD PACKAGE DETAILS
+                No Package Details Found
               </div>
             )}
           </div>
@@ -271,10 +330,10 @@ export const columnHelperForNewOrder = (navigate: any) => {
           <div className="text-base  py-3 text-[#8D8D8D]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
-                onClick={() => navigate("/orders/add-order/delivery")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="  decoration-2 text-[black]"
               >
-                ADD DELIVERY ADDRESS
+                No Delivery Address Found
               </div>
             )}
           </div>
@@ -342,6 +401,7 @@ export const columnHelperForNewOrder = (navigate: any) => {
           tempOrderId = "-",
           sellerId = "-",
           status,
+          source,
         } = info?.row?.original;
         const { AWB } = status[0] ?? "";
         const copyString = `
@@ -362,11 +422,35 @@ export const columnHelperForNewOrder = (navigate: any) => {
           } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
 
         `;
-
+        let draftOrderPayload = {
+          tempOrderId: tempOrderId,
+          source: source,
+        };
         return (
-          <>
+          <div className="flex items-center">
             <CopyTooltip stringToBeCopied={copyString} />
-          </>
+
+            <img
+              src={DeleteIconForLg}
+              alt="Delete "
+              onClick={() => {
+                handleDeleteModalDraftOrder(draftOrderPayload);
+              }}
+              className="w-5 h-5 cursor-pointer "
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content="Delete Order"
+            />
+            <Tooltip
+              id="my-tooltip-inline"
+              style={{
+                backgroundColor: "bg-neutral-900",
+                color: "#FFFFFF",
+                width: "fit-content",
+                fontSize: "14px",
+                lineHeight: "16px",
+              }}
+            />
+          </div>
         );
       },
     }),

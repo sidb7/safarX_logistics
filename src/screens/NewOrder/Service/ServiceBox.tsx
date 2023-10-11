@@ -76,6 +76,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
             <p className="text-[#004EFF] font-medium py-2">
               ETA: {option.text?.EDT}
             </p>
+            <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p>
           </div>
         </div>
       ))}

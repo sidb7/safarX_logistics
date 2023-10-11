@@ -170,6 +170,7 @@ const Index: React.FC = () => {
   const navigate = useNavigate();
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   //
 
@@ -221,6 +222,7 @@ const Index: React.FC = () => {
   const getCourierPartnerService = async () => {
     const payload = {
       tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
 
     try {
@@ -278,6 +280,7 @@ const Index: React.FC = () => {
       companyServiceId,
       companyServiceName,
       tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
 
     try {
@@ -285,7 +288,9 @@ const Index: React.FC = () => {
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate(`/orders/add-order/summary?shipyaari_id=${shipyaari_id}`);
+        navigate(
+          `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
       } else {
         toast.error(response?.message);
       }
