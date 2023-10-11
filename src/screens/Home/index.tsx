@@ -21,15 +21,12 @@ import {
 import { POST } from "../../utils/webService";
 import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
 import AccessDenied from "../../components/AccessDenied";
-import infoIcon from "../../assets/info.svg";
 import { useNavigate } from "react-router-dom";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
   const navigate = useNavigate();
-
-  const kycValue = sessionStorage.getItem("setKycValue");
 
   const roles = useSelector((state: any) => state?.roles);
 
@@ -123,52 +120,35 @@ export const Home = (props: IOverview) => {
   return (
     <>
       {isActive ? (
-        <div className="m-4">
-          <div>
-            {kycValue === "true" ? (
-              <></>
-            ) : (
-              <div className="flex justify-between bg-[#F5BE6D] p-2">
-                <div className="flex gap-x-2">
-                  <img src={infoIcon} alt="" />
-                  <p className="text-base font-normal">KYC Pending</p>
-                </div>
-
-                <p
-                  className="text-base text-[#004EFF] font-normal cursor-pointer"
-                  onClick={() => navigate("/onboarding/kyc-type")}
-                >
-                  Click Here
-                </p>
-              </div>
-            )}
-          </div>
+        <div>
           <div>
             <Breadcrum label="Home" />
           </div>
-          <div className="flex justify-between">
-            {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
-            <div>
-              <ScrollNav
-                arrayData={arrayData}
-                showNumber={false}
-                setScrollIndex={setScrollIndex}
-              />
-            </div>
-            {renderingComponents === 0 && (
+          <div className="m-4">
+            <div className="flex justify-between">
+              {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
               <div>
-                <CustomDropDown
-                  onChange={(e) => {}}
-                  options={yearArr}
-                  heading="Select Filter"
+                <ScrollNav
+                  arrayData={arrayData}
+                  showNumber={false}
+                  setScrollIndex={setScrollIndex}
                 />
               </div>
-            )}
+              {renderingComponents === 0 && (
+                <div>
+                  <CustomDropDown
+                    onChange={(e) => {}}
+                    options={yearArr}
+                    heading="Select Filter"
+                  />
+                </div>
+              )}
+            </div>
+            {renderingComponents === 0 && <Overview />}
+            {renderingComponents === 1 && <Orders />}
+            {renderingComponents === 2 && <Exception />}
+            {renderingComponents === 3 && <SyPerfromance />}
           </div>
-          {renderingComponents === 0 && <Overview />}
-          {renderingComponents === 1 && <Orders />}
-          {renderingComponents === 2 && <Exception />}
-          {renderingComponents === 3 && <SyPerfromance />}
         </div>
       ) : (
         <div>
