@@ -5,6 +5,8 @@ interface IProductCategoryBoxProps {
   className?: string;
   textClassName?: string;
   onClick?: () => void;
+  imageClassName?: string;
+  key?: any;
 }
 const ProductCategoryBox: React.FunctionComponent<IProductCategoryBoxProps> = ({
   image = "",
@@ -12,13 +14,16 @@ const ProductCategoryBox: React.FunctionComponent<IProductCategoryBoxProps> = ({
   className,
   textClassName,
   onClick,
+  imageClassName,
+  key,
 }) => {
   return (
     <div
-      className={`inline-flex p-2 border-[0.5px] rounded-[4px] bg-[#FEFEFE] h-[39px] items-center gap-[4.5px]${className}`}
+      key={key}
+      className={`inline-flex cursor-pointer p-2 border-[0.5px] rounded-[4px] bg-[#FEFEFE] h-[39px] items-center gap-[4.5px]${className}`}
       onClick={onClick}
     >
-      <div className=" w-5">
+      <div className={`w-5 ${imageClassName}`}>
         <img src={image} alt="ProductLogo" />
       </div>
       <div>
