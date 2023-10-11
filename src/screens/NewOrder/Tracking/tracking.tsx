@@ -25,10 +25,10 @@ import { getQueryJson } from "../../../utils/utility";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
-import alertInfoIcon from "../../../assets/info-circle-outline.svg"
+import alertInfoIcon from "../../../assets/info-circle-outline.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { toast } from "react-toastify";
-import { Tooltip } from "../../../components/Tooltip/Tooltip"
+import { Tooltip } from "../../../components/Tooltip/Tooltip";
 
 const Tracking = () => {
   // let tracking = [
@@ -100,7 +100,8 @@ const Tracking = () => {
 
   const [openSection, setOpenSection] = useState<string | null>("tracking");
   const [trackingNo, setTrackingNo] = useState<string>("");
-  const [invalidTrackingModal, setInvalidTrackingModal] = useState<boolean>(false);
+  const [invalidTrackingModal, setInvalidTrackingModal] =
+    useState<boolean>(false);
 
   const [loading, setLoading] = useState(false);
   const params = getQueryJson();
@@ -120,34 +121,33 @@ const Tracking = () => {
     let urlWithTrackingNo;
 
     if (!urlWithTrackingNo && trackingNo === "") {
-      return toast.warning("Please Enter Tracking Number")
+      return toast.warning("Please Enter Tracking Number");
     }
 
     try {
       setLoading(true);
       if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNoFromUrl}`
+        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNoFromUrl}`;
       } else {
-        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`
+        urlWithTrackingNo = `${TRACKING}?trackingNo=${trackingNo}`;
       }
 
       const { data: response } = await GET(urlWithTrackingNo);
 
       if (response?.success) {
-        const { invalidTrackingInfo, trackingInfo } = response?.data?.[0]
+        const { invalidTrackingInfo, trackingInfo } = response?.data?.[0];
 
         setTrackingState(trackingInfo);
-        setInValidTrackingState(invalidTrackingInfo)
-        setTrackingNo("")
+        setInValidTrackingState(invalidTrackingInfo);
+        setTrackingNo("");
       } else {
         setTrackingState([]);
-        toast.error(response?.message)
+        toast.error(response?.message);
       }
     } catch (error: any) {
       console.error("Error in API call:", error);
     } finally {
       setLoading(false);
-
     }
   };
 
@@ -159,23 +159,28 @@ const Tracking = () => {
         </div>
 
         <div className="flex items-start max-w-[400px]">
-          <span>  The tracking IDs:</span>
+          <span> The tracking IDs:</span>
           <div className="flex flex-wrap items-start">
-            {
-              inValidTrackingState.map((inValidTravkingNumber: any, index: any) => (
-                <span key={`${inValidTravkingNumber}_${index}`} title={inValidTravkingNumber} className="mx-1 max-w-[100px] font-semibold truncate">{inValidTravkingNumber}</span>
-              ))
-            }
+            {inValidTrackingState.map(
+              (inValidTravkingNumber: any, index: any) => (
+                <span
+                  key={`${inValidTravkingNumber}_${index}`}
+                  title={inValidTravkingNumber}
+                  className="mx-1 max-w-[100px] font-semibold truncate"
+                >
+                  {inValidTravkingNumber}
+                </span>
+              )
+            )}
           </div>
-
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   useEffect(() => {
     if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-      setTrackingNo(trackingNoFromUrl)
+      setTrackingNo(trackingNoFromUrl);
       handleTrackOrderClick(trackingNoFromUrl);
     }
   }, [trackingNoFromUrl]);
@@ -207,22 +212,29 @@ const Tracking = () => {
                   />
                 </div>
 
-                {
-                  inValidTrackingState.length > 0 && (
-                    <Tooltip position="bottom" content={InvalidTrackingListHover(inValidTrackingState)} showOnClick={true} >
-                      <div
-                        className="text-[#d72323] bg-[#FDEDEA] max-w-[250px] rounded-lg cursor-pointer shadow-md my-2 flex text-[11px]"
-                        onClick={() => setInvalidTrackingModal(!invalidTrackingModal)}
-                      >
-                        <div className="flex py-2 px-4" >
-                          <span className="ml-1">INVALIDE TRACKING NUMBER </span>
-                          <img src={alertInfoIcon} alt="" className="mx-2 w-[12px]" />
-                        </div>
+                {inValidTrackingState.length > 0 && (
+                  <Tooltip
+                    position="bottom"
+                    content={InvalidTrackingListHover(inValidTrackingState)}
+                    showOnClick={true}
+                  >
+                    <div
+                      className="text-[#d72323] bg-[#FDEDEA] max-w-[250px] rounded-lg cursor-pointer shadow-md my-2 flex text-[11px]"
+                      onClick={() =>
+                        setInvalidTrackingModal(!invalidTrackingModal)
+                      }
+                    >
+                      <div className="flex py-2 px-4">
+                        <span className="ml-1">INVALID TRACKING NUMBER </span>
+                        <img
+                          src={alertInfoIcon}
+                          alt=""
+                          className="mx-2 w-[12px]"
+                        />
                       </div>
-                    </Tooltip>
-
-                  )
-                }
+                    </div>
+                  </Tooltip>
+                )}
 
                 {!loading &&
                   trackingState?.map((each: any, indexTracking: number) => {
@@ -243,7 +255,7 @@ const Tracking = () => {
                               <div className="flex items-center justify-between pt-2 mt-4">
                                 <div className="flex flex-col md:flex-row gap-x-8 items-start md:items-center xl:pr-4">
                                   <p className=" flex flex-col sm:flex-row text-xs font-normal font-Open">
-                                    <span>  Tracking ID: </span>
+                                    <span> Tracking ID: </span>
                                     <div className="flex font-bold pl-1">
                                       <span className="mt-1 sm:mt-0">
                                         {each?.partner?.trackingID}
@@ -262,7 +274,9 @@ const Tracking = () => {
                                         {each?.partner?.orderID}
                                       </span>
                                       <CopyTooltip
-                                        stringToBeCopied={each?.partner?.orderID}
+                                        stringToBeCopied={
+                                          each?.partner?.orderID
+                                        }
                                       />
                                     </div>
                                   </p>

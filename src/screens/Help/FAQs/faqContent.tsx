@@ -41,11 +41,11 @@ const FAQContent: React.FC<FAQContentProps> = ({ faqType }) => {
   return (
     <div>
       {faqData[faqType]?.map((faq: any, index: number) => (
-        <div key={index} className="mb-4 mt-4">
+        <div key={index} className=" mb-3 lg:mb-4 ">
           <div
-            className={`flex justify-between items-center cursor-pointer ${
+            className={`flex justify-between  items-center cursor-pointer ${
               activeQuestion === faq.question ? "bg-[#E8E8E8]" : "bg-white"
-            } rounded-lg w-[1148px] h-[48px] border-r-0 border-b-2 border-t-1 border-l-0 border-[#E8E8E8] gap-2 p-4 ${
+            } rounded-lg  lg:w-[1148px] h-[38px] lg:h-[48px] border-r-0 border-b-2 border-t-1 border-l-0 border-[#E8E8E8] gap-2 p-4 ${
               activeQuestion === faq.question
                 ? "border-r-1 border-[#E8E8E8] "
                 : ""

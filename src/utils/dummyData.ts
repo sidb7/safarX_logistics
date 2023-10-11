@@ -1349,3 +1349,115 @@ export const ticketTypeOptions = [
     selected: false,
   },
 ];
+
+export const ticketFilterData = [
+  {
+    name: "Date",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Today",
+
+        isActive: false,
+      },
+      {
+        name: "This Week",
+
+        isActive: false,
+      },
+
+      {
+        name: "This Month",
+
+        isActive: false,
+      },
+      {
+        name: "This Quartar",
+
+        isActive: false,
+      },
+      {
+        name: "This Year",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Support Type",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Sales",
+
+        isActive: false,
+      },
+      {
+        name: "Account & Billing ",
+
+        isActive: false,
+      },
+
+      {
+        name: "Operational",
+
+        isActive: false,
+      },
+      {
+        name: "Technical",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Priority",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "High",
+
+        isActive: false,
+      },
+      {
+        name: "Medium",
+
+        isActive: false,
+      },
+
+      {
+        name: "Low",
+
+        isActive: false,
+      },
+    ],
+  },
+
+  {
+    name: "Status",
+
+    isCollapse: false,
+    menu: [
+      {
+        name: "Processing",
+
+        isActive: false,
+      },
+      {
+        name: "Pending",
+
+        isActive: false,
+      },
+      {
+        name: "Resolved",
+
+        isActive: false,
+      },
+    ],
+  },
+];
