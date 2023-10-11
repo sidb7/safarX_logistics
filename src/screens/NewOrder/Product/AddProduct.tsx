@@ -73,6 +73,8 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const navigate = useNavigate();
   const params = getQueryJson();
   const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
+
   const initialUserData = {
     productId: "",
     name: "",
@@ -101,6 +103,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const addProductInfo = async () => {
     const payload = {
       tempOrderId: +shipyaari_id,
+      source: orderSource,
       products: productPayload,
     };
     console.log("productpayload", payload);
@@ -108,7 +111,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     if (response?.success) {
       toast.success(response?.message);
       navigate(
-        `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}`
+        `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
       );
     } else {
       toast.error("Failed To Upload!");
@@ -137,7 +140,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   const getOrderProductDetails = async () => {
     try {
-      const payload = { tempOrderId: shipyaari_id };
+      const payload = { tempOrderId: +shipyaari_id, source: orderSource };
       const { data } = await POST(GET_LATEST_ORDER, payload);
       if (data?.success) {
         setProductPayload(data?.data[0]?.products);
@@ -148,7 +151,9 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         }
       } else {
         toast.error(data?.message);
-        navigate("/orders/add-order/delivery");
+        navigate(
+          "/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}"
+        );
         throw new Error(data?.message);
       }
     } catch (error) {

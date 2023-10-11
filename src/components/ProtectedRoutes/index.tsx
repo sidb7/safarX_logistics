@@ -22,6 +22,11 @@ const ProtectedRoute = ({ children }: Props) => {
   React.useEffect(() => {
     (async () => {
       const response = await POST(VALIDATE_USER_TOKEN);
+
+      sessionStorage.setItem(
+        "kycValue",
+        JSON.stringify(response?.data?.data[0])
+      );
       if (!response?.data?.success) {
         setIsAuthenticated(false);
         clearLocalStorage();
