@@ -150,25 +150,20 @@ const Summary = (props: Props) => {
                 navigate("/orders/view-orders");
               } else {
                 let errorText = orderPlaceResponse?.data?.message;
-                console.log("errorText", errorText);
-                if (
-                  errorText.startsWith("Order Id") ||
-                  errorText.startsWith("Order Source") ||
-                  errorText.startsWith(" Please") ||
-                  errorText.startsWith(" EWayBill")
-                ) {
-                  return;
-                }
-                toast.warning(orderPlaceResponse?.data?.message);
-                const requiredBalance =
-                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+                if (errorText.startsWith("Wallet")) {
+                  toast.warning(orderPlaceResponse?.data?.message);
+                  const requiredBalance =
+                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate(
-                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
-                  {
-                    state: { requiredBalance: requiredBalance },
-                  }
-                );
+                  navigate(
+                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                    {
+                      state: { requiredBalance: requiredBalance },
+                    }
+                  );
+                } else {
+                  toast.error(orderPlaceResponse?.data?.message);
+                }
               }
             })
             .catch(function (errorResponse) {
