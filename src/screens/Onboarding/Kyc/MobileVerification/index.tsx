@@ -302,7 +302,7 @@ const Index = (props: ITypeProps) => {
                   containerStyle="lg:!w-auto"
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
-                  maxLength={businessType === "individual" ? 6 : 4}
+                  maxLength={businessType === "company" ? 4 : 6}
                   value={otpNumber || ""}
                   onChange={(e) => {
                     setOTPNumber(+e.target.value);
