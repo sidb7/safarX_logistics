@@ -42,6 +42,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
+  let walletBalance = sessionStorage.getItem("kycValue") as any;
+  walletBalance = JSON.parse(walletBalance);
+  walletBalance = walletBalance?.walletBalance;
+
   const handleOutsideClick = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
@@ -128,7 +132,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             text={""}
             onClick={() => {}}
           /> */}
-          <div className="flex justify-self-end gap-x-3 ">
+          <div className="flex items-center justify-self-end gap-x-3 ">
+            <div className="hidden lg:block">
+              <div className="flex items-center w-[128px] h-[36px] space-x-1 rounded-lg p-4 bg-[#E5EDFF]">
+                <img src={WalletIcon} alt="" />
+                <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
+              </div>
+            </div>
+
             <img
               src={SearchIcon}
               width={"22px"}
@@ -148,6 +159,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               /> */}
+
               <div ref={dropdownQuickRef}>
                 <img
                   src={PowerBoosterlogo}
@@ -232,9 +244,9 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 >
                   <div className="p-4" role="none">
                     <div className="flex justify-between mt-4">
-                      <h1 className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
+                      <span className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
                         Quick action
-                      </h1>
+                      </span>
                       <span onClick={() => setIsQuick(false)}>
                         <img
                           src={CrossIcon}

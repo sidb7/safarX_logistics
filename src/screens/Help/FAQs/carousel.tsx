@@ -39,8 +39,8 @@ const Carousel = (props: ITypeProps) => {
     <Slider {...settings}>
       {dummyData?.map((eachCard: any, index: number) => {
         return (
-          <div className="flex relative w-full  ">
-            <p className="font-Open font-semibold text-sm leading-[22px] px-4 py-4 w-2/3  text-[#1C1C1C]">
+          <div className="flex relative  ">
+            <p className="font-Open font-semibold text-sm leading-[22px] px-4 py-4 w-2/3   text-[#1C1C1C]">
               {eachCard.content}
             </p>
             <div className="absolute top-0 right-4  z-999">

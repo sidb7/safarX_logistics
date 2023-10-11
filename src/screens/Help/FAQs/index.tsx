@@ -72,7 +72,7 @@ const FAQ: React.FunctionComponent<IFAQs> = ({ setFAQType }) => {
   return (
     <div>
       <div className="mb-6 lg:mb-[26px]">{filterComponent()}</div>
-      <div className="lg:hidden mb-[46px] rounded-lg border-[0.5px]  border-[#A4A4A4] h-[120px]">
+      <div className="lg:hidden mb-[46px] rounded-lg border-[0.5px] mx-1 border-[#A4A4A4] h-[120px]">
         <Carousel />
       </div>
       <div>

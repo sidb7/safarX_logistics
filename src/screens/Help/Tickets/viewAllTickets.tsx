@@ -96,7 +96,7 @@ const ViewAllTickets = (props: ITypeProps) => {
           All Tickets
         </p>
         <div
-          className="rounded border-[1px] p-2 border-[#A4A4A4]"
+          className="rounded border-[1px] p-2 border-[#A4A4A4] cursor-pointer"
           onClick={() => {
             setIsFilterModalOpen(true);
           }}

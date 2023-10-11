@@ -110,7 +110,7 @@ wrote:`}</p>
           onClick={() => {
             setOnReply(true);
           }}
-          className="mx-5"
+          className="mx-5 cursor-pointer"
         >
           <img alt="" src={ReplyIcon} />
         </div>
