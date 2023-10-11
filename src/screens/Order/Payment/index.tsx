@@ -49,6 +49,7 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
 import {
   getLocalStorage,
+  getQueryJson,
   loadPhonePeTransaction,
   loadRazorPayTransaction,
   removeLocalStorage,
@@ -85,6 +86,7 @@ const Payment = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+  const params = getQueryJson();
 
   const fetchCurrentWallet = async () => {
     const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -93,6 +95,8 @@ const Payment = () => {
     }
   };
 
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
   useEffect(() => {
     (async () => {
       try {
@@ -240,7 +244,8 @@ const Payment = () => {
 
   const placeOrderApi = async () => {
     try {
-      const { data } = await POST(POST_PLACE_ORDER, {});
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data } = await POST(POST_PLACE_ORDER, payload);
 
       if (data?.success) {
         toast.success(data?.message);
