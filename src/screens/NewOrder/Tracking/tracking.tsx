@@ -163,7 +163,7 @@ const Tracking = () => {
           <div className="flex flex-wrap items-start">
             {
               inValidTrackingState.map((inValidTravkingNumber: any, index: any) => (
-                <span key={`${inValidTravkingNumber}_${index}`} className="mx-1 font-semibold">{inValidTravkingNumber}</span>
+                <span key={`${inValidTravkingNumber}_${index}`} title={inValidTravkingNumber} className="mx-1 max-w-[100px] font-semibold truncate">{inValidTravkingNumber}</span>
               ))
             }
           </div>
