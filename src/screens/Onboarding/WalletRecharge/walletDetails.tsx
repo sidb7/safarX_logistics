@@ -106,8 +106,17 @@ const WalletDetails = () => {
               onChange={(e) => setAccountName(+e.target.value)}
             />
           </div>
-
           <div>
+            <CustomInputBox
+              label="IFSC Code"
+              containerStyle={`lg:!w-auto mt-4`}
+              inputType="text"
+              className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem]"
+              onChange={(e) => setIfscCode(e.target.value)}
+            />
+          </div>
+
+          {/* <div>
             <CustomInputBox
               label="Bank Name"
               containerStyle={`lg:!w-auto mt-4`}
@@ -125,15 +134,6 @@ const WalletDetails = () => {
               onChange={(e) => setBranchName(e.target.value)}
             />
           </div>
-          <div>
-            <CustomInputBox
-              label="IFSC Code"
-              containerStyle={`lg:!w-auto mt-4`}
-              inputType="text"
-              className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem]"
-              onChange={(e) => setIfscCode(e.target.value)}
-            />
-          </div>
           <div className="mt-4">
             <CustomDropDown
               value={accountType}
@@ -141,7 +141,7 @@ const WalletDetails = () => {
               onChange={(e) => setAccountType(e.target.value)}
               wrapperClass="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem] lg:m-auto "
             />
-          </div>
+          </div> */}
           <div className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem] m-auto mt-4">
             <CustomButton
               text={"VERIFY BANK"}
