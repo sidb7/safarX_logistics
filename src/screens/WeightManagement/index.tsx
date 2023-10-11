@@ -144,78 +144,82 @@ const WeightFreeze: React.FunctionComponent = () => {
   return (
     <>
       {isActive ? (
-        <div className="m-4">
+        <div>
           <Breadcrum
             label="Weight Management"
             component={renderHeaderComponent()}
           />
           <div className="m-4">
-            <div className="flex justify-between !mt-4 gap-4 mb-10">
-              {disputeArray?.map((order: any, i: number) => (
-                <div
-                  className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
-                  key={i}
-                >
-                  <div className="px-6 py-4">
-                    <p className="text-[#1C1C1C] font-normal text-base">
-                      {order?.text}
-                    </p>
-                    <div className="font-bold font-Lato mb-2  text-[2rem]">
-                      {order?.count}
+            <div className="m-4">
+              <div className="flex justify-between !mt-4 gap-4 mb-10">
+                {disputeArray?.map((order: any, i: number) => (
+                  <div
+                    className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+                    key={i}
+                  >
+                    <div className="px-6 py-4">
+                      <p className="text-[#1C1C1C] font-normal text-base">
+                        {order?.text}
+                      </p>
+                      <div className="font-bold font-Lato mb-2  text-[2rem]">
+                        {order?.count}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <div className="m-7">
-              <WeightFreezeBanner isActiveFreezeweight={isActiveFreezeweight} />
+            <div>
+              <div className="m-7">
+                <WeightFreezeBanner
+                  isActiveFreezeweight={isActiveFreezeweight}
+                />
+              </div>
             </div>
-          </div>
-          <div className="lg:mb-24">
-            <div className="mt-4 px-5 ">
-              <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
-                {listTab?.map(({ statusName }, index) => {
-                  return (
-                    <div
-                      className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
+            <div className="lg:mb-24">
+              <div className="mt-4 px-5 ">
+                <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+                  {listTab?.map(({ statusName }, index) => {
+                    return (
+                      <div
+                        className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
 ${renderingComponents === index && "!border-[#004EFF]"}
 `}
-                      onClick={() => {
-                        sessionStorage.setItem("WeightTab", statusName);
-                        // setTabName(statusName);
-                        setScrollIndex(index);
-                      }}
-                      key={index}
-                    >
-                      <span
-                        className={`text-[#777777] text-[14px] lg:text-[18px]
-${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
+                        onClick={() => {
+                          sessionStorage.setItem("WeightTab", statusName);
+                          // setTabName(statusName);
+                          setScrollIndex(index);
+                        }}
+                        key={index}
                       >
-                        {statusName}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+                        <span
+                          className={`text-[#777777] text-[14px] lg:text-[18px]
+${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
+                        >
+                          {statusName}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
 
-              {renderComponent()}
+                {renderComponent()}
+              </div>
+              <RightSideModal
+                isOpen={discrepancyDetailsRightModal}
+                onClose={() => setDiscrepancyDetailsRightModal(false)}
+                className="!w-[389px]"
+              >
+                <DiscrepancyDetails
+                  title="Discrepancy Details"
+                  buttonText="UPDATE"
+                  inputLabel="Enter SKU no."
+                  onClick={() => setDiscrepancyDetailsRightModal(false)}
+                  // onCustomLandmarkSelection={handleLandmarkSelected}
+                />
+              </RightSideModal>
+              <BottomLayout callApi={() => {}} />
             </div>
-            <RightSideModal
-              isOpen={discrepancyDetailsRightModal}
-              onClose={() => setDiscrepancyDetailsRightModal(false)}
-              className="!w-[389px]"
-            >
-              <DiscrepancyDetails
-                title="Discrepancy Details"
-                buttonText="UPDATE"
-                inputLabel="Enter SKU no."
-                onClick={() => setDiscrepancyDetailsRightModal(false)}
-                // onCustomLandmarkSelection={handleLandmarkSelected}
-              />
-            </RightSideModal>
-            <BottomLayout callApi={() => {}} />
           </div>
         </div>
       ) : (
