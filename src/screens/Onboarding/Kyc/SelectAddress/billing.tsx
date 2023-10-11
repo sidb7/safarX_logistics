@@ -56,7 +56,7 @@ const Billing = (props: ITypeProps) => {
           addressId: defaultAddressSelect?.addressId,
           isBilling: true,
         };
-
+        setLoading(true);
         const { data: responses } = await POST(
           POST_UPDATE_DEFAULT_ADDRESS,
           payload
@@ -65,11 +65,14 @@ const Billing = (props: ITypeProps) => {
           toast.success(responses?.message);
           navigate("/onboarding/select-address-pickup");
           //Navigate Url's go here
+          setLoading(false);
         } else {
           toast.error(responses?.message);
+          setLoading(false);
         }
       } else {
         toast.error("Please Select Address");
+        setLoading(false);
       }
     } catch (error) {
       return error;
@@ -84,7 +87,7 @@ const Billing = (props: ITypeProps) => {
             <img src={CompanyLogo} alt="" />
           </div>
           <WelcomeHeader
-            // className="!mt-[58px]"
+            className="!mt-[44px] lg:!mt-6"
             title="Welcome to Shipyaari"
             content="Select your Billing Address"
           />
@@ -107,32 +110,32 @@ const Billing = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:px-5 lg:h-[390px] lg:overflow-y-scroll ">
-            <div className="  space-y-3 mb-6 ">
-              <div className="flex flex-col items-center px-4 md:px-12 lg:px-4">
-                {defaultAddress?.map((el: any, i: number) => {
-                  return (
-                    <div key={i}>
-                      {el?.fullAddress !== "" && (
-                        <Card
-                          onClick={setDefaultAddressSelect}
-                          name="address"
-                          cardClassName="!mt-6 !cursor-pointer"
-                          value={el}
-                          title={el?.fullAddress}
-                          checked={
-                            defaultAddressSelect?.addressId === el?.addressId
-                          }
-                          doctype={el?.doctype}
-                          titleClassName="!font-normal !text-[12px]"
-                        />
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3">
+            {/* <div className="space-y-3 mb-6 ">
+              <div className="flex flex-col items-center px-4 md:px-12 lg:px-4"> */}
+            {defaultAddress?.map((el: any, i: number) => {
+              return (
+                <div key={i}>
+                  {el?.fullAddress !== "" && (
+                    <Card
+                      onClick={setDefaultAddressSelect}
+                      name="address"
+                      cardClassName="!mt-1  !cursor-pointer"
+                      value={el}
+                      title={el?.fullAddress}
+                      checked={
+                        defaultAddressSelect?.addressId === el?.addressId
+                      }
+                      doctype={el?.doctype}
+                      titleClassName="!font-normal !text-[12px]"
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
+          {/* </div>
+          </div> */}
           {isLgScreen && (
             <div className="flex mt-8  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
@@ -164,11 +167,9 @@ const Billing = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && addressComponent()}
-
-      {isLgScreen && (
+  const renderAddresscomponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <div className="mx-4 hidden lg:block ">
           <CustomBottomModal
             isOpen={openModal}
@@ -185,9 +186,18 @@ const Billing = (props: ITypeProps) => {
             )}
           </CustomBottomModal>
         </div>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      );
+    }
+  };
+  return <div>{renderAddresscomponent()}</div>;
 };
 
 export default Billing;

@@ -56,19 +56,24 @@ const PickUp = (props: ITypeProps) => {
           addressId: defaultAddressSelect?.addressId,
           isDefault: true,
         };
+        setLoading(true);
         const { data: responses } = await POST(
           POST_UPDATE_DEFAULT_ADDRESS,
           payload
         );
         if (responses?.success) {
           toast.success(responses?.message);
-          navigate("/onboarding/wallet-recharge");
+          sessionStorage.setItem("setKycValue", "true");
+          navigate("/onboarding/wallet-main");
           //Navigate Url's go here
+          setLoading(false);
         } else {
           toast.error(responses?.message);
+          setLoading(false);
         }
       } else {
         toast.error("Please Select Address");
+        setLoading(false);
       }
     } catch (error) {
       return error;
@@ -82,14 +87,14 @@ const PickUp = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
-          // className="!mt-[58px]"
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Select your Pickup Address"
         />
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">
           <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0   lg:w-[320px] ">
+            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0 lg:w-[320px] ">
               {/*commented as instructed */}
               {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
@@ -106,53 +111,41 @@ const PickUp = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:px-5 lg:h-[390px] lg:overflow-y-scroll ">
-            <div className="  space-y-3 mb-6 ">
-              {defaultAddress?.map((el: any, i: number) => {
-                return (
-                  <div key={i}>
-                    {el?.fullAddress !== "" && (
-                      <Card
-                        // onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                        onClick={setDefaultAddressSelect}
-                        name="address"
-                        value={el}
-                        title={el?.fullAddress}
-                        checked={
-                          defaultAddressSelect?.addressId === el?.addressId
-                        }
-                        doctype={el?.doctype}
-                        titleClassName="!font-normal !text-[12px]"
-                        cardClassName="!mt-6 !cursor-pointer"
-                      />
-                    )}
-                  </div>
-                );
-              })}
+          <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3 ">
+            {/* <div className="  space-y-3 mb-6 "> */}
+            {defaultAddress?.map((el: any, i: number) => {
+              return (
+                <div key={i}>
+                  {el?.fullAddress !== "" && (
+                    <Card
+                      // onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                      onClick={setDefaultAddressSelect}
+                      name="address"
+                      value={el}
+                      title={el?.fullAddress}
+                      checked={
+                        defaultAddressSelect?.addressId === el?.addressId
+                      }
+                      doctype={el?.doctype}
+                      titleClassName="!font-normal !text-[12px]"
+                      cardClassName="!mt-1 !cursor-pointer"
+                    />
+                  )}
+                </div>
+              );
+            })}
+            {/* </div> */}
+          </div>
+
+          {isLgScreen ? (
+            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+              <ServiceButton
+                text="SUBMIT"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
+                onClick={() => onSubmit()}
+              />
             </div>
-          </div>
-
-          {/* {isLgScreen && ( */}
-          <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
-              onClick={() => onSubmit()}
-            />
-          </div>
-          {/* )} */}
-
-          {/* {isLgScreen && (
-              <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
-                <ServiceButton
-                  text="SUBMIT"
-                  className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
-                  onClick={() => {}}
-                />
-              </div>
-            )} */}
-          {/* </div> */}
-          {!isLgScreen && (
+          ) : (
             <div
               className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
               style={{ width: "-webkit-fill-available" }}
@@ -161,36 +154,49 @@ const PickUp = (props: ITypeProps) => {
                 text="SUBMIT"
                 className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
                 onClick={() => {
-                  navigate("/account/kyc-photo");
+                  // navigate("/account/kyc-photo");
+                  onSubmit();
                 }}
               />
             </div>
           )}
+
+          {/* {isLgScreen && (
+            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+              <ServiceButton
+                text="SUBMIT 3"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
+                onClick={() => {}}
+              />
+            </div>
+          )} */}
+          {/* </div> */}
+          {/* {!isLgScreen && ( */}
+
+          {/* )} */}
         </div>
 
-        {!isLgScreen && (
-          <div
-            className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
-            style={{ width: "-webkit-fill-available" }}
-          >
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
-              onClick={() => {
-                onSubmit();
-              }}
-            />
-          </div>
-        )}
+        {/* {!isLgScreen && ( */}
+        {/* <div
+          className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
+          style={{ width: "-webkit-fill-available" }}
+        >
+          <ServiceButton
+            text="SUBMIT 2"
+            className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
+            onClick={() => {
+              onSubmit();
+            }}
+          />
+        </div> */}
+        {/* )} */}
       </div>
     );
   };
 
-  return (
-    <div>
-      {/* {!isLgScreen && addressComponent()} */}
-
-      {isLgScreen && (
+  const renderAddresscomponent = () => {
+    if (isLgScreen && openModal) {
+      return (
         <div className="mx-4 hidden lg:block ">
           <CustomBottomModal
             isOpen={openModal}
@@ -207,9 +213,18 @@ const PickUp = (props: ITypeProps) => {
             )}
           </CustomBottomModal>
         </div>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        addressComponent()
+      );
+    }
+  };
+  return <div>{renderAddresscomponent()}</div>;
 };
 
 export default PickUp;

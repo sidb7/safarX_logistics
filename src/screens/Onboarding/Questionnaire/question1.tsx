@@ -80,6 +80,13 @@ export const QuestionComponent1: React.FunctionComponent = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
+        <div className="product-box flex items-center lg:hidden">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
         <div className="flex flex-col mx-4 mt-10 lg:grid lg:grid-cols-2 lg:mt-[80px] lg:gap-x-4">
           <div>
             <WelcomeHeader welcomeClassName="lg:!mt-4" className="hidden" />
@@ -90,11 +97,11 @@ export const QuestionComponent1: React.FunctionComponent = () => {
           <div>
             <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
               <div>
-                <span className="text-xl font-semibold leading-[26px] font-Lato">
+                <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
                   {question}
                 </span>
               </div>
-              <div className="flex flex-col items-start mt-4">
+              <div className="flex flex-col items-start mt-4 capitalize font-Open text-base font-normal leading-[22px]">
                 {questionsData[0]?.options?.map((element: any, index: any) => {
                   return (
                     <Checkbox
@@ -104,7 +111,6 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                         handleCheckBox(element.target.checked, index);
                       }}
                       label={element.value}
-                      className="text-base font-Open font-normal leading-[22px]"
                       style={{ accentColor: "black" }}
                     />
                   );

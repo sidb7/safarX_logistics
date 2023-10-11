@@ -27,6 +27,7 @@ import {
   referalRegex,
 } from "../../../utils/regexCheck";
 import { text } from "stream/consumers";
+import { sign } from "crypto";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -58,6 +59,8 @@ const Index = () => {
       };
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
+
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
         sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
@@ -83,6 +86,7 @@ const Index = () => {
         payload
       );
       if (response?.success === true) {
+        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
         navigate("/onboarding/sendotp");
       } else {
@@ -121,11 +125,11 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="flex flex-col mt-7 mx-4 gap-y-3">
+                <div className="flex flex-col mt-12 mx-4 gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                     Welcome to Shipyaari
                   </p>
-                  <p className="text-center font-Open font-light text-sm leading-[22px] mb-3 lg:mb-0">
+                  <p className="text-center font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
                     Fast and Easy Shipping from your doorstep to your
                     customer's.{" "}
                   </p>
@@ -357,9 +361,9 @@ const Index = () => {
     );
   };
 
-  return (
-    <>
-      {isLgScreen && isModalOpen && (
+  const renderSignUp = () => {
+    if (isLgScreen && isModalOpen) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
@@ -367,11 +371,18 @@ const Index = () => {
         >
           {signUp()}
         </CenterModal>
-      )}
-
-      {!isLgScreen && signUp()}
-    </>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        signUp()
+      );
+    }
+  };
+  return <>{renderSignUp()}</>;
 };
 
 export default Index;

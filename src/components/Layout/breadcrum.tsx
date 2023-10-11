@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
 import BackArrowIcon from "../../assets/backArrow.svg";
 import { ReactElement } from "react";
+import infoIcon from "../../assets/info.svg";
+
 interface IBreadcrumProps {
   label: string;
   component?: ReactElement;
@@ -31,8 +34,29 @@ export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
     return navigate(-1);
   };
 
+  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  kycCheck = JSON.parse(kycCheck);
+  kycCheck = kycCheck?.nextStep?.kyc;
+
   return (
     <>
+      <div>
+        {!kycCheck && (
+          <div className="flex justify-between bg-[#F5BE6D] p-2">
+            <div className="flex gap-x-2">
+              <img src={infoIcon} alt="" />
+              <p className="text-base font-normal">KYC Pending</p>
+            </div>
+
+            <p
+              className="text-base text-[#004EFF] font-normal cursor-pointer"
+              onClick={() => navigate("/onboarding/kyc-type")}
+            >
+              Click Here
+            </p>
+          </div>
+        )}
+      </div>
       <div className="p-5">
         <div className={`hidden lg:flex gap-x-2 pl-8 font-Lato `}>
           <div

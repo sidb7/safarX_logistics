@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Spinner } from "../../../../components/Spinner";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
+import WooIcon from "../../../../assets/Catalogue/woo.svg";
+import WooLg from "../../../../assets/Catalogue/WooCommerceLg.svg";
 import Card from "./Card";
 import Header from "./Header";
 import { GET_ALL_STORES } from "../../../../utils/ApiUrls";
@@ -35,8 +37,8 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           response.data.forEach((item: any) => {
             tempArr.push({
               name: item.storeName,
-              icon: ShopifyIcon,
-              iconLg: ShopifyLg,
+              icon: item.channel === "SHOPIFY" ? ShopifyIcon : WooIcon,
+              iconLg: item.channel === "SHOPIFY" ? ShopifyLg : WooLg,
               integrated: true,
               storeId: item.storeId,
             });

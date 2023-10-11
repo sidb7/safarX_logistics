@@ -12,7 +12,7 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
-import { generateUniqueCode } from "../../../utils/utility";
+import { generateUniqueCode, getQueryJson } from "../../../utils/utility";
 import PricingDetails from "./pricingDetails";
 import { toast } from "react-toastify";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
@@ -89,12 +89,15 @@ const Summary = (props: Props) => {
 
   const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
-
-      const { data: response } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data: response } = await POST(GET_LATEST_ORDER, payload);
 
       if (response?.success) {
         setLatestOrder(response);
@@ -108,13 +111,20 @@ const Summary = (props: Props) => {
     }
   };
   const invoiceValue = latestOrder?.data?.[0]?.service?.total;
-  console.log("invoiceValue", invoiceValue);
   const setOrderIdApi = async () => {
     try {
-      let payload = { orderId: orderId, ewaybillNumber: ewaybillNumber };
+      let payload = {
+        orderId: orderId,
+        ewaybillNumber: ewaybillNumber,
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      };
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
-      const placeOrderPromise = await POST(POST_PLACE_ORDER);
+      const placeOrderPromise = await POST(POST_PLACE_ORDER, {
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      });
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
         resolve(setOrderIdPromise);
@@ -124,7 +134,7 @@ const Summary = (props: Props) => {
         resolve(placeOrderPromise);
       });
 
-      if (invoiceValue >= 50000) {
+      if (invoiceValue >= 50000 && ewaybillNumber === "") {
         toast.error("Please enter eway-bill No.");
         return;
       }
@@ -142,9 +152,12 @@ const Summary = (props: Props) => {
                 const requiredBalance =
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate("/orders/add-order/payment", {
-                  state: { requiredBalance: requiredBalance },
-                });
+                navigate(
+                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                  {
+                    state: { requiredBalance: requiredBalance },
+                  }
+                );
               }
             })
             .catch(function (errorResponse) {

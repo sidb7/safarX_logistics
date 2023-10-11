@@ -8,7 +8,16 @@ import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
+import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
+import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
+
 import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
+import CustomButton from "../../components/Button";
+import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
+import { toast } from "react-toastify";
+import { useMediaQuery } from "react-responsive";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -133,16 +142,21 @@ const idHelper = (navigate: any = "") => [
       );
     },
     cell: (info: any) => {
-      const { tempOrderId, orderId, status = [] } = info?.row?.original;
+      const { tempOrderId, orderId, status = [], source } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-
       return (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
-              <span className=" text-sm font-light">Shipyaari ID :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{tempOrderId}</span>
+              <span className="text-sm font-light">Shipyaari ID :</span>
+              <div className="flex text-base items-center font-medium">
+                <Link
+                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                  className="underline text-blue-500 cursor-pointer"
+                >
+                  <span className="">{tempOrderId}</span>
+                </Link>
+
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
@@ -196,7 +210,14 @@ const idHelper = (navigate: any = "") => [
 // table for draft/pending order
 export const columnHelperForPendingOrder = [];
 
-export const columnHelperForNewOrder = (navigate: any) => {
+export const columnHelperForNewOrder = (
+  navigate: any,
+  setDeleteModalDraftOrder: any
+) => {
+  const handleDeleteModalDraftOrder = (payload: any) => {
+    setDeleteModalDraftOrder({ isOpen: true, payload });
+  };
+
   return [
     ...idHelper(),
     ColumnsHelper.accessor(".", {
@@ -219,10 +240,10 @@ export const columnHelperForNewOrder = (navigate: any) => {
               </div>
             ) : (
               <div
-                onClick={() => navigate("/orders/add-order/product-package")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/product-package")}
+                className="  decoration-2 cursor-pointer"
               >
-                ADD PACKAGE DETAILS
+                No Data Found
               </div>
             )}
           </div>
@@ -265,10 +286,10 @@ export const columnHelperForNewOrder = (navigate: any) => {
           <div className="text-base  py-3 text-[#8D8D8D]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
-                onClick={() => navigate("/orders/add-order/delivery")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="  decoration-2 cursor-pointer text-[black]"
               >
-                ADD DELIVERY ADDRESS
+                No Data Found
               </div>
             )}
           </div>
@@ -336,6 +357,7 @@ export const columnHelperForNewOrder = (navigate: any) => {
           tempOrderId = "-",
           sellerId = "-",
           status,
+          source,
         } = info?.row?.original;
         const { AWB } = status[0] ?? "";
         const copyString = `
@@ -356,11 +378,23 @@ export const columnHelperForNewOrder = (navigate: any) => {
           } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
 
         `;
-
+        let draftOrderPayload = {
+          tempOrderId: tempOrderId,
+          source: source,
+        };
         return (
-          <>
+          <div className="flex items-center">
             <CopyTooltip stringToBeCopied={copyString} />
-          </>
+
+            <img
+              src={DeleteIconForLg}
+              alt="Delete "
+              onClick={() => {
+                handleDeleteModalDraftOrder(draftOrderPayload);
+              }}
+              className="w-5 h-5 cursor-pointer"
+            />
+          </div>
         );
       },
     }),
