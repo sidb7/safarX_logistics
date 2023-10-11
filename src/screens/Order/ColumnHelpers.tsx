@@ -285,7 +285,7 @@ export const columnHelperForNewOrder = (
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/product-package")}
-                className="  decoration-2 cursor-pointer"
+                className="  decoration-2 "
               >
                 No Package Details Found
               </div>
@@ -331,7 +331,7 @@ export const columnHelperForNewOrder = (
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="  decoration-2 cursor-pointer text-[black]"
+                className="  decoration-2 text-[black]"
               >
                 No Delivery Address Found
               </div>

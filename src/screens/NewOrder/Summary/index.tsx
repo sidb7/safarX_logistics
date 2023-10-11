@@ -110,7 +110,7 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-  const invoiceValue = latestOrder?.data?.[0]?.service?.total;
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
       let payload = {
@@ -141,6 +141,7 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
+          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
@@ -148,6 +149,16 @@ const Summary = (props: Props) => {
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
+                let errorText = orderPlaceResponse?.data?.message;
+                console.log("errorText", errorText);
+                if (
+                  errorText.startsWith("Order Id") ||
+                  errorText.startsWith("Order Source") ||
+                  errorText.startsWith(" Please") ||
+                  errorText.startsWith(" EWayBill")
+                ) {
+                  return;
+                }
                 toast.warning(orderPlaceResponse?.data?.message);
                 const requiredBalance =
                   orderPlaceResponse?.data?.data[0]?.requiredBalance;

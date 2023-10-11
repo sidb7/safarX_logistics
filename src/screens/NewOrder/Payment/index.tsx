@@ -37,6 +37,7 @@ import { POST } from "../../../utils/webService";
 import { POST_PLACE_ORDER } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
+import { getQueryJson } from "../../../utils/utility";
 
 const steps = [
   {
@@ -88,6 +89,9 @@ const Index = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   const handleUpiPayment: any = () => {
     if (payment === true) {
@@ -159,7 +163,9 @@ const Index = () => {
   };
 
   const placeOrder = async () => {
-    const placeOrderPromise = await POST(POST_PLACE_ORDER);
+    const payload = { tempOrderId: shipyaari_id, source: orderSource };
+    console.log("paymentpayload", payload);
+    const placeOrderPromise = await POST(POST_PLACE_ORDER, payload);
     let promisePlaceOrder = new Promise(function (resolve, reject) {
       resolve(placeOrderPromise);
     });
