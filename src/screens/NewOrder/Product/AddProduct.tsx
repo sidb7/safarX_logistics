@@ -152,7 +152,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       } else {
         toast.error(data?.message);
         navigate(
-          "/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}"
+          `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
         );
         throw new Error(data?.message);
       }
