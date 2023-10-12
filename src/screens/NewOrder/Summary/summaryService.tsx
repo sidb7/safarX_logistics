@@ -21,6 +21,7 @@ interface ISummaryData {
   productDimensionBreadth?: any;
   productDimensionHeight?: any;
   productDimensionUnit?: any;
+  mode?: any;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -40,6 +41,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   productDimensionBreadth = "",
   productDimensionHeight = "",
   productDimensionUnit = "",
+  mode = "",
 }) => {
   const navigate = useNavigate();
   return (
@@ -77,6 +79,9 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
 
           <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
             {`\u20B9`} {price}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
+            {mode}
           </p>
 
           {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">

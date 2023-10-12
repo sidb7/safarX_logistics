@@ -4,6 +4,7 @@ import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
 import { v4 as uuidv4 } from "uuid";
 import ReturningUserPickup from "../ReturningUser/PickUp";
+import { format } from "date-fns";
 
 //Icons
 import TickLogo from "../../../assets/common/Tick.svg";
@@ -74,7 +75,7 @@ const PickupLocation = () => {
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
-
+  const [pickupDateInEpoch, setPickupDateInEpoch] = useState("");
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
@@ -206,6 +207,12 @@ const PickupLocation = () => {
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
+          const pickDateEpochTemp = orderData?.pickupAddress?.pickupDate;
+          const formattedDate = format(
+            new Date(pickDateEpochTemp * 1000),
+            "dd/MM/yyyy hh:mm a"
+          );
+          setPickupDate(formattedDate);
           setPickupAddress({
             pickupAddress: {
               fullAddress: orderData?.pickupAddress?.fullAddress,
@@ -236,7 +243,7 @@ const PickupLocation = () => {
                 emailId: orderData?.pickupAddress?.contact?.emailId,
                 type: orderData?.pickupAddress?.contact?.type,
               },
-              pickupDate: 0,
+              pickupDate: orderData?.pickupAddress?.pickupDate,
             },
             returnAddress: {
               fullAddress: orderData?.returnAddress?.fullAddress,
