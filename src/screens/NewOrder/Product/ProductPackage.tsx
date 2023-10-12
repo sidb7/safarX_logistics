@@ -26,6 +26,7 @@ import {
   GET_SELLER_COMPANY_BOX,
   GET_LATEST_ORDER,
   GET_SELLER_BOX,
+  GET_PRODUCTS,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
@@ -95,6 +96,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
+
   const [combo, setCombo] = useState<any>(false);
   const [products, setProducts] = useState<any>([]);
   const [sellerBox, setSellerBox] = useState<any>([]);
@@ -149,6 +151,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   }, [packages]);
 
   useEffect(() => {
+    // getOrderProductDetailsForReturningUser();
+
     getOrderProductDetails();
   }, []);
 
@@ -235,12 +239,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     try {
       const payload = { tempOrderId: shipyaari_id, source: orderSource };
       const { data } = await POST(GET_LATEST_ORDER, payload);
+      const { data: catalogueProducts } = await POST(GET_PRODUCTS);
+
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
         const { products: resProduct = [], orderType } = data?.data[0];
         setOrderType(orderType);
-        setProducts(resProduct);
+
+        // setProducts(resProduct);
       } else {
         toast.error(data?.message);
         navigate(
@@ -248,6 +255,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         );
         return;
       }
+      if (catalogueProducts?.success) {
+        setProducts(catalogueProducts?.data);
+      }
+
       if (boxData?.success) {
         const { data = [] } = boxData;
         setSellerBox(data);
@@ -260,6 +271,26 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       console.error("getOrderProductDetails", error);
     }
   };
+
+  // const getOrderProductDetailsForReturningUser = async () => {
+  //   try {
+  //     const { data } = await POST(GET_PRODUCTS);
+
+  //     if (data?.success) {
+  //       console.log("catalogueProductData>>", data?.data);
+  //       setOrderType(orderType);
+  //       setProducts(data?.data);
+  //     } else {
+  //       toast.error(data?.message);
+  //       navigate(
+  //         `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+  //       );
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     console.error("getOrderProductDetails", error);
+  //   }
+  // };
 
   const setBoxAndCODInfo = async () => {
     let codDataInfo = {
@@ -302,6 +333,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
+  console.log("productsfromcatalogue>>", products);
   return (
     <div>
       <div>
@@ -310,7 +342,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <Stepper steps={steps} />
         </div>
         <div className="px-5 py-2 mb-12">
-          <div className="flex justify-between ">
+          {/* <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" />
               {isReturningUser ? (
@@ -367,15 +399,21 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 <Spinner />
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="mt-6">
             <AddButton
-              text="ADD PRODUCT"
+              text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
-                navigate(
-                  `/orders/add-order/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                );
+                if (isReturningUser) {
+                  navigate(
+                    `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
+                } else {
+                  navigate(
+                    `/orders/add-order/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
+                }
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -411,41 +449,38 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 />
               );
             })}
-            {showAddBox ? (
-              <div className="w-[500px] ">
-                <div className="hidden lg:flex justify-between ">
-                  <div className="flex py-5 gap-x-2">
-                    <img src={ProductIcon} alt="Package Icon" />
-                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                      Box {packages.length + 1}
-                    </h1>
-                  </div>
-                </div>
-                <div
-                  className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
-                  style={{
-                    boxShadow:
-                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
-                  }}
-                >
-                  <AddButton
-                    text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
-                    onClick={() => {
-                      setBoxIndex(packages.length);
-                      setSelectedProductsOfPackage([]);
-                      setBoxTypeEditMode(false);
-                      setIsSearchProductRightModalOpen(true);
-                    }}
-                    showIcon={true}
-                    icon={ButtonIcon}
-                    className="rounded bg-white !shadow-none text-lg"
-                    alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
-                  />
+
+            <div className="w-[500px] ">
+              <div className="hidden lg:flex justify-between ">
+                <div className="flex py-5 gap-x-2">
+                  <img src={ProductIcon} alt="Package Icon" />
+                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                    Box {packages.length + 1}
+                  </h1>
                 </div>
               </div>
-            ) : (
-              ""
-            )}
+              <div
+                className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
+                style={{
+                  boxShadow:
+                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                }}
+              >
+                <AddButton
+                  text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
+                  onClick={() => {
+                    setBoxIndex(packages.length);
+                    setSelectedProductsOfPackage([]);
+                    setBoxTypeEditMode(false);
+                    setIsSearchProductRightModalOpen(true);
+                  }}
+                  showIcon={true}
+                  icon={ButtonIcon}
+                  className="rounded bg-white !shadow-none text-lg"
+                  alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
+                />
+              </div>
+            </div>
           </div>
           <div>
             <div className="w-full flex justify-between py-6 ">
@@ -760,15 +795,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           callApi={() => setBoxAndCODInfo()}
         />
       </div>
-      {products.length > 0 && (
-        <AddPackageDetails
-          productsFromLatestOrder={products}
-          selectedProducts={selectedProductsOfPackage}
-          isSearchProductRightModalOpen={isSearchProductRightModalOpen}
-          setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
-          handlePackageDetails={handlePackageDetailsForProduct}
-        />
-      )}
+      <AddPackageDetails
+        productsFromLatestOrder={products}
+        selectedProducts={selectedProductsOfPackage}
+        isSearchProductRightModalOpen={isSearchProductRightModalOpen}
+        setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
+        handlePackageDetails={handlePackageDetailsForProduct}
+      />
       ;
     </div>
   );

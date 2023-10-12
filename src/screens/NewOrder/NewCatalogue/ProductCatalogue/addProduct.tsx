@@ -49,7 +49,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     weightUnit: "kg",
     volumetricWeight: "",
     appliedWeight: "",
-    divisor: "",
+    divisor: "5000",
     sku: "",
     images: [],
   };
@@ -69,7 +69,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     });
     if (response?.success) {
       toast.success(response?.message);
-      navigate("/catalogues/product-catalogue");
+      navigate(-1);
     } else {
       toast.error("Failed To Upload!");
     }
@@ -132,7 +132,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       length,
       breadth,
       height
-    ).toFixed(6);
+    ).toFixed(2);
     let arr = productInputState;
     arr[index]["volumetricWeight"] = volumetricWeight;
     arr[index]["appliedWeight"] = Math.max(volumetricWeight, weight);
@@ -166,8 +166,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       toast.error("Failed To Upload!");
     }
   };
-
-  
 
   return (
     <>
