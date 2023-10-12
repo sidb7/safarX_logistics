@@ -29,7 +29,7 @@ const ProductBox = ({ name = "", dimension = "" }: any) => {
       <div>
         <span>Dimention: </span>
         <span className="font-semibold">
-          {`${dimension.length}x${dimension.breadth}x${dimension.height}`} cm
+          {`${dimension?.length}x${dimension.breadth}x${dimension.height}`} cm
         </span>
       </div>
       <div>
@@ -124,9 +124,13 @@ const commonColumnHelper = [
       );
     },
     cell: (info: any) => {
+      const { service } = info?.row?.original;
       return (
-        <div className="my-4 space-y-2">
-          {/* {ProductBox(info?.row?.original?.packageType)}{" "} */}
+        <div className=" ">
+          <div className="py-2 flex flex-col">
+            <span className="text-sm font-light">Delivery Partner</span>
+            <div className="font-semibold">{service?.partnerName}</div>
+          </div>
         </div>
       );
     },
@@ -225,16 +229,18 @@ const idHelper = (navigate: any = "") => [
     },
     cell: (info: any) => {
       const { status } = info?.row?.original;
-      console.log("status", status?.[0]?.currentStatus);
+      console.log("info?.row?.original: ", info?.row?.original);
+      const timeStamp = status?.[0]?.timeStamp;
+      const time = timeStamp && date_DD_MMM_YYY(timeStamp);
       const renderStatus = status?.[0]?.currentStatus || "Draft";
-      console.log("renderStatus", renderStatus);
       return (
         <div className="py-3">
           {
-            <div className="">
+            <div className="flex flex-col gap-y-1">
               <div className="flex text-base items-center font-medium">
                 <p>{renderStatus}</p>
               </div>
+              <div>{time}</div>
             </div>
           }
         </div>
@@ -268,7 +274,7 @@ export const columnHelperForNewOrder = (
         const { boxInfo = [] } = info?.row?.original;
         return (
           <div className="my-4 space-y-2 ">
-            {boxInfo.length > 0 ? (
+            {boxInfo?.length > 0 ? (
               <div>
                 <span>
                   {boxInfo[0].name} {boxInfo[1]?.boxInfo ?? ""}
@@ -400,8 +406,8 @@ export const columnHelperForNewOrder = (
           Order Id: ${tempOrderId} 
           Shipyaari Id: ${sellerId}
           Tracking Id: ${AWB}
-          Package Details: ${boxInfo.length > 0 && boxInfo[0].name} ${
-          (boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""
+          Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
+          (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
         }
           Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
           Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
@@ -453,8 +459,8 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
   setCancellationModal?: any
 ) => {
-  const handleCancellationModal = (awbNo: any) => {
-    setCancellationModal({ isOpen: true, awbNo });
+  const handleCancellationModal = (awbNo: any, orderId: any) => {
+    setCancellationModal({ isOpen: true, awbNo, orderId });
   };
   return [
     // ...commonColumnHelper,
@@ -509,15 +515,32 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 <div className="text-[grey]">No Label Found</div>
               )}
               {setCancellationModal && (
-                <img
-                  src={CrossIcon}
-                  width={"35px"}
-                  alt="Cancel Order"
-                  className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                  onClick={() =>
-                    handleCancellationModal(data.wayBillObject.AWBNo)
-                  }
-                />
+                <div>
+                  <img
+                    src={CrossIcon}
+                    width={"35px"}
+                    // alt="Cancel Order"
+                    className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                    onClick={() =>
+                      handleCancellationModal(
+                        data?.status?.[0]?.AWB,
+                        data?.orderId
+                      )
+                    }
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Cancel Order"
+                  />
+                  <Tooltip
+                    id="my-tooltip-inline"
+                    style={{
+                      backgroundColor: "bg-neutral-900",
+                      color: "#FFFFFF",
+                      width: "fit-content",
+                      fontSize: "14px",
+                      lineHeight: "16px",
+                    }}
+                  />
+                </div>
               )}
             </div>
           </>
