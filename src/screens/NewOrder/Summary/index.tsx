@@ -389,6 +389,7 @@ const Summary = (props: Props) => {
                 partnerServiceName={serviceDetails?.partnerServiceName}
                 partnerName={serviceDetails?.partnerName}
                 baseWeight={serviceDetails?.appliedWeight}
+                mode={serviceDetails?.serviceMode}
               />
             </div>
           </div>
