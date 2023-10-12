@@ -23,7 +23,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [otp, setOtp] = useState({
+  const [otp, setOtp] = useState<any>({
     loginOtp: "",
   });
 
@@ -67,7 +67,13 @@ const Index = () => {
 
       sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       if (response?.success === true) {
-        setLocalStorage(tokenKey, response?.data[0]?.token);
+        localStorage.setItem(
+          `${response?.data[0]?.sellerId}_${tokenKey}`,
+          response?.data[0]?.token
+        );
+        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        // setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");
       } else {
         toast.error(response?.message);
@@ -161,12 +167,14 @@ const Index = () => {
 
               <div className="flex justify-center">
                 <CustomInputBox
-                  value={otp.loginOtp}
+                  inputType="text"
+                  inputMode="numeric"
+                  value={otp.loginOtp || ""}
                   maxLength={6}
                   containerStyle="mt-[32px]"
                   label="Enter OTP"
                   onChange={(e: any) => {
-                    setOtp({ ...otp, loginOtp: e.target.value });
+                    setOtp({ ...otp, loginOtp: +e.target.value });
                   }}
                 />
               </div>

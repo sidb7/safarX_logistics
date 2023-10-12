@@ -38,13 +38,31 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isQuick, setIsQuick] = useState(false);
+  const [walletAmt, setWalletAmt] = useState<any>();
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
 
-  let walletBalance = sessionStorage.getItem("kycValue") as any;
-  walletBalance = JSON.parse(walletBalance);
-  walletBalance = walletBalance?.walletBalance;
+  // let walletBalance = sessionStorage.getItem("kycValue") as any;
+  // let walletAmt: any;
+
+  // if (walletBalance && walletBalance?.walletBalance !== undefined) {
+  //   walletBalance = JSON.parse(walletBalance);
+  //   walletAmt = walletBalance?.walletBalance;
+  // }
+  // console.log("walletBalance", walletAmt);
+
+  useEffect(() => {
+    setTimeout(() => {
+      let walletBalance = sessionStorage.getItem("walletAmt") as any;
+      // console.log("walletBalance", walletBalance !== undefined);
+      if (walletBalance === undefined) {
+        console.log("wallet ", walletBalance);
+      } else {
+        setWalletAmt(walletBalance);
+      }
+    }, 100);
+  }, [walletAmt]);
 
   const handleOutsideClick = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -136,7 +154,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             <div className="hidden lg:block">
               <div className="flex items-center w-[150px] h-[36px] space-x-1 rounded-lg p-4 bg-[#E5EDFF]">
                 <img src={WalletIcon} alt="" />
-                <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
+                <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
               </div>
             </div>
 

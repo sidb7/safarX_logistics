@@ -63,7 +63,11 @@ const Index = () => {
     dispatch(signInUser(signInUserReducerDetails));
 
     if (response?.success) {
-      setLocalStorage(tokenKey, response?.data[0]?.token);
+      sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      setLocalStorage(
+        `${response?.data[0]?.sellerId}_${tokenKey}`,
+        response?.data[0]?.token
+      );
 
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
@@ -96,7 +100,12 @@ const Index = () => {
 
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
-      setLocalStorage(tokenKey, response?.data[0]?.token);
+      // setLocalStorage(tokenKey, response?.data[0]?.token);
+      sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      setLocalStorage(
+        `${response?.data[0]?.sellerId}_${tokenKey}`,
+        response?.data[0]?.token
+      );
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");

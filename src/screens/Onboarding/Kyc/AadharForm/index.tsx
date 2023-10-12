@@ -133,7 +133,7 @@ const Index = (props: ITypeProps) => {
 
   return (
     <div>
-      {/* {!isBigScreen && aadharFormComponent()} */}
+      {!isBigScreen && aadharFormComponent()}
 
       {isBigScreen && (
         <CustomBottomModal

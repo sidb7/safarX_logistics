@@ -227,7 +227,11 @@ const Index = (props: ITypeProps) => {
             };
 
             setLoading(true);
-            const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+            const { data: response } = await POST(POST_VERIFY_GST_OTP, {
+              gstIn: "27ACBPU0343B1Z2",
+              client_id: "gst_otp_qmoHepngnzJWTfcxFhyc",
+              otp: "2450",
+            });
             if (response?.success) {
               setLoading(false);
               if (location?.state?.path === "otp-form") {

@@ -81,7 +81,7 @@ const Card = (props: ITypesProps) => {
           )}
 
           <p
-            className={`${titleClassName} font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
+            className={`${titleClassName}  font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
             ref={boxRef}
           >
             {editAdd === index ? (

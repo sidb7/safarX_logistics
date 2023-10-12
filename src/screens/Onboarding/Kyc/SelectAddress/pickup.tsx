@@ -118,7 +118,9 @@ const PickUp = (props: ITypeProps) => {
         <WelcomeHeader
           className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
-          content="Select your Pickup Address"
+          content="Select your"
+          whichAddress="Pickup"
+          Address="Address"
         />
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">

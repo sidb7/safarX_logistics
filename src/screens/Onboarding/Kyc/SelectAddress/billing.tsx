@@ -118,7 +118,9 @@ const Billing = (props: ITypeProps) => {
           <WelcomeHeader
             className="!mt-[44px] lg:!mt-6"
             title="Welcome to Shipyaari"
-            content="Select your Billing Address"
+            content="Select your"
+            whichAddress="Billing"
+            Address="Address"
           />
 
           <div className="w-full lg:flex lg:justify-center">
