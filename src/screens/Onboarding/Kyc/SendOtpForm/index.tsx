@@ -284,7 +284,11 @@ const Index = (props: ITypeProps) => {
                 label="PAN Number"
                 value={panNumber}
                 maxLength={10}
-                isDisabled={panNumber !== undefined}
+                isDisabled={
+                  businessType === "individual"
+                    ? false
+                    : panNumber !== undefined
+                }
                 className={`${
                   panNumberError !== "" &&
                   panNumberError !== undefined &&
