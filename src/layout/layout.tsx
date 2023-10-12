@@ -41,6 +41,7 @@ export const CommonLayout = (props: Props) => {
     }
     clearLocalStorage();
     sessionStorage.clear();
+
     navigate("/");
   };
 

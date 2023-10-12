@@ -28,6 +28,7 @@ import {
 } from "../../../utils/regexCheck";
 import { text } from "stream/consumers";
 import { sign } from "crypto";
+import { setLocalStorage, tokenKey } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
