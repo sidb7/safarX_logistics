@@ -81,7 +81,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             }}
           />
         </div>
-        <div className="mb-7 md:mb-6 md:mr-6 md:col-span-2">
+        <div className="mb-7 md:mb-6 md:mr-6 md:col-span-1">
           <CustomInputBox
             label="Alternate mobile number (optional)"
             value={address.alternateMobileNo}

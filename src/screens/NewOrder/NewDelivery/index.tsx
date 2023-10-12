@@ -159,8 +159,9 @@ const DeliveryLocation = () => {
 
       if (response?.success) {
         toast.success(response?.message);
+
         navigate(
-          `/orders/add-order/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
         );
       } else {
         toast.error(response?.message);

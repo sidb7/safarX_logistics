@@ -134,7 +134,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
           /> */}
           <div className="flex items-center justify-self-end gap-x-3 ">
             <div className="hidden lg:block">
-              <div className="flex items-center w-[128px] h-[36px] space-x-1 rounded-lg p-4 bg-[#E5EDFF]">
+              <div className="flex items-center w-[150px] h-[36px] space-x-1 rounded-lg p-4 bg-[#E5EDFF]">
                 <img src={WalletIcon} alt="" />
                 <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
               </div>

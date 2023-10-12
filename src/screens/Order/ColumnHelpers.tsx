@@ -155,30 +155,22 @@ const idHelper = (navigate: any = "") => [
             <div className="">
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
-                <Link
-                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
-                  className="underline text-blue-500 cursor-pointer"
-                >
-                  <span
-                    className=""
-                    data-tooltip-id="my-tooltip-inline"
-                    data-tooltip-content="Complete Order"
+                {status.length === 0 ? (
+                  <Link
+                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                    className="underline text-blue-500 cursor-pointer"
                   >
-                    {tempOrderId}
-                  </span>
-                </Link>
-                <Tooltip
-                  id="my-tooltip-inline"
-                  style={{
-                    backgroundColor: "bg-neutral-900",
-                    color: "#FFFFFF",
-                    width: "fit-content",
-                    fontSize: "14px",
-                    lineHeight: "16px",
-                  }}
-                />
-
-                <CopyTooltip stringToBeCopied={tempOrderId} />
+                    <span
+                      className=""
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Complete Order"
+                    >
+                      {tempOrderId}
+                    </span>
+                  </Link>
+                ) : (
+                  <span className=""> {tempOrderId}</span>
+                )}
               </div>
             </div>
           )}
