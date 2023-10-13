@@ -33,7 +33,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
       {options?.map((option: any) => (
         <div
           key={option?.value}
-          className="flex items-center p-2 shadow-md border border-[#c1c1c1] rounded-lg w-72 h-[210px] mb-4 md:mb-0"
+          className="flex items-center p-2 shadow-md border border-[#c1c1c1] rounded-lg w-[310px] h-[210px] mb-4 md:mb-0"
           onClick={() => handleOnChange(option.value)}
           data-tooltip-id={`my-tooltip-inline-${option.value}`}
         >
@@ -50,7 +50,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
           </div>
           <div className="px-2 text-lg">
             <p className="my-2">
-              {`${option.text?.partnerName} ${option.text?.companyServiceName}`}
+              {`${option.text?.partnerName}: ${option.text?.companyServiceName}`}
             </p>
             <p className="">
               {option.text?.total.toLocaleString("en-US", {

@@ -7,25 +7,29 @@ interface ServiceTooltipProps {
 }
 
 const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
+  let totalFreight =
+    option.text?.base + option.text?.add + option.text?.variables;
+  console.log("totalFreight", totalFreight.toFixed(2));
   const tooltipContent = `
-    Partner Service ID: ${option.text?.partnerServiceId}\xa0\xa0\xa0\xa0\xa0\xa0
-    Partner Service Name: ${option.text?.partnerServiceName}
-    Company Service ID: ${option.text?.companyServiceId}
-    Company Service Name: ${option.text?.companyServiceName}
-    Partner Name: ${option.text?.partnerName}
-    Service Mode: ${option.text?.serviceMode}
-    Applied Weight: ${option.text?.appliedWeight}
-    Collectable Amount: ${option.text?.collectableAmount} \xa0\xa0\xa0\xa0
-    Insurance: ${option.text?.insurance}
-    Base: ${option.text?.base} \xa0
-    Add: ${option.text?.add} \xa0
-    Variables: ${option.text?.variables} \xa0\xa0\xa0\xa0
-    COD: ${option.text?.cod} \xa0
-    GST: ${option.text?.gst} \xa0
+    Shipyaari Service ID: ${
+      option.text?.companyServiceId
+    }\xa0\xa0\xa0\xa0\xa0\xa0\xa0
+    Shipyaari Service Name: ${option.text?.companyServiceName}
+    Courier Partner: ${
+      option.text?.partnerName
+    }\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0
+    Service Mode: ${
+      option.text?.serviceMode
+    }\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0
+    Applied Weight: ${option.text?.appliedWeight}Kg\xa0\xa0\xa0\xa0\xa0\xa0
+    Insurance: ${option.text?.insurance}\xa0\xa0\xa0\xa0
+    Total-Freight: ${totalFreight.toFixed(2)}\xa0\xa0
+    COD Charges: ${option.text?.cod}\xa0
+    TAX: ${option.text?.gst}\xa0\xa0\xa0
     Total: ${option.text?.total.toLocaleString("en-US", {
       style: "currency",
       currency: "INR",
-    })}
+    })}\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0\xa0
     EDT: ${option.text?.EDT || "N/A"} 
   `;
 
@@ -35,7 +39,7 @@ const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
       style={{
         backgroundColor: "bg-neutral-900",
         color: "#FFFFFF",
-        width: "280px",
+        width: "300px",
         fontSize: "14px",
         lineHeight: "22px",
         overflow: "auto",
