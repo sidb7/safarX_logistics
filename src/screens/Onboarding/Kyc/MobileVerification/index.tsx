@@ -159,10 +159,14 @@ const Index = (props: ITypeProps) => {
         toast.success(response?.message);
         setLoading(false);
 
-        if (businessType === "business" || businessType === "company") {
-          navigate("/onboarding/kyc-terms/service-agreement");
+        if (businessType === "business") {
+          // navigate("/onboarding/kyc-terms/service-agreement");
+          navigate("/onboarding/kyc-aadhar-form");
+        } else if (businessType === "company") {
+          navigate("/onboarding/kyc");
         } else if (businessType === "individual") {
-          navigate("/onboarding/kyc-terms/gst-agreement");
+          // navigate("/onboarding/kyc-terms/gst-agreement");
+          navigate("/onboarding/kyc");
         }
       } else {
         setLoading(false);
@@ -218,6 +222,7 @@ const Index = (props: ITypeProps) => {
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);
+              navigate("/onboarding/kyc-aadhar-form");
             }
           } else {
             const payload = {
@@ -345,7 +350,7 @@ const Index = (props: ITypeProps) => {
             />
           </div>
         </form>
-        <div className="flex flex-col lg:justify-center px-4 lg:items-center">
+        {/* <div className="flex flex-col lg:justify-center px-4 lg:items-center">
           <ServiceButton
             text="BACK"
             className="!bg-[#E8E8E8] !text-black !h-[36px] !font-Open  lg:!w-[320px] mb-5"
@@ -359,7 +364,7 @@ const Index = (props: ITypeProps) => {
               })
             }
           />
-        </div>
+        </div> */}
       </div>
     );
   };

@@ -124,6 +124,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               onChange={(e: any) => {
                 handleSearchOrder(e);
               }}
+              getFullContent={getAllOrders}
             />
           </div>
           <div
@@ -162,6 +163,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const handleStatusChanges = (index: any) => {
     handleTabChange(index);
     setStatusId(index);
+  };
+
+  const getAllOrders = async () => {
+    let payload = {
+      skip: 0,
+      limit: 10,
+      pageNo: 1,
+      sort: { _id: -1 },
+      currentStatus,
+    };
+    const { data } = await POST(GET_SELLER_ORDER, payload);
+
+    const { OrderData } = data?.data?.[0];
+    setOrders(OrderData);
   };
 
   return (
