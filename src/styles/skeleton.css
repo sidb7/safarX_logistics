@@ -1,0 +1,27 @@
+@keyframes ShimmerAnimation {
+    0% {
+        opacity: 0.4;
+    }
+
+    to {
+        opacity: 0.9;
+    }
+}
+
+.animated {
+    animation: ShimmerAnimation 0.8s linear infinite alternate;
+    will-change: opacity;
+    position: relative;
+}
+
+.animated:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    background-color: #e8e8e8;
+    border-radius: 10px;
+}
