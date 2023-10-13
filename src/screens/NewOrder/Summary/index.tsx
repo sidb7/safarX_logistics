@@ -303,7 +303,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/pickup");
+                  navigate(
+                    `/orders/add-order/pickup?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -359,7 +361,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/delivery");
+                  navigate(
+                    `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -375,7 +379,11 @@ const Summary = (props: Props) => {
 
             {/* Product Details */}
             <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 mb-4 md:pb-20 max-w-screen-md	">
-              <BoxDetails boxInfo={boxInfo} />
+              <BoxDetails
+                boxInfo={boxInfo}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
+              />
 
               {/* Service Details */}
               <SummaryService
@@ -390,6 +398,8 @@ const Summary = (props: Props) => {
                 partnerName={serviceDetails?.partnerName}
                 baseWeight={serviceDetails?.appliedWeight}
                 mode={serviceDetails?.serviceMode}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
               />
             </div>
           </div>

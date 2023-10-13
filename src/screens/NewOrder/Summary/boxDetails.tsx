@@ -13,9 +13,15 @@ interface ISummaryData {
   productDimensionHeight?: any;
   productDimensionUnit?: any;
   boxInfo?: any[];
+  shipyaari_id?: any;
+  orderSource?: any;
 }
 
-const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
+const BoxDetails = ({
+  boxInfo = [],
+  shipyaari_id = "",
+  orderSource = "",
+}: ISummaryData) => {
   const navigate = useNavigate();
   const [expandedBox, setExpandedBox] = useState<number | null>(null);
 
@@ -36,7 +42,9 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/add-product");
+              navigate(
+                `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+              );
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>
