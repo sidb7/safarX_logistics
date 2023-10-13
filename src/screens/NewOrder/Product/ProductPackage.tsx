@@ -405,15 +405,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
-                if (isReturningUser) {
-                  navigate(
-                    `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                  );
-                } else {
-                  navigate(
-                    `/orders/add-order/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                  );
-                }
+                navigate(
+                  `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                );
               }}
               showIcon={true}
               icon={ButtonIcon}
