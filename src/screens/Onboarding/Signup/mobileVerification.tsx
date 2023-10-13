@@ -91,11 +91,14 @@ const Index = () => {
                 inputMode="numeric"
                 label="Enter Your Mobile Number"
                 maxLength={10}
-                onChange={(e) => {
-                  setMobileNumber({
-                    ...mobileNumber,
-                    mobileNo: +e.target.value,
-                  });
+                onChange={(e: any) => {
+                  if (isNaN(e.target.value)) {
+                  } else {
+                    setMobileNumber({
+                      ...mobileNumber,
+                      mobileNo: +e.target.value,
+                    });
+                  }
                 }}
               />
               <CustomButton
