@@ -34,7 +34,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         setLoading(false);
         if (response && response.data.length > 0) {
           let tempArr: any = [];
-          response.data.forEach((item: any) => {
+          response?.data?.forEach((item: any) => {
             tempArr.push({
               name: item.storeName,
               icon: item.channel === "SHOPIFY" ? ShopifyIcon : WooIcon,
