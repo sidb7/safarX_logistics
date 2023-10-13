@@ -1,9 +1,9 @@
 import React, { useState, useEffect, SetStateAction } from "react";
 
-import { toast } from "react-toastify";
 import FAQContent from "./faqContent";
 
 import Carousel from "./carousel";
+import Pagination from "../../../components/Pagination";
 
 interface IFAQs {
   setFAQType: React.Dispatch<SetStateAction<string>>;
@@ -12,6 +12,7 @@ interface IFAQs {
 const FAQ: React.FunctionComponent<IFAQs> = ({ setFAQType }) => {
   const [filterId, setFilterId] = useState(0);
   const [activeTab, setActiveTab] = useState("All");
+  const [totalItemCount, setTotalItemCount] = useState(10);
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
@@ -69,6 +70,11 @@ const FAQ: React.FunctionComponent<IFAQs> = ({ setFAQType }) => {
     );
   };
 
+  //on page change index
+  const onPageIndexChange = () => {};
+
+  // on per page item change
+  const onPerPageItemChange = () => {};
   return (
     <div>
       <div className="mb-6 lg:mb-[26px]">{filterComponent()}</div>
@@ -77,6 +83,16 @@ const FAQ: React.FunctionComponent<IFAQs> = ({ setFAQType }) => {
       </div>
       <div>
         <FAQContent faqType={activeTab} />
+      </div>
+      <div className="hidden lg:block">
+        {totalItemCount > 0 && (
+          <Pagination
+            totalItems={totalItemCount}
+            itemsPerPageOptions={[10, 20, 30, 50]}
+            onPageChange={onPageIndexChange}
+            onItemsPerPageChange={onPerPageItemChange}
+          />
+        )}
       </div>
     </div>
   );

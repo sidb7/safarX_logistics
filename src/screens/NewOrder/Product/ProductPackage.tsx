@@ -450,37 +450,41 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               );
             })}
 
-            <div className="w-[500px] ">
-              <div className="hidden lg:flex justify-between ">
-                <div className="flex py-5 gap-x-2">
-                  <img src={ProductIcon} alt="Package Icon" />
-                  <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                    Box {packages.length + 1}
-                  </h1>
+            {showAddBox ? (
+              <div className="w-[500px] ">
+                <div className="hidden lg:flex justify-between ">
+                  <div className="flex py-5 gap-x-2">
+                    <img src={ProductIcon} alt="Package Icon" />
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Box {packages.length + 1}
+                    </h1>
+                  </div>
+                </div>
+                <div
+                  className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                  }}
+                >
+                  <AddButton
+                    text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
+                    onClick={() => {
+                      setBoxIndex(packages.length);
+                      setSelectedProductsOfPackage([]);
+                      setBoxTypeEditMode(false);
+                      setIsSearchProductRightModalOpen(true);
+                    }}
+                    showIcon={true}
+                    icon={ButtonIcon}
+                    className="rounded bg-white !shadow-none text-lg"
+                    alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
+                  />
                 </div>
               </div>
-              <div
-                className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
-                style={{
-                  boxShadow:
-                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
-                }}
-              >
-                <AddButton
-                  text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
-                  onClick={() => {
-                    setBoxIndex(packages.length);
-                    setSelectedProductsOfPackage([]);
-                    setBoxTypeEditMode(false);
-                    setIsSearchProductRightModalOpen(true);
-                  }}
-                  showIcon={true}
-                  icon={ButtonIcon}
-                  className="rounded bg-white !shadow-none text-lg"
-                  alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
-                />
-              </div>
-            </div>
+            ) : (
+              ""
+            )}
           </div>
           <div>
             <div className="w-full flex justify-between py-6 ">

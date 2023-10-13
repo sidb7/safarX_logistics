@@ -26,6 +26,7 @@ const Index = () => {
   const [otp, setOtp] = useState<any>({
     loginOtp: "",
   });
+  console.log("🚀 ~ file: verifyOtp.tsx:29 ~ Index ~ otp:", otp);
 
   const signUpUser = useSelector((state: any) => state.signup);
   const [minutes, setMinutes] = useState(0);
@@ -174,7 +175,10 @@ const Index = () => {
                   containerStyle="mt-[32px]"
                   label="Enter OTP"
                   onChange={(e: any) => {
-                    setOtp({ ...otp, loginOtp: +e.target.value });
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setOtp({ ...otp, loginOtp: +e.target.value });
+                    }
                   }}
                 />
               </div>
