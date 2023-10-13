@@ -29,7 +29,7 @@ const CustomAccordianTickets = (props: ITypeProps) => {
           <div className={`flex flex-col   mb-3   cursor-pointer `}>
             <div
               className={`flex items-center justify-between p-3 h-[56px] border-[1px] border-[#E8E8E8] ${
-                data[index].isOpen
+                data[index]?.isOpen
                   ? "bg-[#E8E8E8] rounded-tr-lg rounded-tl-lg rounded-b-none "
                   : "bg-[#FFFFFF] rounded-lg "
               }`}
@@ -46,7 +46,7 @@ const CustomAccordianTickets = (props: ITypeProps) => {
                 }
               }}
             >
-              <div className="flex items-center justify-between w-[94%]   ">
+              <div className="flex items-center justify-between w-[94%] lg:w-[98%] ">
                 <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
                   {eachData.subject}
                 </span>
@@ -76,13 +76,14 @@ const CustomAccordianTickets = (props: ITypeProps) => {
               <img
                 src={eachData.isOpen ? upArrowIcon : downArrowIcon}
                 alt="downArrowIcon"
+                className=""
               />
             </div>
             {data[index].isOpen && (
               <div
                 className={`flex flex-col border-[1px] border-[#E8E8E8] rounded-bl-lg rounded-br-lg  `}
               >
-                <div className="grid  gap-y-2 grid-cols-2  py-4  ">
+                <div className="grid  gap-y-2 lg:gap-y-4 grid-cols-2 lg:grid-cols-4  py-4  ">
                   {/* Date */}
                   <div className=" flex flex-col  lg:col-span-1  border-[1px] px-4 border-t-0 border-b-0 border-l-0 border-r-[#E8E8E8]">
                     <span className="font-Open font-normal text-[12px] leading-4 text-[#777777] mb-[2px] whitespace-nowrap">
@@ -131,7 +132,7 @@ const CustomAccordianTickets = (props: ITypeProps) => {
                 </div>
 
                 {isTicketDetails ? (
-                  <div className="mx-4">
+                  <div className="mx-4 lg:hidden">
                     <img alt="" src={CloseTicketIcon} />
                   </div>
                 ) : (
