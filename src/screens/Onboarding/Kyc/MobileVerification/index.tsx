@@ -308,8 +308,11 @@ const Index = (props: ITypeProps) => {
                   labelClassName="!font-Open"
                   maxLength={businessType === "company" ? 4 : 6}
                   value={otpNumber || ""}
-                  onChange={(e) => {
-                    setOTPNumber(+e.target.value);
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setOTPNumber(+e.target.value);
+                    }
                   }}
                 />
               </div>
