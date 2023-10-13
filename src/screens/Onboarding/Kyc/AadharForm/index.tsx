@@ -76,21 +76,22 @@ const Index = (props: ITypeProps) => {
 
   const aadharFormComponent = () => {
     return (
-      <div className="px-5 lg:px-0">
-        <div className="hidden lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div>
+        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
 
         <WelcomeHeader
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <form onSubmit={onSendOtp}>
           <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[160px] px-5 lg:px-0 gap-y-5 mb-6">
-            <div>
+            <div className="!w-full lg:!w-auto">
               <CustomInputBox
-                containerStyle={`lg:!w-auto`}
+                // containerStyle={`lg:!w-auto`}
                 label="Aadhar Number"
                 inputType="text"
                 maxLength={12}
@@ -114,7 +115,7 @@ const Index = (props: ITypeProps) => {
               )}
             </div>
           </div>
-          <div className="flex  lg:justify-center lg:items-center  pb-12 ">
+          <div className="flex  lg:justify-center lg:items-center px-5 lg:px-0 pb-12 ">
             <ServiceButton
               text="SEND OTP"
               disabled={!otpBtnStatus}

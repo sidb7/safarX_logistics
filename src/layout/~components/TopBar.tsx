@@ -24,6 +24,7 @@ import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
+import "../../styles/skeleton.css";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -38,7 +39,8 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isQuick, setIsQuick] = useState(false);
-  const [walletAmt, setWalletAmt] = useState<any>();
+  const [walletAmt, setWalletAmt] = useState<any>(0);
+  const [isLoading, setLoading] = useState(false);
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
@@ -53,13 +55,15 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   // console.log("walletBalance", walletAmt);
 
   useEffect(() => {
+    setLoading(true);
     setTimeout(() => {
       let walletBalance = sessionStorage.getItem("walletAmt") as any;
       // console.log("walletBalance", walletBalance !== undefined);
       if (walletBalance === undefined) {
         console.log("wallet ", walletBalance);
       } else {
-        setWalletAmt(walletBalance);
+        setLoading(false);
+        setWalletAmt(walletBalance || 0);
       }
     }, 100);
   }, [walletAmt]);
@@ -151,12 +155,23 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             onClick={() => {}}
           /> */}
           <div className="flex items-center justify-self-end gap-x-3 ">
-            <div className="hidden lg:block">
-              <div className="flex items-center w-[150px] h-[36px] space-x-1 rounded-lg p-4 bg-[#E5EDFF]">
-                <img src={WalletIcon} alt="" />
-                <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
+            {isLoading ? (
+              <div className="flex animated !rounded-md w-20 h-[36px]    ">
+                <img
+                  src={WalletIcon}
+                  width={35}
+                  className="z-10  mx-2"
+                  alt=""
+                />
               </div>
-            </div>
+            ) : (
+              <div className="hidden lg:block">
+                <div className="flex items-center max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
+                  <img src={WalletIcon} width={35} alt="" />
+                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
+                </div>
+              </div>
+            )}
 
             <img
               src={SearchIcon}
