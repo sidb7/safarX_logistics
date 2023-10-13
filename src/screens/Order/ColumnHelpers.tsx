@@ -70,13 +70,13 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adreess</h1>
+            <h1>Pickup Adress</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 text-[#8D8D8D]">
+          <div className="text-base py-3 ]">
             {info?.row?.original?.pickupAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
@@ -99,7 +99,7 @@ const MainCommonHelper = (navigate: any = "") => {
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 text-[#8D8D8D]">
+          <div className="text-base  py-3 ]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/delivery")}
@@ -147,15 +147,23 @@ const idHelper = (navigate: any = "") => [
       );
     },
     cell: (info: any) => {
-      const { tempOrderId, orderId, status = [], source } = info?.row?.original;
+      const {
+        tempOrderId,
+        orderId,
+        status = [],
+        source,
+        updatedAt,
+        orderType,
+      } = info?.row?.original;
       const { AWB } = status[0] ?? "";
+      console.log("status: ", status);
       return (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
-                {status.length === 0 ? (
+                {status?.length === 0 ? (
                   <Link
                     to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
                     className="underline text-blue-500 cursor-pointer"
@@ -171,6 +179,7 @@ const idHelper = (navigate: any = "") => [
                 ) : (
                   <span className=""> {tempOrderId}</span>
                 )}
+                <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
           )}
@@ -214,6 +223,30 @@ const idHelper = (navigate: any = "") => [
               </div>
             </div>
           )}
+          {status?.length === 0 && (
+            <div className="">
+              <span className=" text-sm font-light">Order Updated At :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+              </div>
+            </div>
+          )}
+          {status?.length === 0 && (
+            <div className="">
+              <span className=" text-sm font-light">Source :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{source}</span>
+              </div>
+            </div>
+          )}
+          {status?.length === 0 && orderType && (
+            <div className="">
+              <span className=" text-sm font-light">Order Type :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{orderType}</span>
+              </div>
+            </div>
+          )}
         </div>
       );
     },
@@ -229,7 +262,6 @@ const idHelper = (navigate: any = "") => [
     },
     cell: (info: any) => {
       const { status } = info?.row?.original;
-      console.log("info?.row?.original: ", info?.row?.original);
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYY(timeStamp);
       const renderStatus = status?.[0]?.currentStatus || "Draft";
@@ -296,13 +328,13 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adreess</h1>
+            <h1>Pickup Adress</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 text-[#8D8D8D]">
+          <div className="text-base py-3]">
             {info?.row?.original?.pickupAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
@@ -325,7 +357,7 @@ export const columnHelperForNewOrder = (
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 text-[#8D8D8D]">
+          <div className="text-base  py-3 ]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
@@ -361,7 +393,7 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Charges</h1>
+            <h1>Payment Mode</h1>
           </div>
         );
       },
@@ -376,7 +408,9 @@ export const columnHelperForNewOrder = (
                   currency: "INR",
                 }) ?? "0"}
               </span>
-              <span>{codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}</span>
+              <span>
+                {codInfo ? (codInfo?.isCod ? "COD" : "PREPAID") : "-"}
+              </span>
             </div>
           </>
         );
