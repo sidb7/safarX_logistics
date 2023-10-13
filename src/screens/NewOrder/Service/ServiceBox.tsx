@@ -1,17 +1,8 @@
-// ServiceBox.tsx
 import React, { useState } from "react";
 import TooltipContent from "./TooltipContent";
 
 interface IRadioButtonProps {
   name?: string;
-  value?: string;
-  inputClassName?: string;
-  labelClassName?: string;
-  onChange?: (e: any) => void;
-  id?: string;
-  label?: string;
-  style?: any;
-  checked?: boolean;
   options?: any;
   selectedValue?: any;
 }
@@ -21,11 +12,11 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
 ) => {
   const { name, options = [], selectedValue } = props;
 
-  const [radioValue, setRadioValue] = useState<any>(options[0]?.value || "");
+  const [selectedOption, setSelectedOption] = useState<any>(null);
 
-  const handleOnChange = (e: any) => {
-    setRadioValue(e);
-    selectedValue(e);
+  const handleOnChange = (option: any) => {
+    setSelectedOption(option);
+    selectedValue(option.value);
   };
 
   return (
@@ -33,8 +24,12 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
       {options?.map((option: any) => (
         <div
           key={option?.value}
-          className="flex items-center p-2 shadow-md border border-[#c1c1c1] rounded-lg w-[310px] h-[210px] mb-4 md:mb-0"
-          onClick={() => handleOnChange(option.value)}
+          className={`flex items-center p-2 shadow-md border rounded-lg w-[310px] h-[210px] mb-4 md:mb-0 ${
+            selectedOption?.value === option?.value
+              ? "border-green-500 border-2"
+              : "border-[#c1c1c1]"
+          }`}
+          onClick={() => handleOnChange(option)}
           data-tooltip-id={`my-tooltip-inline-${option.value}`}
         >
           <div className="self-start px-2">
@@ -44,8 +39,8 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               value={option?.value}
               className="!w-4 !p-0 !m-0"
               readOnly={true}
-              checked={radioValue === option?.value}
-              onChange={() => handleOnChange(option.value)}
+              checked={selectedOption?.value === option?.value}
+              onChange={() => handleOnChange(option)}
             />
           </div>
           <div className="px-2 text-lg">
