@@ -159,10 +159,14 @@ const Index = (props: ITypeProps) => {
         toast.success(response?.message);
         setLoading(false);
 
-        if (businessType === "business" || businessType === "company") {
-          navigate("/onboarding/kyc-terms/service-agreement");
+        if (businessType === "business") {
+          // navigate("/onboarding/kyc-terms/service-agreement");
+          navigate("/onboarding/kyc-aadhar-form");
+        } else if (businessType === "company") {
+          navigate("/onboarding/kyc");
         } else if (businessType === "individual") {
-          navigate("/onboarding/kyc-terms/gst-agreement");
+          // navigate("/onboarding/kyc-terms/gst-agreement");
+          navigate("/onboarding/kyc");
         }
       } else {
         setLoading(false);

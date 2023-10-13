@@ -64,6 +64,7 @@ const Index = () => {
 
     if (response?.success) {
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      sessionStorage.setItem("userName", response?.data[0]?.name);
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
@@ -102,6 +103,7 @@ const Index = () => {
     if (response?.success) {
       // setLocalStorage(tokenKey, response?.data[0]?.token);
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+      sessionStorage.setItem("userName", response?.data[0]?.name);
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token

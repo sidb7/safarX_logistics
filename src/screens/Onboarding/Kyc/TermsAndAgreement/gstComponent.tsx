@@ -35,6 +35,8 @@ export const GSTComponent = (props: ITypeProps) => {
   }, []);
   const userName = sessionStorage.getItem("fullname")?.replace(/,/g, " ");
 
+  const userNameForGst = sessionStorage.getItem("userName");
+
   const acceptStatus = async () => {
     let name = userState?.firstName + " " + userState?.lastName;
     const payload = { entityName: name, businessType: "logistics" };
@@ -153,7 +155,8 @@ export const GSTComponent = (props: ITypeProps) => {
                         userState !== null &&
                         ` ${userState?.firstName} ${userState?.lastName} `} */}
 
-                      {" " + userName + " "}
+                      {/* {" " + userName + " "} */}
+                      {" " + userNameForGst + " "}
 
                       {/* {userState?.firstName + " " + userState?.lastName} */}
                       {/*This will work when user login but didn't work when user signup as the line 144 is commented */}

@@ -38,12 +38,18 @@ const BusinessType = (props: ITypeProps) => {
       const payload = { businessType };
       setLoading(true);
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
+      console.log("bussinesstype", payload.businessType);
       if (response?.success) {
         toast.success(response?.message);
         setLoading(false);
 
         // navigate("/onboarding/kyc-photo"); // temparory hide
-        navigate("/onboarding/kyc-form");
+        // navigate("/onboarding/kyc-form");
+        if (payload.businessType === "individual") {
+          navigate("/onboarding/kyc-terms/gst-agreement");
+        } else {
+          navigate("/onboarding/kyc-terms/service-agreement");
+        }
 
         // toast.success(response?.message);
         //Navigate Url' go here
