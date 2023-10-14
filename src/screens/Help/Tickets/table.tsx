@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { CustomTable } from "../../../components/Table";
 import ClockErrorIcon from "../../../assets/clock.svg";
 import ProcessingIcon from "../../../assets/processing.svg";
@@ -7,9 +7,20 @@ import BlueEye from "../../../assets/blueEye.svg";
 import BlueSend from "../../../assets/blueSend.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import { useNavigate } from "react-router-dom";
+import Pagination from "../../../components/Pagination";
 
 const TicketsTable = () => {
   const columnsHelper = createColumnHelper<any>();
+
+  const navigate = useNavigate();
+  const [totalItemCount, setTotalItemCount] = useState(10);
+
+  //on page change index
+  const onPageIndexChange = () => {};
+
+  // on per page item change
+  const onPerPageItemChange = () => {};
 
   const TicketsData = [
     {
@@ -45,7 +56,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Ticket Id
             </p>
           </div>
@@ -54,7 +65,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 ">
             {info.row.original.ticketId}
           </p>
         );
@@ -64,7 +75,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Date
             </p>
           </div>
@@ -73,7 +84,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 ">
             {info.row.original.date}
           </p>
         );
@@ -83,7 +94,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Time
             </p>
           </div>
@@ -92,7 +103,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 ">
             {info.row.original.time}
           </p>
         );
@@ -102,7 +113,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Subject
             </p>
           </div>
@@ -111,7 +122,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 whitespace-nowrap ">
             {capitalizeFirstLetter(info.row.original.subject)}
           </p>
         );
@@ -121,7 +132,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Priority
             </p>
           </div>
@@ -130,7 +141,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 ">
             {capitalizeFirstLetter(info.row.original.priority)}
           </p>
         );
@@ -140,7 +151,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Support Type
             </p>
           </div>
@@ -149,7 +160,7 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
+          <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-normal leading-5 ">
             {capitalizeFirstLetter(info.row.original.supportType)}
           </p>
         );
@@ -159,7 +170,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Status
             </p>
           </div>
@@ -169,13 +180,13 @@ const TicketsTable = () => {
       cell: (info: any) => {
         return (
           <p
-            className={`flex items-center ${
+            className={`flex items-center justify-center  ${
               info.row.original.status === "Pending"
-                ? "text-[#F35838] bg-[#FEEEEB]  border-[#FEEEEB]"
+                ? "text-[#F35838] bg-[#FEEEEB]  border-[#F35838]"
                 : info.row.original.status === "Resolved"
                 ? "text-[#7CCA62] bg-[#F2FAEF] border-[#7CCA62]"
-                : "text-[#F0A22E] bg-[#FDF6EA] border-[#FDF6EA]"
-            } font-Open text-sm font-semibold leading-5 px-4 py-2 rounded-lg`}
+                : "text-[#F0A22E] bg-[#FDF6EA] border-[#F0A22E]"
+            } font-Open text-sm border-[0.5px] font-normal leading-5 py-2 px-3 mx-2 rounded`}
           >
             <img
               src={
@@ -186,6 +197,7 @@ const TicketsTable = () => {
                   : ProcessingIcon
               }
               alt=""
+              className="mr-2"
             />
             &nbsp;
             {capitalizeFirstLetter(info.row.original.status)}
@@ -197,7 +209,7 @@ const TicketsTable = () => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-5  text-[#1C1C1C] self-center whitespace-nowrap">
               Actions
             </p>
           </div>
@@ -206,16 +218,39 @@ const TicketsTable = () => {
 
       cell: (info: any) => {
         return (
-          <div className="flex">
-            <img src={BlueEye} alt="" />
+          <div className="flex items-center">
+            <img
+              src={BlueEye}
+              alt=""
+              className="cursor-pointer"
+              onClick={() => {
+                navigate("/help/ticket/view-details", {
+                  state: info.row.original,
+                });
+              }}
+            />
 
-            <img src={BlueSend} alt="" />
+            <img src={BlueSend} alt="" className="cursor-pointer" />
           </div>
         );
       },
     }),
   ];
-  return <CustomTable columns={TicketsHeading} data={TicketsData} />;
+  return (
+    <div>
+      <div>
+        <CustomTable columns={TicketsHeading} data={TicketsData} />
+      </div>
+      {totalItemCount > 0 && (
+        <Pagination
+          totalItems={totalItemCount}
+          itemsPerPageOptions={[10, 20, 30, 50]}
+          onPageChange={onPageIndexChange}
+          onItemsPerPageChange={onPerPageItemChange}
+        />
+      )}
+    </div>
+  );
 };
 
 export default TicketsTable;

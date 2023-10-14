@@ -26,6 +26,7 @@ import {
   GET_SELLER_COMPANY_BOX,
   GET_LATEST_ORDER,
   GET_SELLER_BOX,
+  GET_PRODUCTS,
 } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
@@ -38,6 +39,7 @@ import { useSelector } from "react-redux";
 import AddPackageDetails from "./AddPackageDetails";
 import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { getQueryJson } from "../../../utils/utility";
 
 interface IPackageProps {}
 const steps = [
@@ -94,6 +96,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
+
   const [combo, setCombo] = useState<any>(false);
   const [products, setProducts] = useState<any>([]);
   const [sellerBox, setSellerBox] = useState<any>([]);
@@ -119,6 +122,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     collectableAmount: 0,
     invoiceValue: 0,
   });
+  const params = getQueryJson();
+  let shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
+
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
   const isReturningUser = useSelector(
@@ -144,6 +151,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   }, [packages]);
 
   useEffect(() => {
+    // getOrderProductDetailsForReturningUser();
+
     getOrderProductDetails();
   }, []);
 
@@ -228,18 +237,28 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   const getOrderProductDetails = async () => {
     try {
-      const { data } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data } = await POST(GET_LATEST_ORDER, payload);
+      const { data: catalogueProducts } = await POST(GET_PRODUCTS);
+
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
         const { products: resProduct = [], orderType } = data?.data[0];
         setOrderType(orderType);
-        setProducts(resProduct);
+
+        // setProducts(resProduct);
       } else {
         toast.error(data?.message);
-        navigate("/orders/add-order/pickup");
+        navigate(
+          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
         return;
       }
+      if (catalogueProducts?.success) {
+        setProducts(catalogueProducts?.data);
+      }
+
       if (boxData?.success) {
         const { data = [] } = boxData;
         setSellerBox(data);
@@ -253,10 +272,30 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     }
   };
 
+  // const getOrderProductDetailsForReturningUser = async () => {
+  //   try {
+  //     const { data } = await POST(GET_PRODUCTS);
+
+  //     if (data?.success) {
+  //       console.log("catalogueProductData>>", data?.data);
+  //       setOrderType(orderType);
+  //       setProducts(data?.data);
+  //     } else {
+  //       toast.error(data?.message);
+  //       navigate(
+  //         `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+  //       );
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     console.error("getOrderProductDetails", error);
+  //   }
+  // };
+
   const setBoxAndCODInfo = async () => {
     let codDataInfo = {
       ...codData,
-      isCod: orderType === "B2B" ? false : true,
+      isCod: orderType === "B2B" || paymentMode !== "cod" ? false : true,
     };
     let payload = {
       boxInfo: packages,
@@ -265,12 +304,21 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         status: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
+      tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
+
+    // if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
+    //   toast.error("COD collectable Amount Cannot Be Zero");
+    //   return;
+    // }
 
     const { data } = await POST(ADD_BOX_INFO, payload);
     if (data?.success) {
       toast.success(data?.message);
-      navigate("/orders/add-order/service");
+      navigate(
+        `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+      );
     } else {
       toast.error(data?.message);
     }
@@ -285,8 +333,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
-  const isOrderTypeB2C = () => {};
-
+  console.log("productsfromcatalogue>>", products);
   return (
     <div>
       <div>
@@ -295,7 +342,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           <Stepper steps={steps} />
         </div>
         <div className="px-5 py-2 mb-12">
-          <div className="flex justify-between ">
+          {/* <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" />
               {isReturningUser ? (
@@ -332,7 +379,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex  gap-x-3 ">
+          <div className="flex  gap-x-3 flex-nowrap overflow-x-scroll ">
             {products.length > 0 ? (
               products?.map((e: any, index: number) => {
                 return (
@@ -352,13 +399,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 <Spinner />
               </div>
             )}
-          </div>
+          </div> */}
 
           <div className="mt-6">
             <AddButton
-              text="ADD PRODUCT"
+              text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
-                navigate("/orders/add-order/add-product");
+                navigate(
+                  `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                );
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -394,6 +443,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 />
               );
             })}
+
             {showAddBox ? (
               <div className="w-[500px] ">
                 <div className="hidden lg:flex justify-between ">
@@ -405,7 +455,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   </div>
                 </div>
                 <div
-                  className="flex justify-center items-center w-full p-12 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
                   style={{
                     boxShadow:
                       "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -441,7 +491,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
             <div className="flex gap-x-3  ">
               <div
-                className={`relative border-[1px] p-16 rounded ${
+                className={`relative z-1 border-[1px] p-16 rounded ${
                   selectInsurance.isInsurance === true
                     ? "border-[#1C1C1C]"
                     : "border-[#EAEAEA]"
@@ -523,23 +573,23 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
 
               <div className="flex w-fit gap-x-8 py-2 pb-8">
-                {paymentMode === "cod" && !isOrderTypeB2B && (
-                  <CustomInputBox
-                    label={"COD Amount to Collect From Buyer"}
-                    value={codData?.collectableAmount}
-                    inputType="text"
-                    className="!w-60"
-                    onChange={(e) => {
-                      setCodData({
-                        ...codData,
-                        collectableAmount:
-                          e.target.value > codData.invoiceValue
-                            ? codData.invoiceValue
-                            : e.target.value,
-                      });
-                    }}
-                  />
-                )}
+                {/* paymentMode === "cod" && !isOrderTypeB2B */}
+                <CustomInputBox
+                  label={"COD Amount to Collect From Buyer"}
+                  value={codData?.collectableAmount}
+                  inputType="text"
+                  className="!w-60"
+                  isDisabled={paymentMode !== "cod" || isOrderTypeB2B}
+                  onChange={(e) => {
+                    setCodData({
+                      ...codData,
+                      collectableAmount:
+                        e.target.value > codData.invoiceValue
+                          ? codData.invoiceValue
+                          : e.target.value,
+                    });
+                  }}
+                />
                 <CustomInputBox
                   inputType="text"
                   label={"Total invoice value"}
@@ -606,7 +656,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           </div>
         </div>
         <RightSideModal
-          className="w-[400px]"
+          className=" w-full lg:w-[400px]"
           wrapperClassName="rounded-l-xl"
           isOpen={boxTypeModal}
           onClose={() => setBoxTypeModal(false)}
@@ -716,14 +766,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   onClick={() => {
                     setBoxTypeModal(false);
                   }}
-                  className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+                  className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4 "
                 />
                 <ServiceButton
                   text={"SAVE"}
                   onClick={() => {
                     handleBoxType();
                   }}
-                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
+                  className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
                 />
               </div>
             </div>
@@ -743,15 +793,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           callApi={() => setBoxAndCODInfo()}
         />
       </div>
-      {products.length > 0 && (
-        <AddPackageDetails
-          productsFromLatestOrder={products}
-          selectedProducts={selectedProductsOfPackage}
-          isSearchProductRightModalOpen={isSearchProductRightModalOpen}
-          setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
-          handlePackageDetails={handlePackageDetailsForProduct}
-        />
-      )}
+      <AddPackageDetails
+        productsFromLatestOrder={products}
+        selectedProducts={selectedProductsOfPackage}
+        isSearchProductRightModalOpen={isSearchProductRightModalOpen}
+        setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
+        handlePackageDetails={handlePackageDetailsForProduct}
+      />
       ;
     </div>
   );

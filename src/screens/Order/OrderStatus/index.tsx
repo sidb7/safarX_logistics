@@ -8,12 +8,16 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
+import { POST } from "../../../utils/webService";
+import { GET_ORDER_BY_ID, GET_SELLER_ORDER } from "../../../utils/ApiUrls";
 
 interface IOrderstatusProps {
   filterId: any;
   setFilterId: any;
   statusData: any;
   handleTabChange: Function;
+  setOrders: any;
+  currentStatus: string;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -38,12 +42,15 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setFilterId,
   statusData,
   handleTabChange,
+  setOrders,
+  currentStatus,
 }) => {
   const navigate = useNavigate();
-
+  let debounceTimer: any;
   const { isLgScreen } = ResponsiveState();
   const [statusId, setStatusId] = useState(0);
   const [filterModal, setFilterModal] = useState(false);
+  const [searchedText, setSearchedText] = useState("");
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
@@ -75,12 +82,50 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     );
   };
 
+  const handleSearchOrder = (e: any) => {
+    try {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        if (e.target.value.length > 0) {
+          const { data } = await POST(GET_ORDER_BY_ID, {
+            id: e.target.value,
+            currentStatus,
+          });
+          setOrders(data.data);
+        } else {
+          let payload = {
+            skip: 0,
+            limit: 10,
+            pageNo: 1,
+            sort: { _id: -1 },
+            currentStatus,
+          };
+          const { data } = await POST(GET_SELLER_ORDER, payload);
+
+          const { OrderData } = data?.data?.[0];
+          setOrders(OrderData);
+
+          clearTimeout(debounceTimer);
+        }
+      }, 800);
+    } catch (error: any) {
+      console.warn("Error in OrderStatus Debouncing: ", error.message);
+    }
+  };
+
   const filterButton = () => {
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <SearchBox
+              label="Search"
+              value={searchedText}
+              onChange={(e: any) => {
+                handleSearchOrder(e);
+              }}
+              getFullContent={getAllOrders}
+            />
           </div>
           <div
             className="flex justify-between items-center p-2 gap-x-2"
@@ -118,6 +163,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const handleStatusChanges = (index: any) => {
     handleTabChange(index);
     setStatusId(index);
+  };
+
+  const getAllOrders = async () => {
+    let payload = {
+      skip: 0,
+      limit: 10,
+      pageNo: 1,
+      sort: { _id: -1 },
+      currentStatus,
+    };
+    const { data } = await POST(GET_SELLER_ORDER, payload);
+
+    const { OrderData } = data?.data?.[0];
+    setOrders(OrderData);
   };
 
   return (

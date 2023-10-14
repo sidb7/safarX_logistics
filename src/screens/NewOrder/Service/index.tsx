@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";
 import CustomDropDown from "../../../components/DropDown";
 import ServiceBox from "./ServiceBox";
+import { getQueryJson } from "../../../utils/utility";
 
 export const RecommendedServiceData = [
   {
@@ -167,6 +168,9 @@ const Index: React.FC = () => {
   // });
 
   const navigate = useNavigate();
+  const params = getQueryJson();
+  let shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   //
 
@@ -216,21 +220,26 @@ const Index: React.FC = () => {
   // };
 
   const getCourierPartnerService = async () => {
+    const payload = {
+      tempOrderId: +shipyaari_id,
+      source: orderSource,
+    };
+
     try {
       setLoading(true);
 
       const { data: response } = await POST(
         GET_COURIER_PARTNER_SERVICE,
-        getServicePayload
+        payload
       );
 
       if (response?.success) {
         setResponse(response);
 
-        let options = response?.data.map((service: any) => {
+        let options = response?.data.map((service: any, index: number) => {
           return {
             text: service,
-            value: service?.companyServiceId,
+            value: index,
           };
         });
 
@@ -258,29 +267,30 @@ const Index: React.FC = () => {
       return;
     }
 
-    let tempPayalod = response.data?.filter(
-      (service: any) => service?.companyServiceId === selectedService
-    );
-
     let {
       partnerServiceId,
       partnerServiceName,
       companyServiceId,
       companyServiceName,
-    } = tempPayalod[0];
+    } = response.data[selectedService];
 
     const payload = {
       partnerServiceId,
       partnerServiceName,
       companyServiceId,
       companyServiceName,
+      tempOrderId: +shipyaari_id,
+      source: orderSource,
     };
+
     try {
       const { data: response } = await POST(SET_PARTNER_SERVICE_INFO, payload);
 
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/orders/add-order/summary");
+        navigate(
+          `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
       } else {
         toast.error(response?.message);
       }
@@ -378,7 +388,7 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="flex gap-4 p-2">
+          <div className="flex gap-4 p-2 mb-[20%]">
             <div>
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox

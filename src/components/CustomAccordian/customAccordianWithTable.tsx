@@ -3,6 +3,7 @@ import downArrowIcon from "../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../assets/Filter/upArrow.svg";
 import { CustomTable } from "../Table";
 import "../../styles/plan.css";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 interface ICustomAccordianWithProps {
   dummyDatas: any;
@@ -10,7 +11,7 @@ interface ICustomAccordianWithProps {
   isIcon?: boolean;
   icon?: any;
   title: string;
-
+  titleForMobile?: string;
   data?: any;
   columns?: any;
 }
@@ -18,8 +19,17 @@ interface ICustomAccordianWithProps {
 const CustomAccordianWithTable: React.FunctionComponent<
   ICustomAccordianWithProps
 > = (props) => {
-  const { dummyDatas, cardClassName, isIcon, icon, title, data, columns } =
-    props;
+  const {
+    dummyDatas,
+    cardClassName,
+    isIcon,
+    icon,
+    title,
+    data,
+    columns,
+    titleForMobile,
+  } = props;
+  const { isLgScreen } = ResponsiveState();
 
   const [isCollapse, setIsCollapse] = useState(false);
 
@@ -37,8 +47,8 @@ const CustomAccordianWithTable: React.FunctionComponent<
       >
         <div className="flex items-center gap-x-2">
           {isIcon && <img src={icon} alt="" />}
-          <span className="font-Lato font-semibold text-[22px] leading-7 ">
-            {title}
+          <span className="lg:font-Lato  lg:text-[22px] lg:leading-7 font-Open font-semibold text-base leading-[22px] text-[#1C1C1C] ">
+            {isLgScreen ? title : titleForMobile}
           </span>
         </div>
         <img

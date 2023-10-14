@@ -39,7 +39,8 @@ export const ServiceComponent = (props: ITypeProps) => {
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/onboarding/kyc");
+        // navigate("/onboarding/kyc");
+        navigate("/onboarding/kyc-form");
       } else {
         toast.error(response?.message);
         navigate("/onboarding/kyc-terms/service-agreement");
@@ -85,6 +86,7 @@ export const ServiceComponent = (props: ITypeProps) => {
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Terms & Agreement"
         />

@@ -24,7 +24,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
   const navigate = useNavigate();
   const cardClasses = `p-4 shadow-lg rounded-lg cursor-pointer ${
     checked ? "border-[2px] border-green-500" : "border-[1px] border-[#E8E8E8]"
-  } bg-white w-[372px] h-[252px] ${checked ? "bg-gray-100" : "bg-white"}`;
+  } bg-white w-[372px] h-[230px] ${checked ? "bg-gray-100" : "bg-white"}`;
   return (
     <div className={cardClasses} key={key}>
       <div className="flex justify-between ml-3 mb-1">
@@ -45,7 +45,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
         </div> */}
       </div>
 
-      <p className="px-4 w-[250px] lg:w-[95%] text-[16px] font-Open font-semibold leading-6 capatalize">
+      <p className="px-4 w-[250px] w-[95%]  text-[16px] font-Open font-semibold leading-6 capatalize">
         {address}
       </p>
 

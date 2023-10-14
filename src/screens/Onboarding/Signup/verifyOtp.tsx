@@ -23,9 +23,10 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [otp, setOtp] = useState({
+  const [otp, setOtp] = useState<any>({
     loginOtp: "",
   });
+  console.log("🚀 ~ file: verifyOtp.tsx:29 ~ Index ~ otp:", otp);
 
   const signUpUser = useSelector((state: any) => state.signup);
   const [minutes, setMinutes] = useState(0);
@@ -46,6 +47,7 @@ const Index = () => {
 
   const resendOtp = async () => {
     const { data: response } = await POST(POST_SEND_OTP_URL, state);
+
     if (response?.success === true) {
       toast.success("OTP resent Successfully");
       setMinutes(0);
@@ -63,14 +65,23 @@ const Index = () => {
       };
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
+
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
       if (response?.success === true) {
-        setLoading(false);
-        setLocalStorage(tokenKey, response?.data[0]?.token);
+        localStorage.setItem(
+          `${response?.data[0]?.sellerId}_${tokenKey}`,
+          response?.data[0]?.token
+        );
+        sessionStorage.setItem("userName", response?.data[0]?.name);
+        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        // setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");
       } else {
-        setLoading(false);
         toast.error(response?.message);
       }
+      setLoading(false);
     } catch (error) {
       return error;
     }
@@ -135,7 +146,7 @@ const Index = () => {
               />
             </div>
 
-            <div className="flex flex-col mx-4 mt-6  lg:mt-12 gap-y-3">
+            <div className="flex flex-col mx-4 mt-12 gap-y-3">
               <p className="text-center text-[22px] text-[#323232] font-bold font-Lato leading-7 ">
                 Mobile Verification
               </p>
@@ -159,12 +170,17 @@ const Index = () => {
 
               <div className="flex justify-center">
                 <CustomInputBox
-                  value={otp.loginOtp}
+                  inputType="text"
+                  inputMode="numeric"
+                  value={otp.loginOtp || ""}
                   maxLength={6}
                   containerStyle="mt-[32px]"
                   label="Enter OTP"
                   onChange={(e: any) => {
-                    setOtp({ ...otp, loginOtp: e.target.value });
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setOtp({ ...otp, loginOtp: +e.target.value });
+                    }
                   }}
                 />
               </div>
@@ -211,9 +227,9 @@ const Index = () => {
     );
   };
 
-  return (
-    <>
-      {isLgScreen && isModalOpen && (
+  const renderVerifyOtp = () => {
+    if (isLgScreen && isModalOpen) {
+      return (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
@@ -227,11 +243,19 @@ const Index = () => {
             verifyOtp()
           )}
         </CenterModal>
-      )}
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        verifyOtp()
+      );
+    }
+  };
 
-      {!isLgScreen && verifyOtp()}
-    </>
-  );
+  return <>{renderVerifyOtp()}</>;
 };
 
 export default Index;

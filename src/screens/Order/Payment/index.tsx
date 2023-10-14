@@ -42,9 +42,19 @@ import {
   PLACE_ORDER,
   RECHARGE_STATUS,
   POST_PLACE_ORDER,
+  PHONEPE_TRANSACTION_STATUS,
+  SELLER_WEB_URL,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
+import {
+  getLocalStorage,
+  getQueryJson,
+  loadPhonePeTransaction,
+  loadRazorPayTransaction,
+  removeLocalStorage,
+} from "../../../utils/utility";
+import useRazorpay from "react-razorpay";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -66,6 +76,8 @@ const Payment = () => {
   const [upiText, setUpiText] = useState<boolean>();
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const requiredBalance = location?.state?.requiredBalance;
+  const [Razorpay] = useRazorpay();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   let myInterval: number | any;
 
@@ -74,6 +86,7 @@ const Payment = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+  const params = getQueryJson();
 
   const fetchCurrentWallet = async () => {
     const { data } = await POST(GET_CURRENT_WALLET, {});
@@ -82,9 +95,27 @@ const Payment = () => {
     }
   };
 
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
   useEffect(() => {
-    fetchCurrentWallet();
-    setWalletValue(requiredBalance);
+    (async () => {
+      try {
+        fetchCurrentWallet();
+        setWalletValue(requiredBalance);
+        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+        if (phonePeTransactionId) {
+          await POST(PHONEPE_TRANSACTION_STATUS, {
+            orderId: phonePeTransactionId,
+            transactionId: phonePeTransactionId,
+            paymentGateway: "PHONEPE",
+          });
+          removeLocalStorage("phonePeTransactionId");
+          window.location.reload();
+        }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    })();
   }, []);
 
   const steps = [
@@ -136,6 +167,7 @@ const Payment = () => {
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
   );
+  const userDetails = useSelector((state: any) => state.signin);
 
   const moneyArr = [
     {
@@ -212,7 +244,8 @@ const Payment = () => {
 
   const placeOrderApi = async () => {
     try {
-      const { data } = await POST(POST_PLACE_ORDER, {});
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data } = await POST(POST_PLACE_ORDER, payload);
 
       if (data?.success) {
         toast.success(data?.message);
@@ -269,20 +302,48 @@ const Payment = () => {
     }
   };
 
+  const handleRazorPayTransaction = async () => {
+    const options: any = loadRazorPayTransaction(
+      walletValue,
+      "SHIPYAARI",
+      userDetails.name,
+      userDetails.email
+    );
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {
+      alert(response.error.code);
+      alert(response.error.description);
+      alert(response.error.source);
+      alert(response.error.step);
+      alert(response.error.reason);
+      alert(response.error.metadata.order_id);
+      alert(response.error.metadata.payment_id);
+    });
+
+    rzp1.open();
+  };
+
+  useEffect(() => {
+    if (walletValue < 1) setIsDisabled(true);
+    else setIsDisabled(false);
+  }, [walletValue]);
+
   return (
     <div className="w-full">
       <Breadcrum label="Add New Order" />
-      <div className="lg:mb-8">
+      <div className=" mb-4 lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="inline-flex space-x-2 items-center px-5">
+      <div className="inline-flex space-x-2 items-center px-5 max-sm:mt-4">
         <img src={Moneylogo} alt="" />
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Payment
         </p>
       </div>
-      <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
-        <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
+      <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] flex justify-center max-sm:rounded-none items-center mt-5 lg:mx-5  lg:justify-start">
+        <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF] leading-5">
           <p
             className={`${
               isItLgScreen
@@ -304,28 +365,28 @@ const Payment = () => {
       ) : (
         <div className="mx-5 ">
           <div className="grid lg:grid-cols-2 gap-x-[27px]">
-            <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[174px]">
+            <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
               <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
                 <img src={Accountlogo} alt="" />
                 <p className="text-[#1C1C1C]">Your wallet balance</p>
-                <p className="text-[#1C1C1C]">₹{currentWalletValue}</p>
+                <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
               </div>
               <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                 Endless wallet balance with automatic add money
               </p>
               <p
                 onClick={() => convertToEdit()}
-                className="text-[1rem]  flex items-center lg:font-semibold lg:text-[#1C1C1C]"
+                className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
               >
                 <span>₹</span>
                 <input
-                  type={`${isEdit ? "text" : ""}`}
+                  type={`number`}
                   className="text-lg p-1 border-none"
                   value={walletValue}
                   onChange={(e) => setWalletValue(e.target.value)}
                 />
               </p>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                 {moneyArr?.map((el: any, i: number) => {
                   return (
                     <div
@@ -335,11 +396,11 @@ const Payment = () => {
                         walletValue === el?.value
                           ? "border-[#004EFF]"
                           : "border-[#000000]"
-                      } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
+                      } border-[1.5px] p-2 rounded-lg items-center border-solid max-sm:text-[14px] cursor-pointer`}
                       // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
                     >
                       <p
-                        className={`text-[16px] ${
+                        className={`text-[12px] ${
                           walletValue === el?.value
                             ? "!text-[#004EFF]"
                             : "text-[#000000]"
@@ -352,11 +413,10 @@ const Payment = () => {
                 })}
               </div>
             </div>
-
             {/*Second */}
 
             <div className="hidden lg:block">
-              <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[174px]  ">
+              <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
                 {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
@@ -584,8 +644,7 @@ const Payment = () => {
                     : "Recharge with payment gateway"}
                 </p>
               </div>
-
-              <div className="flex mt-4 mb-6  justify-between lg:mb-0 ml-4 mr-5">
+              <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
                 <div className="flex flex-col items-center gap-y-2">
                   <img
                     src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
@@ -593,10 +652,63 @@ const Payment = () => {
                     className="ml-0 object-contain w-20 h-20"
                   />
                   <Paytm
+                    isDisabled={isDisabled}
                     text={"Paytm"}
                     amt={walletValue}
                     navigate="/orders/add-order/payment"
                   />
+                </div>
+                <div className="flex flex-col items-center gap-y-2">
+                  <img
+                    src={
+                      "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                    }
+                    alt=""
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <button
+                    disabled={isDisabled}
+                    type="button"
+                    className={`${
+                      !isDisabled
+                        ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                        : "!bg-opacity-50"
+                    } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={() =>
+                      loadPhonePeTransaction(
+                        walletValue,
+                        `${SELLER_WEB_URL}/orders/add-order/payment`,
+                        `${SELLER_WEB_URL}/orders/add-order/payment`
+                      )
+                    }
+                  >
+                    <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                      PhonePe
+                    </p>
+                  </button>
+                </div>
+                <div className="flex flex-col items-center gap-y-2">
+                  <div className="w-20 h-20 flex justify-center items-center">
+                    <img
+                      src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                      alt=""
+                      className="ml-0 object-contain"
+                    />
+                  </div>
+                  <button
+                    disabled={isDisabled}
+                    type="button"
+                    className={`${
+                      !isDisabled
+                        ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                        : "!bg-opacity-50"
+                    } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={handleRazorPayTransaction}
+                  >
+                    <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                      RazorPay
+                    </p>
+                  </button>
                 </div>
                 {/* <div className="flex flex-col items-center gap-y-2">
                   <img
@@ -651,21 +763,22 @@ const Payment = () => {
       </CustomBottomModal> */}
 
       <footer className="w-full fixed bottom-0">
-        <div className="grid grid-cols-2 shadow-lg border-[1px] bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
-          <button
-            onClick={() => navigate(-1)}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center lg:w-[100px]"
-          >
-            {" "}
-            BACK
-          </button>
-          <button
-            onClick={() => placeOrderApi()}
-            className=" flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
-          >
-            {" "}
-            PLACE ORDER
-          </button>
+        <div className="flex items-center justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
+          <div className="flex">
+            <button
+              onClick={() => navigate(-1)}
+              className="  flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] text-sm font-semibold text-[#1C1C1C] text-center w-[100px] lg:w-[110px]"
+            >
+              BACK
+            </button>
+            <button
+              onClick={() => placeOrderApi()}
+              className="mx-4 flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]"
+            >
+              {" "}
+              PLACE ORDER
+            </button>
+          </div>
         </div>
       </footer>
 

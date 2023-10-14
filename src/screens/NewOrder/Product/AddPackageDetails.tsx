@@ -43,7 +43,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboProducts, setComboProducts] = useState<any>([]);
 
-
   useEffect(() => {
     if (productsFromLatestOrder) {
       setProducts([]);
@@ -89,7 +88,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       console.log("tempArr", tempArr);
       setComboProducts([...tempArr]);
     } else {
-      toast.error(data?.message);
+      console.error(data?.message);
     }
   };
 
@@ -277,12 +276,12 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             onClick={() => {
               setIsSearchProductRightModalOpen(false);
             }}
-            className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+            className="bg-white  text-[#1C1C1C] h-[36px] !py-2 !px-4 "
           />
           <ServiceButton
             text={"SAVE"}
             onClick={() => productsAndComboDetailsTobeSend()}
-            className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 "
+            className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
           />
         </div>
       </div>
@@ -295,7 +294,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         wrapperClassName="rounded"
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className="lg:w-[52%] rounded-l-xl"
+        className=" w-full lg:w-[52%] rounded-l-xl"
       >
         <ProductDetails />
       </CustomRightModal>

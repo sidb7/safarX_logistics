@@ -2,17 +2,16 @@ import CustomButton from "../../../components/Button";
 import DownArrowIcon from "../../../assets/Filter/downArrow.svg";
 import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
-import CopyIcon from "../../../assets/Transaction/CopyIcon.svg";
-import ShareIcon from "../../../assets/Transaction/ShareIcon.svg";
+
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
 import { useEffect, useState } from "react";
 import Collapsible from "react-collapsible";
-import copyIcon from "../../../assets/Transaction/CopyIcon.svg";
-import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
+
 import { createColumnHelper } from "@tanstack/react-table";
 import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
 import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import cancelledicon from "../../../assets/Transaction/cancelledIcon.svg";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
 interface IPassbookProps {
   data: {
@@ -22,9 +21,17 @@ interface IPassbookProps {
     credited: string;
     debited: string;
     balance: string;
+    status: any;
     slabAmount: string;
     redeemAmount: string;
     redeemPoint: string;
+    paymentGatewayName: any;
+    privateCompanyId: any;
+    remark: any;
+    discription: any;
+    orderId: any;
+    amount: any;
+    type: any;
   };
 }
 
@@ -216,9 +223,21 @@ export const PassbookColumns = () => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex space-x-2 items-center">
-            <img src={copyIcon} alt="" />
-            <img src={shareIcon} alt="" />
+          <div className="flex  items-center">
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`
+                Date:${date_DD_MMM_YYY(info.row?.original?.createdAt)},
+                TransactionId:${info.row?.original?.transactionId},
+                ${
+                  info.row?.original?.type === "credit" ? "Credited" : "Debited"
+                }:${info.row?.original?.amount},Balance:${
+                  info.row?.original?.balance
+                },
+                Status:${info.row?.original?.status},
+                Description:${info.row?.original?.description}`}
+              />
+            </div>
           </div>
         );
       },
@@ -228,8 +247,17 @@ export const PassbookColumns = () => {
 
 export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
   data,
-}) => {
+}: any) => {
   const [onOpen, setOnOpen] = useState(false);
+
+  const copyString = ` Date:${date_DD_MMM_YYY(data?.date)}, 
+                TransactionId:${data?.orderId},Credited:${
+    data?.credited
+  },Debited:${data?.debited},Balance:${data?.balance},Status:${
+    data?.status
+  },PrivateCompanyId:${data?.privateCompanyId},PaymentGatewayName:${
+    data?.paymentGatewayName
+  }`;
 
   const header = () => {
     return (
@@ -243,27 +271,37 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
             onOpen ? "bg-[#E8E8E8]" : "bg-white"
           }`}
         >
-          <div>
+          <div
+            className="max-w-[750px] max-sm:w-[200px] max-sm:truncate"
+            title={data?.title}
+          >
             <span className="text-base font-semibold text-[#1C1C1C] ml-4">
               {data?.title}
             </span>
           </div>
-          <div className="flex items-center mr-4">
+          <div className="flex items-center  space-x-3  mr-4">
             <div>
-              <CustomButton
-                text={data?.rupee}
-                onClick={() => {}}
-                className="p-2 !bg-[#004EFF] text-white text-[12p] h-[28px]"
+              <div
+                className={`font-semibold ${
+                  data.type === "credit" ? "text-[#7cca62]" : "text-[#f35838]"
+                } `}
+              >
+                ₹ {data?.amount}
+              </div>
+              {/* <CustomButton
+                text={data?.amount}
+                onClick={() => { }}
+                className={`p-2 bg-transparent ${data.type === "credit" ? "text-[#7cca62]" : "text-[#f35838]"}  h-[28px]`}
                 showIcon={true}
                 icon={RupeeIcon}
                 iconClass={"w-[7px] mr-1"}
-              />
+              /> */}
             </div>
-            <div>
+            <div className="cursor-pointer">
               <img
                 src={onOpen ? UpArrowIcon : DownArrowIcon}
                 alt=""
-                className="ml-4"
+                className="ml-1"
                 onClick={() => setOnOpen(!onOpen)}
               />
             </div>
@@ -274,16 +312,16 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
           <div className="flex flex-col ml-4 mt-4">
             <span className="text-[10px] text-[#777777] font-normal">Date</span>
             <span className="text-xs text-[#1C1C1C] font-semibold">
-              {data?.date}
+              {date_DD_MMM_YYY(data?.date)}
             </span>
           </div>
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#777777] font-normal">
+              <span className="text-[10px] text-[#95d47f] font-semibold">
                 Credited
               </span>
-              <div className="flex">
+              <div className="flex items-center">
                 <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
                 <span className="text-xs text-[#1C1C1C] font-semibold	">
                   {data?.credited}
@@ -292,10 +330,10 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
             </div>
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
-              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+              <span className="ml-3 text-[10px] text-[#f35838] font-semibold">
                 Debited
               </span>
-              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
+              <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold items-center">
                 <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
                 <span>{data?.debited}</span>
               </span>
@@ -307,7 +345,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
               <span className="text-[10px] text-[#777777] font-normal">
                 Balance
               </span>
-              <div className="flex">
+              <div className="flex items-center">
                 <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
                 <span className="text-xs text-[#1C1C1C] font-semibold	">
                   {data?.balance}
@@ -317,11 +355,11 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
 
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <span className="ml-3 text-[10px] text-[#777777] font-normal">
-                Slab Amount
+                Status
               </span>
               <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-                <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
-                <span>{data?.slabAmount}</span>
+                {/* <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" /> */}
+                <span>{data?.status}</span>
               </span>
             </div>
           </div>
@@ -329,34 +367,58 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
               <span className="text-[10px] text-[#777777] font-normal">
-                Redeem Amount
+                Transaction Id
               </span>
-              <div className="flex">
+              <div className="flex items-center">
+                <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
+                <span
+                  className="text-xs text-[#1C1C1C] font-semibold max-sm:w-[120px] truncate"
+                  title={data?.orderId}
+                >
+                  {data?.orderId}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
+              <span className="ml-3 text-[10px] text-[#777777] font-normal">
+                Remark
+              </span>
+              <span className="ml-3 mr-3 flex items-center max-w-full overflow-x-scroll text-xs text-[#1C1C1C] font-semibold">
+                {/* <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" /> */}
+                <span>{data?.remark}</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 ml-4 mt-2">
+            <div className="flex flex-col">
+              <span className="text-[10px] text-[#777777] font-normal">
+                Private Company Id
+              </span>
+              <div className="flex items-center">
                 <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
                 <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  {data?.redeemAmount}
+                  {data?.privateCompanyId}
                 </span>
               </div>
             </div>
             <div className="flex flex-col border-[#E8E8E8] border-l-[1px]">
               <span className="ml-3 text-[10px] text-[#777777] font-normal">
-                Redeem Points
+                Payment Gateway Name
               </span>
               <span className="ml-3 flex text-xs text-[#1C1C1C] font-semibold">
-                <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
-                <span>{data?.redeemPoint}</span>
+                {/* <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" /> */}
+                <span>{data?.paymentGatewayName}</span>
               </span>
             </div>
           </div>
 
-          <div className="flex mx-4 my-2">
-            <div className="flex items-center">
-              <img src={CopyIcon} alt="Copy" />
+          <div className="flex mx-4 my-4">
+            <div className="flex items-center cursor-pointer">
+              <CopyTooltip stringToBeCopied={copyString} />
+
               <span className="ml-2 text-[#004EFF] text-sm">COPY</span>
-            </div>
-            <div className="flex items-center ml-4">
-              <img src={ShareIcon} alt="Share" />
-              <span className="ml-2 text-[#004EFF] text-sm">SHARE</span>
             </div>
           </div>
         </Collapsible>

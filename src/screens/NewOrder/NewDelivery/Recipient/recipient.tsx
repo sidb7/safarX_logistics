@@ -16,7 +16,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
   const type = deliveryAddress?.orderType;
   useEffect(() => {}, [type]);
   return (
-    <div className="relative z-1 mt-5 mx-5 lg:mb-5  border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 ">
+    <div className="relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 ">
       <div className="grid grid-cols-2 gap-3 ">
         <div
           className={`relative z-1  border-[1px] rounded ${
@@ -60,6 +60,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
             setDeliveryAddress((prevData: any) => ({
               ...prevData,
               orderType: "B2C",
+              gstNumber: "",
               deliveryAddress: {
                 ...prevData.deliveryAddress,
                 recipientType: "consumer",

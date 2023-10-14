@@ -24,6 +24,7 @@ import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
+import "../../styles/skeleton.css";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -38,9 +39,34 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isQuick, setIsQuick] = useState(false);
+  const [walletAmt, setWalletAmt] = useState<any>(0);
+  const [isLoading, setLoading] = useState(false);
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
+
+  // let walletBalance = sessionStorage.getItem("kycValue") as any;
+  // let walletAmt: any;
+
+  // if (walletBalance && walletBalance?.walletBalance !== undefined) {
+  //   walletBalance = JSON.parse(walletBalance);
+  //   walletAmt = walletBalance?.walletBalance;
+  // }
+  // console.log("walletBalance", walletAmt);
+
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      let walletBalance = sessionStorage.getItem("walletAmt") as any;
+      // console.log("walletBalance", walletBalance !== undefined);
+      if (walletBalance === undefined) {
+        console.log("wallet ", walletBalance);
+      } else {
+        setLoading(false);
+        setWalletAmt(walletBalance || 0);
+      }
+    }, 100);
+  }, [walletAmt]);
 
   const handleOutsideClick = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -128,7 +154,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             text={""}
             onClick={() => {}}
           /> */}
-          <div className="flex justify-self-end gap-x-3 ">
+          <div className="flex items-center justify-self-end gap-x-3 ">
+            {isLoading ? (
+              <div className="flex animated !rounded-md w-20 h-[36px]    ">
+                <img
+                  src={WalletIcon}
+                  width={35}
+                  className="z-10  mx-2"
+                  alt=""
+                />
+              </div>
+            ) : (
+              <div className="hidden lg:block">
+                <div className="flex items-center max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
+                  <img src={WalletIcon} width={35} alt="" />
+                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
+                </div>
+              </div>
+            )}
+
             <img
               src={SearchIcon}
               width={"22px"}
@@ -148,6 +192,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 className="cursor-pointer"
                 onClick={() => setIsModalOpen(true)}
               /> */}
+
               <div ref={dropdownQuickRef}>
                 <img
                   src={PowerBoosterlogo}
@@ -232,9 +277,9 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                 >
                   <div className="p-4" role="none">
                     <div className="flex justify-between mt-4">
-                      <h1 className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
+                      <span className="text-[#1C1C1C] text-[1rem] font-Open font-semibold">
                         Quick action
-                      </h1>
+                      </span>
                       <span onClick={() => setIsQuick(false)}>
                         <img
                           src={CrossIcon}

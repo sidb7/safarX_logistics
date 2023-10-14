@@ -12,6 +12,7 @@ import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 interface PassModalProps {
   isPassModalOpen: boolean;
   setIsPassModalOpen: React.Dispatch<React.SetStateAction<any>>;
+  className?: string;
 }
 interface PasswordVisibility {
   oldPassword: boolean;
@@ -64,7 +65,8 @@ function PassModal(props: PassModalProps) {
       onClose={() => {
         setIsPassModalOpen(false);
       }}
-      wrapperClassName="!justify-start outline-none"
+      className={` top-[50%] w-full fixed outline-none md:inset-y-0 md:right-0 md:bg-white md:w-1/3 `}
+      // wrapperClassName="!justify-start outline-none"
     >
       <div className="flex flex-col w-full p-4 mt-5 ">
         <div className="flex justify-between w-full ">
@@ -102,6 +104,7 @@ function PassModal(props: PassModalProps) {
             label="New Password"
             inputType={viewPassword.newPassword ? "text" : "password"}
             isRightIcon={true}
+            maxLength={12}
             visibility={viewPassword.newPassword}
             rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
@@ -114,6 +117,7 @@ function PassModal(props: PassModalProps) {
             label="Re-enter New Password"
             inputType={viewPassword.confirmNewPassword ? "text" : "password"}
             isRightIcon={true}
+            maxLength={12}
             visibility={viewPassword.confirmNewPassword}
             rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}

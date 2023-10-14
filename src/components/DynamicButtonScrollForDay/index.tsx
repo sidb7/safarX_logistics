@@ -22,7 +22,7 @@ const index = (props: IProps) => {
           } px-[26px] rounded text-[14px] font-semibold font-Open`}
           onClick={() => onClick(item)}
         >
-          <img src={item?.icons} alt="" className="mr-2 w-4 h-4" />
+          {/* <img src={item?.icons} alt="" className="mr-2 w-4 h-4" /> */}
           {item?.label}
         </button>
       ))}

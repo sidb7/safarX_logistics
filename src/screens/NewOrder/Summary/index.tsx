@@ -12,7 +12,7 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
-import { generateUniqueCode } from "../../../utils/utility";
+import { generateUniqueCode, getQueryJson } from "../../../utils/utility";
 import PricingDetails from "./pricingDetails";
 import { toast } from "react-toastify";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
@@ -89,12 +89,15 @@ const Summary = (props: Props) => {
 
   const [orderId, setOrderId] = useState("");
   const navigate = useNavigate();
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
 
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
-
-      const { data: response } = await POST(GET_LATEST_ORDER);
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data: response } = await POST(GET_LATEST_ORDER, payload);
 
       if (response?.success) {
         setLatestOrder(response);
@@ -107,13 +110,21 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
-      let payload = { orderId: orderId, ewaybillNumber: ewaybillNumber };
+      let payload = {
+        orderId: orderId,
+        ewaybillNumber: ewaybillNumber,
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      };
 
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
-      const placeOrderPromise = await POST(POST_PLACE_ORDER);
+      const placeOrderPromise = await POST(POST_PLACE_ORDER, {
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      });
 
       let promiseSetOrderId = new Promise(function (resolve, reject) {
         resolve(setOrderIdPromise);
@@ -123,32 +134,58 @@ const Summary = (props: Props) => {
         resolve(placeOrderPromise);
       });
 
+      if (invoiceValue >= 50000 && ewaybillNumber === "") {
+        toast.error("Please enter eway-bill No.");
+        return;
+      }
+
       promiseSetOrderId
         .then((orderIdResponse: any) => {
+          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
-              if (orderPlaceResponse?.success) {
+              console.log("orderPlaceResponse", orderPlaceResponse);
+              if (orderPlaceResponse?.data?.success) {
+                console.log(
+                  "orderPlaceResponseSuccess",
+                  orderPlaceResponse?.data?.success
+                );
+                console.log(
+                  "placeordersuccessmessage",
+                  orderPlaceResponse?.data?.message
+                );
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
-                toast.warning(orderPlaceResponse?.data?.message);
-                const requiredBalance =
-                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+                let errorText = orderPlaceResponse?.data?.message;
+                if (errorText.startsWith("Wallet")) {
+                  toast.warning(orderPlaceResponse?.data?.message);
+                  const requiredBalance =
+                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate("/orders/add-order/payment", {
-                  state: { requiredBalance: requiredBalance },
-                });
+                  navigate(
+                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                    {
+                      state: { requiredBalance: requiredBalance },
+                    }
+                  );
+                } else {
+                  toast.error(orderPlaceResponse?.data?.message);
+                }
               }
             })
             .catch(function (errorResponse) {
+              console.log("errorrrr>>>>>", errorResponse);
               toast.error(errorResponse?.data?.message);
             });
         })
         .catch(function (errorMessage) {
+          console.log("anyerrormessage", errorMessage);
           toast.error(errorMessage?.data?.message);
         });
     } catch (error) {
+      console.log("errorrrr", error);
       return error;
     }
   };
@@ -183,8 +220,8 @@ const Summary = (props: Props) => {
         </div>
 
         <div className="flex flex-col lg:flex-row gap-5">
-          <div className="!w-[372px]">
-            <div className="!w-[372px]">
+          <div className="md:!w-[372px]">
+            <div className="md:!w-[372px]">
               <CustomInputBox
                 label="Enter Eway Bill No."
                 value={ewaybillNumber}
@@ -193,7 +230,7 @@ const Summary = (props: Props) => {
             </div>
           </div>
 
-          <div className="!w-[372px]">
+          <div className="md:!w-[372px]">
             <CustomInputBox
               isRightIcon={true}
               containerStyle=""
@@ -221,7 +258,7 @@ const Summary = (props: Props) => {
           <Spinner />
         </div>
       ) : (
-        <div className="flex flex-row">
+        <div className="flex flex-col md:flex-row">
           <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
             {/* Pickup Details */}
             <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
@@ -266,7 +303,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/pickup");
+                  navigate(
+                    `/orders/add-order/pickup?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -322,7 +361,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/delivery");
+                  navigate(
+                    `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -337,8 +378,12 @@ const Summary = (props: Props) => {
             </div>
 
             {/* Product Details */}
-            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5  pb-20 max-w-screen-md	">
-              <BoxDetails boxInfo={boxInfo} />
+            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 mb-4 md:pb-20 max-w-screen-md	">
+              <BoxDetails
+                boxInfo={boxInfo}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
+              />
 
               {/* Service Details */}
               <SummaryService
@@ -352,11 +397,14 @@ const Summary = (props: Props) => {
                 partnerServiceName={serviceDetails?.partnerServiceName}
                 partnerName={serviceDetails?.partnerName}
                 baseWeight={serviceDetails?.appliedWeight}
+                mode={serviceDetails?.serviceMode}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
               />
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row mr-5 ">
+          <div className="flex flex-col lg:flex-row mr-5 gap-y-5 px-5  pb-20 max-w-screen-md">
             {/* Pricing Details */}
             <PricingDetails
               appliedWeight={serviceDetails?.appliedWeight}

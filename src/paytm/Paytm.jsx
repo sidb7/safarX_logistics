@@ -2,18 +2,18 @@ import { useState } from "react";
 import { CheckoutProvider, Checkout } from "paytm-blink-checkout-react";
 import { POST } from "../utils/webService";
 import {
-  Enviornment,
+  Environment,
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
 } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
 
-function Paytm({ text, amt, navigate }) {
+function Paytm({ text, amt, navigate, isDisabled }) {
   let urlLink = "";
   let mid = "";
   let website = "";
   let env = "";
-  if (Enviornment === "production") {
+  if (Environment === "production") {
     urlLink = "https://securegw.paytm.in/merchantpgpui/checkoutjs/merchants/";
     mid = "Shipya54880889423475";
     website = "DEFAULT";
@@ -94,6 +94,9 @@ function Paytm({ text, amt, navigate }) {
       },
       notifyMerchant: function notifyMerchant(eventName, data) {
         console.info("Event", eventName, data);
+        if (eventName === "APP_CLOSED") {
+          window.location.reload();
+        }
       },
     },
   };
@@ -185,8 +188,13 @@ function Paytm({ text, amt, navigate }) {
 
   return (
     <button
+      disabled={isDisabled}
       type="button"
-      className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+      className={`${
+        !isDisabled
+          ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+          : "!bg-opacity-50"
+      } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
       onClick={loadCheckoutScript}
     >
       <p className="buttonClassName lg:text-[14px] whitespace-nowrap">{text}</p>

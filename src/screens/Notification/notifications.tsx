@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { SearchBox } from "../../components/SearchBox";
 import NotificationCard from "./notificationCard";
+import { useSelector } from "react-redux";
+import AccessDenied from "../../components/AccessDenied";
 
 interface INotificationsProps {}
 
 const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
+  const roles = useSelector((state: any) => state?.roles);
+  const isActive = roles.roles?.[0]?.menu?.[9]?.menu?.[0]?.pages?.[0]?.isActive;
+
   const [filterId, setFilterId] = useState(0);
   const [activeTab, setActiveTab] = useState("all");
   const [filterData, setFilterData] = useState([
@@ -89,23 +94,31 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
   };
 
   return (
-    <div>
-      <Breadcrum label="Notifications" />
+    <>
+      {isActive ? (
+        <div>
+          <Breadcrum label="Notifications" />
 
-      {filterComponent()}
-      <div className="flex flex-col gap-y-4 mt-7 mx-4">
-        {notificationData?.map((data: any, index: any) => {
-          return (
-            <NotificationCard
-              label={data?.label}
-              date={data?.date}
-              time={data?.time}
-              key={index}
-            />
-          );
-        })}
-      </div>
-    </div>
+          {filterComponent()}
+          <div className="flex flex-col gap-y-4 mt-7 mx-4">
+            {notificationData?.map((data: any, index: any) => {
+              return (
+                <NotificationCard
+                  label={data?.label}
+                  date={data?.date}
+                  time={data?.time}
+                  key={index}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <AccessDenied />
+        </div>
+      )}
+    </>
   );
 };
 

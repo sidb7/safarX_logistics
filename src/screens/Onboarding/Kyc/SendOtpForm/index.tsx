@@ -5,7 +5,7 @@ import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import {
@@ -24,6 +24,9 @@ interface ITypeProps {}
 const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const state = location.state || {};
+
   const [loading, setLoading] = useState(false);
   const [businessType, setBusinessType] = useState<any>();
 
@@ -38,63 +41,49 @@ const Index = (props: ITypeProps) => {
 
   const [otpFormBtnStatus, setOtpFormBtnStatus] = useState(false);
 
+  const [openModal, setOpenModal] = useState(true);
+  const closeModal = () => setOpenModal(true);
+
+  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  useEffect(() => {
+    if (Object.keys(state).length > 0 && state) {
+      setAadharNumber(state.aadharNo);
+      setPanNumber(state.panCard);
+      setGSTNumber(state.gstNo);
+      setAadharNumberError("");
+      setPanNumberError("");
+      setgstError("");
+    }
+  }, [state]);
   useEffect(() => {
     let btype = sessionStorage.getItem("businessType");
     setBusinessType(btype);
   }, []);
 
-  useEffect(() => {
-    console.log("useEffect :", gstNumber, aadharNumber, panNumber);
-
-    // if (
-    //   (aadharNumber !== undefined || gstNumber !== undefined) &&
-    //   panNumber !== undefined
-    // ) {
-    // if (
-    //   (aadharNumberError === "" || gstError === "") &&
-    //   panNumberError === ""
-    // ) {
-    if (
-      ((aadharNumber &&
-        aadharNumber?.length !== 0 &&
-        aadharNumberError === "") ||
-        (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
-      panNumber &&
-      panNumber?.length !== 0 &&
-      panNumberError === ""
-    ) {
-      setOtpFormBtnStatus(true);
-    } else {
-      setOtpFormBtnStatus(false);
-    }
-    // }
-  }, [
-    aadharNumberError,
-    panNumberError,
-    gstError,
-    aadharNumber,
-    gstNumber,
-    panNumber,
-  ]);
-
   function validateGST(gstNo: any) {
     return gstRegex.test(gstNo);
   }
 
-  useEffect(() => {
-    if (gstNumber !== "" && gstNumber !== undefined) {
-      if (validateGST(gstNumber)) {
-        setgstError("");
-      } else {
-        setgstError("Enter Valid GST Number");
-      }
+  function extractPANFromGST(gstValue: any) {
+    if (!gstValue || gstValue.length !== 15) {
+      return null;
     }
-  }, [gstNumber]);
 
-  const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(true);
+    const panNumber = gstValue.substring(2, 12);
+    setPanNumber(panNumber);
+    return panNumber;
+  }
 
-  const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  // useEffect(() => {
+  //   if (gstNumber) {
+  //     extractPANFromGST(gstNumber);
+  //     setgstError("");
+  //     setPanNumberError("");
+  //   } else {
+  //     setPanNumber("");
+  //   }
+  // }, [gstNumber]);
 
   const verifyAadhar = async (value: any) => {
     try {
@@ -147,6 +136,7 @@ const Index = (props: ITypeProps) => {
           setLoading(false);
           navigate("/onboarding/kyc-mobile-verify");
         }
+        // setgstError("");
       } else {
         setLoading(false);
 
@@ -156,6 +146,30 @@ const Index = (props: ITypeProps) => {
       return error;
     }
   };
+
+  useEffect(() => {
+    if (
+      ((aadharNumber &&
+        aadharNumber?.length !== 0 &&
+        aadharNumberError === "") ||
+        (gstNumber && gstNumber?.length !== 0 && gstError === "")) &&
+      panNumber &&
+      panNumber?.length !== 0 &&
+      panNumberError === ""
+    ) {
+      setOtpFormBtnStatus(true);
+    } else {
+      setOtpFormBtnStatus(false);
+    }
+    // }
+  }, [
+    aadharNumberError,
+    panNumberError,
+    gstError,
+    aadharNumber,
+    gstNumber,
+    panNumber,
+  ]);
 
   const onSendOtp = (e: any) => {
     try {
@@ -168,9 +182,9 @@ const Index = (props: ITypeProps) => {
       else if (businessType === "business") {
         verifyGST(gstNumber);
       } else if (businessType === "company") {
-        navigate("/onboarding/kyc-mobile-verify", {
-          state: { path: "otp-form" },
-        });
+        // navigate("/onboarding/kyc-mobile-verify", {
+        //   state: { path: "otp-form" },
+        // });
         verifyGST(gstNumber);
       } else {
         toast.error("Something Went Wrong!!");
@@ -186,13 +200,13 @@ const Index = (props: ITypeProps) => {
         </div>
 
         <WelcomeHeader
-          // className="!mt-[78px]"
+          className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <form onSubmit={onSendOtp}>
-          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[160px] px-5 lg:px-0 gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
             {businessType === "individual" ? (
               <div className={`${!isBigScreen ? "w-full" : ""}`}>
                 <CustomInputBox
@@ -239,18 +253,30 @@ const Index = (props: ITypeProps) => {
                   label="GST Number"
                   value={gstNumber}
                   maxLength={15}
-                  className={` ${
+                  className={`${
                     gstError !== "" &&
                     gstError !== undefined &&
                     "border-[#F35838]"
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    setGSTNumber(e.target.value.toUpperCase());
+                    const gstValue = e.target.value.toUpperCase();
+
+                    if (gstRegex.test(gstValue)) {
+                      setGSTNumber(gstValue);
+                      extractPANFromGST(gstValue);
+                      setgstError("");
+                      setPanNumberError("");
+                    } else {
+                      setGSTNumber(gstValue);
+                      setgstError("Enter Valid GST Number");
+                      setPanNumber("");
+                    }
                   }}
                 />
+
                 {/* To display error */}
-                {console.log("gstError ", gstError) as any}
+
                 {gstError !== "" && gstError !== undefined && (
                   <div className="flex items-center gap-x-1 mt-1 ">
                     <img src={ErrorIcon} alt="" width={10} height={10} />
@@ -267,6 +293,11 @@ const Index = (props: ITypeProps) => {
                 label="PAN Number"
                 value={panNumber}
                 maxLength={10}
+                isDisabled={
+                  businessType === "individual"
+                    ? false
+                    : panNumber !== undefined
+                }
                 className={`${
                   panNumberError !== "" &&
                   panNumberError !== undefined &&
@@ -310,11 +341,9 @@ const Index = (props: ITypeProps) => {
     );
   };
 
-  return (
-    <div>
-      {!isBigScreen && sendOtpFormComponent()}
-
-      {isBigScreen && (
+  const renderSendOtpFormComponent = () => {
+    if (isBigScreen && openModal) {
+      return (
         <CustomBottomModal
           isOpen={openModal}
           onRequestClose={closeModal}
@@ -329,9 +358,18 @@ const Index = (props: ITypeProps) => {
             sendOtpFormComponent()
           )}
         </CustomBottomModal>
-      )}
-    </div>
-  );
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        sendOtpFormComponent()
+      );
+    }
+  };
+  return <div>{renderSendOtpFormComponent()}</div>;
 };
 
 export default Index;

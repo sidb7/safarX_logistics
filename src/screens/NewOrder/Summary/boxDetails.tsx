@@ -13,9 +13,15 @@ interface ISummaryData {
   productDimensionHeight?: any;
   productDimensionUnit?: any;
   boxInfo?: any[];
+  shipyaari_id?: any;
+  orderSource?: any;
 }
 
-const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
+const BoxDetails = ({
+  boxInfo = [],
+  shipyaari_id = "",
+  orderSource = "",
+}: ISummaryData) => {
   const navigate = useNavigate();
   const [expandedBox, setExpandedBox] = useState<number | null>(null);
 
@@ -36,7 +42,9 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/add-product");
+              navigate(
+                `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+              );
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>
@@ -46,7 +54,7 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
           </div>
         </div>
         <div className="ml-[25px] mb-[10px]">
-          <p className="text-[12px] font-medium  font-Open lg:text-[16px] lg:font-semibold">
+          <p className="text-[12px] font-medium  font-Open lg:text-[16px] font-semibold">
             Box Count: {boxInfo.length}
           </p>
         </div>
@@ -61,7 +69,7 @@ const BoxDetails = ({ boxInfo = [] }: ISummaryData) => {
               }`}
               onClick={() => toggleBox(index)}
             >
-              <p className="text-[12px] font-medium ml-[5px] font-Open lg:text-[16px] lg:font-semibold">
+              <p className="text-[12px] font-medium ml-[5px] font-Open lg:text-[16px] font-semibold">
                 Box Name: {box?.name}
               </p>
               <svg

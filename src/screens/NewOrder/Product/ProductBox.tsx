@@ -1,4 +1,6 @@
 import React from "react";
+import EditIcon from "../../../assets/Product/Edit.svg";
+
 interface IPackageBoxProps {
   image?: any;
   productName: string;
@@ -11,7 +13,9 @@ interface IPackageBoxProps {
   height?: any;
   breadth?: any;
   onClick?: () => void;
+  onClickEdit?: () => void;
   isSelected?: any;
+  isActiveChannel?: boolean;
 }
 
 const productBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -26,11 +30,13 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   dimensionClassName = "",
   label = "",
   onClick,
+  onClickEdit,
   isSelected = false,
+  isActiveChannel,
 }) => {
   return (
     <div
-      className={` ${className} product-box flex items-center border-2 rounded-md h-20 relative ${
+      className={` ${className} items-center product-box flex itisActiveChannelems-center border-2 rounded-md h-20 min-w-[200px] relative ${
         isSelected && "border-[#004EFF]"
       }`}
       onClick={onClick}
@@ -49,9 +55,19 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       <div className="px-4">
         <img src={image} alt="" />
       </div>
-      <div className="flex flex-col  pr-4">
-        <span>{productName}</span>
-        <span className="flex ">
+      <div className="flex flex-col w-full">
+        <div className="flex justify-between">
+          <span className="line-clamp-2">{productName}</span>
+          {!isActiveChannel && (
+            <img
+              src={EditIcon}
+              alt=""
+              onClick={onClickEdit}
+              className="w-4 mx-2"
+            />
+          )}
+        </div>
+        <span className="flex text-[12px] lg:text-[14px] ">
           {`${weight} | ${length} x ${breadth} x ${height} cm`}
         </span>
       </div>
