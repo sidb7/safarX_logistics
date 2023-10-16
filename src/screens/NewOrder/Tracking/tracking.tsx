@@ -113,13 +113,13 @@ const Tracking = () => {
   const handletrackingNoChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setTrackingNo(event.target.value);
+    setTrackingNo(event.target.value.trim());
   };
 
   const handleTrackOrderClick = async (trackingNoFromUrl?: any) => {
-    let urlWithTrackingNo;
+    let urlWithTrackingNo = "";
 
-    if (!urlWithTrackingNo && trackingNo === "") {
+    if (!trackingNoFromUrl && !trackingNo) {
       return toast.warning("Please Enter Tracking Number")
     }
 
@@ -167,7 +167,6 @@ const Tracking = () => {
               ))
             }
           </div>
-
         </div>
       </div>
     )
@@ -206,7 +205,6 @@ const Tracking = () => {
                     onClick={() => handleTrackOrderClick()}
                   />
                 </div>
-
                 {
                   inValidTrackingState.length > 0 && (
                     <Tooltip position="bottom" content={InvalidTrackingListHover(inValidTrackingState)} showOnClick={true} >
@@ -220,7 +218,6 @@ const Tracking = () => {
                         </div>
                       </div>
                     </Tooltip>
-
                   )
                 }
 
