@@ -22,16 +22,21 @@ const ProtectedRoute = ({ children }: Props) => {
   React.useEffect(() => {
     (async () => {
       const response = await POST(VALIDATE_USER_TOKEN);
+      // console.log("response?.data?.data[0]", response);
 
-      sessionStorage.setItem(
-        "kycValue",
-        JSON.stringify(response?.data?.data[0])
-      );
       if (!response?.data?.success) {
         setIsAuthenticated(false);
         clearLocalStorage();
         navigate("/auth/login");
       } else {
+        sessionStorage.setItem(
+          "kycValue",
+          JSON.stringify(response?.data?.data[0])
+        );
+        sessionStorage.setItem(
+          "walletAmt",
+          response?.data?.data[0]?.walletBalance
+        );
         setIsAuthenticated(true);
       }
     })();

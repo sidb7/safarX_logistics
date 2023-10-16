@@ -139,6 +139,8 @@ import WeightFreeze from "../screens/WeightManagement";
 import SystemLog from "../screens/SystemLog";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 import BulkUpload from "../screens/Order/BulkUpload/BulkUpload";
+import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
+import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -805,6 +807,11 @@ const MyRoutes: React.FC = () => {
             <Route path="/help/faqs" element={<HelpScreen />} />
             <Route path="/help/ticket" element={<HelpScreen />} />
             <Route path="/help/agreements" element={<HelpScreen />} />
+            <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
+            <Route
+              path="/help/ticket/view-details"
+              element={<ViewTicketDetails />}
+            />
 
             {/* Weight Management */}
             <Route

@@ -42,7 +42,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
     });
     if (data?.success) {
       let obj = data?.data[0];
-      obj.forEach((category: any) => {
+      obj?.forEach((category: any) => {
         category.categoryName = category?.categoryName?.replace(
           /\w+/g,
           function (w: any) {

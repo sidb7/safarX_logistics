@@ -12,17 +12,26 @@ interface IDeleteProps {
   deleteURL?: any;
   payloadBody?: any;
   DeletepincodeHandler?: any;
+  setIsDeleted?: any;
 }
 
 const DeleteModal = (props: IDeleteProps) => {
-  const { isOpen, setModalClose, deleteTextMessage, deleteURL, payloadBody } =
-    props;
+  const {
+    isOpen,
+    setModalClose,
+    deleteTextMessage,
+    deleteURL,
+    payloadBody,
+    setIsDeleted,
+  } = props;
   const [loading, setLoading] = useState(false);
 
   const deleteApi = async () => {
     setLoading(true);
+    setIsDeleted(true);
     const { data } = await POST(deleteURL, { awbNo: payloadBody });
     if (data?.success) {
+      toast.success(data?.message);
     } else {
       toast.error(data?.message);
     }
@@ -54,14 +63,14 @@ const DeleteModal = (props: IDeleteProps) => {
               type="submit"
               className="bg-white border-2 border-[#A4A4A4] text-[#1C1C1C] px-4 py-2 text-sm font-semibold rounded shadow-md"
             >
-              GO BACK
+              No
             </button>
             <button
               type="submit"
               className=" bg-[#1C1C1C] text-white px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg"
               onClick={() => deleteApi()}
             >
-              {loading ? "LOADING" : "DELETE"}
+              {loading ? "LOADING" : "Yes"}
             </button>
           </div>
         </div>

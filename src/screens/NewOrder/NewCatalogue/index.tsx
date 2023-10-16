@@ -231,16 +231,28 @@ const Catalogue = () => {
   useEffect(() => {
     (async () => {
       if (wooCommerceContents) {
-        const { storeUrl, userId } = JSON.parse(wooCommerceContents);
+        const { storeUrl, userId, storeName } = JSON.parse(wooCommerceContents);
 
-        const storeDetails = await POST(UPDATE_WOOCOMMERCE_STORE, {
+        const { data } = await POST(UPDATE_WOOCOMMERCE_STORE, {
           storeUrl,
           userId,
+          storeName,
         });
 
-        setChannelData({ ...channelData, channels: storeDetails[0] });
+        let newAddedChannel = [
+          {
+            icon: "",
+            iconLg: "",
+            integrated: true,
+            name: data?.data?.storeName,
+            storeId: data?.data?.storeId,
+          },
+        ];
 
+        removeLocalStorage("channelData");
         removeLocalStorage("wooCommerceContents");
+
+        window.location.reload();
       }
     })();
   }, [wooCommerceContents]);

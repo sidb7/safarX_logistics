@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -17,14 +17,16 @@ import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
 // import AddButton from "../../../../components/Button/addButton";
 // import PlusIcon from "../../../../assets/plusIcon.svg";
+import { v4 as uuidv4 } from "uuid";
 
 interface ITypeProps {}
 
 const Billing = (props: ITypeProps) => {
+  const bottomRef = useRef<null | HTMLDivElement>(null);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
-  const [defaultAddress, setDefaultAddress] = useState<any>();
+  const [defaultAddress, setDefaultAddress] = useState<any>([]);
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
 
@@ -54,6 +56,7 @@ const Billing = (props: ITypeProps) => {
       if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
         const payload = {
           addressId: defaultAddressSelect?.addressId,
+          editAddress: defaultAddressSelect?.fullAddress,
           isBilling: true,
         };
         setLoading(true);
@@ -79,6 +82,32 @@ const Billing = (props: ITypeProps) => {
     }
   };
 
+  const addAddress = () => {
+    let uuid = uuidv4();
+    let textArea = {
+      addressId: uuid,
+      doctype: "OTHERS",
+      fullAddress: " ",
+      isActive: true,
+      isBilling: false,
+      isDefault: false,
+      isDeleted: false,
+    };
+    setDefaultAddress([...defaultAddress, textArea]);
+    setTimeout(() => {
+      bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
+    }, 500);
+  };
+
+  const updatedAddress = (value: any, index: number) => {
+    for (let i = 0; i < defaultAddress?.length; i++) {
+      if (index === i) {
+        defaultAddress[i].fullAddress = value;
+      }
+    }
+    // setDefaultAddress([...defaultAddress, defaultAddress]);
+  };
+
   const addressComponent = () => {
     return (
       <div className="relative">
@@ -89,7 +118,9 @@ const Billing = (props: ITypeProps) => {
           <WelcomeHeader
             className="!mt-[44px] lg:!mt-6"
             title="Welcome to Shipyaari"
-            content="Select your Billing Address"
+            content="Select your"
+            whichAddress="Billing"
+            Address="Address"
           />
 
           <div className="w-full lg:flex lg:justify-center">
@@ -99,29 +130,32 @@ const Billing = (props: ITypeProps) => {
                 Default
               </p> */}
 
-              {/* <AddButton
-                onClick={() => {}}
+              <AddButton
+                onClick={() => addAddress()}
                 text={"ADD ADDRESS"}
                 icon={PlusIcon}
                 showIcon={true}
                 className="!bg-transparent !border-0"
                 textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              /> */}
+              />
             </div>
           </div>
 
           <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3">
             {/* <div className="space-y-3 mb-6 ">
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4"> */}
+            {console.log("defaultAddressSelect :", defaultAddressSelect)}
             {defaultAddress?.map((el: any, i: number) => {
               return (
-                <div key={i}>
+                <div key={i} ref={bottomRef}>
                   {el?.fullAddress !== "" && (
                     <Card
                       onClick={setDefaultAddressSelect}
                       name="address"
                       cardClassName="!mt-1  !cursor-pointer"
                       value={el}
+                      updatedAddress={updatedAddress}
+                      index={i}
                       title={el?.fullAddress}
                       checked={
                         defaultAddressSelect?.addressId === el?.addressId
@@ -174,7 +208,7 @@ const Billing = (props: ITypeProps) => {
           <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}
-            className="!p-0 !w-[500px] !h-[700px] overflow-y-auto"
+            className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
           >
             {loading ? (

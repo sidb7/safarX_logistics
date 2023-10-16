@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
@@ -17,14 +17,16 @@ import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 // import AddButton from "../../../../components/Button/addButton";
 // import PlusIcon from "../../../../assets/plusIcon.svg";
+import { v4 as uuidv4 } from "uuid";
 
 interface ITypeProps {}
 
 const PickUp = (props: ITypeProps) => {
+  const bottomRef = useRef<null | HTMLDivElement>(null);
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const closeModal = () => setOpenModal(true);
-  const [defaultAddress, setDefaultAddress] = useState<any>();
+  const [defaultAddress, setDefaultAddress] = useState<any>([]);
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +56,7 @@ const PickUp = (props: ITypeProps) => {
       if (defaultAddressSelect != undefined && defaultAddressSelect != "") {
         const payload = {
           addressId: defaultAddressSelect?.addressId,
+          editAddress: defaultAddressSelect?.fullAddress,
           isDefault: true,
         };
         setLoading(true);
@@ -80,6 +83,32 @@ const PickUp = (props: ITypeProps) => {
     }
   };
 
+  const addAddress = () => {
+    let uuid = uuidv4();
+    let textArea = {
+      addressId: uuid,
+      doctype: "OTHERS",
+      fullAddress: " ",
+      isActive: true,
+      isBilling: false,
+      isDefault: false,
+      isDeleted: false,
+    };
+    setDefaultAddress([...defaultAddress, textArea]);
+    setTimeout(() => {
+      bottomRef?.current?.scrollIntoView({ behavior: "smooth" });
+    }, 500);
+  };
+
+  const updatedAddress = (value: any, index: number) => {
+    for (let i = 0; i < defaultAddress?.length; i++) {
+      if (index === i) {
+        defaultAddress[i].fullAddress = value;
+      }
+    }
+    // setDefaultAddress([...defaultAddress, defaultAddress]);
+  };
+
   const addressComponent = () => {
     return (
       <div>
@@ -89,7 +118,9 @@ const PickUp = (props: ITypeProps) => {
         <WelcomeHeader
           className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
-          content="Select your Pickup Address"
+          content="Select your"
+          whichAddress="Pickup"
+          Address="Address"
         />
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">
@@ -100,14 +131,14 @@ const PickUp = (props: ITypeProps) => {
                 Default
               </p> */}
 
-              {/* <AddButton
-                onClick={() => {}}
+              <AddButton
+                onClick={() => addAddress()}
                 text={"ADD ADDRESS"}
                 icon={PlusIcon}
                 showIcon={true}
                 className="!bg-transparent !border-0"
                 textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              /> */}
+              />
             </div>
           </div>
 
@@ -115,7 +146,7 @@ const PickUp = (props: ITypeProps) => {
             {/* <div className="  space-y-3 mb-6 "> */}
             {defaultAddress?.map((el: any, i: number) => {
               return (
-                <div key={i}>
+                <div key={i} ref={bottomRef}>
                   {el?.fullAddress !== "" && (
                     <Card
                       // onClick={(e) => setDefaultAddressSelect(e.target.value)}
@@ -123,6 +154,8 @@ const PickUp = (props: ITypeProps) => {
                       name="address"
                       value={el}
                       title={el?.fullAddress}
+                      updatedAddress={updatedAddress}
+                      index={i}
                       checked={
                         defaultAddressSelect?.addressId === el?.addressId
                       }
@@ -201,7 +234,7 @@ const PickUp = (props: ITypeProps) => {
           <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}
-            className="!p-0 !w-[500px] !h-[700px] overflow-y-auto"
+            className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
           >
             {loading ? (

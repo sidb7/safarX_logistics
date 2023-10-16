@@ -65,23 +65,25 @@ const Index = (props: ITypeProps) => {
     return gstRegex.test(gstNo);
   }
 
-  function extractPANFromGST(gstNumber: any) {
-    if (!gstNumber || gstNumber.length !== 15) {
+  function extractPANFromGST(gstValue: any) {
+    if (!gstValue || gstValue.length !== 15) {
       return null;
     }
 
-    const panNumber = gstNumber.substring(2, 12);
+    const panNumber = gstValue.substring(2, 12);
     setPanNumber(panNumber);
     return panNumber;
   }
 
-  useEffect(() => {
-    if (gstNumber) {
-      extractPANFromGST(gstNumber);
-      setgstError("");
-      setPanNumberError("");
-    }
-  }, [gstNumber]);
+  // useEffect(() => {
+  //   if (gstNumber) {
+  //     extractPANFromGST(gstNumber);
+  //     setgstError("");
+  //     setPanNumberError("");
+  //   } else {
+  //     setPanNumber("");
+  //   }
+  // }, [gstNumber]);
 
   const verifyAadhar = async (value: any) => {
     try {
@@ -251,21 +253,28 @@ const Index = (props: ITypeProps) => {
                   label="GST Number"
                   value={gstNumber}
                   maxLength={15}
-                  className={` ${
+                  className={`${
                     gstError !== "" &&
                     gstError !== undefined &&
                     "border-[#F35838]"
                   }  lg:!w-[320px]   !font-Open`}
                   labelClassName="!font-Open"
                   onChange={(e) => {
-                    if (gstRegex.test(e.target.value.toUpperCase())) {
+                    const gstValue = e.target.value.toUpperCase();
+
+                    if (gstRegex.test(gstValue)) {
+                      setGSTNumber(gstValue);
+                      extractPANFromGST(gstValue);
                       setgstError("");
+                      setPanNumberError("");
                     } else {
+                      setGSTNumber(gstValue);
                       setgstError("Enter Valid GST Number");
+                      setPanNumber("");
                     }
-                    setGSTNumber(e.target.value.toUpperCase());
                   }}
                 />
+
                 {/* To display error */}
 
                 {gstError !== "" && gstError !== undefined && (
@@ -284,6 +293,11 @@ const Index = (props: ITypeProps) => {
                 label="PAN Number"
                 value={panNumber}
                 maxLength={10}
+                isDisabled={
+                  businessType === "individual"
+                    ? false
+                    : panNumber !== undefined
+                }
                 className={`${
                   panNumberError !== "" &&
                   panNumberError !== undefined &&

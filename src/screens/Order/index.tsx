@@ -108,6 +108,11 @@ const tabs = [
     orderNumber: 0,
   },
   {
+    statusName: "Cancelled",
+    value: "CANCELLED",
+    orderNumber: 0,
+  },
+  {
     statusName: "Ready to Pick",
     value: "READYTOPICK",
     orderNumber: 0,
@@ -142,11 +147,6 @@ const tabs = [
     value: "RETURN",
     orderNumber: 0,
   },
-  {
-    statusName: "Cancelled",
-    value: "CANCELLED",
-    orderNumber: 0,
-  },
 ];
 
 const Index = () => {
@@ -161,6 +161,7 @@ const Index = () => {
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
+    orderId: "",
   });
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
@@ -188,6 +189,7 @@ const Index = () => {
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
   const navigate = useNavigate();
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
   const Buttons = (className?: string) => {
@@ -311,7 +313,7 @@ const Index = () => {
       setOrders(OrderData);
       setGlobalIndex(index);
 
-      statusList.forEach((e1: any) => {
+      statusList?.forEach((e1: any) => {
         const matchingStatus = statusData.find(
           (e: any) => e.value === e1._id.toUpperCase()
         );
@@ -439,6 +441,14 @@ const Index = () => {
     }
   };
 
+  if (isDeleted) {
+    const newOrders = orders.filter(
+      (elem: any) => elem?.status?.[0]?.AWB !== cancellationModal.awbNo
+    );
+    setOrders(newOrders);
+    setIsDeleted(false);
+  }
+
   return (
     <>
       {isActive ? (
@@ -505,19 +515,20 @@ const Index = () => {
         setModalClose={() =>
           setCancellationModal({ ...cancellationModal, isOpen: false })
         }
-        deleteTextMessage="Are You Sure You Want To Cancel This Order?"
+        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal.orderId} ?`}
         payloadBody={cancellationModal.awbNo}
         deleteURL={CANCEL_WAY_BILL}
+        setIsDeleted={setIsDeleted}
       />
 
       <DeleteModalDraftOrder
         url={CANCEL_TEMP_SELLER_ORDER}
-        postData={deleteModalDraftOrder.payload}
-        isOpen={deleteModalDraftOrder.isOpen}
+        postData={deleteModalDraftOrder?.payload}
+        isOpen={deleteModalDraftOrder?.isOpen}
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title="Are You Sure You Want To Cancel This Order?"
+        title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
       />
     </>
   );

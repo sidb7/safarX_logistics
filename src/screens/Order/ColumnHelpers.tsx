@@ -18,6 +18,7 @@ import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
+import { stat } from "fs";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -28,7 +29,7 @@ const ProductBox = ({ name = "", dimension = "" }: any) => {
       <div>
         <span>Dimention: </span>
         <span className="font-semibold">
-          {`${dimension.length}x${dimension.breadth}x${dimension.height}`} cm
+          {`${dimension?.length}x${dimension.breadth}x${dimension.height}`} cm
         </span>
       </div>
       <div>
@@ -69,13 +70,13 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adreess</h1>
+            <h1>Pickup Adress</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 text-[#8D8D8D]">
+          <div className="text-base py-3 ]">
             {info?.row?.original?.pickupAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
@@ -98,7 +99,7 @@ const MainCommonHelper = (navigate: any = "") => {
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 text-[#8D8D8D]">
+          <div className="text-base  py-3 ]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/delivery")}
@@ -123,9 +124,13 @@ const commonColumnHelper = [
       );
     },
     cell: (info: any) => {
+      const { service } = info?.row?.original;
       return (
-        <div className="my-4 space-y-2">
-          {/* {ProductBox(info?.row?.original?.packageType)}{" "} */}
+        <div className=" ">
+          <div className="py-2 flex flex-col">
+            <span className="text-sm font-light">Delivery Partner</span>
+            <div className="font-semibold">{service?.partnerName}</div>
+          </div>
         </div>
       );
     },
@@ -142,21 +147,38 @@ const idHelper = (navigate: any = "") => [
       );
     },
     cell: (info: any) => {
-      const { tempOrderId, orderId, status = [], source } = info?.row?.original;
+      const {
+        tempOrderId,
+        orderId,
+        status = [],
+        source,
+        updatedAt,
+        orderType,
+      } = info?.row?.original;
       const { AWB } = status[0] ?? "";
+      console.log("status: ", status);
       return (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
-                <Link
-                  to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
-                  className="underline text-blue-500 cursor-pointer"
-                >
-                  <span className="">{tempOrderId}</span>
-                </Link>
-
+                {status?.length === 0 ? (
+                  <Link
+                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                    className="underline text-blue-500 cursor-pointer"
+                  >
+                    <span
+                      className=""
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Complete Order"
+                    >
+                      {tempOrderId}
+                    </span>
+                  </Link>
+                ) : (
+                  <span className=""> {tempOrderId}</span>
+                )}
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
@@ -201,6 +223,58 @@ const idHelper = (navigate: any = "") => [
               </div>
             </div>
           )}
+          {status?.length === 0 && (
+            <div className="">
+              <span className=" text-sm font-light">Order Updated At :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+              </div>
+            </div>
+          )}
+          {status?.length === 0 && (
+            <div className="">
+              <span className=" text-sm font-light">Source :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{source}</span>
+              </div>
+            </div>
+          )}
+          {status?.length === 0 && orderType && (
+            <div className="">
+              <span className=" text-sm font-light">Order Type :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{orderType}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    },
+  }),
+  //STATUS
+  ColumnsHelper.accessor("Status", {
+    header: () => {
+      return (
+        <div className="flex justify-between">
+          <h1>Status</h1>
+        </div>
+      );
+    },
+    cell: (info: any) => {
+      const { status } = info?.row?.original;
+      const timeStamp = status?.[0]?.timeStamp;
+      const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+      const renderStatus = status?.[0]?.currentStatus || "Draft";
+      return (
+        <div className="py-3">
+          {
+            <div className="flex flex-col gap-y-1">
+              <div className="flex text-base items-center font-medium">
+                <p>{renderStatus}</p>
+              </div>
+              <div>{time}</div>
+            </div>
+          }
         </div>
       );
     },
@@ -232,7 +306,7 @@ export const columnHelperForNewOrder = (
         const { boxInfo = [] } = info?.row?.original;
         return (
           <div className="my-4 space-y-2 ">
-            {boxInfo.length > 0 ? (
+            {boxInfo?.length > 0 ? (
               <div>
                 <span>
                   {boxInfo[0].name} {boxInfo[1]?.boxInfo ?? ""}
@@ -241,9 +315,9 @@ export const columnHelperForNewOrder = (
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/product-package")}
-                className="  decoration-2 cursor-pointer"
+                className="  decoration-2 "
               >
-                No Data Found
+                No Package Details Found
               </div>
             )}
           </div>
@@ -254,13 +328,13 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adreess</h1>
+            <h1>Pickup Adress</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 text-[#8D8D8D]">
+          <div className="text-base py-3]">
             {info?.row?.original?.pickupAddress?.fullAddress ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
@@ -283,13 +357,13 @@ export const columnHelperForNewOrder = (
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 text-[#8D8D8D]">
+          <div className="text-base  py-3 ]">
             {info?.row?.original?.deliveryAddress?.fullAddress ?? (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="  decoration-2 cursor-pointer text-[black]"
+                className="  decoration-2 text-[black]"
               >
-                No Data Found
+                No Delivery Address Found
               </div>
             )}
           </div>
@@ -319,7 +393,7 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Charges</h1>
+            <h1>Payment Mode</h1>
           </div>
         );
       },
@@ -334,7 +408,9 @@ export const columnHelperForNewOrder = (
                   currency: "INR",
                 }) ?? "0"}
               </span>
-              <span>{codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}</span>
+              <span>
+                {codInfo ? (codInfo?.isCod ? "COD" : "PREPAID") : "-"}
+              </span>
             </div>
           </>
         );
@@ -364,8 +440,8 @@ export const columnHelperForNewOrder = (
           Order Id: ${tempOrderId} 
           Shipyaari Id: ${sellerId}
           Tracking Id: ${AWB}
-          Package Details: ${boxInfo.length > 0 && boxInfo[0].name} ${
-          (boxInfo.length > 0 && boxInfo[1]?.boxInfo) || ""
+          Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
+          (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
         }
           Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
           Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
@@ -392,7 +468,19 @@ export const columnHelperForNewOrder = (
               onClick={() => {
                 handleDeleteModalDraftOrder(draftOrderPayload);
               }}
-              className="w-5 h-5 cursor-pointer"
+              className="w-5 h-5 cursor-pointer "
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content="Delete Order"
+            />
+            <Tooltip
+              id="my-tooltip-inline"
+              style={{
+                backgroundColor: "bg-neutral-900",
+                color: "#FFFFFF",
+                width: "fit-content",
+                fontSize: "14px",
+                lineHeight: "16px",
+              }}
             />
           </div>
         );
@@ -405,8 +493,8 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
   setCancellationModal?: any
 ) => {
-  const handleCancellationModal = (awbNo: any) => {
-    setCancellationModal({ isOpen: true, awbNo });
+  const handleCancellationModal = (awbNo: any, orderId: any) => {
+    setCancellationModal({ isOpen: true, awbNo, orderId });
   };
   return [
     // ...commonColumnHelper,
@@ -461,15 +549,32 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                 <div className="text-[grey]">No Label Found</div>
               )}
               {setCancellationModal && (
-                <img
-                  src={CrossIcon}
-                  width={"35px"}
-                  alt="Cancel Order"
-                  className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                  onClick={() =>
-                    handleCancellationModal(data.wayBillObject.AWBNo)
-                  }
-                />
+                <div>
+                  <img
+                    src={CrossIcon}
+                    width={"35px"}
+                    // alt="Cancel Order"
+                    className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                    onClick={() =>
+                      handleCancellationModal(
+                        data?.status?.[0]?.AWB,
+                        data?.orderId
+                      )
+                    }
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Cancel Order"
+                  />
+                  <Tooltip
+                    id="my-tooltip-inline"
+                    style={{
+                      backgroundColor: "bg-neutral-900",
+                      color: "#FFFFFF",
+                      width: "fit-content",
+                      fontSize: "14px",
+                      lineHeight: "16px",
+                    }}
+                  />
+                </div>
               )}
             </div>
           </>

@@ -52,7 +52,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p>
               {" "}
-              {`\u20B9`} {orderPrice}
+              {`\u20B9`} {orderPrice.toFixed(2)}
             </p>
           </div>
           <div className="flex justify-between">

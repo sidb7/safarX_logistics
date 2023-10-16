@@ -58,6 +58,7 @@ function ChannelIntegrationModalContent(props: any) {
           let wooCommerceContents = {
             storeUrl: storeData.storeUrl,
             userId,
+            storeName: storeData.storeName,
           };
           setLocalStorage(
             "wooCommerceContents",

@@ -110,7 +110,7 @@ const Summary = (props: Props) => {
       setLoading(false);
     }
   };
-  const invoiceValue = latestOrder?.data?.[0]?.service?.total;
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
       let payload = {
@@ -141,33 +141,51 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
+          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
-              if (orderPlaceResponse?.success) {
+              console.log("orderPlaceResponse", orderPlaceResponse);
+              if (orderPlaceResponse?.data?.success) {
+                console.log(
+                  "orderPlaceResponseSuccess",
+                  orderPlaceResponse?.data?.success
+                );
+                console.log(
+                  "placeordersuccessmessage",
+                  orderPlaceResponse?.data?.message
+                );
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
-                toast.warning(orderPlaceResponse?.data?.message);
-                const requiredBalance =
-                  orderPlaceResponse?.data?.data[0]?.requiredBalance;
+                let errorText = orderPlaceResponse?.data?.message;
+                if (errorText.startsWith("Wallet")) {
+                  toast.warning(orderPlaceResponse?.data?.message);
+                  const requiredBalance =
+                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
 
-                navigate(
-                  `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
-                  {
-                    state: { requiredBalance: requiredBalance },
-                  }
-                );
+                  navigate(
+                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+                    {
+                      state: { requiredBalance: requiredBalance },
+                    }
+                  );
+                } else {
+                  toast.error(orderPlaceResponse?.data?.message);
+                }
               }
             })
             .catch(function (errorResponse) {
+              console.log("errorrrr>>>>>", errorResponse);
               toast.error(errorResponse?.data?.message);
             });
         })
         .catch(function (errorMessage) {
+          console.log("anyerrormessage", errorMessage);
           toast.error(errorMessage?.data?.message);
         });
     } catch (error) {
+      console.log("errorrrr", error);
       return error;
     }
   };
@@ -285,7 +303,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/pickup");
+                  navigate(
+                    `/orders/add-order/pickup?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -341,7 +361,9 @@ const Summary = (props: Props) => {
               <div
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
-                  navigate("/orders/add-order/delivery");
+                  navigate(
+                    `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
                 }}
               >
                 <div style={{ width: "20px", height: "20px" }}>
@@ -357,7 +379,11 @@ const Summary = (props: Props) => {
 
             {/* Product Details */}
             <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 mb-4 md:pb-20 max-w-screen-md	">
-              <BoxDetails boxInfo={boxInfo} />
+              <BoxDetails
+                boxInfo={boxInfo}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
+              />
 
               {/* Service Details */}
               <SummaryService
@@ -371,6 +397,9 @@ const Summary = (props: Props) => {
                 partnerServiceName={serviceDetails?.partnerServiceName}
                 partnerName={serviceDetails?.partnerName}
                 baseWeight={serviceDetails?.appliedWeight}
+                mode={serviceDetails?.serviceMode}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
               />
             </div>
           </div>

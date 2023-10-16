@@ -4,6 +4,7 @@ import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
 import { v4 as uuidv4 } from "uuid";
 import ReturningUserPickup from "../ReturningUser/PickUp";
+import { format } from "date-fns";
 
 //Icons
 import TickLogo from "../../../assets/common/Tick.svg";
@@ -74,7 +75,7 @@ const PickupLocation = () => {
   const [isReturnAddress, setIsReturnAddress] = useState(true);
   const [pickupDate, setPickupDate] = useState("");
   const [isRightLandmarkModal, setIsRightLandmarkModal] = useState(false);
-
+  const [pickupDateInEpoch, setPickupDateInEpoch] = useState("");
   const [pickupAddress, setPickupAddress] = useState<any>({
     pickupAddress: {
       fullAddress: "",
@@ -206,6 +207,7 @@ const PickupLocation = () => {
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
+
           setPickupAddress({
             pickupAddress: {
               fullAddress: orderData?.pickupAddress?.fullAddress,

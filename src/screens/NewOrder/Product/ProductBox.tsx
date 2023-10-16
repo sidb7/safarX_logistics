@@ -15,6 +15,7 @@ interface IPackageBoxProps {
   onClick?: () => void;
   onClickEdit?: () => void;
   isSelected?: any;
+  isActiveChannel?: boolean;
 }
 
 const productBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -31,10 +32,11 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   onClick,
   onClickEdit,
   isSelected = false,
+  isActiveChannel,
 }) => {
   return (
     <div
-      className={` ${className} product-box flex items-center border-2 rounded-md h-20 min-w-[200px] relative ${
+      className={` ${className} items-center product-box flex itisActiveChannelems-center border-2 rounded-md h-20 min-w-[200px] relative ${
         isSelected && "border-[#004EFF]"
       }`}
       onClick={onClick}
@@ -55,13 +57,15 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       </div>
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
-          <span>{productName}</span>
-          <img
-            src={EditIcon}
-            alt=""
-            onClick={onClickEdit}
-            className="w-4 mx-2"
-          />
+          <span className="line-clamp-2">{productName}</span>
+          {!isActiveChannel && (
+            <img
+              src={EditIcon}
+              alt=""
+              onClick={onClickEdit}
+              className="w-4 mx-2"
+            />
+          )}
         </div>
         <span className="flex text-[12px] lg:text-[14px] ">
           {`${weight} | ${length} x ${breadth} x ${height} cm`}

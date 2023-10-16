@@ -21,6 +21,9 @@ interface ISummaryData {
   productDimensionBreadth?: any;
   productDimensionHeight?: any;
   productDimensionUnit?: any;
+  mode?: any;
+  shipyaari_id?: any;
+  orderSource?: any;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -40,8 +43,12 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   productDimensionBreadth = "",
   productDimensionHeight = "",
   productDimensionUnit = "",
+  mode = "",
+  shipyaari_id = "",
+  orderSource = "",
 }) => {
   const navigate = useNavigate();
+
   return (
     <div className="p-[12px] gap-[8px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#FFFFFF] lg:w-[385px]">
       <div className="flex flex-col ">
@@ -55,7 +62,9 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           <div
             className="cursor-pointer"
             onClick={() => {
-              navigate("/orders/add-order/service");
+              navigate(
+                `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+              );
             }}
           >
             <div style={{ width: "20px", height: "20px" }}>
@@ -77,6 +86,9 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
 
           <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
             {`\u20B9`} {price}
+          </p>
+          <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
+            {mode}
           </p>
 
           {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] lg:font-semibold">

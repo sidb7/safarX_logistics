@@ -49,7 +49,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     weightUnit: "kg",
     volumetricWeight: "",
     appliedWeight: "",
-    divisor: "",
+    divisor: "5000",
     sku: "",
     images: [],
   };
@@ -69,7 +69,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     });
     if (response?.success) {
       toast.success(response?.message);
-      navigate("/catalogues/product-catalogue");
+      navigate(-1);
     } else {
       toast.error("Failed To Upload!");
     }
@@ -132,7 +132,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       length,
       breadth,
       height
-    ).toFixed(6);
+    ).toFixed(2);
     let arr = productInputState;
     arr[index]["volumetricWeight"] = volumetricWeight;
     arr[index]["appliedWeight"] = Math.max(volumetricWeight, weight);
@@ -167,8 +167,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     }
   };
 
-  
-
   return (
     <>
       <Breadcrum label="Add New Product" />
@@ -200,7 +198,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                   <div className="pt-4">
                     <div className="w-full lg:w-3/4">
                       <span className="text-base">Product Details</span>
-                      <div className="flex gap-6 py-4">
+                      <div className="flex flex-col sm:flex-row gap-6 py-4">
                         <CustomInputBox
                           label="Product name"
                           name="name"
@@ -238,7 +236,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     <div className="w-full lg:w-3/4">
                       <span className=""> Measurement </span>
                       <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-                        <div className="flex gap-4 w-full">
+                        <div className=" flex col-span-2 gap-2 w-full">
                           <CustomInputBox
                             label="Length (CM)"
                             inputType="number"
@@ -287,7 +285,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                             value={divisor}
                           />
                         </div>
-                        <div className="flex w-full gap-6">
+                        <div className="flex col-span-2 lg:col-span-1 w-full gap-6">
                           <CustomInputBox
                             label="Weight (Kg)"
                             inputType="number"

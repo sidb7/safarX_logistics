@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CustomButton from "../../components/Button";
-import BottomLayout from "../../components/Layout/bottomLayout";
+
 import FAQ from "./FAQs";
 import Tickets from "./Tickets";
-import addIcon from "../../assets/Catalogue/add.svg";
-import TicketsTable from "./Tickets/table";
-import RaiseTickets from "./Tickets/raiseTicket";
+
 import AccessDenied from "../../components/AccessDenied";
 import { useSelector } from "react-redux";
 import { GetCurrentPath } from "../../utils/utility";
+
+import { BottomNavBar } from "../../components/BottomNavBar";
+
+import ViewAllTickets from "./Tickets/viewAllTickets";
+import ViewTicketDetails from "./Tickets/viewTicketDetails";
 
 const HelpScreen = () => {
   const roles = useSelector((state: any) => state?.roles);
@@ -20,6 +23,12 @@ const HelpScreen = () => {
   const [faqType, setFAQType] = useState("all");
   const [showTable, setShowTable] = useState(false);
   const [showRaiseTicket, setShowRaiseTicket] = useState(false);
+  const [raiseTicket, setRaiseTicket] = useState(false);
+  const [viewAllTickets, setViewAllTickets] = useState(false);
+  const [ticketDetails, setTicketDetails] = useState({
+    showTicketDetails: false,
+    ticketData: {},
+  });
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   const isActive =
     roles?.roles?.[0]?.menu?.[11]?.menu?.[renderingComponents]?.pages?.[0]
@@ -52,18 +61,26 @@ const HelpScreen = () => {
     setRenderingComponents(id);
   };
 
+  const onClickTicket = (value: any) => {
+    setViewAllTickets(false);
+    setRaiseTicket(false);
+    setTicketDetails({
+      ...ticketDetails,
+      showTicketDetails: true,
+      ticketData: value,
+    });
+  };
+
   const renderComponent = () => {
     if (renderingComponents === 0) {
       return <FAQ setFAQType={setFAQType} />;
     } else if (renderingComponents === 1) {
-      if (showTable) {
-        return <TicketsTable />;
+      if (viewAllTickets) {
+        return <ViewAllTickets onClick={onClickTicket} />;
+      } else if (ticketDetails.showTicketDetails) {
+        return <ViewTicketDetails ticketData={ticketDetails.ticketData} />;
       } else {
-        if (showRaiseTicket) {
-          return <RaiseTickets />;
-        } else {
-          return <Tickets />;
-        }
+        return <Tickets />;
       }
     } else if (renderingComponents === 2) {
       return <p>Agreements</p>;
@@ -71,44 +88,52 @@ const HelpScreen = () => {
   };
   const renderHeaderComponent = () => {
     if (renderingComponents === 1) {
-      if (showTable) {
+      if (viewAllTickets) {
         return (
           <CustomButton
-            icon={addIcon}
-            showIcon={true}
-            text={showTable && "RAISE TICKET"}
-            className="!p-3"
+            text={"RAISE TICKET"}
+            className="!w-[150px] hidden lg:block"
             onClick={() => {
-              setShowRaiseTicket(true);
-              setShowTable(false);
+              setRaiseTicket(true);
+              setViewAllTickets(false);
+              setTicketDetails({
+                ...ticketDetails,
+                showTicketDetails: false,
+              });
+            }}
+          />
+        );
+      } else if (ticketDetails.showTicketDetails) {
+        return (
+          <CustomButton
+            text={"CLOSE TICKET"}
+            className="!w-[150px] hidden lg:block"
+            onClick={() => {
+              setRaiseTicket(true);
+              setViewAllTickets(false);
+              setTicketDetails({
+                ...ticketDetails,
+                showTicketDetails: false,
+              });
             }}
           />
         );
       } else {
         return (
           <CustomButton
-            icon={addIcon}
-            showIcon={true}
             text={"VIEW ALL TICKETS"}
-            className="!p-3"
+            className="!w-[150px] text-sm hidden lg:block"
             onClick={() => {
-              setShowTable(true);
+              setViewAllTickets(true);
+              setRaiseTicket(false);
+              setTicketDetails({
+                ...ticketDetails,
+                showTicketDetails: false,
+              });
             }}
           />
         );
       }
-    } else {
-      return (
-        <CustomButton
-          icon={addIcon}
-          showIcon={true}
-          text={"CLOSE TICKET"}
-          className="!p-3"
-          onClick={() => {
-            setShowRaiseTicket(true);
-          }}
-        />
-      );
     }
   };
   const data = GetCurrentPath() as any;
@@ -133,7 +158,7 @@ const HelpScreen = () => {
           <Breadcrum label="Help" component={renderHeaderComponent()} />
           <div className="lg:mb-24">
             <div className="mt-4 px-5 ">
-              <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+              <div className="flex flex-row whitespace-nowrap mt-2 mb-[32px]  lg:h-[34px]">
                 {listTab?.map(({ statusName }, index) => {
                   return (
                     <div
@@ -148,7 +173,7 @@ ${renderingComponents === index && "!border-[#004EFF]"}
                       key={index}
                     >
                       <span
-                        className={`text-[#777777] text-[14px] lg:text-[18px]
+                        className={`text-[#777777] font-Open  leading-[18px]   lg:leading-6  font-semibold text-sm lg:text-[18px]
 ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
                       >
                         {statusName}
@@ -159,9 +184,11 @@ ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
               </div>
 
               {renderComponent()}
-              {/* {showRaiseTicket && <RaiseTickets />} */}
             </div>
-            <BottomLayout callApi={() => {}} />
+
+            <div className="lg:hidden mt-24">
+              <BottomNavBar />
+            </div>
           </div>
         </div>
       ) : (

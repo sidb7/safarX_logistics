@@ -23,9 +23,10 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const [otp, setOtp] = useState({
+  const [otp, setOtp] = useState<any>({
     loginOtp: "",
   });
+  console.log("🚀 ~ file: verifyOtp.tsx:29 ~ Index ~ otp:", otp);
 
   const signUpUser = useSelector((state: any) => state.signup);
   const [minutes, setMinutes] = useState(0);
@@ -66,8 +67,16 @@ const Index = () => {
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
 
       sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+
       if (response?.success === true) {
-        setLocalStorage(tokenKey, response?.data[0]?.token);
+        localStorage.setItem(
+          `${response?.data[0]?.sellerId}_${tokenKey}`,
+          response?.data[0]?.token
+        );
+        sessionStorage.setItem("userName", response?.data[0]?.name);
+        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+        // setLocalStorage(tokenKey, response?.data[0]?.token);
         navigate("/onBoarding/get-started");
       } else {
         toast.error(response?.message);
@@ -161,12 +170,17 @@ const Index = () => {
 
               <div className="flex justify-center">
                 <CustomInputBox
-                  value={otp.loginOtp}
+                  inputType="text"
+                  inputMode="numeric"
+                  value={otp.loginOtp || ""}
                   maxLength={6}
                   containerStyle="mt-[32px]"
                   label="Enter OTP"
                   onChange={(e: any) => {
-                    setOtp({ ...otp, loginOtp: e.target.value });
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setOtp({ ...otp, loginOtp: +e.target.value });
+                    }
                   }}
                 />
               </div>
