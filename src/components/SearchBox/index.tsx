@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import SearchBoxIcon from "../../assets/SearchBox/SearchIcon.svg";
 import CrossIcon from "../../assets/cross.svg";
+import "../../styles/placeHolderPadding.css";
 
 interface ISearchBoxProps {
   className?: string;
@@ -18,14 +19,15 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
 }) => {
   const resetRef: any = useRef(null);
   const resetValue = () => {
+    if (resetRef.current.value) getFullContent();
     resetRef.current.value = "";
-    getFullContent();
   };
+
   return (
     <div className="relative">
       <input
         ref={resetRef}
-        // placeholder={label}
+        placeholder={`Search By Order Id, AWB`}
         type="text"
         className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px] !pl-[36px] w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
         // value={value}

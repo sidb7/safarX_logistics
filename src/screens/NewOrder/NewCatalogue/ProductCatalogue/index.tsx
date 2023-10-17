@@ -306,7 +306,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             </h1>
 
             <div className="flex gap-x-3">
-              {channels.map((channel: any, index) => (
+              {channels?.map((channel: any, index) => (
                 <ProductCategoryBox
                   key={index}
                   className={`!border-2 !border-[#1C1C1C] ${
@@ -328,7 +328,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             </div>
             {isActiveChannel && (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
-                {channelProducts.map((data: any, index: any) => (
+                {channelProducts?.map((data: any, index: any) => (
                   <div
                     key={index}
                     className="w-[272px] h-[76px]"

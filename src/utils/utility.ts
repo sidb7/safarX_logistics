@@ -72,7 +72,7 @@ export const generateUniqueCode = (minLength: number, maxLength: number) => {
 
 export const searchResults = (value: any, searchProductData: any = []) => {
   let productArray: any = [];
-  searchProductData.map((eachProduct: any, index: any) => {
+  searchProductData?.map((eachProduct: any, index: any) => {
     let joinedName = eachProduct?.name?.split(" ").join("");
     if (
       eachProduct?.name?.toUpperCase().includes(value.toUpperCase()) ||

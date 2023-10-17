@@ -236,7 +236,7 @@ const Index: React.FC = () => {
       if (response?.success) {
         setResponse(response);
 
-        let options = response?.data.map((service: any, index: number) => {
+        let options = response?.data?.map((service: any, index: number) => {
           return {
             text: service,
             value: index,
