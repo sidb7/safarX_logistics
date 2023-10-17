@@ -41,6 +41,7 @@ import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
+import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -184,6 +185,11 @@ const Index = () => {
     { label: "Sucsess Rate", value: "sucsessRate", number: "5%", gif: false },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [infoModalContent, setInfoModalContent]: any = useState({
+    isOpen: false,
+    data: [],
+    orderId: "",
+  });
 
   const roles = useSelector((state: any) => state?.roles);
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
@@ -328,22 +334,29 @@ const Index = () => {
       switch (tabs[index].value) {
         case "DRAFT":
           setColumnhelper(
-            columnHelperForNewOrder(navigate, setDeleteModalDraftOrder)
+            columnHelperForNewOrder(
+              navigate,
+              setDeleteModalDraftOrder,
+              setInfoModalContent
+            )
           );
           break;
         case "BOOKED":
           setColumnhelper(
             ColumnHelperForBookedAndReadyToPicked(
               navigate,
-              setCancellationModal
+              setCancellationModal,
+              setInfoModalContent
             )
           );
           break;
         case "READYTOPICK":
-          setColumnhelper(ColumnHelperForBookedAndReadyToPicked(navigate));
+          setColumnhelper(
+            ColumnHelperForBookedAndReadyToPicked(navigate, setInfoModalContent)
+          );
           break;
         default:
-          setColumnhelper(columnHelpersForRest);
+          setColumnhelper(columnHelpersForRest(navigate, setInfoModalContent));
           break;
       }
     } catch (error) {
@@ -530,6 +543,23 @@ const Index = () => {
         }}
         title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
       />
+
+      <CenterModal
+        isOpen={infoModalContent.isOpen}
+        onRequestClose={() => setInfoModalContent({ isOpen: false })}
+        className="!justify-start"
+      >
+        <div className="flex border-b-2 mt-2 w-[95%] justify-center px-[1rem] text-[1.2rem]">
+          <p className="">
+            {infoModalContent?.orderId?.includes("T")
+              ? `${
+                  infoModalContent?.orderId?.split("T")?.[1]
+                } - Temp Order Details`
+              : `${infoModalContent?.orderId} - Order Details`}
+          </p>
+        </div>
+        <CustomTableAccordian data={infoModalContent.data} />
+      </CenterModal>
     </>
   );
 };

@@ -123,7 +123,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
   //desselect an arr (selected:false)
   const DeSelectArr = (arr: any = []) =>
-    arr.map((arr: any) => {
+    arr?.map((arr: any) => {
       return { ...arr, selected: false };
     }) || [];
 
@@ -247,7 +247,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             </div>
           </div>
           <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
-            {comboProducts.map((combo: any, index: number) => {
+            {comboProducts?.map((combo: any, index: number) => {
               return (
                 <ComboProductBox
                   image={StackLogo}

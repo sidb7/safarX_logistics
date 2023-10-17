@@ -205,7 +205,7 @@ const WeightFreezeTable = () => {
     if (isCheckedAll) {
       setSelectedRows([]);
     } else {
-      setSelectedRows(WeightFreezeData.map((_, index) => index));
+      setSelectedRows(WeightFreezeData?.map((_, index) => index));
     }
     setIsCheckedAll(!isCheckedAll);
   };
