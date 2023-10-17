@@ -24,7 +24,7 @@ const CustomAccordianTickets = (props: ITypeProps) => {
 
   return (
     <>
-      {data.map((eachData: any, index: any) => {
+      {data?.map((eachData: any, index: any) => {
         return (
           <div className={`flex flex-col   mb-3   cursor-pointer `}>
             <div

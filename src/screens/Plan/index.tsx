@@ -110,7 +110,7 @@ const Index = (props: ITypeProps) => {
 
             {/* Plan Cards */}
             <div className="flex items-end gap-x-6 overflow-x-scroll ml-5 xl:justify-evenly mb-8 lg:mb-[60px] ">
-              {allPlans.map((eachPlan: any, index: any) => {
+              {allPlans?.map((eachPlan: any, index: any) => {
                 return (
                   <PlanCard
                     planId={eachPlan?.planId}

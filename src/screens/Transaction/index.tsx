@@ -56,10 +56,10 @@ export const Transaction = () => {
   }, []);
 
   //on page change index
-  const onPageIndexChange = () => { };
+  const onPageIndexChange = () => {};
 
   // on per page item change
-  const onPerPageItemChange = () => { };
+  const onPerPageItemChange = () => {};
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
@@ -71,11 +71,11 @@ export const Transaction = () => {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox label="Search" value="" onChange={() => { }} />
+            <SearchBox label="Search" value="" onChange={() => {}} />
           </div>
           <div
             className="flex justify-between items-center p-2 gap-x-2"
-          // onClick={() => setFilterModal(true)}
+            // onClick={() => setFilterModal(true)}
           >
             <img src={FilterIcon} alt="" />
             <span className="text-[#004EFF] text-[14px] font-semibold">
@@ -166,19 +166,29 @@ export const Transaction = () => {
                 </div>
 
                 <div className="lg:hidden">
-                  {
-                    data.length && data.map((passbookData: any, index) => (
-                      <div className="mt-4" key={`${index}_${passbookData?.transactionId}`}>
+                  {data.length &&
+                    data?.map((passbookData: any, index) => (
+                      <div
+                        className="mt-4"
+                        key={`${index}_${passbookData?.transactionId}`}
+                      >
                         <PassbookHistory
                           data={{
                             title: passbookData.transactionId,
                             rupee: "500",
                             date: "July 9, 2023",
-                            credited: passbookData?.type === "credit" ? passbookData.amount : "0",
-                            debited: passbookData?.type === "credit" ? "0" : passbookData.amount,
+                            credited:
+                              passbookData?.type === "credit"
+                                ? passbookData.amount
+                                : "0",
+                            debited:
+                              passbookData?.type === "credit"
+                                ? "0"
+                                : passbookData.amount,
                             balance: passbookData?.balance,
                             status: passbookData?.status,
-                            paymentGatewayName: passbookData?.paymentGatewayName,
+                            paymentGatewayName:
+                              passbookData?.paymentGatewayName,
                             privateCompanyId: passbookData?.privateCompanyId,
                             remark: passbookData.remark,
                             discription: passbookData.description,
@@ -191,8 +201,7 @@ export const Transaction = () => {
                           }}
                         />
                       </div>
-                    ))
-                  }
+                    ))}
 
                   {/* <div className="mt-4">
                     <CashbackHistory
