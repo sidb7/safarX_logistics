@@ -161,7 +161,7 @@ const Tracking = () => {
         <div className="flex items-start max-w-[400px]">
           <span> The tracking IDs:</span>
           <div className="flex flex-wrap items-start">
-            {inValidTrackingState.map(
+            {inValidTrackingState?.map(
               (inValidTravkingNumber: any, index: any) => (
                 <span
                   key={`${inValidTravkingNumber}_${index}`}

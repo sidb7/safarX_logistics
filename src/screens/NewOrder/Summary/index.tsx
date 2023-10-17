@@ -141,20 +141,10 @@ const Summary = (props: Props) => {
 
       promiseSetOrderId
         .then((orderIdResponse: any) => {
-          console.log("orderIdResponse", orderIdResponse);
           // toast.success(successMessage?.data?.message);
           promisePlaceOrder
             .then((orderPlaceResponse: any) => {
-              console.log("orderPlaceResponse", orderPlaceResponse);
               if (orderPlaceResponse?.data?.success) {
-                console.log(
-                  "orderPlaceResponseSuccess",
-                  orderPlaceResponse?.data?.success
-                );
-                console.log(
-                  "placeordersuccessmessage",
-                  orderPlaceResponse?.data?.message
-                );
                 toast.success(orderPlaceResponse?.data?.message);
                 navigate("/orders/view-orders");
               } else {
@@ -176,16 +166,13 @@ const Summary = (props: Props) => {
               }
             })
             .catch(function (errorResponse) {
-              console.log("errorrrr>>>>>", errorResponse);
               toast.error(errorResponse?.data?.message);
             });
         })
         .catch(function (errorMessage) {
-          console.log("anyerrormessage", errorMessage);
           toast.error(errorMessage?.data?.message);
         });
     } catch (error) {
-      console.log("errorrrr", error);
       return error;
     }
   };
