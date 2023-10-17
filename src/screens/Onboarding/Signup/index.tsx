@@ -54,6 +54,16 @@ const Index = () => {
     referalCode: "",
   });
   const signUpOnClick = async (value: any) => {
+    if (
+      signUpError.email ||
+      signUpError.firstName ||
+      signUpError.lastName ||
+      signUpError.password ||
+      signUpError.referalCode
+    ) {
+      toast.error("Please complete all the fields.");
+      return;
+    }
     try {
       let payload = {
         sellerData: value,
@@ -78,17 +88,6 @@ const Index = () => {
 
   const signUpWithGoogle = async (googleData: any) => {
     try {
-      if (
-        signUpError.email ||
-        signUpError.firstName ||
-        signUpError.lastName ||
-        signUpError.password ||
-        signUpError.referalCode
-      ) {
-        toast.error("Please complete all the fields.");
-        return;
-      }
-
       const payload = {
         clientId: googleData?.clientId,
         credential: googleData?.credential,
