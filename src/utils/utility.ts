@@ -1,4 +1,9 @@
-import { Environment, INITIAL_RECHARGE, RECHARGE_STATUS } from "./ApiUrls";
+import {
+  Environment,
+  INITIAL_RECHARGE,
+  RECHARGE_STATUS,
+  SELLER_WEB_URL,
+} from "./ApiUrls";
 import { POST } from "./webService";
 
 export const setLocalStorage = (key: string, value: any) => {
@@ -155,7 +160,7 @@ export const loadRazorPayTransaction = async (
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),
-        callbackUrl: " ",
+        callbackUrl: `${SELLER_WEB_URL}/dashboard/overview`,
       },
       paymentGateway: "RAZORPE",
     };
