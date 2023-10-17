@@ -20,11 +20,7 @@ import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 
-const arrayData = [
-  { label: "Passbook" },
-  { label: "NEFT /IMPS / RTGS" },
-  { label: "Cashback" },
-];
+const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
   const navigate = useNavigate();
@@ -42,10 +38,21 @@ export const Transaction = () => {
     if (renderingComponents === 0) {
       setLoading(true);
       (async () => {
-        const { data } = await POST(GET_WALLET_TRANSACTION);
+        const { data } = await POST(GET_WALLET_TRANSACTION, {
+          filter: {
+            status: "",
+            from: "",
+            to: "",
+          },
+          skip: 0,
+          limit: 2,
+          pageNo: 1,
+          sort: {},
+          searchValue: "",
+        });
 
         if (data?.success) {
-          setData(data.data[0]);
+          setData(data.data || []);
           setLoading(false);
         } else {
           toast.error(data?.message);
@@ -72,15 +79,6 @@ export const Transaction = () => {
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
             <SearchBox label="Search" value="" onChange={() => {}} />
-          </div>
-          <div
-            className="flex justify-between items-center p-2 gap-x-2"
-            // onClick={() => setFilterModal(true)}
-          >
-            <img src={FilterIcon} alt="" />
-            <span className="text-[#004EFF] text-[14px] font-semibold">
-              FILTER
-            </span>
           </div>
         </div>
       );
@@ -110,8 +108,6 @@ export const Transaction = () => {
     if (renderingComponents === 0) {
       return <CustomTable data={data} columns={PassbookColumns()} />;
     } else if (renderingComponents === 1) {
-      return <CustomTable data={data} columns={OnlineDetailsColumns()} />;
-    } else if (renderingComponents === 2) {
       return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
     }
   };
@@ -143,31 +139,24 @@ export const Transaction = () => {
 
                 <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
                   <div className="flex items-center">
-                    <span className="text-[#494949] text-[14px] font-semibold">
-                      00 Order
+                    <span className="text-[#494949] text-[14px] font-Open leading-4 font-semibold">
+                      10 Transactions
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-x-2">
-                    <div className="flex items-center justify-center border-[1px] rounded-md border-[#A4A4A4] col-span-2">
+                  <div className="flex items-center justify-end gap-x-2">
+                    <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
                       <img src={SelectIcon} alt="" />
                       <span className="ml-2 text-[#1C1C1C] text-[14px] font-medium">
                         SELECT
                       </span>
                     </div>
-                    <div
-                      className="grid justify-center items-center border-[1px] rounded-md border-[#A4A4A4]"
-                      onClick={() => {
-                        navigate("/transaction/filter");
-                      }}
-                    >
-                      <img src={FilterIcon} alt="Filter Order" width="16px" />
-                    </div>
                   </div>
                 </div>
 
                 <div className="lg:hidden">
-                  {data.length &&
-                    data?.map((passbookData: any, index) => (
+                  {data &&
+                    data?.length !== 0 &&
+                    data.map((passbookData: any, index) => (
                       <div
                         className="mt-4"
                         key={`${index}_${passbookData?.transactionId}`}

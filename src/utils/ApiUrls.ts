@@ -239,6 +239,10 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 //Tracking
 const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
+//Serviceability URL
+const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
+const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
+
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -352,4 +356,6 @@ export {
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_WOOCOMMERCE_STORE,
   CANCEL_TEMP_SELLER_ORDER,
+  POST_SERVICEABILITY,
+  GET_COMPANY_SERVICE,
 };

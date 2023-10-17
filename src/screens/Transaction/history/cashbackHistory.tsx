@@ -10,6 +10,7 @@ import shareIcon from "../../../assets/Transaction/ShareIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import filterIconTable from "../../../assets/Transaction/filtericon.svg";
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
+import CopyTooltip from "../../../components/CopyToClipboard";
 
 interface ICashbackProps {
   data: {
@@ -33,7 +34,6 @@ export const cashbackDetailsColumns = () => {
             </div>
             <div className="flex">
               <img src={sortIconTable} alt="" />
-              <img src={filterIconTable} alt="" />
             </div>
           </div>
         );
@@ -112,9 +112,8 @@ export const cashbackDetailsColumns = () => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex space-x-2 items-center">
-            <img src={copyIcon} alt="" />
-            <img src={shareIcon} alt="" />
+          <div className="flex space-x-2 items-center cursor-pointer">
+            <CopyTooltip stringToBeCopied={info.row?.original} />
           </div>
         );
       },

@@ -64,7 +64,7 @@ const InputWithFileUpload = (props: propTypes) => {
           <img
             src={imgSrc ? imgSrc : UploadFileIcon}
             alt=""
-            className="absolute z-20  right-[8%] top-[30%]  "
+            className="absolute z-1  right-[8%] top-[30%]  "
           />
           {uploadText}
         </div>

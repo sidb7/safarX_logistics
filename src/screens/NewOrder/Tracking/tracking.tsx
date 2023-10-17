@@ -114,14 +114,14 @@ const Tracking = () => {
   const handletrackingNoChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setTrackingNo(event.target.value);
+    setTrackingNo(event.target.value.trim());
   };
 
   const handleTrackOrderClick = async (trackingNoFromUrl?: any) => {
-    let urlWithTrackingNo;
+    let urlWithTrackingNo = "";
 
-    if (!urlWithTrackingNo && trackingNo === "") {
-      return toast.warning("Please Enter Tracking Number");
+    if (!trackingNoFromUrl && !trackingNo) {
+      return toast.warning("Please Enter Tracking Number")
     }
 
     try {

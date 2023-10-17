@@ -8,6 +8,8 @@ import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
+import { strongpasswordRegex } from "../../../utils/regexCheck";
+import InfoCircle from "../../../assets/info-circle.svg";
 
 interface PassModalProps {
   isPassModalOpen: boolean;
@@ -34,6 +36,11 @@ function PassModal(props: PassModalProps) {
     confirmNewPassword: false,
   });
 
+  const [passwordError, setPasswordError] = useState({
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
       return toast.error(
@@ -58,6 +65,38 @@ function PassModal(props: PassModalProps) {
       [field]: !prevState[field],
     }));
   };
+
+  function validatePassword(password: string) {
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+    if (!passwordRegex.test(password)) {
+      if (!/[A-Z]/.test(password)) {
+        return "Password must contain at least one uppercase letter.";
+      }
+      if (!/[!@#$%^&*()_+\-=;':"|,.<>/?]+/.test(password)) {
+        return "Password must contain at least one special character.";
+      }
+      if (!/[0-9]+/.test(password)) {
+        return "Password must contain at least one number.";
+      }
+      if (/\s/.test(password)) {
+        return "Password must not contain spaces.";
+      }
+    }
+
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+
+    if (password.length > 16) {
+      return "Password should be less than 16 characters.";
+    }
+
+    return "";
+  }
 
   return (
     <RightSideModal
@@ -109,10 +148,35 @@ function PassModal(props: PassModalProps) {
             rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
             onClick={() => {}}
-            onChange={(e) =>
-              setPassword({ ...password, newPassword: e.target.value })
-            }
+            onChange={(e) => {
+              setPassword({ ...password, newPassword: e.target.value });
+              if (
+                !strongpasswordRegex.test(e.target.value) ||
+                password.newPassword.length < 8 ||
+                password.newPassword.length > 16
+              ) {
+                const isPasswordError = validatePassword(e.target.value);
+
+                setPasswordError({
+                  ...passwordError,
+                  newPassword: isPasswordError,
+                });
+              } else {
+                setPasswordError({
+                  ...passwordError,
+                  newPassword: "",
+                });
+              }
+            }}
           />
+          {passwordError.newPassword !== "" && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {passwordError.newPassword}
+              </span>
+            </div>
+          )}
           <CustomInputBox
             label="Re-enter New Password"
             inputType={viewPassword.confirmNewPassword ? "text" : "password"}

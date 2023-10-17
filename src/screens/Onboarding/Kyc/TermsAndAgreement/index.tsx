@@ -39,7 +39,8 @@ export const ServiceComponent = (props: ITypeProps) => {
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
         toast.success(response?.message);
-        navigate("/onboarding/kyc");
+        // navigate("/onboarding/kyc");
+        navigate("/onboarding/kyc-form");
       } else {
         toast.error(response?.message);
         navigate("/onboarding/kyc-terms/service-agreement");
