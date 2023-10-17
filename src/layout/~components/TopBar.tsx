@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
-import SyAppIcon from "../../assets/App.svg";
+import SyAppIcon from "../../assets/app.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 
@@ -497,8 +497,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           src={AddBulkIcon}
                           alt=""
                           className="self-center"
-                          width={"40px"}
-                          height={"40px"}
+                          width={"30px"}
                         />
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
                           Add Bulk
