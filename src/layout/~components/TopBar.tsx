@@ -25,6 +25,10 @@ import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
+import ServiceabilityIcon from "../../assets/Serviceability.svg";
+import SyAppIcon from "../../assets/App.svg";
+import Serviceability from "./Serviceability";
+import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -41,6 +45,43 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const [isQuick, setIsQuick] = useState(false);
   const [walletAmt, setWalletAmt] = useState<any>(0);
   const [isLoading, setLoading] = useState(false);
+  const [showServiceability, setShowServiceability] = useState(false);
+  const [companyServices, setCompanyServices] = useState([]);
+  const [servicesData, setServicesData] = useState<any>([]);
+
+  const [showTable, setShowTable] = useState(false);
+
+  const [serviceabilityData, setServiceabilityData] = useState<any>({
+    pickupPincode: "",
+    deliveryPincode: "",
+    invoiceValue: "",
+    paymentMode: "",
+    serviceId: "",
+    weight: "",
+    orderType: "B2B",
+    dimension: {
+      length: "",
+      width: "",
+      height: "",
+    },
+  });
+
+  const clearServiceabilityState = () => {
+    setServiceabilityData({
+      pickupPincode: "",
+      deliveryPincode: "",
+      invoiceValue: "",
+      paymentMode: "",
+      serviceId: "",
+      weight: "",
+      orderType: "B2B",
+      dimension: {
+        length: "",
+        width: "",
+        height: "",
+      },
+    });
+  };
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
@@ -83,6 +124,39 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     }
   };
 
+  //Creating Dropdown data for service in serviceability
+  const setDropDownData = (data: any) => {
+    data.map((eachData: any, index: number) => {
+      let temp = servicesData;
+      let newData = {
+        label: eachData.serviceName + " - " + eachData.serviceMode,
+        value: eachData.serviceId,
+      };
+      temp.push(newData);
+      setServicesData(temp);
+    });
+  };
+
+  const onSubmitServiceability = async (payload: any) => {
+    try {
+      // Serviceability API
+
+      const { data: response }: any = await POST(POST_SERVICEABILITY, payload);
+
+      if (response?.success) {
+        // toast.success(response?.message);
+
+        setShowTable(true);
+      } else {
+        toast.error(response?.message);
+
+        setShowTable(true);
+      }
+    } catch (error) {
+      return error;
+    }
+  };
+
   useEffect(() => {
     document.addEventListener("click", handleOutsideClick);
     document.addEventListener("click", handleQuickOutsideClick);
@@ -91,6 +165,26 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       document.removeEventListener("click", handleOutsideClick);
       document.removeEventListener("click", handleQuickOutsideClick);
     };
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        //Get Company Services API - Serviceability
+        const { data: response }: any = await POST(GET_COMPANY_SERVICE, {
+          skip: 0,
+          limit: 500,
+        });
+
+        if (response?.success) {
+          setCompanyServices(response?.data);
+          setDropDownData(response?.data);
+        }
+      } catch (error) {
+        console.error("GET SERVICES API ERROR", error);
+        return error;
+      }
+    })();
   }, []);
 
   const openQuickAction = async () => {
@@ -166,7 +260,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               </div>
             ) : (
               <div className="hidden lg:block">
-                <div className="flex items-center max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
+                <div
+                  className="flex items-center cursor-pointer max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
+                  onClick={() => navigate("/wallet/view-wallet")}
+                >
                   <img src={WalletIcon} width={35} alt="" />
                   <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
                 </div>
@@ -293,21 +390,24 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                     <div className="grid grid-cols-4 gap-6 overflow-hidden mt-4">
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
-                        onClick={() => navigate("/wallet/view-wallet")}
+                        onClick={() => {
+                          setShowTable(false);
+                          setShowServiceability(true);
+                        }}
                       >
                         <img
-                          src={WalletIcon}
+                          src={ServiceabilityIcon}
                           alt=""
                           className="self-center"
                           width={"40px"}
                           height={"40px"}
                         />
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Wallet
+                          Serviceability
                         </span>
-                        <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
+                        {/* <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
                           ₹ {quickData?.walletBalance}
-                        </span>
+                        </span> */}
                       </div>
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
@@ -372,18 +472,23 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Create an order
                         </span>
                       </div>
-                      <div className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl">
+                      <a
+                        className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
+                        href="https://play.google.com/store/apps/details?id=com.sts.shipyaari"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <img
-                          src={SyncOrder}
+                          src={SyAppIcon}
                           alt=""
                           className="self-center"
                           width={"40px"}
                           height={"40px"}
                         />
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Sync Order
+                          Shipyaari App
                         </span>
-                      </div>
+                      </a>
                       <div
                         className="flex flex-col text-center  hover:bg-gray-100 hover:rounded-2xl"
                         onClick={() => navigate("/orders/add-bulk")}
@@ -421,6 +526,30 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             </div>
           </div>
         </div>
+        {/* Open Modal on Clicking Serviceability */}
+
+        <CenterModal
+          isOpen={showServiceability}
+          className=" !flex !justify-center !items-center !w-[320px]  md:!w-[700px] !h-[500px]"
+          onRequestClose={() => {
+            setShowServiceability(false);
+            clearServiceabilityState();
+          }}
+        >
+          <Serviceability
+            onClick={() => {
+              setShowServiceability(false);
+              clearServiceabilityState();
+            }}
+            servicesData={servicesData}
+            serviceabilityData={serviceabilityData}
+            setServiceabilityData={setServiceabilityData}
+            onSubmitServiceability={onSubmitServiceability}
+            clearServiceabilityState={clearServiceabilityState}
+            showTable={showTable}
+            setShowTable={setShowTable}
+          />
+        </CenterModal>
       </nav>
     </>
   );
