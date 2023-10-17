@@ -3,6 +3,12 @@
 @tailwind utilities;
 @import url("./styles/hideScrollbar.css");
 
+.datepickerCss::placeholder{
+    color: #1C1C1C;
+    font-size: 12px;
+    
+}
+
 /* .ReactModal__Content{
     width: 388px;
 } */

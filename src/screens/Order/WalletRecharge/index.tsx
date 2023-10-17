@@ -578,7 +578,7 @@ const WalletRecharge = () => {
                         isDisabled={isDisabled}
                         text={"Paytm"}
                         amt={walletValue}
-                        navigate="/wallet/view-wallet"
+                        navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
                       />
                     </div>
                     <div className="flex flex-col items-center gap-y-2">

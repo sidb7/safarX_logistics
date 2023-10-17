@@ -133,14 +133,14 @@ import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
 import OrdersScreen from "../screens/Billing/orders";
-import CreditNote from "../screens/Billing/creditNote";
-import Invoice from "../screens/Billing/invoice";
+import Invoice from "../screens/NewOrder/Billing/invoice";
 import WeightFreeze from "../screens/WeightManagement";
 import SystemLog from "../screens/SystemLog";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
 import BulkUpload from "../screens/Order/BulkUpload/BulkUpload";
 import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
 import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
+import Reports from "../screens/NewOrder/Reports";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -485,14 +485,14 @@ const MyRoutes: React.FC = () => {
 
             {/* billing details Routes */}
             <Route>
-              <Route
+              {/* <Route
                 path="/billing/orders"
                 element={
                   <ProtectedRoute>
                     <OrdersScreen />
                   </ProtectedRoute>
                 }
-              />
+              /> */}
 
               <Route
                 path="/billing/invoice"
@@ -507,7 +507,7 @@ const MyRoutes: React.FC = () => {
                 path="/billing/credit-note"
                 element={
                   <ProtectedRoute>
-                    <CreditNote />
+                    <Invoice />
                   </ProtectedRoute>
                 }
               />
@@ -845,6 +845,15 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute>
+                  <Reports />
                 </ProtectedRoute>
               }
             />
