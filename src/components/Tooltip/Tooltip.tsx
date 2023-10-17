@@ -4,21 +4,20 @@ import { classNames } from "./classNames";
 
 interface TooltipPropTypes {
   position: any;
-  content: React.ReactNode;
-  children?: React.ReactNode;
+  content: any;
+  children?: any;
   showOnHover?: boolean;
   showOnClick?: boolean;
-  className?: any;
+  className?: any
 }
 
 export const Tooltip = (props: TooltipPropTypes) => {
-  const {
-    position,
+  const { position,
     content,
     children,
     showOnHover = false,
     showOnClick = false,
-    className,
+    className
   } = props;
 
   const [showTooltip, setShowTooltip] = useState(false);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CancelIcon from "../../../assets/common/cancel.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
+import InfoCircle from "../../../assets/info-circle.svg";
 
 import CustomInputBox from "../../../components/Input";
 import AddButton from "../../../components/Button/addButton";
@@ -24,6 +25,7 @@ import "../../../styles/signupPages.css";
 import { Spinner } from "flowbite-react";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
+import { strongpasswordRegex } from "../../../utils/regexCheck";
 interface ITypeProps {
   onClick?: any;
 }
@@ -49,6 +51,11 @@ const ForgotPassword = (props: ITypeProps) => {
   });
   const [password, setPassword] = useState({
     oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+
+  const [passwordError, setPasswordError] = useState({
     newPassword: "",
     confirmNewPassword: "",
   });
@@ -219,6 +226,38 @@ const ForgotPassword = (props: ITypeProps) => {
     }));
   };
 
+  function validatePassword(password: string) {
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+    if (!passwordRegex.test(password)) {
+      if (!/[A-Z]/.test(password)) {
+        return "Password must contain at least one uppercase letter.";
+      }
+      if (!/[!@#$%^&*()_+\-=;':"|,.<>/?]+/.test(password)) {
+        return "Password must contain at least one special character.";
+      }
+      if (!/[0-9]+/.test(password)) {
+        return "Password must contain at least one number.";
+      }
+      if (/\s/.test(password)) {
+        return "Password must not contain spaces.";
+      }
+    }
+
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+
+    if (password.length > 16) {
+      return "Password should be less than 16 characters.";
+    }
+
+    return "";
+  }
+
   return (
     <div className="flex flex-col gap-y-9 lg:h-screen lg:w-full overflow-auto">
       {isLgScreen && modalTitle()}
@@ -329,10 +368,35 @@ const ForgotPassword = (props: ITypeProps) => {
               setVisibility={() => togglePasswordVisibility("newPassword")}
               rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
               onClick={() => {}}
-              onChange={(e) =>
-                setPassword({ ...password, newPassword: e.target.value })
-              }
+              onChange={(e) => {
+                setPassword({ ...password, newPassword: e.target.value });
+                if (
+                  !strongpasswordRegex.test(e.target.value) ||
+                  password.newPassword.length < 8 ||
+                  password.newPassword.length > 16
+                ) {
+                  const isPasswordError = validatePassword(e.target.value);
+
+                  setPasswordError({
+                    ...passwordError,
+                    newPassword: isPasswordError,
+                  });
+                } else {
+                  setPasswordError({
+                    ...passwordError,
+                    newPassword: "",
+                  });
+                }
+              }}
             />
+            {passwordError.newPassword !== "" && (
+              <div className="flex items-center gap-x-1 mt-1">
+                <img src={InfoCircle} alt="" width={10} height={10} />
+                <span className="font-normal text-[#F35838] text-xs leading-3">
+                  {passwordError.newPassword}
+                </span>
+              </div>
+            )}
             <CustomInputBox
               label="Re-enter New Password"
               inputType={viewPassword.confirmNewPassword ? "text" : "password"}
@@ -346,10 +410,14 @@ const ForgotPassword = (props: ITypeProps) => {
                 togglePasswordVisibility("confirmNewPassword")
               }
               onClick={() => {}}
-              onChange={(e) =>
-                setPassword({ ...password, confirmNewPassword: e.target.value })
-              }
+              onChange={(e) => {
+                setPassword({
+                  ...password,
+                  confirmNewPassword: e.target.value,
+                });
+              }}
             />
+
             <CustomButton
               onClick={updatePasswordData}
               text="Update Password"
