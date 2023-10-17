@@ -6,6 +6,6 @@ export const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/gm;
 export const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
 
 export const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-export const strongpasswordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
-export const textRegex = /^[a-zA-Z]+$/;
+export const strongpasswordRegex = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
+export const textRegex = /^[a-zA-Z]+$/;  ///^[A-Za-z]+$/;  
 export const referalRegex = /[A-Z][A-Z0-9]+/;

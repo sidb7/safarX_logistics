@@ -156,7 +156,6 @@ const idHelper = (navigate: any = "") => [
         orderType,
       } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-      console.log("status: ", status);
       return (
         <div className="py-3">
           {tempOrderId && (

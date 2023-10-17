@@ -107,6 +107,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       postServicablePincode(payload);
     }
   };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
