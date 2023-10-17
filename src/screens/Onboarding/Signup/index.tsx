@@ -78,6 +78,17 @@ const Index = () => {
 
   const signUpWithGoogle = async (googleData: any) => {
     try {
+      if (
+        signUpError.email ||
+        signUpError.firstName ||
+        signUpError.lastName ||
+        signUpError.password ||
+        signUpError.referalCode
+      ) {
+        toast.error("Please complete all the fields.");
+        return;
+      }
+
       const payload = {
         clientId: googleData?.clientId,
         credential: googleData?.credential,
@@ -108,7 +119,39 @@ const Index = () => {
   //     <img src={AiIcon} alt="Arrow" onClick={handleButtonClick} />
   //   );
   // }
+
   const signUp = () => {
+    function validatePassword(password: string) {
+      const passwordRegex =
+        /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
+      if (password.length < 8) {
+        return "Enter at least 8 characters.";
+      }
+      if (!passwordRegex.test(password)) {
+        if (!/[A-Z]/.test(password)) {
+          return "Password must contain at least one uppercase letter.";
+        }
+        if (!/[!@#$%^&*()_+\-=;':"|,.<>/?]+/.test(password)) {
+          return "Password must contain at least one special character.";
+        }
+        if (!/[0-9]+/.test(password)) {
+          return "Password must contain at least one number.";
+        }
+        if (/\s/.test(password)) {
+          return "Password must not contain spaces.";
+        }
+      }
+
+      if (password.length < 8) {
+        return "Enter at least 8 characters.";
+      }
+
+      if (password.length > 16) {
+        return "Password should be less than 16 characters.";
+      }
+
+      return "";
+    }
     return (
       <>
         {loading ? (
@@ -152,7 +195,8 @@ const Index = () => {
                           if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
-                              firstName: "Enter Valid name",
+                              firstName:
+                                "Enter Valid name(numbers, special characters not allowed) ",
                             });
                           } else {
                             setSignUpError({
@@ -186,7 +230,8 @@ const Index = () => {
                           if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
-                              lastName: "Enter Valid name",
+                              lastName:
+                                "Enter Valid name(numbers, special characters not allowed) ",
                             });
                           } else {
                             setSignUpError({
@@ -256,10 +301,18 @@ const Index = () => {
                           ...sellerData,
                           password: e.target.value,
                         });
-                        if (!strongpasswordRegex.test(e.target.value)) {
+                        if (
+                          !strongpasswordRegex.test(e.target.value) ||
+                          sellerData.password.length < 8 ||
+                          sellerData.password.length > 16
+                        ) {
+                          const passwordError = validatePassword(
+                            e.target.value
+                          );
+
                           setSignUpError({
                             ...signUpError,
-                            password: "Enter Valid Password",
+                            password: passwordError,
                           });
                         } else {
                           setSignUpError({
