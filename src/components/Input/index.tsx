@@ -4,6 +4,7 @@ interface propTypes {
   value?: string | number;
   inputMode?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
   containerStyle?: string;
@@ -32,6 +33,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     value = undefined,
     inputMode = "",
     onChange = () => {},
+    onBlur = () => {},
     onClick,
     placeholder = "",
     className,
@@ -62,6 +64,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
+          onBlur={(e: any) => onBlur(e)}
           value={value}
           disabled={isDisabled}
           inputMode={inputMode}

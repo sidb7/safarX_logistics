@@ -210,6 +210,18 @@ const Index = () => {
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={(googleData) => signInWithGoogle(googleData)}
+                  onError={() => {}}
+                />
+              </div>
+              <hr className="mb-[-30px] mt-2" />
+              <div className="flex justify-center my-[-4px]">
+                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
+                  OR
+                </button>
+              </div>
               <div>
                 <CustomInputBox
                   containerStyle="mt-[17px]"
@@ -223,6 +235,8 @@ const Index = () => {
                       ...loginCredentials,
                       email: e.target.value,
                     });
+                  }}
+                  onBlur={(e) => {
                     if (!emailRegex.test(e.target.value)) {
                       setLoginError({
                         ...loginError,
@@ -305,18 +319,6 @@ const Index = () => {
                 onClick={(e: any) => logInOnClick(loginCredentials)}
                 text="LOG IN"
               />
-              <hr className="mb-[-30px] mt-2" />
-              <div className="flex justify-center my-[-4px]">
-                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
-                  OR
-                </button>
-              </div>
-              <div className="flex justify-center">
-                <GoogleLogin
-                  onSuccess={(googleData) => signInWithGoogle(googleData)}
-                  onError={() => {}}
-                />
-              </div>
 
               <div className="flex justify-center">
                 <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
