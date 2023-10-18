@@ -155,6 +155,38 @@ const Index = () => {
     if (e.key === "Enter") logInOnClick(loginCredentials);
   };
 
+  function validatePassword(password: string) {
+    const passwordRegex =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=;':"|,.<>/?])([A-Za-z\d!@#$%^&*()_+\-=;':"|,.<>/?]+)$/;
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+    if (!passwordRegex.test(password)) {
+      if (!/[A-Z]/.test(password)) {
+        return "Password must contain at least one uppercase letter.";
+      }
+      if (!/[!@#$%^&*()_+\-=;':"|,.<>/?]+/.test(password)) {
+        return "Password must contain at least one special character.";
+      }
+      if (!/[0-9]+/.test(password)) {
+        return "Password must contain at least one number.";
+      }
+      if (/\s/.test(password)) {
+        return "Password must not contain spaces.";
+      }
+    }
+
+    if (password.length < 8) {
+      return "Enter at least 8 characters.";
+    }
+
+    if (password.length > 16) {
+      return "Password should be less than 16 characters.";
+    }
+
+    return "";
+  }
+
   const loginComponent = () => {
     return (
       <div className="relative h-full w-full overflow-y-auto hide-scrollbar">
@@ -231,10 +263,15 @@ const Index = () => {
                       ...loginCredentials,
                       password: e.target.value,
                     });
-                    if (!strongpasswordRegex.test(e.target.value)) {
+                    if (
+                      !strongpasswordRegex.test(e.target.value) ||
+                      loginCredentials.password.length < 8 ||
+                      loginCredentials.password.length > 16
+                    ) {
+                      const passwordError = validatePassword(e.target.value);
                       setLoginError({
                         ...loginError,
-                        password: "Incorrect Password",
+                        password: passwordError,
                       });
                     } else {
                       setLoginError({
