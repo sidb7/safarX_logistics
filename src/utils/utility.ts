@@ -166,6 +166,10 @@ export const loadRazorPayTransaction = async (
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
 
+    if (!data?.success) {
+      return data;
+    }
+
     let orderId = data?.data?.[0]?.id;
     let transactionId = data?.data?.[0]?.receipt;
 
