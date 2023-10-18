@@ -24,7 +24,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
       {options?.map((option: any) => (
         <div
           key={option?.value}
-          className={`flex items-center p-2 shadow-md border rounded-lg w-[310px] h-[210px] mb-4 md:mb-0 ${
+          className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
             selectedOption?.value === option?.value
               ? "border-green-500 border-2"
               : "border-[#c1c1c1]"
@@ -43,20 +43,24 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               onChange={() => handleOnChange(option)}
             />
           </div>
-          <div className="px-2 text-lg">
-            <p className="my-2">
+          <div className=" ">
+            <p className="text-[16px] font-semibold font-Open pt-2">
               {`${option.text?.partnerName}: ${option.text?.companyServiceName}`}
             </p>
-            <p className="">
-              {option.text?.total.toLocaleString("en-US", {
+            <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
+              {/* {option.text?.total.toLocaleString("en-US", {
                 style: "currency",
                 currency: "INR",
-              })}
+              })} */}
+              {`\u20B9`} {option.text?.total.toFixed(2)}
             </p>
-            <p className="text-[#004EFF] font-medium py-2">
-              ETA: {option.text?.EDT || "N/A"}
+            <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
+              ETA: {option.text?.EDT || "N/A"}{" "}
+              <span className="pl-1 text-[#1C1C1C] text-[12px]">
+                MODE: {`${option.text?.serviceMode}`}
+              </span>
             </p>
-            <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p>
+            {/* <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p> */}
           </div>
           <TooltipContent option={option} />
         </div>
