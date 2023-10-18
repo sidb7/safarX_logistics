@@ -3,7 +3,6 @@ import CloseIcon from "../../assets/CloseIcon.svg";
 import CustomeBottomModal from "./customBottomModal";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
-import { useState } from "react";
 
 interface IDeleteProps {
   isOpen: boolean;
@@ -24,18 +23,15 @@ const DeleteModal = (props: IDeleteProps) => {
     payloadBody,
     setIsDeleted,
   } = props;
-  const [loading, setLoading] = useState(false);
 
   const deleteApi = async () => {
-    setLoading(true);
-    setIsDeleted(true);
     const { data } = await POST(deleteURL, { awbNo: payloadBody });
     if (data?.success) {
+      setIsDeleted(true);
       toast.success(data?.message);
     } else {
       toast.error(data?.message);
     }
-    setLoading(false);
     setModalClose();
   };
 
@@ -70,7 +66,7 @@ const DeleteModal = (props: IDeleteProps) => {
               className=" bg-[#1C1C1C] text-white px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg"
               onClick={() => deleteApi()}
             >
-              {loading ? "LOADING" : "Yes"}
+              Yes
             </button>
           </div>
         </div>

@@ -228,7 +228,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 <ProductBox
                   key={index}
                   image={SampleProduct}
-                  weight={`${eachProduct?.deadWeight} Kg`}
+                  weight={`${eachProduct?.appliedWeight } Kg`}
                   productName={eachProduct?.name || 0}
                   breadth={eachProduct?.breadth || 0}
                   length={eachProduct?.length || 0}
