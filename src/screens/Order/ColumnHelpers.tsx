@@ -156,28 +156,21 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         orderType,
       } = info?.row?.original;
       const { AWB } = status[0] ?? "";
+      console.log("status", status?.[0]?.currentStatus);
       return (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
-                {status?.length === 0 ? (
-                  <Link
-                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
-                    className="underline text-blue-500 cursor-pointer"
-                  >
-                    <span
-                      className=""
-                      data-tooltip-id="my-tooltip-inline"
-                      data-tooltip-content="Complete Order"
-                    >
-                      {tempOrderId}
-                    </span>
-                  </Link>
-                ) : (
-                  <span className=""> {tempOrderId}</span>
-                )}
+                <span
+                  className=""
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Complete Order"
+                >
+                  {tempOrderId}
+                </span>
+
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
@@ -416,7 +409,144 @@ export const columnHelperForNewOrder = (
   };
 
   return [
-    ...idHelper(navigate, setInfoModalContent),
+    ColumnsHelper.accessor("IDs", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>IDs</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const {
+          tempOrderId,
+          orderId,
+          status = [],
+          source,
+          updatedAt,
+          orderType,
+        } = info?.row?.original;
+        const { AWB } = status[0] ?? "";
+        console.log("status", status?.[0]?.currentStatus);
+        return (
+          <div className="py-3">
+            {tempOrderId && (
+              <div className="">
+                <span className="text-sm font-light">Shipyaari ID :</span>
+                <div className="flex text-base items-center font-medium">
+                  <Link
+                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                    className="underline text-blue-500 cursor-pointer"
+                  >
+                    <span
+                      className=""
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Complete Order"
+                    >
+                      {tempOrderId}
+                    </span>
+                  </Link>
+
+                  <CopyTooltip stringToBeCopied={tempOrderId} />
+                </div>
+              </div>
+            )}
+            {orderId && (
+              <div className="">
+                <span className=" text-sm font-light">Order ID :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{orderId}</span>
+                  <CopyTooltip stringToBeCopied={orderId} />
+                </div>
+              </div>
+            )}
+            {AWB && (
+              <div className="">
+                <span className=" text-sm font-light">Tracking :</span>
+                <div className="flex text-base items-center font-medium">
+                  <span
+                    onClick={() =>
+                      navigate({
+                        pathname: "/tracking",
+                        search: `?trackingNo=${AWB}`,
+                      })
+                    }
+                    className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Track"
+                  >
+                    {AWB}
+                  </span>
+                  <Tooltip
+                    id="my-tooltip-inline"
+                    style={{
+                      backgroundColor: "bg-neutral-900",
+                      color: "#FFFFFF",
+                      width: "fit-content",
+                      fontSize: "14px",
+                      lineHeight: "16px",
+                    }}
+                  />
+                  <CopyTooltip stringToBeCopied={AWB} />
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && (
+              <div className="">
+                <span className=" text-sm font-light">Order Updated At :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && (
+              <div className="">
+                <span className=" text-sm font-light">Source :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{source}</span>
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && orderType && (
+              <div className="">
+                <span className=" text-sm font-light">Order Type :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{orderType}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+    //STATUS
+    ColumnsHelper.accessor("Status", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Status</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { status } = info?.row?.original;
+        const timeStamp = status?.[0]?.timeStamp;
+        const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+        const renderStatus = status?.[0]?.currentStatus || "Draft";
+        return (
+          <div className="py-3">
+            {
+              <div className="flex flex-col gap-y-1">
+                <div className="flex text-base items-center font-medium">
+                  <p>{renderStatus}</p>
+                </div>
+                <div>{time}</div>
+              </div>
+            }
+          </div>
+        );
+      },
+    }),
     ColumnsHelper.accessor(".", {
       header: () => {
         return (
