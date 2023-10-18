@@ -283,9 +283,9 @@ const Index: React.FC = () => {
                 selectedValue={setSelectedService}
               />
             </div>
-            <div className="mx-5 mb-5 mt-4 lg:mb-6">
+            {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
               <FilterBy />
-            </div>
+            </div> */}
             <div className="flex flex-col lg:flex-row gap-4 p-2 mb-[10%] ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox
