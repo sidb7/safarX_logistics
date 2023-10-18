@@ -156,7 +156,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         orderType,
       } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-      console.log("status", status?.[0]?.currentStatus);
+
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -427,7 +427,6 @@ export const columnHelperForNewOrder = (
           orderType,
         } = info?.row?.original;
         const { AWB } = status[0] ?? "";
-        console.log("status", status?.[0]?.currentStatus);
         return (
           <div className="py-3">
             {tempOrderId && (
@@ -491,30 +490,25 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            {status?.length === 0 && (
-              <div className="">
-                <span className=" text-sm font-light">Order Updated At :</span>
-                <div className=" flex text-base items-center font-medium">
-                  <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
-                </div>
+            <div className="">
+              <span className=" text-sm font-light">Order Updated At :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
               </div>
-            )}
-            {status?.length === 0 && (
-              <div className="">
-                <span className=" text-sm font-light">Source :</span>
-                <div className=" flex text-base items-center font-medium">
-                  <span className="">{source}</span>
-                </div>
+            </div>
+
+            <div className="">
+              <span className=" text-sm font-light">Source :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{source}</span>
               </div>
-            )}
-            {status?.length === 0 && orderType && (
-              <div className="">
-                <span className=" text-sm font-light">Order Type :</span>
-                <div className=" flex text-base items-center font-medium">
-                  <span className="">{orderType}</span>
-                </div>
+            </div>
+            <div className="">
+              <span className=" text-sm font-light">Order Type :</span>
+              <div className=" flex text-base items-center font-medium">
+                <span className="">{orderType}</span>
               </div>
-            )}
+            </div>
           </div>
         );
       },
@@ -529,16 +523,142 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
+        let rowData = info?.row?.original;
+        const latestStatus =
+          rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status } = info?.row?.original;
+        const rowsData = info?.row?.original;
+        // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYY(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
+        const rows: any = [
+          {
+            title: "Pickup Address",
+            FlatNo: rowsData?.pickupAddress?.flatNo,
+            LandkMark: rowsData?.pickupAddress?.landmark,
+            Locality: rowsData?.pickupAddress?.locality,
+            City: rowsData?.pickupAddress?.city,
+            State: rowsData?.pickupAddress?.state,
+            Pincode: rowsData?.pickupAddress?.pincode,
+            Country: rowsData?.pickupAddress?.country,
+            "Address Type": rowsData?.pickupAddress?.addressType,
+            Name: rowsData?.pickupAddress?.contact?.name,
+            "Email Id": rowsData?.pickupAddress?.contact?.emailId,
+            Type: rowsData?.pickupAddress?.contact?.type,
+          },
+          {
+            title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
+            FlatNo: rowsData?.deliveryAddress?.flatNo,
+            Landmark: rowsData?.deliveryAddress?.landmark,
+            Locality: rowsData?.deliveryAddress?.locality,
+            City: rowsData?.deliveryAddress?.city,
+            State: rowsData?.deliveryAddress?.state,
+            Pincode: rowsData?.deliveryAddress?.pincode,
+            Country: rowsData?.deliveryAddress?.country,
+            "Address Type": rowsData?.deliveryAddress?.addressType,
+            Name: rowsData?.deliveryAddress?.contact?.name,
+            "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
+            Type: rowsData?.deliveryAddress?.contact?.type,
+          },
+          {
+            title: rowsData?.service?.companyServiceId && "Services",
+            "Partner Name": rowsData?.service?.partnerName,
+            "AVN Service": rowsData?.service?.companyServiceName,
+            "Service Mode": rowsData?.service?.serviceMode,
+            "Applied Weight": rowsData?.service?.appliedWeight,
+            "Freight Charges": (
+              rowsData?.service?.add + rowsData?.service?.base
+            )?.toFixed(2),
+            "COD Charges": rowsData?.service?.cod,
+            Insurance: rowsData?.service?.insurance,
+            "Other Charges": rowsData?.service?.variables,
+            GST: rowsData?.service?.gst?.toFixed(2),
+            Total: rowsData?.service?.total?.toFixed(2),
+          },
+        ];
+        let boxObj: any = { title: "" };
+        rowsData?.boxInfo?.map((item: any, index: any) => {
+          let title = `Box Info ${
+            rowsData?.boxInfo?.length > 1 ? `${index + 1}` : ""
+          }`;
+          let qty = 0;
+          item?.products?.map((elem: any, num: any) => {
+            boxObj = {
+              ...boxObj,
+              [`Name ${num + 1}`]: elem?.name,
+              [`QTY ${num + 1}`]: elem?.qty,
+              [`Dead Weight ${num + 1}`]: elem?.deadWeight,
+              [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+              [`Dimensions ${
+                num + 1
+              }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
+              [`Price ${num + 1}`]: elem?.unitPrice,
+              [`Tax ${num + 1}`]: elem?.unitTax,
+              [`SKU ${num + 1}`]: elem?.sku,
+            };
+            qty += elem?.qty;
+          });
+          title += ` Product(s) x ${qty}`;
+          boxObj.title = title;
+          rows.push(boxObj);
+        });
+
+        let statusObj: any = { title: "" };
+        rowsData?.status?.map((elem: any, index: any) => {
+          statusObj = {
+            ...statusObj,
+            [`AWB No ${index + 1}`]: elem.AWB,
+            [`Current Status ${index + 1}`]: elem.currentStatus,
+            [`Description ${index + 1}`]: elem.description,
+            [`LogId ${index + 1}`]: elem.logId,
+            [`Notes ${index + 1}`]: elem.notes,
+            [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+          };
+          statusObj.title = "Status";
+        });
+        rows.push(statusObj);
+
+        rows.push({
+          title: "Other Details",
+          "Shipyaari ID": rowsData?.tempOrderId,
+          "Order Id": rowsData?.orderId,
+          "Tracking Id": rowsData?.otherDetails?.awbNo,
+          Source: rowsData?.source,
+          "Order Type": rowsData?.orderType,
+        });
+
+        // if (rowsData?.orderId === "100175") {
+        //   console.log("rowsData: ", rowsData);
+        // }
+
+        const handleInformativeModal = () => {
+          setInfoModalContent({
+            isOpen: true,
+            data: rows,
+            orderId: rowsData.orderId
+              ? rowsData.orderId
+              : `T${rowsData.tempOrderId}`,
+          });
+        };
         return (
           <div className="py-3">
             {
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
-                  <p>{renderStatus}</p>
+                  <div className="flex gap-x-1 items-center">
+                    <div>
+                      <p>{latestStatus ? latestStatus : "DRAFT"}</p>
+                    </div>
+                    {setInfoModalContent && (
+                      <div
+                        className="cursor-pointer"
+                        onClick={handleInformativeModal}
+                      >
+                        <img src={InformativeIcon} width={"20px"} />
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div>{time}</div>
               </div>
