@@ -76,7 +76,7 @@ const BulkUpload = (props: ITypeProps) => {
     e.preventDefault();
     if (e.dataTransfer.items) {
       const files = Array.from(e.dataTransfer.items)
-        .map((item: DataTransferItem) =>
+        ?.map((item: DataTransferItem) =>
           item.kind === "file" ? item.getAsFile() : null
         )
         .filter((file): file is File => file !== null);

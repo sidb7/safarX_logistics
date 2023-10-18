@@ -73,32 +73,12 @@ const ServicabilityPincode = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex flex-col">
-            {displayTableField("Name", info.row.original.partnerName)}
-            {displayTableField("ID", info.row.original.partnerId)}
-          </div>
-        );
-      },
-    }),
-    columnsHelper.accessor("partnerName", {
-      header: () => {
-        return (
-          <div className="">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Account Details
-            </p>
-          </div>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <div className="flex flex-col">
             {displayTableField("Name", info.row.original.accountName)}
-            {displayTableField("ID", info.row.original.accountId)}
           </div>
         );
       },
     }),
+
     columnsHelper.accessor("pincode", {
       header: () => {
         return (
@@ -144,7 +124,7 @@ const ServicabilityPincode = (props: ITypeProps) => {
         return (
           <div className="">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
-              Payment Details
+              Serviceability
             </p>
           </div>
         );
