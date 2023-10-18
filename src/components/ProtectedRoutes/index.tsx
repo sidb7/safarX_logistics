@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { clearLocalStorage, getLocalStorage } from "../../utils/utility";
 import { POST } from "../../utils/webService";
 import { VALIDATE_USER_TOKEN } from "../../utils/ApiUrls";
+import { setWalletBalance } from "../../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
 
 interface Props {
   children?: any;
@@ -11,6 +13,7 @@ interface Props {
 
 const ProtectedRoute = ({ children }: Props) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
   //used getLocalStorage to get the token from local storage
@@ -22,7 +25,6 @@ const ProtectedRoute = ({ children }: Props) => {
   React.useEffect(() => {
     (async () => {
       const response = await POST(VALIDATE_USER_TOKEN);
-      // console.log("response?.data?.data[0]", response);
 
       if (!response?.data?.success) {
         setIsAuthenticated(false);
@@ -38,6 +40,9 @@ const ProtectedRoute = ({ children }: Props) => {
           response?.data?.data[0]?.walletBalance
         );
         setIsAuthenticated(true);
+        dispatch(
+          setWalletBalance({ amt: response?.data?.data[0]?.walletBalance })
+        );
       }
     })();
   }, [localUserToken, navigate]);

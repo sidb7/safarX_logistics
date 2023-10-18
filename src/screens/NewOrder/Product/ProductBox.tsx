@@ -12,6 +12,7 @@ interface IPackageBoxProps {
   length?: any;
   height?: any;
   breadth?: any;
+  editMode?: any;
   onClick?: () => void;
   onClickEdit?: () => void;
   isSelected?: any;
@@ -33,6 +34,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   onClickEdit,
   isSelected = false,
   isActiveChannel,
+  editMode = false,
 }) => {
   return (
     <div
@@ -58,7 +60,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
           <span className="line-clamp-2">{productName}</span>
-          {!isActiveChannel && (
+          {editMode && !isActiveChannel && (
             <img
               src={EditIcon}
               alt=""

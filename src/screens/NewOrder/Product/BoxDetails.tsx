@@ -36,8 +36,6 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const [allProducts, setAllProducts]: any = useState([]);
 
-  const boxDetails: any = useRef(null);
-
   useEffect(() => {
     setAllProducts([...products]);
   }, [products]);
@@ -51,17 +49,13 @@ const BoxDetails = (props: IBoxdetails) => {
     return volume / 5000;
   };
 
-  const calcAllTotalProductVolumetricWeight: any = () => {
-    let MasterValueForProgressBar: number = 0;
-
+  const calcAllTotalProductAppliedWeight: any = () => {
+    let totalVolumetricWeight = 0;
     allProducts?.forEach((e: any) => {
-      let totalVolumetricWeight = 0;
-      const { qty, length, breadth, height } = e;
-      totalVolumetricWeight =
-        ((length * breadth * height) / 5000) * Math.pow(+qty, 3);
-      MasterValueForProgressBar += totalVolumetricWeight;
+      const { qty = 1, appliedWeight } = e;
+      totalVolumetricWeight += appliedWeight * +qty;
     });
-    return MasterValueForProgressBar;
+    return totalVolumetricWeight;
   };
   const percentage = (partialValue: any, totalValue: any) => {
     let percentage = (100 * +partialValue) / +totalValue;
@@ -100,7 +94,10 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const calcBillableWeight = () => {
-    let billableWeight = calcAllTotalProductVolumetricWeight();
+    let billableWeight = Math.max(
+      calcAllTotalProductAppliedWeight(),
+      +selectedBox.volumetricWeight
+    );
     return billableWeight.toFixed(2);
   };
 
@@ -221,7 +218,7 @@ const BoxDetails = (props: IBoxdetails) => {
         {Object.keys(selectedBox).length > 0 ? (
           <>
             <span className="text-base text-slate-600 mt-2 pl-4">
-              {`Products Applied weight is ${calcAllTotalProductVolumetricWeight().toFixed(
+              {`Products Applied weight is ${calcAllTotalProductAppliedWeight().toFixed(
                 2
               )} Kg`}
             </span>
@@ -229,14 +226,14 @@ const BoxDetails = (props: IBoxdetails) => {
               <div className="h-[6px] bg-[#CBEAC0] mt-2 ml- mr-16">
                 <div
                   className={`h-[6px] ${
-                    calcAllTotalProductVolumetricWeight() >
+                    calcAllTotalProductAppliedWeight() >
                     +selectedBox.appliedWeight
                       ? "bg-[red]"
                       : "bg-[#7CCA62]"
                   } p-0 m-0 transition-all duration-700 ease-in-out`}
                   style={{
                     width: `${percentage(
-                      calcAllTotalProductVolumetricWeight() || 0,
+                      calcAllTotalProductAppliedWeight() || 0,
                       +selectedBox.appliedWeight || 0
                     )}%`,
                   }}
@@ -250,11 +247,11 @@ const BoxDetails = (props: IBoxdetails) => {
               </div>
             </div>
             {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
-            {calcAllTotalProductVolumetricWeight() >
+            {calcAllTotalProductAppliedWeight() >
             +selectedBox.volumetricWeight ? (
               <span className="text-base text-slate-600  mt-4 pl-4">
                 {` Your billable weight is  ${calcBillableWeight()} KG. ( You are ${(
-                  calcAllTotalProductVolumetricWeight() -
+                  calcAllTotalProductAppliedWeight() -
                   +selectedBox.volumetricWeight
                 ).toFixed(2)} KG over your box capacity/volumetric weight )`}
               </span>
@@ -262,7 +259,7 @@ const BoxDetails = (props: IBoxdetails) => {
               <span className="text-base text-slate-600  mt-4 pl-4">
                 {`Your billable weight is ${calcBillableWeight()} KG. You can add more products up to ${(
                   +selectedBox.volumetricWeight -
-                  calcAllTotalProductVolumetricWeight()
+                  calcAllTotalProductAppliedWeight()
                 ).toFixed(2)} KG`}
               </span>
             )}
