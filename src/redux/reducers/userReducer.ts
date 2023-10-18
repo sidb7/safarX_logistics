@@ -7,6 +7,7 @@ interface UserState {
   email: string | null;
   loggedIn: boolean;
   isReturningUser: boolean;
+  walletBalance: number;
 }
 
 // Define the initial state using that type
@@ -16,6 +17,7 @@ const initialState: UserState = {
   email: null,
   loggedIn: false,
   isReturningUser: true,
+  walletBalance: 0,
 };
 
 export const userSlice = createSlice({
@@ -37,9 +39,12 @@ export const userSlice = createSlice({
       state.email = null;
       state.loggedIn = false;
     },
+    setWalletBalance: (state, action: PayloadAction<{ amt: number }>) => {
+      state.walletBalance = action.payload.amt;
+    },
     // other reducers...
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setWalletBalance } = userSlice.actions;
 export default userSlice.reducer;
