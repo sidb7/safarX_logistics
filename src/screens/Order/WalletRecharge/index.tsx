@@ -287,6 +287,10 @@ const WalletRecharge = () => {
       userDetails.name,
       userDetails.email
     );
+if(!options?.success && !options?.amount){
+   toast.error(options.message)
+   return;
+}
 
     const rzp1: any = new Razorpay(options);
 
