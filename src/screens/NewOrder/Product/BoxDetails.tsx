@@ -52,16 +52,12 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const calcAllTotalProductVolumetricWeight: any = () => {
-    let MasterValueForProgressBar: number = 0;
-
+    let totalVolumetricWeight = 0;
     allProducts?.forEach((e: any) => {
-      let totalVolumetricWeight = 0;
-      const { qty, length, breadth, height } = e;
-      totalVolumetricWeight =
-        ((length * breadth * height) / 5000) * Math.pow(+qty, 3);
-      MasterValueForProgressBar += totalVolumetricWeight;
+      const { qty, appliedWeight } = e;
+      totalVolumetricWeight = appliedWeight * +qty;
     });
-    return MasterValueForProgressBar;
+    return totalVolumetricWeight;
   };
   const percentage = (partialValue: any, totalValue: any) => {
     let percentage = (100 * +partialValue) / +totalValue;
@@ -100,7 +96,10 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   const calcBillableWeight = () => {
-    let billableWeight = calcAllTotalProductVolumetricWeight();
+    let billableWeight = Math.max(
+      calcAllTotalProductVolumetricWeight(),
+      +selectedBox.volumetricWeight
+    );
     return billableWeight.toFixed(2);
   };
 
