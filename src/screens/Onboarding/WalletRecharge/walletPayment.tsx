@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import NavBar from "../../../layout/Old_NavBar";
+import { toast } from "react-toastify";
+import CustomDropDown from "../../../components/DropDown";
 
 const modalTitle = () => {
   return (
@@ -34,9 +36,90 @@ const WalletPayment = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
   const [Razorpay] = useRazorpay();
-  const [money, setMoney] = useState<any>(2000);
+  // const [walletValue, setMoney] = useState<any>(100);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isEdit, setIsedit] = useState<any>();
+
+  const [walletValue, setWalletValue] = useState<any>();
+
+  const walletMenu = [
+    {
+      label: "100",
+      value: "100",
+    },
+    {
+      label: "200",
+      value: "200",
+    },
+    {
+      label: "500",
+      value: "500",
+    },
+    {
+      label: "1,000",
+      value: "1,000",
+    },
+    {
+      label: "2,000",
+      value: "2,000",
+    },
+    {
+      label: "3,000",
+      value: "3,000",
+    },
+    {
+      label: "5,000",
+      value: "5,000",
+    },
+    {
+      label: "10,000",
+      value: "10,000",
+    },
+    {
+      label: "15,000",
+      value: "15,000",
+    },
+    {
+      label: "20,000",
+      value: "20,000",
+    },
+    {
+      label: "25,000",
+      value: "25,000",
+    },
+    {
+      label: "30,000",
+      value: "30,000",
+    },
+    {
+      label: "50,000",
+      value: "50,000",
+    },
+    {
+      label: "1,00,000",
+      value: "1,00,000",
+    },
+    {
+      label: "2,00,000",
+      value: "2,00,000",
+    },
+    {
+      label: "3,00,000",
+      value: "3,00,000",
+    },
+    {
+      label: "5,00,000",
+      value: "5,00,000",
+    },
+    {
+      label: "7,00,000",
+      value: "7,00,000",
+    },
+    {
+      label: "10,00,000",
+      value: "10,00,000",
+    },
+  ];
 
   const userDetails = useSelector((state: any) => state.signin);
   const WalletRechargePaymentDetails = () => {
@@ -44,24 +127,9 @@ const WalletPayment = () => {
       setIsedit(true);
     };
 
-    const moneyArr = [
-      {
-        value: 2000,
-      },
-      {
-        value: 3000,
-      },
-      {
-        value: 4000,
-      },
-      {
-        value: 5000,
-      },
-    ];
-
     const handleRazorPayTransaction = async () => {
       const options: any = await loadRazorPayTransaction(
-        money,
+        walletValue,
         "SHIPYAARI",
         userDetails.name,
         userDetails.email
@@ -88,7 +156,7 @@ const WalletPayment = () => {
             Welcome to Shipyaari
           </h1>
         </div>
-        <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[210px]">
+        <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
           <div className="flex items-center gap-2">
             <img src={Accountlogo} alt="" />
             <p className="text-sm lg:text-[18px] font-semibold lg:text-[#1C1C1C]">
@@ -101,7 +169,17 @@ const WalletPayment = () => {
           <p className="text-[12px] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
             Endless wallet balance with automatic add money
           </p>
-          <p
+          <CustomDropDown
+            heading="Select Amount"
+            value={walletValue}
+            options={walletMenu}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              setWalletValue(event.target.value);
+            }}
+            wrapperClass="w-[200px]"
+            selectClassName="text-[18px]"
+          />
+          {/* <p
             onClick={() => convertToEdit()}
             className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
           >
@@ -109,33 +187,33 @@ const WalletPayment = () => {
             <input
               type={`number`}
               className="text-lg p-1 border-none"
-              value={money}
+              value={walletValue}
               onChange={(e) => setMoney(e.target.value)}
             />
-          </p>
+          </p> */}
           <div className="grid grid-cols-4 gap-2 mt-1 ">
-            {moneyArr?.map((el: any, i: number) => {
+            {/* {moneyArr?.map((el: any, i: number) => {
               return (
                 <div
                   key={i}
                   onClick={() => setMoney(el?.value)}
                   className={`${
-                    money === el?.value
+                    walletValue === el?.value
                       ? "border-[#004EFF]"
                       : "border-[#000000]"
                   } border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer`}
-                  // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {money ? border-[#004EFF]: border-[#000000]`}
+                  // className={`border-[1.5px] p-2 rounded-lg items-center border-solid cursor-pointer {walletValue ? border-[#004EFF]: border-[#000000]`}
                 >
                   <p
                     className={`text-[16px] ${
-                      money === el?.value ? "!text-[#004EFF]" : "text-[#000000]"
+                      walletValue === el?.value ? "!text-[#004EFF]" : "text-[#000000]"
                     } font-semibold lg:text-[14px] `}
                   >
                     ₹{el?.value}
                   </p>
                 </div>
               );
-            })}
+            })} */}
           </div>
         </div>
         <div className="flex mx-5 my-3">
@@ -159,7 +237,7 @@ const WalletPayment = () => {
                 <Paytm
                   isDisabled={isDisabled}
                   text={"Paytm"}
-                  amt={money}
+                  amt={walletValue}
                   navigate={`${SELLER_WEB_URL}/dashboard/overview`}
                 />
               </div>
@@ -181,7 +259,7 @@ const WalletPayment = () => {
                   }  flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
                   onClick={() =>
                     loadPhonePeTransaction(
-                      money,
+                      walletValue,
                       `${SELLER_WEB_URL}/dashboard/overview`,
                       `${SELLER_WEB_URL}/dashboard/overview`
                     )
@@ -219,14 +297,14 @@ const WalletPayment = () => {
           </div>
         </div>
 
-        <div
+        {/* <div
           className="flex justify-center  cursor-pointer"
           onClick={() => navigate("/dashboard/overview")}
         >
           <p className="text-[14px] text-[#004EFF] font-semibold border-b-2 border-[#004EFF] mt-3">
             SKIP FOR NOW{" "}
           </p>
-        </div>
+        </div> */}
       </div>
     );
   };
