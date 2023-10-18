@@ -196,14 +196,10 @@ const PickupLocation = () => {
     }
   };
 
-  console.log("shipyaariId", shipyaari_id);
-  console.log("orderSource", orderSource);
-
   useEffect(() => {
     (async () => {
       if (shipyaari_id) {
         const payload = { tempOrderId: shipyaari_id, source: orderSource };
-        console.log("latestOrderPayload", payload);
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
@@ -311,7 +307,6 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
-  console.log("pickupAddress", pickupAddress);
   return (
     <>
       {isActive ? (

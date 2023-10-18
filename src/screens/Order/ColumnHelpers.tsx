@@ -10,7 +10,7 @@ import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
-
+import InformativeIcon from "../../assets/I icon.svg";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
 import CustomButton from "../../components/Button";
@@ -137,7 +137,7 @@ const commonColumnHelper = [
   }),
 ];
 
-const idHelper = (navigate: any = "") => [
+const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
       return (
@@ -156,29 +156,21 @@ const idHelper = (navigate: any = "") => [
         orderType,
       } = info?.row?.original;
       const { AWB } = status[0] ?? "";
-      console.log("status: ", status);
+      console.log("status", status?.[0]?.currentStatus);
       return (
         <div className="py-3">
           {tempOrderId && (
             <div className="">
               <span className="text-sm font-light">Shipyaari ID :</span>
               <div className="flex text-base items-center font-medium">
-                {status?.length === 0 ? (
-                  <Link
-                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
-                    className="underline text-blue-500 cursor-pointer"
-                  >
-                    <span
-                      className=""
-                      data-tooltip-id="my-tooltip-inline"
-                      data-tooltip-content="Complete Order"
-                    >
-                      {tempOrderId}
-                    </span>
-                  </Link>
-                ) : (
-                  <span className=""> {tempOrderId}</span>
-                )}
+                <span
+                  className=""
+                  data-tooltip-id="my-tooltip-inline"
+                  data-tooltip-content="Complete Order"
+                >
+                  {tempOrderId}
+                </span>
+
                 <CopyTooltip stringToBeCopied={tempOrderId} />
               </div>
             </div>
@@ -262,15 +254,138 @@ const idHelper = (navigate: any = "") => [
     },
     cell: (info: any) => {
       const { status } = info?.row?.original;
+      const rowsData = info?.row?.original;
+      // console.log("rowData: ", info?.row?.original);
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYY(timeStamp);
       const renderStatus = status?.[0]?.currentStatus || "Draft";
+      const rows: any = [
+        {
+          title: "Pickup Address",
+          FlatNo: rowsData?.pickupAddress?.flatNo,
+          LandkMark: rowsData?.pickupAddress?.landmark,
+          Locality: rowsData?.pickupAddress?.locality,
+          City: rowsData?.pickupAddress?.city,
+          State: rowsData?.pickupAddress?.state,
+          Pincode: rowsData?.pickupAddress?.pincode,
+          Country: rowsData?.pickupAddress?.country,
+          "Address Type": rowsData?.pickupAddress?.addressType,
+          Name: rowsData?.pickupAddress?.contact?.name,
+          "Email Id": rowsData?.pickupAddress?.contact?.emailId,
+          Type: rowsData?.pickupAddress?.contact?.type,
+        },
+        {
+          title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
+          FlatNo: rowsData?.deliveryAddress?.flatNo,
+          Landmark: rowsData?.deliveryAddress?.landmark,
+          Locality: rowsData?.deliveryAddress?.locality,
+          City: rowsData?.deliveryAddress?.city,
+          State: rowsData?.deliveryAddress?.state,
+          Pincode: rowsData?.deliveryAddress?.pincode,
+          Country: rowsData?.deliveryAddress?.country,
+          "Address Type": rowsData?.deliveryAddress?.addressType,
+          Name: rowsData?.deliveryAddress?.contact?.name,
+          "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
+          Type: rowsData?.deliveryAddress?.contact?.type,
+        },
+        {
+          title: rowsData?.service?.companyServiceId && "Services",
+          "Partner Name": rowsData?.service?.partnerName,
+          "AVN Service": rowsData?.service?.companyServiceName,
+          "Service Mode": rowsData?.service?.serviceMode,
+          "Applied Weight": rowsData?.service?.appliedWeight,
+          "Freight Charges": (
+            rowsData?.service?.add + rowsData?.service?.base
+          )?.toFixed(2),
+          "COD Charges": rowsData?.service?.cod,
+          Insurance: rowsData?.service?.insurance,
+          "Other Charges": rowsData?.service?.variables,
+          GST: rowsData?.service?.gst?.toFixed(2),
+          Total: rowsData?.service?.total?.toFixed(2),
+        },
+      ];
+      let boxObj: any = { title: "" };
+      rowsData?.boxInfo?.map((item: any, index: any) => {
+        let title = `Box Info ${
+          rowsData?.boxInfo?.length > 1 ? `${index + 1}` : ""
+        }`;
+        let qty = 0;
+        item?.products?.map((elem: any, num: any) => {
+          boxObj = {
+            ...boxObj,
+            [`Name ${num + 1}`]: elem?.name,
+            [`QTY ${num + 1}`]: elem?.qty,
+            [`Dead Weight ${num + 1}`]: elem?.deadWeight,
+            [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+            [`Dimensions ${
+              num + 1
+            }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
+            [`Price ${num + 1}`]: elem?.unitPrice,
+            [`Tax ${num + 1}`]: elem?.unitTax,
+            [`SKU ${num + 1}`]: elem?.sku,
+          };
+          qty += elem?.qty;
+        });
+        title += ` Product(s) x ${qty}`;
+        boxObj.title = title;
+        rows.push(boxObj);
+      });
+
+      let statusObj: any = { title: "" };
+      rowsData?.status?.map((elem: any, index: any) => {
+        statusObj = {
+          ...statusObj,
+          [`AWB No ${index + 1}`]: elem.AWB,
+          [`Current Status ${index + 1}`]: elem.currentStatus,
+          [`Description ${index + 1}`]: elem.description,
+          [`LogId ${index + 1}`]: elem.logId,
+          [`Notes ${index + 1}`]: elem.notes,
+          [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+        };
+        statusObj.title = "Status";
+      });
+      rows.push(statusObj);
+
+      rows.push({
+        title: "Other Details",
+        "Shipyaari ID": rowsData?.tempOrderId,
+        "Order Id": rowsData?.orderId,
+        "Tracking Id": rowsData?.otherDetails?.awbNo,
+        Source: rowsData?.source,
+        "Order Type": rowsData?.orderType,
+      });
+
+      // if (rowsData?.orderId === "100175") {
+      //   console.log("rowsData: ", rowsData);
+      // }
+
+      const handleInformativeModal = () => {
+        setInfoModalContent({
+          isOpen: true,
+          data: rows,
+          orderId: rowsData.orderId
+            ? rowsData.orderId
+            : `T${rowsData.tempOrderId}`,
+        });
+      };
       return (
         <div className="py-3">
           {
             <div className="flex flex-col gap-y-1">
               <div className="flex text-base items-center font-medium">
-                <p>{renderStatus}</p>
+                <div className="flex gap-x-1 items-center">
+                  <div>
+                    <p>{renderStatus}</p>
+                  </div>
+                  {setInfoModalContent && (
+                    <div
+                      className="cursor-pointer"
+                      onClick={handleInformativeModal}
+                    >
+                      <img src={InformativeIcon} width={"20px"} />
+                    </div>
+                  )}
+                </div>
               </div>
               <div>{time}</div>
             </div>
@@ -286,14 +401,152 @@ export const columnHelperForPendingOrder = [];
 
 export const columnHelperForNewOrder = (
   navigate: any,
-  setDeleteModalDraftOrder: any
+  setDeleteModalDraftOrder: any,
+  setInfoModalContent?: any
 ) => {
   const handleDeleteModalDraftOrder = (payload: any) => {
     setDeleteModalDraftOrder({ isOpen: true, payload });
   };
 
   return [
-    ...idHelper(),
+    ColumnsHelper.accessor("IDs", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>IDs</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const {
+          tempOrderId,
+          orderId,
+          status = [],
+          source,
+          updatedAt,
+          orderType,
+        } = info?.row?.original;
+        const { AWB } = status[0] ?? "";
+        console.log("status", status?.[0]?.currentStatus);
+        return (
+          <div className="py-3">
+            {tempOrderId && (
+              <div className="">
+                <span className="text-sm font-light">Shipyaari ID :</span>
+                <div className="flex text-base items-center font-medium">
+                  <Link
+                    to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                    className="underline text-blue-500 cursor-pointer"
+                  >
+                    <span
+                      className=""
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content="Complete Order"
+                    >
+                      {tempOrderId}
+                    </span>
+                  </Link>
+
+                  <CopyTooltip stringToBeCopied={tempOrderId} />
+                </div>
+              </div>
+            )}
+            {orderId && (
+              <div className="">
+                <span className=" text-sm font-light">Order ID :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{orderId}</span>
+                  <CopyTooltip stringToBeCopied={orderId} />
+                </div>
+              </div>
+            )}
+            {AWB && (
+              <div className="">
+                <span className=" text-sm font-light">Tracking :</span>
+                <div className="flex text-base items-center font-medium">
+                  <span
+                    onClick={() =>
+                      navigate({
+                        pathname: "/tracking",
+                        search: `?trackingNo=${AWB}`,
+                      })
+                    }
+                    className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                    data-tooltip-id="my-tooltip-inline"
+                    data-tooltip-content="Track"
+                  >
+                    {AWB}
+                  </span>
+                  <Tooltip
+                    id="my-tooltip-inline"
+                    style={{
+                      backgroundColor: "bg-neutral-900",
+                      color: "#FFFFFF",
+                      width: "fit-content",
+                      fontSize: "14px",
+                      lineHeight: "16px",
+                    }}
+                  />
+                  <CopyTooltip stringToBeCopied={AWB} />
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && (
+              <div className="">
+                <span className=" text-sm font-light">Order Updated At :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && (
+              <div className="">
+                <span className=" text-sm font-light">Source :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{source}</span>
+                </div>
+              </div>
+            )}
+            {status?.length === 0 && orderType && (
+              <div className="">
+                <span className=" text-sm font-light">Order Type :</span>
+                <div className=" flex text-base items-center font-medium">
+                  <span className="">{orderType}</span>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      },
+    }),
+    //STATUS
+    ColumnsHelper.accessor("Status", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Status</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { status } = info?.row?.original;
+        const timeStamp = status?.[0]?.timeStamp;
+        const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+        const renderStatus = status?.[0]?.currentStatus || "Draft";
+        return (
+          <div className="py-3">
+            {
+              <div className="flex flex-col gap-y-1">
+                <div className="flex text-base items-center font-medium">
+                  <p>{renderStatus}</p>
+                </div>
+                <div>{time}</div>
+              </div>
+            }
+          </div>
+        );
+      },
+    }),
     ColumnsHelper.accessor(".", {
       header: () => {
         return (
@@ -491,7 +744,8 @@ export const columnHelperForNewOrder = (
 
 export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
-  setCancellationModal?: any
+  setCancellationModal?: any,
+  setInfoModalContent?: any
 ) => {
   const handleCancellationModal = (awbNo: any, orderId: any) => {
     setCancellationModal({ isOpen: true, awbNo, orderId });
@@ -523,7 +777,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         );
       },
     }),
-    ...idHelper(navigate),
+    ...idHelper(navigate, setInfoModalContent),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
       header: () => {
@@ -583,48 +837,53 @@ export const ColumnHelperForBookedAndReadyToPicked = (
     }),
   ];
 };
-export const columnHelpersForRest = [
-  ...idHelper(),
-  // ColumnsHelper.accessor("createdAt", {
-  //   header: () => {
-  //     return (
-  //       <div className="flex justify-between">
-  //         <h1>ETA</h1>
-  //       </div>
-  //     );
-  //   },
-  //   cell: (info: any) => {
-  //     const { original } = info.cell.row;
-  //     console.log("original: ", original);
+export const columnHelpersForRest = (
+  navigate: any,
+  setInfoModalContent: any
+) => {
+  return [
+    ...idHelper(navigate, setInfoModalContent),
+    // ColumnsHelper.accessor("createdAt", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <h1>ETA</h1>
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     const { original } = info.cell.row;
+    //     console.log("original: ", original);
 
-  //     return (
-  //       <div className="flex flex-col whitespace-nowrap">
-  //         <div className="flex gap-x-2">
-  //           <img src={BlackShipIcon} alt="" />
-  //           <span className="text-[14px]">04 Jun 2023</span>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // }),
-  ...commonColumnHelper,
-  // ColumnsHelper.accessor("createdAt", {
-  //   header: () => {
-  //     return (
-  //       <div className="flex justify-between">
-  //         <h1>Remark</h1>
-  //       </div>
-  //     );
-  //   },
-  //   cell: (info: any) => {
-  //     return (
-  //       <div className="flex flex-col whitespace-nowrap">
-  //         <div className="flex gap-x-2">
-  //           <span className="text-[14px]">Remarks</span>
-  //         </div>
-  //       </div>
-  //     );
-  //   },
-  // }),
-  ...MainCommonHelper(),
-];
+    //     return (
+    //       <div className="flex flex-col whitespace-nowrap">
+    //         <div className="flex gap-x-2">
+    //           <img src={BlackShipIcon} alt="" />
+    //           <span className="text-[14px]">04 Jun 2023</span>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // }),
+    ...commonColumnHelper,
+    // ColumnsHelper.accessor("createdAt", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <h1>Remark</h1>
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     return (
+    //       <div className="flex flex-col whitespace-nowrap">
+    //         <div className="flex gap-x-2">
+    //           <span className="text-[14px]">Remarks</span>
+    //         </div>
+    //       </div>
+    //     );
+    //   },
+    // }),
+    ...MainCommonHelper(),
+  ];
+};

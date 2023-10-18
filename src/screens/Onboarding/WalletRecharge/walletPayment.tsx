@@ -160,7 +160,7 @@ const WalletPayment = () => {
                   isDisabled={isDisabled}
                   text={"Paytm"}
                   amt={money}
-                  navigate="/dashboard/overview"
+                  navigate={`${SELLER_WEB_URL}/dashboard/overview`}
                 />
               </div>
               <div className="flex flex-col items-center gap-y-2">

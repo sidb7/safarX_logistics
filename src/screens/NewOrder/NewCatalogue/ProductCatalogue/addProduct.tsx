@@ -312,7 +312,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     </div>
                     <div className="w-full lg:w-3/4">
                       <span className="text-base">Cost</span>
-                      <div className="grid grid-cols-3 gap-6 py-4">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
                         <div className="w-full flex gap-6">
                           <CustomInputBox
                             label="Product Price"
@@ -344,7 +344,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                     </div>
                     <div className="w-full lg:w-3/4">
                       <span className=""> Product Images </span>
-                      <div className="grid grid-cols-3 gap-6 py-4 ">
+                      <div className="w-[250px] py-4 ">
                         <div className="">
                           <InputWithFileUpload
                             type="file"

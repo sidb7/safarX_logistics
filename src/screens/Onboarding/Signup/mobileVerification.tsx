@@ -45,7 +45,7 @@ const Index = () => {
 
   const modalTitle = () => {
     return (
-      <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
           src={CompanyLogo}
@@ -59,7 +59,7 @@ const Index = () => {
     return (
       <div className="relative h-full w-full">
         {isLgScreen && modalTitle()}
-        <div className="xl:mx-[90px] lg:mt-[125px] md:mx-6">
+        <div className="xl:mx-[90px] lg:mt-[24px] md:mx-6">
           <div className="flex flex-col gap-y-8">
             <div className="product-box flex items-center lg:hidden">
               <img

@@ -100,7 +100,8 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
-const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
+// const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
+const CANCEL_WAY_BILL = `http://localhost:8010/api/v1/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
@@ -238,6 +239,10 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 //Tracking
 const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
+//Serviceability URL
+const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
+const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
+
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -351,4 +356,6 @@ export {
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_WOOCOMMERCE_STORE,
   CANCEL_TEMP_SELLER_ORDER,
+  POST_SERVICEABILITY,
+  GET_COMPANY_SERVICE,
 };
