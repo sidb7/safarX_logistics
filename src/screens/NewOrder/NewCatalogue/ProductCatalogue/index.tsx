@@ -258,6 +258,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                         height={data?.height}
                         breadth={data?.breadth}
                         length={data?.length}
+                        editMode={true}
                         className={`cursor-pointer p-[16px] ${
                           viewed === index
                             ? "border-2 border-solid border-[#004EFF]"
