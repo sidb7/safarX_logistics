@@ -58,6 +58,7 @@ import {
 // import Razorpay from "razorpay";
 import useRazorpay from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
+import CustomDropDown from "../../../components/DropDown";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -125,18 +126,82 @@ const WalletRecharge = () => {
     (state: any) => state.payment.yaariPointsAvail
   );
 
-  const moneyArr = [
+  const walletMenu = [
     {
-      value: 2000,
+      label: "100",
+      value: "100",
     },
     {
-      value: 3000,
+      label: "200",
+      value: "200",
     },
     {
-      value: 4000,
+      label: "500",
+      value: "500",
     },
     {
-      value: 5000,
+      label: "1,000",
+      value: "1,000",
+    },
+    {
+      label: "2,000",
+      value: "2,000",
+    },
+    {
+      label: "3,000",
+      value: "3,000",
+    },
+    {
+      label: "5,000",
+      value: "5,000",
+    },
+    {
+      label: "10,000",
+      value: "10,000",
+    },
+    {
+      label: "15,000",
+      value: "15,000",
+    },
+    {
+      label: "20,000",
+      value: "20,000",
+    },
+    {
+      label: "25,000",
+      value: "25,000",
+    },
+    {
+      label: "30,000",
+      value: "30,000",
+    },
+    {
+      label: "50,000",
+      value: "50,000",
+    },
+    {
+      label: "1,00,000",
+      value: "1,00,000",
+    },
+    {
+      label: "2,00,000",
+      value: "2,00,000",
+    },
+    {
+      label: "3,00,000",
+      value: "3,00,000",
+    },
+    {
+      label: "5,00,000",
+      value: "5,00,000",
+    },
+    {
+      label: "7,00,000",
+      value: "7,00,000",
+    },
+    {
+      label: "10,00,000",
+      value: "10,00,000",
     },
   ];
 
@@ -277,7 +342,7 @@ const WalletRecharge = () => {
                   <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                     Endless wallet balance with automatic add money
                   </p>
-                  <p
+                  {/* <p
                     onClick={() => convertToEdit()}
                     className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
                   >
@@ -288,8 +353,18 @@ const WalletRecharge = () => {
                       value={walletValue}
                       onChange={(e) => setWalletValue(e.target.value)}
                     />
-                  </p>
-                  <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
+                  </p> */}
+                  <CustomDropDown
+                    heading="Select Amount"
+                    value={walletValue}
+                    options={walletMenu}
+                    onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                      setWalletValue(event.target.value);
+                    }}
+                    wrapperClass="w-[200px]"
+                    selectClassName="text-[18px]"
+                  />
+                  {/* <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                     {moneyArr?.map((el: any, i: number) => {
                       return (
                         <div
@@ -314,7 +389,7 @@ const WalletRecharge = () => {
                         </div>
                       );
                     })}
-                  </div>
+                  </div> */}
                 </div>
 
                 {/*Second */}

@@ -291,7 +291,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   key={`${e.name + index}`}
                 >
                   <div
-                    className={` flex items-center gap-x-4  rounded-lg p-4 justify-start w-full `}
+                    className={` flex items-center gap-x-4  cursor-pointer  rounded-lg p-4 justify-start w-full `}
                     onClick={() => {
                       opneAndCloseChild(index, e.isChild);
                     }}
@@ -316,12 +316,12 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                     </div>
                   </div>
                   {e.isChild ? (
-                    <div className="flex flex-col overflow-hidden ">
+                    <div className="flex flex-col overflow-hidden  ">
                       {e.menu?.map((child: any, childIndex: number) => {
                         return (
                           <div
                             key={`${child.path + childIndex}`}
-                            className={` rounded-lg  text-sm font-semibold leading-5 capitalize p-4 `}
+                            className={` rounded-lg  text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
                             onClick={() =>
                               setIsActivePath(index, childIndex, child.path)
                             }
