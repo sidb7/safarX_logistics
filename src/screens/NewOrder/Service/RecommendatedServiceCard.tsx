@@ -5,14 +5,22 @@ interface IRadioButtonProps {
   name?: string;
   options?: any;
   selectedValue?: any;
+  selectedOption?: any;
+  setSelectedOption?: any;
 }
 
 const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   props: IRadioButtonProps
 ) => {
-  const { name, options = [], selectedValue } = props;
+  const {
+    name,
+    options = [],
+    selectedValue,
+    selectedOption,
+    setSelectedOption,
+  } = props;
 
-  const [selectedOption, setSelectedOption] = useState<any>(null);
+  // const [selectedOption, setSelectedOption] = useState<any>(null);
 
   const cheapestService = options.reduce(
     (minOption: any, currentOption: any) => {

@@ -125,6 +125,7 @@ const Index: React.FC = () => {
   const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<any>(null);
 
   const [response, setResponse] = useState<any>();
   const [serviceOptions, setServiceOptions] = useState<any>([]);
@@ -281,6 +282,8 @@ const Index: React.FC = () => {
               <RecommendatedServiceCard
                 options={serviceOptions}
                 selectedValue={setSelectedService}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
               />
             </div>
             {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
@@ -291,6 +294,8 @@ const Index: React.FC = () => {
               <ServiceBox
                 options={serviceOptions}
                 selectedValue={setSelectedService}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
               />
             </div>
           </div>

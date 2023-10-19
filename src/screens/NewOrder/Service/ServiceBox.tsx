@@ -7,14 +7,22 @@ interface IRadioButtonProps {
   name?: string;
   options?: any;
   selectedValue?: any;
+  selectedOption?: any;
+  setSelectedOption?: any;
 }
 
 const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   props: IRadioButtonProps
 ) => {
-  const { name, options = [], selectedValue } = props;
+  const {
+    name,
+    options = [],
+    selectedValue,
+    selectedOption,
+    setSelectedOption,
+  } = props;
 
-  const [selectedOption, setSelectedOption] = useState<any>(null);
+  // const [selectedOption, setSelectedOption] = useState<any>(null);
   const [sortOption, setSortOption] = useState<string | null>(null);
 
   const handleOnChange = (option: any) => {
