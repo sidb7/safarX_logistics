@@ -95,7 +95,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
             onClick={() => handleOnChange(fastestService)}
             data-tooltip-id={`my-tooltip-inline-${fastestService.value}`}
           >
-            <p className="absolute z-2 -top-3 left-5 bg-[#1E88E5] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
+            <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
               Fastest
             </p>
 

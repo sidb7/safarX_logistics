@@ -46,7 +46,6 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     );
   }
 
-  console.log("sortedOption", sortedOptions);
   return (
     <div>
       <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
@@ -86,17 +85,13 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                 {`${option.text?.partnerName}: ${option.text?.companyServiceName}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
-                {/* {option.text?.total.toLocaleString("en-US", {
-                style: "currency",
-                currency: "INR",
-              })} */}
-                {`\u20B9`} {option.text?.total.toFixed(2)}
+                {`\u20B9`} {option.text?.total.toFixed(2)}{" "}
+                <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
+                  {`${option.text?.serviceMode}`}
+                </span>
               </p>
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
                 ETA: {option.text?.EDT || "N/A"}{" "}
-                <span className="pl-1 text-[#1C1C1C] text-[12px]">
-                  MODE: {`${option.text?.serviceMode}`}
-                </span>
               </p>
               {/* <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p> */}
             </div>
