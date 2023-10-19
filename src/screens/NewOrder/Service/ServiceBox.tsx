@@ -24,41 +24,40 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     ignoreRecommended,
   } = props;
 
-  // const [selectedOption, setSelectedOption] = useState<any>(null);
-  const [sortOption, setSortOption] = useState<string | null>(null);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleOnChange = (option: any) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
-  const items = ["Fastest", "Low Price", "Surface", "Air"];
-  const handleSortBy = (sortBy: string) => {
-    setSortOption(sortBy);
+
+  const handleSortBy = (selectedItems: string[]) => {
+    setSelectedItems(selectedItems);
   };
 
-  //  const filteredOptions = ignoreRecommended
-  //    ? options.filter((option:any) => !option.isRecommended)
-  //    : options;
-
-  const sortedOptions = [...options];
-
-  if (sortOption === "Fastest") {
-    sortedOptions.sort((a, b) => a.text.EDT - b.text.EDT);
-  } else if (sortOption === "Low Price") {
-    sortedOptions.sort((a, b) => a.text.total - b.text.total);
-  } else if (sortOption === "Surface") {
-    sortedOptions.sort((a, b) =>
+  const sortingFunctions: { [key: string]: (a: any, b: any) => number } = {
+    Fastest: (a, b) => a.text.EDT - b.text.EDT,
+    "Low Price": (a, b) => a.text.total - b.text.total,
+    Surface: (a, b) =>
       a.text.serviceMode === "SURFACE"
         ? -1
         : b.text.serviceMode === "SURFACE"
         ? 1
-        : 0
-    );
-  } else if (sortOption === "Air") {
-    sortedOptions.sort((a, b) =>
-      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0
-    );
-  }
+        : 0,
+    Air: (a, b) =>
+      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0,
+  };
+
+  const sortedOptions = [...options].sort((a, b) => {
+    let result = 0;
+    for (const selectedSortOption of selectedItems) {
+      result = sortingFunctions[selectedSortOption](a, b);
+      if (result !== 0) {
+        break; // Break on the first non-zero result
+      }
+    }
+    return result;
+  });
 
   return (
     <div>
@@ -69,7 +68,10 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         </div>
       </div>
       <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
-        <FilterItems items={items} onClick={handleSortBy} />
+        <FilterItems
+          items={["Fastest", "Low Price", "Surface", "Air"]}
+          onClick={handleSortBy}
+        />
       </div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
         {sortedOptions.map((option: any) => (
@@ -107,7 +109,6 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
                 ETA: {option.text?.EDT || "N/A"}{" "}
               </p>
-              {/* <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p> */}
             </div>
             <TooltipContent option={option} />
           </div>
