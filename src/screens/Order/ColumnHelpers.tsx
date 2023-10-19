@@ -42,31 +42,6 @@ const ProductBox = ({ name = "", dimension = "" }: any) => {
 };
 const MainCommonHelper = (navigate: any = "") => {
   return [
-    ColumnsHelper.accessor("Payment", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <h1>Amounts</h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        const { payment, codInfo } = info?.row?.original;
-        return (
-          <>
-            <div className="flex flex-col gap-y-2 text-base py-3 justify-start">
-              <span>
-                {payment?.amount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                }) ?? "0"}
-              </span>
-              <span>{codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}</span>
-            </div>
-          </>
-        );
-      },
-    }),
     ColumnsHelper.accessor("Pickup Adreess", {
       header: () => {
         return (
@@ -114,6 +89,46 @@ const MainCommonHelper = (navigate: any = "") => {
               </div>
             )}
           </div>
+        );
+      },
+    }),
+    ColumnsHelper.accessor("Payment", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Payment Mode</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { service, codInfo } = info?.row?.original;
+        return (
+          <>
+            <div className="flex flex-col gap-y-1 text-base py-3">
+              <p>
+                <span>Invoice Value : </span>
+                {codInfo.invoiceValue.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+              <p>
+                <span>COD : </span>
+                {codInfo?.collectableAmount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+
+              <span>
+                {codInfo
+                  ? codInfo?.isCod
+                    ? "Payment Type : COD"
+                    : "Payment Type : PREPAID"
+                  : "-"}
+              </span>
+            </div>
+          </>
         );
       },
     }),
@@ -252,7 +267,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       const rowsData = info?.row?.original;
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYY(timeStamp);
-      const renderStatus = status?.[0]?.currentStatus || "Draft";
+      // const renderStatus = status?.[0]?.currentStatus || "Draft";
+      let renderStatus =
+        rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
+        "DRAFT";
       const rows: any = [
         {
           title: "Pickup Address",
@@ -973,6 +991,27 @@ export const columnHelpersForRest = (
   setInfoModalContent: any
 ) => {
   return [
+    // ...commonColumnHelper,
+    ColumnsHelper.accessor("packageType", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Courier Details</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { service } = info?.row?.original;
+        return (
+          <div className=" ">
+            <div className="py-2 flex flex-col">
+              <span className="text-sm font-light">Delivery Partner</span>
+              <div className="font-semibold">{service?.partnerName}</div>
+            </div>
+          </div>
+        );
+      },
+    }),
     ...idHelper(navigate, setInfoModalContent),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
@@ -996,7 +1035,6 @@ export const columnHelpersForRest = (
     //     );
     //   },
     // }),
-    ...commonColumnHelper,
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
     //     return (
