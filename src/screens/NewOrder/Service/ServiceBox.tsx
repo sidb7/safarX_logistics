@@ -77,7 +77,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
               selectedOption?.value === option?.value
-                ? "border-green-500 border-2"
+                ? "border-[#004EFF] border-2"
                 : "border-[#c1c1c1]"
             }`}
             onClick={() => handleOnChange(option)}
