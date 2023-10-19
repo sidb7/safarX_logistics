@@ -189,7 +189,8 @@ const Summary = (props: Props) => {
   const serviceDetails = latestOrder?.data?.[0]?.service;
   const products = latestOrder?.data?.[0]?.products || [];
   const boxInfo = latestOrder?.data?.[0]?.boxInfo;
-
+  const codInfo = latestOrder?.data?.[0]?.codInfo;
+  console.log("codInfo", codInfo);
   // console.log("boxInfo", boxInfo);
 
   return (
@@ -401,7 +402,7 @@ const Summary = (props: Props) => {
               variables={serviceDetails?.variables}
               cod={serviceDetails?.cod}
               gst={serviceDetails?.gst}
-              invoiceValue={serviceDetails?.invoiceValue}
+              invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}
             />
           </div>

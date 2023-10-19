@@ -21,33 +21,14 @@ import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";
 import CustomDropDown from "../../../components/DropDown";
-import ServiceBox from "./ServiceBox";
 import { getQueryJson } from "../../../utils/utility";
+import RecommendatedServiceCard from "./RecommendatedServiceCard";
+import ServiceBox from "./ServiceBox";
 
 export const RecommendedServiceData = [
   {
     isRecommendation: true,
     recommendation: "Cheapest",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "1",
-  },
-  {
-    isRecommendation: true,
-    recommendation: "Fastest",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "2",
   },
 ];
 
@@ -141,83 +122,20 @@ export const FilterServiceData = [
 ];
 
 const Index: React.FC = () => {
-  const [recommendedData, setRecommendedData] = useState([]);
+  // const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<any>(null);
 
   const [response, setResponse] = useState<any>();
   const [serviceOptions, setServiceOptions] = useState<any>([]);
-
-  const [latestOrder, setLatestOrder] = useState<any>([]);
+  const [recommendedOptions, setRecommendatedOptions] = useState<any>([]);
   const [loading, setLoading] = useState(false);
-  const [companyServiceId, setCompanyServiceId] = useState<any>();
-  const [companyServiceName, setCompanyServiceName] = useState<any>();
-  const [partnerService, setPartnerService] = useState<any>();
-  const [partnerServiceId, setPartnerServiceId] = useState<any>();
-  const [partnerServiceName, setPartnerServiceName] = useState<any>();
-  const [cardInfo, setCardInfo] = useState<any>();
-
-  // const [payload, setPayload] = useState({
-  //   mode: null,
-  //   companyServiceId: null,
-  //   companyServiceName: null,
-  //   baseWeight: null,
-  //   partnerServiceId: null,
-  //   partnerServiceName: null,
-  //   price: null,
-  // });
 
   const navigate = useNavigate();
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
-
-  //
-
-  //
-
-  //
-  // const dataArray = (response as any).data;
-  //
-
-  // endpoint to maintain order state
-  // const getLatestOrderDetails = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const { data: response } = await POST(GET_LATEST_ORDER);
-
-  //     if (response?.success) {
-  //       // const recommended = response.filter(
-  //       //   (item: any) => item?.isRecommendation
-  //       // );
-  //       // const filter = response.filter((item: any) => !item?.isRecommendation);
-
-  //       setLatestOrder(response);
-  //       setLoading(false);
-  //       // setFilterData(filter);
-  //     } else {
-  //       setLatestOrder([]);
-  //       // toast.error(response?.message);
-  //     }
-  //   } catch (error) {
-  //     return error;
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   getLatestOrderDetails();
-  // }, []);
-
-  const getServicePayload = latestOrder?.data?.codInfo;
-  //
-
-  /* getserviceAPI Static Payload */
-
-  // const getServiceDetailsPayload = {
-  //   paymentType: "COD",
-  //   codCollectAmount: 123,
-  //   invoiceValue: 1234,
-  // };
 
   const getCourierPartnerService = async () => {
     const payload = {
@@ -243,7 +161,31 @@ const Index: React.FC = () => {
           };
         });
 
-        setServiceOptions(options);
+        const cheapestService = options.reduce(
+          (minOption: any, currentOption: any) => {
+            return currentOption.text.total < minOption.text.total
+              ? currentOption
+              : minOption;
+          },
+          options[0]
+        );
+
+        const fastestService = options.reduce(
+          (minOption: any, currentOption: any) => {
+            return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+              ? currentOption
+              : minOption;
+          },
+          options[0]
+        );
+
+        setRecommendatedOptions([cheapestService, fastestService]);
+        const filteredOptions = options.filter(
+          (option: any) =>
+            option !== cheapestService && option !== fastestService
+        );
+
+        setServiceOptions(filteredOptions);
         setLoading(false);
       } else {
         setResponse([]);
@@ -260,6 +202,24 @@ const Index: React.FC = () => {
   useEffect(() => {
     getCourierPartnerService();
   }, []);
+
+  // const cheapestService = serviceOptions.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.total < minOption.text.total
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   serviceOptions[0]
+  // );
+
+  // const fastestService = serviceOptions.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   serviceOptions[0]
+  // );
 
   const postServiceDetails = async () => {
     if (selectedService === null) {
@@ -300,36 +260,6 @@ const Index: React.FC = () => {
     }
   };
 
-  const companyName =
-    response &&
-    response?.data?.map((el: any, i: number) => ({
-      label: el?.companyServiceName,
-      value: el?.companyServiceId,
-    }));
-
-  const fetchPartnerServiceName = (e: any) => {
-    setCompanyServiceId(e.target.value);
-    const filtered = response?.data?.filter((resp: any) => {
-      return resp?.companyServiceId === e.target.value;
-    });
-    setCompanyServiceName(filtered[0].companyServiceName);
-
-    const partnerDropdown = filtered?.map((el: any, i: number) => ({
-      label: el?.partnerServiceName,
-      value: el?.partnerServiceId,
-    }));
-    setPartnerService(partnerDropdown);
-  };
-
-  const setCardInfoFunction = (e: any) => {
-    setPartnerServiceId(e.target.value);
-    const CardInfo = response?.data?.filter((resp: any) => {
-      return resp?.partnerServiceId === e.target.value;
-    });
-    setPartnerServiceName(CardInfo[0].partnerServiceName);
-    setCardInfo(CardInfo[0]);
-  };
-
   const steps = [
     {
       label: "Pickup",
@@ -368,6 +298,7 @@ const Index: React.FC = () => {
       imgSrc: TickLogo,
     },
   ];
+
   return (
     <div className="w-full ">
       <Breadcrum label="Add New Order" />
@@ -388,103 +319,32 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="flex gap-4 p-2 mb-[20%]">
-            <div>
+          <div>
+            <div className="flex flex-col lg:flex-row gap-4 p-2 ">
+              {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
+              <RecommendatedServiceCard
+                // options={serviceOptions}
+                options={recommendedOptions}
+                selectedValue={setSelectedService}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
+            </div>
+            {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
+              <FilterBy />
+            </div> */}
+            <div className="flex flex-col lg:flex-row gap-4 p-2 mb-[10%] ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <ServiceBox
                 options={serviceOptions}
                 selectedValue={setSelectedService}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+                ignoreRecommended={true}
               />
-              {/* <CustomDropDown
-                value={companyServiceId}
-                options={companyName}
-                onChange={(e) => fetchPartnerServiceName(e)}
-                wrapperClass="!w-[20rem] mt-4"
-                heading="Select Shipyaari Service"
-              /> */}
             </div>
-
-            {/* {partnerService && (
-              <div>
-                <h1 className="font-Lato">Partner Service</h1>
-                <CustomDropDown
-                  value={partnerServiceId}
-                  options={partnerService}
-                  onChange={(e) => setCardInfoFunction(e)}
-                  wrapperClass="!w-[20rem] mt-4"
-                  heading="Select Partner Service"
-                />
-              </div>
-            )} */}
           </div>
         </>
-      )}
-
-      {cardInfo && (
-        <div className="max-w-2xl rounded shadow-xl pb-20">
-          <div className="px-6 py-4">
-            <div className="font-bold text-xl mb-2 underline">
-              Service Information :
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="text-sm">
-                <span className="font-bold font-Lato">
-                  Partner Service Name :
-                </span>{" "}
-                {cardInfo.partnerServiceName}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">
-                  Company Service Name :
-                </span>{" "}
-                {cardInfo.companyServiceName}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">EDT : </span>
-                {cardInfo.EDT}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Add Price : </span>{" "}
-                &#8377; {cardInfo.add}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">
-                  Applied Weight (KG) :{" "}
-                </span>
-                {cardInfo.appliedWeight}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Base Price : </span>
-                &#8377; {cardInfo.base}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">COD Price : </span>
-                &#8377; {cardInfo.cod}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">GST % : </span>
-                &#8377; {cardInfo.gst}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Invoice Value : </span>
-                &#8377; {cardInfo.invoiceValue}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Total : </span>
-                &#8377; {cardInfo.total}
-              </div>
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Variables : </span>
-                &#8377; {cardInfo.variables}
-              </div>
-
-              <div className="text-sm">
-                <span className="font-bold font-Lato">Insurance : </span>
-                &#8377; {cardInfo?.insurance}
-              </div>
-            </div>
-          </div>
-        </div>
       )}
 
       <BottomLayout
