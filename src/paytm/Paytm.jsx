@@ -123,6 +123,12 @@ function Paytm({ text, amt, navigate, isDisabled }) {
         },
       });
     }
+
+    if(!data){
+      toast.error( "Some Thing Went Wrong") 
+    }else{
+      toast.error( data?.message )
+    }
   };
 
   const loadCheckoutScript = () => {

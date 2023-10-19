@@ -135,8 +135,15 @@ export const loadPhonePeTransaction = async (
       paymentGateway: "PHONEPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-    const phonePayTransactionPage =
-      data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    console.log(data);
+    let phonePayTransactionPage;
+    if (!data) {
+      phonePayTransactionPage = redirectUrl;
+    } else {
+      phonePayTransactionPage =
+        data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    }
+
     setLocalStorage(
       "phonePeTransactionId",
       data?.data[0]?.data?.merchantTransactionId
