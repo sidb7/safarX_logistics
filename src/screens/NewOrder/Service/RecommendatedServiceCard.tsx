@@ -4,6 +4,8 @@ import TooltipContent from "./TooltipContent";
 interface IRadioButtonProps {
   name?: string;
   options?: any;
+  cheapestService?: any;
+  fastestService?: any;
   selectedValue?: any;
   selectedOption?: any;
   setSelectedOption?: any;
@@ -18,32 +20,37 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
     selectedValue,
     selectedOption,
     setSelectedOption,
+    // cheapestService,
+    // fastestService,
   } = props;
-
+  console.log(">>>", options);
   // const [selectedOption, setSelectedOption] = useState<any>(null);
 
-  const cheapestService = options.reduce(
-    (minOption: any, currentOption: any) => {
-      return currentOption.text.total < minOption.text.total
-        ? currentOption
-        : minOption;
-    },
-    options[0]
-  );
+  // const cheapestService = options.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.total < minOption.text.total
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   options[0]
+  // );
 
-  const fastestService = options.reduce(
-    (minOption: any, currentOption: any) => {
-      return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
-        ? currentOption
-        : minOption;
-    },
-    options[0]
-  );
+  // const fastestService = options.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   options[0]
+  // );
 
   const handleOnChange = (option: any) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
+
+  const cheapestService = options[0];
+  const fastestService = options[1];
 
   return (
     <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">

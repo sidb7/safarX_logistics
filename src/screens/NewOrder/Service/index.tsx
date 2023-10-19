@@ -122,14 +122,14 @@ export const FilterServiceData = [
 ];
 
 const Index: React.FC = () => {
-  const [recommendedData, setRecommendedData] = useState([]);
+  // const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedOption, setSelectedOption] = useState<any>(null);
 
   const [response, setResponse] = useState<any>();
   const [serviceOptions, setServiceOptions] = useState<any>([]);
-
+  const [recommendedOptions, setRecommendatedOptions] = useState<any>([]);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -161,7 +161,31 @@ const Index: React.FC = () => {
           };
         });
 
-        setServiceOptions(options);
+        const cheapestService = options.reduce(
+          (minOption: any, currentOption: any) => {
+            return currentOption.text.total < minOption.text.total
+              ? currentOption
+              : minOption;
+          },
+          options[0]
+        );
+
+        const fastestService = options.reduce(
+          (minOption: any, currentOption: any) => {
+            return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+              ? currentOption
+              : minOption;
+          },
+          options[0]
+        );
+
+        setRecommendatedOptions([cheapestService, fastestService]);
+        const filteredOptions = options.filter(
+          (option: any) =>
+            option !== cheapestService && option !== fastestService
+        );
+
+        setServiceOptions(filteredOptions);
         setLoading(false);
       } else {
         setResponse([]);
@@ -178,6 +202,24 @@ const Index: React.FC = () => {
   useEffect(() => {
     getCourierPartnerService();
   }, []);
+
+  // const cheapestService = serviceOptions.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.total < minOption.text.total
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   serviceOptions[0]
+  // );
+
+  // const fastestService = serviceOptions.reduce(
+  //   (minOption: any, currentOption: any) => {
+  //     return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+  //       ? currentOption
+  //       : minOption;
+  //   },
+  //   serviceOptions[0]
+  // );
 
   const postServiceDetails = async () => {
     if (selectedService === null) {
@@ -256,6 +298,7 @@ const Index: React.FC = () => {
       imgSrc: TickLogo,
     },
   ];
+
   return (
     <div className="w-full ">
       <Breadcrum label="Add New Order" />
@@ -280,7 +323,8 @@ const Index: React.FC = () => {
             <div className="flex flex-col lg:flex-row gap-4 p-2 ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <RecommendatedServiceCard
-                options={serviceOptions}
+                // options={serviceOptions}
+                options={recommendedOptions}
                 selectedValue={setSelectedService}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
@@ -296,6 +340,7 @@ const Index: React.FC = () => {
                 selectedValue={setSelectedService}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
+                ignoreRecommended={true}
               />
             </div>
           </div>

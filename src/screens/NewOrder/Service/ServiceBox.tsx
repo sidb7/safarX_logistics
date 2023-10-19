@@ -9,6 +9,7 @@ interface IRadioButtonProps {
   selectedValue?: any;
   selectedOption?: any;
   setSelectedOption?: any;
+  ignoreRecommended?: boolean;
 }
 
 const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
@@ -20,6 +21,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     selectedValue,
     selectedOption,
     setSelectedOption,
+    ignoreRecommended,
   } = props;
 
   // const [selectedOption, setSelectedOption] = useState<any>(null);
@@ -33,6 +35,10 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   const handleSortBy = (sortBy: string) => {
     setSortOption(sortBy);
   };
+
+  //  const filteredOptions = ignoreRecommended
+  //    ? options.filter((option:any) => !option.isRecommended)
+  //    : options;
 
   const sortedOptions = [...options];
 
