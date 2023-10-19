@@ -122,6 +122,12 @@ function Paytm({ text, amt, navigate, isDisabled }) {
           amount: data?.data?.amount,
         },
       });
+    }else{
+      toast.error( data?.message || "Some Thing Went Wrong")
+    }
+
+    if(!data){
+      toast.error("Some Thing Went Wrong" ) 
     }
   };
 
