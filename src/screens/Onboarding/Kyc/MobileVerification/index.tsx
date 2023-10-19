@@ -161,7 +161,7 @@ const Index = (props: ITypeProps) => {
 
         if (businessType === "business") {
           // navigate("/onboarding/kyc-terms/service-agreement");
-          navigate("/onboarding/kyc-aadhar-form");
+          navigate("/onboarding/kyc");
         } else if (businessType === "company") {
           navigate("/onboarding/kyc");
         } else if (businessType === "individual") {
