@@ -18,7 +18,7 @@ switch (Environment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
-    SELLER_WEB_URL = `http://localhost:3000`;
+    SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
 
     break;
 
