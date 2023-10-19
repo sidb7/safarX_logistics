@@ -1,3 +1,4 @@
+import { Tooltip } from "react-tooltip";
 import "../../styles/inputBox.css";
 interface propTypes {
   label?: string;
@@ -17,12 +18,15 @@ interface propTypes {
   maxLength?: number;
   isRightIcon?: boolean;
   rightIcon?: string;
+  informativeIcon?: string;
+  isInfoIcon?: boolean;
   setVisibility?: any;
   visibility?: any;
   onClick?: any;
   imageClassName?: string;
   tempLabel?: any;
   onKeyDown?: any;
+  tooltipContent?: string;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -45,6 +49,8 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     visibility,
     isDisabled,
     rightIcon,
+    informativeIcon,
+    isInfoIcon = false,
     inputType = "text",
     isRequired = false,
     isRightIcon = false,
@@ -52,6 +58,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     maxLength,
     imageClassName,
     onKeyDown,
+    tooltipContent,
   } = props;
 
   return (
@@ -91,13 +98,35 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <img
             src={rightIcon}
             alt=""
-            className={`${imageClassName} absolute z-20  right-5  top-[30%] cursor-pointer w-[20px] h-[20px]`}
+            className={`${imageClassName} absolute z-20  right-6  top-[30%] cursor-pointer w-[20px] h-[20px]`}
             onClick={() => {
               setVisibility(!visibility);
               onClick();
             }}
           />
         )}
+        <div>
+          {isInfoIcon && (
+            <img
+              src={informativeIcon}
+              alt=""
+              className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content={tooltipContent}
+            />
+          )}
+          <Tooltip
+            id="my-tooltip-inline"
+            // style={{
+            //   backgroundColor: "bg-neutral-900",
+            //   color: "#FFFFFF",
+            //   width: "fit-content",
+            //   fontSize: "12px",
+            //   lineHeight: "14px",
+            //   textTransform: "capitalize",
+            // }}
+          />
+        </div>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import { Spinner } from "../../../components/Spinner";
-
+import InformativeIcon from "../../../assets/I icon.svg";
 import {
   POST_SIGN_UP_URL,
   POST_SIGN_UP_WITH_GOOGLE_URL,
@@ -29,6 +29,7 @@ import {
 import { text } from "stream/consumers";
 import { sign } from "crypto";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import { Tooltip } from "react-tooltip";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -307,15 +308,18 @@ const Index = () => {
                       </div>
                     )}
                   </div>
-                  <div>
+                  <div className="relative">
                     <CustomInputBox
                       inputType={viewPassWord ? "text" : "password"}
                       tempLabel={true}
                       label="Password"
+                      tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       isRightIcon={true}
+                      isInfoIcon={true}
                       visibility={viewPassWord}
                       onClick={() => {}}
                       rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                      informativeIcon={InformativeIcon}
                       setVisibility={setViewPassWord}
                       onChange={(e) => {
                         setsellerData({
@@ -353,7 +357,27 @@ const Index = () => {
                         </span>
                       </div>
                     )}
+                    {/* <div
+                      className=" absolute bottom-[220px] right-[129px]"
+                      data-tooltip-id="my-tooltip-inline"
+                      // data-tooltip-content="Your password must be of 8 to 16 characteristics with atleast one uppercase letter, one special character and it must atleast one number"
+                      data-tooltip-content="Password Length 8 to 16 with one Uppercase One Special Character and one Number"
+                    >
+                      <img src={InformativeIcon} alt="" />
+                      <Tooltip
+                        id="my-tooltip-inline"
+                        style={{
+                          backgroundColor: "bg-neutral-900",
+                          color: "#FFFFFF",
+                          width: "fit-content",
+                          fontSize: "12px",
+                          lineHeight: "14px",
+                          textTransform: "capitalize",
+                        }}
+                      />
+                    </div> */}
                   </div>
+
                   <div>
                     <CustomInputBox
                       label="Referal Code"

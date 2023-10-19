@@ -133,7 +133,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
 
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   whitespace-nowrap ${
-            address.type === "dispatcher"
+            address.type === "recipient"
               ? "border-[#004EFF] text-[#004EFF] "
               : "border-gray-300 text-[#1C1C1C]"
           }`}
