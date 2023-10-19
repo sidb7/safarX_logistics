@@ -23,7 +23,6 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
     // cheapestService,
     // fastestService,
   } = props;
-  console.log(">>>", options);
   // const [selectedOption, setSelectedOption] = useState<any>(null);
 
   // const cheapestService = options.reduce(

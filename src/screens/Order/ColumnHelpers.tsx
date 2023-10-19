@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
 import { stat } from "fs";
 import { capitalizeFirstLetter } from "../../utils/utility";
+import editIcon from "../../assets/serv/edit.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -538,7 +539,7 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status } = info?.row?.original;
+        const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
         // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
@@ -670,6 +671,23 @@ export const columnHelperForNewOrder = (
                         <img src={InformativeIcon} width={"20px"} />
                       </div>
                     )}
+                  </div>
+                  <div
+                    className="lg:block cursor-pointer pl-1"
+                    onClick={() => {
+                      navigate(
+                        `/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`
+                      );
+                    }}
+                  >
+                    <div style={{ width: "20px", height: "20px" }}>
+                      {" "}
+                      <img
+                        src={editIcon}
+                        alt="editIcon"
+                        className="w-full h-full"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div>{time}</div>
