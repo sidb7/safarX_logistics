@@ -191,18 +191,6 @@ const WalletRecharge = () => {
       label: "3,00,000",
       value: "3,00,000",
     },
-    {
-      label: "5,00,000",
-      value: "5,00,000",
-    },
-    {
-      label: "7,00,000",
-      value: "7,00,000",
-    },
-    {
-      label: "10,00,000",
-      value: "10,00,000",
-    },
   ];
 
   const convertToEdit = () => {
@@ -281,16 +269,18 @@ const WalletRecharge = () => {
   };
 
   const handleRazorPayTransaction = async () => {
+    let replacewalletValue = walletValue.replace(/,/g, "");
+
     const options: any = await loadRazorPayTransaction(
-      walletValue,
+      replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
       userDetails.email
     );
-if(!options?.success && !options?.amount){
-   toast.error(options.message)
-   return;
-}
+    if (!options?.success && !options?.amount) {
+      toast.error(options.message);
+      return;
+    }
 
     const rzp1: any = new Razorpay(options);
 
