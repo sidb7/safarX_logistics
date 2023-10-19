@@ -121,14 +121,14 @@ export const titleCase = (str: string) => {
 };
 
 export const loadPhonePeTransaction = async (
-  walletValue: number,
+  walletValue: string,
   redirectUrl: string,
   callbackUrl: string
 ) => {
   try {
     const payload = {
       paymentObject: {
-        amount: (walletValue * 100).toString(),
+        amount: (+walletValue.replace(/,/g, "") * 100).toString(),
         redirectUrl,
         callbackUrl,
       },
