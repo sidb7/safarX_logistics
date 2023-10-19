@@ -12,7 +12,11 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import AddButton from "../../../components/Button/addButton";
-import { generateUniqueCode, getQueryJson } from "../../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  generateUniqueCode,
+  getQueryJson,
+} from "../../../utils/utility";
 import PricingDetails from "./pricingDetails";
 import { toast } from "react-toastify";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
@@ -260,7 +264,9 @@ const Summary = (props: Props) => {
                 }
                 editImage={editIcon}
                 locationImage2={locationIcon}
-                summaryAddres={pickupLocationDetails?.fullAddress}
+                summaryAddres={capitalizeFirstLetter(
+                  pickupLocationDetails?.fullAddress
+                )}
                 city={pickupLocationDetails?.city}
                 profileImage={contactIcon}
                 contactNumber={pickupLocationDetails?.contact?.mobileNo}
@@ -279,7 +285,9 @@ const Summary = (props: Props) => {
                   pickupLocationDetails?.addressType.slice(1)
                 }
                 locationImage2={locationIcon}
-                summaryAddres={pickupLocationReturnAddress?.fullAddress}
+                summaryAddres={capitalizeFirstLetter(
+                  pickupLocationReturnAddress?.fullAddress
+                )}
                 city=""
                 profileImage={contactIcon}
                 contactNumber={pickupLocationReturnAddress?.contact?.mobileNo}
@@ -319,7 +327,9 @@ const Summary = (props: Props) => {
                 }
                 editImage={editIcon}
                 locationImage2={locationIcon}
-                summaryAddres={deliveryLocationDetails?.fullAddress}
+                summaryAddres={capitalizeFirstLetter(
+                  deliveryLocationDetails?.fullAddress
+                )}
                 city=""
                 profileImage={contactIcon}
                 contactNumber={deliveryLocationDetails?.contact?.mobileNo}
@@ -337,7 +347,9 @@ const Summary = (props: Props) => {
                   deliveryLocationDetails?.addressType.slice(1)
                 }
                 locationImage2={locationIcon}
-                summaryAddres={deliveryLocationDetails?.fullAddress}
+                summaryAddres={capitalizeFirstLetter(
+                  deliveryLocationDetails?.fullAddress
+                )}
                 city=""
                 profileImage={contactIcon}
                 contactNumber={deliveryLocationDetails?.contact?.mobileNo}
