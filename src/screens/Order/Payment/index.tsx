@@ -723,7 +723,7 @@ const Payment = () => {
                     navigate="/orders/add-order/payment"
                   />
                 </div>
-                {/* <div className="flex flex-col items-center gap-y-2">
+                <div className="flex flex-col items-center gap-y-2">
                   <img
                     src={
                       "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
@@ -751,7 +751,7 @@ const Payment = () => {
                       PhonePe
                     </p>
                   </button>
-                </div> */}
+                </div>
                 <div className="flex flex-col items-center gap-y-2">
                   <div className="w-20 h-20 flex justify-center items-center">
                     <img
