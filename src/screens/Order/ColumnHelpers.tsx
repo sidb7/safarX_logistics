@@ -19,6 +19,7 @@ import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
 import { stat } from "fs";
+import { capitalizeFirstLetter } from "../../utils/utility";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -77,7 +78,9 @@ const MainCommonHelper = (navigate: any = "") => {
       cell: (info: any) => {
         return (
           <div className="text-base py-3 ]">
-            {info?.row?.original?.pickupAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.pickupAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -100,7 +103,9 @@ const MainCommonHelper = (navigate: any = "") => {
       cell: (info: any) => {
         return (
           <div className="text-base  py-3 ]">
-            {info?.row?.original?.deliveryAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.deliveryAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/delivery")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -215,30 +220,20 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               </div>
             </div>
           )}
-          {status?.length === 0 && (
-            <div className="">
-              <span className=" text-sm font-light">Order Updated At :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
-              </div>
+
+          <div className="">
+            <span className=" text-sm font-light">Source :</span>
+            <div className=" flex text-base items-center font-medium">
+              <span className="">{source}</span>
             </div>
-          )}
-          {status?.length === 0 && (
-            <div className="">
-              <span className=" text-sm font-light">Source :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{source}</span>
-              </div>
+          </div>
+
+          <div className="">
+            <span className=" text-sm font-light">Order Type :</span>
+            <div className=" flex text-base items-center font-medium">
+              <span className="">{orderType}</span>
             </div>
-          )}
-          {status?.length === 0 && orderType && (
-            <div className="">
-              <span className=" text-sm font-light">Order Type :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{orderType}</span>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       );
     },
@@ -255,7 +250,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
     cell: (info: any) => {
       const { status } = info?.row?.original;
       const rowsData = info?.row?.original;
-      // console.log("rowData: ", info?.row?.original);
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYY(timeStamp);
       const renderStatus = status?.[0]?.currentStatus || "Draft";
@@ -708,7 +702,9 @@ export const columnHelperForNewOrder = (
       cell: (info: any) => {
         return (
           <div className="text-base py-3]">
-            {info?.row?.original?.pickupAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.pickupAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -731,7 +727,9 @@ export const columnHelperForNewOrder = (
       cell: (info: any) => {
         return (
           <div className="text-base  py-3 ]">
-            {info?.row?.original?.deliveryAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.deliveryAddress?.fullAddress
+            ) ?? (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
                 className="  decoration-2 text-[black]"
