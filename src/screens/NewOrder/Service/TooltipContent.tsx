@@ -9,7 +9,6 @@ interface ServiceTooltipProps {
 const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
   let totalFreight =
     option.text?.base + option.text?.add + option.text?.variables;
-  console.log("totalFreight", totalFreight.toFixed(2));
   const tooltipContent = `Shipyaari Service Name: ${
     option.text?.companyServiceName
   }
