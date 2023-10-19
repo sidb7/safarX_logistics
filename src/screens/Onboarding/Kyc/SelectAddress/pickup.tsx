@@ -84,6 +84,12 @@ const PickUp = (props: ITypeProps) => {
   };
 
   const addAddress = () => {
+    for (let i = 0; i < defaultAddress.length; i++) {
+      if (defaultAddress[i].fullAddress?.length === 1) {
+        toast.warning("Previous Address Field Is Empty");
+        return;
+      }
+    }
     let uuid = uuidv4();
     let textArea = {
       addressId: uuid,
