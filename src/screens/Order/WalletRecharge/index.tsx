@@ -260,6 +260,7 @@ const WalletRecharge = () => {
 
   const handlePhonePeTransaction = async () => {
     setLoading(true);
+   
     await loadPhonePeTransaction(
       walletValue,
       `${SELLER_WEB_URL}/wallet/view-wallet`,
