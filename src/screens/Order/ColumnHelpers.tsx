@@ -774,20 +774,28 @@ export const columnHelperForNewOrder = (
         const { service, codInfo } = info?.row?.original;
         return (
           <>
-            <div className="flex flex-col gap-y-2 text-base py-3">
+            <div className="flex flex-col gap-y-1 text-base py-3">
+              <p>
+                <span>Invoice Value : </span>
+                {codInfo.invoiceValue.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+              <p>
+                <span>COD : </span>
+                {codInfo?.collectableAmount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+
               <span>
-                {codInfo.isCod
-                  ? codInfo?.collectableAmount.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "INR",
-                    })
-                  : codInfo.invoiceValue.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
-              </span>
-              <span>
-                {codInfo ? (codInfo?.isCod ? "COD" : "PREPAID") : "-"}
+                {codInfo
+                  ? codInfo?.isCod
+                    ? "Payment Type : COD"
+                    : "Payment Type : PREPAID"
+                  : "-"}
               </span>
             </div>
           </>
