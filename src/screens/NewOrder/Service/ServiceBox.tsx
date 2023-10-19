@@ -53,7 +53,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     for (const selectedSortOption of selectedItems) {
       result = sortingFunctions[selectedSortOption](a, b);
       if (result !== 0) {
-        break; // Break on the first non-zero result
+        break;
       }
     }
     return result;
@@ -62,6 +62,8 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
+  const displayedOptions = sortedOptions.slice(0, 10);
 
   return (
     <div>
@@ -78,7 +80,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         />
       </div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {sortedOptions.map((option: any) => (
+        {displayedOptions.map((option: any) => (
           <div
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
