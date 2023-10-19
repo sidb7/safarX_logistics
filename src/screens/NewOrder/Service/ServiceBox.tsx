@@ -21,7 +21,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     setSelectedOption(option);
     selectedValue(option.value);
   };
-  const items = ["Fastest", "Low Price", "Economy", "Standard", "Premium"];
+  const items = ["Fastest", "Low Price", "Surface", "Air"];
   const handleSortBy = (sortBy: string) => {
     setSortOption(sortBy);
   };
@@ -32,6 +32,18 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     sortedOptions.sort((a, b) => a.text.EDT - b.text.EDT);
   } else if (sortOption === "Low Price") {
     sortedOptions.sort((a, b) => a.text.total - b.text.total);
+  } else if (sortOption === "Surface") {
+    sortedOptions.sort((a, b) =>
+      a.text.serviceMode === "SURFACE"
+        ? -1
+        : b.text.serviceMode === "SURFACE"
+        ? 1
+        : 0
+    );
+  } else if (sortOption === "Air") {
+    sortedOptions.sort((a, b) =>
+      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0
+    );
   }
 
   console.log("sortedOption", sortedOptions);
