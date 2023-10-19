@@ -72,6 +72,7 @@ const ForgotPassword = (props: ITypeProps) => {
   const [seconds, setSeconds] = useState(30);
   const [emailVerified, setEmailVerified] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState(true);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -89,6 +90,7 @@ const ForgotPassword = (props: ITypeProps) => {
       if (response?.success) {
         setResponse(response);
         setEmailVerified(true);
+        setDisable(false);
         toast.success(response.message);
         // setFormData({ email: "", companyName: "" });
       } else {
@@ -259,7 +261,7 @@ const ForgotPassword = (props: ITypeProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-y-9 lg:h-screen lg:w-full overflow-auto">
+    <div className="flex flex-col gap-y-14 lg:gap-y-6 lg:h-screen lg:w-full overflow-auto">
       {isLgScreen && modalTitle()}
       <div className="lg:mx-24 lg:mt-[25px]">
         <div className="flex flex-col gap-y-8 w-full">
@@ -287,8 +289,8 @@ const ForgotPassword = (props: ITypeProps) => {
         />
       </div> */}
 
-      <div className="flex flex-col mx-4  gap-y-4 lg:gap-y-8 mt-11 lg:mt-0 ">
-        <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
+      <div className="flex flex-col mx-2  gap-y-4 lg:gap-y-8 ">
+        <p className="text-center text-[22px] font-bold font-Lato leading-7 md:mt-10 lg:mt-0">
           Reset Password
         </p>
         <p className="text-center font-Open font-light leading-[22px]">
@@ -304,12 +306,14 @@ const ForgotPassword = (props: ITypeProps) => {
           onChange={handleInputChange}
         />
 
-        <CustomButton
-          onClick={postForgotPasswordData}
-          text="Send OTP"
-          className={`mt-4 ${emailVerified ? "bg-gray-300" : ""}`}
-          disabled={emailVerified}
-        />
+        {disable && (
+          <CustomButton
+            onClick={postForgotPasswordData}
+            text="Send OTP"
+            className={`mt-4 ${emailVerified ? "bg-gray-300" : ""}`}
+            disabled={emailVerified}
+          />
+        )}
         {loading ? (
           <div className="fixed top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Spinner />
@@ -320,18 +324,18 @@ const ForgotPassword = (props: ITypeProps) => {
               <CustomInputBox
                 value={otp.forgotPasswordOtp}
                 maxLength={6}
-                containerStyle="mt-[32px]"
+                containerStyle="mt-[12px]"
                 label="Enter OTP"
                 onChange={(e: any) => {
                   setOtp({ ...otp, forgotPasswordOtp: e.target.value });
                 }}
               />
 
-              <p className="mt-1 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
+              <p className=" text-[#494949] ml-2 font-Open text-xs font-semibold leading-4 items-center">
                 {resendOtpTimer()}
               </p>
 
-              <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+              <p className="text-[#494949] font-Open font-normal text-xs leading-4 mb-1">
                 Didn't Receive Code ?
                 <span
                   className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
