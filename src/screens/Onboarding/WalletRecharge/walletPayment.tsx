@@ -107,18 +107,6 @@ const WalletPayment = () => {
       label: "3,00,000",
       value: "3,00,000",
     },
-    {
-      label: "5,00,000",
-      value: "5,00,000",
-    },
-    {
-      label: "7,00,000",
-      value: "7,00,000",
-    },
-    {
-      label: "10,00,000",
-      value: "10,00,000",
-    },
   ];
 
   const userDetails = useSelector((state: any) => state.signin);
@@ -128,8 +116,10 @@ const WalletPayment = () => {
     };
 
     const handleRazorPayTransaction = async () => {
+      let replacewalletValue = walletValue.replace(/,/g, "");
+
       const options: any = await loadRazorPayTransaction(
-        walletValue,
+        replacewalletValue,
         "SHIPYAARI",
         userDetails.name,
         userDetails.email
@@ -241,7 +231,7 @@ const WalletPayment = () => {
                   navigate={`${SELLER_WEB_URL}/dashboard/overview`}
                 />
               </div>
-              <div className="flex flex-col items-center gap-y-2">
+              {/* <div className="flex flex-col items-center gap-y-2">
                 <img
                   src={
                     "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
@@ -269,7 +259,7 @@ const WalletPayment = () => {
                     PhonePe
                   </p>
                 </button>
-              </div>
+              </div> */}
               <div className="flex flex-col items-center gap-y-2">
                 <div className="w-20 h-20 flex justify-center items-center">
                   <img
