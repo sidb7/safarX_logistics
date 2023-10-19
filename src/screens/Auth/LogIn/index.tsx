@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
 import InfoCircle from "../../../assets/info-circle.svg";
+import InformativeIcon from "../../../assets/I icon.svg";
 import {
   getLocalStorage,
   setLocalStorage,
@@ -259,14 +260,18 @@ const Index = () => {
                   </div>
                 )}
               </div>
+
               <div>
                 <CustomInputBox
                   inputType={viewPassWord ? "text" : "password"}
                   onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
+                  tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                   maxLength={12}
                   tempLabel={true}
                   isRightIcon={true}
+                  isInfoIcon={true}
+                  informativeIcon={InformativeIcon}
                   value={loginCredentials.password}
                   visibility={viewPassWord}
                   onClick={() => {}}
@@ -277,6 +282,8 @@ const Index = () => {
                       ...loginCredentials,
                       password: e.target.value,
                     });
+                  }}
+                  onBlur={(e) => {
                     if (
                       !strongpasswordRegex.test(e.target.value) ||
                       loginCredentials.password.length < 8 ||
