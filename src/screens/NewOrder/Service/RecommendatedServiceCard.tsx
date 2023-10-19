@@ -50,7 +50,9 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
 
   const cheapestService = options[0];
   const fastestService = options[1];
-
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
   return (
     <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
       {cheapestService && (
@@ -82,13 +84,15 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
               />
             </div>
             <div className=" ">
-              <p className="text-[16px] font-semibold font-Open pt-2">
-                {`${cheapestService.text?.partnerName}: ${cheapestService.text?.companyServiceName}`}
+              <p className="text-[16px] font-semibold font-Open pt-2 capitalize">
+                {`${toPascalCase(
+                  cheapestService.text?.partnerName
+                )}: ${toPascalCase(cheapestService.text?.companyServiceName)}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                 {`\u20B9`} {cheapestService.text?.total.toFixed(2)}{" "}
                 <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
-                  {`${cheapestService.text?.serviceMode}`}
+                  {`${toPascalCase(cheapestService.text?.serviceMode)}`}
                 </span>
               </p>
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">

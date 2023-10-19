@@ -59,6 +59,10 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     return result;
   });
 
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
   return (
     <div>
       <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
@@ -98,12 +102,14 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
             </div>
             <div className=" ">
               <p className="text-[16px] font-semibold font-Open pt-2">
-                {`${option.text?.partnerName}: ${option.text?.companyServiceName}`}
+                {`${toPascalCase(option.text?.partnerName)}: ${toPascalCase(
+                  option.text?.companyServiceName
+                )}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                 {`\u20B9`} {option.text?.total.toFixed(2)}{" "}
                 <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
-                  {`${option.text?.serviceMode}`}
+                  {`${toPascalCase(option.text?.serviceMode)}`}
                 </span>
               </p>
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
