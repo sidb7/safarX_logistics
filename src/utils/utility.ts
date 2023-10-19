@@ -128,7 +128,7 @@ export const loadPhonePeTransaction = async (
   try {
     const payload = {
       paymentObject: {
-        amount: (+walletValue.replace(/,/g, "") * 100).toString(),
+        amount: (+walletValue?.replace(/,/g, "") * 100).toString(),
         redirectUrl,
         callbackUrl,
       },

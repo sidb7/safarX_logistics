@@ -116,7 +116,7 @@ const WalletPayment = () => {
     };
 
     const handleRazorPayTransaction = async () => {
-      let replacewalletValue = walletValue.replace(/,/g, "");
+      let replacewalletValue = walletValue?.replace(/,/g, "");
 
       const options: any = await loadRazorPayTransaction(
         replacewalletValue,
@@ -124,6 +124,11 @@ const WalletPayment = () => {
         userDetails.name,
         userDetails.email
       );
+
+      if (!options?.success && !options?.amount) {
+        toast.error(options.message);
+        return;
+      }
 
       const rzp1: any = new Razorpay(options);
 

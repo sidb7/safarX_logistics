@@ -356,25 +356,24 @@ const Payment = () => {
   };
 
   const handleRazorPayTransaction = async () => {
-    let replacewalletValue = walletValue.replace(/,/g, "");
+    let replacewalletValue = walletValue?.replace(/,/g, "");
 
-    const options: any = loadRazorPayTransaction(
+    const options: any = await loadRazorPayTransaction(
       replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
       userDetails.email
     );
+    if (!options?.success && !options?.amount) {
+      toast.error(options.message);
+      return;
+    }
+    console.log("hded", options);
 
     const rzp1: any = new Razorpay(options);
 
     rzp1.on("payment.failed", (response: any) => {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
+      console.log("response: ", response);
     });
 
     rzp1.open();
@@ -720,7 +719,7 @@ const Payment = () => {
                     isDisabled={isDisabled}
                     text={"Paytm"}
                     amt={walletValue}
-                    navigate="/orders/add-order/payment"
+                    navigate={`${SELLER_WEB_URL}/orders/add-order/payment`}
                   />
                 </div>
                 <div className="flex flex-col items-center gap-y-2">
