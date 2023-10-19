@@ -46,7 +46,7 @@ const Index = () => {
     referalCode: "",
   });
 
-  const [signUpError, setSignUpError] = useState({
+  const [signUpError, setSignUpError] = useState<any>({
     email: "",
     firstName: "",
     lastName: "",
@@ -151,6 +151,7 @@ const Index = () => {
 
       return "";
     }
+
     return (
       <>
         {loading ? (
@@ -168,7 +169,7 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="flex flex-col mt-12 mx-4 gap-y-3">
+                <div className="flex flex-col mt-12 lg:mt-8 mx-4 gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                     Welcome to Shipyaari
                   </p>
@@ -178,6 +179,20 @@ const Index = () => {
                   </p>
                 </div>
                 <div className=" flex flex-col mx-4 gap-y-7">
+                  <div className="flex justify-center">
+                    <GoogleLogin
+                      text="continue_with"
+                      onSuccess={(googleData) => signUpWithGoogle(googleData)}
+                      onError={() => {}}
+                    />
+                  </div>
+                  <hr className="mb-[-30px] mt-2" />
+                  <div className="flex justify-center my-[-7px]">
+                    <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
+                      OR
+                    </button>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-x-5">
                     <div>
                       <CustomInputBox
@@ -191,6 +206,8 @@ const Index = () => {
                             ...sellerData,
                             firstName: e.target.value,
                           });
+                        }}
+                        onBlur={(e) => {
                           if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
@@ -205,6 +222,7 @@ const Index = () => {
                           }
                         }}
                       />
+
                       {signUpError.firstName !== "" && (
                         <div className="flex items-center gap-x-1 mt-1">
                           <img src={InfoCircle} alt="" width={10} height={10} />
@@ -226,6 +244,8 @@ const Index = () => {
                             ...sellerData,
                             lastName: e.target.value,
                           });
+                        }}
+                        onBlur={(e) => {
                           if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
@@ -263,6 +283,8 @@ const Index = () => {
                           ...sellerData,
                           email: e.target.value,
                         });
+                      }}
+                      onBlur={(e) => {
                         if (!emailRegex.test(e.target.value)) {
                           setSignUpError({
                             ...signUpError,
@@ -300,6 +322,8 @@ const Index = () => {
                           ...sellerData,
                           password: e.target.value,
                         });
+                      }}
+                      onBlur={(e) => {
                         if (
                           !strongpasswordRegex.test(e.target.value) ||
                           sellerData.password.length < 8 ||
@@ -341,6 +365,8 @@ const Index = () => {
                           ...sellerData,
                           referalCode: e.target.value,
                         });
+                      }}
+                      onBlur={(e) => {
                         if (!referalRegex.test(e.target.value)) {
                           setSignUpError({
                             ...signUpError,
@@ -353,6 +379,7 @@ const Index = () => {
                           });
                         }
                       }}
+                      isDisabled={true}
                     />
                     {signUpError.referalCode !== "" && (
                       <div className="flex items-center gap-x-1 mt-1">
@@ -368,19 +395,7 @@ const Index = () => {
                     onClick={(e: any) => signUpOnClick(sellerData)}
                     text="SIGN UP"
                   />
-                  <hr className="mb-[-30px] mt-2" />
-                  <div className="flex justify-center my-[-7px]">
-                    <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
-                      OR
-                    </button>
-                  </div>
-                  <div className="flex justify-center">
-                    <GoogleLogin
-                      text="continue_with"
-                      onSuccess={(googleData) => signUpWithGoogle(googleData)}
-                      onError={() => {}}
-                    />
-                  </div>
+
                   <div className="flex justify-center">
                     <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                       Already Have An Account ?{" "}
