@@ -159,6 +159,7 @@ const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 // Validate Token
 const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
+const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickup/createPickupAddress`;
 const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
 const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
 const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
@@ -357,4 +358,5 @@ export {
   CANCEL_TEMP_SELLER_ORDER,
   POST_SERVICEABILITY,
   GET_COMPANY_SERVICE,
+  ADD_PICKUP_ADDRESS_CATALOGUE,
 };

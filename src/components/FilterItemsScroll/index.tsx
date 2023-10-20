@@ -10,15 +10,12 @@ const FilterItems: React.FC<IProps> = (props: IProps) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const handleItemClick = (item: string) => {
-    const isSelected = selectedItems.includes(item);
+    const updatedSelection = selectedItems.includes(item)
+      ? selectedItems.filter((selected) => selected !== item)
+      : [...selectedItems, item];
 
-    if (isSelected) {
-      setSelectedItems(selectedItems.filter((selected) => selected !== item));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
-
-    onClick([...selectedItems, item]);
+    setSelectedItems(updatedSelection);
+    onClick(updatedSelection);
   };
 
   return (

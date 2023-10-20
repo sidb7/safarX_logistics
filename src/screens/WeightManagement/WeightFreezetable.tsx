@@ -63,8 +63,8 @@ const WeightFreezeTable = () => {
         return (
           <div className="flex">
             <CustomCheckbox
-              checked={selectedRows.includes(info.index)}
-              onChange={() => handleCheckboxChange(info.index)}
+              checked={selectedRows.includes(info.row.index)}
+              onChange={() => handleCheckboxChange(info.row.index)}
             />
             <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
               {info.row.original.packageDetails}

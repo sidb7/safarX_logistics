@@ -42,7 +42,7 @@ export const ChangePassword = () => {
           inputType={viewPassWord ? "text" : "password"}
           isRightIcon={true}
           label="Old Password"
-          maxLength={12}
+          maxLength={16}
           visibility={viewPassWord}
           rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
           setVisibility={setViewPassWord}
@@ -53,7 +53,7 @@ export const ChangePassword = () => {
         <CustomInputBox
           label="New Password"
           inputType="password"
-          maxLength={12}
+          maxLength={16}
           onChange={(e) =>
             setPassword({ ...password, newPassword: e.target.value })
           }
@@ -61,7 +61,7 @@ export const ChangePassword = () => {
         <CustomInputBox
           label="Re-enter New Password"
           inputType="password"
-          maxLength={12}
+          maxLength={16}
           onChange={(e) =>
             setPassword({ ...password, confirmNewPassword: e.target.value })
           }

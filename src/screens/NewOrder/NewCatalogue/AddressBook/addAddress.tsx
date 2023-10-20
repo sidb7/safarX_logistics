@@ -5,7 +5,7 @@ import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
 import { POST } from "../../../../utils/webService";
 import {
-  ADD_PICKUP_ADDRESS,
+  ADD_PICKUP_ADDRESS_CATALOGUE,
   ADD_DELIVERY_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -110,7 +110,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
 
     let url = "";
     if (activeTab === "pickup") {
-      url = ADD_PICKUP_ADDRESS;
+      url = ADD_PICKUP_ADDRESS_CATALOGUE;
     } else if (activeTab === "delivery") {
       url = ADD_DELIVERY_ADDRESS;
     }

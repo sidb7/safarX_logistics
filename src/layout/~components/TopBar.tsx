@@ -52,6 +52,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const [servicesData, setServicesData] = useState<any>([]);
 
   const [showTable, setShowTable] = useState(false);
+  const [serviceabilityTableData, setServiceabilityTableData] = useState([]);
 
   const [serviceabilityData, setServiceabilityData] = useState<any>({
     pickupPincode: "",
@@ -126,6 +127,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
         // toast.success(response?.message);
 
         setShowTable(true);
+        setServiceabilityTableData(response?.data[0]);
       } else {
         toast.error(response?.message);
 
@@ -508,16 +510,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
         <CenterModal
           isOpen={showServiceability}
-          className=" !flex !justify-center !items-center !w-[320px]  md:!w-[700px] !h-[500px]"
+          className=" !flex !justify-center !items-center !w-[320px]  md:!w-[50%] !h-[60%]"
           onRequestClose={() => {
             setShowServiceability(false);
             clearServiceabilityState();
+            setServiceabilityTableData([]);
           }}
         >
           <Serviceability
             onClick={() => {
               setShowServiceability(false);
               clearServiceabilityState();
+              setServiceabilityTableData([]);
             }}
             servicesData={servicesData}
             serviceabilityData={serviceabilityData}
@@ -526,6 +530,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             clearServiceabilityState={clearServiceabilityState}
             showTable={showTable}
             setShowTable={setShowTable}
+            serviceabilityTableData={serviceabilityTableData}
           />
         </CenterModal>
       </nav>

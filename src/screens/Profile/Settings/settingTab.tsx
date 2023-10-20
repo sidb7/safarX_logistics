@@ -61,7 +61,7 @@ export const SettingTab = () => {
                 onClick={() => navigateTo("settings")}
               >
                 <div className="flex">
-                  <span className="text-base font-semibold text-[#1C1C1C] ml-2">
+                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
                     Change Password
                   </span>
                 </div>
@@ -131,7 +131,7 @@ export const SettingTab = () => {
             >
               <div className={`flex justify-between items-center h-[44px]`}>
                 <div className="flex">
-                  <span className="text-base font-semibold text-[#1C1C1C] ml-2">
+                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
                     Role Management
                   </span>
                 </div>
@@ -151,7 +151,7 @@ export const SettingTab = () => {
             >
               <div className={`flex justify-between items-center h-[44px]`}>
                 <div className="flex">
-                  <span className="text-base font-semibold text-[#1C1C1C] ml-2">
+                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
                     User Management
                   </span>
                 </div>
@@ -171,7 +171,7 @@ export const SettingTab = () => {
             >
               <div className={`flex justify-between items-center h-[44px]`}>
                 <div className="flex">
-                  <span className="text-base font-semibold text-[#1C1C1C] ml-2">
+                  <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
                     System Logs
                   </span>
                 </div>

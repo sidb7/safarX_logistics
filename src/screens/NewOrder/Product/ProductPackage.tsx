@@ -119,7 +119,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
     isCod: orderType === "B2C",
-    collectableAmount: 0,
+    collectableAmount: "",
     invoiceValue: 0,
   });
   const [isLoading, setIsLoading]: any = useState(false);
@@ -416,6 +416,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               className="rounded"
               alt="Add Product"
             />
+            <AddButton
+              text="ADD BOX TO CATALOGUE"
+              onClick={() => {
+                navigate(
+                  `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                );
+              }}
+              showIcon={true}
+              icon={ButtonIcon}
+              className="rounded ml-4 mt-2"
+              alt="Add Box"
+            />
           </div>
           <div className="flex justify-between mt-5 whitespace-nowrap  bg-[#FFFFFF] shadow-sm p-2  lg:hidden ">
             <div>
@@ -587,10 +599,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 <CustomInputBox
                   label={"COD Amount to Collect From Buyer"}
                   value={codData?.collectableAmount}
-                  inputType="text"
+                  inputType="number"
                   className="!w-60"
-                  isDisabled={paymentMode !== "cod" || isOrderTypeB2B}
-                  onChange={(e) => {
+                  isDisabled={
+                    paymentMode !== "cod" ||
+                    isOrderTypeB2B ||
+                    packages?.length === 0
+                  }
+                  onChange={(e: any) => {
                     setCodData({
                       ...codData,
                       collectableAmount:
