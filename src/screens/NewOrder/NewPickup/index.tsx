@@ -158,6 +158,9 @@ const PickupLocation = () => {
   let orderSource = params?.source || "";
   const postPickupOrderDetails = async () => {
     try {
+      const isShipyaariPresent =
+        params?.shipyaari_id !== undefined && params?.source !== undefined;
+
       let payload = {};
       if (isReturnAddress) {
         payload = {
@@ -277,6 +280,8 @@ const PickupLocation = () => {
               },
               isActive: orderData?.branding?.isActive,
             },
+            tempOrderId: shipyaari_id,
+            source: orderSource,
           });
         }
       }

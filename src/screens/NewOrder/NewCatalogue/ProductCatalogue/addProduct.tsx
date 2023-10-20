@@ -342,7 +342,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         <div className="w-full"></div>
                       </div>
                     </div>
-                    <div className="w-full lg:w-3/4">
+                    {/* <div className="w-full lg:w-3/4">
                       <span className=""> Product Images </span>
                       <div className="w-[250px] py-4 ">
                         <div className="">
@@ -352,7 +352,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <></>

@@ -39,7 +39,6 @@ const Card = (props: ITypesProps) => {
   const boxRef = useRef<any>();
 
   const editAddress = (id: any) => {
-    console.log("id :", id);
     setEditAdd(id);
   };
 
@@ -58,7 +57,7 @@ const Card = (props: ITypesProps) => {
           onClick(value);
         }}
       >
-        <div className="flex items-center   gap-x-3 ">
+        <div className="flex items-center  gap-x-3 justify-around ">
           <CustomRadioButton
             name={name}
             value={value}
@@ -81,14 +80,15 @@ const Card = (props: ITypesProps) => {
           )}
 
           <p
-            className={`${titleClassName}  font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
+            className={`${titleClassName} w-[200px] overflow-hidden font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
             ref={boxRef}
           >
             {editAdd === index ? (
-              <input
-                type="text"
+              <textarea
+                // type="text"
                 value={updateTempAdd}
                 onChange={(e) => setUpdateTempAdd(e.target.value)}
+                className="text-[12px] h-[77px] w-full"
                 onBlur={() => blurFunction()}
               />
             ) : (

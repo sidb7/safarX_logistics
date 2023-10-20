@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
 import InfoCircle from "../../../assets/info-circle.svg";
+import InformativeIcon from "../../../assets/I icon.svg";
 import {
   getLocalStorage,
   setLocalStorage,
@@ -210,6 +211,18 @@ const Index = () => {
               </p>
             </div>
             <div className=" flex flex-col mx-4 gap-y-6">
+              <div className="flex justify-center">
+                <GoogleLogin
+                  onSuccess={(googleData) => signInWithGoogle(googleData)}
+                  onError={() => {}}
+                />
+              </div>
+              <hr className="mb-[-30px] mt-2" />
+              <div className="flex justify-center my-[-4px]">
+                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
+                  OR
+                </button>
+              </div>
               <div>
                 <CustomInputBox
                   containerStyle="mt-[17px]"
@@ -223,6 +236,8 @@ const Index = () => {
                       ...loginCredentials,
                       email: e.target.value,
                     });
+                  }}
+                  onBlur={(e) => {
                     if (!emailRegex.test(e.target.value)) {
                       setLoginError({
                         ...loginError,
@@ -245,14 +260,18 @@ const Index = () => {
                   </div>
                 )}
               </div>
+
               <div>
                 <CustomInputBox
                   inputType={viewPassWord ? "text" : "password"}
                   onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
+                  tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                   maxLength={12}
                   tempLabel={true}
                   isRightIcon={true}
+                  isInfoIcon={true}
+                  informativeIcon={InformativeIcon}
                   value={loginCredentials.password}
                   visibility={viewPassWord}
                   onClick={() => {}}
@@ -263,6 +282,8 @@ const Index = () => {
                       ...loginCredentials,
                       password: e.target.value,
                     });
+                  }}
+                  onBlur={(e) => {
                     if (
                       !strongpasswordRegex.test(e.target.value) ||
                       loginCredentials.password.length < 8 ||
@@ -305,18 +326,6 @@ const Index = () => {
                 onClick={(e: any) => logInOnClick(loginCredentials)}
                 text="LOG IN"
               />
-              <hr className="mb-[-30px] mt-2" />
-              <div className="flex justify-center my-[-4px]">
-                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
-                  OR
-                </button>
-              </div>
-              <div className="flex justify-center">
-                <GoogleLogin
-                  onSuccess={(googleData) => signInWithGoogle(googleData)}
-                  onError={() => {}}
-                />
-              </div>
 
               <div className="flex justify-center">
                 <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">

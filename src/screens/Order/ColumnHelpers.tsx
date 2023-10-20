@@ -19,6 +19,8 @@ import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useMediaQuery } from "react-responsive";
 import { stat } from "fs";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import editIcon from "../../assets/serv/edit.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -41,31 +43,6 @@ const ProductBox = ({ name = "", dimension = "" }: any) => {
 };
 const MainCommonHelper = (navigate: any = "") => {
   return [
-    ColumnsHelper.accessor("Payment", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <h1>Amounts</h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        const { payment, codInfo } = info?.row?.original;
-        return (
-          <>
-            <div className="flex flex-col gap-y-2 text-base py-3 justify-start">
-              <span>
-                {payment?.amount.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                }) ?? "0"}
-              </span>
-              <span>{codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}</span>
-            </div>
-          </>
-        );
-      },
-    }),
     ColumnsHelper.accessor("Pickup Adreess", {
       header: () => {
         return (
@@ -77,7 +54,9 @@ const MainCommonHelper = (navigate: any = "") => {
       cell: (info: any) => {
         return (
           <div className="text-base py-3 ]">
-            {info?.row?.original?.pickupAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.pickupAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -100,7 +79,9 @@ const MainCommonHelper = (navigate: any = "") => {
       cell: (info: any) => {
         return (
           <div className="text-base  py-3 ]">
-            {info?.row?.original?.deliveryAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.deliveryAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/delivery")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -109,6 +90,46 @@ const MainCommonHelper = (navigate: any = "") => {
               </div>
             )}
           </div>
+        );
+      },
+    }),
+    ColumnsHelper.accessor("Payment", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Payment Mode</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { service, codInfo } = info?.row?.original;
+        return (
+          <>
+            <div className="flex flex-col gap-y-1 text-base py-3">
+              <p>
+                <span>Invoice Value : </span>
+                {codInfo.invoiceValue.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+              <p>
+                <span>COD : </span>
+                {codInfo?.collectableAmount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+
+              <span>
+                {codInfo
+                  ? codInfo?.isCod
+                    ? "Payment Type : COD"
+                    : "Payment Type : PREPAID"
+                  : "-"}
+              </span>
+            </div>
+          </>
         );
       },
     }),
@@ -215,30 +236,19 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               </div>
             </div>
           )}
-          {status?.length === 0 && (
-            <div className="">
-              <span className=" text-sm font-light">Order Updated At :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
-              </div>
+
+          <div className="flex items-center">
+            <span className=" text-sm font-light">Source :</span>
+            <div className=" pl-2 text-base items-center font-medium">
+              <span className="">{source}</span>
             </div>
-          )}
-          {status?.length === 0 && (
-            <div className="">
-              <span className=" text-sm font-light">Source :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{source}</span>
-              </div>
+          </div>
+          <div className="flex items-center">
+            <span className=" text-sm font-light">Order Type :</span>
+            <div className=" pl-2 flex text-base items-center font-medium">
+              <span className="">{orderType}</span>
             </div>
-          )}
-          {status?.length === 0 && orderType && (
-            <div className="">
-              <span className=" text-sm font-light">Order Type :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{orderType}</span>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       );
     },
@@ -255,10 +265,12 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
     cell: (info: any) => {
       const { status } = info?.row?.original;
       const rowsData = info?.row?.original;
-      // console.log("rowData: ", info?.row?.original);
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYY(timeStamp);
-      const renderStatus = status?.[0]?.currentStatus || "Draft";
+      // const renderStatus = status?.[0]?.currentStatus || "Draft";
+      let renderStatus =
+        rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
+        "DRAFT";
       const rows: any = [
         {
           title: "Pickup Address",
@@ -497,15 +509,15 @@ export const columnHelperForNewOrder = (
               </div>
             </div>
 
-            <div className="">
+            <div className="flex items-center">
               <span className=" text-sm font-light">Source :</span>
-              <div className=" flex text-base items-center font-medium">
+              <div className=" pl-2 text-base items-center font-medium">
                 <span className="">{source}</span>
               </div>
             </div>
-            <div className="">
+            <div className="flex items-center">
               <span className=" text-sm font-light">Order Type :</span>
-              <div className=" flex text-base items-center font-medium">
+              <div className=" pl-2 flex text-base items-center font-medium">
                 <span className="">{orderType}</span>
               </div>
             </div>
@@ -526,7 +538,7 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status } = info?.row?.original;
+        const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
         // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
@@ -659,6 +671,23 @@ export const columnHelperForNewOrder = (
                       </div>
                     )}
                   </div>
+                  <div
+                    className="lg:block cursor-pointer pl-1"
+                    onClick={() => {
+                      navigate(
+                        `/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`
+                      );
+                    }}
+                  >
+                    <div style={{ width: "20px", height: "20px" }}>
+                      {" "}
+                      <img
+                        src={editIcon}
+                        alt="editIcon"
+                        className="w-full h-full"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <div>{time}</div>
               </div>
@@ -708,7 +737,9 @@ export const columnHelperForNewOrder = (
       cell: (info: any) => {
         return (
           <div className="text-base py-3]">
-            {info?.row?.original?.pickupAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.pickupAddress?.fullAddress
+            ) ?? (
               <div
                 onClick={() => navigate("/orders/add-order/pickup")}
                 className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
@@ -731,7 +762,9 @@ export const columnHelperForNewOrder = (
       cell: (info: any) => {
         return (
           <div className="text-base  py-3 ]">
-            {info?.row?.original?.deliveryAddress?.fullAddress ?? (
+            {capitalizeFirstLetter(
+              info?.row?.original?.deliveryAddress?.fullAddress
+            ) ?? (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
                 className="  decoration-2 text-[black]"
@@ -771,18 +804,31 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
-        const { payment, codInfo } = info?.row?.original;
+        const { service, codInfo } = info?.row?.original;
         return (
           <>
-            <div className="flex flex-col gap-y-2 text-base py-3">
-              <span>
-                {payment?.amount.toLocaleString("en-US", {
+            <div className="flex flex-col gap-y-1 text-base py-3">
+              <p>
+                <span>Invoice Value : </span>
+                {codInfo.invoiceValue.toLocaleString("en-US", {
                   style: "currency",
                   currency: "INR",
-                }) ?? "0"}
-              </span>
+                })}
+              </p>
+              <p>
+                <span>COD : </span>
+                {codInfo?.collectableAmount.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "INR",
+                })}
+              </p>
+
               <span>
-                {codInfo ? (codInfo?.isCod ? "COD" : "PREPAID") : "-"}
+                {codInfo
+                  ? codInfo?.isCod
+                    ? "Payment Type : COD"
+                    : "Payment Type : PREPAID"
+                  : "-"}
               </span>
             </div>
           </>
@@ -962,6 +1008,27 @@ export const columnHelpersForRest = (
   setInfoModalContent: any
 ) => {
   return [
+    // ...commonColumnHelper,
+    ColumnsHelper.accessor("packageType", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Courier Details</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        const { service } = info?.row?.original;
+        return (
+          <div className=" ">
+            <div className="py-2 flex flex-col">
+              <span className="text-sm font-light">Delivery Partner</span>
+              <div className="font-semibold">{service?.partnerName}</div>
+            </div>
+          </div>
+        );
+      },
+    }),
     ...idHelper(navigate, setInfoModalContent),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
@@ -985,7 +1052,6 @@ export const columnHelpersForRest = (
     //     );
     //   },
     // }),
-    ...commonColumnHelper,
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
     //     return (

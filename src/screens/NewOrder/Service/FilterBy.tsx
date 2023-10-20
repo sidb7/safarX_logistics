@@ -18,12 +18,7 @@ const FilterBy = (props: Props) => {
         </div>
       </div>
       <div className="grid lg:grid-cols-1">
-        <FilterItems
-          items={items}
-          onClick={() => {
-            alert("pranay");
-          }}
-        />
+        <FilterItems items={items} onClick={() => {}} />
       </div>
     </div>
   );

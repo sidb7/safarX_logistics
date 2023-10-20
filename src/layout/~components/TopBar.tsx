@@ -26,7 +26,7 @@ import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
-import SyAppIcon from "../../assets/app.svg";
+import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 import { useSelector } from "react-redux";

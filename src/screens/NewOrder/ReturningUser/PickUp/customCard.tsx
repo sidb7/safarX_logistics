@@ -4,11 +4,12 @@ import ProfileImage from "../../../../assets/Catalogue/profileIcon.svg";
 import { useNavigate } from "react-router-dom";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
 import CustomCheckbox from "../../../../components/CheckBox";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
 
 interface IPickUpData {
   cardData: {
     label?: string;
-    address?: string;
+    address?: any;
     name?: any;
     phoneNumber?: string;
   };
@@ -46,7 +47,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
       </div>
 
       <p className="px-4 w-[250px] w-[95%]  text-[16px] font-Open font-semibold leading-6 capatalize">
-        {address}
+        {capitalizeFirstLetter(address)}
       </p>
 
       <div className="flex flex-col gap-y-4 px-4 w-[250px] lg:w-[280px] mt-4">
