@@ -5,7 +5,7 @@ import CustomInputBox from "../../components/Input";
 import CustomDropDown from "../../components/DropDown";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { DropDownWeightData } from "../../utils/dummyData";
-import { serviceabilityTableData } from "../../utils/dummyData";
+
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
 
@@ -17,7 +17,8 @@ interface ITypeProps {
   onSubmitServiceability: any;
   clearServiceabilityState: any;
   showTable?: boolean;
-  // serviceabilityTableData?: any;
+  serviceabilityTableData?: any;
+
   setShowTable: any;
 }
 
@@ -29,7 +30,8 @@ const Serviceability = (props: ITypeProps) => {
     setServiceabilityData,
     onSubmitServiceability,
     clearServiceabilityState,
-    // serviceabilityTableData,
+    serviceabilityTableData,
+
     showTable,
     setShowTable,
   } = props;
@@ -53,7 +55,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <p className=" flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap ">
-            {info.row.original.partnerName}
+            {info.row?.original?.partnerName}
           </p>
         );
       },
@@ -69,7 +71,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap ">
-            {info.row.original.companyServiceName}
+            {info.row?.original?.companyServiceName}
           </div>
         );
       },
@@ -85,7 +87,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.appliedWeight}
+            {info.row?.original?.appliedWeight}
           </div>
         );
       },
@@ -101,7 +103,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.zone}
+            {info.row?.original?.zone}
           </div>
         );
       },
@@ -117,7 +119,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.cod}
+            {info.row?.original?.cod}
           </div>
         );
       },
@@ -134,7 +136,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.insurance}
+            {info.row?.original?.insurance}
           </div>
         );
       },
@@ -150,7 +152,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.gst}
+            {info.row?.original?.gst}
           </div>
         );
       },
@@ -166,7 +168,23 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row.original.total}
+            {info.row?.original?.total}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("edt_epoch", {
+      header: () => {
+        return (
+          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+            {"EDT"}
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
+            {info.row?.original?.EDT_Epoch}
           </div>
         );
       },
@@ -209,7 +227,7 @@ const Serviceability = (props: ITypeProps) => {
         />
       </div>
       <hr />
-      {/* {showTable ? tableComponent() : serviceabilityComponent()} */}
+
       {showTable ? (
         tableComponent()
       ) : (
@@ -233,13 +251,7 @@ const Serviceability = (props: ITypeProps) => {
                   ...serviceabilityData,
                   pickupPincode: e.target.value ? Number(e.target.value) : "",
                 });
-
-                // setServiceabilityData({
-                //   ...serviceabilityData,
-                //   pickupPincode: +e.target.value,
-                // });
               }}
-              // inputType="number"
             />
             <CustomInputBox
               label="Delivery Pincode"
@@ -250,7 +262,6 @@ const Serviceability = (props: ITypeProps) => {
                   deliveryPincode: e.target.value ? Number(e.target.value) : "",
                 });
               }}
-              // inputType="number"
             />
             <CustomDropDown
               onChange={(e: any) => {
@@ -303,7 +314,6 @@ const Serviceability = (props: ITypeProps) => {
                   invoiceValue: e.target.value ? Number(e.target.value) : "",
                 });
               }}
-              // inputType="number"
             />
           </div>
           <div className="grid grid-cols-3 p-5 gap-5">
@@ -321,7 +331,6 @@ const Serviceability = (props: ITypeProps) => {
                   ...temp,
                 });
               }}
-              // inputType="number"
             />
             <CustomInputBox
               label="Height (CM)"
@@ -337,7 +346,6 @@ const Serviceability = (props: ITypeProps) => {
                   ...temp,
                 });
               }}
-              // inputType="number"
             />
             <CustomInputBox
               label="Width (CM)"
@@ -353,7 +361,6 @@ const Serviceability = (props: ITypeProps) => {
                   ...temp,
                 });
               }}
-              // inputType="number"
             />
           </div>
         </div>
