@@ -71,7 +71,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       toast.success(response?.message);
       navigate(-1);
     } else {
-      toast.error("Failed To Upload!");
+      toast.error(response?.message);
     }
   };
 
