@@ -11,7 +11,11 @@ const CustomDatePicker = (props: ITypeProps) => {
   const { onSelect } = props;
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const minTime = new Date();
+  minTime.setHours(9, 0, 0, 0);
 
+  const maxTime = new Date();
+  maxTime.setHours(21, 0, 0, 0);
   return (
     <div className="relative flex justify-left">
       <DatePicker
@@ -27,6 +31,9 @@ const CustomDatePicker = (props: ITypeProps) => {
         dateFormat="MMMM d, yyyy h:mm aa"
         popperPlacement="bottom-start"
         inline
+        minDate={new Date()}
+        minTime={minTime}
+        maxTime={maxTime}
       />
     </div>
   );

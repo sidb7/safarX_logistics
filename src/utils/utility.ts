@@ -163,7 +163,7 @@ export const loadRazorPayTransaction = async (
 ) => {
   try {
     let key = "rzp_test_03BJrYhr9s8YHM";
-    if (Environment === "production") key = "rzp_test_03BJrYhr9s8YHM";
+    if (Environment === "production") key = "rzp_live_ielBjwfQcB6jUh"; // rzp_live_ielBjwfQcB6jUh
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),
