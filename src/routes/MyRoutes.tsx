@@ -142,6 +142,9 @@ import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
 import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
 import Reports from "../screens/NewOrder/Reports";
 
+//feedBack
+import FeedBack from "../screens/FeedBack";
+
 const MyRoutes: React.FC = () => {
   return (
     <div>
@@ -845,6 +848,15 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <WeightFreeze />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/feedback/feedback"
+              element={
+                <ProtectedRoute>
+                  <FeedBack />
                 </ProtectedRoute>
               }
             />
