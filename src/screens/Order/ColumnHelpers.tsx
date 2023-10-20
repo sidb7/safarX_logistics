@@ -108,14 +108,14 @@ const MainCommonHelper = (navigate: any = "") => {
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>
-                {codInfo.invoiceValue.toLocaleString("en-US", {
+                {codInfo?.invoiceValue?.toLocaleString("en-US", {
                   style: "currency",
                   currency: "INR",
                 })}
               </p>
               <p>
                 <span>COD : </span>
-                {codInfo?.collectableAmount.toLocaleString("en-US", {
+                {codInfo?.collectableAmount?.toLocaleString("en-US", {
                   style: "currency",
                   currency: "INR",
                 })}
