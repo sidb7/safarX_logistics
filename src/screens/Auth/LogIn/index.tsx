@@ -267,7 +267,8 @@ const Index = () => {
                   onKeyDown={(e: any) => handleEnterLogin(e)}
                   label="Password"
                   tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
-                  maxLength={12}
+                  minLength={8}
+                  maxLength={16}
                   tempLabel={true}
                   isRightIcon={true}
                   isInfoIcon={true}
