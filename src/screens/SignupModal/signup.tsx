@@ -43,7 +43,12 @@ const Index = (props: any) => {
           <CustomInputBox containerStyle="ml-4" label="Last Name" />
         </div>
         <CustomInputBox label="Email" />
-        <CustomInputBox inputType="password" label="Password" />
+        <CustomInputBox
+          inputType="password"
+          label="Password"
+          minLength={8}
+          maxLength={16}
+        />
         <CustomInputBox inputType="password" label="Referral code(Optional)" />
         <CustomButton onClick={signUpOnClick} text="SIGN UP" />
         <hr className="mb-[-30px]" />
