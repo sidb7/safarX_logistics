@@ -156,7 +156,10 @@ const Index = (props: ITypeProps) => {
 
       sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
-        toast.success(response?.message);
+        setTimeout(() => {
+          console.log("Delayed for 1 second.");
+          // toast.success(response?.message);
+        }, 1000);
         setLoading(false);
 
         if (businessType === "business") {
@@ -165,7 +168,6 @@ const Index = (props: ITypeProps) => {
         } else if (businessType === "company") {
           navigate("/onboarding/kyc");
         } else if (businessType === "individual") {
-          // navigate("/onboarding/kyc-terms/gst-agreement");
           navigate("/onboarding/kyc");
         }
       } else {
@@ -199,7 +201,7 @@ const Index = (props: ITypeProps) => {
           if (response?.success) {
             verifyPAN(panCard);
 
-            toast.success(response?.message);
+            // toast.success(response?.message);
             //Navigate Url's go here
           } else {
             toast.error(response?.message);
