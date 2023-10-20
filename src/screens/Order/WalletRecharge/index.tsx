@@ -318,7 +318,7 @@ const WalletRecharge = () => {
                 <p
                   className={`${
                     isItLgScreen
-                      ? "px-[16px] py-[13px] text-[16px] font-semibold"
+                      ? "px-[16px] py-[13px] text-[16px] font-semibold font-Open leading-[22px]"
                       : ""
                   }`}
                 >
@@ -331,10 +331,12 @@ const WalletRecharge = () => {
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
                     <img src={Accountlogo} alt="" />
-                    <p className="text-[#1C1C1C]">Your wallet balance</p>
+                    <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6">
+                      Your wallet balance
+                    </p>
                     <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
                   </div>
-                  <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
+                  <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                     Endless wallet balance with automatic add money
                   </p>
                   {/* <p
@@ -434,17 +436,17 @@ const WalletRecharge = () => {
                 ) : ( */}
                     <div className="flex flex-col h-full ">
                       <div className="flex flex-col mb-12">
-                        <p className="text-[1rem] font-semibold text-[#1C1C1C]">
+                        <p className="font-Open text-base font-semibold leading-[22px]">
                           Yaari points are availed after first
                         </p>
-                        <p className="text-[1rem] font-semibold text-[#1C1C1C]">
+                        <p className="font-Open text-base font-semibold leading-[22px]">
                           order is placed
                         </p>
                       </div>
 
-                      <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                      {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
                         Tap to know how it works
-                      </p>
+                      </p> */}
                     </div>
                     {/* )} */}
                     <div>
@@ -473,7 +475,9 @@ const WalletRecharge = () => {
               {/* Available Offers Mobile */}
               <div className="flex  gap-2 lg:hidden">
                 <img src={discountIcon} alt="" />
-                <p className="text-lg font-semibold">Available offers</p>
+                <p className="font-Lato text-2xl font-normal leading-8">
+                  Available offers
+                </p>
               </div>
               <div className="flex flex-nowwrap overflow-x-scroll space-x-4 mb-7 lg:hidden">
                 <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
@@ -628,7 +632,7 @@ const WalletRecharge = () => {
                 <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
                   <div className="flex  gap-x-2 text-[14px]">
                     <img src={rechargeIcon} alt="" className="object-contain" />
-                    <p className="  font-semibold text-sm lg:text-lg lg:text-[#1C1C1C]">
+                    <p className=" font-Lato font-semibold text-sm lg:text-lg lg:text-[#1C1C1C] lg:leading-6">
                       {isItLgScreen
                         ? "Payment gateway"
                         : "Recharge with payment gateway"}
@@ -704,7 +708,7 @@ const WalletRecharge = () => {
                 className="max-w-[900px] flex justify-between items-center cursor-pointer rounded-lg shadow-lg py-4 px-5 mb-[40px] font-medium max-sm:font-normal"
                 onClick={() => navigate("/wallet/transaction-history")}
               >
-                <p className="text-[24px] max-sm:text-[20px]">
+                <p className="font-Lato text-lg font-semibold leading-6">
                   {" "}
                   View Transaction History
                 </p>
