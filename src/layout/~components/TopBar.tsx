@@ -26,9 +26,10 @@ import { toast } from "react-toastify";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";
-import SyAppIcon from "../../assets/app.svg";
+import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
+import { useSelector } from "react-redux";
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -37,13 +38,14 @@ interface ITopBarProps {
 
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const navigate = useNavigate();
+  const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quickData, setQuickData] = useState<any>();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isQuick, setIsQuick] = useState(false);
-  const [walletAmt, setWalletAmt] = useState<any>(0);
   const [isLoading, setLoading] = useState(false);
   const [showServiceability, setShowServiceability] = useState(false);
   const [companyServices, setCompanyServices] = useState([]);
@@ -85,29 +87,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
   const dropdownRef = useRef<any>();
   const dropdownQuickRef = useRef<any>();
-
-  // let walletBalance = sessionStorage.getItem("kycValue") as any;
-  // let walletAmt: any;
-
-  // if (walletBalance && walletBalance?.walletBalance !== undefined) {
-  //   walletBalance = JSON.parse(walletBalance);
-  //   walletAmt = walletBalance?.walletBalance;
-  // }
-  // console.log("walletBalance", walletAmt);
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      let walletBalance = sessionStorage.getItem("walletAmt") as any;
-      // console.log("walletBalance", walletBalance !== undefined);
-      if (walletBalance === undefined) {
-        console.log("wallet ", walletBalance);
-      } else {
-        setLoading(false);
-        setWalletAmt(walletBalance || 0);
-      }
-    }, 100);
-  }, [walletAmt]);
 
   const handleOutsideClick = (event: any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -167,38 +146,37 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     };
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        //Get Company Services API - Serviceability
-        const { data: response }: any = await POST(GET_COMPANY_SERVICE, {
-          skip: 0,
-          limit: 500,
-        });
-
-        if (response?.success) {
-          setCompanyServices(response?.data);
-          setDropDownData(response?.data);
-        }
-      } catch (error) {
-        console.error("GET SERVICES API ERROR", error);
-        return error;
-      }
-    })();
-  }, []);
-
-  const openQuickAction = async () => {
+  const onClickServiceability = async () => {
     try {
-      const { data } = await POST(GET_PROFILE_URL);
-      if (data?.success) {
-        setQuickData(data?.data[0]);
-        setIsQuick(!isQuick);
-      } else {
-        toast.error(data?.message);
+      //Get Company Services API - Serviceability
+      const { data: response }: any = await POST(GET_COMPANY_SERVICE, {
+        skip: 0,
+        limit: 500,
+      });
+
+      if (response?.success) {
+        setCompanyServices(response?.data);
+        setDropDownData(response?.data);
       }
     } catch (error) {
-      console.error(error);
+      console.error("GET SERVICES API ERROR", error);
+      return error;
     }
+  };
+
+  const openQuickAction = async () => {
+    setIsQuick(!isQuick);
+    // try {
+    //   const { data } = await POST(GET_PROFILE_URL);
+    //   if (data?.success) {
+    //     setQuickData(data?.data[0]);
+
+    //   } else {
+    //     toast.error(data?.message);
+    //   }
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   const logoutHandler = async () => {
@@ -265,7 +243,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   onClick={() => navigate("/wallet/view-wallet")}
                 >
                   <img src={WalletIcon} width={35} alt="" />
-                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletAmt}`}</span>
+                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
                 </div>
               </div>
             )}
@@ -393,6 +371,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                         onClick={() => {
                           setShowTable(false);
                           setShowServiceability(true);
+                          onClickServiceability();
                         }}
                       >
                         <img
@@ -424,7 +403,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           Yaari Points
                         </span>
                         <span className="text-[#004EFF] text-[0.700rem] md:text-[0.875rem] font-Open font-semibold">
-                          {quickData?.yaariPoints}
+                          {0}
                         </span>
                       </div>
                       <div

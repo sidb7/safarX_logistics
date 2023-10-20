@@ -121,22 +121,29 @@ export const titleCase = (str: string) => {
 };
 
 export const loadPhonePeTransaction = async (
-  walletValue: number,
+  walletValue: string,
   redirectUrl: string,
   callbackUrl: string
 ) => {
   try {
     const payload = {
       paymentObject: {
-        amount: (walletValue * 100).toString(),
+        amount: (+walletValue?.replace(/,/g, "") * 100).toString(),
         redirectUrl,
         callbackUrl,
       },
       paymentGateway: "PHONEPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-    const phonePayTransactionPage =
-      data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    console.log(data);
+    let phonePayTransactionPage;
+    if (!data) {
+      phonePayTransactionPage = redirectUrl;
+    } else {
+      phonePayTransactionPage =
+        data?.data[0]?.data?.instrumentResponse?.redirectInfo?.url;
+    }
+
     setLocalStorage(
       "phonePeTransactionId",
       data?.data[0]?.data?.merchantTransactionId
@@ -165,6 +172,10 @@ export const loadRazorPayTransaction = async (
       paymentGateway: "RAZORPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
+
+    if (!data?.success) {
+      return data;
+    }
 
     let orderId = data?.data?.[0]?.id;
     let transactionId = data?.data?.[0]?.receipt;

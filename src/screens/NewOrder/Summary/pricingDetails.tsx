@@ -42,6 +42,12 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
         <div className="flex flex-col gap-y-4  ">
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+              Invoice Value:
+            </p>
+            {`\u20B9`} {invoiceValue}
+          </div>
+          <div className="flex justify-between">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Billable Weight:
             </p>
             <p> {appliedWeight} kg</p>

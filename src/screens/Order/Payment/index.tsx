@@ -55,6 +55,7 @@ import {
   removeLocalStorage,
 } from "../../../utils/utility";
 import useRazorpay from "react-razorpay";
+import CustomDropDown from "../../../components/DropDown";
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -169,24 +170,76 @@ const Payment = () => {
   );
   const userDetails = useSelector((state: any) => state.signin);
 
-  const moneyArr = [
+  const walletMenu = [
     {
-      value: 2000,
+      label: "100",
+      value: "100",
     },
     {
-      value: 3000,
+      label: "200",
+      value: "200",
     },
     {
-      value: 4000,
+      label: "500",
+      value: "500",
     },
     {
-      value: 5000,
+      label: "1,000",
+      value: "1,000",
+    },
+    {
+      label: "2,000",
+      value: "2,000",
+    },
+    {
+      label: "3,000",
+      value: "3,000",
+    },
+    {
+      label: "5,000",
+      value: "5,000",
+    },
+    {
+      label: "10,000",
+      value: "10,000",
+    },
+    {
+      label: "15,000",
+      value: "15,000",
+    },
+    {
+      label: "20,000",
+      value: "20,000",
+    },
+    {
+      label: "25,000",
+      value: "25,000",
+    },
+    {
+      label: "30,000",
+      value: "30,000",
+    },
+    {
+      label: "50,000",
+      value: "50,000",
+    },
+    {
+      label: "1,00,000",
+      value: "1,00,000",
+    },
+    {
+      label: "2,00,000",
+      value: "2,00,000",
+    },
+    {
+      label: "3,00,000",
+      value: "3,00,000",
     },
   ];
 
-  const convertToEdit = () => {
-    setIsedit(true);
-  };
+  // const convertToEdit = () => {
+  //   setIsedit(true);
+  // };
 
   const ModalContent = () => {
     return (
@@ -303,23 +356,24 @@ const Payment = () => {
   };
 
   const handleRazorPayTransaction = async () => {
-    const options: any = loadRazorPayTransaction(
-      walletValue,
+    let replacewalletValue = walletValue?.replace(/,/g, "");
+
+    const options: any = await loadRazorPayTransaction(
+      replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
       userDetails.email
     );
+    if (!options?.success && !options?.amount) {
+      toast.error(options.message);
+      return;
+    }
+    console.log("hded", options);
 
     const rzp1: any = new Razorpay(options);
 
     rzp1.on("payment.failed", (response: any) => {
-      alert(response.error.code);
-      alert(response.error.description);
-      alert(response.error.source);
-      alert(response.error.step);
-      alert(response.error.reason);
-      alert(response.error.metadata.order_id);
-      alert(response.error.metadata.payment_id);
+      console.log("response: ", response);
     });
 
     rzp1.open();
@@ -374,7 +428,17 @@ const Payment = () => {
               <p className="text-[0.75rem] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
                 Endless wallet balance with automatic add money
               </p>
-              <p
+              <CustomDropDown
+                heading="Select Amount"
+                value={walletValue}
+                options={walletMenu}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setWalletValue(event.target.value);
+                }}
+                wrapperClass="w-[200px]"
+                selectClassName="text-[18px]"
+              />
+              {/* <p
                 onClick={() => convertToEdit()}
                 className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center lg:font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
               >
@@ -411,7 +475,7 @@ const Payment = () => {
                     </div>
                   );
                 })}
-              </div>
+              </div> */}
             </div>
             {/*Second */}
 
@@ -655,7 +719,7 @@ const Payment = () => {
                     isDisabled={isDisabled}
                     text={"Paytm"}
                     amt={walletValue}
-                    navigate="/orders/add-order/payment"
+                    navigate={`${SELLER_WEB_URL}/orders/add-order/payment`}
                   />
                 </div>
                 <div className="flex flex-col items-center gap-y-2">
