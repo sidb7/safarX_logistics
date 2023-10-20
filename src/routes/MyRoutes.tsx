@@ -141,6 +141,7 @@ import BulkUpload from "../screens/Order/BulkUpload/BulkUpload";
 import ViewAllTickets from "../screens/Help/Tickets/viewAllTickets";
 import ViewTicketDetails from "../screens/Help/Tickets/viewTicketDetails";
 import Reports from "../screens/NewOrder/Reports";
+import AddBox from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addBox";
 
 //feedBack
 import FeedBack from "../screens/FeedBack";
@@ -703,6 +704,14 @@ const MyRoutes: React.FC = () => {
                 element={
                   <ProtectedRoute>
                     <AddProductScreen />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/catalogues/catalogue/add-box"
+                element={
+                  <ProtectedRoute>
+                    <AddBox />
                   </ProtectedRoute>
                 }
               />

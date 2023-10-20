@@ -121,7 +121,7 @@ const Tracking = () => {
     let urlWithTrackingNo = "";
 
     if (!trackingNoFromUrl && !trackingNo) {
-      return toast.warning("Please Enter Tracking Number")
+      return toast.warning("Please Enter Tracking Number");
     }
 
     try {
@@ -456,15 +456,23 @@ const Tracking = () => {
               <div className="flex gap-x-2 my-3">
                 <img src={telephoneIcon} alt="" />
                 <p className="text-base font-semibold font-Open whitespace-nowrap">
-                  Call at 9989245464, if have some issue
+                  Call at 9136996666, if have some issue
                 </p>
               </div>
               <div className="flex gap-x-4 my-3">
                 <p className="text-[#004EFF] text-lg font-semibold">
                   Follow us on{" "}
                 </p>
-                <img src={instagramIcon} alt="" />
-                <img src={facebook} alt="" />
+                <a
+                  href="https://instagram.com/shipyaari?igshid=OGQ5ZDc2ODk2ZA=="
+                  target="_blank"
+                >
+                  <img src={instagramIcon} alt="Instagram" />
+                </a>
+
+                <a href="https://www.facebook.com/Shipyaari/" target="_blank">
+                  <img src={facebook} alt="Facebook" />
+                </a>
               </div>
             </div>
           </div>

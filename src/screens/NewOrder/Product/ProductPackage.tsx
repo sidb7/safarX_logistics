@@ -416,6 +416,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               className="rounded"
               alt="Add Product"
             />
+            <AddButton
+              text="ADD BOX TO CATALOGUE"
+              onClick={() => {
+                navigate(
+                  `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                );
+              }}
+              showIcon={true}
+              icon={ButtonIcon}
+              className="rounded ml-4 mt-2"
+              alt="Add Box"
+            />
           </div>
           <div className="flex justify-between mt-5 whitespace-nowrap  bg-[#FFFFFF] shadow-sm p-2  lg:hidden ">
             <div>

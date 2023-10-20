@@ -130,12 +130,14 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
             </div>
             <div className=" ">
               <p className="text-[16px] font-semibold font-Open pt-2">
-                {`${fastestService.text?.partnerName}: ${fastestService.text?.companyServiceName}`}
+                {`${toPascalCase(
+                  fastestService.text?.partnerName
+                )}: ${toPascalCase(fastestService.text?.companyServiceName)}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                 {`\u20B9`} {fastestService.text?.total.toFixed(2)}{" "}
                 <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
-                  {`${fastestService.text?.serviceMode}`}
+                  {`${toPascalCase(fastestService.text?.serviceMode)}`}
                 </span>
               </p>
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
