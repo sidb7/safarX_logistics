@@ -317,10 +317,12 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
           <CustomInputBox
             label="Pincode"
             value={address.pincode}
-            onChange={(e) =>
-              handlePickupAddressChange("pincode", e.target.value)
-            }
+            inputMode="numeric"
             maxLength={6}
+            onChange={(e: any) => {
+              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
+              handlePickupAddressChange("pincode", numericValue); // Pass the cleaned numeric value to the handler
+            }}
           />
         </div>
 
