@@ -464,7 +464,7 @@ const WalletRecharge = () => {
 
               <div className="flex items-center lg:mb-2">
                 <Checkbox />
-                <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#CCDCFF]">
+                <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p>
               </div>
