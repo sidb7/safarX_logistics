@@ -380,8 +380,8 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    if (walletValue < 1) setIsDisabled(true);
-    else setIsDisabled(false);
+    if (walletValue) setIsDisabled(false);
+    else setIsDisabled(true);
   }, [walletValue]);
 
   return (

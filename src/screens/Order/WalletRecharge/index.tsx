@@ -75,7 +75,7 @@ const WalletRecharge = () => {
   // const [footer, setFooter] = useState(true);
   const [isLabelRightModal, setIsLabelRightModal] = useState(false);
   const [isPostPaymentModal, setIsPostPaymentModal] = useState(false);
-  const [walletValue, setWalletValue] = useState<any>(2000);
+  const [walletValue, setWalletValue] = useState<any>(0);
   const [isEdit, setIsedit] = useState<any>();
   const [upiValue, setUpiValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
@@ -85,7 +85,7 @@ const WalletRecharge = () => {
   let myInterval: number | any;
   const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -293,8 +293,9 @@ const WalletRecharge = () => {
   };
 
   useEffect(() => {
-    if (walletValue < 1) setIsDisabled(true);
-    else setIsDisabled(false);
+    if (walletValue) {
+      setIsDisabled(false);
+    } else setIsDisabled(true);
   }, [walletValue]);
 
   return (
