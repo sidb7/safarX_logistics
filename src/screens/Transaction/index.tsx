@@ -45,7 +45,7 @@ export const Transaction = () => {
             to: "",
           },
           skip: 0,
-          limit: 2,
+          limit: 50,
           pageNo: 1,
           sort: {},
           searchValue: "",
@@ -139,9 +139,9 @@ export const Transaction = () => {
 
                 <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
                   <div className="flex items-center">
-                    <span className="text-[#494949] text-[14px] font-Open leading-4 font-semibold">
+                    {/* <span className="text-[#494949] text-[14px] font-Open leading-4 font-semibold">
                       10 Transactions
-                    </span>
+                    </span> */}
                   </div>
                   <div className="flex items-center justify-end gap-x-2">
                     <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
@@ -210,7 +210,7 @@ export const Transaction = () => {
                     <div className="overflow-x-auto">{render()}</div>
                   )}
                 </div>
-                {totalItemCount > 0 && (
+                {/* {totalItemCount > 0 && (
                   <div className="max-sm:hidden">
                     <PaginationComponent
                       totalItems={totalItemCount}
@@ -219,7 +219,7 @@ export const Transaction = () => {
                       onItemsPerPageChange={onPerPageItemChange}
                     />
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </>
