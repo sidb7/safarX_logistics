@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CrossIcon from "../../../assets/CloseIcon.svg";
+import InformativeIcon from "../../../assets/I icon.svg";
 import CustomInputBox from "../../../components/Input";
 import RightSideModal from "../.././../components/CustomModal/customRightModal";
 import ServiceButton from "../../../components/Button/ServiceButton";
@@ -129,10 +130,11 @@ function PassModal(props: PassModalProps) {
         <div className="flex flex-col mx-4 mt-4 gap-y-4">
           <CustomInputBox
             label="Old Password"
+            maxLength={16}
             inputType={viewPassword.oldPassword ? "text" : "password"}
             isRightIcon={true}
             visibility={viewPassword.oldPassword}
-            rightIcon={viewPassword.oldPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.oldPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("oldPassword")}
             onClick={() => {}}
             onChange={(e) =>
@@ -143,9 +145,12 @@ function PassModal(props: PassModalProps) {
             label="New Password"
             inputType={viewPassword.newPassword ? "text" : "password"}
             isRightIcon={true}
-            maxLength={12}
+            isInfoIcon={true}
+            informativeIcon={InformativeIcon}
+            tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
+            maxLength={16}
             visibility={viewPassword.newPassword}
-            rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.newPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
             onClick={() => {}}
             onChange={(e) => {
@@ -181,9 +186,9 @@ function PassModal(props: PassModalProps) {
             label="Re-enter New Password"
             inputType={viewPassword.confirmNewPassword ? "text" : "password"}
             isRightIcon={true}
-            maxLength={12}
+            maxLength={16}
             visibility={viewPassword.confirmNewPassword}
-            rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
+            rightIcon={viewPassword.confirmNewPassword ? EyeIcon : CrossEyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
             onClick={() => {}}
             onChange={(e) =>
@@ -215,6 +220,7 @@ function PassModal(props: PassModalProps) {
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[80px]"
               onClick={() => {
                 updatePassword();
+                setIsPassModalOpen(false);
               }}
             />
           </div>
