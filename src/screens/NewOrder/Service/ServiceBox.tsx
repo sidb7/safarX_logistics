@@ -24,15 +24,15 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     ignoreRecommended,
   } = props;
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   const handleOnChange = (option: any) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
 
-  const handleSortBy = (selectedItems: string[]) => {
-    setSelectedItems(selectedItems);
+  const handleSortBy = (selectedFilters: string[]) => {
+    setActiveFilters(selectedFilters);
   };
 
   const sortingFunctions: { [key: string]: (a: any, b: any) => number } = {
@@ -48,22 +48,25 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
       a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0,
   };
 
-  const sortedOptions = [...options].sort((a, b) => {
-    let result = 0;
-    for (const selectedSortOption of selectedItems) {
-      result = sortingFunctions[selectedSortOption](a, b);
-      if (result !== 0) {
-        break;
+  const applyFilters = (data: any[], filters: string[]) => {
+    return data.sort((a, b) => {
+      for (const filter of filters) {
+        const result = sortingFunctions[filter](a, b);
+        if (result !== 0) {
+          return result;
+        }
       }
-    }
-    return result;
-  });
+      return 0;
+    });
+  };
 
+  const displayedOptions = applyFilters([...options], activeFilters).slice(
+    0,
+    10
+  );
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
-
-  const displayedOptions = sortedOptions.slice(0, 10);
 
   return (
     <div>
