@@ -119,7 +119,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
     isCod: orderType === "B2C",
-    collectableAmount: 0,
+    collectableAmount: "",
     invoiceValue: 0,
   });
   const [isLoading, setIsLoading]: any = useState(false);
@@ -587,10 +587,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 <CustomInputBox
                   label={"COD Amount to Collect From Buyer"}
                   value={codData?.collectableAmount}
-                  inputType="text"
+                  inputType="number"
                   className="!w-60"
-                  isDisabled={paymentMode !== "cod" || isOrderTypeB2B}
-                  onChange={(e) => {
+                  isDisabled={
+                    paymentMode !== "cod" ||
+                    isOrderTypeB2B ||
+                    packages?.length === 0
+                  }
+                  onChange={(e: any) => {
                     setCodData({
                       ...codData,
                       collectableAmount:

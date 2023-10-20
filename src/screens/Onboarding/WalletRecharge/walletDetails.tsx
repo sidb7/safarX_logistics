@@ -110,9 +110,11 @@ const WalletDetails = () => {
             <CustomInputBox
               label="IFSC Code"
               containerStyle={`lg:!w-auto mt-4`}
+              maxLength={11}
+              value={ifscCode}
               inputType="text"
               className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem]"
-              onChange={(e) => setIfscCode(e.target.value)}
+              onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
             />
           </div>
 
