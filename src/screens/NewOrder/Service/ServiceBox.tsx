@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TooltipContent from "./TooltipContent";
 import FilterIcon from "../../../assets/serv/filter.svg";
 import FilterItems from "../../../components/FilterItemsScroll";
 
+interface IServiceOption {
+  value: string;
+  text: {
+    partnerName: string;
+    companyServiceName: string;
+    total: number;
+    serviceMode: string;
+    EDT: string;
+  };
+}
+
 interface IRadioButtonProps {
   name?: string;
-  options?: any;
+  options?: IServiceOption[];
   selectedValue?: any;
   selectedOption?: any;
   setSelectedOption?: any;
@@ -24,46 +35,56 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     ignoreRecommended,
   } = props;
 
-  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [surface, setSurface] = useState(true);
+  const [air, setAir] = useState(true);
+  const [sortingPrice, setSortingPrice] = useState(false);
+  const [sortingFastest, setSortingFastest] = useState(false);
+  const [sortedOptions, setSortedOptions] = useState<IServiceOption[]>([]);
 
-  const handleOnChange = (option: any) => {
+  useEffect(() => {
+    const filters = options.filter((service) => {
+      const serviceMode = service.text.serviceMode.toLowerCase();
+
+      if (
+        (surface && serviceMode === "surface") ||
+        (air && serviceMode === "air") ||
+        (!surface && !air)
+      ) {
+        return service;
+      }
+      return null;
+    });
+
+    if (sortingPrice) {
+      filters.sort((a, b) => a.text.total - b.text.total);
+    }
+    if (sortingFastest) {
+      filters.sort((a, b) => a.text.EDT.localeCompare(b.text.EDT));
+    }
+
+    setSortedOptions(filters.slice(0, 10));
+  }, [surface, air, sortingPrice, sortingFastest, options]);
+
+  const handleOnChange = (option: IServiceOption) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
 
-  const handleSortBy = (selectedFilters: string[]) => {
-    setActiveFilters(selectedFilters);
+  const handleSortBy = (selectedItems: string[]) => {
+    const isSurfaceSelected = selectedItems.includes("Surface");
+    const isAirSelected = selectedItems.includes("Air");
+
+    setSurface(isSurfaceSelected);
+    setAir(isAirSelected);
+
+    const sortingItems = selectedItems.filter(
+      (item) => item !== "Surface" && item !== "Air"
+    );
+
+    setSortingPrice(sortingItems.includes("Low Price"));
+    setSortingFastest(sortingItems.includes("Fastest"));
   };
 
-  const sortingFunctions: { [key: string]: (a: any, b: any) => number } = {
-    Fastest: (a, b) => a.text.EDT - b.text.EDT,
-    "Low Price": (a, b) => a.text.total - b.text.total,
-    Surface: (a, b) =>
-      a.text.serviceMode === "SURFACE"
-        ? -1
-        : b.text.serviceMode === "SURFACE"
-        ? 1
-        : 0,
-    Air: (a, b) =>
-      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0,
-  };
-
-  const applyFilters = (data: any[], filters: string[]) => {
-    return data.sort((a, b) => {
-      for (const filter of filters) {
-        const result = sortingFunctions[filter](a, b);
-        if (result !== 0) {
-          return result;
-        }
-      }
-      return 0;
-    });
-  };
-
-  const displayedOptions = applyFilters([...options], activeFilters).slice(
-    0,
-    10
-  );
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
@@ -78,12 +99,12 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
       </div>
       <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
         <FilterItems
-          items={["Fastest", "Low Price", "Surface", "Air"]}
+          items={["Surface", "Air", "Low Price", "Fastest"]}
           onClick={handleSortBy}
         />
       </div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {displayedOptions.map((option: any) => (
+        {sortedOptions.map((option) => (
           <div
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
