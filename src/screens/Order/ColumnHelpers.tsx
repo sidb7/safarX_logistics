@@ -237,16 +237,15 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             </div>
           )}
 
-          <div className="">
+          <div className="flex items-center">
             <span className=" text-sm font-light">Source :</span>
-            <div className=" flex text-base items-center font-medium">
+            <div className=" pl-2 text-base items-center font-medium">
               <span className="">{source}</span>
             </div>
           </div>
-
-          <div className="">
+          <div className="flex items-center">
             <span className=" text-sm font-light">Order Type :</span>
-            <div className=" flex text-base items-center font-medium">
+            <div className=" pl-2 flex text-base items-center font-medium">
               <span className="">{orderType}</span>
             </div>
           </div>
@@ -510,15 +509,15 @@ export const columnHelperForNewOrder = (
               </div>
             </div>
 
-            <div className="">
+            <div className="flex items-center">
               <span className=" text-sm font-light">Source :</span>
-              <div className=" flex text-base items-center font-medium">
+              <div className=" pl-2 text-base items-center font-medium">
                 <span className="">{source}</span>
               </div>
             </div>
-            <div className="">
+            <div className="flex items-center">
               <span className=" text-sm font-light">Order Type :</span>
-              <div className=" flex text-base items-center font-medium">
+              <div className=" pl-2 flex text-base items-center font-medium">
                 <span className="">{orderType}</span>
               </div>
             </div>
