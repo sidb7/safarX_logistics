@@ -853,7 +853,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/feedback/feedback"
+              path="/feedback"
               element={
                 <ProtectedRoute>
                   <FeedBack />

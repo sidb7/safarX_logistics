@@ -15,6 +15,7 @@ import okayActiveIcon from "../../assets/Feedback/okayColor.svg"
 import goodActiveIcon from "../../assets/Feedback/goodColor.svg"
 import excellentActiveIcon from "../../assets/Feedback/excellentColor.svg"
 import CustomInputBox from '../../components/Input';
+import { module } from './data';
 
 const userExperienceExpression = [
     {
@@ -50,7 +51,16 @@ const userExperienceExpression = [
 ]
 function FeedBack() {
     const [expresstion, setExpression] = useState(userExperienceExpression)
-    const [selectedExpression, setSelectedExpression] = useState({})
+    const [selectedExpression, setSelectedExpression] = useState("")
+    const [subModuleList, setSubModuleList] = useState([])
+
+    const [feedbackState, setFeedBackState] = useState({
+        module: "",
+        subModule: "",
+        comments: ""
+    })
+
+
 
 
 
@@ -58,10 +68,34 @@ function FeedBack() {
         let arr = expresstion.map((e: any) => { return { ...e, isActive: false } })
         arr[index].isActive = true
         setExpression([...arr])
-        setSelectedExpression(arr[index])
+        setSelectedExpression(arr[index]?.value)
+        console.log(arr[index].value)
     }
 
-    console.log("selectedExpression", selectedExpression)
+    const onChangeHandler = (e: any) => {
+        if (e.target.name === "module") {
+            const getSelectedModuleObject: any = module.find((data) => data.name === e.target.value)
+            setSubModuleList(getSelectedModuleObject?.menu)
+            setFeedBackState((prevValue: any) => {
+                return { ...prevValue, [e.target.name]: e.target.value }
+            })
+        } else {
+            setFeedBackState((prevValue: any) => {
+                return { ...prevValue, [e.target.name]: e.target.value }
+            })
+        }
+    }
+
+    const SubmitFeedBack = () => {
+        const payLoad = {
+            experience: selectedExpression,
+            module: feedbackState.module,
+            subModule: feedbackState.subModule,
+            comments: feedbackState.comments
+        }
+        console.log("payLoad", payLoad)
+    }
+
 
 
     return (
@@ -99,9 +133,6 @@ function FeedBack() {
                                                     {
                                                         data.isActive ? (<img src={data.activeIcon} alt='' />) : (<img src={data.icon} alt='' />)
                                                     }
-
-
-
                                                 </div>
                                                 <Tooltip
                                                     id="my-tooltip-inline"
@@ -122,14 +153,47 @@ function FeedBack() {
                             <div className='my-10 max-w-[550px] m-auto'>
                                 <div>
                                     <div className='my-5'>
-                                        <CustomDropDown placeHolder='Select Module' wrapperClass='shadow-inner rounded-lg bg-[#f3f3f3]' onChange={() => console.log("")} />
+                                        <CustomDropDown
+                                            options={module?.map((option) => ({
+                                                label: option?.name,
+                                                value: option?.name,
+                                            }))}
+                                            name="module"
+                                            heading="Select Module"
+                                            wrapperClass='shadow-inner rounded-lg bg-[#f3f3f3]'
+                                            onChange={onChangeHandler}
+                                        />
                                     </div>
+                                    {
+                                        subModuleList.length > 0 && (
+                                            <div className='my-5'>
+                                                <CustomDropDown
+                                                    options={subModuleList?.map((option: any) => ({
+                                                        label: option?.name,
+                                                        value: option?.name,
+                                                    }))}
+                                                    name='subModule'
+                                                    heading="Select Sub Module"
+                                                    wrapperClass='shadow-inner rounded-lg bg-[#f3f3f3]'
+                                                    onChange={onChangeHandler}
+                                                />
+                                            </div>
+                                        )
+                                    }
                                     <div className=''>
-                                        <CustomInputBox placeholder='Add a Comment' className='w-[100%] shadow-inner rounded-lg bg-[#f3f3f3] p-4' />
+                                        <textarea
+                                            placeholder='Add a Comment'
+                                            className=' w-[100%] shadow-inner rounded-lg bg-[#f3f3f3] p-4'
+                                            name='comments'
+                                            onChange={onChangeHandler}
+                                        />
                                     </div>
 
                                 </div>
-                                <button className='border py-3 w-[100%] my-10 rounded-lg bg-black text-white'>Save Feedback</button>
+                                <button
+                                    className='border py-3 w-[100%] my-10 rounded-lg bg-black text-white'
+                                    onClick={SubmitFeedBack}
+                                >Save Feedback</button>
 
                             </div>
 
