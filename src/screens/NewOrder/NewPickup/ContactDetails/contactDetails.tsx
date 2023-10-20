@@ -66,8 +66,11 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
           <CustomInputBox
             label="Mobile Number"
             value={address.mobileNo}
+            maxLength={10}
+            inputMode="numeric"
             onChange={(e) => {
-              handleContactChange("mobileNo", e.target.value);
+              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
+              handleContactChange("mobileNo", numericValue); // Pass the cleaned numeric value to the handler
             }}
           />
         </div>

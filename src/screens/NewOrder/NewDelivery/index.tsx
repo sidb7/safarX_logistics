@@ -188,7 +188,7 @@ const DeliveryLocation = () => {
                 locality: orderData?.deliveryAddress?.locality,
                 sector: orderData?.deliveryAddress?.sector,
                 landmark: orderData?.deliveryAddress?.landmark,
-                pincode: orderData?.deliveryAddress?.pincode,
+                pincode: orderData?.deliveryAddress?.pincode || "",
                 city: orderData?.deliveryAddress?.city,
                 state: orderData?.deliveryAddress?.state,
                 country: orderData?.deliveryAddress?.country,
