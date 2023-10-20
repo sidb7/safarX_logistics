@@ -63,7 +63,7 @@ const Index = () => {
               </div>
 
               <CustomButton
-                className="!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150 "
+                className=" bg-black  "
                 onClick={() => navigate("/onboarding/questionnaire/question1")}
                 text="SET UP MY ACCOUNT"
               />
