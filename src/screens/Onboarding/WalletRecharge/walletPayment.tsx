@@ -137,6 +137,11 @@ const WalletPayment = () => {
       rzp1.open();
     };
 
+    useEffect(() => {
+      if (walletValue) setIsDisabled(false);
+      else setIsDisabled(true);
+    }, [walletValue]);
+
     return (
       <div className="h-full w-full">
         {!isLgScreen ? (
