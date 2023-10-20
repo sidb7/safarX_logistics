@@ -103,15 +103,15 @@ export const EditProfile = () => {
           onChange={(e) => changeHandler("contactNumber", e)}
         />
         <CustomInputBox
-          label="Brand Website"
+          label="Brand Name"
           // placeholder="Brand Website"
-          value={profileData?.privateCompany?.brandWebsite}
+          value={profileData?.privateCompany?.name}
           onChange={(e) =>
             setProfileData({
               ...profileData,
               privateCompany: {
                 ...profileData.privateCompany,
-                brandWebsite: e.target.value,
+                name: e.target.value,
               },
             })
           }

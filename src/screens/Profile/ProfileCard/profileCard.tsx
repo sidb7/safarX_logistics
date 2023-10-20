@@ -5,7 +5,7 @@ import EmailIcon from "../../../assets/Profile/EmailIcon.svg";
 import PhoneIcon from "../../../assets/Profile/PhoneIcon.svg";
 import WebsiteIcon from "../../../assets/Profile/WebsiteIcon.svg";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
 
@@ -44,6 +44,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const walletBalance = props?.ProfileDetails?.walletBalance;
   const companyDisplayName = props?.ProfileDetails?.privateCompany?.name;
   const activePlanExpiry = props?.ProfileDetails?.activePlanExpiry;
+  const [kycValue, setKycValue] = useState();
+
+  useEffect(() => {
+    const kyc = sessionStorage.getItem("setKycValue") as any;
+    setKycValue(kyc);
+  }, []);
 
   const navigate = useNavigate();
 
@@ -87,12 +93,16 @@ export const ProfileCard = (props: ProfileCardProps) => {
           <div className="col-span-5  whitespace-nowrap flex flex-col space-y-2 py-2 pr-4 pl-3">
             <span className="flex justify-between font-Lato font-semibold leading-7 capitalize">
               {`${firstName} ${lastName}`}
-              <img
-                src={BlackEditIcon}
-                alt=""
-                className="pr-4 cursor-pointer"
-                onClick={() => navigate("/profile/edit-profile")}
-              />
+              {kycValue === "true" ? (
+                ""
+              ) : (
+                <img
+                  src={BlackEditIcon}
+                  alt=""
+                  className="pr-4 cursor-pointer"
+                  onClick={() => navigate("/profile/edit-profile")}
+                />
+              )}
             </span>
             <span className="flex font-Lato text-[16px] font-normal leading-6">
               <img src={EmailIcon} alt="Email" className="w-[16px] mr-2" />
