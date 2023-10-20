@@ -260,6 +260,7 @@ const WalletRecharge = () => {
 
   const handlePhonePeTransaction = async () => {
     setLoading(true);
+
     await loadPhonePeTransaction(
       walletValue,
       `${SELLER_WEB_URL}/wallet/view-wallet`,
@@ -269,7 +270,7 @@ const WalletRecharge = () => {
   };
 
   const handleRazorPayTransaction = async () => {
-    let replacewalletValue = walletValue.replace(/,/g, "");
+    let replacewalletValue = walletValue?.replace(/,/g, "");
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
@@ -650,7 +651,7 @@ const WalletRecharge = () => {
                         navigate={`${SELLER_WEB_URL}/wallet/view-wallet`}
                       />
                     </div>
-                    {/* <div className="flex flex-col items-center gap-y-2">
+                    <div className="flex flex-col items-center gap-y-2">
                       <img
                         src={
                           "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
@@ -672,7 +673,7 @@ const WalletRecharge = () => {
                           PhonePe
                         </p>
                       </button>
-                    </div> */}
+                    </div>
                     <div className="flex flex-col items-center gap-y-2">
                       <div className="w-20 h-20 flex justify-center items-center">
                         <img
