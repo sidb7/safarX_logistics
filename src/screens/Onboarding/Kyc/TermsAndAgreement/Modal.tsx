@@ -36,8 +36,12 @@ const Modal = (props: ITypesProps) => {
               <p className="font-bold text-[16px] text-[#1C1C1C] font-Open leading-[22px]">
                 Congratulations!
               </p>
+
               <p className="font-bold text-[16px] text-[#1C1C1C] text-center font-Open leading-[22px] ">
-                Your KYC details have been successfully verified!
+                {/* {`Your ${text} details have been successfully verified!`} */}
+                {businessType === "individual"
+                  ? "Your Adhaar and PAN Details are verified successfully"
+                  : "Your GST and PAN Details Verified successfully"}
               </p>
             </div>
 
