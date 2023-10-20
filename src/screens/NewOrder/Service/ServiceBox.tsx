@@ -24,41 +24,49 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     ignoreRecommended,
   } = props;
 
-  // const [selectedOption, setSelectedOption] = useState<any>(null);
-  const [sortOption, setSortOption] = useState<string | null>(null);
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
   const handleOnChange = (option: any) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
-  const items = ["Fastest", "Low Price", "Surface", "Air"];
-  const handleSortBy = (sortBy: string) => {
-    setSortOption(sortBy);
+
+  const handleSortBy = (selectedFilters: string[]) => {
+    setActiveFilters(selectedFilters);
   };
 
-  //  const filteredOptions = ignoreRecommended
-  //    ? options.filter((option:any) => !option.isRecommended)
-  //    : options;
-
-  const sortedOptions = [...options];
-
-  if (sortOption === "Fastest") {
-    sortedOptions.sort((a, b) => a.text.EDT - b.text.EDT);
-  } else if (sortOption === "Low Price") {
-    sortedOptions.sort((a, b) => a.text.total - b.text.total);
-  } else if (sortOption === "Surface") {
-    sortedOptions.sort((a, b) =>
+  const sortingFunctions: { [key: string]: (a: any, b: any) => number } = {
+    Fastest: (a, b) => a.text.EDT - b.text.EDT,
+    "Low Price": (a, b) => a.text.total - b.text.total,
+    Surface: (a, b) =>
       a.text.serviceMode === "SURFACE"
         ? -1
         : b.text.serviceMode === "SURFACE"
         ? 1
-        : 0
-    );
-  } else if (sortOption === "Air") {
-    sortedOptions.sort((a, b) =>
-      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0
-    );
-  }
+        : 0,
+    Air: (a, b) =>
+      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0,
+  };
+
+  const applyFilters = (data: any[], filters: string[]) => {
+    return data.sort((a, b) => {
+      for (const filter of filters) {
+        const result = sortingFunctions[filter](a, b);
+        if (result !== 0) {
+          return result;
+        }
+      }
+      return 0;
+    });
+  };
+
+  const displayedOptions = applyFilters([...options], activeFilters).slice(
+    0,
+    10
+  );
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
 
   return (
     <div>
@@ -69,10 +77,13 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         </div>
       </div>
       <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
-        <FilterItems items={items} onClick={handleSortBy} />
+        <FilterItems
+          items={["Fastest", "Low Price", "Surface", "Air"]}
+          onClick={handleSortBy}
+        />
       </div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {sortedOptions.map((option: any) => (
+        {displayedOptions.map((option: any) => (
           <div
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
@@ -96,18 +107,19 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
             </div>
             <div className=" ">
               <p className="text-[16px] font-semibold font-Open pt-2">
-                {`${option.text?.partnerName}: ${option.text?.companyServiceName}`}
+                {`${toPascalCase(option.text?.partnerName)}: ${toPascalCase(
+                  option.text?.companyServiceName
+                )}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                 {`\u20B9`} {option.text?.total.toFixed(2)}{" "}
                 <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
-                  {`${option.text?.serviceMode}`}
+                  {`${toPascalCase(option.text?.serviceMode)}`}
                 </span>
               </p>
               <p className="text-[#004EFF] text-[14px] pt-4 font-semibold font-Open">
                 ETA: {option.text?.EDT || "N/A"}{" "}
               </p>
-              {/* <p className="my-2">MODE: {`${option.text?.serviceMode}`}</p> */}
             </div>
             <TooltipContent option={option} />
           </div>
