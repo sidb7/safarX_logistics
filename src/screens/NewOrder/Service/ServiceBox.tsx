@@ -25,45 +25,42 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   } = props;
 
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [sortOption, setSortOption] = useState<string | null>(null);
 
   const handleOnChange = (option: any) => {
     setSelectedOption(option);
     selectedValue(option.value);
   };
 
-  const handleSortBy = (selectedFilters: string[]) => {
-    setActiveFilters(selectedFilters);
+  const handleSortBy = (selectedItems: string[]) => {
+    console.log("Selected Items:", selectedItems);
+    setSortOption(selectedItems.join(","));
   };
 
-  const sortingFunctions: { [key: string]: (a: any, b: any) => number } = {
-    Fastest: (a, b) => a.text.EDT - b.text.EDT,
-    "Low Price": (a, b) => a.text.total - b.text.total,
-    Surface: (a, b) =>
+  const sortedOptions = [...options].slice(0, 10);
+
+  if (sortOption === "Fastest") {
+    sortedOptions.sort((a, b) => a.text.EDT - b.text.EDT);
+  } else if (sortOption === "Low Price") {
+    sortedOptions.sort((a, b) => a.text.total - b.text.total);
+  } else if (sortOption === "Surface") {
+    sortedOptions.sort((a, b) =>
       a.text.serviceMode === "SURFACE"
         ? -1
         : b.text.serviceMode === "SURFACE"
         ? 1
-        : 0,
-    Air: (a, b) =>
-      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0,
-  };
+        : 0
+    );
+  } else if (sortOption === "Air") {
+    sortedOptions.sort((a, b) =>
+      a.text.serviceMode === "AIR" ? -1 : b.text.serviceMode === "AIR" ? 1 : 0
+    );
+  }
 
-  const applyFilters = (data: any[], filters: string[]) => {
-    return data.sort((a, b) => {
-      for (const filter of filters) {
-        const result = sortingFunctions[filter](a, b);
-        if (result !== 0) {
-          return result;
-        }
-      }
-      return 0;
-    });
-  };
-
-  const displayedOptions = applyFilters([...options], activeFilters).slice(
-    0,
-    10
-  );
+  // const displayedOptions = applyFilters([...options], activeFilters).slice(
+  //   0,
+  //   10
+  // );
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
@@ -83,7 +80,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         />
       </div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {displayedOptions.map((option: any) => (
+        {sortedOptions.map((option: any) => (
           <div
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
