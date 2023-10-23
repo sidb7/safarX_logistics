@@ -129,9 +129,9 @@ const WalletMain = () => {
                 className="flex justify-center mt-4 cursor-pointer"
                 onClick={() => navigate("/dashboard/overview")}
               >
-                <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
+                {/* <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                   SKIP FOR NOW{" "}
-                </p>
+                </p> */}
               </div>
             </div>
             {!isLgScreen && note()}

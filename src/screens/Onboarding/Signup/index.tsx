@@ -203,13 +203,22 @@ const Index = () => {
                         label="First Name"
                         maxLength={16}
                         onChange={(e) => {
+                          setSignUpError({
+                            ...signUpError,
+                            firstName: "",
+                          });
                           setsellerData({
                             ...sellerData,
                             firstName: e.target.value,
                           });
                         }}
                         onBlur={(e) => {
-                          if (!textRegex.test(e.target.value)) {
+                          if (!sellerData?.firstName) {
+                            setSignUpError({
+                              ...signUpError,
+                              firstName: "Please Enter Your First Name",
+                            });
+                          } else if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
                               firstName:
@@ -241,13 +250,22 @@ const Index = () => {
                         maxLength={16}
                         // placeholder=""
                         onChange={(e) => {
+                          setSignUpError({
+                            ...signUpError,
+                            lastName: "",
+                          });
                           setsellerData({
                             ...sellerData,
                             lastName: e.target.value,
                           });
                         }}
                         onBlur={(e) => {
-                          if (!textRegex.test(e.target.value)) {
+                          if (!sellerData?.lastName) {
+                            setSignUpError({
+                              ...signUpError,
+                              lastName: "Please Enter Your Last Name",
+                            });
+                          } else if (!textRegex.test(e.target.value)) {
                             setSignUpError({
                               ...signUpError,
                               lastName:
@@ -280,13 +298,22 @@ const Index = () => {
                       } `}
                       tempLabel={true}
                       onChange={(e) => {
+                        setSignUpError({
+                          ...signUpError,
+                          email: "",
+                        });
                         setsellerData({
                           ...sellerData,
                           email: e.target.value,
                         });
                       }}
                       onBlur={(e) => {
-                        if (!emailRegex.test(e.target.value)) {
+                        if (!sellerData?.email) {
+                          setSignUpError({
+                            ...signUpError,
+                            email: "Please Enter Your Email ID",
+                          });
+                        } else if (!emailRegex.test(e.target.value)) {
                           setSignUpError({
                             ...signUpError,
                             email: "Enter Valid Email",
@@ -324,6 +351,10 @@ const Index = () => {
                       informativeIcon={InformativeIcon}
                       setVisibility={setViewPassWord}
                       onChange={(e) => {
+                        setSignUpError({
+                          ...signUpError,
+                          password: "",
+                        });
                         setsellerData({
                           ...sellerData,
                           password: e.target.value,
@@ -387,13 +418,22 @@ const Index = () => {
                       tempLabel={true}
                       // placeholder=""
                       onChange={(e) => {
+                        setSignUpError({
+                          ...signUpError,
+                          referalCode: "",
+                        });
                         setsellerData({
                           ...sellerData,
                           referalCode: e.target.value,
                         });
                       }}
                       onBlur={(e) => {
-                        if (!referalRegex.test(e.target.value)) {
+                        if (!sellerData?.referalCode) {
+                          setSignUpError({
+                            ...signUpError,
+                            referalCode: "Please Enter Your Referal Code",
+                          });
+                        } else if (!referalRegex.test(e.target.value)) {
                           setSignUpError({
                             ...signUpError,
                             referalCode: "Enter Valid Code",

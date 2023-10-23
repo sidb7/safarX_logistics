@@ -19,6 +19,9 @@ const Index = () => {
   const location = useLocation();
   const state = location?.state?.path || {};
 
+  const updatedNumber =
+    state?.mobileNo?.toString()?.replace(/(?<=\d)\d(?=\d{2})/g, "*") || "";
+
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -87,7 +90,7 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (otp?.loginOtp.length === 6) {
+    if (otp?.loginOtp.toString().length === 6) {
       onClickVerifyOtp();
     }
   }, [otp]);
@@ -153,7 +156,7 @@ const Index = () => {
               <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] ">
                 Enter The OTP Sent To{" "}
                 <span className="text-[#494949] font-Open text-base font-semibold leading-[22px]">
-                  +91 {state.mobileNo}{" "}
+                  +91 {updatedNumber}{" "}
                 </span>
               </p>
             </div>
