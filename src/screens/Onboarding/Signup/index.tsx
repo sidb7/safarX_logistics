@@ -312,6 +312,8 @@ const Index = () => {
                     <CustomInputBox
                       inputType={viewPassWord ? "text" : "password"}
                       tempLabel={true}
+                      minLength={8}
+                      maxLength={16}
                       label="Password"
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       isRightIcon={true}

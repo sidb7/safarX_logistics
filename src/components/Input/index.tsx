@@ -15,6 +15,7 @@ interface propTypes {
   isDisabled?: boolean;
   inputType?: string;
   isRequired?: boolean;
+  minLength?: number;
   maxLength?: number;
   isRightIcon?: boolean;
   rightIcon?: string;
@@ -55,6 +56,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     isRequired = false,
     isRightIcon = false,
     setVisibility,
+    minLength,
     maxLength,
     imageClassName,
     onKeyDown,
@@ -75,6 +77,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           value={value}
           disabled={isDisabled}
           inputMode={inputMode}
+          minLength={minLength}
           maxLength={maxLength}
           onKeyDown={onKeyDown}
         />

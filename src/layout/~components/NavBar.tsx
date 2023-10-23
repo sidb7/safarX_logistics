@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyLogo from "../../assets/webshipyaarilogo.svg";
 import ShipyaariLogo from "../../assets/Navbar/shipyaariLogos.svg";
 import downArrow from "../../assets/downwardArrow.svg";
@@ -35,7 +35,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
               e1.isChild = false;
               e1.isActivePath = false;
               if (e1.menu.menu) {
-                e1.menu.menu.foEach((e2: any) => {
+                e1.menu.menu.forEach((e2: any) => {
                   e2.isActivePath = false;
                   e2.isChild = false;
                 });
@@ -83,7 +83,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             e1.isActivePath = true;
           }
           if (e1.menu.menu) {
-            e1.menu.menu.foEach((e2: any) => {
+            e1.menu.menu.forEach((e2: any) => {
               if (e2.isActivePath) e2.isActivePath = !e2.isActivePath;
             });
           }
@@ -101,7 +101,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         e.menu?.forEach((e1: any) => {
           e1.isActivePath = false;
           if (e1.menu.menu) {
-            e1.menu.menu.foEach((e2: any) => {
+            e1.menu.menu.forEach((e2: any) => {
               e2.isActivePath = false;
             });
           }
@@ -118,9 +118,17 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
     navigate(path);
   };
 
-  const opneAndCloseChild = (index: number, toggle: boolean) => {
+  const opneAndCloseChild = (index: number, element: any) => {
+    console.log("name", element);
+    const { name, isChild } = element;
+    if (name === "Help") {
+      console.log("help clicked");
+      window.open("https://care.shipyaari.com/support/home", "_blank");
+      return;
+    }
+
     let arr = sideBarMenus;
-    arr[index].isChild = !toggle;
+    arr[index].isChild = !isChild;
     setSideBarMenus([...arr]);
   };
 
@@ -134,7 +142,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
         e.menu?.forEach((e1: any) => {
           if (e1.isChild) e1.isChild = !e1.isChild;
           if (e1.menu.menu) {
-            e1.menu.menu.foEach((e2: any) => {
+            e1.menu.menu.forEach((e2: any) => {
               if (e2.isChild) e2.isChild = !e2.isChild;
             });
           }
@@ -172,10 +180,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             <div className="w-full flex-col" key={index}>
               <div
                 key={`${e.name + index}`}
-                className={`h-10 flex items-center  rounded-lg px-2
-                } w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
+                className={`h-10 flex items-center rounded-lg px-2
+} w-full ${e.isActivePath ? " !bg-[black]" : ""}`}
                 onClick={() => {
-                  opneAndCloseChild(index, e.isChild);
+                  opneAndCloseChild(index, e);
                 }}
               >
                 <img
@@ -217,7 +225,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                 )}
               </div>
               {e.isChild ? (
-                <div className="flex flex-col  overflow-hidden">
+                <div className="flex flex-col overflow-hidden">
                   {e.menu?.map((child: any, childIndex: number) => {
                     return (
                       <div
@@ -240,11 +248,6 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
             </div>
           );
         })}
-        {/* <img
-          src={`../../assets/Navbar/Weight.svg`}
-          className="!w-8 !h-8"
-          alt=""
-        /> */}
       </nav>
       <div
         style={{
@@ -252,7 +255,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           transitionTimingFunction: "ease-in-out",
           backdropFilter: conditinalClass.backdropFilter,
         }}
-        className={`fixed h-screen  z-10 top-0 left-0" ${
+        className={`fixed h-screen z-10 top-0 left-0" ${
           isHover ? "w-full" : "w-0"
         } `}
       ></div>
@@ -260,7 +263,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       {/* Mobile Nav Bar */}
       <>
         <nav
-          className={`lg:hidden absolute  h-full font-Open bg-white z-20 overflow-scroll`}
+          className={`lg:hidden absolute h-full font-Open bg-white z-20 overflow-scroll`}
           style={{
             boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
             transition: `all .2s `,
@@ -291,16 +294,16 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                   key={`${e.name + index}`}
                 >
                   <div
-                    className={` flex items-center gap-x-4  cursor-pointer  rounded-lg p-4 justify-start w-full `}
-                    onClick={() => {
-                      opneAndCloseChild(index, e.isChild);
-                    }}
+                    className={`flex items-center gap-x-4 cursor-pointer rounded-lg p-4 justify-start w-full`}
                   >
                     <img src={iconPath} alt="" />
                     <div
-                      className={` flex items-center  justify-between w-full  text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                      className={` flex items-center justify-between w-full text-sm font-semibold leading-5 capitalize overflow-hidden`}
+                      onClick={() => {
+                        opneAndCloseChild(index, e);
+                      }}
                     >
-                      <p className={` whitespace-nowrap`}>{e.name}</p>
+                      <p className={` whitespace-nowrap`}>{e.name} </p>
 
                       <div className={` flex items-center gap-2`}>
                         <CustomButton
@@ -308,7 +311,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                           showIcon={true}
                           onlyIcon={true}
                           className={`
-                            bg-white w-fit !p-0 !h-fit`}
+bg-white w-fit !p-0 !h-fit`}
                           text={""}
                           onClick={() => {}}
                         />
@@ -316,12 +319,12 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
                     </div>
                   </div>
                   {e.isChild ? (
-                    <div className="flex flex-col overflow-hidden  ">
+                    <div className="flex flex-col overflow-hidden ">
                       {e.menu?.map((child: any, childIndex: number) => {
                         return (
                           <div
                             key={`${child.path + childIndex}`}
-                            className={` rounded-lg  text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
+                            className={` rounded-lg text-sm font-semibold cursor-pointer leading-5 capitalize p-4 `}
                             onClick={() =>
                               setIsActivePath(index, childIndex, child.path)
                             }

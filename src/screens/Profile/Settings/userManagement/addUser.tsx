@@ -133,6 +133,8 @@ function AddUser() {
         <div>
           <CustomInputBox
             label="Password"
+            minLength={8}
+            maxLength={16}
             value={addUserData?.password}
             inputType={viewPassWord ? "text" : "password"}
             setVisibility={setViewPassWord}
