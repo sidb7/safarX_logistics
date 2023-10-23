@@ -7,7 +7,6 @@ import CustomDropDown from "../../components/DropDown";
 import terriableEmojiIcon from "../../assets/Feedback/terriable.svg";
 import badEmojiIcon from "../../assets/Feedback/bad.svg";
 import goodEmojiIcon from "../../assets/Feedback/good.svg"
-import InputBox from "../../components/Input/index";
 import okayEmojiIcon from "../../assets/Feedback/okay.svg"
 import ExcellentEmojiIcon from "../../assets/Feedback/excellent.svg"
 import terriableActiveIcon from "../../assets/Feedback/terriableColor.svg"
@@ -17,9 +16,6 @@ import goodActiveIcon from "../../assets/Feedback/goodColor.svg"
 import excellentActiveIcon from "../../assets/Feedback/excellentColor.svg"
 import CustomInputBox from '../../components/Input';
 import { module } from './data';
-import { POST } from '../../utils/webService';
-import { CREATE_FEEDBACK } from '../../utils/ApiUrls';
-import { toast } from 'react-toastify';
 
 const userExperienceExpression = [
     {
@@ -53,7 +49,7 @@ const userExperienceExpression = [
         value: "Excellent"
     }
 ]
-function AddFeedBack() {
+function FeedBack() {
     const [expresstion, setExpression] = useState(userExperienceExpression)
     const [selectedExpression, setSelectedExpression] = useState("")
     const [subModuleList, setSubModuleList] = useState([])
@@ -63,6 +59,10 @@ function AddFeedBack() {
         subModule: "",
         comments: ""
     })
+
+
+
+
 
     const selectExperience = (index: any) => {
         let arr = expresstion.map((e: any) => { return { ...e, isActive: false } })
@@ -86,30 +86,21 @@ function AddFeedBack() {
         }
     }
 
-    const SubmitFeedBack = async () => {
-        try {
-            const payLoad = {
-                experience: selectedExpression,
-                module: feedbackState.module,
-                subModule: feedbackState.subModule,
-                comments: feedbackState.comments
-            }
-            const { data } = await POST(CREATE_FEEDBACK, payLoad);
-            if (data.success === true) {
-                toast.success(data.message)
-            }
-        } catch (error: any) {
-            console.error("Error in API call:", error);
+    const SubmitFeedBack = () => {
+        const payLoad = {
+            experience: selectedExpression,
+            module: feedbackState.module,
+            subModule: feedbackState.subModule,
+            comments: feedbackState.comments
         }
+        console.log("payLoad", payLoad)
     }
-
-    console.log("feedbackState", feedbackState)
 
 
 
     return (
         <>
-            <Breadcrum label="Add Feedback" />
+            <Breadcrum label="Feedback" />
             <div className='flex'>
                 <div className='w-[100%] max-w-[800px] m-auto'>
                     <div className=' p-8 h-[100%]'>
@@ -157,6 +148,7 @@ function AddFeedBack() {
                                         )
                                     })
                                 }
+
                             </div>
                             <div className='my-10 max-w-[550px] m-auto'>
                                 <div>
@@ -214,4 +206,4 @@ function AddFeedBack() {
     )
 }
 
-export default AddFeedBack
+export default FeedBack
