@@ -1,0 +1,99 @@
+import React, { useEffect, useState } from 'react'
+import { Breadcrum } from '../../components/Layout/breadcrum'
+import CustomButton from "../../components/Button";
+import addIcon from "../../assets/Catalogue/add.svg";
+import { useNavigate } from 'react-router-dom';
+import { tabs } from "./data"
+import { GET_FEEDBACK } from '../../utils/ApiUrls';
+import { POST } from '../../utils/webService';
+import { toast } from 'react-toastify';
+import FeedbackTable from './feedbackTable';
+import { capitalizeFirstLetter } from '../../utils/utility';
+
+function Feedback() {
+
+    const [feedbackTabs, setFeedBackTabs] = useState(tabs)
+    const [renderingComponents, setRenderingComponents] = useState(0);
+    const [TotalItemCount, setTotalItemCount] = useState(0)
+    const [feedbackDataList, setFeedbackDataList] = useState([])
+
+    const navigate = useNavigate()
+
+
+    const getFeedbackList = async (data?: any) => {
+
+        const { data: response } = await POST(GET_FEEDBACK, {
+            module:
+                feedbackTabs[renderingComponents].value === "ALL"
+                    ? ""
+                    : capitalizeFirstLetter(feedbackTabs[renderingComponents].value),
+            skip: (data?.currentPage - 1) * data?.itemsPerPage || 0,
+            limit: data?.itemsPerPage || 10,
+            pageNo: data?.currentPage || 1,
+        });
+
+        if (response?.success) {
+            setTotalItemCount(response.totalCount);
+            setFeedbackDataList(response?.data);
+        } else {
+            setFeedbackDataList([]);
+            toast.error(response?.message);
+        }
+    };
+
+    const renderHeaderComponent = () => {
+        return (
+            <CustomButton
+                icon={addIcon}
+                showIcon={true}
+                text={"ADD FEEDBACK"}
+                className="!p-3"
+                onClick={() => navigate(`/feedback/add-feedback`)}
+            />
+        )
+    }
+
+    useEffect(() => {
+        getFeedbackList()
+    }, [renderingComponents])
+
+
+    return (
+        <>
+            <div>
+                <Breadcrum label="Feedback" component={renderHeaderComponent()} />
+            </div>
+            <div className='mx-5'>
+                <div className="flex flex-col whitespace-nowrap mt-2 lg:h-[34px]">
+                    <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+                        {feedbackTabs?.map(({ statusName }, index) => {
+                            return (
+                                <div
+                                    className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
+${renderingComponents === index && "!border-[#004EFF]"}
+`}
+                                    onClick={() => {
+                                        setRenderingComponents(index);
+                                    }}
+                                    key={index}
+                                >
+                                    <span
+                                        className={`text-[#777777] text-[14px] lg:text-[18px]
+${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
+                                    >
+                                        {statusName}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className='mt-2'>
+                        <FeedbackTable feedbackDataList={feedbackDataList} />
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default Feedback
