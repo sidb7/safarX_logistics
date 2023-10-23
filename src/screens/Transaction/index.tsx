@@ -74,7 +74,7 @@ export const Transaction = () => {
     fetchData();
   }, []);
 
-  const onPageIndexChange = (data: any) => {
+  const onPageIndexChange = async (data: any) => {
     const payload: any = {
       skip: 0,
       limit: 0,
@@ -88,10 +88,12 @@ export const Transaction = () => {
     } else {
       payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
       payload.limit = data?.itemsPerPage;
-      payload.pageNo = data?.currentPage || 0;
+      payload.pageNo = data?.currentPage;
+      console.log("data>>", data);
     }
+    console.log("payloadOnPageIndex", payload);
 
-    fetchData(payload);
+    // await fetchData(payload);
   };
 
   const onPerPageItemChange = (data: any) => {
@@ -241,14 +243,14 @@ export const Transaction = () => {
                   )}
                 </div>
 
-                {totalItemCount > 0 && (
-                  <Pagination
-                    totalItems={totalItemCount}
-                    itemsPerPageOptions={[10, 20, 30, 50]}
-                    onPageChange={onPageIndexChange}
-                    onItemsPerPageChange={onPerPageItemChange}
-                  />
-                )}
+                {/* {totalItemCount > 0 && ( */}
+                <Pagination
+                  totalItems={totalItemCount}
+                  itemsPerPageOptions={[10, 20, 30, 50]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                />
+                {/* )} */}
               </div>
             </div>
           </>
