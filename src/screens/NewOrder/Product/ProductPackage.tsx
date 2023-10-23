@@ -119,7 +119,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
     isCod: orderType === "B2C",
-    collectableAmount: "",
+    collectableAmount: 0,
     invoiceValue: 0,
   });
   const [isLoading, setIsLoading]: any = useState(false);

@@ -31,48 +31,58 @@ export const Transaction = () => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
   const [loading, setLoading] = useState(false);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    if (renderingComponents === 0) {
-      setLoading(true);
-      (async () => {
-        const { data } = await POST(GET_WALLET_TRANSACTION, {
-          filter: {
-            status: "",
-            from: "",
-            to: "",
-          },
-          skip: 0,
-          limit: 50,
-          pageNo: 1,
-          sort: {},
-          searchValue: "",
-        });
+  const fetchData = async (page: number, limit: number) => {
+    setLoading(true);
+    try {
+      const { data } = await POST(GET_WALLET_TRANSACTION, {
+        filter: {
+          status: "",
+          from: "",
+          to: "",
+        },
+        skip: (page - 1) * limit,
+        limit: limit,
+        pageNo: page,
+        sort: {},
+        searchValue: "",
+      });
 
-        if (data?.success) {
-          setData(data.data || []);
-          setLoading(false);
-        } else {
-          toast.error(data?.message);
-          setLoading(false);
-        }
-      })();
+      if (data?.success) {
+        setData(data.data || []);
+        setTotalItemCount(data.totalCount || 0);
+        setLoading(false);
+      } else {
+        toast.error(data?.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error("Error fetching data");
     }
-  }, []);
+  };
 
-  //on page change index
-  const onPageIndexChange = () => {};
+  useEffect(() => {
+    fetchData(currentPage, itemsPerPage);
+  }, [currentPage, itemsPerPage]);
 
-  // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPageIndexChange = (data: any) => {
+    setCurrentPage(data.currentPage);
+    fetchData(data.currentPage, itemsPerPage);
+  };
+
+  const onPerPageItemChange = (data: any) => {
+    setItemsPerPage(data.itemsPerPage);
+    fetchData(1, data.itemsPerPage);
+  };
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
   };
 
-  // search and filter component
   const filterButton = () => {
     if (isLgScreen) {
       return (
@@ -138,11 +148,7 @@ export const Transaction = () => {
                 </div>
 
                 <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
-                  <div className="flex items-center">
-                    {/* <span className="text-[#494949] text-[14px] font-Open leading-4 font-semibold">
-                      10 Transactions
-                    </span> */}
-                  </div>
+                  <div className="flex items-center"></div>
                   <div className="flex items-center justify-end gap-x-2">
                     <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
                       <img src={SelectIcon} alt="" />
@@ -191,27 +197,14 @@ export const Transaction = () => {
                         />
                       </div>
                     ))}
-
-                  {/* <div className="mt-4">
-                    <CashbackHistory
-                      data={{
-                        title: "May 23- 2023 COUPON",
-                        rupee: "500",
-                        date: "May 23, 2023",
-                        time: "08: 12 PM",
-                        description:
-                          "Rs. 3000 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
-                      }}
-                    />
-                  </div> */}
                 </div>
                 <div>
                   {isLgScreen && (
                     <div className="overflow-x-auto">{render()}</div>
                   )}
                 </div>
-                {/* {totalItemCount > 0 && (
-                  <div className="max-sm:hidden">
+                {totalItemCount > 0 && (
+                  <div className="hidden">
                     <PaginationComponent
                       totalItems={totalItemCount}
                       itemsPerPageOptions={[10, 20, 30, 50]}
@@ -219,7 +212,7 @@ export const Transaction = () => {
                       onItemsPerPageChange={onPerPageItemChange}
                     />
                   </div>
-                )} */}
+                )}
               </div>
             </div>
           </>
