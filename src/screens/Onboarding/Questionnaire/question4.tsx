@@ -1,7 +1,7 @@
 import Checkbox from "../../../components/CheckBox";
 import DroneDeliveryGif from "../../../assets/AccountQuestions/DroneDelivery.gif";
 import CustomButton from "../../../components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
 import { ResponsiveState } from "../../../utils/responsiveState";
@@ -22,6 +22,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const data = state?.questionsData;
   const [questionsData, setQuestionsData] = useState(data || []);
+  const [nextBtnStatus, setNextBtnStatus] = useState(false);
 
   const modalTitle = () => {
     return (
@@ -55,7 +56,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
     try {
       const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
       if (response?.success === true) {
-        toast.success(response?.message);
+        // toast.success(response?.message);
         navigate("/onboarding/kyc-welcome", {
           state: { questionsData },
         });
@@ -69,16 +70,29 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   }
 
   const nextHandler = () => {
+    // if (questionsData && questionsData?.length > 0) {
+    //   const filterQuestion = questionsData[3]?.options.filter(
+    //     (singleData: any) => singleData.isChecked === true
+    //   );
+    //   if (filterQuestion?.length === 0) {
+    //     return toast.error("Please Select Atleast One Option");
+    //   }
+    // }
+    submitAnswer(payload);
+  };
+
+  useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
       const filterQuestion = questionsData[3]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
-        return toast.error("Please Select Atleast One Option");
+        setNextBtnStatus(false);
+      } else {
+        setNextBtnStatus(true);
       }
     }
-    submitAnswer(payload);
-  };
+  }, [questionsData]);
 
   const question4 = () => {
     return (
@@ -133,7 +147,16 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                   })
                 }
               />
-              <CustomButton text="NEXT" onClick={() => nextHandler()} />
+              <CustomButton
+                text="NEXT"
+                disabled={!nextBtnStatus}
+                onClick={() => nextHandler()}
+                className={`${
+                  nextBtnStatus === true
+                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                }`}
+              />
             </div>
           </div>
         </div>

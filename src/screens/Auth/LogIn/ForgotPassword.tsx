@@ -16,6 +16,7 @@ import {
 import { useSelector } from "react-redux";
 import CustomButton from "../../../components/Button";
 import MobileGif from "../../../assets/OrderCard/Gif.gif";
+import InformativeIcon from "../../../assets/I icon.svg";
 import { setLocalStorage, tokenKey } from "../../../utils/utility";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
@@ -177,9 +178,7 @@ const ForgotPassword = (props: ITypeProps) => {
   const updatePasswordData = async () => {
     try {
       if (password?.newPassword !== password?.confirmNewPassword) {
-        return toast.error(
-          "Please enter a new password and re-enter the same password !"
-        );
+        return toast.error("Passwords do not match.");
       }
       const updatedFormData = {
         ...formData,
@@ -353,10 +352,10 @@ const ForgotPassword = (props: ITypeProps) => {
               </p>
 
               {/* <CustomButton
-              onClick={onClickVerifyOtp}
-              text="Submit Otp"
-              className="mt-2"
-            /> */}
+                onClick={onClickVerifyOtp}
+                text="Submit Otp"
+                className="mt-2"
+              /> */}
             </>
           )
         )}
@@ -365,15 +364,25 @@ const ForgotPassword = (props: ITypeProps) => {
           <>
             <CustomInputBox
               label="New Password"
-              maxLength={12}
+              minLength={8}
+              maxLength={16}
+              tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
               inputType={viewPassword.newPassword ? "text" : "password"}
               isRightIcon={true}
+              isInfoIcon={true}
+              informativeIcon={InformativeIcon}
               visibility={viewPassword.newPassword}
               setVisibility={() => togglePasswordVisibility("newPassword")}
-              rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
+              rightIcon={viewPassword.newPassword ? EyeIcon : CrossEyeIcon}
               onClick={() => {}}
               onChange={(e) => {
+                setPasswordError({
+                  ...passwordError,
+                  newPassword: "",
+                });
                 setPassword({ ...password, newPassword: e.target.value });
+              }}
+              onBlur={(e) => {
                 if (
                   !strongpasswordRegex.test(e.target.value) ||
                   password.newPassword.length < 8 ||
@@ -402,13 +411,13 @@ const ForgotPassword = (props: ITypeProps) => {
               </div>
             )}
             <CustomInputBox
-              label="Re-enter New Password"
+              label="Re-enter Password"
               inputType={viewPassword.confirmNewPassword ? "text" : "password"}
               isRightIcon={true}
               maxLength={12}
               visibility={viewPassword.confirmNewPassword}
               rightIcon={
-                viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon
+                viewPassword.confirmNewPassword ? EyeIcon : CrossEyeIcon
               }
               setVisibility={() =>
                 togglePasswordVisibility("confirmNewPassword")
