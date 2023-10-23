@@ -239,6 +239,11 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 //Tracking
 const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
+//feedback
+const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`
+const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`
+
+
 //Serviceability URL
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
 const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
@@ -359,4 +364,6 @@ export {
   POST_SERVICEABILITY,
   GET_COMPANY_SERVICE,
   ADD_PICKUP_ADDRESS_CATALOGUE,
+  CREATE_FEEDBACK,
+  GET_FEEDBACK
 };
