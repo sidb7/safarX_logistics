@@ -19,6 +19,7 @@ import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import Pagination from "../../components/Pagination";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
@@ -27,33 +28,37 @@ export const Transaction = () => {
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
 
-  const [totalItemCount, setTotalItemCount] = useState(10);
+  const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
-  const [data, setData] = useState([]);
+  const [data, setData]: any = useState([]);
 
-  const fetchData = async (page: number, limit: number) => {
+  const fetchData = async (data?: any) => {
+    console.log("data", data);
     setLoading(true);
+    const payload = {
+      filter: {
+        status: "",
+        from: "",
+        to: "",
+      },
+
+      sort: { _id: -1 },
+      skip: data?.skip || 0,
+      pageNo: data?.pageNo || 1,
+      limit: data?.limit || 10,
+      searchValue: "",
+    };
     try {
-      const { data } = await POST(GET_WALLET_TRANSACTION, {
-        filter: {
-          status: "",
-          from: "",
-          to: "",
-        },
-        skip: (page - 1) * limit,
-        limit: limit,
-        pageNo: page,
-        sort: {},
-        searchValue: "",
-      });
+      const { data } = await POST(GET_WALLET_TRANSACTION, payload);
+      let transactionCount = data?.data?.length || 0;
 
       if (data?.success) {
         setData(data.data || []);
-        setTotalItemCount(data.totalCount || 0);
+        setTotalItemCount(transactionCount ? transactionCount : 0);
         setLoading(false);
       } else {
         toast.error(data?.message);
@@ -66,17 +71,47 @@ export const Transaction = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage, itemsPerPage);
-  }, [currentPage, itemsPerPage]);
+    fetchData();
+  }, []);
 
   const onPageIndexChange = (data: any) => {
-    setCurrentPage(data.currentPage);
-    fetchData(data.currentPage, itemsPerPage);
+    const payload: any = {
+      skip: 0,
+      limit: 0,
+      pageNo: 0,
+    };
+
+    if (data?.currentPage === 1) {
+      payload.skip = 0;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = 1;
+    } else {
+      payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = data?.currentPage || 0;
+    }
+
+    fetchData(payload);
   };
 
   const onPerPageItemChange = (data: any) => {
-    setItemsPerPage(data.itemsPerPage);
-    fetchData(1, data.itemsPerPage);
+    const payload: any = {
+      skip: 0,
+      limit: 0,
+      pageNo: 0,
+    };
+
+    if (data?.currentPage === 1) {
+      payload.skip = 0;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = 1;
+    } else {
+      payload.skip = 0;
+      payload.limit = data?.itemsPerPage;
+      payload.pageNo = data?.currentPage || 0;
+    }
+
+    fetchData(payload);
   };
 
   const setScrollIndex = (id: number) => {
@@ -122,6 +157,8 @@ export const Transaction = () => {
     }
   };
 
+  console.log("totalCount", totalItemCount);
+
   return (
     <>
       {isActive ? (
@@ -162,7 +199,7 @@ export const Transaction = () => {
                 <div className="lg:hidden">
                   {data &&
                     data?.length !== 0 &&
-                    data.map((passbookData: any, index) => (
+                    data.map((passbookData: any, index: any) => (
                       <div
                         className="mt-4"
                         key={`${index}_${passbookData?.transactionId}`}
@@ -203,15 +240,14 @@ export const Transaction = () => {
                     <div className="overflow-x-auto">{render()}</div>
                   )}
                 </div>
+
                 {totalItemCount > 0 && (
-                  <div className="hidden">
-                    <PaginationComponent
-                      totalItems={totalItemCount}
-                      itemsPerPageOptions={[10, 20, 30, 50]}
-                      onPageChange={onPageIndexChange}
-                      onItemsPerPageChange={onPerPageItemChange}
-                    />
-                  </div>
+                  <Pagination
+                    totalItems={totalItemCount}
+                    itemsPerPageOptions={[10, 20, 30, 50]}
+                    onPageChange={onPageIndexChange}
+                    onItemsPerPageChange={onPerPageItemChange}
+                  />
                 )}
               </div>
             </div>

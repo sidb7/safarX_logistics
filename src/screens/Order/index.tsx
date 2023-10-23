@@ -389,7 +389,6 @@ const Index = () => {
       skip,
       limit
     );
-
     setOrders(OrderData);
   };
 
