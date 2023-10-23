@@ -215,10 +215,10 @@ ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
                   buttonText="UPDATE"
                   inputLabel="Enter SKU no."
                   onClick={() => setDiscrepancyDetailsRightModal(false)}
-                // onCustomLandmarkSelection={handleLandmarkSelected}
+                  // onCustomLandmarkSelection={handleLandmarkSelected}
                 />
               </RightSideModal>
-              <BottomLayout callApi={() => { }} />
+              <BottomLayout callApi={() => {}} />
             </div>
           </div>
         </div>
