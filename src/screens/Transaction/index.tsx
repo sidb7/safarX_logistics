@@ -32,8 +32,6 @@ export const Transaction = () => {
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
   const [data, setData]: any = useState([]);
 
   const fetchData = async (data?: any) => {
@@ -54,11 +52,13 @@ export const Transaction = () => {
     };
     try {
       const { data } = await POST(GET_WALLET_TRANSACTION, payload);
-      let transactionCount = data?.data?.length || 0;
+      // let transactionCount = data?.data?.length || 0;
 
       if (data?.success) {
+        console.log("datainsideApi", data?.totalTransactions);
         setData(data.data || []);
-        setTotalItemCount(transactionCount ? transactionCount : 0);
+
+        setTotalItemCount(data?.totalTransactions);
         setLoading(false);
       } else {
         toast.error(data?.message);
