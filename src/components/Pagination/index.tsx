@@ -16,8 +16,9 @@ const Pagination: React.FC<PaginationProps> = ({
   onPageChange,
   onItemsPerPageChange,
   rightmodalPagination,
+  pageNo,
 }) => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(pageNo || 1);
   const [itemsPerPage, setItemsPerPage] = useState(itemsPerPageOptions[0]);
   const totalPages: any = Math.ceil(totalItems / itemsPerPage);
   let pageNoId = 0;

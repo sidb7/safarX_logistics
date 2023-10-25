@@ -318,10 +318,10 @@ const Index = () => {
       );
       setOrders(OrderData);
       setGlobalIndex(index);
-
+      console.log("statusData", statusData);
       statusList?.forEach((e1: any) => {
         const matchingStatus = statusData.find(
-          (e: any) => e.value === e1._id.toUpperCase()
+          (e: any) => e.value === e1._id?.toUpperCase()
         );
         if (matchingStatus) {
           matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
@@ -330,6 +330,9 @@ const Index = () => {
           });
         }
       });
+
+      console.log("tabs", tabs[index].value);
+      console.log("orders", orders);
 
       switch (tabs[index].value) {
         case "DRAFT":
@@ -390,7 +393,6 @@ const Index = () => {
       skip,
       limit
     );
-
     setOrders(OrderData);
   };
 
