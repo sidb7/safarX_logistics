@@ -96,6 +96,21 @@ const Buttons = (className?: string) => {
     </div>
   );
 };
+// [
+//   "BOOKED",
+//   "NOT PICKED",
+//   "CANCELLED",
+//   "DRAFT",
+//   "READY TO PICK",
+//   "PICKED UP",
+//   "IN TRANSIT",
+//   "DESTINATION CITY",
+//   "OUT OF DELIVERY",
+//   "DELIVERED",
+//   "RETURN",
+//   "RTO",
+//   "FAILED",
+// ];
 
 const tabs = [
   {
@@ -115,27 +130,27 @@ const tabs = [
   },
   {
     statusName: "Ready to Pick",
-    value: "READYTOPICK",
+    value: "READY TO PICK",
     orderNumber: 0,
   },
-  {
-    statusName: "Picked Up",
-    value: "PICKEDUP",
-    orderNumber: 0,
-  },
+  // {
+  //   statusName: "Picked Up",
+  //   value: "PICKED UP",
+  //   orderNumber: 0,
+  // },
   {
     statusName: "In Transit",
-    value: "INTRANSIT",
+    value: "IN TRANSIT",
     orderNumber: 0,
   },
-  {
-    statusName: "Destination City",
-    value: "DESTINATIONCITY",
-    orderNumber: 0,
-  },
+  // {
+  //   statusName: "Destination City",
+  //   value: "DESTINATION CITY",
+  //   orderNumber: 0,
+  // },
   {
     statusName: "Out of Delivery",
-    value: "OUTOFDELIVERY",
+    value: "OUT OF DELIVERY",
     orderNumber: 0,
   },
   {
@@ -555,8 +570,9 @@ const Index = () => {
         <div className="flex border-b-2 mt-2 w-[95%] justify-center px-[1rem] text-[1.2rem]">
           <p className="">
             {infoModalContent?.orderId?.includes?.("T")
-              ? `${infoModalContent?.orderId?.split("T")?.[1]
-              } - Temp Order Details`
+              ? `${
+                  infoModalContent?.orderId?.split("T")?.[1]
+                } - Temp Order Details`
               : `${infoModalContent?.orderId} - Order Details`}
           </p>
         </div>
