@@ -73,7 +73,7 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
             cell: (info: any) => {
                 const { original } = info.row
                 return (
-                    <div className="whitespace-nowrap px-2 my-4 space-y-2">
+                    <div className="whitespace-nowrap my-4 space-y-2">
                         {original?.fullName}
                     </div>
                 );

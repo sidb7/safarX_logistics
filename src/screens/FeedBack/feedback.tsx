@@ -22,14 +22,16 @@ function Feedback() {
 
     const getFeedbackList = async (data?: any) => {
 
+        console.log("data25", data)
+
         const { data: response } = await POST(GET_FEEDBACK, {
             module:
                 feedbackTabs[renderingComponents].value === "ALL"
                     ? ""
                     : capitalizeFirstLetter(feedbackTabs[renderingComponents].value),
-            skip: (data?.currentPage - 1) * data?.itemsPerPage || 0,
-            limit: data?.itemsPerPage || 10,
-            pageNo: data?.currentPage || 1,
+            skip: data?.skip || 0,
+            limit: data?.limit || 10,
+            pageNo: data?.pageNo || 1,
         });
 
         if (response?.success) {
