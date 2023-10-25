@@ -22,8 +22,6 @@ function Feedback() {
 
     const getFeedbackList = async (data?: any) => {
 
-        console.log("data25", data)
-
         const { data: response } = await POST(GET_FEEDBACK, {
             module:
                 feedbackTabs[renderingComponents].value === "ALL"
