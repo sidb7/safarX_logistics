@@ -54,8 +54,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
-    { label: "Success", isActive: false },
-    { label: "Error", isActive: false },
+    { label: "Draft", isActive: false },
+    { label: "Failed", isActive: false },
   ]);
 
   const filterComponent = (className?: string) => {
@@ -180,6 +180,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setOrders(OrderData);
   };
 
+  console.log("currentStatus", currentStatus);
   return (
     <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
@@ -219,13 +220,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               00 Order
             </span> */}
           </div>
-          {filterComponent("!hidden lg:!flex lg:!mt-0")}
+          {currentStatus === "DRAFT" &&
+            filterComponent("!hidden lg:!flex lg:!mt-0")}
         </div>
 
         {filterButton()}
       </div>
 
-      {filterComponent("")}
+      {currentStatus === "DRAFT" && filterComponent("")}
 
       {/* filter modal */}
 

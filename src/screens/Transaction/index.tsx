@@ -20,6 +20,7 @@ import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
+import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
@@ -100,7 +101,7 @@ export const Transaction = () => {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox
+            <TransactionSearchBox
               label="Search"
               value={debouncedSearchValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
