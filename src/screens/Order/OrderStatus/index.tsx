@@ -54,8 +54,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false },
-    { label: "Success", isActive: false },
-    { label: "Error", isActive: false },
+    { label: "Draft", isActive: false },
+    { label: "Failed", isActive: false },
   ]);
 
   const filterComponent = (className?: string) => {
@@ -64,6 +64,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
+          console.log("index", index);
+          console.log("singleData", singleData);
+
           return (
             <span
               key={index}
@@ -125,6 +128,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 handleSearchOrder(e);
               }}
               getFullContent={getAllOrders}
+              customPlaceholder="Search By Order Id, AWB"
             />
           </div>
           <div
@@ -176,9 +180,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     const { OrderData } = data?.data?.[0];
+
     setOrders(OrderData);
   };
 
+  console.log("currentStatus", currentStatus);
   return (
     <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
@@ -218,13 +224,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               00 Order
             </span> */}
           </div>
-          {filterComponent("!hidden lg:!flex lg:!mt-0")}
+          {currentStatus === "DRAFT" &&
+            filterComponent("!hidden lg:!flex lg:!mt-0")}
         </div>
 
         {filterButton()}
       </div>
 
-      {filterComponent("")}
+      {currentStatus === "DRAFT" && filterComponent("")}
 
       {/* filter modal */}
 

@@ -7,6 +7,7 @@ interface PaginationProps {
   onPageChange: any;
   onItemsPerPageChange: any;
   pageNo?: number;
+  initialItemsPerPage?: number;
   rightmodalPagination?: boolean;
 }
 
@@ -17,9 +18,13 @@ const Pagination: React.FC<PaginationProps> = ({
   onItemsPerPageChange,
   rightmodalPagination,
   pageNo,
+  initialItemsPerPage,
 }) => {
   const [currentPage, setCurrentPage] = useState(pageNo || 1);
-  const [itemsPerPage, setItemsPerPage] = useState(itemsPerPageOptions[0]);
+  const [itemsPerPage, setItemsPerPage] = useState(
+    initialItemsPerPage || itemsPerPageOptions[0]
+  );
+
   const totalPages: any = Math.ceil(totalItems / itemsPerPage);
   let pageNoId = 0;
   let numOftabs = 3;
