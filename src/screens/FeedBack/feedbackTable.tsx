@@ -132,19 +132,6 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
                 );
             },
         }),
-        columnsHelper.accessor("time", {
-            header: () => {
-                return (
-                    <div className="flex justify-between items-center text-left min-w-[200px]">
-                        <h1 className="text-sm font-semibold leading-5 ">Time</h1>
-
-                    </div>
-                );
-            },
-            cell: (info: any) => {
-                return <div className="flex px-2 ">{info.getValue()}</div>;
-            },
-        }),
         columnsHelper.accessor("comments", {
             header: () => {
                 return (
