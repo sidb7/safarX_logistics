@@ -33,7 +33,7 @@ function Feedback() {
         });
 
         if (response?.success) {
-            setTotalItemCount(response.totalFeedback);
+            setTotalItemCount(response?.totalFeedback);
             setFeedbackDataList(response?.data);
         } else {
             setFeedbackDataList([]);
