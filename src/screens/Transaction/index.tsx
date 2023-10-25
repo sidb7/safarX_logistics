@@ -208,6 +208,7 @@ export const Transaction = () => {
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   pageNo={currentPage}
+                  initialItemsPerPage={itemsPerPage}
                 />
 
                 {/* )} */}
