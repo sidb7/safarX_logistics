@@ -24,6 +24,8 @@ import Pagination from "../../components/Pagination";
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
+  const [sortOrder, setSortOrder] = useState("desc");
+
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
@@ -49,7 +51,7 @@ export const Transaction = () => {
           skip: (currentPage - 1) * itemsPerPage,
           limit: itemsPerPage,
           pageNo: currentPage,
-          sort: { _id: -1 },
+          sort: { _id: sortOrder === "desc" ? -1 : 1 },
           searchValue: "",
         });
 
@@ -63,7 +65,7 @@ export const Transaction = () => {
         }
       })();
     }
-  }, [renderingComponents, itemsPerPage, currentPage]);
+  }, [renderingComponents, itemsPerPage, currentPage, sortOrder]);
 
   const onPageIndexChange = (paginationData: any) => {
     setCurrentPage(paginationData.currentPage);
@@ -111,7 +113,9 @@ export const Transaction = () => {
 
   const render = () => {
     if (renderingComponents === 0) {
-      return <CustomTable data={data} columns={PassbookColumns()} />;
+      return (
+        <CustomTable data={data} columns={PassbookColumns(setSortOrder)} />
+      );
     } else if (renderingComponents === 1) {
       return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
     }

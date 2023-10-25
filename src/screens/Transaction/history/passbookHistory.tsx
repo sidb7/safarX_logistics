@@ -37,7 +37,7 @@ interface IPassbookProps {
 
 const columnsHelper = createColumnHelper<any>();
 
-export const PassbookColumns = () => {
+export const PassbookColumns = (setSortOrder: any) => {
   const renderStatusComponent = (status: string) => {
     return (
       <div>
@@ -67,6 +67,17 @@ export const PassbookColumns = () => {
       </div>
     );
   };
+  const compareDates = (rowA: any, rowB: any) => {
+    const dateA = new Date(rowA.values.createdAt);
+    const dateB = new Date(rowB.values.createdAt);
+    return dateA > dateB ? 1 : -1;
+  };
+
+  const handleSortClick = () => {
+    if (setSortOrder) {
+      setSortOrder((prevOrder: any) => (prevOrder === "desc" ? "asc" : "desc"));
+    }
+  };
 
   return [
     columnsHelper.accessor("createdAt", {
@@ -77,15 +88,22 @@ export const PassbookColumns = () => {
               <h1 className="text-sm font-semibold leading-5">Date</h1>
             </div>
             <div className="flex">
-              <img src={sortIconTable} alt="" />
+              <img src={sortIconTable} alt="" onClick={handleSortClick} />
             </div>
           </div>
         );
       },
       cell: (info: any) => {
+        console.log("info", info);
+        const formattedDate = date_DD_MMM_YYY(info.getValue());
+        console.log("formattedDate", formattedDate);
+        const date = new Date(info.getValue());
+        const formattedTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        console.log("formattedTime", formattedTime);
+
         return (
           <div className="whitespace-nowrap my-4 space-y-2">
-            {date_DD_MMM_YYY(info.getValue())}
+            {`${formattedDate} ${formattedTime}`}
           </div>
         );
       },
@@ -95,7 +113,7 @@ export const PassbookColumns = () => {
         return (
           <div className="flex whitespace-nowrap justify-between items-center ">
             <h1 className="text-sm font-semibold leading-5 ">Transaction ID</h1>
-            <img src={sortIconTable} alt="" />
+            {/* <img src={sortIconTable} alt="" /> */}
           </div>
         );
       },
@@ -114,9 +132,9 @@ export const PassbookColumns = () => {
             <div>
               <h1 className="text-sm font-semibold leading-5 ">Credited </h1>
             </div>
-            <div className="flex">
+            {/* <div className="flex">
               <img src={sortIconTable} alt="" />
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -137,9 +155,9 @@ export const PassbookColumns = () => {
             <div>
               <h1>Debited</h1>
             </div>
-            <div className="flex">
+            {/* <div className="flex">
               <img src={sortIconTable} alt="" />
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -158,7 +176,7 @@ export const PassbookColumns = () => {
         return (
           <div className="flex justify-between items-center  min-w-[142px]">
             <h1>Balance</h1>
-            <img src={sortIconTable} alt="" />
+            <img src={sortIconTable} alt="" onClick={handleSortClick} />
           </div>
         );
       },
