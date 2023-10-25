@@ -39,6 +39,13 @@ const Card = (props: ITypesProps) => {
   const boxRef = useRef<any>();
 
   const editAddress = (id: any) => {
+    setTimeout(() => {
+      boxRef.current && boxRef.current.focus();
+      if (boxRef.current) {
+        boxRef.current.style.border = "2px solid #004EFF";
+      }
+    }, 100);
+
     setEditAdd(id);
   };
 
@@ -81,21 +88,25 @@ const Card = (props: ITypesProps) => {
 
           <p
             className={`${titleClassName} w-[200px] overflow-hidden font-Open  font-semibold text-[16px] text-[#1C1C1C] leading-4`}
-            ref={boxRef}
           >
             {editAdd === index ? (
               <textarea
-                // type="text"
                 value={updateTempAdd}
                 onChange={(e) => setUpdateTempAdd(e.target.value)}
-                className="text-[12px] h-[77px] w-full"
+                className={`text-[12px] h-[77px] w-full outline-none rounded-lg p-2`}
+                ref={boxRef}
                 onBlur={() => blurFunction()}
               />
             ) : (
               updateTempAdd
             )}
           </p>
-          <img src={EditIcon} onClick={() => editAddress(index)} alt="edit" />
+          <img
+            className="!z-9999 cursor-pointer "
+            src={EditIcon}
+            onClick={() => editAddress(index)}
+            alt="edit"
+          />
         </div>
       </div>
     </>
