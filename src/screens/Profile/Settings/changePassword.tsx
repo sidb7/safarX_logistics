@@ -18,9 +18,7 @@ export const ChangePassword = () => {
 
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
-      return toast.error(
-        "Please enter a new password and re-enter the same password !"
-      );
+      return toast.error("Passwords do not match.");
     }
     const { data }: any = await POST(UPDATE_PASSWORD, {
       oldPassword: password?.oldPassword,
@@ -59,7 +57,7 @@ export const ChangePassword = () => {
           }
         />
         <CustomInputBox
-          label="Re-enter New Password"
+          label="Re-enter  Password"
           inputType="password"
           maxLength={16}
           onChange={(e) =>

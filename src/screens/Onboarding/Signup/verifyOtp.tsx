@@ -19,12 +19,16 @@ const Index = () => {
   const location = useLocation();
   const state = location?.state?.path || {};
 
+  const updatedNumber =
+    state?.mobileNo?.toString()?.replace(/(?<=\d)\d(?=\d{2})/g, "*") || "";
+
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const [otp, setOtp] = useState<any>({
-    loginOtp: "",
+    mobileOtp: "",
+    emailOtp: "",
   });
 
   const signUpUser = useSelector((state: any) => state.signup);
@@ -51,7 +55,7 @@ const Index = () => {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
-      setOtp({ ...otp, loginOtp: "" });
+      setOtp({ ...otp, mobileOtp: "", emailOtp: "" });
     } else {
       toast.error(response?.message);
     }
@@ -60,7 +64,8 @@ const Index = () => {
     try {
       let payload = {
         email: signUpUser.email,
-        otp: otp.loginOtp,
+        mobileOtp: otp.mobileOtp,
+        emailOtp: otp.emailOtp,
       };
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
@@ -86,11 +91,11 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    if (otp?.loginOtp.length === 6) {
-      onClickVerifyOtp();
-    }
-  }, [otp]);
+  // useEffect(() => {
+  //   if (otp?.mobileOtp.toString().length === 6) {
+  //     onClickVerifyOtp();
+  //   }
+  // }, [otp]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -153,7 +158,7 @@ const Index = () => {
               <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] ">
                 Enter The OTP Sent To{" "}
                 <span className="text-[#494949] font-Open text-base font-semibold leading-[22px]">
-                  +91 {state.mobileNo}{" "}
+                  +91 {updatedNumber}{" "}
                 </span>
               </p>
             </div>
@@ -167,18 +172,32 @@ const Index = () => {
                 />
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex flex-col justify-center">
                 <CustomInputBox
                   inputType="text"
                   inputMode="numeric"
-                  value={otp.loginOtp || ""}
+                  value={otp.mobileOtp || ""}
                   maxLength={6}
                   containerStyle="mt-[32px]"
-                  label="Enter OTP"
+                  label="Enter Mobile OTP "
                   onChange={(e: any) => {
                     if (isNaN(e.target.value)) {
                     } else {
-                      setOtp({ ...otp, loginOtp: +e.target.value });
+                      setOtp({ ...otp, mobileOtp: +e.target.value });
+                    }
+                  }}
+                />
+                <CustomInputBox
+                  inputType="text"
+                  inputMode="numeric"
+                  value={otp.emailOtp || ""}
+                  maxLength={6}
+                  containerStyle="mt-[32px]"
+                  label="Enter Email OTP"
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setOtp({ ...otp, emailOtp: +e.target.value });
                     }
                   }}
                 />

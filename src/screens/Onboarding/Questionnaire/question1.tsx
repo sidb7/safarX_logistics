@@ -17,6 +17,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [questionsData, setQuestionsData] = useState<any>([]);
+  const [nextBtnStatus, setNextBtnStatus] = useState(false);
 
   const location = useLocation();
   const state = location.state || {};
@@ -51,18 +52,23 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   }
 
   const nextHandler = () => {
+    navigate("/onboarding/questionnaire/question2", {
+      state: { questionsData },
+    });
+  };
+
+  useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
       const filterQuestion = questionsData[0]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
-        return toast.error("Please Select Atleast One Option");
+        setNextBtnStatus(false);
+      } else {
+        setNextBtnStatus(true);
       }
     }
-    navigate("/onboarding/questionnaire/question2", {
-      state: { questionsData },
-    });
-  };
+  }, [questionsData]);
 
   const modalTitle = () => {
     return (
@@ -118,7 +124,16 @@ export const QuestionComponent1: React.FunctionComponent = () => {
               </div>
             </div>
             <div className="mt-6">
-              <CustomButton text="NEXT" onClick={() => nextHandler()} />
+              <CustomButton
+                text="NEXT"
+                disabled={!nextBtnStatus}
+                onClick={() => nextHandler()}
+                className={`${
+                  nextBtnStatus === true
+                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                }`}
+              />
             </div>
           </div>
         </div>

@@ -120,14 +120,14 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           )}
           <Tooltip
             id="my-tooltip-inline"
-            // style={{
-            //   backgroundColor: "bg-neutral-900",
-            //   color: "#FFFFFF",
-            //   width: "fit-content",
-            //   fontSize: "12px",
-            //   lineHeight: "14px",
-            //   textTransform: "capitalize",
-            // }}
+            style={{
+              backgroundColor: "bg-neutral-900",
+              color: "#FFFFFF",
+              // width: "fit-content",
+              fontSize: "12px",
+              lineHeight: "14px",
+              textTransform: "capitalize",
+            }}
           />
         </div>
       </div>

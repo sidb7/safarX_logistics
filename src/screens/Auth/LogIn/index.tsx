@@ -232,16 +232,25 @@ const Index = () => {
                   value={loginCredentials.email}
                   onChange={(e) => {
                     //
+                    setLoginError({
+                      ...loginError,
+                      email: "",
+                    });
                     setLoginCredentials({
                       ...loginCredentials,
                       email: e.target.value,
                     });
                   }}
                   onBlur={(e) => {
-                    if (!emailRegex.test(e.target.value)) {
+                    if (!loginCredentials?.email) {
                       setLoginError({
                         ...loginError,
-                        email: "Incorrect Email",
+                        email: "Please Enter Your Email ID",
+                      });
+                    } else if (!emailRegex.test(e.target.value)) {
+                      setLoginError({
+                        ...loginError,
+                        email: "Incorrect Email ID",
                       });
                     } else {
                       setLoginError({
@@ -279,6 +288,10 @@ const Index = () => {
                   rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {
+                    setLoginError({
+                      ...loginError,
+                      password: "",
+                    });
                     setLoginCredentials({
                       ...loginCredentials,
                       password: e.target.value,

@@ -144,352 +144,354 @@ import Reports from "../screens/NewOrder/Reports";
 import AddBox from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addBox";
 
 //feedBack
-import FeedBack from "../screens/FeedBack";
+import AddFeedBack from "../screens/FeedBack/addFeedback";
+import FeedBack from "../screens/FeedBack/feedback";
+import KycProtectedRoute from "../components/ProtectedRoutes/KycProtected";
+import BankProtected from "../components/ProtectedRoutes/BankProtected";
 
 const MyRoutes: React.FC = () => {
   return (
-    <div>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth/login" element={<LogInScreen />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth/login" element={<LogInScreen />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <BootScreen />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* onboarding routes  */}
+        <Route>
+          <Route path="/onboarding/signup" element={<SignUpScreen />} />
+          <Route path="/onboarding/sendotp" element={<SendOTPScreen />} />
+          <Route path="/onboarding/verifyotp" element={<VerifyOTPScreen />} />
           <Route
-            path="/"
+            path="/onboarding/offers"
             element={
-              <ProtectedRoute>
-                <BootScreen />
-              </ProtectedRoute>
+              <KycProtectedRoute>
+                <OffersScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/get-started"
+            element={
+              <KycProtectedRoute>
+                <GetStartedScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/questionnaire/question1"
+            element={
+              <KycProtectedRoute>
+                <QuestionComponent1 />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/questionnaire/question2"
+            element={
+              <KycProtectedRoute>
+                <QuestionComponent2 />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/questionnaire/question3"
+            element={
+              <KycProtectedRoute>
+                <QuestionComponent3 />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/questionnaire/question4"
+            element={
+              <KycProtectedRoute>
+                <QuestionComponent4 />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-welcome"
+            element={
+              <KycProtectedRoute>
+                <WelcomeKyc />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-type"
+            element={
+              <KycProtectedRoute>
+                <KycBusinessTypeScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-photo"
+            element={
+              <KycProtectedRoute>
+                <KycPhotoIdentificationScreen />
+              </KycProtectedRoute>
             }
           />
 
-          {/* onboarding routes  */}
-          <Route>
-            <Route path="/onboarding/signup" element={<SignUpScreen />} />
-            <Route path="/onboarding/sendotp" element={<SendOTPScreen />} />
-            <Route path="/onboarding/verifyotp" element={<VerifyOTPScreen />} />
-            <Route
-              path="/onboarding/offers"
-              element={
-                <ProtectedRoute>
-                  <OffersScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/get-started"
-              element={
-                <ProtectedRoute>
-                  <GetStartedScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/questionnaire/question1"
-              element={
-                <ProtectedRoute>
-                  <QuestionComponent1 />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/questionnaire/question2"
-              element={
-                <ProtectedRoute>
-                  <QuestionComponent2 />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/questionnaire/question3"
-              element={
-                <ProtectedRoute>
-                  <QuestionComponent3 />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/questionnaire/question4"
-              element={
-                <ProtectedRoute>
-                  <QuestionComponent4 />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-welcome"
-              element={
-                <ProtectedRoute>
-                  <WelcomeKyc />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-type"
-              element={
-                <ProtectedRoute>
-                  <KycBusinessTypeScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-photo"
-              element={
-                <ProtectedRoute>
-                  <KycPhotoIdentificationScreen />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/onboarding/kyc-form"
+            element={
+              <KycProtectedRoute>
+                <KycSendOtpFormScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/select-address-billing"
+            element={
+              <KycProtectedRoute>
+                <SelectAddressBilling />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/select-address-pickup"
+            element={
+              <KycProtectedRoute>
+                <SelectAddressPickUp />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-mobile-verify"
+            element={
+              <KycProtectedRoute>
+                <KycMobileVerificationScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-terms/gst-agreement"
+            element={
+              <KycProtectedRoute>
+                <GSTComponent />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-terms/service-agreement"
+            element={
+              <KycProtectedRoute>
+                <ServiceComponent />
+              </KycProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/onboarding/kyc-form"
-              element={
-                <ProtectedRoute>
-                  <KycSendOtpFormScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/select-address-billing"
-              element={
-                <ProtectedRoute>
-                  <SelectAddressBilling />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/select-address-pickup"
-              element={
-                <ProtectedRoute>
-                  <SelectAddressPickUp />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-mobile-verify"
-              element={
-                <ProtectedRoute>
-                  <KycMobileVerificationScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-terms/gst-agreement"
-              element={
-                <ProtectedRoute>
-                  <GSTComponent />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-terms/service-agreement"
-              element={
-                <ProtectedRoute>
-                  <ServiceComponent />
-                </ProtectedRoute>
-              }
-            />
+          <Route
+            path="/onboarding/kyc"
+            element={
+              <KycProtectedRoute>
+                <KycModalScreen />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/select-address"
+            element={
+              <KycProtectedRoute>
+                <SelectAddress />
+              </KycProtectedRoute>
+            }
+          />
+          <Route
+            path="/onboarding/kyc-aadhar-form"
+            element={
+              <KycProtectedRoute>
+                <KycAadharForm />
+              </KycProtectedRoute>
+            }
+          />
 
-            <Route
-              path="/onboarding/kyc"
-              element={
-                <ProtectedRoute>
-                  <KycModalScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/select-address"
-              element={
-                <ProtectedRoute>
-                  <SelectAddress />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding/kyc-aadhar-form"
-              element={
-                <ProtectedRoute>
-                  <KycAadharForm />
-                </ProtectedRoute>
-              }
-            />
+          {/**wallet recharge main page */}
+          <Route
+            path="/onboarding/wallet-main"
+            element={
+              <BankProtected>
+                <WalletMain />
+              </BankProtected>
+            }
+          />
+          {/**wallet details page */}
+          <Route
+            path="/onboarding/wallet-details"
+            element={
+              <BankProtected>
+                <WalletDetails />
+              </BankProtected>
+            }
+          />
+          {/**wallet payment page */}
 
-            {/**wallet recharge main page */}
-            <Route
-              path="/onboarding/wallet-main"
-              element={
-                <ProtectedRoute>
-                  <WalletMain />
-                </ProtectedRoute>
-              }
-            />
-            {/**wallet details page */}
-            <Route
-              path="/onboarding/wallet-details"
-              element={
-                <ProtectedRoute>
-                  <WalletDetails />
-                </ProtectedRoute>
-              }
-            />
-            {/**wallet payment page */}
+          <Route
+            path="/onboarding/wallet-payment"
+            element={
+              <BankProtected>
+                <WalletPayment />
+              </BankProtected>
+            }
+          />
 
-            <Route
-              path="/onboarding/wallet-payment"
-              element={
-                <ProtectedRoute>
-                  <WalletPayment />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* <Route
+          {/* <Route
               path="/onboarding/wallet-recharge"
               element={
-                <ProtectedRoute>
+                <BankProtected>
                   <OnBoundingWalletRecharge />
-                </ProtectedRoute>
+                </BankProtected>
               }
             /> */}
 
+          <Route
+            path="/onboarding/recharge-payment"
+            element={
+              <BankProtected>
+                <RechargePayment />
+              </BankProtected>
+            }
+          />
+        </Route>
+
+        {/* Root Routes */}
+        <Route path="/" element={<CommonLayout />}>
+          {/* Order Routes */}
+          <Route>
+            {/* home page i.e , overview, orders, exception, sy-performance */}
             <Route
-              path="/onboarding/recharge-payment"
+              path="dashboard/overview"
               element={
                 <ProtectedRoute>
-                  <RechargePayment />
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="dashboard/orders"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="dashboard/exception"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="dashboard/sy-performance"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* End here */}
+
+            <Route
+              path="orders/view-orders"
+              element={
+                <ProtectedRoute>
+                  <Order />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="orders/add-bulk"
+              element={
+                <ProtectedRoute>
+                  <BulkUpload />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/orders/add-order/pickup"
+              element={
+                <ProtectedRoute>
+                  <PickupLocationNew />
+                  {/* <PickupLocationUpdatedUI /> */}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/delivery"
+              element={
+                <ProtectedRoute>
+                  <DeliveryLocation />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/orders/add-order/add-product"
+              element={
+                <ProtectedRoute>
+                  <AddProductOrder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/product-package"
+              element={
+                <ProtectedRoute>
+                  <ProductPackage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/service"
+              element={
+                <ProtectedRoute>
+                  <ServiceScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/summary"
+              element={
+                <ProtectedRoute>
+                  <SummaryScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/orders/add-order/payment"
+              element={
+                <ProtectedRoute>
+                  <Payment />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wallet/view-wallet"
+              element={
+                <ProtectedRoute>
+                  <WalletRecharge />
                 </ProtectedRoute>
               }
             />
           </Route>
 
-          {/* Root Routes */}
-          <Route path="/" element={<CommonLayout />}>
-            {/* Order Routes */}
-            <Route>
-              {/* home page i.e , overview, orders, exception, sy-performance */}
-              <Route
-                path="dashboard/overview"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="dashboard/orders"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="dashboard/exception"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="dashboard/sy-performance"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
-
-              {/* End here */}
-
-              <Route
-                path="orders/view-orders"
-                element={
-                  <ProtectedRoute>
-                    <Order />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="orders/add-bulk"
-                element={
-                  <ProtectedRoute>
-                    <BulkUpload />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/orders/add-order/pickup"
-                element={
-                  <ProtectedRoute>
-                    <PickupLocationNew />
-                    {/* <PickupLocationUpdatedUI /> */}
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/orders/add-order/delivery"
-                element={
-                  <ProtectedRoute>
-                    <DeliveryLocation />
-                  </ProtectedRoute>
-                }
-              />
-
-              <Route
-                path="/orders/add-order/add-product"
-                element={
-                  <ProtectedRoute>
-                    <AddProductOrder />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/orders/add-order/product-package"
-                element={
-                  <ProtectedRoute>
-                    <ProductPackage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/orders/add-order/service"
-                element={
-                  <ProtectedRoute>
-                    <ServiceScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/orders/add-order/summary"
-                element={
-                  <ProtectedRoute>
-                    <SummaryScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/orders/add-order/payment"
-                element={
-                  <ProtectedRoute>
-                    <Payment />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/wallet/view-wallet"
-                element={
-                  <ProtectedRoute>
-                    <WalletRecharge />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-
-            {/* billing details Routes */}
-            <Route>
-              {/* <Route
+          {/* billing details Routes */}
+          <Route>
+            {/* <Route
                 path="/billing/orders"
                 element={
                   <ProtectedRoute>
@@ -498,24 +500,164 @@ const MyRoutes: React.FC = () => {
                 }
               /> */}
 
-              <Route
-                path="/billing/invoice"
-                element={
-                  <ProtectedRoute>
-                    <Invoice />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/billing/invoice"
+              element={
+                <ProtectedRoute>
+                  <Invoice />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/billing/credit-note"
-                element={
-                  <ProtectedRoute>
-                    <Invoice />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
+            <Route
+              path="/billing/credit-note"
+              element={
+                <ProtectedRoute>
+                  <Invoice />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+
+          {/* User Profile Routes */}
+          <Route>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/notification"
+              element={
+                <ProtectedRoute>
+                  <ProfileNotificationTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-bank"
+              element={
+                <ProtectedRoute>
+                  <EditProfileBank />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-kyc"
+              element={
+                <ProtectedRoute>
+                  <EditProfileKyc />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-profile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <SettingTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings/role-management"
+              element={
+                <ProtectedRoute>
+                  <RoleManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/role-management/add-role"
+              element={
+                <ProtectedRoute>
+                  <AddRole />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/role-management/update-role"
+              element={
+                <ProtectedRoute>
+                  <UpdateRole />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/user-management"
+              element={
+                <ProtectedRoute>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/user-management/add-user"
+              element={
+                <ProtectedRoute>
+                  <AddUser />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/user-management/update-user"
+              element={
+                <ProtectedRoute>
+                  <UpdateUser />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/role-management/userslist"
+              element={
+                <ProtectedRoute>
+                  <UsersList />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/system-logs"
+              element={
+                <ProtectedRoute>
+                  <SystemLog />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/profile/refer-earn"
+              element={
+                <ProtectedRoute>
+                  <ReferTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/change-password"
+              element={
+                <ProtectedRoute>
+                  <ChangePassword />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
 
             {/* User Profile Routes */}
             <Route>
@@ -809,7 +951,7 @@ const MyRoutes: React.FC = () => {
             </Route>
             <Route>
               <Route
-                path="notifications/notifications"
+                path="notifications"
                 element={<Notifications />}
               />
             </Route>
@@ -820,70 +962,240 @@ const MyRoutes: React.FC = () => {
             <Route path="/help/ticket" element={<HelpScreen />} />
             <Route path="/help/agreements" element={<HelpScreen />} />
             <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
+          {/* Catalogue Routes */}
+          <Route>
             <Route
-              path="/help/ticket/view-details"
-              element={<ViewTicketDetails />}
-            />
-
-            {/* Weight Management */}
-            <Route
-              path="/weight-management/weight-freeze"
+              path="/catalogues/channel-integration"
               element={
                 <ProtectedRoute>
-                  <WeightFreeze />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/weight-management/new-discrepancy"
-              element={
-                <ProtectedRoute>
-                  <WeightFreeze />
-                </ProtectedRoute>
-              }
-            />
-
-            <Route
-              path="/weight-management/pending-dispute"
-              element={
-                <ProtectedRoute>
-                  <WeightFreeze />
+                  <Catalogue />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/weight-management/completed"
+              path="/catalogues/address-book"
               element={
                 <ProtectedRoute>
-                  <WeightFreeze />
+                  <Catalogue />
                 </ProtectedRoute>
               }
             />
-
             <Route
-              path="/feedback"
+              path="/catalogues/product-catalogue"
               element={
                 <ProtectedRoute>
-                  <FeedBack />
+                  <Catalogue />
                 </ProtectedRoute>
               }
             />
-
             <Route
-              path="/reports"
+              path="/catalogues/box-catalogue"
               element={
                 <ProtectedRoute>
-                  <Reports />
+                  <Catalogue />
                 </ProtectedRoute>
               }
             />
-
-            <Route path="*" element={<NotFound />} />
+            <Route
+              path="/catalogues/catalogue/add-combo"
+              element={
+                <ProtectedRoute>
+                  <AddComboScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-product"
+              element={
+                <ProtectedRoute>
+                  <AddProductScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-box"
+              element={
+                <ProtectedRoute>
+                  <AddBox />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-bulk-product/"
+              element={
+                <ProtectedRoute>
+                  <BulkProducts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/edit-address"
+              element={
+                <ProtectedRoute>
+                  <EditAddress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-address"
+              element={
+                <ProtectedRoute>
+                  <AddAddress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-product"
+              element={
+                <ProtectedRoute>
+                  <CatalogueAddProduct />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+
+          {/* Wallet Routes */}
+          <Route>
+            <Route
+              path="wallet/transaction-history"
+              element={
+                <ProtectedRoute>
+                  <Transaction />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          {/* Plan Routes */}
+          <Route>
+            <Route
+              path="/plans"
+              element={
+                <ProtectedRoute>
+                  <NewUserPlanScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plans/plan-details"
+              element={
+                <ProtectedRoute>
+                  <PlanDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plans/compare-plans"
+              element={
+                <ProtectedRoute>
+                  <ComparePlans />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route>
+            <Route
+              path="/tracking"
+              element={
+                <ProtectedRoute>
+                  <Tracking />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
+            <Route
+              path="/tracking/clientTracking"
+              element={
+                <ProtectedRoute>
+                  <ClientTracking />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route>
+            <Route
+              path="notifications/notifications"
+              element={<Notifications />}
+            />
+          </Route>
+
+          {/* Help Screen Routes */}
+
+          <Route path="/help/faqs" element={<HelpScreen />} />
+          <Route path="/help/ticket" element={<HelpScreen />} />
+          <Route path="/help/agreements" element={<HelpScreen />} />
+          <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
+          <Route
+            path="/help/ticket/view-details"
+            element={<ViewTicketDetails />}
+          />
+
+          {/* Weight Management */}
+          <Route
+            path="/weight-management/weight-freeze"
+            element={
+              <ProtectedRoute>
+                <WeightFreeze />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/weight-management/new-discrepancy"
+            element={
+              <ProtectedRoute>
+                <WeightFreeze />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/weight-management/pending-dispute"
+            element={
+              <ProtectedRoute>
+                <WeightFreeze />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/weight-management/completed"
+            element={
+              <ProtectedRoute>
+                <WeightFreeze />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/feedback/add-feedback"
+            element={
+              <ProtectedRoute>
+                <AddFeedBack />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/feedback"
+            element={
+              <ProtectedRoute>
+                <FeedBack />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <Reports />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

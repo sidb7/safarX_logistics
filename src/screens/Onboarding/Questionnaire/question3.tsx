@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Checkbox from "../../../components/CheckBox";
 import CargoRatingGif from "../../../assets/AccountQuestions/CargoRating.gif";
 import CustomButton from "../../../components/Button";
@@ -20,6 +20,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const data = state?.questionsData;
   const [questionsData, setQuestionsData] = useState(data || []);
+  const [nextBtnStatus, setNextBtnStatus] = useState(false);
 
   const modalTitle = () => {
     return (
@@ -52,18 +53,31 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   const question = questionsData[2]?.question;
 
   const nextHandler = () => {
+    // if (questionsData && questionsData?.length > 0) {
+    //   const filterQuestion = questionsData[2]?.options.filter(
+    //     (singleData: any) => singleData.isChecked === true
+    //   );
+    //   if (filterQuestion?.length === 0) {
+    //     return toast.error("Please Select Atleast One Option");
+    //   }
+    // }
+    navigate("/onboarding/questionnaire/question4", {
+      state: { questionsData },
+    });
+  };
+
+  useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
       const filterQuestion = questionsData[2]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
-        return toast.error("Please Select Atleast One Option");
+        setNextBtnStatus(false);
+      } else {
+        setNextBtnStatus(true);
       }
     }
-    navigate("/onboarding/questionnaire/question4", {
-      state: { questionsData },
-    });
-  };
+  }, [questionsData]);
 
   const question3 = () => {
     return (
@@ -116,7 +130,16 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                   })
                 }
               />
-              <CustomButton text="NEXT" onClick={() => nextHandler()} />
+              <CustomButton
+                text="NEXT"
+                disabled={!nextBtnStatus}
+                onClick={() => nextHandler()}
+                className={`${
+                  nextBtnStatus === true
+                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                }`}
+              />
             </div>
           </div>
         </div>
