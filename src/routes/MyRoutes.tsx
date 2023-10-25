@@ -144,7 +144,8 @@ import Reports from "../screens/NewOrder/Reports";
 import AddBox from "../screens/NewOrder/NewCatalogue/ProductCatalogue/addBox";
 
 //feedBack
-import FeedBack from "../screens/FeedBack";
+import AddFeedBack from "../screens/FeedBack/addFeedback";
+import FeedBack from "../screens/FeedBack/feedback";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -862,6 +863,15 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
+              path="/feedback/add-feedback"
+              element={
+                <ProtectedRoute>
+                  <AddFeedBack />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
               path="/feedback"
               element={
                 <ProtectedRoute>
@@ -869,7 +879,6 @@ const MyRoutes: React.FC = () => {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/reports"
               element={
