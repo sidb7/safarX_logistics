@@ -1,6 +1,6 @@
 import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
 import Onboarding from "../../../assets/AccountQuestions/Onboarding.gif";
@@ -19,6 +19,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   let data = state?.questionsData;
   const [questionsData, setQuestionsData] = useState(data || []);
+  const [nextBtnStatus, setNextBtnStatus] = useState(false);
 
   const modalTitle = () => {
     return (
@@ -41,18 +42,31 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   const question = questionsData[1]?.question;
 
   const nextHandler = () => {
+    // if (questionsData && questionsData?.length > 0) {
+    //   const filterQuestion = questionsData[1]?.options.filter(
+    //     (singleData: any) => singleData.isChecked === true
+    //   );
+    //   if (filterQuestion?.length === 0) {
+    //     return toast.error("Please Select Atleast One Option");
+    //   }
+    // }
+    navigate("/onboarding/questionnaire/question3", {
+      state: { questionsData },
+    });
+  };
+
+  useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
       const filterQuestion = questionsData[1]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
-        return toast.error("Please Select Atleast One Option");
+        setNextBtnStatus(false);
+      } else {
+        setNextBtnStatus(true);
       }
     }
-    navigate("/onboarding/questionnaire/question3", {
-      state: { questionsData },
-    });
-  };
+  }, [questionsData]);
 
   const question2 = () => {
     return (
@@ -107,7 +121,16 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                   })
                 }
               />
-              <CustomButton text="NEXT" onClick={() => nextHandler()} />
+              <CustomButton
+                text="NEXT"
+                disabled={!nextBtnStatus}
+                onClick={() => nextHandler()}
+                className={`${
+                  nextBtnStatus === true
+                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                }`}
+              />
             </div>
             <div className="mt-3"></div>
           </div>

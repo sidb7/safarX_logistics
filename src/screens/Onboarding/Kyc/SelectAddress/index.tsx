@@ -215,7 +215,9 @@ const BusinessType = (props: ITypeProps) => {
         <WelcomeHeader
           className="!mt-[44px] lg:!mt-6"
           title="Welcome to Shipyaari"
-          content="Tell us more about your company"
+          content="Select your"
+          whichAddress="Pickup"
+          Address="Address"
         />
 
         <div>
