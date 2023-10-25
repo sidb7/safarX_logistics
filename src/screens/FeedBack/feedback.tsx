@@ -88,7 +88,7 @@ function Feedback() {
                         })}
                     </div>
                     <div className='mt-2'>
-                        <FeedbackTable feedbackDataList={feedbackDataList} totalItemCount={totalItemCount} />
+                        <FeedbackTable feedbackDataList={feedbackDataList} getFeedbackList={getFeedbackList} totalItemCount={totalItemCount} />
                     </div>
                 </div>
             </div>

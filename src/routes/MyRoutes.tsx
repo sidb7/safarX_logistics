@@ -810,7 +810,7 @@ const MyRoutes: React.FC = () => {
             </Route>
             <Route>
               <Route
-                path="notifications/notifications"
+                path="notifications"
                 element={<Notifications />}
               />
             </Route>
