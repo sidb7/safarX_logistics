@@ -818,3 +818,71 @@ export const module = [
         sequence: 11
     }
 ]
+
+export const tabs = [
+    {
+        statusName: "All",
+        value: "ALL",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Smart Shipyaari",
+        value: "SMART_SHIPYAARI",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Plan",
+        value: "PLANS",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Catalogue",
+        value: "CATALOGUE",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Tracking",
+        value: "TRACKING",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Wallet",
+        value: "Wallet",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Billing",
+        value: "BILLING",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Weight Management",
+        value: "WEIGHT MANAGEMENT",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Report",
+        value: "REPORTS",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Orders",
+        value: "ORDERS",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Notification",
+        value: "NOTIFICATION",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Feedback",
+        value: "FEEDBACK",
+        orderNumber: 0,
+    },
+    {
+        statusName: "Help",
+        value: "HELP",
+        orderNumber: 0,
+    },
+];

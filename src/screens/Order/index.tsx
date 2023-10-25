@@ -555,9 +555,8 @@ const Index = () => {
         <div className="flex border-b-2 mt-2 w-[95%] justify-center px-[1rem] text-[1.2rem]">
           <p className="">
             {infoModalContent?.orderId?.includes?.("T")
-              ? `${
-                  infoModalContent?.orderId?.split("T")?.[1]
-                } - Temp Order Details`
+              ? `${infoModalContent?.orderId?.split("T")?.[1]
+              } - Temp Order Details`
               : `${infoModalContent?.orderId} - Order Details`}
           </p>
         </div>
