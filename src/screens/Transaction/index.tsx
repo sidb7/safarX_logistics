@@ -33,87 +33,45 @@ export const Transaction = () => {
   const { isLgScreen } = ResponsiveState();
   const [loading, setLoading] = useState(false);
   const [data, setData]: any = useState([]);
-
-  const fetchData = async (data?: any) => {
-    console.log("data", data);
-    setLoading(true);
-    const payload = {
-      filter: {
-        status: "",
-        from: "",
-        to: "",
-      },
-
-      sort: { _id: -1 },
-      skip: data?.skip || 0,
-      pageNo: data?.pageNo || 1,
-      limit: data?.limit || 10,
-      searchValue: "",
-    };
-    try {
-      const { data } = await POST(GET_WALLET_TRANSACTION, payload);
-      // let transactionCount = data?.data?.length || 0;
-
-      if (data?.success) {
-        console.log("datainsideApi", data?.totalTransactions);
-        setData(data.data || []);
-
-        setTotalItemCount(data?.totalTransactions);
-        setLoading(false);
-      } else {
-        toast.error(data?.message);
-        setLoading(false);
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.error("Error fetching data");
-    }
-  };
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (renderingComponents === 0) {
+      setLoading(true);
+      (async () => {
+        const { data } = await POST(GET_WALLET_TRANSACTION, {
+          filter: {
+            status: "",
+            from: "",
+            to: "",
+          },
+          skip: (currentPage - 1) * itemsPerPage,
+          limit: itemsPerPage,
+          pageNo: currentPage,
+          sort: { _id: -1 },
+          searchValue: "",
+        });
 
-  const onPageIndexChange = async (data: any) => {
-    const payload: any = {
-      skip: 0,
-      limit: 0,
-      pageNo: 0,
-    };
-
-    if (data?.currentPage === 1) {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = 1;
-    } else {
-      payload.skip = (data?.currentPage - 1) * data?.itemsPerPage;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = data?.currentPage;
-      console.log("data>>", data);
+        if (data?.success) {
+          setData(data.data || []);
+          setTotalItemCount(data.totalTransactions);
+          setLoading(false);
+        } else {
+          toast.error(data?.message);
+          setLoading(false);
+        }
+      })();
     }
-    console.log("payloadOnPageIndex", payload);
+  }, [renderingComponents, itemsPerPage, currentPage]);
 
-    // await fetchData(payload);
+  const onPageIndexChange = (paginationData: any) => {
+    setCurrentPage(paginationData.currentPage);
   };
 
-  const onPerPageItemChange = (data: any) => {
-    const payload: any = {
-      skip: 0,
-      limit: 0,
-      pageNo: 0,
-    };
-
-    if (data?.currentPage === 1) {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = 1;
-    } else {
-      payload.skip = 0;
-      payload.limit = data?.itemsPerPage;
-      payload.pageNo = data?.currentPage || 0;
-    }
-
-    fetchData(payload);
+  const onPerPageItemChange = (paginationData: any) => {
+    setItemsPerPage(paginationData.itemsPerPage);
+    setCurrentPage(1);
   };
 
   const setScrollIndex = (id: number) => {
@@ -249,7 +207,9 @@ export const Transaction = () => {
                   itemsPerPageOptions={[10, 20, 30, 50]}
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
+                  pageNo={currentPage}
                 />
+
                 {/* )} */}
               </div>
             </div>
