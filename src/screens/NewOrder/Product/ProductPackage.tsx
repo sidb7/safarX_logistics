@@ -119,7 +119,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
     isCod: orderType === "B2C",
-    collectableAmount: "",
+    collectableAmount: 0,
     invoiceValue: 0,
   });
   const [isLoading, setIsLoading]: any = useState(false);
@@ -299,6 +299,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       ...codData,
       isCod: orderType === "B2B" || paymentMode !== "cod" ? false : true,
     };
+    if (codDataInfo.isCod && !codDataInfo.collectableAmount) {
+      toast.error("COD Amount Must Be Required");
+      return;
+    }
+
     let payload = {
       boxInfo: packages,
       codInfo: { ...codDataInfo },
