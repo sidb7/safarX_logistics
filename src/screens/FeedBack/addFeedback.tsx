@@ -79,7 +79,6 @@ function AddFeedBack() {
       setFeedBackState((prevValue: any) => {
         return { ...prevValue, experience: arr[index].value }
       })
-      console.log(arr[index].value)
     } else {
       if (e.target.name === "module") {
         const getSelectedModuleObject: any = module.find((data) => data.name === e.target.value)
