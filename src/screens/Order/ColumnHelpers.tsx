@@ -744,10 +744,10 @@ export const columnHelperForNewOrder = (
               info?.row?.original?.pickupAddress?.fullAddress
             ) ?? (
               <div
-                onClick={() => navigate("/orders/add-order/pickup")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="  decoration-2 text-[black]"
               >
-                ADD PICKUP ADDRESS
+                No Pickup Address Found
               </div>
             )}
           </div>
