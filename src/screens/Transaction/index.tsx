@@ -25,11 +25,10 @@ const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
-
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
-
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
@@ -52,7 +51,7 @@ export const Transaction = () => {
           limit: itemsPerPage,
           pageNo: currentPage,
           sort: { _id: sortOrder === "desc" ? -1 : 1 },
-          searchValue: "",
+          searchValue: debouncedSearchValue,
         });
 
         if (data?.success) {
@@ -65,7 +64,13 @@ export const Transaction = () => {
         }
       })();
     }
-  }, [renderingComponents, itemsPerPage, currentPage, sortOrder]);
+  }, [
+    renderingComponents,
+    itemsPerPage,
+    currentPage,
+    sortOrder,
+    debouncedSearchValue,
+  ]);
 
   const onPageIndexChange = (paginationData: any) => {
     setCurrentPage(paginationData.currentPage);
@@ -80,12 +85,30 @@ export const Transaction = () => {
     setRenderingComponents(id);
   };
 
+  let debounceTimer: any;
+  const handleSearchDebounced = (value: string) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      setDebouncedSearchValue(value);
+    }, 500);
+  };
+  const clearSearchValue = () => {
+    setDebouncedSearchValue("");
+  };
   const filterButton = () => {
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <SearchBox
+              label="Search"
+              value={debouncedSearchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearchDebounced(e.target.value);
+              }}
+              customPlaceholder="Search By Transaction Id"
+              getFullContent={clearSearchValue}
+            />
           </div>
         </div>
       );

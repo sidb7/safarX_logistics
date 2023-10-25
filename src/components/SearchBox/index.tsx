@@ -9,6 +9,7 @@ interface ISearchBoxProps {
   value: string;
   onChange: any;
   getFullContent?: any;
+  customPlaceholder?: string;
 }
 export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   className = "",
@@ -16,6 +17,7 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   value,
   onChange,
   getFullContent,
+  customPlaceholder,
 }) => {
   const resetRef: any = useRef(null);
   const resetValue = () => {
@@ -27,7 +29,7 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
     <div className="relative">
       <input
         ref={resetRef}
-        placeholder={`Search By Order Id, AWB`}
+        placeholder={customPlaceholder}
         type="text"
         className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px] !pl-[36px] w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
         // value={value}

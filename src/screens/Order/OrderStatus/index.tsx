@@ -125,6 +125,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 handleSearchOrder(e);
               }}
               getFullContent={getAllOrders}
+              customPlaceholder="Search By Order Id, AWB"
             />
           </div>
           <div
