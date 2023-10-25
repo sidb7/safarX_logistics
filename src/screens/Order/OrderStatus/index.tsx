@@ -64,6 +64,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
+          console.log("index", index);
+          console.log("singleData", singleData);
+
           return (
             <span
               key={index}
@@ -177,6 +180,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     const { OrderData } = data?.data?.[0];
+
     setOrders(OrderData);
   };
 
