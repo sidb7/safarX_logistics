@@ -11,12 +11,14 @@ import { GET_SYSTEM_LOG } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 const SystemLog = () => {
   const columnsHelper = createColumnHelper<any>();
   const [systemLogData, setSystemLogData] = React.useState<any>([]);
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
+  const isActive = checkPageAuthorized("System Logs");
 
   const systemLogColumns = [
     columnsHelper.accessor("companyId", {

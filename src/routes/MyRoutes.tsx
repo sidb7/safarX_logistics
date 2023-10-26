@@ -149,7 +149,6 @@ import FeedBack from "../screens/FeedBack/feedback";
 import KycProtectedRoute from "../components/ProtectedRoutes/KycProtected";
 import BankProtected from "../components/ProtectedRoutes/BankProtected";
 
-
 //Public
 //PublicTracking
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
@@ -168,9 +167,9 @@ const MyRoutes: React.FC = () => {
           }
         />
 
-            <Route>
-              <Route path="/shipyaari-tracking"  element={<PublicTracking />}/>
-            </Route>
+        <Route>
+          <Route path="/shipyaari-tracking" element={<PublicTracking />} />
+        </Route>
 
         {/* onboarding routes  */}
         <Route>
@@ -668,310 +667,307 @@ const MyRoutes: React.FC = () => {
             />
           </Route>
 
-            {/* User Profile Routes */}
-            <Route>
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/notification"
-                element={
-                  <ProtectedRoute>
-                    <ProfileNotificationTab />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/edit-bank"
-                element={
-                  <ProtectedRoute>
-                    <EditProfileBank />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/edit-kyc"
-                element={
-                  <ProtectedRoute>
-                    <EditProfileKyc />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/edit-profile"
-                element={
-                  <ProtectedRoute>
-                    <EditProfile />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/settings"
-                element={
-                  <ProtectedRoute>
-                    <SettingTab />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/settings/role-management"
-                element={
-                  <ProtectedRoute>
-                    <RoleManagement />
-                  </ProtectedRoute>
-                }
-              />
+          {/* User Profile Routes */}
+          <Route>
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/notification"
+              element={
+                <ProtectedRoute>
+                  <ProfileNotificationTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-bank"
+              element={
+                <ProtectedRoute>
+                  <EditProfileBank />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-kyc"
+              element={
+                <ProtectedRoute>
+                  <EditProfileKyc />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/edit-profile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <SettingTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings/role-management"
+              element={
+                <ProtectedRoute>
+                  <RoleManagement />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/role-management/add-role"
-                element={
-                  <ProtectedRoute>
-                    <AddRole />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/role-management/add-role"
+              element={
+                <ProtectedRoute>
+                  <AddRole />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/role-management/update-role"
-                element={
-                  <ProtectedRoute>
-                    <UpdateRole />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/role-management/update-role"
+              element={
+                <ProtectedRoute>
+                  <UpdateRole />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/user-management"
-                element={
-                  <ProtectedRoute>
-                    <UserManagement />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/user-management"
+              element={
+                <ProtectedRoute>
+                  <UserManagement />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/user-management/add-user"
-                element={
-                  <ProtectedRoute>
-                    <AddUser />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/user-management/add-user"
+              element={
+                <ProtectedRoute>
+                  <AddUser />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/user-management/update-user"
-                element={
-                  <ProtectedRoute>
-                    <UpdateUser />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/user-management/update-user"
+              element={
+                <ProtectedRoute>
+                  <UpdateUser />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/role-management/userslist"
-                element={
-                  <ProtectedRoute>
-                    <UsersList />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/role-management/userslist"
+              element={
+                <ProtectedRoute>
+                  <UsersList />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/settings/system-logs"
-                element={
-                  <ProtectedRoute>
-                    <SystemLog />
-                  </ProtectedRoute>
-                }
-              />
+            <Route
+              path="/settings/system-logs"
+              element={
+                <ProtectedRoute>
+                  <SystemLog />
+                </ProtectedRoute>
+              }
+            />
 
-              <Route
-                path="/profile/refer-earn"
-                element={
-                  <ProtectedRoute>
-                    <ReferTab />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/profile/change-password"
-                element={
-                  <ProtectedRoute>
-                    <ChangePassword />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
+            <Route
+              path="/profile/refer-earn"
+              element={
+                <ProtectedRoute>
+                  <ReferTab />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/change-password"
+              element={
+                <ProtectedRoute>
+                  <ChangePassword />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
 
-            {/* Catalogue Routes */}
-            <Route>
-              <Route
-                path="/catalogues/channel-integration"
-                element={
-                  <ProtectedRoute>
-                    <Catalogue />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/address-book"
-                element={
-                  <ProtectedRoute>
-                    <Catalogue />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/product-catalogue"
-                element={
-                  <ProtectedRoute>
-                    <Catalogue />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/box-catalogue"
-                element={
-                  <ProtectedRoute>
-                    <Catalogue />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-combo"
-                element={
-                  <ProtectedRoute>
-                    <AddComboScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-product"
-                element={
-                  <ProtectedRoute>
-                    <AddProductScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-box"
-                element={
-                  <ProtectedRoute>
-                    <AddBox />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-bulk-product/"
-                element={
-                  <ProtectedRoute>
-                    <BulkProducts />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/edit-address"
-                element={
-                  <ProtectedRoute>
-                    <EditAddress />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-address"
-                element={
-                  <ProtectedRoute>
-                    <AddAddress />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/catalogues/catalogue/add-product"
-                element={
-                  <ProtectedRoute>
-                    <CatalogueAddProduct />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
+          {/* Catalogue Routes */}
+          <Route>
+            <Route
+              path="/catalogues/channel-integration"
+              element={
+                <ProtectedRoute>
+                  <Catalogue />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/address-book"
+              element={
+                <ProtectedRoute>
+                  <Catalogue />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/product-catalogue"
+              element={
+                <ProtectedRoute>
+                  <Catalogue />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/box-catalogue"
+              element={
+                <ProtectedRoute>
+                  <Catalogue />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-combo"
+              element={
+                <ProtectedRoute>
+                  <AddComboScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-product"
+              element={
+                <ProtectedRoute>
+                  <AddProductScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-box"
+              element={
+                <ProtectedRoute>
+                  <AddBox />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-bulk-product/"
+              element={
+                <ProtectedRoute>
+                  <BulkProducts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/edit-address"
+              element={
+                <ProtectedRoute>
+                  <EditAddress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-address"
+              element={
+                <ProtectedRoute>
+                  <AddAddress />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/catalogues/catalogue/add-product"
+              element={
+                <ProtectedRoute>
+                  <CatalogueAddProduct />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
 
-            {/* Wallet Routes */}
-            <Route>
-              <Route
-                path="wallet/transaction-history"
-                element={
-                  <ProtectedRoute>
-                    <Transaction />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-            {/* Plan Routes */}
-            <Route>
-              <Route
-                path="/plans"
-                element={
-                  <ProtectedRoute>
-                    <NewUserPlanScreen />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/plans/plan-details"
-                element={
-                  <ProtectedRoute>
-                    <PlanDetails />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/plans/compare-plans"
-                element={
-                  <ProtectedRoute>
-                    <ComparePlans />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
+          {/* Wallet Routes */}
+          <Route>
+            <Route
+              path="wallet/transaction-history"
+              element={
+                <ProtectedRoute>
+                  <Transaction />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          {/* Plan Routes */}
+          <Route>
+            <Route
+              path="/plans"
+              element={
+                <ProtectedRoute>
+                  <NewUserPlanScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plans/plan-details"
+              element={
+                <ProtectedRoute>
+                  <PlanDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/plans/compare-plans"
+              element={
+                <ProtectedRoute>
+                  <ComparePlans />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
 
-            <Route>
-              <Route
-                path="/tracking"
-                element={
-                  <ProtectedRoute>
-                    <Tracking />
-                  </ProtectedRoute>
-                }
-              />
+          <Route>
+            <Route
+              path="/tracking"
+              element={
+                <ProtectedRoute>
+                  <Tracking />
+                </ProtectedRoute>
+              }
+            />
 
-              {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
-              <Route
-                path="/tracking/clientTracking"
-                element={
-                  <ProtectedRoute>
-                    <ClientTracking />
-                  </ProtectedRoute>
-                }
-              />
-            </Route>
-            <Route>
-              <Route
-                path="notifications"
-                element={<Notifications />}
-              />
-            </Route>
+            {/* <Route path="/tracking/shipyaari" element={<Tracking />} /> */}
+            <Route
+              path="/tracking/clientTracking"
+              element={
+                <ProtectedRoute>
+                  <ClientTracking />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route>
+            <Route path="notifications" element={<Notifications />} />
+          </Route>
 
-            {/* Help Screen Routes */}
+          {/* Help Screen Routes */}
 
-            <Route path="/help/faqs" element={<HelpScreen />} />
-            <Route path="/help/ticket" element={<HelpScreen />} />
-            <Route path="/help/agreements" element={<HelpScreen />} />
-            <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
+          <Route path="/help/faqs" element={<HelpScreen />} />
+          <Route path="/help/ticket" element={<HelpScreen />} />
+          <Route path="/help/agreements" element={<HelpScreen />} />
+          <Route path="/help/ticket/view-all" element={<ViewAllTickets />} />
           {/* Catalogue Routes */}
           <Route>
             <Route

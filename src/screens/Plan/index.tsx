@@ -13,6 +13,7 @@ import CenterModal from "../../components/CustomModal/customCenterModal";
 import WebCrossIcon from "../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { BottomNavBar } from "../../components/BottomNavBar";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 interface ITypeProps {}
 
@@ -20,7 +21,8 @@ const Index = (props: ITypeProps) => {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
 
-  const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Plans");
 
   const [allPlans, setAllPlans] = useState<any>([]);
   const [activePlanId, setActivePlanId] = useState<string>("");
