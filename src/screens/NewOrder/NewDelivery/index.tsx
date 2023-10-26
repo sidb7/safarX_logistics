@@ -183,6 +183,7 @@ const DeliveryLocation = () => {
       console.log("isContactDetailsValid", isContactDetailsValid);
       console.log("isPickupDateValid", isContactDetailsBillingValid);
       if (
+        (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         (!isDeliveryAddressValid && !isbillingAddressValid) ||
         !isContactDetailsValid ||
         !isContactDetailsBillingValid
@@ -354,7 +355,9 @@ const DeliveryLocation = () => {
         <Stepper steps={steps} />
       </div>
 
-      <RecipientType data={{ deliveryAddress, setDeliveryAddress }} />
+      <RecipientType
+        data={{ deliveryAddress, setDeliveryAddress, inputError }}
+      />
 
       {/* DELIVERY ADDRESS */}
 

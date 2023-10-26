@@ -145,7 +145,7 @@ const PublicTracking = () => {
                   />
                   <CustomButton
                     text="Track Order"
-                    className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px]  h-full "
+                    className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] py-3 md:py-0 md:text-[18px] h-full "
                     onClick={() => handleTrackOrderClick()}
                   />
                 </div>

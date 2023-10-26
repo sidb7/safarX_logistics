@@ -763,14 +763,17 @@ export const columnHelperForNewOrder = (
         );
       },
       cell: (info: any) => {
+        const deliveryAddress =
+          info?.row?.original?.deliveryAddress?.fullAddress;
+
         return (
-          <div className="text-base  py-3 ]">
-            {capitalizeFirstLetter(
-              info?.row?.original?.deliveryAddress?.fullAddress
-            ) ?? (
+          <div className="text-base py-3">
+            {deliveryAddress ? (
+              capitalizeFirstLetter(deliveryAddress)
+            ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="  decoration-2 text-[black]"
+                className="decoration-2 text-[black]"
               >
                 No Delivery Address Found
               </div>
