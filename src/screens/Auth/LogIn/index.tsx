@@ -285,7 +285,7 @@ const Index = () => {
                   value={loginCredentials.password}
                   visibility={viewPassWord}
                   onClick={() => {}}
-                  rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                  rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
                   setVisibility={setViewPassWord}
                   onChange={(e) => {
                     setLoginError({

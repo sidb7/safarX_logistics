@@ -6,6 +6,7 @@ import { LANDMARK_API } from "../../utils/ApiUrls";
 interface CustomInputWithDropDownProps {
   pastedData: any;
   value: any;
+  inputError?: boolean;
   handlePickupAddressChange: (field: any, value: any) => any;
   handleReturnAddressChange?: (field: any, value: any) => any;
 
@@ -18,6 +19,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   handlePickupAddressChange,
   handleLandmarkSelected,
   handleReturnAddressChange,
+  inputError,
 }) => {
   const [arrayValue, setArrayValue] = useState<string[]>([]);
   const [selected, setSelected] = useState(value || "");
@@ -93,6 +95,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
           }
           handleLandmarkSelected(e.target.value);
         }}
+        inputError={inputError}
         className="downarrowImage"
       />
 

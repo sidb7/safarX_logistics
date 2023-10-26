@@ -89,13 +89,13 @@ const PickupLocation = () => {
       country: "",
       addressType: "warehouse",
       workingDays: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
       workingHours: "09:00",
       contact: {
@@ -119,13 +119,13 @@ const PickupLocation = () => {
       country: "",
       addressType: "warehouse",
       workingDays: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
       workingHours: "09:00",
       contact: {
@@ -153,14 +153,58 @@ const PickupLocation = () => {
   const [loading, setLoading] = useState(true);
   const [returningUserData, setReturningUserData] = useState<any>([]);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
-
+  const [inputError, setInputError] = useState(false);
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
+
+  const isObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  console.log("pickupState", pickupDate);
   const postPickupOrderDetails = async () => {
     try {
-      const isShipyaariPresent =
-        params?.shipyaari_id !== undefined && params?.source !== undefined;
+      const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
+      const isReturnAddressValid = !isObjectEmpty(pickupAddress.returnAddress);
 
+      const isContactDetailsValid = !isObjectEmpty(
+        pickupAddress.pickupAddress.contact
+      );
+      const isContactDetailsReturnValid = !isObjectEmpty(
+        pickupAddress.returnAddress.contact
+      );
+
+      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
+      console.log("pickupaddressPostApicall", pickupAddress);
+      console.log("validPickup", isPickupAddressValid);
+      console.log("isContactDetailsValid", isContactDetailsValid);
+      console.log("isPickupDateValid", isPickupDateValid);
+
+      if (
+        (!isPickupAddressValid && !isReturnAddressValid) ||
+        !isContactDetailsValid ||
+        !isContactDetailsReturnValid
+      ) {
+        setInputError(true);
+        return;
+      }
+
+      setInputError(false);
       let payload = {};
       if (isReturnAddress) {
         payload = {
@@ -312,6 +356,8 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
+  console.log("inputErrorState", inputError);
+
   return (
     <>
       {isActive ? (
@@ -349,6 +395,7 @@ const PickupLocation = () => {
             data={{
               pickupAddress,
               setPickupAddress,
+              inputError,
             }}
           />
 
@@ -370,11 +417,12 @@ const PickupLocation = () => {
                 pickupAddress,
                 setPickupAddress,
                 label: "return",
+                inputError,
               }}
             />
           )}
 
-          <PickupDate epochPickupDate={setPickupDate} />
+          <PickupDate epochPickupDate={setPickupDate} inputError={inputError} />
 
           <CustomBranding
             data={{

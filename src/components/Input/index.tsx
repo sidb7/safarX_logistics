@@ -28,6 +28,7 @@ interface propTypes {
   tempLabel?: any;
   onKeyDown?: any;
   tooltipContent?: string;
+  inputError?: boolean;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -61,6 +62,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     imageClassName,
     onKeyDown,
     tooltipContent,
+    inputError,
   } = props;
 
   return (
@@ -70,7 +72,9 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           name={name}
           type={inputType}
           placeholder={placeholder}
-          className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
+          className={`${className} ${
+            inputError && !value ? "border-red-500" : "border-[#A4A4A4]"
+          } rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           onBlur={(e: any) => onBlur(e)}
