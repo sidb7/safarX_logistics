@@ -22,6 +22,7 @@ import { POST } from "../../utils/webService";
 import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
 import AccessDenied from "../../components/AccessDenied";
 import { useNavigate } from "react-router-dom";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 interface IOverview {}
 
@@ -31,9 +32,11 @@ export const Home = (props: IOverview) => {
   const roles = useSelector((state: any) => state?.roles);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
-  const isActive =
-    roles?.roles?.[0]?.menu?.[0]?.menu?.[renderingComponents]?.pages?.[0]
-      ?.isActive;
+  // const isActive =
+  //   roles?.roles?.[0]?.menu?.[0]?.menu?.[renderingComponents]?.pages?.[0]
+  //     ?.isActive;
+
+  const [isActive, setIsActive] = React.useState<any>(false);
 
   const arrayData = [
     { index: 0, label: "Overview" },
@@ -92,12 +95,16 @@ export const Home = (props: IOverview) => {
 
     if (data[1] === "overview") {
       setRenderingComponents(0);
+      setIsActive(checkPageAuthorized("Overview"));
     } else if (data[1] === "orders") {
       setRenderingComponents(1);
+      setIsActive(checkPageAuthorized("Orders"));
     } else if (data[1] === "exception") {
       setRenderingComponents(2);
+      setIsActive(checkPageAuthorized("Exception"));
     } else if (data[1] === "sy-performance") {
       setRenderingComponents(3);
+      setIsActive(checkPageAuthorized("SY Performance"));
     }
   });
 

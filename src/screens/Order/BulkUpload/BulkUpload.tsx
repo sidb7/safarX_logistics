@@ -18,6 +18,7 @@ import { Spinner } from "../../../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 interface ITypeProps {
   onClick?: any;
@@ -37,7 +38,8 @@ const BulkUpload = (props: ITypeProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Add Bulk");
 
   // console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {

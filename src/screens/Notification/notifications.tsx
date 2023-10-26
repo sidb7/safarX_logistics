@@ -4,12 +4,14 @@ import { SearchBox } from "../../components/SearchBox";
 import NotificationCard from "./notificationCard";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 interface INotificationsProps {}
 
 const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[9]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[9]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Notifications");
 
   const [filterId, setFilterId] = useState(0);
   const [activeTab, setActiveTab] = useState("all");

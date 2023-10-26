@@ -25,6 +25,7 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import ModalContent from "./RightModal/ModalContent";
 import AccessDenied from "../../../components/AccessDenied";
 import { getQueryJson } from "../../../utils/utility";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 const steps = [
   {
@@ -69,7 +70,8 @@ const PickupLocation = () => {
   const navigate = useNavigate();
 
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[1]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[1]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Add Order");
   const params = getQueryJson();
 
   const [isReturnAddress, setIsReturnAddress] = useState(true);

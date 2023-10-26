@@ -59,12 +59,14 @@ import {
 import useRazorpay from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("View Wallet");
 
   const [payment, setPayment] = useState(false);
   const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
