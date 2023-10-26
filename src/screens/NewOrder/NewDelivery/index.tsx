@@ -183,6 +183,7 @@ const DeliveryLocation = () => {
       console.log("isContactDetailsValid", isContactDetailsValid);
       console.log("isPickupDateValid", isContactDetailsBillingValid);
       if (
+        (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         (!isDeliveryAddressValid && !isbillingAddressValid) ||
         !isContactDetailsValid ||
         !isContactDetailsBillingValid
