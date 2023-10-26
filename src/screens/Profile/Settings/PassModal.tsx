@@ -45,7 +45,7 @@ function PassModal(props: PassModalProps) {
   const updatePassword = async () => {
     if (password?.newPassword !== password?.confirmNewPassword) {
       return toast.error(
-        "Please enter a new password and re-enter the same password!"
+        "New password and confirm new password should be same"
       );
     }
     const { data }: any = await POST(UPDATE_PASSWORD, {
@@ -55,6 +55,7 @@ function PassModal(props: PassModalProps) {
 
     if (data?.success) {
       toast.success(data?.message);
+      setIsPassModalOpen(false);
     } else {
       toast.error(data?.message);
     }
@@ -186,7 +187,10 @@ function PassModal(props: PassModalProps) {
             label="Re-enter New Password"
             inputType={viewPassword.confirmNewPassword ? "text" : "password"}
             isRightIcon={true}
+            isInfoIcon={true}
             maxLength={16}
+            informativeIcon={InformativeIcon}
+            tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
             visibility={viewPassword.confirmNewPassword}
             rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
@@ -220,7 +224,7 @@ function PassModal(props: PassModalProps) {
               className="bg-[#1C1C1C] text-[#FFFFFF] w-[80px]"
               onClick={() => {
                 updatePassword();
-                setIsPassModalOpen(false);
+                // setIsPassModalOpen(false);
               }}
             />
           </div>
