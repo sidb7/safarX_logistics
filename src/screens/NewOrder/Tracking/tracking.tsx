@@ -29,6 +29,7 @@ import alertInfoIcon from "../../../assets/info-circle-outline.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { toast } from "react-toastify";
 import { Tooltip } from "../../../components/Tooltip/Tooltip";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 const Tracking = () => {
   // let tracking = [
@@ -93,7 +94,8 @@ const Tracking = () => {
 
   // const [trackingState, setTrackingState] = useState<any>([...tracking]);
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Tracking");
 
   const [trackingState, setTrackingState] = useState<any>([]);
   const [inValidTrackingState, setInValidTrackingState] = useState<any>([]);

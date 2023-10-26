@@ -22,9 +22,11 @@ import { checkPageAuthorized } from "../../../redux/reducers/role";
 const Catalogue = () => {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const [isActive, setIsActive] = useState(
-    roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive
-  );
+  // const [isActive, setIsActive] = useState(
+  //   roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive
+  // );
+
+  const [isActive, setIsActive] = useState<any>(false);
   let wooCommerceContents = getLocalStorage("wooCommerceContents");
   const [filterId, setFilterId] = useState(0);
   const [tabName, setTabName] = useState(
@@ -125,20 +127,24 @@ const Catalogue = () => {
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
-      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[1]?.pages?.[0]?.isActive);
+      // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[1]?.pages?.[0]?.isActive);
+      setIsActive(checkPageAuthorized("Address Book"));
     } else if (data[1] === "channel-integration") {
       setTabName("Channel Integration");
-      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive);
+      // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[0]?.pages?.[0]?.isActive);
+      setIsActive(checkPageAuthorized("Channel Integration"));
     } else if (data[1] === "product-catalogue") {
       setTabName("Product Catalogue");
-      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[2]?.pages?.[0]?.isActive);
+      // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[2]?.pages?.[0]?.isActive);
+      setIsActive(checkPageAuthorized("Product Catalogue"));
     } else if (data[1] === "box-catalogue") {
       setTabName("Box Catalogue");
-      setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
+      // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
+      setIsActive(checkPageAuthorized("Box Catalogue"));
     }
 
     console.log("my page autho", checkPageAuthorized("Channel Integration"));
-  }, [tabName]);
+  }, [tabName, isActive]);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");

@@ -14,13 +14,16 @@ import RightSideModal from "../../components/CustomModal/customRightModal";
 import DiscrepancyDetails from "./DiscrepancyDetailModal";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 const WeightFreeze: React.FunctionComponent = () => {
   const roles = useSelector((state: any) => state?.roles);
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
 
-  const isActive =
-    roles.roles?.[0]?.menu?.[6]?.menu?.[renderingComponents]?.pages?.[0]
-      ?.isActive;
+  // const isActive =
+  //   roles.roles?.[0]?.menu?.[6]?.menu?.[renderingComponents]?.pages?.[0]
+  //     ?.isActive;
+
+  const [isActive, setIsActive] = useState<any>(false);
 
   const [isActiveFreezeweight, setActiveFreezeweight] = useState(true);
   const [filterId, setFilterId] = useState(0);
@@ -127,15 +130,23 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (data[1] === "weight-freeze") {
+      setIsActive(checkPageAuthorized("Weight Freeze"));
+
       setRenderingComponents(0);
       setScrollIndex(0);
     } else if (data[1] === "new-discrepancy") {
+      setIsActive(checkPageAuthorized("New Discrepancy"));
+
       setRenderingComponents(1);
       setScrollIndex(1);
     } else if (data[1] === "pending-dispute") {
+      setIsActive(checkPageAuthorized("Pending Dispute"));
+
       setRenderingComponents(2);
       setScrollIndex(2);
     } else if (data[1] === "completed") {
+      setIsActive(checkPageAuthorized("Completed"));
+
       setRenderingComponents(3);
       setScrollIndex(3);
     }

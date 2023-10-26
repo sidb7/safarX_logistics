@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
@@ -28,7 +29,8 @@ export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Transaction History");
   const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);

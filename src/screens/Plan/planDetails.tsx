@@ -22,13 +22,15 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { BottomNavBar } from "../../components/BottomNavBar";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 interface ITypeProps {}
 
 const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[1]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[1]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Plan Details");
 
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);

@@ -20,6 +20,12 @@ export function checkPageAuthorized(name: any) {
             break;
           }
         }
+        for (let child of parent.menu?.[0].pages) {
+          if (child.name.toLowerCase() === name) {
+            status = true;
+            break;
+          }
+        }
       }
     }
     return status;

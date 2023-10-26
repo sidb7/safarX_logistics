@@ -10,13 +10,15 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { DELETE_SELLER } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 export const SettingTab = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const roles = useSelector((state: any) => state?.roles);
 
-  const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Settings");
 
   const state = location.state?.data || {};
   const isItLgScreen = useMediaQuery({
