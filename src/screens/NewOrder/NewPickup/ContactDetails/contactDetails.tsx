@@ -13,24 +13,27 @@ interface IContactDetailsProps {
     pickupAddress: any;
     setPickupAddress: any;
     contactLabel: string;
+    inputError: boolean;
   };
 }
 
-const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
-  data: { pickupAddress, setPickupAddress, contactLabel },
-}) => {
-  const [mobileValidationError, setMobileValidationError] = useState<
-    string | null
-  >(null);
-  const [nameValidationError, setNameValidationError] = useState<string | null>(
-    null
-  );
-  const [emailValidationError, setEmailValidationError] = useState<
-    string | null
-  >(null);
+interface ValidationErrorState {
+  name: string | null;
+  mobileNo: string | null;
+  emailId: string | null;
+  alternateMobileNo: string | null;
+}
 
-  const [alternateMobileValidationError, setAlternateMobileValidationError] =
-    useState<string | null>(null);
+const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
+  data: { pickupAddress, setPickupAddress, contactLabel, inputError },
+}) => {
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationErrorState>({
+      name: null,
+      mobileNo: null,
+      emailId: null,
+      alternateMobileNo: null,
+    });
 
   const address =
     contactLabel === "Return Address Contact"
@@ -56,6 +59,50 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
     }));
   };
 
+  const setValidationError = (
+    fieldName: keyof ValidationErrorState,
+    error: string | null
+  ) => {
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
+
+  const validateName = (name: string) => {
+    if (/^\D+$/.test(name) || name === "") {
+      return null;
+    } else {
+      return "Name should not contain numbers";
+    }
+  };
+
+  const validateMobileNo = (mobileNo: string) => {
+    const numericValue = mobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
+
+  const validateEmailId = (emailId: string) => {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId) || emailId === "") {
+      return null;
+    } else {
+      return "Invalid email address";
+    }
+  };
+
+  const validateAlternateMobileNo = (alternateMobileNo: string) => {
+    const numericValue = alternateMobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
@@ -75,20 +122,16 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             value={address.name}
             onChange={(e) => {
               const nameValue = e.target.value;
-
               handleContactChange("name", nameValue);
-              if (/^\D+$/.test(nameValue)) {
-                setNameValidationError(null); // No validation error
-              } else {
-                setNameValidationError("Name should not contain numbers"); // Validation error message
-              }
+              setValidationError("name", validateName(nameValue));
             }}
+            inputError={inputError}
           />
-          {nameValidationError && (
+          {validationErrors.name && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
-                {nameValidationError}
+                {validationErrors.name}
               </span>
             </div>
           )}
@@ -101,22 +144,17 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             maxLength={10}
             inputMode="numeric"
             onChange={(e) => {
-              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
-              handleContactChange("mobileNo", numericValue); // Pass the cleaned numeric value to the handler
-              if (numericValue.length === 10) {
-                setMobileValidationError(null); // No validation error
-              } else {
-                setMobileValidationError(
-                  "Mobile number must be a 10-digit number"
-                ); // Validation error message
-              }
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
+              handleContactChange("mobileNo", numericValue);
+              setValidationError("mobileNo", validateMobileNo(numericValue));
             }}
+            inputError={inputError}
           />
-          {mobileValidationError && (
+          {validationErrors.mobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
-                {mobileValidationError}
+                {validationErrors.mobileNo}
               </span>
             </div>
           )}
@@ -130,21 +168,14 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             onChange={(e) => {
               const emailValue = e.target.value;
               handleContactChange("emailId", emailValue);
-              if (
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue) ||
-                emailValue === ""
-              ) {
-                setEmailValidationError(null); // No validation error
-              } else {
-                setEmailValidationError("Invalid email address"); // Validation error message
-              }
+              setValidationError("emailId", validateEmailId(emailValue));
             }}
           />
-          {emailValidationError && (
+          {validationErrors.emailId && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
-                {emailValidationError}
+                {validationErrors.emailId}
               </span>
             </div>
           )}
@@ -156,23 +187,19 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             maxLength={10}
             inputMode="numeric"
             onChange={(e) => {
-              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
-
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
               handleContactChange("alternateMobileNo", e.target.value);
-              if (numericValue.length === 10) {
-                setAlternateMobileValidationError(null); // No validation error
-              } else {
-                setAlternateMobileValidationError(
-                  "Mobile number must be a 10-digit number"
-                ); // Validation error message
-              }
+              setValidationError(
+                "alternateMobileNo",
+                validateAlternateMobileNo(numericValue)
+              );
             }}
           />
-          {alternateMobileValidationError && (
+          {validationErrors.alternateMobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
-                {alternateMobileValidationError}
+                {validationErrors.alternateMobileNo}
               </span>
             </div>
           )}
