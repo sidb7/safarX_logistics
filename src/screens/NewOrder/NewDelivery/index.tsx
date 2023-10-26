@@ -174,6 +174,9 @@ const DeliveryLocation = () => {
   useEffect(() => {
     (async () => {
       {
+        const sanitizeField = (fieldValue: number) =>
+          fieldValue === 0 ? "" : fieldValue;
+
         const payload = { tempOrderId: +shipyaari_id, source: orderSource };
 
         const { data } = await POST(GET_LATEST_ORDER, payload);
@@ -206,9 +209,12 @@ const DeliveryLocation = () => {
                   orderData?.deliveryAddress?.workingHours || "09:00",
                 contact: {
                   name: orderData?.deliveryAddress?.contact?.name,
-                  mobileNo: orderData?.deliveryAddress?.contact?.mobileNo,
-                  alternateMobileNo:
-                    orderData?.deliveryAddress?.contact?.alternateMobileNo,
+                  mobileNo: sanitizeField(
+                    orderData?.deliveryAddress?.contact?.mobileNo
+                  ),
+                  alternateMobileNo: sanitizeField(
+                    orderData?.deliveryAddress?.contact?.alternateMobileNo
+                  ),
                   emailId: orderData?.deliveryAddress?.contact?.emailId,
                   type: orderData?.deliveryAddress?.contact?.type,
                 },
@@ -237,9 +243,12 @@ const DeliveryLocation = () => {
                   orderData?.billingAddress?.workingHours || "09:00",
                 contact: {
                   name: orderData?.billingAddress?.contact?.name,
-                  mobileNo: orderData?.billingAddress?.contact?.mobileNo,
-                  alternateMobileNo:
-                    orderData?.billingAddress?.contact?.alternateMobileNo,
+                  mobileNo: sanitizeField(
+                    orderData?.billingAddress?.contact?.mobileNo
+                  ),
+                  alternateMobileNo: sanitizeField(
+                    orderData?.billingAddress?.contact?.alternateMobileNo
+                  ),
                   emailId: orderData?.billingAddress?.contact?.emailId,
                   type: orderData?.billingAddress?.contact?.type,
                 },
