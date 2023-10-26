@@ -394,6 +394,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               <CustomInputBox
                 label="GST No."
                 maxLength={15}
+                inputError={inputError}
                 value={deliveryAddress.gstNumber}
                 onChange={(e) =>
                   setDeliveryAddress((prevData: any) => ({
