@@ -10,10 +10,12 @@ import SelectDateModalContent from "../../PickUp/selectDateModal";
 
 interface IPickupDateProps {
   epochPickupDate: any;
+  inputError?: boolean;
 }
 
 const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
   epochPickupDate,
+  inputError,
 }) => {
   const isLgScreen = useMediaQuery({ query: "(min-width: 640px)" });
 
@@ -43,6 +45,7 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
           imgSrc={CalenderIcon}
           value={pickupDate}
           onClick={() => setIsDateRightModal(true)}
+          inputError={inputError}
         />
       </div>
 

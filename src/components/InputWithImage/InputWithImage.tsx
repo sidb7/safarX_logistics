@@ -16,6 +16,7 @@ interface IInputProps {
   inputType?: string;
   isRequired?: boolean;
   imgSrc?: string;
+  inputError?: boolean;
 }
 
 const InputWithImage = (props: IInputProps) => {
@@ -34,6 +35,7 @@ const InputWithImage = (props: IInputProps) => {
 
     isRequired = false,
     imgSrc,
+    inputError,
   } = props;
 
   const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
@@ -55,7 +57,9 @@ const InputWithImage = (props: IInputProps) => {
       <input
         placeholder={placeholder}
         type="text"
-        className={`rounded border-[1px] border-[#A4A4A4] placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
+        className={`rounded border-[1px]  ${
+          inputError && !value ? "!border-red-500" : "border-[#A4A4A4]"
+        } placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
         required={isRequired}
         onChange={onChange}
         onClick={onClick}

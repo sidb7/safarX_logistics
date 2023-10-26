@@ -149,6 +149,11 @@ import FeedBack from "../screens/FeedBack/feedback";
 import KycProtectedRoute from "../components/ProtectedRoutes/KycProtected";
 import BankProtected from "../components/ProtectedRoutes/BankProtected";
 
+
+//Public
+//PublicTracking
+import PublicTracking from "../screens/PublicScreens/PublicTracking";
+
 const MyRoutes: React.FC = () => {
   return (
     <BrowserRouter>
@@ -162,6 +167,10 @@ const MyRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
+            <Route>
+              <Route path="/shipyaari-tracking"  element={<PublicTracking />}/>
+            </Route>
 
         {/* onboarding routes  */}
         <Route>
@@ -929,6 +938,7 @@ const MyRoutes: React.FC = () => {
                 }
               />
             </Route>
+
             <Route>
               <Route
                 path="/tracking"

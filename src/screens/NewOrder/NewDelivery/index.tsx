@@ -142,6 +142,10 @@ const DeliveryLocation = () => {
   const isObjectEmpty = (obj: any) => {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
+        if (key === "sector") {
+          continue;
+        }
+
         if (typeof obj[key] === "object") {
           if (!isObjectEmpty(obj[key])) {
             return false;
@@ -166,7 +170,23 @@ const DeliveryLocation = () => {
       const isbillingAddressValid = !isObjectEmpty(
         deliveryAddress.billingAddress
       );
-      if (!isDeliveryAddressValid && !isbillingAddressValid) {
+
+      const isContactDetailsValid = !isObjectEmpty(
+        deliveryAddress.deliveryAddress.contact
+      );
+      const isContactDetailsBillingValid = !isObjectEmpty(
+        deliveryAddress.billingAddress.contact
+      );
+
+      console.log("deliveryupaddressPostApicall", deliveryAddress);
+      console.log("validDelivery", isDeliveryAddressValid);
+      console.log("isContactDetailsValid", isContactDetailsValid);
+      console.log("isPickupDateValid", isContactDetailsBillingValid);
+      if (
+        (!isDeliveryAddressValid && !isbillingAddressValid) ||
+        !isContactDetailsValid ||
+        !isContactDetailsBillingValid
+      ) {
         setInputError(true);
         return;
       }
@@ -324,6 +344,7 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
+  console.log("inputErrorState", inputError);
 
   console.log("deliverypayload", deliveryAddress);
   return (
