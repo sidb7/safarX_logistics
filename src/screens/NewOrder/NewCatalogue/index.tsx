@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 import ChannelIntegrationModalContent from "./ChannelIntegration/ChannelIntegrationModalContent";
 import AccessDenied from "../../../components/AccessDenied";
 import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -135,6 +136,8 @@ const Catalogue = () => {
       setTabName("Box Catalogue");
       setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
     }
+
+    console.log("my page autho", checkPageAuthorized("Channel Integration"));
   }, [tabName]);
 
   const changeUrl = (statusName: any) => {
