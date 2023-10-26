@@ -96,12 +96,13 @@ export const ProfileCard = (props: ProfileCardProps) => {
               {kycValue === "true" ? (
                 ""
               ) : (
-                <img
-                  src={BlackEditIcon}
-                  alt=""
-                  className="pr-4 cursor-pointer"
-                  onClick={() => navigate("/profile/edit-profile")}
-                />
+                // <img
+                //   src={BlackEditIcon}
+                //   alt=""
+                //   className="pr-4 cursor-pointer"
+                //   onClick={() => navigate("/profile/edit-profile")}
+                // />
+                <></>
               )}
             </span>
             <span className="flex font-Lato text-[16px] font-normal leading-6">
@@ -146,7 +147,12 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <span className="text-[16px] font-[#1C1C1C]">
                 {activePlan || "Not Assigned Yet"}
               </span>
-              <span className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]">
+              <span
+                className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]"
+                onClick={() => {
+                  navigate("/plans");
+                }}
+              >
                 UPGRADE
               </span>
             </div>
@@ -181,13 +187,18 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <span className="text-[20px] font-semibold font-[#1C1C1C]">
                 {activePlan || "Not Assigned Yet"}
               </span>
-              <span className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded cursor-pointer">
+              <span
+                className="text-[14px] md:text-[12px] text-[#fff] border-1 border-[#1C1C1C] font-normal bg-[#1C1C1C] px-4 py-2 rounded cursor-pointer"
+                onClick={() => {
+                  navigate("/plans");
+                }}
+              >
                 UPGRADE
               </span>
             </div>
             <div className="flex mt-2">
-              <span className="text-[14px] text-[#494949]">
-                {/* Activited since Jun 2023 */}
+              <span className="font-Open font-normal text-sm text-[#1C1C1C] leading-[18px]">
+                {`Activated Since ${date_DD_MMM_YYY(activePlanExpiry)}`}
               </span>
             </div>
           </div>
