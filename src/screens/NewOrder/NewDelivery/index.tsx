@@ -354,7 +354,9 @@ const DeliveryLocation = () => {
         <Stepper steps={steps} />
       </div>
 
-      <RecipientType data={{ deliveryAddress, setDeliveryAddress }} />
+      <RecipientType
+        data={{ deliveryAddress, setDeliveryAddress, inputError }}
+      />
 
       {/* DELIVERY ADDRESS */}
 
