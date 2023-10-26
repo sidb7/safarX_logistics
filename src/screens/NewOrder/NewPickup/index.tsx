@@ -176,11 +176,30 @@ const PickupLocation = () => {
     return false;
   };
 
+  console.log("pickupState", pickupDate);
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
       const isReturnAddressValid = !isObjectEmpty(pickupAddress.returnAddress);
-      if (!isPickupAddressValid && !isReturnAddressValid) {
+
+      const isContactDetailsValid = !isObjectEmpty(
+        pickupAddress.pickupAddress.contact
+      );
+      const isContactDetailsReturnValid = !isObjectEmpty(
+        pickupAddress.returnAddress.contact
+      );
+
+      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
+      console.log("pickupaddressPostApicall", pickupAddress);
+      console.log("validPickup", isPickupAddressValid);
+      console.log("isContactDetailsValid", isContactDetailsValid);
+      console.log("isPickupDateValid", isPickupDateValid);
+
+      if (
+        (!isPickupAddressValid && !isReturnAddressValid) ||
+        !isContactDetailsValid ||
+        !isContactDetailsReturnValid
+      ) {
         setInputError(true);
         return;
       }
@@ -403,7 +422,7 @@ const PickupLocation = () => {
             />
           )}
 
-          <PickupDate epochPickupDate={setPickupDate} />
+          <PickupDate epochPickupDate={setPickupDate} inputError={inputError} />
 
           <CustomBranding
             data={{
