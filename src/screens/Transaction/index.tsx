@@ -87,11 +87,8 @@ export const Transaction = () => {
   };
 
   let debounceTimer: any;
-  const handleSearchDebounced = (value: string) => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-      setDebouncedSearchValue(value);
-    }, 500);
+  const handleSearch = (value: string) => {
+    setDebouncedSearchValue(value);
   };
   const clearSearchValue = () => {
     setDebouncedSearchValue("");
@@ -105,7 +102,7 @@ export const Transaction = () => {
               label="Search"
               value={debouncedSearchValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                handleSearchDebounced(e.target.value);
+                handleSearch(e.target.value);
               }}
               customPlaceholder="Search By Transaction Id"
               getFullContent={clearSearchValue}
