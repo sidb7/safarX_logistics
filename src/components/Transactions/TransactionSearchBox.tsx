@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import SearchBoxIcon from "../../assets/SearchBox/SearchIcon.svg";
 import CrossIcon from "../../assets/cross.svg";
 import "../../styles/placeHolderPadding.css";
@@ -11,6 +11,7 @@ interface ISearchBoxProps {
   getFullContent?: any;
   customPlaceholder?: string;
 }
+
 export const TransactionSearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   className = "",
   label,
@@ -19,21 +20,34 @@ export const TransactionSearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   getFullContent,
   customPlaceholder,
 }) => {
-  const resetRef: any = useRef(null);
+  const [inputValue, setInputValue] = useState(value);
+  const inputRef: any = useRef(null);
+
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+
   const resetValue = () => {
-    if (resetRef.current.value) getFullContent();
-    resetRef.current.value = "";
+    setInputValue("");
+    getFullContent();
   };
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <div className="relative">
       <input
-        ref={resetRef}
+        ref={inputRef}
         placeholder={customPlaceholder}
         type="text"
-        className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px] !pl-[36px] w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
-        value={value}
-        onChange={onChange}
+        className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px]  w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
+        value={inputValue}
+        onChange={(e) => {
+          setInputValue(e.target.value);
+          onChange(e);
+        }}
         title="searchBox"
       />
       <img
