@@ -63,6 +63,7 @@ const DeliveryLocation = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const params = getQueryJson();
+  const [inputError, setInputError] = useState(false);
   const shipyaari_id = params?.shipyaari_id;
   let orderSource = params?.source || "";
 
@@ -138,8 +139,39 @@ const DeliveryLocation = () => {
   const [returningUserDeliveryData, setReturningUserDeliveryData] =
     useState<any>([]);
 
+  const isObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const postDeliveryOrderDetails = async () => {
     try {
+      const isDeliveryAddressValid = !isObjectEmpty(
+        deliveryAddress.deliveryAddress
+      );
+      const isbillingAddressValid = !isObjectEmpty(
+        deliveryAddress.billingAddress
+      );
+      if (!isDeliveryAddressValid && !isbillingAddressValid) {
+        setInputError(true);
+        return;
+      }
+
+      setInputError(false);
       let payload = {};
       if (isBillingAddress) {
         payload = {
@@ -331,6 +363,7 @@ const DeliveryLocation = () => {
         data={{
           deliveryAddress,
           setDeliveryAddress,
+          inputError,
         }}
       />
 
@@ -352,6 +385,7 @@ const DeliveryLocation = () => {
             deliveryAddress,
             setDeliveryAddress,
             label: "billing",
+            inputError,
           }}
         />
       )}
