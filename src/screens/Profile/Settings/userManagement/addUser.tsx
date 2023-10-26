@@ -141,7 +141,7 @@ function AddUser() {
             isRightIcon={true}
             onClick={() => {}}
             visibility={viewPassWord}
-            rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+            rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
             onChange={(e) =>
               onChangeAddUserCardHandler("password", e.target.value)
             }

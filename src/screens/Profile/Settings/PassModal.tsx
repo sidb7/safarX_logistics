@@ -134,7 +134,7 @@ function PassModal(props: PassModalProps) {
             inputType={viewPassword.oldPassword ? "text" : "password"}
             isRightIcon={true}
             visibility={viewPassword.oldPassword}
-            rightIcon={viewPassword.oldPassword ? EyeIcon : CrossEyeIcon}
+            rightIcon={viewPassword.oldPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("oldPassword")}
             onClick={() => {}}
             onChange={(e) =>
@@ -150,7 +150,7 @@ function PassModal(props: PassModalProps) {
             tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
             maxLength={16}
             visibility={viewPassword.newPassword}
-            rightIcon={viewPassword.newPassword ? EyeIcon : CrossEyeIcon}
+            rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("newPassword")}
             onClick={() => {}}
             onChange={(e) => {
@@ -188,7 +188,7 @@ function PassModal(props: PassModalProps) {
             isRightIcon={true}
             maxLength={16}
             visibility={viewPassword.confirmNewPassword}
-            rightIcon={viewPassword.confirmNewPassword ? EyeIcon : CrossEyeIcon}
+            rightIcon={viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon}
             setVisibility={() => togglePasswordVisibility("confirmNewPassword")}
             onClick={() => {}}
             onChange={(e) =>
