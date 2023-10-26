@@ -80,6 +80,7 @@ function ChannelIntegrationModalContent(props: any) {
           } catch (error: any) {
             window.location.href = error?.config?.url;
           }
+          return;
         }
         setModalData({ isOpen: false });
       } else {
