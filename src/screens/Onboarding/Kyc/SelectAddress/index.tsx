@@ -95,7 +95,7 @@ const BusinessType = (props: ITypeProps) => {
         if (response?.success) {
           sessionStorage.setItem("setKycValue", "true");
           setLoading(false);
-          toast.success(responses?.message);
+          // toast.success(responses?.message);
 
           navigate("/onboarding/wallet-main");
         } else {
@@ -310,7 +310,7 @@ const BusinessType = (props: ITypeProps) => {
                   />
                 </div>
 
-                <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
+                {/* <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
                   <CustomInputWithFileUpload
                     label="Upload logo"
                     className="font-Open  "
@@ -319,7 +319,7 @@ const BusinessType = (props: ITypeProps) => {
                     // onChange={(e) => uploadFile(e)}
                     isRequired={false}
                   />
-                </div>
+                </div> */}
                 <div className={`${!isLgScreen && "w-full"}`}>
                   <ServiceButton
                     text="SUBMIT"

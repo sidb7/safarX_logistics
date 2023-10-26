@@ -212,9 +212,10 @@ const Index = () => {
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
-                    className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-                      (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-                      "text-[#494949]"
+                    className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                      seconds > 0 || (seconds > 0 && minutes === 0)
+                        ? "text-[#494949]"
+                        : "cursor-pointer"
                     }`}
                     onClick={() => {
                       if (seconds === 0 && minutes === 0) {
