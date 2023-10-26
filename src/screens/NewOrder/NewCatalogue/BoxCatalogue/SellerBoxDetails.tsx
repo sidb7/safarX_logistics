@@ -8,6 +8,11 @@ import {
   UPDATE_SELLER_BOX,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import {
+  checkNonNegative,
+  greaterThenZero,
+  isRequired,
+} from "../../../../utils/validationRules";
 
 interface ISellerBoxDetailsProps {
   editMode?: boolean;
@@ -30,9 +35,51 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
   });
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
-  
-  
+  const [validationErrors, setValidationErrors]: any = useState<any>(null);
+
+  const validate = (value: any, validationRule: any) => {
+    let errors = [];
+    for (let index = 0; index < validationRule.length; index++) {
+      const element = validationRule[index];
+      const res = element(value);
+      if (res !== true) {
+        errors.push(res);
+      }
+    }
+    return errors;
+  };
+
+  const validation: any = {
+    name: [isRequired],
+    length: [isRequired, greaterThenZero],
+    breadth: [isRequired, greaterThenZero],
+    height: [isRequired, greaterThenZero],
+    color: [isRequired],
+    price: [isRequired, checkNonNegative],
+    deadWeight: [isRequired, checkNonNegative],
+  };
+  const validateOnSubmit = () => {
+    let hasErrors = false;
+    for (const inputName in validation) {
+      const errors = validate(
+        sellerBoxDetails[inputName],
+        validation[inputName]
+      );
+      setValidationErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [inputName]: errors[0] || false,
+      }));
+      if (errors.length > 0) {
+        hasErrors = true;
+      }
+    }
+    return !hasErrors;
+  };
   const createAndUpdateSellerBoxDetails = async () => {
+    const valid = validateOnSubmit();
+
+    if (!valid) return;
+
     const { data } = await POST(
       isEditMode ? UPDATE_SELLER_BOX : CREATE_SELLER_BOX,
       sellerBoxDetails
@@ -70,6 +117,16 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
     return volume / 5000;
   };
 
+  const handleValidation = (event: any) => {
+    const { name, value } = event.target;
+    const validationRules = validation[name];
+    const errors = validate(value, validationRules) || true;
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      [name]: errors.length > 0 ? errors[0] : true,
+    }));
+  };
+
   const handleVolumCalc = (obj: any) => {
     const { length, height, breadth } = obj;
     if (!length) return;
@@ -94,42 +151,53 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Box Name"
             name="name"
             value={sellerBoxDetails?.name}
-            onChange={(e) =>
-              setSellerBoxDetails({ ...sellerBoxDetails, name: e.target.value })
-            }
+            errorMessage={validationErrors?.name}
+            onChange={(e) => {
+              handleValidation(e);
+              setSellerBoxDetails({
+                ...sellerBoxDetails,
+                name: e.target.value,
+              });
+            }}
           />
           <CustomInputBox
             label="Box Color"
             name="color"
             value={sellerBoxDetails?.color}
-            onChange={(e) =>
+            errorMessage={validationErrors?.color}
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 color: e.target.value,
-              })
-            }
+              });
+            }}
           />
           <CustomInputBox
             label="Box Price"
             name="price"
+            errorMessage={validationErrors?.price}
             value={sellerBoxDetails?.price}
-            onChange={(e) =>
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 price: e.target.value,
-              })
-            }
+              });
+            }}
           />
           <CustomInputBox
             label="Dead Weight"
             name="deadWeight"
+            errorMessage={validationErrors?.deadWeight}
             value={sellerBoxDetails?.deadWeight}
-            onChange={(e) =>
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 deadWeight: e.target.value,
-              })
-            }
+              });
+            }}
           />
         </div>
         <hr />
@@ -138,37 +206,43 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Length (cm)"
             inputType="number"
             name="length"
+            errorMessage={validationErrors?.length}
             value={sellerBoxDetails?.length}
-            onChange={(e) =>
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 length: e.target.value,
-              })
-            }
+              });
+            }}
           />
           <CustomInputBox
             inputType="number"
             name="breadth"
             label="Breadth (cm)"
+            errorMessage={validationErrors?.breadth}
             value={sellerBoxDetails?.breadth}
-            onChange={(e) =>
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 breadth: e.target.value,
-              })
-            }
+              });
+            }}
           />
           <CustomInputBox
             name="height"
             label="height (cm)"
             inputType="number"
+            errorMessage={validationErrors?.height}
             value={sellerBoxDetails?.height}
-            onChange={(e) =>
+            onChange={(e) => {
+              handleValidation(e);
               setSellerBoxDetails({
                 ...sellerBoxDetails,
                 height: e.target.value,
-              })
-            }
+              });
+            }}
           />
           <CustomInputBox
             name="volumetricWeight"
