@@ -11,7 +11,7 @@ interface ISearchBoxProps {
   getFullContent?: any;
   customPlaceholder?: string;
 }
-export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
+export const TransactionSearchBox: React.FunctionComponent<ISearchBoxProps> = ({
   className = "",
   label,
   value,
@@ -32,7 +32,7 @@ export const SearchBox: React.FunctionComponent<ISearchBoxProps> = ({
         placeholder={customPlaceholder}
         type="text"
         className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px] !pl-[36px] w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
-        // value={value}
+        value={value}
         onChange={onChange}
         title="searchBox"
       />

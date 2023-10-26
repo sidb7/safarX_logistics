@@ -27,13 +27,13 @@ function Feedback() {
                 feedbackTabs[renderingComponents].value === "ALL"
                     ? ""
                     : capitalizeFirstLetter(feedbackTabs[renderingComponents].value),
-            skip: (data?.currentPage - 1) * data?.itemsPerPage || 0,
-            limit: data?.itemsPerPage || 10,
-            pageNo: data?.currentPage || 1,
+            skip: data?.skip || 0,
+            limit: data?.limit || 10,
+            pageNo: data?.pageNo || 1,
         });
 
         if (response?.success) {
-            setTotalItemCount(response.totalFeedback);
+            setTotalItemCount(response?.totalFeedback);
             setFeedbackDataList(response?.data);
         } else {
             setFeedbackDataList([]);

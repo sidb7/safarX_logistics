@@ -1,7 +1,10 @@
+import React, { useState } from "react";
+
 import ContactIcon from "../../../../assets/PickUp/Contact.svg";
 import WebContactIcon from "../../../../assets/PickUp/WebContact.svg";
 import WarehouseIcon from "../../../../assets/PickUp/Warehouse.svg";
 import OfficeIcon from "../../../../assets/PickUp/Office.svg";
+import InfoCircle from "../../../../assets/info-circle.svg";
 
 import CustomInputBox from "../../../../components/Input";
 
@@ -10,12 +13,26 @@ interface IContactDetailsProps {
     deliveryAddress: any;
     setDeliveryAddress: any;
     contactLabel: string;
+    inputError: boolean;
   };
+}
+interface ValidationErrorState {
+  name: string | null;
+  mobileNo: string | null;
+  emailId: string | null;
+  alternateMobileNo: string | null;
 }
 
 const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
-  data: { deliveryAddress, setDeliveryAddress, contactLabel },
+  data: { deliveryAddress, setDeliveryAddress, contactLabel, inputError },
 }) => {
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationErrorState>({
+      name: null,
+      mobileNo: null,
+      emailId: null,
+      alternateMobileNo: null,
+    });
   const address =
     contactLabel === "Billing Address Contact"
       ? deliveryAddress?.billingAddress?.contact
@@ -40,6 +57,49 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
     }));
   };
 
+  const setValidationError = (
+    fieldName: keyof ValidationErrorState,
+    error: string | null
+  ) => {
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
+
+  const validateName = (name: string) => {
+    if (/^\D+$/.test(name) || name === "") {
+      return null;
+    } else {
+      return "Name should not contain numbers";
+    }
+  };
+
+  const validateMobileNo = (mobileNo: string) => {
+    const numericValue = mobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
+
+  const validateEmailId = (emailId: string) => {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId) || emailId === "") {
+      return null;
+    } else {
+      return "Invalid email address";
+    }
+  };
+
+  const validateAlternateMobileNo = (alternateMobileNo: string) => {
+    const numericValue = alternateMobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
   return (
     <div>
       <div className="flex flex-row items-center gap-2  lg:col-span-3 mb-5 lg:mb-[23px]">
@@ -57,9 +117,20 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             label="Name of the contact person"
             value={address.name}
             onChange={(e) => {
-              handleContactChange("name", e.target.value);
+              const nameValue = e.target.value;
+              handleContactChange("name", nameValue);
+              setValidationError("name", validateName(nameValue));
             }}
+            inputError={inputError}
           />
+          {validationErrors.name && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationErrors.name}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -69,10 +140,20 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             maxLength={10}
             inputMode="numeric"
             onChange={(e) => {
-              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
-              handleContactChange("mobileNo", numericValue); // Pass the cleaned numeric value to the handler
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
+              handleContactChange("mobileNo", numericValue);
+              setValidationError("mobileNo", validateMobileNo(numericValue));
             }}
+            inputError={inputError}
           />
+          {validationErrors.mobileNo && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationErrors.mobileNo}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
@@ -80,18 +161,41 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             label="Email ID (optional)"
             value={address.emailId}
             onChange={(e) => {
-              handleContactChange("emailId", e.target.value);
+              const emailValue = e.target.value;
+              handleContactChange("emailId", emailValue);
+              setValidationError("emailId", validateEmailId(emailValue));
             }}
           />
+          {validationErrors.emailId && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationErrors.emailId}
+              </span>
+            </div>
+          )}
         </div>
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number (optional)"
             value={address.alternateMobileNo}
             onChange={(e) => {
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
               handleContactChange("alternateMobileNo", e.target.value);
+              setValidationError(
+                "alternateMobileNo",
+                validateAlternateMobileNo(numericValue)
+              );
             }}
           />
+          {validationErrors.alternateMobileNo && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationErrors.alternateMobileNo}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

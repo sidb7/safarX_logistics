@@ -346,9 +346,6 @@ const Index = () => {
         }
       });
 
-      console.log("tabs", tabs[index].value);
-      console.log("orders", orders);
-
       switch (tabs[index].value) {
         case "DRAFT":
           setColumnhelper(

@@ -14,7 +14,8 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
         let pageNo: any = 0;
 
         if (data?.currentPage === 1) {
-            skip = 0;
+
+            skip = (data.currentPage - 1) * data.itemsPerPage || 0;
             limit = data?.itemsPerPage;
             pageNo = 1;
         } else {
@@ -38,7 +39,7 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
         let pageNo: any = 0;
 
         if (data?.currentPage === 1) {
-            skip = 0;
+            skip = (data.currentPage - 1) * data.itemsPerPage || 0;
             limit = data?.itemsPerPage;
             pageNo = 1;
         } else {
@@ -73,7 +74,7 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
             cell: (info: any) => {
                 const { original } = info.row
                 return (
-                    <div className="whitespace-nowrap px-2 my-4 space-y-2">
+                    <div className="whitespace-nowrap my-4 space-y-2">
                         {original?.fullName}
                     </div>
                 );
@@ -130,19 +131,6 @@ function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: an
                         <span>{date_DD_MMM_YYYY_HH_MM(original?.createdAt)}</span>
                     </div>
                 );
-            },
-        }),
-        columnsHelper.accessor("time", {
-            header: () => {
-                return (
-                    <div className="flex justify-between items-center text-left min-w-[200px]">
-                        <h1 className="text-sm font-semibold leading-5 ">Time</h1>
-
-                    </div>
-                );
-            },
-            cell: (info: any) => {
-                return <div className="flex px-2 ">{info.getValue()}</div>;
             },
         }),
         columnsHelper.accessor("comments", {
