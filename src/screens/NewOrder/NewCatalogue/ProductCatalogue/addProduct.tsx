@@ -28,6 +28,11 @@ import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
+import {
+  checkNonNegative,
+  isGreaterThenValidation,
+  isRequired,
+} from "../../../../utils/validationRules";
 
 interface IProductFilledProps {}
 
@@ -53,17 +58,65 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     sku: "",
     images: [],
   };
+  const validation: any = {
+    name: [isRequired],
+    category: [isRequired],
+    unitPrice: [isRequired, checkNonNegative],
+    unitTax: [isRequired, checkNonNegative],
+    length: [isRequired, checkNonNegative],
+    breadth: [isRequired, checkNonNegative],
+    height: [isRequired, checkNonNegative],
+    deadWeight: [isRequired, checkNonNegative],
+  };
 
   const [productPayload, setProductPayload]: any = useState([]);
   const [productInputState, setProductInputState]: any = useState([
     { ...initialUserData },
   ]);
+
+  console.log("productInputState", productInputState);
+
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [showCombo, setShowCombo] = useState<any>(false);
   const [divisor, setDivisor] = useState<any>(5000);
-
   //adding all products info
+
+  const [validationErrors, setValidationErrors]: any = useState<any>(null);
+
+  const validate = (value: any, validationRule: any) => {
+    let errors = [];
+    for (let index = 0; index < validationRule.length; index++) {
+      const element = validationRule[index];
+      const res = element(value);
+      if (res !== true) {
+        errors.push(res);
+      }
+    }
+    return errors;
+  };
+
+  const validateOnSubmit = () => {
+    let hasErrors = false;
+    for (const inputName in validation) {
+      const errors = validate(
+        productInputState[0][inputName],
+        validation[inputName] || []
+      );
+      setValidationErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [inputName]: errors[0] || false,
+      }));
+      if (errors.length > 0) {
+        hasErrors = true;
+      }
+    }
+    return !hasErrors;
+  };
+
   const addProductInfo = async () => {
+    const valid = validateOnSubmit();
+    if (!valid) return;
+
     const { data: response } = await POST(CREATE_BULK_PRODUCT, {
       products: productPayload,
     });
@@ -93,8 +146,17 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     query: "(min-width: 1024px)",
   });
 
-  const handleProductInputChange = (e: any, index: number) => {
+  const handleProductInputChange = (
+    e: any,
+    index: number,
+    validationRule: any = []
+  ) => {
     const { name, value } = e;
+    const errors = validate(value, validationRule) || true;
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      [name]: errors.length > 0 ? errors[0] : true,
+    }));
     let arr = productInputState;
     let name2: any = [];
     name2 = name?.split(".");
@@ -174,175 +236,189 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         <Stepper steps={steps} />
       </div> */}
       <div className="px-5 mb-20">
-        <div>
-          {productInputState?.map((e: any, index: number) => {
-            return (
-              <>
-                <div className="py-4" key={index}>
-                  <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
-                    <div>
-                      <h1 className="text-[#004EFF] text-  items-center font-bold leading-18px font-Lato">
-                        Product {index + 1}
-                      </h1>
-                    </div>
-                    <div className="flex">
-                      <img
-                        src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
-                        alt="Delete Product"
-                        onClick={(e: any) => deleteProduct(index)}
-                        className="w-5 h-5"
+        {productInputState?.map((e: any, index: number) => {
+          return (
+            <>
+              <div className="py-4" key={index}>
+                <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
+                  <div>
+                    <h1 className="text-[#004EFF] text-  items-center font-bold leading-18px font-Lato">
+                      Product {index + 1}
+                    </h1>
+                  </div>
+                  <div className="flex">
+                    <img
+                      src={`${isLgScreen ? DeleteIconForLg : DeleteIcon}`}
+                      alt="Delete Product"
+                      onClick={(e: any) => deleteProduct(index)}
+                      className="w-5 h-5"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <div className="w-full lg:w-3/4">
+                    <span className="text-base">Product Details</span>
+                    <div className="flex flex-col sm:flex-row gap-6 py-4">
+                      <CustomInputBox
+                        label="Product name"
+                        name="name"
+                        value={productInputState[index].name}
+                        errorMessage={validationErrors?.name}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: e.target.value },
+                            index,
+                            [isRequired]
+                          )
+                        }
+                      />
+                      <CustomInputWithDropDown
+                        value={productInputState[index].category}
+                        initValue={productInputState[index].name}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: "category", value: e },
+                            index,
+                            [isRequired]
+                          )
+                        }
+                      />
+                      <CustomInputBox
+                        label="SKU"
+                        name="sku"
+                        value={productInputState[index].sku}
+                        onChange={(e: any) =>
+                          handleProductInputChange(
+                            { name: e.target.name, value: e.target.value },
+                            index
+                          )
+                        }
                       />
                     </div>
                   </div>
-
-                  <div className="pt-4">
-                    <div className="w-full lg:w-3/4">
-                      <span className="text-base">Product Details</span>
-                      <div className="flex flex-col sm:flex-row gap-6 py-4">
+                  <div className="w-full lg:w-3/4">
+                    <span className=""> Measurement </span>
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
+                      <div className=" flex col-span-2  w-full gap-6">
                         <CustomInputBox
-                          label="Product name"
-                          name="name"
-                          value={productInputState[index].name}
-                          onChange={(e: any) =>
+                          label="Length (CM)"
+                          inputType="number"
+                          name="length"
+                          errorMessage={validationErrors?.length}
+                          value={productInputState[index]?.length || ""}
+                          onChange={(e: any) => {
                             handleProductInputChange(
-                              { name: e.target.name, value: e.target.value },
-                              index
-                            )
-                          }
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
+                            );
+                            handleVolumCalc(index);
+                          }}
                         />
-                        <CustomInputWithDropDown
-                          value={productInputState[index].category}
-                          initValue={productInputState[index].name}
+
+                        <CustomInputBox
+                          label="Breadth (CM)"
+                          name="breadth"
+                          inputType="number"
+                          value={productInputState[index].breadth || ""}
+                          errorMessage={validationErrors?.breadth}
+                          onChange={(e: any) => {
+                            handleProductInputChange(
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
+                            );
+                            handleVolumCalc(index);
+                          }}
+                        />
+                        <CustomInputBox
+                          label="Height (CM)"
+                          inputType="number"
+                          name="height"
+                          value={productInputState[index].height || ""}
+                          errorMessage={validationErrors?.height}
+                          onChange={(e: any) => {
+                            handleProductInputChange(
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
+                            );
+                            handleVolumCalc(index);
+                          }}
+                        />
+                        <CustomInputBox
+                          placeholder="Divisor"
+                          label="Divisor"
+                          inputMode="numeric"
+                          isDisabled={true}
+                          value={divisor}
+                        />
+                      </div>
+                      <div className="flex col-span-2 lg:col-span-1 w-full gap-6">
+                        <CustomInputBox
+                          label="Weight (Kg)"
+                          inputType="number"
+                          name="deadWeight"
+                          value={productInputState[index]?.deadWeight || ""}
+                          errorMessage={validationErrors?.deadWeight}
                           onChange={(e: any) =>
                             handleProductInputChange(
-                              { name: "category", value: e },
-                              index
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
                             )
                           }
                         />
                         <CustomInputBox
-                          label="SKU"
-                          name="sku"
-                          value={productInputState[index].sku}
-                          onChange={(e: any) =>
-                            handleProductInputChange(
-                              { name: e.target.name, value: e.target.value },
-                              index
-                            )
+                          placeholder="Volumetric Weight (Kg)"
+                          label="Volumetric Weight (Kg)"
+                          isDisabled={true}
+                          value={
+                            productInputState[index]?.volumetricWeight ||
+                            volumetricWeight
                           }
                         />
                       </div>
                     </div>
-                    <div className="w-full lg:w-3/4">
-                      <span className=""> Measurement </span>
-                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-                        <div className=" flex col-span-2 gap-2 w-full">
-                          <CustomInputBox
-                            label="Length (CM)"
-                            inputType="number"
-                            name="length"
-                            value={productInputState[index]?.length || ""}
-                            onChange={(e: any) => {
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              );
-                              handleVolumCalc(index);
-                            }}
-                          />
-
-                          <CustomInputBox
-                            label="Breadth (CM)"
-                            name="breadth"
-                            inputType="number"
-                            value={productInputState[index].breadth || ""}
-                            onChange={(e: any) => {
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              );
-                              handleVolumCalc(index);
-                            }}
-                          />
-                          <CustomInputBox
-                            label="Height (CM)"
-                            inputType="number"
-                            name="height"
-                            value={productInputState[index].height || ""}
-                            onChange={(e: any) => {
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              );
-                              handleVolumCalc(index);
-                            }}
-                          />
-                          <CustomInputBox
-                            placeholder="Divisor"
-                            label="Divisor"
-                            inputMode="numeric"
-                            isDisabled={true}
-                            value={divisor}
-                          />
-                        </div>
-                        <div className="flex col-span-2 lg:col-span-1 w-full gap-6">
-                          <CustomInputBox
-                            label="Weight (Kg)"
-                            inputType="number"
-                            name="deadWeight"
-                            value={productInputState[index]?.deadWeight || ""}
-                            onChange={(e: any) =>
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              )
-                            }
-                          />
-                          <CustomInputBox
-                            placeholder="Volumetric Weight (Kg)"
-                            label="Volumetric Weight (Kg)"
-                            isDisabled={true}
-                            value={
-                              productInputState[index]?.volumetricWeight ||
-                              volumetricWeight
-                            }
-                          />
-                        </div>
+                  </div>
+                  <div className="w-full lg:w-3/4">
+                    <span className="text-base">Cost</span>
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 py-4">
+                      <div className="w-full flex gap-6">
+                        <CustomInputBox
+                          label="Product Price"
+                          name="unitPrice"
+                          inputMode="numeric"
+                          errorMessage={validationErrors?.unitPrice}
+                          value={productInputState[index].unitPrice || ""}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
+                            )
+                          }
+                        />
+                        <CustomInputBox
+                          label="Product tax"
+                          name="unitTax"
+                          inputMode="numeric"
+                          errorMessage={validationErrors?.unitTax}
+                          value={productInputState[index].unitTax || ""}
+                          onChange={(e: any) =>
+                            handleProductInputChange(
+                              { name: e.target.name, value: +e.target.value },
+                              index,
+                              [isRequired, checkNonNegative]
+                            )
+                          }
+                        />
                       </div>
+                      <div className="w-full"></div>
                     </div>
-                    <div className="w-full lg:w-3/4">
-                      <span className="text-base">Cost</span>
-                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 py-4">
-                        <div className="w-full flex gap-6">
-                          <CustomInputBox
-                            label="Product Price"
-                            name="unitPrice"
-                            inputMode="numeric"
-                            value={productInputState[index].unitPrice || ""}
-                            onChange={(e: any) =>
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              )
-                            }
-                          />
-                          <CustomInputBox
-                            label="Product tax"
-                            name="unitTax"
-                            inputMode="numeric"
-                            value={productInputState[index].unitTax || ""}
-                            onChange={(e: any) =>
-                              handleProductInputChange(
-                                { name: e.target.name, value: +e.target.value },
-                                index
-                              )
-                            }
-                          />
-                        </div>
-                        <div className="w-full"></div>
-                      </div>
-                    </div>
-                    {/* <div className="w-full lg:w-3/4">
+                  </div>
+                  {/* <div className="w-full lg:w-3/4">
                       <span className=""> Product Images </span>
                       <div className="w-[250px] py-4 ">
                         <div className="">
@@ -353,13 +429,12 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         </div>
                       </div>
                     </div> */}
-                  </div>
                 </div>
-                <></>
-              </>
-            );
-          })}
-        </div>
+              </div>
+              <></>
+            </>
+          );
+        })}
         {/* {productInputState.length - 1 === index && ( */}
         <>
           <div className="text-gray-400	text-xs	mt-3 lg:hidden">
