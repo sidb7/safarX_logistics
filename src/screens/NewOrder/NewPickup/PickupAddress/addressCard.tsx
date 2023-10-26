@@ -22,6 +22,7 @@ import AiIcon from "../../../../assets/Buttons.svg";
 import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
 import { capitalizeFirstLetter, titleCase } from "../../../../utils/utility";
+import InfoCircle from "../../../../assets/info-circle.svg";
 
 import "../../../../styles/magicAddressInput.css";
 
@@ -57,6 +58,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   const [loading, setLoading] = useState(false);
   const [prevPastedData, setPrevPastedData] = useState("");
   const [pastedData, setPastedData] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const [selectedOption, setSelectedOption] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -308,10 +310,23 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             inputMode="numeric"
             maxLength={6}
             onChange={(e: any) => {
-              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
-              handlePickupAddressChange("pincode", numericValue); // Pass the cleaned numeric value to the handler
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
+              handlePickupAddressChange("pincode", numericValue);
+              if (numericValue.length === 6) {
+                setValidationError(null);
+              } else {
+                setValidationError("PIN code must be a 6-digit number");
+              }
             }}
           />
+          {validationError && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationError}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
