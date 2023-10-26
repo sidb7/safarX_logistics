@@ -166,7 +166,18 @@ const DeliveryLocation = () => {
       const isbillingAddressValid = !isObjectEmpty(
         deliveryAddress.billingAddress
       );
-      if (!isDeliveryAddressValid && !isbillingAddressValid) {
+
+      const isContactDetailsValid = !isObjectEmpty(
+        deliveryAddress.pickupAddress.contact
+      );
+      const isContactDetailsBillingValid = !isObjectEmpty(
+        deliveryAddress.billingAddress.contact
+      );
+      if (
+        (!isDeliveryAddressValid && !isbillingAddressValid) ||
+        !isContactDetailsValid ||
+        !isContactDetailsBillingValid
+      ) {
         setInputError(true);
         return;
       }
