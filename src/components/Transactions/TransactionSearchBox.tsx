@@ -42,7 +42,7 @@ export const TransactionSearchBox: React.FunctionComponent<ISearchBoxProps> = ({
         ref={inputRef}
         placeholder={customPlaceholder}
         type="text"
-        className={`${className} rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px]  w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
+        className={`${className} transactionSearhBox rounded border-[1px] border-[#A4A4A4] py-[12px] pr-[35px] !pl-[36px] w-[150px] h-[36px] font-normal text-[12px] text-[#8d8d8d] `}
         value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);
