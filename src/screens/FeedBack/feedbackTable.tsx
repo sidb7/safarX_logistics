@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { capitalizeFirstLetter } from '../../utils/utility';
 import { createColumnHelper } from '@tanstack/react-table';
 import { CustomTable } from '../../components/Table';
-import { date_DD_MMM_YYY } from '../../utils/dateFormater';
+import { date_DD_MMM_YYYY_HH_MM } from '../../utils/dateFormater';
 import Pagination from "../../components/Pagination";
 
-function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
+function FeedbackTable({ feedbackDataList, getFeedbackList, totalItemCount }: any) {
 
 
     const onPageIndexChange = async (data: any) => {
@@ -14,7 +14,8 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
         let pageNo: any = 0;
 
         if (data?.currentPage === 1) {
-            skip = 0;
+
+            skip = (data.currentPage - 1) * data.itemsPerPage || 0;
             limit = data?.itemsPerPage;
             pageNo = 1;
         } else {
@@ -29,7 +30,7 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
             limit
         }
 
-        feedbackDataList(paginationData)
+        getFeedbackList(paginationData)
     };
 
     const onPerPageItemChange = async (data: any) => {
@@ -38,7 +39,7 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
         let pageNo: any = 0;
 
         if (data?.currentPage === 1) {
-            skip = 0;
+            skip = (data.currentPage - 1) * data.itemsPerPage || 0;
             limit = data?.itemsPerPage;
             pageNo = 1;
         } else {
@@ -53,7 +54,7 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
             limit
         }
 
-        feedbackDataList(paginationData);
+        getFeedbackList(paginationData);
     };
 
 
@@ -73,8 +74,8 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
             cell: (info: any) => {
                 const { original } = info.row
                 return (
-                    <div className="whitespace-nowrap px-2 my-4 space-y-2">
-                        {original.fullName}
+                    <div className="whitespace-nowrap my-4 space-y-2">
+                        {original?.fullName}
                     </div>
                 );
             },
@@ -89,9 +90,10 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
                 );
             },
             cell: (info: any) => {
+                const { original } = info.row
                 return (
                     <div className="flex  whitespace-nowrap">
-                        <p className="">{capitalizeFirstLetter(info.getValue())}</p>
+                        <p className="">{capitalizeFirstLetter(original?.email)}</p>
                     </div>
                 );
             },
@@ -105,9 +107,10 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
                 );
             },
             cell: (info: any) => {
+                const { original } = info.row
                 return (
                     <div className="flex">
-                        <span>{capitalizeFirstLetter(info.getValue())}</span>
+                        <span>{capitalizeFirstLetter(original?.module)}</span>
                     </div>
                 );
             },
@@ -125,24 +128,11 @@ function FeedbackTable({ feedbackDataList, totalItemCount }: any) {
                 const { original } = info.row
                 return (
                     <div className="flex whitespace-nowrap ">
-                        <span>{date_DD_MMM_YYY(original?.createdAt)}</span>
+                        <span>{date_DD_MMM_YYYY_HH_MM(original?.createdAt)}</span>
                     </div>
                 );
             },
         }),
-        // columnsHelper.accessor("time", {
-        //     header: () => {
-        //         return (
-        //             <div className="flex justify-between items-center text-left min-w-[200px]">
-        //                 <h1 className="text-sm font-semibold leading-5 ">Time</h1>
-
-        //             </div>
-        //         );
-        //     },
-        //     cell: (info: any) => {
-        //         return <div className="flex px-2 ">{info.getValue()}</div>;
-        //     },
-        // }),
         columnsHelper.accessor("comments", {
             header: () => {
                 return (

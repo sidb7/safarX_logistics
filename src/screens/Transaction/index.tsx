@@ -19,20 +19,24 @@ import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
+import Pagination from "../../components/Pagination";
+import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
+  const [sortOrder, setSortOrder] = useState("desc");
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
-
-  const [totalItemCount, setTotalItemCount] = useState(10);
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
+  const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
   const [loading, setLoading] = useState(false);
-
-  const [data, setData] = useState([]);
+  const [data, setData]: any = useState([]);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (renderingComponents === 0) {
@@ -44,15 +48,16 @@ export const Transaction = () => {
             from: "",
             to: "",
           },
-          skip: 0,
-          limit: 50,
-          pageNo: 1,
-          sort: {},
-          searchValue: "",
+          skip: (currentPage - 1) * itemsPerPage,
+          limit: itemsPerPage,
+          pageNo: currentPage,
+          sort: { _id: sortOrder === "desc" ? -1 : 1 },
+          searchValue: debouncedSearchValue,
         });
 
         if (data?.success) {
           setData(data.data || []);
+          setTotalItemCount(data.totalTransactions);
           setLoading(false);
         } else {
           toast.error(data?.message);
@@ -60,25 +65,51 @@ export const Transaction = () => {
         }
       })();
     }
-  }, []);
+  }, [
+    renderingComponents,
+    itemsPerPage,
+    currentPage,
+    sortOrder,
+    debouncedSearchValue,
+  ]);
 
-  //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = (paginationData: any) => {
+    setCurrentPage(paginationData.currentPage);
+  };
 
-  // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = (paginationData: any) => {
+    setItemsPerPage(paginationData.itemsPerPage);
+    setCurrentPage(1);
+  };
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
   };
 
-  // search and filter component
+  let debounceTimer: any;
+  const handleSearchDebounced = (value: string) => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      setDebouncedSearchValue(value);
+    }, 500);
+  };
+  const clearSearchValue = () => {
+    setDebouncedSearchValue("");
+  };
   const filterButton = () => {
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <TransactionSearchBox
+              label="Search"
+              value={debouncedSearchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearchDebounced(e.target.value);
+              }}
+              customPlaceholder="Search By Transaction Id"
+              getFullContent={clearSearchValue}
+            />
           </div>
         </div>
       );
@@ -106,11 +137,15 @@ export const Transaction = () => {
 
   const render = () => {
     if (renderingComponents === 0) {
-      return <CustomTable data={data} columns={PassbookColumns()} />;
+      return (
+        <CustomTable data={data} columns={PassbookColumns(setSortOrder)} />
+      );
     } else if (renderingComponents === 1) {
       return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
     }
   };
+
+  console.log("totalCount", totalItemCount);
 
   return (
     <>
@@ -138,11 +173,7 @@ export const Transaction = () => {
                 </div>
 
                 <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
-                  <div className="flex items-center">
-                    {/* <span className="text-[#494949] text-[14px] font-Open leading-4 font-semibold">
-                      10 Transactions
-                    </span> */}
-                  </div>
+                  <div className="flex items-center"></div>
                   <div className="flex items-center justify-end gap-x-2">
                     <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
                       <img src={SelectIcon} alt="" />
@@ -156,7 +187,7 @@ export const Transaction = () => {
                 <div className="lg:hidden">
                   {data &&
                     data?.length !== 0 &&
-                    data.map((passbookData: any, index) => (
+                    data.map((passbookData: any, index: any) => (
                       <div
                         className="mt-4"
                         key={`${index}_${passbookData?.transactionId}`}
@@ -191,35 +222,24 @@ export const Transaction = () => {
                         />
                       </div>
                     ))}
-
-                  {/* <div className="mt-4">
-                    <CashbackHistory
-                      data={{
-                        title: "May 23- 2023 COUPON",
-                        rupee: "500",
-                        date: "May 23, 2023",
-                        time: "08: 12 PM",
-                        description:
-                          "Rs. 3000 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
-                      }}
-                    />
-                  </div> */}
                 </div>
                 <div>
                   {isLgScreen && (
                     <div className="overflow-x-auto">{render()}</div>
                   )}
                 </div>
-                {/* {totalItemCount > 0 && (
-                  <div className="max-sm:hidden">
-                    <PaginationComponent
-                      totalItems={totalItemCount}
-                      itemsPerPageOptions={[10, 20, 30, 50]}
-                      onPageChange={onPageIndexChange}
-                      onItemsPerPageChange={onPerPageItemChange}
-                    />
-                  </div>
-                )} */}
+
+                {/* {totalItemCount > 0 && ( */}
+                <Pagination
+                  totalItems={totalItemCount}
+                  itemsPerPageOptions={[10, 20, 30, 50]}
+                  onPageChange={onPageIndexChange}
+                  onItemsPerPageChange={onPerPageItemChange}
+                  pageNo={currentPage}
+                  initialItemsPerPage={itemsPerPage}
+                />
+
+                {/* )} */}
               </div>
             </div>
           </>

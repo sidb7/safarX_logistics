@@ -57,51 +57,55 @@ const userExperienceExpression = [
 ]
 function AddFeedBack() {
   const [expresstion, setExpression] = useState(userExperienceExpression)
-  const [selectedExpression, setSelectedExpression] = useState("")
   const [subModuleList, setSubModuleList] = useState([])
+  const [onHoverShowColorEmoji, setOnHoverShowColorEmoji]: any = useState(null)
 
   const navigate = useNavigate()
 
   const [feedbackState, setFeedBackState] = useState({
     module: "",
     subModule: "",
-    comments: ""
+    comments: "",
+    experience: ""
   })
 
-  const selectExperience = (index: any) => {
-    let arr = expresstion.map((e: any) => { return { ...e, isActive: false } })
-    arr[index].isActive = true
-    setExpression([...arr])
-    setSelectedExpression(arr[index]?.value)
-    console.log(arr[index].value)
-  }
+  const isSubmitDisabled = !Object.values(feedbackState).every(value => value)
 
-  const onChangeHandler = (e: any) => {
-    if (e.target.name === "module") {
-      const getSelectedModuleObject: any = module.find((data) => data.name === e.target.value)
-      setSubModuleList(getSelectedModuleObject?.menu)
+  const onChangeHandler = (e?: any, identifier?: any, index?: any) => {
+    if (identifier === "experience") {
+      let arr = expresstion.map((e: any) => { return { ...e, isActive: false } })
+      arr[index].isActive = true
+      setExpression([...arr])
       setFeedBackState((prevValue: any) => {
-        return { ...prevValue, [e.target.name]: e.target.value }
+        return { ...prevValue, experience: arr[index].value }
       })
     } else {
-      setFeedBackState((prevValue: any) => {
-        return { ...prevValue, [e.target.name]: e.target.value }
-      })
+      if (e.target.name === "module") {
+        const getSelectedModuleObject: any = module.find((data) => data.name === e.target.value)
+        setSubModuleList(getSelectedModuleObject?.menu)
+        setFeedBackState((prevValue: any) => {
+          return { ...prevValue, [e.target.name]: e.target.value }
+        })
+      } else {
+        setFeedBackState((prevValue: any) => {
+          return { ...prevValue, [e.target.name]: e.target.value }
+        })
+      }
+
     }
   }
 
   const SubmitFeedBack = async () => {
     try {
       const payLoad = {
-        experience: selectedExpression,
-        module: feedbackState.module,
-        subModule: feedbackState.subModule,
-        comments: feedbackState.comments
+        ...feedbackState
       }
       const { data } = await POST(CREATE_FEEDBACK, payLoad);
       if (data.success === true) {
         toast.success(data.message)
         navigate(`/feedback`)
+      } else {
+        toast.error(data.message)
       }
     } catch (error: any) {
       console.error("Error in API call:", error);
@@ -113,14 +117,7 @@ function AddFeedBack() {
       <Breadcrum label="Add Feedback" />
       <div className='flex'>
         <div className='w-[100%] max-w-[800px] m-auto'>
-          <div className=' p-8 h-[100%]'>
-            <div className='border-b flex justify-between items-center py-4'>
-              <div className='flex items-center justify-center'>
-                <img src={feedBackIcon} alt='' className='w-[25px] h-[25px] mr-3' />
-                <div className='text-[23px]'>Feedback</div>
-              </div>
-            </div>
-
+          <div className=' p-4 h-[100%]'>
             <div>
               <div className='flex flex-col items-center'>
                 <div className='my-5 text-[30px] font-bold'>  How Was Your Experience ?</div>
@@ -128,7 +125,7 @@ function AddFeedBack() {
               </div>
             </div>
 
-            <div className='p-3 my-6'>
+            <div className='p-3 mt-6'>
               <div className='flex items-center justify-between max-w-[500px] m-auto '>
                 {
                   expresstion.map((data, index) => {
@@ -138,10 +135,12 @@ function AddFeedBack() {
                           className='w-[60px] h-[60px] rounded-full transform hover:scale-125 shadow-lg hover:shadow-2xl transition duration-300'
                           data-tooltip-id="my-tooltip-inline"
                           data-tooltip-content={data.value}
-                          onClick={() => selectExperience(index)}
+                          onMouseEnter={() => setOnHoverShowColorEmoji(index)}
+                          onMouseLeave={() => setOnHoverShowColorEmoji(null)}
+                          onClick={() => onChangeHandler(null, "experience", index)}
                         >
                           {
-                            data.isActive ? (<img src={data.activeIcon} alt='' />) : (<img src={data.icon} alt='' />)
+                            data.isActive || onHoverShowColorEmoji === index ? (<img src={data.activeIcon} alt='' />) : (<img src={data.icon} alt='' />)
                           }
                         </div>
                         <Tooltip
@@ -200,8 +199,9 @@ function AddFeedBack() {
 
                 </div>
                 <button
-                  className='border py-3 w-[100%] my-10 rounded-lg bg-black text-white'
+                  className='border py-3 w-[100%] my-10 rounded-lg bg-black disabled:bg-[#d9d7d7] text-white'
                   onClick={SubmitFeedBack}
+                  disabled={isSubmitDisabled}
                 >Save Feedback</button>
 
               </div>
