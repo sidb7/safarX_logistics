@@ -347,7 +347,7 @@ const Index = () => {
                       isInfoIcon={true}
                       visibility={viewPassWord}
                       onClick={() => {}}
-                      rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+                      rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
                       informativeIcon={InformativeIcon}
                       setVisibility={setViewPassWord}
                       onChange={(e) => {

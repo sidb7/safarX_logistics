@@ -337,9 +337,10 @@ const ForgotPassword = (props: ITypeProps) => {
               <p className="text-[#494949] font-Open font-normal text-xs leading-4 mb-1">
                 Didn't Receive Code ?
                 <span
-                  className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-                    (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-                    "text-[#494949]"
+                  className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                    seconds > 0 || (seconds > 0 && minutes === 0)
+                      ? "text-[#494949]"
+                      : "cursor-pointer"
                   }`}
                   onClick={() => {
                     if (seconds === 0 && minutes === 0) {
@@ -373,7 +374,7 @@ const ForgotPassword = (props: ITypeProps) => {
               informativeIcon={InformativeIcon}
               visibility={viewPassword.newPassword}
               setVisibility={() => togglePasswordVisibility("newPassword")}
-              rightIcon={viewPassword.newPassword ? EyeIcon : CrossEyeIcon}
+              rightIcon={viewPassword.newPassword ? CrossEyeIcon : EyeIcon}
               onClick={() => {}}
               onChange={(e) => {
                 setPasswordError({
@@ -417,7 +418,7 @@ const ForgotPassword = (props: ITypeProps) => {
               maxLength={12}
               visibility={viewPassword.confirmNewPassword}
               rightIcon={
-                viewPassword.confirmNewPassword ? EyeIcon : CrossEyeIcon
+                viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon
               }
               setVisibility={() =>
                 togglePasswordVisibility("confirmNewPassword")

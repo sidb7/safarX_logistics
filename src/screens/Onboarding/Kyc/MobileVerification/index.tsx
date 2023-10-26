@@ -93,9 +93,9 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response.data.data.client_id);
 
-        toast.success("Aadhar OTP resent Successfully");
+        toast.success("Aadhar OTP Resent Successfully");
       } else {
-        toast.error("Aadhar OTP resent Failed!");
+        toast.error("Aadhar OTP Resent Failed!");
       }
     } catch (error) {
       return error;
@@ -111,7 +111,7 @@ const Index = (props: ITypeProps) => {
       if (response?.success) {
         sessionStorage.setItem("client_id", response.data[0].data.client_id);
         setClientId(response.data[0].data.client_id);
-        toast.success("GST OTP resent Successfully");
+        toast.success("GST OTP Resent Successfully");
       } else {
         toast.error("GST Verification Failed!");
       }
@@ -327,9 +327,10 @@ const Index = (props: ITypeProps) => {
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
-                    className={`mx-1 font-normal text-[#004EFF] text-[12px] cursor-pointer ${
-                      (seconds > 0 || (seconds > 0 && minutes === 0)) &&
-                      "text-[#494949]"
+                    className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                      seconds > 0 || (seconds > 0 && minutes === 0)
+                        ? "text-[#494949]"
+                        : "cursor-pointer"
                     }`}
                     onClick={() => {
                       if (seconds === 0 && minutes === 0) {

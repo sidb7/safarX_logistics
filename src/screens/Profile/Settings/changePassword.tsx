@@ -42,7 +42,7 @@ export const ChangePassword = () => {
           label="Old Password"
           maxLength={16}
           visibility={viewPassWord}
-          rightIcon={viewPassWord ? EyeIcon : CrossEyeIcon}
+          rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
           setVisibility={setViewPassWord}
           onChange={(e) =>
             setPassword({ ...password, oldPassword: e.target.value })

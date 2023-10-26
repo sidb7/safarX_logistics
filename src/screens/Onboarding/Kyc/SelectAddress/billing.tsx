@@ -65,7 +65,7 @@ const Billing = (props: ITypeProps) => {
           payload
         );
         if (responses?.success) {
-          toast.success(responses?.message);
+          // toast.success(responses?.message);
           navigate("/onboarding/select-address-pickup");
           //Navigate Url's go here
           setLoading(false);
