@@ -22,6 +22,7 @@ import AiIcon from "../../../../assets/Buttons.svg";
 import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
 import RightSideModal from "../../../../components/CustomModal/customRightModal";
 import { capitalizeFirstLetter, titleCase } from "../../../../utils/utility";
+import InfoCircle from "../../../../assets/info-circle.svg";
 
 //GST Json Data
 import gstJsonData from "../../../../data/gstStateCode.json";
@@ -31,11 +32,12 @@ interface IAddressCardProps {
     deliveryAddress: any;
     setDeliveryAddress: any;
     addressLabel: string;
+    inputError: boolean;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { deliveryAddress, setDeliveryAddress, addressLabel },
+  data: { deliveryAddress, setDeliveryAddress, addressLabel, inputError },
 }) => {
   const address =
     addressLabel === "Billing Address"
@@ -51,6 +53,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   const [customLandmark, setCustomLandmark] = useState("");
   const [validGstStateCode, setValidGstStateCode] = useState("");
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -289,6 +292,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onChange={(e) => {
               handlePickupAddressChange("flatNo", e.target.value);
             }}
+            inputError={inputError}
           />
         </div>
 
@@ -299,6 +303,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onChange={(e) =>
               handlePickupAddressChange("locality", e.target.value)
             }
+            inputError={inputError}
           />
         </div>
 
@@ -310,6 +315,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             value={address.landmark}
             handlePickupAddressChange={handlePickupAddressChange}
             handleLandmarkSelected={handleLandmarkSelected}
+            inputError={inputError}
           />
         </div>
 
@@ -319,17 +325,32 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             value={address.pincode}
             inputMode="numeric"
             maxLength={6}
+            inputError={inputError}
             onChange={(e: any) => {
-              const numericValue = e.target.value.replace(/[^0-9]/g, ""); // Allow only numeric input
-              handlePickupAddressChange("pincode", numericValue); // Pass the cleaned numeric value to the handler
+              const numericValue = e.target.value.replace(/[^0-9]/g, "");
+              handlePickupAddressChange("pincode", numericValue);
+              if (numericValue.length === 6 || numericValue.length === 0) {
+                setValidationError(null);
+              } else {
+                setValidationError("PIN code must be a 6-digit number");
+              }
             }}
           />
+          {validationError && (
+            <div className="flex items-center gap-x-1 mt-1">
+              <img src={InfoCircle} alt="" width={10} height={10} />
+              <span className="font-normal text-[#F35838] text-xs leading-3">
+                {validationError}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="City"
             value={address.city}
+            inputError={inputError}
             onChange={(e) => handlePickupAddressChange("city", e.target.value)}
           />
         </div>
@@ -343,6 +364,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             }}
             options={dummyStateDropdownData}
             placeHolder="Select State"
+            inputError={inputError}
           />
         </div>
 
@@ -353,6 +375,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onChange={(e) =>
               handlePickupAddressChange("country", e.target.value)
             }
+            inputError={inputError}
           />
         </div>
 

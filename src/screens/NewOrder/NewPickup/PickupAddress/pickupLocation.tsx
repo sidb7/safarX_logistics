@@ -10,11 +10,12 @@ interface IPickupAddress {
     pickupAddress: any;
     setPickupAddress: any;
     label?: string;
+    inputError: boolean;
   };
 }
 
 const PickupAddress: React.FunctionComponent<IPickupAddress> = ({
-  data: { pickupAddress, setPickupAddress, label },
+  data: { pickupAddress, setPickupAddress, label, inputError },
 }) => {
   const data = {
     pickupAddress,
@@ -31,10 +32,10 @@ const PickupAddress: React.FunctionComponent<IPickupAddress> = ({
 
   return (
     <div className="px-5">
-      <AddressCard data={data} />
+      <AddressCard data={{ ...data, inputError }} />
       <SaveAddress data={data} />
       <AddressTiming data={data} />
-      <ContactDetails data={contactData} />
+      <ContactDetails data={{ ...contactData, inputError }} />
     </div>
   );
 };
