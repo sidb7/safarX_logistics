@@ -178,29 +178,49 @@ const PickupLocation = () => {
     return false;
   };
 
-  console.log("pickupState", pickupDate);
+  const isContactObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "emailId" || key === "alternateMobileNo") {
+          continue;
+        }
+
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
       const isReturnAddressValid = !isObjectEmpty(pickupAddress.returnAddress);
 
-      const isContactDetailsValid = !isObjectEmpty(
+      const isContactDetailsValid = !isContactObjectEmpty(
         pickupAddress.pickupAddress.contact
       );
-      const isContactDetailsReturnValid = !isObjectEmpty(
+      const isContactDetailsReturnValid = !isContactObjectEmpty(
         pickupAddress.returnAddress.contact
       );
 
-      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      console.log("pickupaddressPostApicall", pickupAddress);
-      console.log("validPickup", isPickupAddressValid);
-      console.log("isContactDetailsValid", isContactDetailsValid);
-      console.log("isPickupDateValid", isPickupDateValid);
+      // const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
 
       if (
-        (!isPickupAddressValid && !isReturnAddressValid) ||
+        !isPickupAddressValid ||
         !isContactDetailsValid ||
-        !isContactDetailsReturnValid
+        (!isReturnAddress &&
+          !isReturnAddressValid &&
+          !isContactDetailsReturnValid)
       ) {
         setInputError(true);
         return;
@@ -357,8 +377,6 @@ const PickupLocation = () => {
       getReturningUserPickupDetails();
     }
   }, [userType]);
-
-  console.log("inputErrorState", inputError);
 
   return (
     <>

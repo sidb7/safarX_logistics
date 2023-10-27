@@ -40,8 +40,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
     setCustomAddressType(addressName);
   };
 
-  console.log("addressName", customAddressType);
-
   useEffect(() => {
     if (
       address?.addressType &&

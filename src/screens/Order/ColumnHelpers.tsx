@@ -3,7 +3,10 @@ import Delivery from "../../assets/OrderDetails/Delivery.svg";
 import CopyIcon from "../../assets/OrderDetails/CopyIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
-import { date_DD_MMM_YYY } from "../../utils/dateFormater";
+import {
+  date_DD_MMM_YYY,
+  date_DD_MMM_YYYY_HH_MM,
+} from "../../utils/dateFormater";
 import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
@@ -178,7 +181,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         otherDetails,
       } = info?.row?.original;
       const AWB = otherDetails?.awbNo;
-      console.log("AWB", AWB);
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -367,10 +369,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Order Type": rowsData?.orderType,
       });
 
-      // if (rowsData?.orderId === "100175") {
-      //   console.log("rowsData: ", rowsData);
-      // }
-
       const handleInformativeModal = () => {
         setInfoModalContent({
           isOpen: true,
@@ -440,13 +438,12 @@ export const columnHelperForNewOrder = (
           otherDetails,
         } = info?.row?.original;
         const AWB = otherDetails?.awbNo;
-        console.log("AWB", AWB);
 
         return (
           <div className="py-3">
             {tempOrderId && (
               <div className="">
-                <span className="text-sm font-light">Shipyaari ID :</span>
+                <span className="text-sm font-light mr-1">Shipyaari ID :</span>
                 <div className="flex text-base items-center font-medium">
                   <Link
                     to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
@@ -505,14 +502,18 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            <div className="">
-              <span className=" text-sm font-light">Order Updated At :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+            <div className="  mt-1">
+              <span className="text-sm font-light mr-1">
+                Order Updated At :
+              </span>
+              <div className=" ">
+                <p className="text-sm font-medium">
+                  {date_DD_MMM_YYYY_HH_MM(updatedAt)}
+                </p>
               </div>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center mt-1">
               <span className=" text-sm font-light">Source :</span>
               <div className=" pl-2 text-base items-center font-medium">
                 <span className="">{source}</span>
@@ -543,7 +544,6 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
-        // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYY(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
@@ -642,10 +642,6 @@ export const columnHelperForNewOrder = (
           Source: rowsData?.source,
           "Order Type": rowsData?.orderType,
         });
-
-        // if (rowsData?.orderId === "100175") {
-        //   console.log("rowsData: ", rowsData);
-        // }
 
         const handleInformativeModal = () => {
           setInfoModalContent({
@@ -934,7 +930,6 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       },
       cell: (info: any) => {
         const { pickupAddress, service } = info?.row?.original;
-        console.log("pickup>>viewOrder", pickupAddress);
         return (
           <div className=" ">
             <p className="">
@@ -1047,7 +1042,6 @@ export const columnHelpersForRest = (
     //   },
     //   cell: (info: any) => {
     //     const { original } = info.cell.row;
-    //     console.log("original: ", original);
 
     //     return (
     //       <div className="flex flex-col whitespace-nowrap">

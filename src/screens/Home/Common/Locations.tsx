@@ -71,28 +71,28 @@ const Locations = (props: IBarChart) => {
               <tbody className="text-[1.125rem] font-semibold font-Open">
                 <tr>
                   <td className="border-none px-4 py-2">Maharashtra</td>
-                  <td className="border-none px-4 py-2">245 Orders</td>
+                  <td className="border-none px-4 py-2">0 Orders</td>
                   <td className="border-none px-4 py-2">
                     <img src={GreenEllipse} alt="greenEllipse" />
                   </td>
                 </tr>
                 <tr>
                   <td className="border-none px-4 py-2">Delhi</td>
-                  <td className="border-none px-4 py-2">142 Orders</td>
+                  <td className="border-none px-4 py-2">0 Orders</td>
                   <td className="border-none px-4 py-2">
                     <img src={RedEllipse} alt="RedEllipse" />
                   </td>
                 </tr>
                 <tr>
                   <td className="border-none px-4 py-2">M.P</td>
-                  <td className="border-none px-4 py-2">102 Orders</td>
+                  <td className="border-none px-4 py-2">0 Orders</td>
                   <td className="border-none px-4 py-2">
                     <img src={GreenEllipse} alt="greenEllipse" />
                   </td>
                 </tr>
                 <tr>
                   <td className="border-none px-4 py-2">Orissa</td>
-                  <td className="border-none px-4 py-2">45 Orders</td>
+                  <td className="border-none px-4 py-2">0 Orders</td>
                   <td className="border-none px-4 py-2">
                     <img src={GreenEllipse} alt="greenEllipse" />
                   </td>

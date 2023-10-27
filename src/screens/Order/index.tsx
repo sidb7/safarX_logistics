@@ -335,7 +335,7 @@ const Index = () => {
       );
       setOrders(OrderData);
       setGlobalIndex(index);
-      console.log("statusData", statusData);
+
       statusList?.forEach((e1: any) => {
         const matchingStatus = statusData.find(
           (e: any) => e.value === e1._id?.toUpperCase()

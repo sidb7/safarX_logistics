@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
@@ -18,7 +18,7 @@ const SystemLog = () => {
   const [systemLogData, setSystemLogData] = React.useState<any>([]);
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
-  const isActive = checkPageAuthorized("System Logs");
+  const [isActive, setIsActive] = useState<any>(false);
 
   const systemLogColumns = [
     columnsHelper.accessor("companyId", {
@@ -176,6 +176,7 @@ const SystemLog = () => {
   React.useEffect(() => {
     (async () => {
       try {
+        // setIsActive(checkPageAuthorized("System Logs"));
         const { data } = await POST(GET_SYSTEM_LOG, {});
         if (data?.success) {
           setSystemLogData(data?.data);
@@ -187,6 +188,10 @@ const SystemLog = () => {
       }
     })();
   }, []);
+
+  React.useEffect(() => {
+    setIsActive(checkPageAuthorized("System Log"));
+  }, [isActive]);
 
   return (
     <>

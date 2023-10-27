@@ -64,9 +64,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
-          console.log("index", index);
-          console.log("singleData", singleData);
-
           return (
             <span
               key={index}
@@ -184,7 +181,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setOrders(OrderData);
   };
 
-  console.log("currentStatus", currentStatus);
   return (
     <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">

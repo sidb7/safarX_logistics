@@ -57,7 +57,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       setProductsFromAPI(data?.data);
       setIsLoading(false);
     } catch (error) {
-      console.log("getProducts Product package error", error);
       setProductsFromAPI([]);
       setIsLoading(false);
     }
@@ -105,7 +104,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       tempArr?.forEach((combo: any) => {
         combo.selected = false;
       });
-      console.log("tempArr", tempArr);
       setComboProducts([...tempArr]);
     } else {
       console.error(data?.message);
@@ -150,7 +148,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   //Select Product for package
   const selectProduct = (product: any, index: number) => {
     //deselect or enable multile select when addproductmode is enable
-    console.log("isAddProductMode product", isAddProductMode);
     if (comboProducts.length > 0 && !isAddProductMode) {
       setComboProducts(DeSelectArr(comboProducts));
     }
@@ -168,7 +165,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
   //Select Combo for package
   const selectComboProduct = (combo: any, index: number) => {
-    console.log("isAddProductMode product", isAddProductMode);
     if (products.length > 0 && !isAddProductMode) {
       setProducts(DeSelectArr(products));
     }

@@ -157,7 +157,6 @@ const Index = (props: ITypeProps) => {
       sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         setTimeout(() => {
-          console.log("Delayed for 1 second.");
           // toast.success(response?.message);
         }, 1000);
         setLoading(false);
@@ -306,7 +305,7 @@ const Index = (props: ITypeProps) => {
                   label="Enter OTP"
                   inputType="text"
                   inputMode="numeric"
-                  containerStyle="lg:!w-auto"
+                  containerStyle="lg:!w-auto self-center"
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   maxLength={businessType === "company" ? 4 : 6}

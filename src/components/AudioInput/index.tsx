@@ -30,7 +30,7 @@ export const AudioInput: React.FunctionComponent<IAudioInputProps> = ({
         setPermission(true);
         setStream(streamData);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     } else {
       alert("The MediaRecorder API is not supported in your browser.");
