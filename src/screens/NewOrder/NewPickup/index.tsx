@@ -181,7 +181,11 @@ const PickupLocation = () => {
   const isContactObjectEmpty = (obj: any) => {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
-        if (key === "emailId" || key === "alternateMobileNo") {
+        if (
+          key === "emailId" ||
+          key === "alternateMobileNo" ||
+          key === "type"
+        ) {
           continue;
         }
 
