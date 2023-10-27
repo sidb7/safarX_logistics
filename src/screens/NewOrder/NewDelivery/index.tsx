@@ -82,13 +82,13 @@ const DeliveryLocation = () => {
       country: "",
       addressType: "warehouse",
       workingDays: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
       workingHours: "09:00",
       contact: {
@@ -201,14 +201,12 @@ const DeliveryLocation = () => {
         deliveryAddress.billingAddress.contact
       );
 
-      console.log("deliveryupaddressPostApicall", deliveryAddress);
-      console.log("validDelivery", isDeliveryAddressValid);
-      console.log("isContactDetailsValid", isContactDetailsValid);
       if (
         (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         !isDeliveryAddressValid ||
-        (!isBillingAddress && !isbillingAddressValid) ||
-        isContactDetailsBillingValid
+        (!isBillingAddress &&
+          !isbillingAddressValid &&
+          !isContactDetailsBillingValid)
       ) {
         setInputError(true);
         return;
@@ -367,9 +365,7 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
-  console.log("inputErrorState", inputError);
 
-  console.log("deliverypayload", deliveryAddress);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
