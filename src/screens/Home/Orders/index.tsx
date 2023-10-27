@@ -17,22 +17,22 @@ const Orders = () => {
   const columnsHelper = createColumnHelper<any>();
   const ordersArr = [
     {
-      count: 23,
+      count: 0,
       text: "Created Order",
       img: CreateOrderIcon,
     },
     {
-      count: 20,
+      count: 0,
       text: "Shipped",
       img: ShippedIcon,
     },
     {
-      count: 35,
+      count: 0,
       text: "In Transit",
       img: InTransitIcon,
     },
     {
-      count: 18,
+      count: 0,
       text: "Delivered",
       img: InTransitIcon,
     },
@@ -41,51 +41,51 @@ const Orders = () => {
   const orderArr = [
     {
       name: "10 Jul",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "11 Jul",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "12 Jul",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "13 Jul",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "14 Jul",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "15 Jul",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "16 Jul",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
   const piedata = [
-    { name: "Group A", value: 700 },
-    { name: "Group B", value: 300 },
+    { name: "Group A", value: 1 },
+    { name: "Group B", value: 1 },
   ];
 
   const yearArr = [
@@ -114,28 +114,28 @@ const Orders = () => {
   const tableData = [
     {
       state: "Uttar Pradesh",
-      count: "198",
-      revenue: "₹56,89024",
+      count: "0",
+      revenue: "₹0",
     },
     {
       state: "Maharastra",
-      count: "245",
-      revenue: "₹23,84524",
+      count: "0",
+      revenue: "₹0",
     },
     {
       state: "Karnataka",
-      count: "156",
-      revenue: "₹20,80724",
+      count: "0",
+      revenue: "₹0",
     },
     {
       state: "Tamil nadu",
-      count: "98",
-      revenue: "₹20,80724",
+      count: "0",
+      revenue: "₹0",
     },
     {
       state: "Telangana",
-      count: "98",
-      revenue: "₹20,80724",
+      count: "0",
+      revenue: "₹0",
     },
   ];
 
@@ -199,28 +199,28 @@ const Orders = () => {
   const tableTopProducts = [
     {
       products: "Sumsung Galaxy",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       products: "Sumsung Galaxy",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       products: "Sumsung Galaxy",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       products: "Sumsung Galaxy",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       products: "Sumsung Galaxy",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
   ];
 
@@ -284,28 +284,28 @@ const Orders = () => {
   const tableTopCustomer = [
     {
       name: "Aman Roy",
-      order: "54",
-      revenue: "₹56,89024",
+      order: "0",
+      revenue: "₹0",
     },
     {
       name: "Aman Roy",
-      order: "54",
-      revenue: "₹56,89024",
+      order: "0",
+      revenue: "₹0",
     },
     {
       name: "Aman Roy",
-      order: "54",
-      revenue: "₹56,89024",
+      order: "0",
+      revenue: "₹0",
     },
     {
       name: "Aman Roy",
-      order: "54",
-      revenue: "₹56,89024",
+      order: "0",
+      revenue: "₹0",
     },
     {
       name: "Aman Roy",
-      order: "54",
-      revenue: "₹56,89024",
+      order: "0",
+      revenue: "₹0",
     },
   ];
 

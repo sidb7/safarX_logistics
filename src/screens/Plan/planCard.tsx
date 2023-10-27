@@ -42,12 +42,10 @@ const PlanCard = (props: ITypeProps) => {
 
       <div
         className={`flex flex-col  items-center  ${
-          planName.toUpperCase() === "GOLD"
-            ? "rounded-t-none"
-            : "rounded-t-none rounded-b-lg"
+          planName.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
-          isSelected && "!border-[#004EFF]"
-        } py-5 px-4 shadow-sm border-[1px] border-t-[0px] border-[#E8E8E8] bg-[#FFFFFF] h-[504px]  lg:h-[433px] w-[288px] lg:w-[273px]`}
+          isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
+        } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] h-[504px]  lg:h-[433px] w-[288px] lg:w-[273px]`}
       >
         <img
           src={CargoRatingGif}

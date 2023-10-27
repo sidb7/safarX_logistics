@@ -509,7 +509,7 @@ const MyRoutes: React.FC = () => {
               /> */}
 
             <Route
-              path="/billing/invoice"
+              path="/billing/invoices"
               element={
                 <ProtectedRoute>
                   <Invoice />
@@ -518,7 +518,7 @@ const MyRoutes: React.FC = () => {
             />
 
             <Route
-              path="/billing/credit-note"
+              path="/billing/credit-notes"
               element={
                 <ProtectedRoute>
                   <Invoice />

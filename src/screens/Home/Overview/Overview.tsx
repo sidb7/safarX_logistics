@@ -21,108 +21,108 @@ export const Overview = (props: IOverview) => {
   const orderArr = [
     {
       name: "Wed",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Thu",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Fri",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Sat",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Sun",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Mon",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Tue",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
   const piedata = [
-    { name: "Group A", value: 400 },
-    { name: "Group B", value: 300 },
-    { name: "Group C", value: 300 },
-    { name: "Group D", value: 200 },
+    { name: "Group A", value: 1 },
+    { name: "Group B", value: 1 },
+    { name: "Group C", value: 1 },
+    { name: "Group D", value: 1 },
   ];
 
   const invoices1 = [
     {
-      count: 230,
+      count: 0,
       text: "Total Invoices",
     },
     {
-      count: 12,
+      count: 0,
       text: "Paid Invoices",
     },
     {
-      count: 89,
+      count: 0,
       text: "Unpaid Invoices",
     },
     {
-      count: 8,
+      count: 0,
       text: "Overdue Invoices",
     },
   ];
 
   const invoices2 = [
     {
-      count: 230,
+      count: 0,
       text: "Total Invoices",
     },
     {
-      count: 12,
+      count: 0,
       text: "Paid Invoices",
     },
     {
-      count: 89,
+      count: 0,
       text: "Dispute Rejected By Courier",
     },
     {
-      count: 8,
+      count: 0,
       text: "Average Dispute Amount",
     },
   ];
 
   const ordersArr = [
     {
-      count: 23,
+      count: 0,
       text: "Orders need to be proceed",
     },
     {
-      count: 28,
+      count: 0,
       text: "Orders delayed for Pickup",
     },
     {
-      count: 78,
+      count: 0,
       text: "RTO Orders",
     },
     {
-      count: 78,
+      count: 0,
       text: "Orders in Weight Descripancy",
     },
   ];
@@ -180,7 +180,7 @@ export const Overview = (props: IOverview) => {
         <div className="mt-[3.125rem] p-4 space-y-[60px]">
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">&#8377;700</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
               <img src={GreenEllipse} alt="GreenEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -189,7 +189,7 @@ export const Overview = (props: IOverview) => {
           </div>
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">&#8377;28,000</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
               <img src={RedEllipse} alt="RedEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -198,7 +198,7 @@ export const Overview = (props: IOverview) => {
           </div>
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">&#8377;23,876</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
               <img src={GreenEllipse} alt="GreenEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
