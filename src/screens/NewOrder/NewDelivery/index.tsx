@@ -82,13 +82,13 @@ const DeliveryLocation = () => {
       country: "",
       addressType: "warehouse",
       workingDays: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
       workingHours: "09:00",
       contact: {
@@ -112,13 +112,13 @@ const DeliveryLocation = () => {
       country: "",
       addressType: "warehouse",
       workingDays: {
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        saturday: false,
-        sunday: false,
+        monday: true,
+        tuesday: true,
+        wednesday: true,
+        thursday: true,
+        friday: true,
+        saturday: true,
+        sunday: true,
       },
       workingHours: "09:00",
       contact: {
@@ -203,8 +203,9 @@ const DeliveryLocation = () => {
       if (
         (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         !isDeliveryAddressValid ||
-        (!isBillingAddress && !isbillingAddressValid) ||
-        isContactDetailsBillingValid
+        (!isBillingAddress &&
+          !isbillingAddressValid &&
+          !isContactDetailsBillingValid)
       ) {
         setInputError(true);
         return;

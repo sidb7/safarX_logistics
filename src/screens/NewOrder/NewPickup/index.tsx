@@ -213,13 +213,14 @@ const PickupLocation = () => {
         pickupAddress.returnAddress.contact
       );
 
-      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
+      // const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
 
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||
-        (!isReturnAddress && !isReturnAddressValid) ||
-        isContactDetailsReturnValid
+        (!isReturnAddress &&
+          !isReturnAddressValid &&
+          !isContactDetailsReturnValid)
       ) {
         setInputError(true);
         return;
