@@ -54,6 +54,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   const [validGstStateCode, setValidGstStateCode] = useState("");
   const [isLandmarkModal, setIsLandmarkModal] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationErrorGST, setValidationErrorGST] = useState<string | null>(
+    null
+  );
 
   const [isAudioModal, setIsAudioModal] = useState(false);
   const [directionAudio, setDirectionAudio] = useState("");
@@ -216,6 +219,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       return error;
     }
   };
+
+  const validateGST = (gstNumber: string): boolean => {
+    const gstRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
+    return gstRegex.test(gstNumber);
+  };
+
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
@@ -394,18 +404,33 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 maxLength={15}
                 inputError={inputError}
                 value={deliveryAddress.gstNumber}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const gstValue = e.target.value;
+
+                  const isValidGST = validateGST(gstValue);
+                  setValidationErrorGST(
+                    isValidGST ? null : "Invalid GST number"
+                  );
+
                   setDeliveryAddress((prevData: any) => ({
                     ...prevData,
                     gstNumber:
                       validGstStateCode.length === 0
-                        ? e.target.value
+                        ? gstValue
                         : deliveryAddress.gstNumber.includes(validGstStateCode)
-                        ? `${e.target.value}`
-                        : `${validGstStateCode}${e.target.value}`,
-                  }))
-                }
+                        ? `${gstValue}`
+                        : `${validGstStateCode}${gstValue}`,
+                  }));
+                }}
               />
+              {validationErrorGST && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={InfoCircle} alt="" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    {validationErrorGST}
+                  </span>
+                </div>
+              )}
             </div>
           )}
       </div>
