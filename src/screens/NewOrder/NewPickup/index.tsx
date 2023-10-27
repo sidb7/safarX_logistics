@@ -201,7 +201,6 @@ const PickupLocation = () => {
     return false;
   };
 
-  console.log("pickupState", pickupDate);
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);

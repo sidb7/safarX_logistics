@@ -181,7 +181,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         otherDetails,
       } = info?.row?.original;
       const AWB = otherDetails?.awbNo;
-      console.log("AWB", AWB);
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -443,12 +442,11 @@ export const columnHelperForNewOrder = (
           otherDetails,
         } = info?.row?.original;
         const AWB = otherDetails?.awbNo;
-        console.log("AWB", AWB);
 
         return (
           <div className="py-3">
             {tempOrderId && (
-              <div className="flex items-center">
+              <div className="">
                 <span className="text-sm font-light mr-1">Shipyaari ID :</span>
                 <div className="flex text-base items-center font-medium">
                   <Link
@@ -508,7 +506,7 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            <div className=" flex items-center mt-1">
+            <div className="  mt-1">
               <span className="text-sm font-light mr-1">
                 Order Updated At :
               </span>
@@ -941,7 +939,6 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       },
       cell: (info: any) => {
         const { pickupAddress, service } = info?.row?.original;
-        console.log("pickup>>viewOrder", pickupAddress);
         return (
           <div className=" ">
             <p className="">
