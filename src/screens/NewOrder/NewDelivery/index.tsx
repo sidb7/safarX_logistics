@@ -200,10 +200,6 @@ const DeliveryLocation = () => {
       const isContactDetailsBillingValid = !isObjectEmpty(
         deliveryAddress.billingAddress.contact
       );
-
-      console.log("deliveryupaddressPostApicall", deliveryAddress);
-      console.log("validDelivery", isDeliveryAddressValid);
-      console.log("isContactDetailsValid", isContactDetailsValid);
       if (
         (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         !isDeliveryAddressValid ||
@@ -367,9 +363,6 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
-  console.log("inputErrorState", inputError);
-
-  console.log("deliverypayload", deliveryAddress);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />

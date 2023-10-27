@@ -15,8 +15,6 @@ const connectSocket = (roomName: string) => {
       },
     });
 
-    console.log(`Connecting socket...`);
-
     socket.on("welcomeMessage", (message) => {
       console.log(`Received welcome message: ${message}`);
     });

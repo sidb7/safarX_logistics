@@ -114,7 +114,7 @@ const Payment = () => {
           window.location.reload();
         }
       } catch (error: any) {
-        console.log(error.message);
+        console.error(error.message);
       }
     })();
   }, []);
@@ -368,7 +368,6 @@ const Payment = () => {
       toast.error(options.message);
       return;
     }
-    console.log("hded", options);
 
     const rzp1: any = new Razorpay(options);
 

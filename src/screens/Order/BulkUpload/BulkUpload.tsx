@@ -41,7 +41,6 @@ const BulkUpload = (props: ITypeProps) => {
   // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[2]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Add Bulk");
 
-  // console.log("uploadedFile", uploadFile);
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option);
   };

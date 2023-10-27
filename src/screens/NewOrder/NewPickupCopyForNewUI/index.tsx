@@ -291,7 +291,6 @@ const PickupLocationUpdatedUI = () => {
     }
   }, [userType]);
 
-  console.log("pickupAddress", pickupAddress);
   return (
     <>
       {isActive ? (

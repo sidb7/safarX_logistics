@@ -74,8 +74,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     { ...initialUserData },
   ]);
 
-  console.log("productInputState", productInputState);
-
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [showCombo, setShowCombo] = useState<any>(false);
   const [divisor, setDivisor] = useState<any>(5000);

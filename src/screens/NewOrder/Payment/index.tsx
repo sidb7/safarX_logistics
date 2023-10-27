@@ -164,7 +164,6 @@ const Index = () => {
 
   const placeOrder = async () => {
     const payload = { tempOrderId: shipyaari_id, source: orderSource };
-    console.log("paymentpayload", payload);
     const placeOrderPromise = await POST(POST_PLACE_ORDER, payload);
     let promisePlaceOrder = new Promise(function (resolve, reject) {
       resolve(placeOrderPromise);

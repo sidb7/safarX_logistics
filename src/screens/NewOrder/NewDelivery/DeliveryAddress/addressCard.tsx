@@ -195,8 +195,6 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       const { data: response } = await POST(GET_PINCODE_DATA, payload);
 
       if (response?.success) {
-        console.log("pincodeResponse", response);
-
         const pincodeData = response.data[0];
 
         const addressName: any =

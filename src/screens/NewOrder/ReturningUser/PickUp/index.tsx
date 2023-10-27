@@ -26,9 +26,6 @@ const ReturningPickUp: React.FunctionComponent<IReturningUserPickupAddress> = ({
 }) => {
   const [selectedCardID, setSelectedCardID] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(null);
-  console.log("returningUserDataForCard", returningUserData);
-  console.log("selectedcardId", selectedCardID);
-  console.log("selectedAddress", selectedAddress);
 
   // const [toggleStatus, setToggleStatus] = useState(false);
   const returningUserAddressData = returningUserData?.data;
@@ -82,7 +79,6 @@ const ReturningPickUp: React.FunctionComponent<IReturningUserPickupAddress> = ({
 
       <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2 scrollbar-thin scrollbar-thumb-black-400 scrollbar-track-black-200 ml-1 mb-1">
         {returningUserAddress?.map((data: any, index: any) => {
-          // console.log("cardDaata", data);
           return (
             <div key={index} onClick={() => handleCardSelect(data?.addressID)}>
               <PickupCard

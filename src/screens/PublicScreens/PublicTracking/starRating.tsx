@@ -9,7 +9,6 @@ const StarRating = () => {
   const navigate = useNavigate();
 
   const RatingHandler = (currentRating: any) => {
-    console.log("its working");
     setRating(currentRating);
     navigate(`/auth/login`);
   };
