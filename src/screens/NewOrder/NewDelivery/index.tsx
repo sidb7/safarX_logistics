@@ -162,6 +162,29 @@ const DeliveryLocation = () => {
     return false;
   };
 
+  const isContactObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "emailId" || key === "alternateMobileNo") {
+          continue;
+        }
+
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const postDeliveryOrderDetails = async () => {
     try {
       const isDeliveryAddressValid = !isObjectEmpty(
@@ -171,7 +194,7 @@ const DeliveryLocation = () => {
         deliveryAddress.billingAddress
       );
 
-      const isContactDetailsValid = !isObjectEmpty(
+      const isContactDetailsValid = !isContactObjectEmpty(
         deliveryAddress.deliveryAddress.contact
       );
       const isContactDetailsBillingValid = !isObjectEmpty(
@@ -181,12 +204,11 @@ const DeliveryLocation = () => {
       console.log("deliveryupaddressPostApicall", deliveryAddress);
       console.log("validDelivery", isDeliveryAddressValid);
       console.log("isContactDetailsValid", isContactDetailsValid);
-      console.log("isPickupDateValid", isContactDetailsBillingValid);
       if (
         (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
-        (!isDeliveryAddressValid && !isbillingAddressValid) ||
-        !isContactDetailsValid ||
-        !isContactDetailsBillingValid
+        !isDeliveryAddressValid ||
+        (!isBillingAddress && !isbillingAddressValid) ||
+        isContactDetailsBillingValid
       ) {
         setInputError(true);
         return;

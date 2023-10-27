@@ -8,7 +8,10 @@ import { useEffect, useState } from "react";
 import Collapsible from "react-collapsible";
 
 import { createColumnHelper } from "@tanstack/react-table";
-import { date_DD_MMM_YYY } from "../../../utils/dateFormater";
+import {
+  date_DD_MMM_YYY,
+  date_DD_MMM_YYYY_HH_MM,
+} from "../../../utils/dateFormater";
 import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import cancelledicon from "../../../assets/Transaction/cancelledIcon.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
@@ -67,17 +70,33 @@ export const PassbookColumns = (setSortOrder: any) => {
       </div>
     );
   };
-  const compareDates = (rowA: any, rowB: any) => {
-    const dateA = new Date(rowA.values.createdAt);
-    const dateB = new Date(rowB.values.createdAt);
-    return dateA > dateB ? 1 : -1;
-  };
+
+  // const compareDates = (rowA: any, rowB: any) => {
+  //   const dateA = new Date(rowA.values.createdAt);
+  //   const dateB = new Date(rowB.values.createdAt);
+  //   return dateA > dateB ? 1 : -1;
+  // };
 
   const handleSortClick = () => {
     if (setSortOrder) {
       setSortOrder((prevOrder: any) => (prevOrder === "desc" ? "asc" : "desc"));
     }
   };
+
+  function formatEpochTimeWithAMPM(epochTime: number) {
+    const date = new Date(epochTime);
+    const formattedDate = date_DD_MMM_YYY(epochTime);
+
+    const hours = date.getHours();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+
+    const formattedTime = `${formattedHours}:${String(
+      date.getMinutes()
+    ).padStart(2, "0")}:${String(date.getSeconds()).padStart(2, "0")}`;
+
+    return `${formattedDate} ${formattedTime} ${ampm}`;
+  }
 
   return [
     columnsHelper.accessor("createdAt", {
@@ -94,16 +113,11 @@ export const PassbookColumns = (setSortOrder: any) => {
         );
       },
       cell: (info: any) => {
-        console.log("info", info);
-        const formattedDate = date_DD_MMM_YYY(info.getValue());
-        console.log("formattedDate", formattedDate);
-        const date = new Date(info.getValue());
-        const formattedTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-        console.log("formattedTime", formattedTime);
+        const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
 
         return (
           <div className="whitespace-nowrap my-4 space-y-2">
-            {`${formattedDate} ${formattedTime}`}
+            {formattedDateTime}
           </div>
         );
       },
