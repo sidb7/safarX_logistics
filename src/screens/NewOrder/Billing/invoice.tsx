@@ -30,7 +30,6 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
-    console.log("renderingComponents", id);
     render(id);
   };
   return (

@@ -283,7 +283,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   //     const { data } = await POST(GET_PRODUCTS);
 
   //     if (data?.success) {
-  //       console.log("catalogueProductData>>", data?.data);
   //       setOrderType(orderType);
   //       setProducts(data?.data);
   //     } else {

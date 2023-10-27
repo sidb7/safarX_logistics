@@ -23,7 +23,6 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
 }) => {
   const tempProductData = editProductData;
   const [productData, setproductData]: any = useState(tempProductData);
-  console.log("🚀 ~ file: editProduct.tsx:26 ~ productData:", productData);
   const divisor = 5000;
 
   const handleProductInputChange = (e: any) => {

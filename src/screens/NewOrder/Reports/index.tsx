@@ -61,7 +61,6 @@ const Reports = () => {
   const fetchReport = async () => {
     let startEpoch = convertEpoch(startDate && startDate);
     let endEpoch = convertEpoch(endDate && endDate);
-    console.log("data :", startEpoch, endEpoch, reportValue);
     // const { data } = await POST(GET_CATEGOROIES, {});
     // if (data?.success) {
     // }

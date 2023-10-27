@@ -150,7 +150,7 @@ const Billing = (props: ITypeProps) => {
           <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3">
             {/* <div className="space-y-3 mb-6 ">
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4"> */}
-            {console.log("defaultAddressSelect :", defaultAddressSelect)}
+
             {defaultAddress?.map((el: any, i: number) => {
               return (
                 <div key={i} ref={bottomRef}>

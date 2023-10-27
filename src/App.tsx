@@ -12,7 +12,6 @@ const App = () => {
   // const roomName = useSelector(
   //   (state: any) => state?.roles?.roles[0]?.roleName
   // );
-  // console.log("userType", roomName);
 
   // useEffect(() => {
   //   if (roomName) {

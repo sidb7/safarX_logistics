@@ -106,7 +106,6 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       source: orderSource,
       products: productPayload,
     };
-    console.log("productpayload", payload);
     const { data: response } = await POST(POST_PRODUCT_URL, payload);
     if (response?.success) {
       toast.success(response?.message);

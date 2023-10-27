@@ -26,7 +26,6 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
     try {
       const { data: deleteData } = await POST(url, postData);
       if (deleteData?.success) {
-        console.log("deleteData", deleteData);
         toast.success(deleteData?.message);
       } else {
         toast.error(deleteData?.message);

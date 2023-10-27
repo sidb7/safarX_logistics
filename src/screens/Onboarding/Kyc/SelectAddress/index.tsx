@@ -55,8 +55,6 @@ const BusinessType = (props: ITypeProps) => {
   }, []);
 
   const onSubmitForm = async () => {
-    console.log("brandName", defaultAddressSelect.hasOwnProperty("addressId"));
-
     try {
       if (brandName === "" || brandName === undefined) {
         toast.error("Enter Brand Name");
@@ -164,7 +162,6 @@ const BusinessType = (props: ITypeProps) => {
   //       "Content-Type": "multipart/form-data",
   //     },
   //   });
-  //   console.log("data", data);
   //   // if (response?.success) {
   //   //   toast.success(response?.message);
   //   //   //Navigate Url's go here

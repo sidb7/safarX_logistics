@@ -93,7 +93,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             channelName.push(elem.channel);
         }
         setChannels(channelName);
-        console.log("productData: ", productData);
         incomingChannelProducts.map((item: any) => {
           channelProductArr.push({
             name: item?.name,
@@ -125,8 +124,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           });
         });
         setChannelProducts(channelProductArr);
-        console.log("channelProducts: ", channelProducts);
-        console.log("channels: ", channels);
       } catch (error) {}
       setLoading(false);
     })();
