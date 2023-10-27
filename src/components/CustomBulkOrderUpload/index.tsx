@@ -12,7 +12,6 @@ const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
   const { setDisabled, setAddButton, setUploadFile } = props;
   const { className } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  console.log("props", props);
 
   const handleFileChange = useCallback((event: any) => {
     const file = event.target.files[0];

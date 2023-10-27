@@ -369,10 +369,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Order Type": rowsData?.orderType,
       });
 
-      // if (rowsData?.orderId === "100175") {
-      //   console.log("rowsData: ", rowsData);
-      // }
-
       const handleInformativeModal = () => {
         setInfoModalContent({
           isOpen: true,
@@ -548,7 +544,6 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
-        // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYY(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
@@ -647,10 +642,6 @@ export const columnHelperForNewOrder = (
           Source: rowsData?.source,
           "Order Type": rowsData?.orderType,
         });
-
-        // if (rowsData?.orderId === "100175") {
-        //   console.log("rowsData: ", rowsData);
-        // }
 
         const handleInformativeModal = () => {
           setInfoModalContent({
@@ -1051,7 +1042,6 @@ export const columnHelpersForRest = (
     //   },
     //   cell: (info: any) => {
     //     const { original } = info.cell.row;
-    //     console.log("original: ", original);
 
     //     return (
     //       <div className="flex flex-col whitespace-nowrap">

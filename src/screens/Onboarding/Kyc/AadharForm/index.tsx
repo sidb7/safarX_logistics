@@ -38,7 +38,6 @@ const Index = (props: ITypeProps) => {
   // const aadharRegex = /^[2-9]{1}[0-9]{3}[0-9]{4}[0-9]{4}$/gm;
 
   useEffect(() => {
-    console.log("aadharNumber", aadharNumber);
     if (aadharNumber !== 0 && aadharNumber !== undefined) {
       if (aadharRegex.test(aadharNumber)) {
         setAadharError("");

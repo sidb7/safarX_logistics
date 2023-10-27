@@ -200,7 +200,6 @@ const DeliveryLocation = () => {
       const isContactDetailsBillingValid = !isObjectEmpty(
         deliveryAddress.billingAddress.contact
       );
-
       if (
         (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
         !isDeliveryAddressValid ||
@@ -365,7 +364,6 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
-
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />

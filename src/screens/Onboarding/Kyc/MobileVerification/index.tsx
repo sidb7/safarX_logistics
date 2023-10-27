@@ -157,7 +157,6 @@ const Index = (props: ITypeProps) => {
       sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         setTimeout(() => {
-          console.log("Delayed for 1 second.");
           // toast.success(response?.message);
         }, 1000);
         setLoading(false);
