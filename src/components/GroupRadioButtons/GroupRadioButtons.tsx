@@ -12,6 +12,7 @@ interface IRadioButtonProps {
   checked?: boolean;
   options?: any;
   selectedValue?: any;
+  isDisabled?: any;
 }
 
 const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
@@ -29,11 +30,13 @@ const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
     checked,
     options = [],
     selectedValue,
+    isDisabled = false,
   } = props;
 
   const [radioValue, setRadioValue] = useState<any>(value || "");
 
   const handleOnChange = (e: any) => {
+    if (isDisabled) return;
     setRadioValue(e);
     selectedValue(e);
   };
@@ -47,6 +50,7 @@ const GroupRadioButtons: React.FunctionComponent<IRadioButtonProps> = (
             name={name}
             value={option?.value}
             className="!w-4"
+            disabled={isDisabled}
             readOnly={true}
             checked={radioValue === option?.value}
             onChange={(e: any) => handleOnChange(e.target.value)}

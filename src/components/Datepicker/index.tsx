@@ -12,7 +12,7 @@ const CustomDatePicker = (props: ITypeProps) => {
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const minTime = new Date();
-  minTime.setHours(9, 0, 0, 0);
+  minTime.setHours(12, 0, 0, 0);
 
   const maxTime = new Date();
   maxTime.setHours(21, 0, 0, 0);

@@ -178,16 +178,39 @@ const PickupLocation = () => {
     return false;
   };
 
+  const isContactObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "emailId" || key === "alternateMobileNo") {
+          continue;
+        }
+
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   console.log("pickupState", pickupDate);
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
       const isReturnAddressValid = !isObjectEmpty(pickupAddress.returnAddress);
 
-      const isContactDetailsValid = !isObjectEmpty(
+      const isContactDetailsValid = !isContactObjectEmpty(
         pickupAddress.pickupAddress.contact
       );
-      const isContactDetailsReturnValid = !isObjectEmpty(
+      const isContactDetailsReturnValid = !isContactObjectEmpty(
         pickupAddress.returnAddress.contact
       );
 
@@ -198,13 +221,16 @@ const PickupLocation = () => {
       console.log("isPickupDateValid", isPickupDateValid);
 
       if (
-        (!isPickupAddressValid && !isReturnAddressValid) ||
+        !isPickupAddressValid ||
         !isContactDetailsValid ||
-        !isContactDetailsReturnValid
+        (!isReturnAddress && !isReturnAddressValid) ||
+        isContactDetailsReturnValid
       ) {
         setInputError(true);
         return;
       }
+
+      console.log("validReturn", isReturnAddressValid);
 
       setInputError(false);
       let payload = {};
@@ -226,6 +252,7 @@ const PickupLocation = () => {
           },
         };
       }
+      console.log("payloadforPostPickupafterInputValidation", payload);
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
       if (response?.success) {

@@ -3,7 +3,10 @@ import Delivery from "../../assets/OrderDetails/Delivery.svg";
 import CopyIcon from "../../assets/OrderDetails/CopyIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
-import { date_DD_MMM_YYY } from "../../utils/dateFormater";
+import {
+  date_DD_MMM_YYY,
+  date_DD_MMM_YYYY_HH_MM,
+} from "../../utils/dateFormater";
 import HamBurger from "../../assets/HamBurger.svg";
 import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
 import ShowLabel from "./ShowLabel";
@@ -445,8 +448,8 @@ export const columnHelperForNewOrder = (
         return (
           <div className="py-3">
             {tempOrderId && (
-              <div className="">
-                <span className="text-sm font-light">Shipyaari ID :</span>
+              <div className="flex items-center">
+                <span className="text-sm font-light mr-1">Shipyaari ID :</span>
                 <div className="flex text-base items-center font-medium">
                   <Link
                     to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
@@ -505,14 +508,18 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            <div className="">
-              <span className=" text-sm font-light">Order Updated At :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+            <div className=" flex items-center mt-1">
+              <span className="text-sm font-light mr-1">
+                Order Updated At :
+              </span>
+              <div className=" ">
+                <p className="text-sm font-medium">
+                  {date_DD_MMM_YYYY_HH_MM(updatedAt)}
+                </p>
               </div>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center mt-1">
               <span className=" text-sm font-light">Source :</span>
               <div className=" pl-2 text-base items-center font-medium">
                 <span className="">{source}</span>
