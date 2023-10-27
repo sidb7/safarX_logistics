@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
+import { Spinner } from "../Spinner";
 
 const BottomLayout = ({
   callApi,
@@ -26,14 +27,21 @@ const BottomLayout = ({
         )}
 
         <ServiceButton
+          disabled={loading}
           text={
-            loading
-              ? "LOADING"
-              : Button2Name
-              ? `${customButtonText ? customButtonText : "NEXT"}`
-              : finalButtonText
+            loading ? (
+              <div className="flex">
+                <Spinner />
+              </div>
+            ) : Button2Name ? (
+              `${customButtonText ? customButtonText : "NEXT"}`
+            ) : (
+              finalButtonText
+            )
           }
-          className={`bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px] ${className}`}
+          className={`${
+            loading ? "bg-white" : "bg-[#1C1C1C]"
+          } text-[#FFFFFF] lg:w-[100px] ${className}`}
           onClick={async () => {
             setLoading(true);
             await callApi();

@@ -16,7 +16,7 @@ export const isGreaterThenValidation = (
   if (value.toString().length > length) {
     return true;
   }
-  return error || `Value should be greater then ${length}`;
+  return error || `Value must be greater then ${length}`;
 };
 
 export const checkNonNegative = (value: any) => {
@@ -28,7 +28,7 @@ export const checkNonNegative = (value: any) => {
 
 export const greaterThenZero = (value: any) => {
   if (value <= 0) {
-    return "Value Must be greater then zero";
+    return "Value must be greater then zero";
   }
   return true;
 };

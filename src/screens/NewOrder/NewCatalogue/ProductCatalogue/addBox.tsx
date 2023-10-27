@@ -136,11 +136,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               value={sellerBoxDetails?.name}
               errorMessage={validationErrors?.name}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   name: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -149,11 +149,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               value={sellerBoxDetails?.color}
               errorMessage={validationErrors?.color}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   color: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -162,11 +162,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               errorMessage={validationErrors?.price}
               value={sellerBoxDetails?.price}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   price: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -176,11 +176,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               errorMessage={validationErrors?.deadWeight}
               value={sellerBoxDetails?.deadWeight}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   deadWeight: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -191,11 +191,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               errorMessage={validationErrors?.length}
               value={sellerBoxDetails?.length}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   length: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -205,11 +205,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               errorMessage={validationErrors?.breadth}
               value={sellerBoxDetails?.breadth}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   breadth: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox
@@ -219,11 +219,11 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               errorMessage={validationErrors?.height}
               value={sellerBoxDetails?.height}
               onChange={(e) => {
-                handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
                   height: e.target.value,
                 });
+                handleValidation(e);
               }}
             />
             <CustomInputBox

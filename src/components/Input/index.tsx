@@ -91,10 +91,10 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         {/* absolute -bottom-4 px-2 left-0 */}
 
         <label
-          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label ${
+          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
             (value || tempLabel) && "filled"
           } ${
-            errorMessage !== true && errorMessage !== false && "!text-[red]"
+            errorMessage !== true && errorMessage !== false && "!text-[red] "
           }`}
         >
           {label}
@@ -134,11 +134,15 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           />
         </div>
       </div>
-      {errorMessage && (
-        <span className="text-[red] transition font-Open text-[11px] mt-1 px-2 ">
-          {errorMessage && errorMessage}
-        </span>
-      )}
+      <span
+        className={`text-[red] transition-all ease-out h-0 ${
+          errorMessage !== false &&
+          errorMessage !== true &&
+          "opacity-100 h-[18px]"
+        } opacity-0 delay-100 font-Open text-[11px] mt-1 px-2 `}
+      >
+        {errorMessage && errorMessage}
+      </span>
     </div>
   );
 };
