@@ -105,7 +105,7 @@ const Index = (props: ITypeProps) => {
     <>
       {isActive ? (
         <div>
-          <div className="ml-5 lg:mr-6">
+          <div className=" lg:mr-6">
             <div className="lg:mb-6">
               <Breadcrum label="Plans" />
             </div>
