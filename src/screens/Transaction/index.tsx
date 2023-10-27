@@ -144,8 +144,6 @@ export const Transaction = () => {
     }
   };
 
-  console.log("totalCount", totalItemCount);
-
   return (
     <>
       {isActive ? (
