@@ -109,7 +109,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [packages, setPackages] = useState<any>([]);
   const [tempPackage, setTempPackage] = useState<any>({});
   const [boxTypeEditMode, setBoxTypeEditMode] = useState<any>(false);
-  const [paymentMode, setPaymentMode] = useState<any>("cod");
+  const [paymentMode, setPaymentMode] = useState<any>("prepaid");
   const [selectInsurance, setSelectInsrance] = useState<any>({
     isInsurance: true,
     iwillTakeRisk: false,
@@ -155,6 +155,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     // getOrderProductDetailsForReturningUser();
 
     getOrderProductDetails();
+
+    if (orderType === "B2B") {
+      setPaymentMode("prepaid");
+    }
   }, []);
 
   const handleRemovePackage = (boxIndex: any) => {
@@ -340,7 +344,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
-  console.log("productsfromcatalogue>>", products);
   return (
     <div>
       <div>
@@ -587,16 +590,16 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
             <div>
               <div className="flex py-5 ">
-                {!isOrderTypeB2B && (
-                  <GroupRadioButtons
-                    options={[
-                      { text: "Prepaid", value: "prepaid" },
-                      { text: "COD", value: "cod" },
-                    ]}
-                    value={paymentMode}
-                    selectedValue={setPaymentMode}
-                  />
-                )}
+                <GroupRadioButtons
+                  options={[
+                    { text: "Prepaid", value: "prepaid" },
+                    { text: "COD", value: "cod" },
+                  ]}
+                  value={paymentMode}
+                  isDisabled={isOrderTypeB2B}
+                  selectedValue={setPaymentMode}
+                />
+                {/* )} */}
               </div>
 
               <div className="flex w-fit gap-x-8 py-2 pb-8">
