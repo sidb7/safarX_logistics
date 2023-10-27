@@ -305,7 +305,7 @@ const Index = (props: ITypeProps) => {
                   label="Enter OTP"
                   inputType="text"
                   inputMode="numeric"
-                  containerStyle="lg:!w-auto"
+                  containerStyle="lg:!w-auto self-center"
                   className=" lg:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   maxLength={businessType === "company" ? 4 : 6}
