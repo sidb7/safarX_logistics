@@ -4,6 +4,7 @@ import InputBox from "../../../components/Input/index";
 import trackingIcon from "../../../assets/trackingShipyaariIcon.jpg";
 import trackingIcon2 from "../../../assets/trackingShipyaari2.svg";
 import instagramIcon from "../../../assets/instagramIcon.svg";
+import ShipyaariLogo from "../../../assets/Navbar/shipyaariLogos.svg";
 import facebook from "../../../assets/facebookIcon.svg";
 import Star from "../../../assets/Comments.svg";
 import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
@@ -15,7 +16,6 @@ import UpwardArrow from "../../../assets/AccordionUp.svg";
 import Product from "../../../assets/layer.svg";
 import GalleryIcon from "../../../assets/galleryIcon.svg";
 import Location from "../../../assets/other.png";
-import StarRating from "./starRating";
 import { GET, POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
 import CustomButton from "../../../components/Button";
@@ -29,73 +29,11 @@ import alertInfoIcon from "../../../assets/info-circle-outline.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { toast } from "react-toastify";
 import { Tooltip } from "../../../components/Tooltip/Tooltip";
-import { checkPageAuthorized } from "../../../redux/reducers/role";
+import StarRating from "./starRating";
 
-const Tracking = () => {
-  // let tracking = [
-  //   {
-  //     partner: {
-  //       partnerIcon: DelhiveryIcon,
-  //       partnerID: 0,
-  //       etaDate: "18 Jun 2023",
-  //       trackingNo: "GYSH23678119",
-  //       orderID: "GYSH23678119",
-  //       status: "Booked",
-  //       orderPlaced: "14 Jun",
-  //     },
-
-  //     trackingDetails: [
-  //       {
-  //         date: "18 Jul, 2023",
-  //         time: "11:00  am",
-  //         heading: "Pick-up assigned",
-  //         locationImage: Location,
-  //         location: "Mumbai",
-  //       },
-  //       {
-  //         date: "18 Jul, 2023",
-  //         time: "15:20",
-  //         heading: "Reached Warehouse",
-  //         locationImage: Location,
-  //         location: "Bhiwandi",
-  //       },
-  //       {
-  //         date: "18 Jul, 2023",
-  //         time: "15:20",
-  //         heading: "Delivery assigned",
-  //         locationImage: telephoneIcon,
-  //         location: "+91 12345 12345",
-  //       },
-  //     ],
-  //     productDetails: [
-  //       {
-  //         galleryImage: GalleryIcon,
-  //         productheading: "Lev's V necked T-shirt",
-  //         price: "500",
-  //       },
-  //       {
-  //         galleryImage: GalleryIcon,
-  //         productheading: "Lev's V necked T-shirt",
-  //         price: "500",
-  //       },
-  //       {
-  //         galleryImage: GalleryIcon,
-  //         productheading: "Lev's V necked T-shirt",
-  //         price: "500",
-  //       },
-  //       {
-  //         galleryImage: GalleryIcon,
-  //         productheading: "Lev's V necked T-shirt",
-  //         price: "500",
-  //       },
-  //     ],
-  //   },
-  // ];
-
-  // const [trackingState, setTrackingState] = useState<any>([...tracking]);
+const PublicTracking = () => {
   const roles = useSelector((state: any) => state?.roles);
-  // const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
-  const isActive = checkPageAuthorized("Tracking");
+  const isActive = roles.roles?.[0]?.menu?.[2]?.menu?.[0]?.pages?.[0]?.isActive;
 
   const [trackingState, setTrackingState] = useState<any>([]);
   const [inValidTrackingState, setInValidTrackingState] = useState<any>([]);
@@ -107,7 +45,7 @@ const Tracking = () => {
 
   const [loading, setLoading] = useState(false);
   const params = getQueryJson();
-  const trackingNoFromUrl = params?.trackingNo;
+  const trackingNoFromUrl = params?.tracking_no;
   const toggleSection = (section: string) => {
     setOpenSection((prevOpenSection) =>
       prevOpenSection === section ? null : section
@@ -188,16 +126,14 @@ const Tracking = () => {
   }, [trackingNoFromUrl]);
 
   return (
-    <>
-      {isActive ? (
-        <div className=" w-full">
-          <Breadcrum label="Tracking" />
-          {/*shipyaari icon */}
-          {/* <div className="flex justify-center p-3">
-          <img src={shipyaari} alt="Shipyaari" />
-        </div> */}
-          <div className="flex mx-3 md:mx-5 md:my-5 ">
-            <div className="flex w-[100%] max-w-[1300px] gap-5 max-md:flex-col">
+    <div className="h-screen flex flex-col items-center justify-center">
+      <div className=" h-full w-full max-w-[1500px]">
+        <div className="flex justify-center items-center h-[130px]">
+          <img src={ShipyaariLogo} alt="" className=" w-[200px] h-fit" />
+        </div>
+        <div>
+          <div className="flex flex-col mx-3 md:mx-5 md:my-5">
+            <div className="flex w-[100%]  gap-5 max-md:flex-col">
               {/*tracking ID Box */}
               <div className="flex flex-col basis-3/4">
                 <div className="flex items-center">
@@ -209,7 +145,7 @@ const Tracking = () => {
                   />
                   <CustomButton
                     text="Track Order"
-                    className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px]  h-full "
+                    className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] py-3 md:py-0 md:text-[18px] h-full "
                     onClick={() => handleTrackOrderClick()}
                   />
                 </div>
@@ -417,18 +353,6 @@ const Tracking = () => {
                           </div>
                         </div>
                         {/* </div> */}
-                        {/* <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
-                          <div className="flex gap-x-2 px-2 ml-9">
-                            <img src={Star} alt="" />
-                            <p className="font-Lato text-lg font-semibold xl:max-w-[358px]">
-                              How much would you recommend a product to your
-                              friends and family?
-                            </p>
-                          </div>
-                          <div className="px-3  pt-2 ml-16 mt-2">
-                            <StarRating />
-                          </div>
-                        </div> */}
                       </div>
                     );
                   })}
@@ -450,6 +374,18 @@ const Tracking = () => {
                   alt=""
                   style={{ minWidth: "30%", height: "auto" }}
                 />
+              </div>
+            </div>
+            <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
+              <div className="flex gap-x-2 px-2 md:ml-9 ">
+                <img src={Star} alt="" />
+                <p className="font-Lato text-base md:text-lg font-semibold ">
+                  How much would you recommend a product to your friends and
+                  family?
+                </p>
+              </div>
+              <div className="px-3  pt-2 md:ml-8 mt-2 ">
+                <StarRating />
               </div>
             </div>
           </div>
@@ -479,12 +415,8 @@ const Tracking = () => {
             </div>
           </div>
         </div>
-      ) : (
-        <div>
-          <AccessDenied />
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
-export default Tracking;
+export default PublicTracking;

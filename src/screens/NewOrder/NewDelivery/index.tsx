@@ -63,6 +63,7 @@ const DeliveryLocation = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const params = getQueryJson();
+  const [inputError, setInputError] = useState(false);
   const shipyaari_id = params?.shipyaari_id;
   let orderSource = params?.source || "";
 
@@ -138,8 +139,60 @@ const DeliveryLocation = () => {
   const [returningUserDeliveryData, setReturningUserDeliveryData] =
     useState<any>([]);
 
+  const isObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (key === "sector") {
+          continue;
+        }
+
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const postDeliveryOrderDetails = async () => {
     try {
+      const isDeliveryAddressValid = !isObjectEmpty(
+        deliveryAddress.deliveryAddress
+      );
+      const isbillingAddressValid = !isObjectEmpty(
+        deliveryAddress.billingAddress
+      );
+
+      const isContactDetailsValid = !isObjectEmpty(
+        deliveryAddress.deliveryAddress.contact
+      );
+      const isContactDetailsBillingValid = !isObjectEmpty(
+        deliveryAddress.billingAddress.contact
+      );
+
+      console.log("deliveryupaddressPostApicall", deliveryAddress);
+      console.log("validDelivery", isDeliveryAddressValid);
+      console.log("isContactDetailsValid", isContactDetailsValid);
+      console.log("isPickupDateValid", isContactDetailsBillingValid);
+      if (
+        (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
+        (!isDeliveryAddressValid && !isbillingAddressValid) ||
+        !isContactDetailsValid ||
+        !isContactDetailsBillingValid
+      ) {
+        setInputError(true);
+        return;
+      }
+
+      setInputError(false);
       let payload = {};
       if (isBillingAddress) {
         payload = {
@@ -174,6 +227,9 @@ const DeliveryLocation = () => {
   useEffect(() => {
     (async () => {
       {
+        const sanitizeField = (fieldValue: number) =>
+          fieldValue === 0 ? "" : fieldValue;
+
         const payload = { tempOrderId: +shipyaari_id, source: orderSource };
 
         const { data } = await POST(GET_LATEST_ORDER, payload);
@@ -206,9 +262,12 @@ const DeliveryLocation = () => {
                   orderData?.deliveryAddress?.workingHours || "09:00",
                 contact: {
                   name: orderData?.deliveryAddress?.contact?.name,
-                  mobileNo: orderData?.deliveryAddress?.contact?.mobileNo,
-                  alternateMobileNo:
-                    orderData?.deliveryAddress?.contact?.alternateMobileNo,
+                  mobileNo: sanitizeField(
+                    orderData?.deliveryAddress?.contact?.mobileNo
+                  ),
+                  alternateMobileNo: sanitizeField(
+                    orderData?.deliveryAddress?.contact?.alternateMobileNo
+                  ),
                   emailId: orderData?.deliveryAddress?.contact?.emailId,
                   type: orderData?.deliveryAddress?.contact?.type,
                 },
@@ -237,9 +296,12 @@ const DeliveryLocation = () => {
                   orderData?.billingAddress?.workingHours || "09:00",
                 contact: {
                   name: orderData?.billingAddress?.contact?.name,
-                  mobileNo: orderData?.billingAddress?.contact?.mobileNo,
-                  alternateMobileNo:
-                    orderData?.billingAddress?.contact?.alternateMobileNo,
+                  mobileNo: sanitizeField(
+                    orderData?.billingAddress?.contact?.mobileNo
+                  ),
+                  alternateMobileNo: sanitizeField(
+                    orderData?.billingAddress?.contact?.alternateMobileNo
+                  ),
                   emailId: orderData?.billingAddress?.contact?.emailId,
                   type: orderData?.billingAddress?.contact?.type,
                 },
@@ -283,6 +345,7 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
+  console.log("inputErrorState", inputError);
 
   console.log("deliverypayload", deliveryAddress);
   return (
@@ -292,7 +355,9 @@ const DeliveryLocation = () => {
         <Stepper steps={steps} />
       </div>
 
-      <RecipientType data={{ deliveryAddress, setDeliveryAddress }} />
+      <RecipientType
+        data={{ deliveryAddress, setDeliveryAddress, inputError }}
+      />
 
       {/* DELIVERY ADDRESS */}
 
@@ -322,6 +387,7 @@ const DeliveryLocation = () => {
         data={{
           deliveryAddress,
           setDeliveryAddress,
+          inputError,
         }}
       />
 
@@ -343,6 +409,7 @@ const DeliveryLocation = () => {
             deliveryAddress,
             setDeliveryAddress,
             label: "billing",
+            inputError,
           }}
         />
       )}

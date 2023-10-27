@@ -7,16 +7,24 @@ interface IRecipientType {
   data: {
     deliveryAddress: any;
     setDeliveryAddress: any;
+    inputError?: boolean;
   };
 }
 
 const RecipientType: React.FunctionComponent<IRecipientType> = ({
-  data: { deliveryAddress, setDeliveryAddress },
+  data: { deliveryAddress, setDeliveryAddress, inputError },
 }) => {
   const type = deliveryAddress?.orderType;
   useEffect(() => {}, [type]);
+
+  const isError = inputError && !deliveryAddress?.orderType;
+
   return (
-    <div className="relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 ">
+    <div
+      className={`relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] ${
+        isError ? "border-red-500" : "border-[#EAEAEA]"
+      }  bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 `}
+    >
       <div className="grid grid-cols-2 gap-3 ">
         <div
           className={`relative z-1  border-[1px] rounded ${

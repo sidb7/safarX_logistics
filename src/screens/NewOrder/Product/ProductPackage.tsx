@@ -825,7 +825,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         />
       </div>
       <AddPackageDetails
-        productsFromLatestOrder={products}
+        // productsFromLatestOrder={products}
         selectedProducts={selectedProductsOfPackage}
         isSearchProductRightModalOpen={isSearchProductRightModalOpen}
         setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}

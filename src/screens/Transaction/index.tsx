@@ -20,14 +20,18 @@ import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
+import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
+  const [sortOrder, setSortOrder] = useState("desc");
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
-
+  // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("Transaction History");
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState<string>("");
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const { isLgScreen } = ResponsiveState();
@@ -49,8 +53,8 @@ export const Transaction = () => {
           skip: (currentPage - 1) * itemsPerPage,
           limit: itemsPerPage,
           pageNo: currentPage,
-          sort: { _id: -1 },
-          searchValue: "",
+          sort: { _id: sortOrder === "desc" ? -1 : 1 },
+          searchValue: debouncedSearchValue,
         });
 
         if (data?.success) {
@@ -63,7 +67,13 @@ export const Transaction = () => {
         }
       })();
     }
-  }, [renderingComponents, itemsPerPage, currentPage]);
+  }, [
+    renderingComponents,
+    itemsPerPage,
+    currentPage,
+    sortOrder,
+    debouncedSearchValue,
+  ]);
 
   const onPageIndexChange = (paginationData: any) => {
     setCurrentPage(paginationData.currentPage);
@@ -78,12 +88,27 @@ export const Transaction = () => {
     setRenderingComponents(id);
   };
 
+  let debounceTimer: any;
+  const handleSearch = (value: string) => {
+    setDebouncedSearchValue(value);
+  };
+  const clearSearchValue = () => {
+    setDebouncedSearchValue("");
+  };
   const filterButton = () => {
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
           <div>
-            <SearchBox label="Search" value="" onChange={() => {}} />
+            <TransactionSearchBox
+              label="Search"
+              value={debouncedSearchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                handleSearch(e.target.value);
+              }}
+              customPlaceholder="Search By Transaction Id"
+              getFullContent={clearSearchValue}
+            />
           </div>
         </div>
       );
@@ -111,7 +136,9 @@ export const Transaction = () => {
 
   const render = () => {
     if (renderingComponents === 0) {
-      return <CustomTable data={data} columns={PassbookColumns()} />;
+      return (
+        <CustomTable data={data} columns={PassbookColumns(setSortOrder)} />
+      );
     } else if (renderingComponents === 1) {
       return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
     }
@@ -208,6 +235,7 @@ export const Transaction = () => {
                   onPageChange={onPageIndexChange}
                   onItemsPerPageChange={onPerPageItemChange}
                   pageNo={currentPage}
+                  initialItemsPerPage={itemsPerPage}
                 />
 
                 {/* )} */}

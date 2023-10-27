@@ -12,14 +12,14 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import { searchResults } from "../../../utils/utility";
 import ComboProductBox from "../../../components/ComboProductBox";
 import { POST } from "../../../utils/webService";
-import { GET_COMBO_PRODUCT } from "../../../utils/ApiUrls";
+import { GET_COMBO_PRODUCT, GET_PRODUCTS } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import StackLogo from "../../../assets/Catalogue/StackIcon.svg";
-
+import "../../../styles/skeleton.css";
+import { Spinner } from "../../../components/Spinner";
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
   setIsSearchProductRightModalOpen: any;
-  productsFromLatestOrder?: any;
   selectedProducts?: any;
   handlePackageDetails?: any;
 }
@@ -30,7 +30,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const {
     isSearchProductRightModalOpen,
     setIsSearchProductRightModalOpen,
-    productsFromLatestOrder,
     selectedProducts,
     handlePackageDetails,
   } = props;
@@ -42,14 +41,35 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [products, setProducts] = useState<any>([]);
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboProducts, setComboProducts] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<any>(false);
+  const [productsFromAPI, setProductsFromAPI] = useState<any>([]);
 
   useEffect(() => {
-    if (productsFromLatestOrder) {
+    if (isSearchProductRightModalOpen) {
+      getProducts(searchedProduct);
+    }
+  }, [isSearchProductRightModalOpen, searchedProduct]);
+
+  const getProducts = async (searchValue: any = "") => {
+    try {
+      setIsLoading(true);
+      const { data } = await POST(GET_PRODUCTS, { searchValue });
+      setProductsFromAPI(data?.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.log("getProducts Product package error", error);
+      setProductsFromAPI([]);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (productsFromAPI) {
       setProducts([]);
       // getComboProducts();
 
       //coping arr
-      let tempArrProducts = JSON.parse(JSON.stringify(productsFromLatestOrder)); //productsFromLatestOrder => will be replaced by seller's products api
+      let tempArrProducts = JSON.parse(JSON.stringify(productsFromAPI)); //productsFromAPI => will be replaced by seller's products api
       let tempArrCombos = JSON.parse(JSON.stringify(comboProducts));
       let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
 
@@ -75,7 +95,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       setProducts([...sortOnSelected(tempArrProducts)]);
       setComboProducts([...sortOnSelected(tempArrCombos)]);
     }
-  }, [isSearchProductRightModalOpen, selectedProducts]);
+  }, [isSearchProductRightModalOpen, selectedProducts, productsFromAPI]);
 
   //get combo products
   const getComboProducts = async () => {
@@ -168,8 +188,8 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
   const ProductDetails = () => {
     return (
-      <div>
-        <div className="p-5 ">
+      <div className="h-full">
+        <div className="p-5 overflow-scroll h-full">
           <div className="flex items-center justify-between mb-[27px]">
             <p className="font-Lato font-normal text-2xl leading-8 text-[#323232]">
               Search Product
@@ -189,10 +209,8 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               value={searchedProduct}
               label="Search any product"
               onChange={(e) => {
-                setSearchedProduct(e.target.value);
+                setSearchedProduct(e.target.value.toString().trim());
                 setClearIconVisible(true);
-                const result = searchResults(e.target.value, searchProductData);
-                setSearchResult(result);
               }}
               onClick={() => {
                 setSearchResult([]);
@@ -219,26 +237,36 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
           <div className="flex  items-center gap-x-2 py-2">
             <img src={ProductIcon} alt="Product" />
             <div className="font-Lato font-normal text-2xl leading-8">
-              Top Added
+              Products
             </div>
           </div>
-          <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
-            {products?.map((eachProduct: any, index: number) => {
-              return (
-                <ProductBox
-                  key={index}
-                  image={SampleProduct}
-                  weight={`${eachProduct?.appliedWeight } Kg`}
-                  productName={eachProduct?.name || 0}
-                  breadth={eachProduct?.breadth || 0}
-                  length={eachProduct?.length || 0}
-                  height={eachProduct?.height || 0}
-                  className="!w-72 cursor-pointer "
-                  onClick={() => selectProduct(eachProduct, index)}
-                  isSelected={isProductSelected(index, products)}
-                />
-              );
-            })}
+          <div className="flex flex-wrap gap-5 mb-6 py-6 h-96 px-2 overflow-scroll">
+            {isLoading ? (
+              <div className="w-full h-full justify-center items-center flex ">
+                <div className="flex">
+                  <Spinner />
+                </div>
+              </div>
+            ) : (
+              <>
+                {products?.map((eachProduct: any, index: number) => {
+                  return (
+                    <ProductBox
+                      key={index}
+                      image={SampleProduct}
+                      weight={`${eachProduct?.appliedWeight} Kg`}
+                      productName={eachProduct?.name || 0}
+                      breadth={eachProduct?.breadth || 0}
+                      length={eachProduct?.length || 0}
+                      height={eachProduct?.height || 0}
+                      className="!w-56 cursor-pointer "
+                      onClick={() => selectProduct(eachProduct, index)}
+                      isSelected={isProductSelected(index, products)}
+                    />
+                  );
+                })}
+              </>
+            )}
           </div>
           <div className="flex  items-center gap-x-2 py-2">
             <img src={ProductIcon} alt="Product" />
@@ -294,9 +322,9 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         wrapperClassName="rounded"
         isOpen={isSearchProductRightModalOpen}
         onClose={() => setIsSearchProductRightModalOpen(false)}
-        className=" w-full lg:w-[52%] rounded-l-xl"
+        className=" w-full lg:w-[52%] h-screen rounded-l-xl"
       >
-        <ProductDetails />
+        {ProductDetails()}
       </CustomRightModal>
     </>
   );

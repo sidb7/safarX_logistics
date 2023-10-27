@@ -2,7 +2,7 @@ import TaskSquare from "../../../../assets/task-square.svg";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { GET, POST } from "../../../../utils/webService";
 import {
@@ -29,6 +29,7 @@ function ChannelIntegrationModalContent(props: any) {
     channelName: "",
   });
   const [channel, setChannel] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const storeId = channelData?.channels?.[indexNum]?.storeId;
 
@@ -37,22 +38,28 @@ function ChannelIntegrationModalContent(props: any) {
       if (!isUpdateModal) {
         if (channel === "SHOPIFY") {
           const { data } = await POST(POST_CREATE_STORE, storeData);
-          if (data?.status) toast.success(data?.message);
-          else toast.error(data?.message);
-          let newStore = [
-            {
-              name: storeData.storeName,
-              icon: ShopifyIcon,
-              iconLg: ShopifyLg,
-              integrated: true,
-              storeId: data?.data?.storeId,
-              channel: "SHOPIFY",
-            },
-          ];
-          newStore = [...newStore, ...channelData.channels];
-          console.log("Setting channel");
-          setChannelData({ channels: newStore });
-          setModalData({ isOpen: false });
+          if (data?.status) {
+            // let newStore = [
+            //   {
+            //     name: storeData.storeName,
+            //     icon: ShopifyIcon,
+            //     iconLg: ShopifyLg,
+            //     integrated: true,
+            //     storeId: data?.data?.storeId || "",
+            //     channel: "SHOPIFY",
+            //   },
+            // ];
+            // if (channelData.channels.length > 0) {
+            //   newStore = [...newStore, ...channelData.channels];
+            // }
+            // setChannelData({ channels: newStore });
+            setModalData({ isOpen: false });
+            toast.success(data?.message);
+            window.location.reload();
+          } else {
+            toast.error(data?.message);
+            setModalData({ isOpen: false });
+          }
         } else if (channel === "WOOCOMMERCE") {
           let userId = Date.now();
           let wooCommerceContents = {
@@ -73,7 +80,9 @@ function ChannelIntegrationModalContent(props: any) {
           } catch (error: any) {
             window.location.href = error?.config?.url;
           }
+          return;
         }
+        setModalData({ isOpen: false });
       } else {
         let payload = { ...storeData, storeId };
         const { data } = await POST(UPDATE_SINGLE_STORE, payload);
@@ -94,7 +103,9 @@ function ChannelIntegrationModalContent(props: any) {
         setChannelData({ channels: newStore });
         setModalData({ isOpen: false });
       }
-    } catch (error) {}
+    } catch (error) {
+      setModalData({ isOpen: false });
+    }
   };
 
   const channelArr = [
@@ -124,6 +135,23 @@ function ChannelIntegrationModalContent(props: any) {
     })();
   }, []);
 
+  useEffect(() => {
+    if (
+      channel === "SHOPIFY" &&
+      storeData.storeName !== "" &&
+      storeData.storeUrl !== "" &&
+      storeData.storeToken !== ""
+    ) {
+      setIsDisabled(false);
+    } else if (
+      channel === "WOOCOMMERCE" &&
+      storeData.storeName !== "" &&
+      storeData.storeUrl !== ""
+    ) {
+      setIsDisabled(false);
+    } else setIsDisabled(true);
+  }, [storeData]);
+
   return (
     <>
       <div className="text-[24px] justify-between flex m-5 items-center">
@@ -149,28 +177,34 @@ function ChannelIntegrationModalContent(props: any) {
         {channel === "SHOPIFY" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
-              label="Store Name"
+              isRequired={true}
+              placeholder="Store Name"
               value={storeData.storeName}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeName: e.target.value })
               }
             />
             <CustomInputBox
-              label="Store Url"
+              placeholder="Store Url - 7fd4c3"
+              isRequired={true}
               value={storeData.storeUrl}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeUrl: e.target.value })
               }
             />
+            <p className="text-[15px]">
+              Example : https://<strong>7fd4c3</strong>.myshopify.com/{" "}
+            </p>
             <CustomInputBox
-              label="Store Token"
+              placeholder="Store Token"
+              isRequired={true}
               value={storeData.storeToken}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeToken: e.target.value })
               }
             />
             <CustomInputBox
-              label="Store Logo"
+              placeholder="Store Logo"
               value={storeData.storeLogo}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeLogo: e.target.value })
@@ -180,14 +214,16 @@ function ChannelIntegrationModalContent(props: any) {
         ) : channel === "WOOCOMMERCE" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
-              label="Store Url"
+              placeholder="Store Url - https://example.com"
+              isRequired={true}
               value={storeData.storeUrl}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeUrl: e.target.value })
               }
             />
             <CustomInputBox
-              label="Store Name"
+              placeholder="Store Name"
+              isRequired={true}
               value={storeData.storeName}
               onChange={(e) =>
                 setStoreData({ ...storeData, storeName: e.target.value })
@@ -201,9 +237,10 @@ function ChannelIntegrationModalContent(props: any) {
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
+          disabled={isDisabled}
           onClick={addStore}
           text={!isUpdateModal ? "Add New Channel" : "Update Channel"}
-          className="bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
+          className={`bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
     </>

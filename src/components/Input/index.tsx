@@ -28,6 +28,8 @@ interface propTypes {
   tempLabel?: any;
   onKeyDown?: any;
   tooltipContent?: string;
+  inputError?: boolean;
+  errorMessage?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -61,16 +63,21 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     imageClassName,
     onKeyDown,
     tooltipContent,
+    inputError,
+    errorMessage = false,
   } = props;
 
   return (
-    <div className="flex justify-center items-center w-full">
+    <div className="flex  flex-col text-start  w-full">
       <div className={`relative w-[100%]  ${containerStyle}`}>
         <input
           name={name}
           type={inputType}
           placeholder={placeholder}
-          className={`${className} rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
+          className={`${className} ${
+            errorMessage !== true && errorMessage !== false && "!border-[red]"
+          }  ${inputError && !value ? "border-red-500" : "border-[#A4A4A4]"}
+           rounded border-[1px] border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           onBlur={(e: any) => onBlur(e)}
@@ -81,17 +88,13 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           maxLength={maxLength}
           onKeyDown={onKeyDown}
         />
-        {/* <label
-          className={`text-[12px] text-[#777777] absolute  leading-4 font-Open custom-label ${
-            value && tempLabel && "filled"
-          }  ${tempLabel ? "filled" : ""}`}
-        >
-          {label}
-        </label> */}
+        {/* absolute -bottom-4 px-2 left-0 */}
 
         <label
           className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label ${
             (value || tempLabel) && "filled"
+          } ${
+            errorMessage !== true && errorMessage !== false && "!text-[red]"
           }`}
         >
           {label}
@@ -131,6 +134,11 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           />
         </div>
       </div>
+      {errorMessage && (
+        <span className="text-[red] transition font-Open text-[11px] mt-1 px-2 ">
+          {errorMessage && errorMessage}
+        </span>
+      )}
     </div>
   );
 };

@@ -42,6 +42,7 @@ import Pagination from "../../components/Pagination";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
+import { checkPageAuthorized } from "../../redux/reducers/role";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -212,7 +213,8 @@ const Index = () => {
   const navigate = useNavigate();
   const [isDeleted, setIsDeleted] = useState(false);
 
-  const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
+  const isActive = checkPageAuthorized("View Orders");
   const Buttons = (className?: string) => {
     return (
       <div
@@ -345,9 +347,6 @@ const Index = () => {
           });
         }
       });
-
-      console.log("tabs", tabs[index].value);
-      console.log("orders", orders);
 
       switch (tabs[index].value) {
         case "DRAFT":

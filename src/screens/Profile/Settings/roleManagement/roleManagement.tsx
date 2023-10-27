@@ -16,6 +16,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
+import { checkPageAuthorized } from "../../../../redux/reducers/role";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -58,7 +59,8 @@ function RoleManagement() {
   const [isModalOpen, setIsModalOpen]: any = useState(false);
   const [deleteRole, setDeleteRole]: any = useState("");
 
-  const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[1]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[1]?.isActive;
+  const isActive = checkPageAuthorized("Role Management");
 
   const HelperColumn = [
     columnsHelper.accessor("roleId", {

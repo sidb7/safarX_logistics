@@ -16,6 +16,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
+import { checkPageAuthorized } from "../../../../redux/reducers/role";
 
 const Buttons = (className?: string, usersData?: any) => {
   const navigate = useNavigate();
@@ -48,7 +49,8 @@ const Buttons = (className?: string, usersData?: any) => {
 function UserManagement() {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[2]?.isActive;
+  // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[2]?.isActive;
+  const isActive = checkPageAuthorized("User Management");
 
   const [usersData, setUsersData] = useState([]);
   const [totalItemCount, setTotalItemCount] = useState(0);
