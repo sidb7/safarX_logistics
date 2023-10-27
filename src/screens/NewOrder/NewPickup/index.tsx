@@ -201,7 +201,6 @@ const PickupLocation = () => {
     return false;
   };
 
-  console.log("pickupState", pickupDate);
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
@@ -214,23 +213,18 @@ const PickupLocation = () => {
         pickupAddress.returnAddress.contact
       );
 
-      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      console.log("pickupaddressPostApicall", pickupAddress);
-      console.log("validPickup", isPickupAddressValid);
-      console.log("isContactDetailsValid", isContactDetailsValid);
-      console.log("isPickupDateValid", isPickupDateValid);
+      // const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
 
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||
-        (!isReturnAddress && !isReturnAddressValid) ||
-        isContactDetailsReturnValid
+        (!isReturnAddress &&
+          !isReturnAddressValid &&
+          !isContactDetailsReturnValid)
       ) {
         setInputError(true);
         return;
       }
-
-      console.log("validReturn", isReturnAddressValid);
 
       setInputError(false);
       let payload = {};
@@ -252,7 +246,6 @@ const PickupLocation = () => {
           },
         };
       }
-      console.log("payloadforPostPickupafterInputValidation", payload);
       const { data: response } = await POST(ADD_PICKUP_LOCATION, payload);
 
       if (response?.success) {
@@ -384,8 +377,6 @@ const PickupLocation = () => {
       getReturningUserPickupDetails();
     }
   }, [userType]);
-
-  console.log("inputErrorState", inputError);
 
   return (
     <>

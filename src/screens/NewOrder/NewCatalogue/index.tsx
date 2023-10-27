@@ -142,8 +142,6 @@ const Catalogue = () => {
       // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
       setIsActive(checkPageAuthorized("Box Catalogue"));
     }
-
-    console.log("my page autho", checkPageAuthorized("Channel Integration"));
   }, [tabName, isActive, data]);
 
   const changeUrl = (statusName: any) => {

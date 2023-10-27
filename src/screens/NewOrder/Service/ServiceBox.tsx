@@ -71,7 +71,6 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   };
 
   const handleSortBy = (selectedItems: string[]) => {
-    console.log("SelectedItems", selectedItems);
     const isSurfaceSelected = selectedItems.includes("Surface");
     const isAirSelected = selectedItems.includes("Air");
 

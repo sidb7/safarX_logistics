@@ -181,7 +181,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         otherDetails,
       } = info?.row?.original;
       const AWB = otherDetails?.awbNo;
-      console.log("AWB", AWB);
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -370,10 +369,6 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Order Type": rowsData?.orderType,
       });
 
-      // if (rowsData?.orderId === "100175") {
-      //   console.log("rowsData: ", rowsData);
-      // }
-
       const handleInformativeModal = () => {
         setInfoModalContent({
           isOpen: true,
@@ -443,12 +438,11 @@ export const columnHelperForNewOrder = (
           otherDetails,
         } = info?.row?.original;
         const AWB = otherDetails?.awbNo;
-        console.log("AWB", AWB);
 
         return (
           <div className="py-3">
             {tempOrderId && (
-              <div className="flex items-center">
+              <div className="">
                 <span className="text-sm font-light mr-1">Shipyaari ID :</span>
                 <div className="flex text-base items-center font-medium">
                   <Link
@@ -508,7 +502,7 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            <div className=" flex items-center mt-1">
+            <div className="  mt-1">
               <span className="text-sm font-light mr-1">
                 Order Updated At :
               </span>
@@ -550,7 +544,6 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
-        // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYY(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
@@ -649,10 +642,6 @@ export const columnHelperForNewOrder = (
           Source: rowsData?.source,
           "Order Type": rowsData?.orderType,
         });
-
-        // if (rowsData?.orderId === "100175") {
-        //   console.log("rowsData: ", rowsData);
-        // }
 
         const handleInformativeModal = () => {
           setInfoModalContent({
@@ -941,7 +930,6 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       },
       cell: (info: any) => {
         const { pickupAddress, service } = info?.row?.original;
-        console.log("pickup>>viewOrder", pickupAddress);
         return (
           <div className=" ">
             <p className="">
@@ -1054,7 +1042,6 @@ export const columnHelpersForRest = (
     //   },
     //   cell: (info: any) => {
     //     const { original } = info.cell.row;
-    //     console.log("original: ", original);
 
     //     return (
     //       <div className="flex flex-col whitespace-nowrap">

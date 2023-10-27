@@ -119,10 +119,8 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
   };
 
   const opneAndCloseChild = (index: number, element: any) => {
-    console.log("name", element);
     const { name, isChild } = element;
     if (name === "Help") {
-      console.log("help clicked");
       window.open("https://care.shipyaari.com/support/home", "_blank");
       return;
     }

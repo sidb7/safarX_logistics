@@ -63,7 +63,6 @@ const BulkUpload = (props: ITypeProps) => {
   const handleDroppedFiles = (droppedFiles: File[]) => {
     if (droppedFiles.length > 0) {
       const selectedFile = droppedFiles[0];
-      console.log("selectedFile", selectedFile);
 
       setUploadFile(selectedFile);
       setIsDragging(true);

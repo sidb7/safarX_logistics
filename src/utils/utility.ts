@@ -135,7 +135,7 @@ export const loadPhonePeTransaction = async (
       paymentGateway: "PHONEPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-    console.log(data);
+   
     let phonePayTransactionPage;
     if (!data) {
       phonePayTransactionPage = redirectUrl;
@@ -219,7 +219,7 @@ export const loadRazorPayTransaction = async (
     };
     return options;
   } catch (error: any) {
-    console.log("RazorPay Error: ", error.message);
+    console.error("RazorPay Error: ", error.message);
     return null;
   }
 };
