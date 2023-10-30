@@ -20,7 +20,8 @@ const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const [loading, setLoading] = useState(false);
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
+
   const [checked, setChecked] = useState<any>({
     individual: false,
     bussiness: false,
@@ -67,10 +68,14 @@ const BusinessType = (props: ITypeProps) => {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="flex flex-col relative m-auto mt-[5%]   !w-[500px] lg:px-0 lg:gap-y-0">
+          <div
+            className={`${
+              isMdScreen ? " m-auto mt-[5%] !w-[500px] " : "w-full !h-full"
+            }flex flex-col relative lg:px-0 lg:gap-y-0`}
+          >
             {/* {isLgScreen && modalTitle()} */}
-            <div className="custom_shadow">
-              <div className="product-box  flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+              <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
                   className="my-auto  object-contain"
                   src={CompanyLogo}
