@@ -9,6 +9,7 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
 import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
@@ -21,6 +22,7 @@ export const ServiceComponent = (props: ITypeProps) => {
   const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
   const [acceptTnC, setAcceptTnC] = useState<any>();
+  const { isMdScreen } = ResponsiveState();
 
   useEffect(() => {
     const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus");
@@ -81,7 +83,11 @@ export const ServiceComponent = (props: ITypeProps) => {
 
   const serviceCommonComponent = () => {
     return (
-      <div className="lg:px-0 ">
+      <div 
+      className={`${
+        isMdScreen ? " m-auto mt-[7%] !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative lg:px-0 lg:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
         <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
           <img src={CompanyLogo} alt="" />
         </div>
@@ -97,6 +103,7 @@ export const ServiceComponent = (props: ITypeProps) => {
           />
         </div>
         {BottomButton()}
+        </div>
       </div>
     );
   };
@@ -106,14 +113,14 @@ export const ServiceComponent = (props: ITypeProps) => {
       {!isLgScreen && serviceCommonComponent()}
 
       {isLgScreen && (
-        <CustomBottomModal
-          isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px] overflow-y-scroll"
-          overlayClassName="flex  items-center"
-        >
-          {serviceCommonComponent()}
-        </CustomBottomModal>
+        // <CustomBottomModal
+        //   isOpen={openModal}
+        //   onRequestClose={closeModal}
+        //   className="!p-0 !w-[500px] !h-[700px] overflow-y-scroll"
+        //   overlayClassName="flex  items-center"
+        // >
+          serviceCommonComponent()
+        // </CustomBottomModal>
       )}
     </div>
   );
