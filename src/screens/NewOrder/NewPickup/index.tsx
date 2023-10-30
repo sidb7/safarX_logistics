@@ -107,7 +107,7 @@ const PickupLocation = () => {
         emailId: "",
         type: "warehouse associate",
       },
-      pickupDate: 0,
+      pickupDate: "",
     },
     returnAddress: {
       fullAddress: "",
@@ -217,11 +217,15 @@ const PickupLocation = () => {
         pickupAddress.returnAddress.contact
       );
 
-      // const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
+      const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
+      console.log("isPickuPDateValid", isPickupDateValid);
+      console.log("pickupAddress", pickupAddress);
 
+      console.log("isPickupAddValid", isPickupAddressValid);
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||
+        !isPickupDateValid ||
         (!isReturnAddress &&
           !isReturnAddressValid &&
           !isContactDetailsReturnValid)
@@ -307,7 +311,7 @@ const PickupLocation = () => {
                 emailId: orderData?.pickupAddress?.contact?.emailId,
                 type: orderData?.pickupAddress?.contact?.type,
               },
-              pickupDate: 0,
+              pickupDate: "",
             },
             returnAddress: {
               fullAddress: orderData?.returnAddress?.fullAddress,
