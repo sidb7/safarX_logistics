@@ -10,6 +10,8 @@ import { useEffect, useState, useRef } from "react";
 import AddButton from "../../../components/Button/addButton";
 import ButtonIcon from "../../../assets/Product/Button.svg";
 import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
+import Checkbox from "../../../components/CheckBox";
+import CustomInputBox from "../../../components/Input";
 interface IBoxdetails {
   products?: any;
   selectedBox?: any;
@@ -20,6 +22,7 @@ interface IBoxdetails {
   setBoxIndex?: any;
   handleEditBoxType?: any;
   removePackage?: any;
+  setCheckBoxValuePerBox: any;
 }
 
 const BoxDetails = (props: IBoxdetails) => {
@@ -32,10 +35,10 @@ const BoxDetails = (props: IBoxdetails) => {
     handleEditBoxType,
     boxIndex,
     removePackage,
+    setCheckBoxValuePerBox,
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
-
   useEffect(() => {
     setAllProducts([...products]);
   }, [products]);
@@ -49,6 +52,16 @@ const BoxDetails = (props: IBoxdetails) => {
     return volume / 5000;
   };
 
+  const handleCheckBox = (event: any) => {
+    const { value, name } = event;
+    setCheckBoxValuePerBox(value, name, boxIndex);
+  };
+
+  const handleCollectableAmmount = (event: any) => {
+    const { name, value } = event.target;
+    setCheckBoxValuePerBox(value, "codAmount", boxIndex);
+  };
+
   const calcAllTotalProductAppliedWeight: any = () => {
     let totalVolumetricWeight = 0;
     allProducts?.forEach((e: any) => {
@@ -57,6 +70,7 @@ const BoxDetails = (props: IBoxdetails) => {
     });
     return totalVolumetricWeight;
   };
+
   const percentage = (partialValue: any, totalValue: any) => {
     let percentage = (100 * +partialValue) / +totalValue;
     return percentage > 100 ? 100 : percentage;
@@ -147,7 +161,7 @@ const BoxDetails = (props: IBoxdetails) => {
           </div>
         </div>
 
-        <div className="h-full overflow-auto rounded-lg">
+        <div className="h-[300px] scroll-smooth  overflow-auto rounded-lg border border-x-[#E8E8E8]">
           {!(allProducts.length > 0) && (
             <div className="h-full w-full flex justify-center items-center">
               No Products Added
@@ -168,7 +182,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     dimensionClassName="!font-light"
                     className="!border-none !shadow-none !h-[70px]"
                   />
-                  <div className="flex items-center p-2  gap-2  rounded-lg">
+                  <div className="flex items-center p-2  gap-2 !mr-2 rounded-lg">
                     <div>
                       <img
                         src={subtractIcon}
@@ -215,15 +229,15 @@ const BoxDetails = (props: IBoxdetails) => {
           />
         </div>
         <hr />
-        {Object.keys(selectedBox).length > 0 ? (
+        {Object.keys(selectedBox).length > 0 && (
           <>
-            <span className="text-base text-slate-600 mt-2 pl-4">
+            <span className="text-base text-slate-600 ">
               {`Products Applied weight is ${calcAllTotalProductAppliedWeight().toFixed(
                 2
               )} Kg`}
             </span>
             <div className="relative">
-              <div className="h-[6px] bg-[#CBEAC0] mt-2 ml- mr-16">
+              <div className="h-[6px] bg-[#CBEAC0]  ml- mr-16">
                 <div
                   className={`h-[6px] ${
                     calcAllTotalProductAppliedWeight() >
@@ -238,7 +252,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     )}%`,
                   }}
                 ></div>
-                <div className="absolute top-1 right-0">
+                <div className="absolute -top-[6px] right-0">
                   <p className="text-base font-semibold leading-4 text-[#494949]">
                     {/* {weight is length x width x height (cm) / 5000.} */}
                     {selectedBox.volumetricWeight} Kg
@@ -246,28 +260,78 @@ const BoxDetails = (props: IBoxdetails) => {
                 </div>
               </div>
             </div>
-            {/* <span className="text-xs text-slate-600 font-semibold mt-4 pl-4"> */}
             {calcAllTotalProductAppliedWeight() >
             +selectedBox.volumetricWeight ? (
-              <span className="text-base text-slate-600  mt-4 pl-4">
-                {` Your billable weight is  ${calcBillableWeight()} KG. ( You are ${(
-                  calcAllTotalProductAppliedWeight() -
-                  +selectedBox.volumetricWeight
-                ).toFixed(2)} KG over your box capacity/volumetric weight )`}
-              </span>
+              <>
+                <span className="text-[15px] text-slate-600  mt-2">
+                  {` Your billable weight is  ${calcBillableWeight()} KG.`}
+                  <br />
+                  <span className="text-[15px] text-slate-600">
+                    {`You are ${(
+                      calcAllTotalProductAppliedWeight() -
+                      +selectedBox.volumetricWeight
+                    ).toFixed(2)} KG over your box capacity/volumetric weight `}
+                  </span>
+                </span>
+              </>
             ) : (
-              <span className="text-base text-slate-600  mt-4 pl-4">
-                {`Your billable weight is ${calcBillableWeight()} KG. You can add more products up to ${(
+              <span className="text-[15px]  text-slate-600  mt-2">
+                {`Your billable weight is ${calcBillableWeight()} KG.`}
+                <br />
+                {` You can add more products up to ${(
                   +selectedBox.volumetricWeight -
                   calcAllTotalProductAppliedWeight()
                 ).toFixed(2)} KG`}
               </span>
             )}
+            <div className="py-2 ">
+              <div className="flex  gap-x-2">
+                <Checkbox
+                  label="COD"
+                  name="cod"
+                  checkboxClassName="hover:transition-all border shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  checked={selectedBox?.codInfo?.isCod}
+                  onChange={handleCheckBox}
+                />
+                <Checkbox
+                  label="POD"
+                  name="pod"
+                  checked={selectedBox?.podInfo?.isPod}
+                  checkboxClassName="hover:transition-all border shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  onChange={handleCheckBox}
+                />
+                <Checkbox
+                  name="insurance"
+                  label="Insurance"
+                  checkboxClassName="hover:transition-all border shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  onChange={handleCheckBox}
+                  checked={selectedBox?.insurance?.isInsured}
+                />
+                <Checkbox
+                  name="fragile"
+                  checkboxClassName="hover:transition-all border shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  label="Fragile?"
+                  checked={selectedBox?.isFragile}
+                  onChange={handleCheckBox}
+                />
+              </div>
+              <div
+                className={`transition-all ease-in-out  ${
+                  selectedBox?.codInfo?.isCod
+                    ? "h-14 pt-5 opacity-100 "
+                    : "h-0 pt-0 opacity-0 "
+                } `}
+              >
+                <CustomInputBox
+                  label={"COD Amount to Collect From Buyer"}
+                  value={selectedBox?.codInfo?.collectableAmount}
+                  onChange={handleCollectableAmmount}
+                  inputType="number"
+                  className="!w-[350px]"
+                />
+              </div>
+            </div>
           </>
-        ) : (
-          <div className="flex justify-center items-center h-full">
-            Please Select Box Type
-          </div>
         )}
       </div>
     </div>

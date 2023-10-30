@@ -123,6 +123,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     invoiceValue: 0,
   });
   const [isLoading, setIsLoading]: any = useState(false);
+
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
@@ -137,11 +138,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     let totalInvoiceValue = 0;
     let tempArr = packages;
 
-    if (packages.length === 1 && orderType === "B2C") {
-      setShowAddBox(false);
-    } else {
-      setShowAddBox(true);
-    }
+    // if (packages.length === 1 && orderType === "B2C") {
+    //   setShowAddBox(false);
+    // } else {
+    //   setShowAddBox(true);
+    // }
 
     tempArr?.forEach((packages: any) => {
       totalInvoiceValue =
@@ -211,7 +212,89 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
   const setBoxTypeToPackage = (boxType: any) => {
     let tempArr = packages;
-    tempArr[boxIndex] = { ...boxType, ...tempArr[boxIndex] };
+    tempArr[boxIndex] = {
+      ...boxType,
+      ...tempArr[boxIndex],
+      codInfo: {
+        isCod: false,
+        collectableAmount: null,
+        invoiceValue: null,
+      },
+      insurance: {
+        isInsured: true,
+        amount: null,
+      },
+      isFragile: false,
+      podInfo: {
+        isPod: false,
+      },
+      tracking: {
+        awb: "",
+        label: "",
+        status: [],
+      },
+    };
+    setPackages([...tempArr]);
+  };
+
+  const handleCheckBoxValuePerBox = (
+    value: any,
+    name: string,
+    boxIndex: number
+  ) => {
+    console.log("value,name,boxIndex", value, name, boxIndex);
+
+    let tempArr = packages;
+
+    switch (name) {
+      case "cod":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex],
+          codInfo: {
+            ...tempArr[boxIndex].codInfo,
+            isCod: value,
+          },
+        };
+        break;
+      case "pod":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex],
+          podInfo: {
+            isPod: value,
+          },
+        };
+        break;
+      case "insurance":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex],
+          insurance: {
+            ...tempArr[boxIndex].insurance,
+            isInsured: value,
+          },
+        };
+        break;
+      case "fragile":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex],
+          insurance: {
+            ...tempArr[boxIndex].insurance,
+            isFragile: value,
+          },
+        };
+        break;
+      case "codAmount":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex],
+          codInfo: {
+            ...tempArr[boxIndex].codInfo,
+            collectableAmount: value,
+          },
+        };
+        break;
+      default:
+        break;
+    }
+
     setPackages([...tempArr]);
   };
 
@@ -318,6 +401,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       source: orderSource,
     };
 
+
     // if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
     //   toast.error("COD collectable Amount Cannot Be Zero");
     //   return;
@@ -350,7 +434,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         <div className="lg:mb-8">
           <Stepper steps={steps} />
         </div>
-        <div className="px-5 py-2 mb-12">
+        <div className="px-5 py-2 mb-12 scroll-smooth ">
           {/* <div className="flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={ProductIcon} alt="Product Icon" />
@@ -468,45 +552,42 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     removePackage={handleRemovePackage}
                     setBoxIndex={setBoxIndex}
                     openPackageDetailModal={handleOpenPackageDetails}
+                    setCheckBoxValuePerBox={handleCheckBoxValuePerBox}
                   />
                 );
               })}
 
-              {showAddBox ? (
-                <div className="w-[500px] ">
-                  <div className="hidden lg:flex justify-between ">
-                    <div className="flex py-5 gap-x-2">
-                      <img src={ProductIcon} alt="Package Icon" />
-                      <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                        Box {packages.length + 1}
-                      </h1>
-                    </div>
-                  </div>
-                  <div
-                    className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
-                    style={{
-                      boxShadow:
-                        "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
-                    }}
-                  >
-                    <AddButton
-                      text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
-                      onClick={() => {
-                        setBoxIndex(packages.length);
-                        setSelectedProductsOfPackage([]);
-                        setBoxTypeEditMode(false);
-                        setIsSearchProductRightModalOpen(true);
-                      }}
-                      showIcon={true}
-                      icon={ButtonIcon}
-                      className="rounded bg-white !shadow-none text-lg"
-                      alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
-                    />
+              <div className="w-[500px] ">
+                <div className="hidden lg:flex justify-between ">
+                  <div className="flex py-5 gap-x-2">
+                    <img src={ProductIcon} alt="Package Icon" />
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Box {packages.length + 1}
+                    </h1>
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
+                <div
+                  className="flex justify-center items-center w-full p-10 border-[5px] border-spacing-8 rounded-md border-dotted"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
+                  }}
+                >
+                  <AddButton
+                    text={`ADD PRODUCTS TO BOX ${packages.length + 1}`}
+                    onClick={() => {
+                      setBoxIndex(packages.length);
+                      setSelectedProductsOfPackage([]);
+                      setBoxTypeEditMode(false);
+                      setIsSearchProductRightModalOpen(true);
+                    }}
+                    showIcon={true}
+                    icon={ButtonIcon}
+                    className="rounded bg-white !shadow-none text-lg"
+                    alt={`ADD PRODUCTS BOX ${packages.length + 1}`}
+                  />
+                </div>
+              </div>
             </div>
           )}
           <div>
