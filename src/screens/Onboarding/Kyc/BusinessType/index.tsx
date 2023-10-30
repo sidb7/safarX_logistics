@@ -67,7 +67,7 @@ const BusinessType = (props: ITypeProps) => {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="flex flex-col relative w-full !h-full lg:px-0 lg:gap-y-0">
+          <div className="flex flex-col relative m-auto mt-[5%] shadow-lg  !w-[500px] lg:px-0 lg:gap-y-0">
             {isLgScreen && modalTitle()}
             <div className="overflow-y-auto">
               <div className="flex justify-between items-center shadow-md h-[60px] px-6 mb-6 lg:hidden ">
@@ -151,14 +151,14 @@ const BusinessType = (props: ITypeProps) => {
   const renderBusinessType = () => {
     if (isLgScreen && openModal) {
       return (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={openModal}
-          // onRequestClose={() => setOpenModal(false)}
-          className="!w-[500px] lg:!h-[700px]"
-        >
-          {businessTypeComponent()}
-        </CenterModal>
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   isOpen={openModal}
+        //   // onRequestClose={() => setOpenModal(false)}
+        //   className="!w-[500px] lg:!h-[700px]"
+        // >
+        businessTypeComponent()
+        // </CenterModal>
       );
     } else {
       return loading ? (
