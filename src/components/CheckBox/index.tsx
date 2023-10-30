@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 interface IProps {
   label?: string;
   checked?: boolean;
@@ -6,11 +6,10 @@ interface IProps {
   checkboxClassName?: string;
   labelClassName?: string;
   name?: string;
-  value?: string;
+  value?: boolean;
   style?: any;
   disabled?: any;
   required?: boolean;
-
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const Checkbox: React.FC<IProps> = ({
@@ -19,28 +18,40 @@ const Checkbox: React.FC<IProps> = ({
   disabled,
   className,
   checkboxClassName,
-  onChange,
+  onChange = () => {},
   labelClassName,
   name,
-  value,
+  value = false,
   style,
   required,
 }) => {
+  const [isChecked, setIsChecked] = useState(checked);
+
+  const handleCheckboxChange = (e: any) => {
+    setIsChecked(!isChecked);
+    onChange({ ...e, name, value: !isChecked });
+  };
   return (
-    <div className="flex items-center justify-start p-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap">
+    <div
+      className={`${checkboxClassName} flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
+    >
       <input
         required={required}
         type="checkbox"
         disabled={disabled}
         name={name}
-        value={value}
-        checked={checked}
-        onChange={onChange}
+        checked={isChecked}
+        onChange={(e) => handleCheckboxChange(e)}
         title="Checkbox"
         style={style}
         className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
-      <span className={`ml-2 ${labelClassName} text-sm`}>{label}</span>
+      <span
+        className={`ml-2 ${labelClassName} select-none text-sm cursor-pointer`}
+        onClick={handleCheckboxChange} // Handle checkbox change when the span is clicked
+      >
+        {label}
+      </span>
     </div>
   );
 };
