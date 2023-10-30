@@ -158,6 +158,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomInputBox
+            inputType="email"
             label="Email ID (optional)"
             value={address.emailId}
             onChange={(e) => {
@@ -179,6 +180,8 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
           <CustomInputBox
             label="Alternate mobile number (optional)"
             value={address.alternateMobileNo}
+            maxLength={10}
+            inputMode="numeric"
             onChange={(e) => {
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
               handleContactChange("alternateMobileNo", e.target.value);
