@@ -9,19 +9,21 @@ import CheckIsOnline from "./components/CheckIsOnline";
 const App = () => {
   /* Socket code */
 
-  // const roomName = useSelector(
-  //   (state: any) => state?.roles?.roles[0]?.roleName
-  // );
+  const roomName = useSelector(
+    (state: any) => state?.roles?.roles[0]?.roleName
+  );
 
-  // useEffect(() => {
-  //   if (roomName) {
-  //     socketCallbacks.connectSocket(roomName);
-  //   }
+  useEffect(() => {
+    if (roomName) {
+      console.log("userType", roomName);
 
-  //   return () => {
-  //     socketCallbacks.disconnectSocket();
-  //   };
-  // }, [roomName]);
+      socketCallbacks.connectSocket(roomName);
+    }
+
+    return () => {
+      socketCallbacks.disconnectSocket();
+    };
+  }, [roomName]);
 
   return (
     <div>
