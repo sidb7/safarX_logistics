@@ -288,10 +288,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       case "fragile":
         tempArr[boxIndex] = {
           ...tempArr[boxIndex],
-          insurance: {
-            ...tempArr[boxIndex].insurance,
-            isFragile: value,
-          },
+          isFragile: value,
         };
         break;
       case "codAmount":
@@ -414,7 +411,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       boxInfo: packages,
       codInfo: { ...codDataInfo },
       insurance: {
-        status: selectInsurance.isInsurance ? true : false,
+        isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
       tempOrderId: +shipyaari_id,
