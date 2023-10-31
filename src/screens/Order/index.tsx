@@ -1,28 +1,16 @@
-import { OrderCard } from "./OrderCard";
 import CustomButton from "../../components/Button";
 import AddOrderIcon from "../../assets/Order/AddOrder.svg";
 import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
-import SyncIcon from "../../assets/Order/SyncIcon.svg";
-import BlackShipIcon from "../../assets/OrderDetails/BlackShipIcon.svg";
-import Delivery from "../../assets/OrderDetails/Delivery.svg";
-import CopyIcon from "../../assets/OrderDetails/CopyIcon.svg";
-import BackArrowIcon from "../../assets/backArrow.svg";
 import { OrderStatus } from "./OrderStatus";
-import { OrderDetails } from "./OrderDetails";
 import DeliveryGIF from "../../assets/OrderCard/Gif.gif";
 import { CustomTable } from "../../components/Table";
-import { createColumnHelper } from "@tanstack/react-table";
 import { useEffect, useState } from "react";
-import ErrorFile from "./OrderStatus/errorFile";
-import Slider from "react-slick";
 import "../../styles/silkStyle.css";
 import {
-  columnHelperForPendingOrder,
   columnHelperForNewOrder,
   ColumnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
 } from "./ColumnHelpers";
-import { insufficientBalance } from "../../utils/dummyData";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
@@ -43,6 +31,7 @@ import DeleteModal from "../../components/CustomModal/DeleteModal";
 import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteModal";
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import CustomRightModal from "../../components/CustomModal/customRightModal";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -561,12 +550,12 @@ const Index = () => {
         title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
       />
 
-      <CenterModal
+      <CustomRightModal
         isOpen={infoModalContent.isOpen}
-        onRequestClose={() => setInfoModalContent({ isOpen: false })}
+        onClose={() => setInfoModalContent({ isOpen: false })}
         className="!justify-start"
       >
-        <div className="flex border-b-2 mt-2 w-[95%] justify-center px-[1rem] text-[1.2rem]">
+        <div className="flex mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[1.2rem]">
           <p className="">
             {infoModalContent?.orderId?.includes?.("T")
               ? `${
@@ -576,7 +565,7 @@ const Index = () => {
           </p>
         </div>
         <CustomTableAccordian data={infoModalContent.data} />
-      </CenterModal>
+      </CustomRightModal>
     </>
   );
 };
