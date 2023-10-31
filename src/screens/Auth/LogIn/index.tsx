@@ -192,7 +192,7 @@ const Index = () => {
     return (
       <div
         className={` ${
-          isMdScreen ? "m-auto mt-[5%] !w-[500px]" : ""
+          isMdScreen ? "m-auto  !w-[500px]" : ""
         } flex flex-col relative lg:px-0 lg:gap-y-0`}
       >
         <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
@@ -384,7 +384,11 @@ const Index = () => {
             </CenterModal>
           )} */}
 
-          {isLgScreen && loginComponent()}
+          {isLgScreen && (
+            <div className="flex justify-center items-center h-screen">
+              {loginComponent()}
+            </div>
+          )}
           {!isLgScreen && loginComponent()}
         </>
       )}

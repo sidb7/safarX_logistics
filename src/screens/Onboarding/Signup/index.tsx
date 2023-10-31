@@ -160,7 +160,7 @@ const Index = () => {
         ) : (
           <div
             className={` ${
-              isMdScreen ? "m-auto mt-[5%] !w-[500px]" : "w-full !h-full"
+              isMdScreen ? "m-auto  !w-[500px]" : "w-full !h-full"
             } flex flex-col relative lg:px-0 lg:gap-y-0`}
           >
             {/* {isLgScreen && modalTitle()} */}
@@ -501,14 +501,16 @@ const Index = () => {
   };
 
   const renderSignUp = () => {
-    if (isLgScreen && isModalOpen) {
+    if (isLgScreen) {
       return (
         // <CenterModal
         //   shouldCloseOnOverlayClick={false}
         //   isOpen={isModalOpen}
         //   // onRequestClose={() => setIsModalOpen(false)}
         // >
-        signUp()
+        <div className="flex justify-center items-center h-screen">
+          {signUp()}
+        </div>
         // </CenterModal>
       );
     } else {
