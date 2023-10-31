@@ -4,15 +4,30 @@ import { tokenKey } from "../utils/utility";
 let socket: Socket | null = null;
 
 const connectSocket = (roomName: string) => {
+  const sellerId = sessionStorage.getItem("sellerId");
+  const token = sellerId
+    ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    : "";
+
+  const sessionID = localStorage.getItem("sessionID");
+
   if (!socket) {
     socket = io("http://localhost:8010", {
       reconnectionDelayMax: 10000,
       auth: {
-        token: localStorage.getItem(tokenKey),
+        token: localStorage.getItem(token),
+        sessionID: sessionID,
       },
       query: {
         "my-key": "my-value",
       },
+    });
+
+    console.log(`Connecting socket...`);
+
+    socket.on("authenticated", ({ sessionID }) => {
+      localStorage.setItem("sessionID", sessionID);
+      console.log("Authenticated with session ID:", sessionID);
     });
 
     socket.on("welcomeMessage", (message) => {
