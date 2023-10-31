@@ -74,8 +74,8 @@ const BusinessType = (props: ITypeProps) => {
             }flex flex-col relative lg:px-0 lg:gap-y-0`}
           >
             {/* {isLgScreen && modalTitle()} */}
-            <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-              <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <div className={`${isMdScreen ? "custom_shadow" : "product-box"}`}>
+              <div className=" flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
                   className="my-auto  object-contain"
                   src={CompanyLogo}

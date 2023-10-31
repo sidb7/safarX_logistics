@@ -33,7 +33,7 @@ import { Tooltip } from "react-tooltip";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -158,11 +158,16 @@ const Index = () => {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="relative h-full w-full pb-6 overflow-y-auto hide-scrollbar">
-            {isLgScreen && modalTitle()}
-            <div className="lg:mx-24 lg:mt-[18px]">
+          <div
+            className={` ${
+              isMdScreen ? "m-auto mt-[5%] !w-[500px]" : "w-full !h-full"
+            } flex flex-col relative lg:px-0 lg:gap-y-0`}
+          >
+            {/* {isLgScreen && modalTitle()} */}
+
+            <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
               <div className="flex flex-col xl:gap-y-9 lg:gap-y-4">
-                <div className="product-box flex items-center lg:hidden">
+                <div className="product-box flex items-center ">
                   <img
                     className="m-4 h-[25px] object-contain"
                     src={CompanyLogo}
@@ -170,16 +175,16 @@ const Index = () => {
                   />
                 </div>
 
-                <div className="flex flex-col mt-12 lg:mt-8 mx-4 gap-y-3">
+                <div className="flex flex-col mt-12 lg:mt-2 mx-4 md:mx-[85px] gap-y-3">
                   <p className="text-center	leading-7 text-2xl font-bold font-Lato">
                     Welcome to Shipyaari
                   </p>
-                  <p className="text-center font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
+                  <p className="text-center text-[#494949] font-Open font-light text-base leading-[22px] mb-7 lg:mb-0">
                     Fast and Easy Shipping from your doorstep to your
                     customer's.{" "}
                   </p>
                 </div>
-                <div className=" flex flex-col mx-4 gap-y-7">
+                <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-7">
                   <div className="flex justify-center">
                     <GoogleLogin
                       text="continue_with"
@@ -462,7 +467,7 @@ const Index = () => {
                     text="SIGN UP"
                   />
 
-                  <div className="flex justify-center">
+                  <div className="flex justify-center md:mb-[40px]">
                     <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                       Already Have An Account ?{" "}
                     </p>
@@ -498,13 +503,13 @@ const Index = () => {
   const renderSignUp = () => {
     if (isLgScreen && isModalOpen) {
       return (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={isModalOpen}
-          // onRequestClose={() => setIsModalOpen(false)}
-        >
-          {signUp()}
-        </CenterModal>
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   isOpen={isModalOpen}
+        //   // onRequestClose={() => setIsModalOpen(false)}
+        // >
+        signUp()
+        // </CenterModal>
       );
     } else {
       return loading ? (
