@@ -16,7 +16,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
   const location = useLocation();
   const state = location.state || {};
 
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const data = state?.questionsData;
   const [questionsData, setQuestionsData] = useState(data || []);
@@ -81,18 +81,22 @@ export const QuestionComponent3: React.FunctionComponent = () => {
 
   const question3 = () => {
     return (
-      <div className="relative h-full w-full">
-        {isLgScreen && modalTitle()}
-        <div className="product-box flex items-center lg:hidden">
+      <div
+        className={` ${
+          isMdScreen ? "custom_shadow m-auto  !w-[688px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
+      >
+        {/* {isLgScreen && modalTitle()} */}
+        <div className="product-box flex items-center">
           <img
             className="m-4 h-[25px] object-contain"
             src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 mt-10 lg:grid lg:grid-cols-2 lg:mt-[80px] lg:gap-x-4">
+        <div className="flex flex-col mx-4 mt-10 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
           <div>
-            <WelcomeHeader welcomeClassName="lg:!mt-4" className="hidden" />
+            <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">
               <img src={CargoRatingGif} alt="" width="180px" />
             </div>
@@ -149,15 +153,18 @@ export const QuestionComponent3: React.FunctionComponent = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          className="h-[474px] w-[688px]"
-          isOpen={isModalOpen}
-          // onRequestClose={() => setIsModalOpen(false)}
-        >
+      {isMdScreen && (
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   className="h-[474px] w-[688px]"
+        //   isOpen={isModalOpen}
+        //   // onRequestClose={() => setIsModalOpen(false)}
+        // >
+        <div className="flex justify-center items-center h-screen">
+          {" "}
           {question3()}
-        </CenterModal>
+        </div>
+        // </CenterModal>
       )}
 
       {!isLgScreen && question3()}
