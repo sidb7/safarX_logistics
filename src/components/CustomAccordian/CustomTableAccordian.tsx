@@ -128,9 +128,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                               //   </div>
                               // </div>
                               <div>
-                                {item?.title === "Status" && index === 7 && (
-                                  <br />
-                                )}
+                                {item?.title === "Status" &&
+                                  (index === 7 ||
+                                    index === 13 ||
+                                    index === 19) && <br />}
                                 <div
                                   className={`grid grid-cols-12 mt-1 border-2 py-[0.5rem] ${
                                     index % 2 === 0

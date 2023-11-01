@@ -160,6 +160,7 @@ const Index = () => {
   const [statusData, setStatusData]: any = useState(tabs);
 
   const [orders, setOrders]: any = useState([]);
+  const [allOrders, setAllOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
@@ -323,6 +324,7 @@ const Index = () => {
         statusData[index].value
       );
       setOrders(OrderData);
+      setAllOrders(OrderData);
       setGlobalIndex(index);
 
       statusList?.forEach((e1: any) => {
@@ -397,6 +399,7 @@ const Index = () => {
       limit
     );
     setOrders(OrderData);
+    setAllOrders(OrderData);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -423,6 +426,7 @@ const Index = () => {
     );
 
     setOrders(OrderData);
+    setAllOrders(OrderData);
   };
 
   const getSellerOrder = async (
@@ -465,6 +469,7 @@ const Index = () => {
       (elem: any) => elem?.status?.[0]?.AWB !== cancellationModal.awbNo
     );
     setOrders(newOrders);
+    setAllOrders(newOrders);
     setIsDeleted(false);
   }
 
@@ -477,10 +482,12 @@ const Index = () => {
             <div className="pl-5 pr-6">
               <OrderStatus
                 filterId={filterId}
+                orders={orders}
                 setFilterId={setFilterId}
                 handleTabChange={handleTabChanges}
                 statusData={statusData}
                 setOrders={setOrders}
+                allOrders={allOrders}
                 currentStatus={tabs[globalIndex].value}
               />
               {isLoading ? (
