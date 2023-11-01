@@ -5,6 +5,7 @@ import MyRoutes from "./routes/MyRoutes";
 import { socketCallbacks } from "./Socket";
 import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
+import { GlobalToast } from "./components/GlobalToast/GlobalToast";
 
 const App = () => {
   /* Socket code */
@@ -24,6 +25,10 @@ const App = () => {
       socketCallbacks.disconnectSocket();
     };
   }, [roomName]);
+
+  // useEffect(() => {
+  //   GlobalToast("Welcome to the application!");
+  // }, []);
 
   return (
     <div>

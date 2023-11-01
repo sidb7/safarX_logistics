@@ -1,6 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { tokenKey } from "../utils/utility";
 import { SELLER_URL } from "../utils/ApiUrls";
+import { GlobalToast } from "../components/GlobalToast/GlobalToast";
 let socket: Socket | null = null;
 
 const connectSocket = (roomName: string) => {
@@ -10,9 +11,11 @@ const connectSocket = (roomName: string) => {
     : "";
 
   const sessionID = localStorage.getItem("sessionID");
+  // "http://localhost:8010";
 
   if (!socket) {
-    socket = io("http://localhost:8010", {
+    console.log("url", SELLER_URL);
+    socket = io(SELLER_URL, {
       reconnectionDelayMax: 10000,
       auth: {
         token: localStorage.getItem(token),
@@ -24,13 +27,19 @@ const connectSocket = (roomName: string) => {
     });
     socket.emit("joinRoom", roomName);
 
+    socket.on("error", (error) => {
+      console.error("Socket error:", error);
+    });
+
+    console.log("socket", socket);
+
     console.log(`Connecting socket...`);
 
     socket.on("authenticated", ({ sessionID }) => {
       localStorage.setItem("sessionID", sessionID);
       console.log("Authenticated with session ID:", sessionID);
     });
-
+    socket.emit("joinRoom", roomName);
     socket.on("welcomeMessage", (message) => {
       console.log(`Received welcome message: ${message}`);
     });
@@ -39,7 +48,10 @@ const connectSocket = (roomName: string) => {
       //GlobalToast(data.message);
     });
 
-    // socket.emit("joinRoom", roomName);
+    socket.on("bulkOrderFailed", (data) => {
+      console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
+      GlobalToast(data.message);
+    });
 
     socket.on("roomWelcomeMessage", (message) => {
       console.log(`Received room welcome message: ${message}`);
