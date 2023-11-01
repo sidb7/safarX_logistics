@@ -105,6 +105,7 @@ const Summary = (props: Props) => {
 
       if (response?.success) {
         setLatestOrder(response);
+        setOrderId(response?.data?.[0]?.orderId);
       } else {
         setLatestOrder([]);
       }
@@ -213,9 +214,13 @@ const Summary = (props: Props) => {
           <div className="md:!w-[372px]">
             <div className="md:!w-[372px]">
               <CustomInputBox
+                inputType="number"
                 label="Enter Eway Bill No."
                 value={ewaybillNumber}
-                onChange={(e) => setEwaybillNumber(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value.length <= 12)
+                    setEwaybillNumber(e.target.value);
+                }}
               />
             </div>
           </div>
@@ -411,7 +416,7 @@ const Summary = (props: Props) => {
               base={serviceDetails?.base}
               variables={serviceDetails?.variables}
               cod={serviceDetails?.cod}
-              gst={serviceDetails?.gst}
+              tax={serviceDetails?.tax}
               invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}
             />
