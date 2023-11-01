@@ -9,11 +9,11 @@ import CheckIsOnline from "./components/CheckIsOnline";
 const App = () => {
   /* Socket code */
 
-  const roomName = useSelector(
-    (state: any) => state?.roles?.roles[0]?.roleName
-  );
+  let roomName = sessionStorage.getItem("sellerId");
+  //useSelector((state: any) => state?.roles?.roles[0]);
 
   useEffect(() => {
+    roomName = `${sessionStorage.getItem("sellerId")}`;
     if (roomName) {
       console.log("userType", roomName);
 

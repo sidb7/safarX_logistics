@@ -1,6 +1,6 @@
 import { io, Socket } from "socket.io-client";
 import { tokenKey } from "../utils/utility";
-
+import { SELLER_URL } from "../utils/ApiUrls";
 let socket: Socket | null = null;
 
 const connectSocket = (roomName: string) => {
@@ -22,6 +22,7 @@ const connectSocket = (roomName: string) => {
         "my-key": "my-value",
       },
     });
+    socket.emit("joinRoom", roomName);
 
     console.log(`Connecting socket...`);
 
@@ -33,8 +34,12 @@ const connectSocket = (roomName: string) => {
     socket.on("welcomeMessage", (message) => {
       console.log(`Received welcome message: ${message}`);
     });
+    socket.on("bulkOrderFailed", (data) => {
+      console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
+      //GlobalToast(data.message);
+    });
 
-    socket.emit("joinRoom", roomName);
+    // socket.emit("joinRoom", roomName);
 
     socket.on("roomWelcomeMessage", (message) => {
       console.log(`Received room welcome message: ${message}`);
