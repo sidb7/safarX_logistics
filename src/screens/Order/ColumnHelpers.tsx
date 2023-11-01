@@ -978,9 +978,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                     width={"35px"}
                     // alt="Cancel Order"
                     className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                    onClick={() =>
-                      handleCancellationModal(data?.AWB, data?.orderId)
-                    }
+                    onClick={() => handleCancellationModal(awb, data?.orderId)}
                     data-tooltip-id="my-tooltip-inline"
                     data-tooltip-content="Cancel Order"
                   />
