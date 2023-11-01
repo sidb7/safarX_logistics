@@ -10,15 +10,11 @@ import { GlobalToast } from "./components/GlobalToast/GlobalToast";
 const App = () => {
   /* Socket code */
 
-  // const roomName = useSelector(
-  //   (state: any) => state?.roles?.roles[0]?.roleName
-  // );
-
-  let roomName = `${sessionStorage.getItem("sellerId")}`;
+  let roomName = sessionStorage.getItem("sellerId");
+  //useSelector((state: any) => state?.roles?.roles[0]);
 
   useEffect(() => {
     roomName = `${sessionStorage.getItem("sellerId")}`;
-
     if (roomName) {
       console.log("userType", roomName);
 
