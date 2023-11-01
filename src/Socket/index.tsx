@@ -15,7 +15,7 @@ const connectSocket = (roomName: string) => {
 
   if (!socket) {
     console.log("url", SELLER_URL);
-    socket = io(SELLER_URL, {
+    socket = io("http://localhost:8010", {
       reconnectionDelayMax: 10000,
       auth: {
         token: localStorage.getItem(token),

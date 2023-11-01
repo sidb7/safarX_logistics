@@ -30,9 +30,11 @@ import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 import { useSelector } from "react-redux";
-import { getSocket } from "../../Socket";
+import { getSocket, initSocket, socketCallbacks } from "../../Socket";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
+import { io, Socket } from "socket.io-client";
+let socket: Socket | null = null;
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -201,24 +203,29 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
-  // Initialize socket
-  const socket = getSocket();
+  // // Initialize socket
+  // const socket = getSocket();
+  // initSocket();
 
-  // Subscribe to the socket event for wallet balance updates
-  useEffect(() => {
-    if (socket) {
-      socket.on("wallet_balance_update", (newBalance: number) => {
-        // Update the wallet balance in the Redux store or local state
-        console.log("newWalletBalance", newBalance);
-        dispatch(setWalletBalance({ amt: newBalance }));
-      });
+  // // // Subscribe to the socket event for wallet balance updates
+  // useEffect(() => {
+  //   const socket = getSocket();
+  //   console.log("socketwallet", socket);
+  //   if (socket) {
+  //     socket.on("wallet_balance_update", (newBalance: number) => {
+  //       // Update the wallet balance in the Redux store or local state
+  //       console.log("newWalletBalance", newBalance);
+  //       dispatch(setWalletBalance({ amt: newBalance }));
+  //     });
 
-      // Clean up the socket subscription on component unmount
-      return () => {
-        socket.off("wallet_balance_update");
-      };
-    }
-  }, [socket]);
+  //     // Clean up the socket subscription on component unmount
+  //     return () => {
+  //       if (socket) {
+  //         socket.off("wallet_balance_update");
+  //       }
+  //     };
+  //   }
+  // }, [socket]);
 
   return (
     <>
