@@ -5,15 +5,20 @@ import MyRoutes from "./routes/MyRoutes";
 import { socketCallbacks } from "./Socket";
 import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
+import { GlobalToast } from "./components/GlobalToast/GlobalToast";
 
 const App = () => {
   /* Socket code */
 
-  const roomName = useSelector(
-    (state: any) => state?.roles?.roles[0]?.roleName
-  );
+  // const roomName = useSelector(
+  //   (state: any) => state?.roles?.roles[0]?.roleName
+  // );
+
+  let roomName = `${sessionStorage.getItem("sellerId")}`;
 
   useEffect(() => {
+    roomName = `${sessionStorage.getItem("sellerId")}`;
+
     if (roomName) {
       console.log("userType", roomName);
 
@@ -24,6 +29,10 @@ const App = () => {
       socketCallbacks.disconnectSocket();
     };
   }, [roomName]);
+
+  // useEffect(() => {
+  //   GlobalToast("Welcome to the application!");
+  // }, []);
 
   return (
     <div>
