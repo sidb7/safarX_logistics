@@ -241,8 +241,8 @@ const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 //feedback
 //feedback
-const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`
-const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`
+const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
+const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 
 //Serviceability URL
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
@@ -365,5 +365,5 @@ export {
   GET_COMPANY_SERVICE,
   ADD_PICKUP_ADDRESS_CATALOGUE,
   CREATE_FEEDBACK,
-  GET_FEEDBACK
+  GET_FEEDBACK,
 };

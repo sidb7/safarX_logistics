@@ -264,7 +264,8 @@ const BoxDetails = (props: IBoxdetails) => {
             +selectedBox.volumetricWeight ? (
               <>
                 <span className="text-[15px] text-slate-600  mt-2">
-                  {` Your billable weight is  ${calcBillableWeight()} KG.`}
+                  {` Your billable weight is `}
+                  <span className="font-semibold">{`${calcBillableWeight()} KG.`}</span>
                   <br />
                   <span className="text-[15px] text-slate-600">
                     {`You are ${(
@@ -315,21 +316,30 @@ const BoxDetails = (props: IBoxdetails) => {
                   onChange={handleCheckBox}
                 />
               </div>
-              <div
-                className={`transition-all ease-in-out  ${
+              {/* <div
+                className={`transition-all ease-in-out flex gap-4 ${
                   selectedBox?.codInfo?.isCod
                     ? "h-14 pt-5 opacity-100 "
                     : "h-0 pt-0 opacity-0 "
                 } `}
-              >
+              > */}
+              <div className="flex pt-5  ">
+                <div className="!mr-4 w-[300px]">
+                  <CustomInputBox
+                    label="Invoice Value"
+                    isDisabled={true}
+                    value={selectedBox?.codInfo?.invoiceValue}
+                  />
+                </div>
                 <CustomInputBox
                   label={"COD Amount to Collect From Buyer"}
+                  isDisabled={!selectedBox?.codInfo?.isCod}
                   value={selectedBox?.codInfo?.collectableAmount}
                   onChange={handleCollectableAmmount}
                   inputType="number"
-                  className="!w-[350px]"
                 />
               </div>
+              {/* </div> */}
             </div>
           </>
         )}

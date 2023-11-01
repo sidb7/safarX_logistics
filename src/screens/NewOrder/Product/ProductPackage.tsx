@@ -134,6 +134,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     (state: any) => state?.user.isReturningUser
   );
   const isOrderTypeB2B = orderType === "B2B";
+
+  //update invoice value
   useEffect(() => {
     let totalInvoiceValue = 0;
     let tempArr = packages;
@@ -202,11 +204,18 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   };
 
   const setProductsToPackage = (products: any, boxIndex: number) => {
+    const invoiceValue = +getInvoiceValue(products);
+
     let tempArr = packages;
     tempArr[boxIndex] = {
       ...tempArr[boxIndex],
       products: [...products],
+      codInfo: {
+        ...tempArr[boxIndex]?.codInfo,
+        invoiceValue: +invoiceValue,
+      },
     };
+
     setPackages([...tempArr]);
   };
 
@@ -217,12 +226,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       ...tempArr[boxIndex],
       codInfo: {
         isCod: false,
-        collectableAmount: null,
-        invoiceValue: null,
+        collectableAmount: 0,
+        invoiceValue: 0,
       },
       insurance: {
         isInsured: true,
-        amount: null,
+        amount: 0,
       },
       isFragile: false,
       podInfo: {
@@ -242,10 +251,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     name: string,
     boxIndex: number
   ) => {
-    console.log("value,name,boxIndex", value, name, boxIndex);
-
     let tempArr = packages;
-
     switch (name) {
       case "cod":
         tempArr[boxIndex] = {
@@ -264,6 +270,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           },
         };
         break;
+      case "invoiceValue":
+        tempArr[boxIndex] = {
+          ...tempArr[boxIndex].codInfo,
+          invoiceValue: value && +value,
+        };
+        break;
       case "insurance":
         tempArr[boxIndex] = {
           ...tempArr[boxIndex],
@@ -276,10 +288,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       case "fragile":
         tempArr[boxIndex] = {
           ...tempArr[boxIndex],
-          insurance: {
-            ...tempArr[boxIndex].insurance,
-            isFragile: value,
-          },
+          isFragile: value,
         };
         break;
       case "codAmount":
@@ -287,7 +296,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           ...tempArr[boxIndex],
           codInfo: {
             ...tempArr[boxIndex].codInfo,
-            collectableAmount: value,
+            collectableAmount: value && +value,
           },
         };
         break;
@@ -314,7 +323,15 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     let tempArr = packages;
     let selectedBoxTemp = selectedBox;
     delete selectedBoxTemp.products;
-    tempArr[boxIndex] = { ...tempArr[boxIndex], ...selectedBoxTemp };
+
+    const invoiceValue = +getInvoiceValue(tempArr[boxIndex]?.products);
+    const codInfo = {
+      ...tempArr[boxIndex]?.codInfo,
+      invoiceValue: invoiceValue,
+    };
+    // console.log("package", packages);
+
+    tempArr[boxIndex] = { ...tempArr[boxIndex], codInfo, ...selectedBoxTemp };
     setPackages([...tempArr]);
     setBoxTypeModal(false);
   };
@@ -394,13 +411,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       boxInfo: packages,
       codInfo: { ...codDataInfo },
       insurance: {
-        status: selectInsurance.isInsurance ? true : false,
+        isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
       },
       tempOrderId: +shipyaari_id,
       source: orderSource,
     };
-
 
     // if (paymentMode === "cod" && +codData.collectableAmount <= 0) {
     //   toast.error("COD collectable Amount Cannot Be Zero");
@@ -539,7 +555,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-6">
+            <div className="flex flex-wrap gap-6 mb-16">
               {packages?.map((packageDetails: any, index: number) => {
                 return (
                   <BoxDetails
@@ -590,7 +606,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           )}
-          <div>
+          {/* <div>
             <div className="w-full flex justify-between py-6 ">
               <div className="flex gap-x-2 items-center ">
                 <img src={shieldTick} alt="" />
@@ -657,19 +673,19 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div>
-            <div className="w-full flex justify-between pt-6 ">
+            {/* <div className="w-full flex justify-between pt-6 ">
               <div className="flex gap-x-2 items-center">
                 <img src={CodIcon} alt="" />
                 <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
                   Payment Mode
                 </h1>
               </div>
-            </div>
+            </div> */}
 
             <div>
-              <div className="flex py-5 ">
+              {/* <div className="flex py-5 ">
                 <GroupRadioButtons
                   options={[
                     { text: "Prepaid", value: "prepaid" },
@@ -679,11 +695,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   isDisabled={isOrderTypeB2B}
                   selectedValue={setPaymentMode}
                 />
-                {/* )} */}
-              </div>
+              </div> */}
 
-              <div className="flex w-fit gap-x-8 py-2 pb-8">
-                {/* paymentMode === "cod" && !isOrderTypeB2B */}
+              {/* <div className="flex w-fit gap-x-8 py-2 pb-8">
                 <CustomInputBox
                   label={"COD Amount to Collect From Buyer"}
                   value={codData?.collectableAmount}
@@ -714,9 +728,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     setCodData({ ...codData, invoiceValue: e.target.value })
                   }
                 />
-              </div>
+              </div> */}
 
-              <div className="w-full flex justify-between pt-6 ">
+              {/* <div className="w-full flex justify-between pt-6 ">
                 <div className="flex gap-x-2 items-center">
                   <img src={CodIcon} alt="" />
                   <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
@@ -765,7 +779,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     </p>
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
@@ -914,7 +928,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
         handlePackageDetails={handlePackageDetailsForProduct}
       />
-      ;
     </div>
   );
 };

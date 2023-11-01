@@ -241,11 +241,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             ) : (
               <div className="hidden lg:block">
                 <div
-                  className="flex items-center cursor-pointer max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
+                  className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
                   onClick={() => navigate("/wallet/view-wallet")}
                 >
                   <img src={WalletIcon} width={35} alt="" />
-                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
+                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div>₹</div>
+                    <div>{walletBalance}</div>
+                  </div>
                 </div>
               </div>
             )}
