@@ -21,6 +21,7 @@ import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 
 interface ITypeProps {}
 
@@ -33,6 +34,7 @@ const BusinessType = (props: ITypeProps) => {
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const { isMdScreen } = ResponsiveState();
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>({});
 
@@ -205,152 +207,166 @@ const BusinessType = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div>
-        <div className="lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-          <img src={CompanyLogo} alt="" />
-        </div>
-        <WelcomeHeader
-          className="!mt-[44px] lg:!mt-6"
-          title="Welcome to Shipyaari"
-          content="Select your"
-          whichAddress="Pickup"
-          Address="Address"
-        />
-
-        <div>
-          <div className="flex flex-col justify-center items-center px-5 ">
-            <div className="flex items-center justify-between w-full lg:!w-[320px] ">
-              {/* <p>Default</p> */}
-              <div className="flex gap-x-2" onClick={() => addAddress()}>
-                <img src={PlusIcon} alt="" />
-                <p className="font-Open px-[6px] lg:px-0 font-semibold text-sm cursor-pointer text-[#004EFF]  ">
-                  ADD ADDRESS
-                </p>
-              </div>
-
-              {/* <AddButton
-                onClick={() => {}}
-                text={"ADD ADDRESS"}
-                icon={PlusIcon}
-                showIcon={true}
-                className="!bg-white !border-npne "
-                textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              /> */}
+      <>
+      <div 
+      className={`${
+        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+          <div>
+            <div className="md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+              <img src={CompanyLogo} alt="" />
             </div>
-            {location?.state?.path === "company-form" ? (
-              <>
-                <div className="mb-4 h-[300px] overflow-auto">
-                  {defaultAddress?.map((el: any, i: number) => {
-                    return (
-                      <Card
-                        key={i}
-                        onClick={setDefaultAddressSelect}
-                        name="address"
-                        value={el}
-                        title={el?.fullAddress}
-                        updatedAddress={updatedAddress}
-                        index={i}
-                        doctype={el?.doctype}
-                        checked={
-                          defaultAddressSelect?.addressId === el?.addressId
-                        }
-                        titleClassName="!font-normal !text-[12px]"
-                        cardClassName="!mt-4 !cursor-pointer"
-                      />
-                    );
-                  })}
-                </div>
-                <div className={`${!isLgScreen && "w-full"}`}>
-                  <ServiceButton
-                    text="SUBMIT"
-                    btnType="submit"
-                    onClick={() => onMagicForm()}
-                    className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open lg:!w-[320px] "
-                  />
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="mb-4 lg:h-[250px]  overflow-auto">
-                  {defaultAddress?.map((el: any, i: number) => {
-                    return (
-                      <div key={i} ref={bottomRef}>
-                        {el?.fullAddress !== "" && (
-                          <Card
-                            onClick={setDefaultAddressSelect}
-                            name="address"
-                            value={el}
-                            title={el?.fullAddress}
-                            updatedAddress={updatedAddress}
-                            index={i}
-                            doctype={el?.doctype}
-                            checked={
-                              defaultAddressSelect?.addressId === el?.addressId
-                            }
-                            titleClassName="!font-normal !text-[12px]"
-                            cardClassName="!mt-4 !cursor-pointer"
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
+            <WelcomeHeader
+              className="!mt-[44px] md:!mt-6"
+              title="Welcome to Shipyaari"
+              content="Select your"
+              whichAddress="Pickup"
+              Address="Address"
+            />
+
+          <div>
+            <div className="flex flex-col justify-center items-center px-5">
+              <div className="flex items-center justify-between w-full md:!w-[320px] ">
+                {/* <p>Default</p> */}
+                <div className="flex gap-x-2 pl-0 md:pl-[52px] md:pl-0 " onClick={() => addAddress()}>
+                  <img src={PlusIcon} alt="" />
+                  <p className="font-Open px-[6px] md:px-0 font-semibold text-sm cursor-pointer text-[#004EFF]  ">
+                    ADD ADDRESS
+                  </p>
                 </div>
 
-                <div
-                  className={` ${!isLgScreen && "w-full"} mb-6 md:mt-5 lg:mt-4`}
-                >
-                  <CustomInputBox
-                    label="Brand Name"
-                    className="font-Open !w-full lg:!w-[320px]"
-                    labelClassName="font-Open"
-                    onChange={(e) => setBrandName(e.target.value)}
-                  />
-                </div>
+                {/* <AddButton
+                  onClick={() => {}}
+                  text={"ADD ADDRESS"}
+                  icon={PlusIcon}
+                  showIcon={true}
+                  className="!bg-white !border-npne "
+                  textClassName="!font-semibold !text-sm !leading-5 !font-Open"
+                /> */}
+              </div>
+              {location?.state?.path === "company-form" ? (
+                <>
+                  <div className="mb-4 h-[300px] overflow-auto">
+                    {defaultAddress?.map((el: any, i: number) => {
+                      return (
+                        <Card
+                          key={i}
+                          onClick={setDefaultAddressSelect}
+                          name="address"
+                          value={el}
+                          title={el?.fullAddress}
+                          updatedAddress={updatedAddress}
+                          index={i}
+                          doctype={el?.doctype}
+                          checked={
+                            defaultAddressSelect?.addressId === el?.addressId
+                          }
+                          titleClassName="!font-normal !text-[12px]"
+                          cardClassName="!mt-4 !cursor-pointer"
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className={`${!isMdScreen && "w-full"}`}>
+                    <ServiceButton
+                      text="SUBMIT"
+                      btnType="submit"
+                      onClick={() => onMagicForm()}
+                      className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open md:!w-[320px] "
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mb-4 h-[250px]  overflow-auto">
+                    {defaultAddress?.map((el: any, i: number) => {
+                      return (
+                        <div key={i} ref={bottomRef}>
+                          {el?.fullAddress !== "" && (
+                            <Card
+                              onClick={setDefaultAddressSelect}
+                              name="address"
+                              value={el}
+                              title={el?.fullAddress}
+                              updatedAddress={updatedAddress}
+                              index={i}
+                              doctype={el?.doctype}
+                              checked={
+                                defaultAddressSelect?.addressId === el?.addressId
+                              }
+                              titleClassName="!font-normal !text-[12px]"
+                              cardClassName="!mt-4 !cursor-pointer"
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
 
-                {/* <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
-                  <CustomInputWithFileUpload
-                    label="Upload logo"
-                    className="font-Open  "
-                    inputClassName="  lg:!w-[320px]"
-                    type="file"
-                    // onChange={(e) => uploadFile(e)}
-                    isRequired={false}
-                  />
-                </div> */}
-                <div className={`${!isLgScreen && "w-full"}`}>
-                  <ServiceButton
-                    text="SUBMIT"
-                    btnType="submit"
-                    onClick={() => onSubmitForm()}
-                    className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open lg:!w-[320px] "
-                  />
-                </div>
-              </>
-            )}
+                  {/* <div
+                    className={` ${!isMdScreen && "w-full"} mb-6 md:mt-5 lg:mt-4`}
+                  > */}
+                     <div
+                    className="mb-6 md:mt-5 md:mt-4"
+                  >
+                    <CustomInputBox
+                      label="Brand Name"
+                      className="font-Open !w-[320px]"
+                      labelClassName="font-Open"
+                      onChange={(e) => setBrandName(e.target.value)}
+                    />
+                  </div>
+
+                  {/* <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
+                    <CustomInputWithFileUpload
+                      label="Upload logo"
+                      className="font-Open  "
+                      inputClassName="  lg:!w-[320px]"
+                      type="file"
+                      // onChange={(e) => uploadFile(e)}
+                      isRequired={false}
+                    />
+                  </div> */}
+                  <div className={`${!isMdScreen && "w-full"}`}>
+                    <ServiceButton
+                      text="SUBMIT"
+                      btnType="submit"
+                      onClick={() => onSubmitForm()}
+                      className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-4 w-full  font-Open md:!w-[320px] "
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
           </div>
         </div>
       </div>
+      </>
     );
   };
 
   const renderAddresscomponent = () => {
-    if (isLgScreen && openModal) {
+    if (isMdScreen) {
       return (
-        <div className="mx-4 hidden lg:block ">
-          <CustomBottomModal
+        <div className="mx-4">
+          {/* <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}
             className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
-          >
+          > */}
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <Spinner />
               </div>
             ) : (
-              addressComponent()
+              <div className="flex justify-center items-center h-screen">
+                {addressComponent()}
+              </div>
             )}
-          </CustomBottomModal>
+          {/* </CustomBottomModal> */}
         </div>
       );
     } else {

@@ -27,23 +27,34 @@ export const GSTComponent = (props: ITypeProps) => {
   const [userState, setIsUserState] = useState<any>();
 
   const [loading, setLoading] = useState(false);
+  const { isMdScreen } = ResponsiveState();
 
+
+  const userName = sessionStorage.getItem("fullname")?.replace(/,/g, " ");
+  const userNameForGst = sessionStorage.getItem("userName");
   useEffect(() => {
-    let data = JSON.parse(sessionStorage.getItem("userinfo") as any);
+    let data = sessionStorage.getItem("userInfo") as any;
+    data = JSON.parse(data);
+    
 
     if (data !== "" && data !== null) {
       setIsUserState(data);
     }
   }, []);
-  const userName = sessionStorage.getItem("fullname")?.replace(/,/g, " ");
 
-  const userNameForGst = sessionStorage.getItem("userName");
 
   const acceptStatus = async () => {
-    let name = userState?.firstName + " " + userState?.lastName;
+    
+    let name;
+    if(userState?.firstName===undefined){
+      name = userState?.name
+    }else{
+      name = userState?.firstName + " " + userState?.lastName;
+    }
+    
     const payload = { entityName: name, businessType: "logistics" };
-    setLoading(true);
     const { data: responses } = await POST(GST_AGREEMENTS, payload);
+    
     try {
       if (responses?.success) {
         setLoading(false);
@@ -51,9 +62,7 @@ export const GSTComponent = (props: ITypeProps) => {
         navigate("/onboarding/kyc-terms/service-agreement");
       } else {
         setLoading(false);
-        // toast.error(responses?.message);
-        //As their is a error in api at this time routed to the service-agreement
-        // navigate("/onboarding/kyc-terms/gst-agreement");
+        toast.error(responses?.message);
         navigate("/onboarding/kyc-terms/service-agreement");
       }
     } catch (error) {
@@ -63,8 +72,8 @@ export const GSTComponent = (props: ITypeProps) => {
 
   const BottomButton = () => {
     return (
-      <div className="flex flex-col items-center px-5 lg:px-0 pb-4  bg-white">
-        <div className="flex items-center  lg:px-9 self-start my-1">
+      <div className="flex flex-col items-center px-5 md:px-0 pb-4  bg-white">
+        <div className="flex items-center  md:px-9 self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
             style={{ accentColor: "black" }}
@@ -77,7 +86,7 @@ export const GSTComponent = (props: ITypeProps) => {
         <ServiceButton
           text="ACCEPT AND CONTINUE"
           disabled={!checkbox}
-          className={` w-full lg:!w-[320px] mb-1 mt-0 mx-5 font-Open  ${
+          className={` w-full md:!w-[320px] mb-1 mt-0 mx-5 font-Open  ${
             checkbox === true
               ? "bg-[#1C1C1C] text-white"
               : "bg-[#E8E8E8] text-[#BBBBBB]"
@@ -91,24 +100,23 @@ export const GSTComponent = (props: ITypeProps) => {
   };
 
   const gstCommonComponent = () => {
-    const { isLgScreen, isMdScreen } = ResponsiveState();
     
     return (
       <div 
       className={`${
-        isMdScreen ? " m-auto mt-[7%] !w-[500px] " : "w-full !h-full"
-      }flex flex-col relative lg:px-0 lg:gap-y-0`}>
+        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
         <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
-          <img src={CompanyLogo} alt="" />
+          <img src={CompanyLogo} alt="" className="h-[25px]"/>
         </div>
 
         <WelcomeHeader
-          className="!mt-[44px] lg:!mt-6"
+          className="!mt-[44px] md:!mt-6"
           title="Welcome to Shipyaari"
           content="Terms & Agreement"
         />
-        <div className=" px-5 mb-3 lg:mb-1 lg:mx-5">
+        <div className=" px-5 mb-3 md:mb-1 md:mx-5">
           {/* <Card
             title="DECLARATION OF GST NON-ENROLMENT"
             subTitleOne="Sub: Declaration of"
@@ -247,24 +255,22 @@ export const GSTComponent = (props: ITypeProps) => {
   };
 
   const renderGstCommonComponent = () => {
-    if (isBigScreen && openModal) {
+    if (isMdScreen) {
       return (
-        // <CustomBottomModal
-        //   isOpen={openModal}
-        //   onRequestClose={closeModal}
-        //   className="!p-0 !w-[500px] !h-[700px] overflow-x-scroll"
-        //   overlayClassName="flex  items-center"
-        // >
+        
           <>
           {loading ? (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center h-screen">
               <Spinner />
             </div>
           ) : (
-            gstCommonComponent()
+            <div className="flex justify-center items-center h-[100vh] border-4 ">
+              {gstCommonComponent()}
+              
+            </div>
           )}
           </>
-        // </CustomBottomModal>
+        
       );
     } else {
       return loading ? (
@@ -272,7 +278,9 @@ export const GSTComponent = (props: ITypeProps) => {
           <Spinner />
         </div>
       ) : (
-        gstCommonComponent()
+        <div className="flex justify-center items-center">
+          {gstCommonComponent()}
+        </div>
       );
     }
   };

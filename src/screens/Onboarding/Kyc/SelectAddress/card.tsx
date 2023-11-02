@@ -59,7 +59,7 @@ const Card = (props: ITypesProps) => {
       <div
         className={` ${cardClassName} border-[1px] rounded-lg p-4 shadow ${
           !checked ? "border-[#E8E8E8]" : "border-[black]"
-        } w-full lg:!w-[320px] relative`}
+        } w-[320px] md:w-full relative`}
         onClick={(e: any) => {
           onClick(value);
         }}
@@ -73,7 +73,7 @@ const Card = (props: ITypesProps) => {
             checked={checked}
           />
           {doctype && (
-            <p className="text-[10px] font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md">
+            <p className="text-[10px] text-center font-Open font-normal border-[0.5px] border-[#E8E8E8] p-1 rounded-md w-[70px]">
               {doctype}
             </p>
           )}

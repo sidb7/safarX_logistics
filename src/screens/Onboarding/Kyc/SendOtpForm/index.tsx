@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 
 interface ITypeProps {}
 
@@ -56,6 +57,8 @@ const Index = (props: ITypeProps) => {
   const [clientId, setClientId] = useState<any>();
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  const { isLgScreen, isMdScreen } = ResponsiveState();
 
   useEffect(() => {
     if (Object.keys(state).length > 0 && state) {
@@ -380,24 +383,27 @@ const Index = (props: ITypeProps) => {
 
   const sendOtpFormComponent = () => {
     return (
-      <div className=" lg:px-0">
-        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-          <img src={CompanyLogo} alt="" />
+      <div className={`${
+        isMdScreen ? " m-auto  !w-[500px] mt-60px" : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+        <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+          <img src={CompanyLogo} alt="" className="h-[25px]"/>
         </div>
 
         <WelcomeHeader
-          className="!mt-[44px] lg:!mt-6"
+          className="!mt-[44px] md:!mt-6"
           title="Welcome to Shipyaari"
           content="Kindly complete your KYC"
         />
 
         <div>
-          <div className="flex flex-col justify-center items-center mt-[104px] lg:mt-[97px] px-5 lg:px-0 gap-y-5 mb-6">
+          <div className="flex flex-col justify-center items-center mt-[104px]  px-5 md:px-0 gap-y-5 mb-6">
             {businessType === "individual" ? (
               <>
-                <div className={`${!isBigScreen ? "w-full" : ""}`}>
+                <div className={`${!isMdScreen ? "w-full" : ""}`}>
                   <CustomInputBox
-                    containerStyle={`lg:!w-auto`}
+                    containerStyle={`md:!w-auto`}
                     label="Aadhar Number"
                     inputType="text"
                     inputMode="numeric"
@@ -409,7 +415,7 @@ const Index = (props: ITypeProps) => {
                       aadharNumberError !== undefined &&
                       "!border-[#F35838]"
                     }
-                  lg:!w-[320px]   !font-Open`}
+                  md:!w-[320px]   !font-Open`}
                     onChange={(e: any) => {
                       if (aadharRegex.test(e.target.value)) {
                         setAadharNumberError("");
@@ -435,13 +441,13 @@ const Index = (props: ITypeProps) => {
                 </div>
                 {showAaddharOtpBox && (
                   <>
-                    <div className={`${!isBigScreen ? "w-full" : ""}`}>
+                    <div className={`${!isMdScreen ? "w-full" : ""}`}>
                       <CustomInputBox
                         label="Enter Aadhar OTP"
                         inputType="text"
                         inputMode="numeric"
-                        containerStyle="lg:!w-auto"
-                        className=" lg:!w-[320px] !font-Open "
+                        containerStyle="md:!w-auto"
+                        className=" md:!w-[320px] !font-Open "
                         labelClassName="!font-Open"
                         maxLength={6}
                         value={otpNumber || ""}
@@ -459,9 +465,9 @@ const Index = (props: ITypeProps) => {
               </>
             ) : (
               <>
-                <div className={`${!isBigScreen ? "w-full" : ""}`}>
+                <div className={`${!isMdScreen ? "w-full" : ""}`}>
                   <CustomInputBox
-                    containerStyle="lg:!w-auto"
+                    containerStyle="md:!w-auto"
                     label="GST Number"
                     value={gstNumber}
                     maxLength={15}
@@ -469,7 +475,7 @@ const Index = (props: ITypeProps) => {
                       gstError !== "" &&
                       gstError !== undefined &&
                       "border-[#F35838]"
-                    }  lg:!w-[320px]   !font-Open`}
+                    }  md:!w-[320px]   !font-Open`}
                     labelClassName="!font-Open"
                     onChange={(e) => {
                       const gstValue = e.target.value.toUpperCase();
@@ -501,13 +507,13 @@ const Index = (props: ITypeProps) => {
 
                 {showGstOtpBox && (
                   <>
-                    <div className={`${!isBigScreen ? "w-full" : ""}`}>
+                    <div className={`${!isMdScreen ? "w-full" : ""}`}>
                       <CustomInputBox
                         label="Enter GST OTP"
                         inputType="text"
                         inputMode="numeric"
-                        containerStyle="lg:!w-auto"
-                        className=" lg:!w-[320px] !font-Open "
+                        containerStyle="md:!w-auto"
+                        className=" md:!w-[320px] !font-Open "
                         labelClassName="!font-Open"
                         maxLength={4}
                         value={otpNumber || ""}
@@ -524,9 +530,9 @@ const Index = (props: ITypeProps) => {
                 )}
               </>
             )}
-            <div className={`${!isBigScreen ? "w-full" : ""}`}>
+            <div className={`${!isMdScreen ? "w-full" : ""}`}>
               <CustomInputBox
-                containerStyle="lg:!w-auto"
+                containerStyle="md:!w-auto"
                 label="PAN Number"
                 value={panNumber}
                 maxLength={10}
@@ -539,7 +545,7 @@ const Index = (props: ITypeProps) => {
                   panNumberError !== "" &&
                   panNumberError !== undefined &&
                   "border-[#F35838]"
-                }   lg:!w-[320px] !font-Open`}
+                }   md:!w-[320px] !font-Open`}
                 labelClassName="!font-Open"
                 onChange={(e) => {
                   if (panRegex.test(e.target.value.toUpperCase())) {
@@ -561,14 +567,14 @@ const Index = (props: ITypeProps) => {
               )}
             </div>
           </div>
-          <div className="flex  lg:justify-center lg:items-center px-5 pb-12">
+          <div className="flex  md:justify-center md:items-center px-5 pb-12">
             {verifyOTP ? (
               <ServiceButton
                 text="VERIFY OTP & PAN"
                 btnType="submit"
                 onClick={() => onVerifyOtp()}
                 disabled={!verifyBtnStatus}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px] !font-Open ${
+                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
                   verifyBtnStatus === true
                     ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
@@ -580,7 +586,7 @@ const Index = (props: ITypeProps) => {
                 disabled={!otpFormBtnStatus}
                 btnType="submit"
                 onClick={() => onSendOtp()}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px] !font-Open ${
+                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
                   otpFormBtnStatus === true
                     ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
                     : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
@@ -589,27 +595,25 @@ const Index = (props: ITypeProps) => {
             )}
           </div>
         </div>
+        </div>
       </div>
     );
   };
 
   const renderSendOtpFormComponent = () => {
-    if (isBigScreen && openModal) {
+    if (isMdScreen) {
       return (
-        <CustomBottomModal
-          isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px]"
-          overlayClassName="!flex   items-center"
-        >
+        <>
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <Spinner />
             </div>
           ) : (
-            sendOtpFormComponent()
+            <div className="flex justify-center items-center h-screen">
+              {sendOtpFormComponent()}
+            </div>
           )}
-        </CustomBottomModal>
+        </>
       );
     } else {
       return loading ? (
