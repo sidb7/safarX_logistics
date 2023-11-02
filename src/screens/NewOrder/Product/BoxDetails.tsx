@@ -59,6 +59,14 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const handleCollectableAmmount = (event: any) => {
     const { name, value } = event.target;
+    if (value > selectedBox?.codInfo?.invoiceValue) {
+      setCheckBoxValuePerBox(
+        selectedBox?.codInfo?.invoiceValue,
+        "codAmount",
+        boxIndex
+      );
+      return;
+    }
     setCheckBoxValuePerBox(value, "codAmount", boxIndex);
   };
 
@@ -126,17 +134,17 @@ const BoxDetails = (props: IBoxdetails) => {
 
   return (
     <div className="w-[500px]">
-      <div className="flex p-5 gap-x-2">
+      <div className="flex p-3 lg:p-5 gap-x-2">
         <img src={ProductIcon} alt="Package Icon" />
-        <h1 className="flex items-baseline gap-x-2 font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+        <h1 className="flex items-baseline gap-x-2 font-Lato text-center text-gray-900 font-normal text-[1.2rem] lg:text-[1.5rem] lg:text-[#1C1C1C] ">
           Box {boxIndex + 1}
-          <div className="font-semibold font-Lato text-lg text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]">{`(${calcTotalProducts(
+          <div className="font-Lato text-lg text-gray-900 font-normal text-[1.2rem] lg:text-[1.5rem] lg:text-[#1C1C1C]">{`(${calcTotalProducts(
             allProducts
           )} Products) `}</div>
         </h1>
       </div>
       <div
-        className={`flex flex-col  lg:gap-y-2 lg:rounded-lg p-5`}
+        className={`flex flex-col  lg:gap-y-2 rounded-md lg:rounded-lg p-3 lg:p-5`}
         style={{
           boxShadow:
             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
@@ -144,7 +152,9 @@ const BoxDetails = (props: IBoxdetails) => {
         }}
       >
         <div className="p-2 flex items-center ">
-          <div className="font-semibold text-lg">{selectedBox.name}</div>
+          <div className="font-semibold text-base lg:text-lg">
+            {selectedBox.name}
+          </div>
           <div className="flex px-4 gap-x-2">
             <div
               onClick={() => handleEditBoxType(selectedBox, boxIndex, true)}
@@ -161,13 +171,15 @@ const BoxDetails = (props: IBoxdetails) => {
           </div>
         </div>
 
-        <div className="h-[300px] scroll-smooth  overflow-auto rounded-lg border border-x-[#E8E8E8]">
+        <div
+          className={`!transition-all !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg border border-x-[#E8E8E8] shadow-none hover:shadow-inner`}
+        >
           {!(allProducts.length > 0) && (
             <div className="h-full w-full flex justify-center items-center">
               No Products Added
             </div>
           )}
-          {allProducts?.map((e: any, index: number) => {
+          {allProducts?.map((e: any, index: number, arr: any) => {
             return (
               <div key={index}>
                 <div className="flex justify-between items-center " key={index}>
@@ -182,7 +194,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     dimensionClassName="!font-light"
                     className="!border-none !shadow-none !h-[70px]"
                   />
-                  <div className="flex items-center p-2  gap-2 !mr-2 rounded-lg">
+                  <div className="flex items-center p-1 lg:p-2  gap-2 !mr-2 rounded-lg">
                     <div>
                       <img
                         src={subtractIcon}
@@ -216,7 +228,7 @@ const BoxDetails = (props: IBoxdetails) => {
           })}
         </div>
 
-        <div className="flex items-center justify-center mb-2">
+        <div className="flex items-center justify-center py-1 lg:py-0">
           <AddButton
             text="ADD PRODUCT"
             onClick={() => {
@@ -224,20 +236,21 @@ const BoxDetails = (props: IBoxdetails) => {
             }}
             showIcon={true}
             icon={ButtonIcon}
-            className="rounded bg-white !shadow-none !m-0 !p-0"
+            className="rounded bg-white  !shadow-none !m-0 !p-0 "
+            textClassName="text-sm  lg:text-base"
             alt="Add Product"
           />
         </div>
         <hr />
         {Object.keys(selectedBox).length > 0 && (
           <>
-            <span className="text-base text-slate-600 ">
+            <span className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0">
               {`Products Applied weight is ${calcAllTotalProductAppliedWeight().toFixed(
                 2
               )} Kg`}
             </span>
             <div className="relative">
-              <div className="h-[6px] bg-[#CBEAC0]  ml- mr-16">
+              <div className="h-[6px] bg-[#CBEAC0] mr-16">
                 <div
                   className={`h-[6px] ${
                     calcAllTotalProductAppliedWeight() >
@@ -263,7 +276,7 @@ const BoxDetails = (props: IBoxdetails) => {
             {calcAllTotalProductAppliedWeight() >
             +selectedBox.volumetricWeight ? (
               <>
-                <span className="text-[15px] text-slate-600  mt-2">
+                <span className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0  lg:mt-2">
                   {` Your billable weight is `}
                   <span className="font-semibold">{`${calcBillableWeight()} KG.`}</span>
                   <br />
@@ -276,7 +289,7 @@ const BoxDetails = (props: IBoxdetails) => {
                 </span>
               </>
             ) : (
-              <span className="text-[15px]  text-slate-600  mt-2">
+              <span className="!text-sm lg:!text-base  text-slate-600 py-2 lg:py-0 lg:mt-2">
                 {`Your billable weight is ${calcBillableWeight()} KG.`}
                 <br />
                 {` You can add more products up to ${(
@@ -286,7 +299,7 @@ const BoxDetails = (props: IBoxdetails) => {
               </span>
             )}
             <div className="py-2 ">
-              <div className="flex  gap-x-2">
+              <div className="flex flex-wrap lg:flex  gap-2 ">
                 <Checkbox
                   label="COD"
                   name="cod"
@@ -323,21 +336,29 @@ const BoxDetails = (props: IBoxdetails) => {
                     : "h-0 pt-0 opacity-0 "
                 } `}
               > */}
-              <div className="flex pt-5  ">
-                <div className="!mr-4 w-[300px]">
+              <div className="flex flex-col lg:flex-row transition-all pt-5 gap-4 !w-full">
+                <div className="!w-full">
                   <CustomInputBox
                     label="Invoice Value"
                     isDisabled={true}
                     value={selectedBox?.codInfo?.invoiceValue}
                   />
                 </div>
-                <CustomInputBox
-                  label={"COD Amount to Collect From Buyer"}
-                  isDisabled={!selectedBox?.codInfo?.isCod}
-                  value={selectedBox?.codInfo?.collectableAmount}
-                  onChange={handleCollectableAmmount}
-                  inputType="number"
-                />
+                <div
+                  className={`transition-all ease-in-out ${
+                    selectedBox?.codInfo?.isCod
+                      ? "w-full flex opacity-100 h-12  lg:m-0"
+                      : "w-0 opacity-0 h-0 mt-0"
+                  }`}
+                >
+                  <CustomInputBox
+                    label={"COD Amount"}
+                    isDisabled={!selectedBox?.codInfo?.isCod}
+                    value={selectedBox?.codInfo?.collectableAmount}
+                    onChange={handleCollectableAmmount}
+                    inputType="number"
+                  />
+                </div>
               </div>
               {/* </div> */}
             </div>

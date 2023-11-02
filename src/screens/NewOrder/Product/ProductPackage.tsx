@@ -510,7 +510,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             )}
           </div> */}
 
-          <div className="mt-6">
+          <div className="mt-6 flex flex-col gap-4 lg:flex-row">
             <AddButton
               text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
@@ -532,20 +532,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               }}
               showIcon={true}
               icon={ButtonIcon}
-              className="rounded ml-4 mt-2"
+              className="rounded"
               alt="Add Box"
             />
-          </div>
-          <div className="flex justify-between mt-5 whitespace-nowrap  bg-[#FFFFFF] shadow-sm p-2  lg:hidden ">
-            <div>
-              <p>Handle with care</p>
-            </div>
-
-            <div className="bg-[white] flex  items-center rounded-md gap-x-3 px-2">
-              <img src={toggleBlack} alt="toggle" />
-
-              <p className="text-[14px] text-[#F35838]">DEACTIVATE</p>
-            </div>
           </div>
           {/* <Box /> */}
           {isLoading ? (
@@ -555,7 +544,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-6 mb-16">
+            <div className="flex flex-wrap gap-6 lg:mt-10 lg:mb-16 my-16">
               {packages?.map((packageDetails: any, index: number) => {
                 return (
                   <BoxDetails

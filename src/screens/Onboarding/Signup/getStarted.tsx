@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
 
@@ -33,27 +33,32 @@ const Index = () => {
 
   const getStarted = () => {
     return (
-      <div className="relative h-full w-full">
-        {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[24px]">
-          <div className="flex flex-col gap-y-8">
-            <div className="product-box flex items-center lg:hidden">
-              <img
-                className="m-4 h-[25px] object-contain"
-                src={CompanyLogo}
-                alt="CompanyLogo"
-              />
-            </div>
-
-            <div className="flex flex-col mt-7 mx-4 gap-y-6">
-              <p className="text-center text-2xl font-medium">Get Started</p>
-              <p className="text-center font-thin">
+      <div
+        className={` ${
+          isMdScreen ? "custom_shadow m-auto  !w-[500px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
+      >
+        <div className="product-box flex items-center ">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
+        {/* {isLgScreen && modalTitle()} */}
+        <div className="">
+          <div className="flex flex-col md:mx-[90px] gap-y-8">
+            <div className="flex flex-col mt-11 md:mt-6 mx-4 gap-y-6">
+              <p className="text-center font-Lato text-[22px] font-bold leading-7">
+                Get Started
+              </p>
+              <p className="text-center font-Open text-base font-light leading-5 text-[#494949]">
                 Let us understand your requirements so that we can serve you
                 better .
               </p>
             </div>
 
-            <div className=" flex flex-col mx-4 gap-y-6">
+            <div className=" flex flex-col mx-4 md:mb-44 gap-y-6">
               <div className="flex justify-center">
                 <img
                   className="h-[180px] w-[180px] "
@@ -76,14 +81,17 @@ const Index = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={isModalOpen}
-          // onRequestClose={() => setIsModalOpen(false)}
-        >
+      {isMdScreen && (
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   isOpen={isModalOpen}
+        //   // onRequestClose={() => setIsModalOpen(false)}
+        // >
+        <div className="flex justify-center items-center h-screen">
+          {" "}
           {getStarted()}
-        </CenterModal>
+        </div>
+        // </CenterModal>
       )}
 
       {!isLgScreen && getStarted()}

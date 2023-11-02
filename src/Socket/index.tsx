@@ -15,7 +15,10 @@ const connectSocket = (roomName: string) => {
 
   if (!socket) {
     console.log("url", SELLER_URL);
-    socket = io("http://localhost:8010", {
+    socket = io(`${SELLER_URL}`, {
+      secure: true,
+      transports: ["websocket"],
+      path: "/socket.io",
       reconnectionDelayMax: 10000,
       auth: {
         token: localStorage.getItem(token),
@@ -43,14 +46,14 @@ const connectSocket = (roomName: string) => {
     socket.on("welcomeMessage", (message) => {
       console.log(`Received welcome message: ${message}`);
     });
-    socket.on("bulkOrderFailed", (data) => {
-      console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
-      //GlobalToast(data.message);
-    });
+    // socket.on("bulkOrderFailed", (data) => {
+    //   console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
+    //   //GlobalToast(data.message);
+    // });
 
     socket.on("bulkOrderFailed", (data) => {
       console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
-      GlobalToast(data.message);
+      GlobalToast(data);
     });
 
     socket.on("roomWelcomeMessage", (message) => {
@@ -67,7 +70,25 @@ const disconnectSocket = () => {
 };
 
 export const initSocket = (): Socket => {
-  return socket || io();
+  const sellerId = sessionStorage.getItem("sellerId");
+  const token = sellerId
+    ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+    : "";
+
+  const sessionID = localStorage.getItem("sessionID");
+  return io(`${SELLER_URL}`, {
+    secure: true,
+    transports: ["websocket"],
+    path: "/socket.io",
+    reconnectionDelayMax: 10000,
+    auth: {
+      token: localStorage.getItem(token),
+      sessionID: sessionID,
+    },
+    query: {
+      "my-key": "my-value",
+    },
+  });
 };
 
 export const getSocket = (): Socket => {

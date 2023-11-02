@@ -20,7 +20,7 @@ import CustomDropDown from "../../../components/DropDown";
 
 const modalTitle = () => {
   return (
-    <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
+    <div className="product-box flex justify-between items-center w-full lg:w-[31.25rem] h-[60px] absolute top-0">
       <img
         className="my-auto ml-6  h-[25px] object-contain"
         src={CompanyLogo}
@@ -31,7 +31,7 @@ const modalTitle = () => {
 };
 
 const WalletPayment = () => {
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(true);
   const navigate = useNavigate();
@@ -110,76 +110,82 @@ const WalletPayment = () => {
   ];
 
   const userDetails = useSelector((state: any) => state.signin);
+
+  const convertToEdit = () => {
+    setIsedit(true);
+  };
+
+  const handleRazorPayTransaction = async () => {
+    let replacewalletValue = walletValue?.replace(/,/g, "");
+
+    const options: any = await loadRazorPayTransaction(
+      replacewalletValue,
+      "SHIPYAARI",
+      userDetails.name,
+      userDetails.email
+    );
+
+    if (!options?.success && !options?.amount) {
+      toast.error(options.message);
+      return;
+    }
+
+    const rzp1: any = new Razorpay(options);
+
+    rzp1.on("payment.failed", (response: any) => {});
+
+    rzp1.open();
+  };
+
+  useEffect(() => {
+    if (walletValue) setIsDisabled(false);
+    else setIsDisabled(true);
+  }, [walletValue]);
   const WalletRechargePaymentDetails = () => {
-    const convertToEdit = () => {
-      setIsedit(true);
-    };
-
-    const handleRazorPayTransaction = async () => {
-      let replacewalletValue = walletValue?.replace(/,/g, "");
-
-      const options: any = await loadRazorPayTransaction(
-        replacewalletValue,
-        "SHIPYAARI",
-        userDetails.name,
-        userDetails.email
-      );
-
-      if (!options?.success && !options?.amount) {
-        toast.error(options.message);
-        return;
-      }
-
-      const rzp1: any = new Razorpay(options);
-
-      rzp1.on("payment.failed", (response: any) => {});
-
-      rzp1.open();
-    };
-
-    useEffect(() => {
-      if (walletValue) setIsDisabled(false);
-      else setIsDisabled(true);
-    }, [walletValue]);
-
     return (
-      <div className="h-full w-full">
-        {!isLgScreen ? (
-          <header className="fixed top-0 z-50 w-full ">
-            <NavBar />
-          </header>
-        ) : (
-          modalTitle()
-        )}
-        <div className="text-center mt-20 mb-1">
-          <h1 className="text-[22px] font-Lato font-bold leading-7 text-center mt-[148px] lg:mt-0">
-            Welcome to Shipyaari
-          </h1>
-        </div>
-        <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
-          <div className="flex items-center gap-2">
-            <img src={Accountlogo} alt="" />
-            <p className="text-sm lg:text-[18px] font-semibold lg:text-[#1C1C1C]">
-              Your wallet balance
-            </p>
-            <p className="lg:text-[18px] font-semibold lg:text-[#1C1C1C]">
-              ₹ 0
-            </p>
-          </div>
-          <p className="text-[12px] leading-4 text-[#BBBBBB] my-1 lg:font-normal">
-            Endless wallet balance with automatic add money
-          </p>
-          <CustomDropDown
-            heading="Select Amount"
-            value={walletValue}
-            options={walletMenu}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-              setWalletValue(event.target.value);
-            }}
-            wrapperClass="w-[200px]"
-            selectClassName="text-[18px]"
+      <div
+        className={`md:h-[37.265rem] w-full md:w-[31.25rem]   ${
+          isMdScreen ? "custom_shadow flex flex-col  relative  " : ""
+        }`}
+      >
+        <div className="product-box flex justify-between items-center w-full md:w-[31.25rem] h-[60px] absolute top-0">
+          <img
+            className="my-auto ml-6  h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="Company Logo"
           />
-          {/* <p
+        </div>
+
+        <div className="overflow-y-auto">
+          <div className="text-center mt-20 mb-1">
+            <h1 className="text-[22px] font-Lato font-bold leading-7 text-center mt-[148px] md:mt-0">
+              Welcome to Shipyaari
+            </h1>
+          </div>
+          <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
+            <div className="flex items-center gap-2">
+              <img src={Accountlogo} alt="" />
+              <p className="text-sm md:text-[18px] font-semibold md:text-[#1C1C1C]">
+                Your wallet balance
+              </p>
+              <p className="md:text-[18px] font-semibold md:text-[#1C1C1C]">
+                ₹ 0
+              </p>
+            </div>
+            <p className="text-[12px] leading-4 text-[#BBBBBB] my-1 md:font-normal">
+              Endless wallet balance with automatic add money
+            </p>
+            <CustomDropDown
+              heading="Select Amount"
+              value={walletValue}
+              options={walletMenu}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                setWalletValue(event.target.value);
+              }}
+              wrapperClass="w-[200px]"
+              selectClassName="text-[18px]"
+            />
+            {/* <p
             onClick={() => convertToEdit()}
             className="text-[1rem] my-[1rem] border-solid border-[1px] rounded pl-[1rem] w-[40%] flex items-center font-semibold lg:text-[#1C1C1C] hover:border-[blue]"
           >
@@ -191,8 +197,8 @@ const WalletPayment = () => {
               onChange={(e) => setMoney(e.target.value)}
             />
           </p> */}
-          <div className="grid grid-cols-4 gap-2 mt-1 ">
-            {/* {moneyArr?.map((el: any, i: number) => {
+            <div className="grid grid-cols-4 gap-2 mt-1 ">
+              {/* {moneyArr?.map((el: any, i: number) => {
               return (
                 <div
                   key={i}
@@ -214,84 +220,85 @@ const WalletPayment = () => {
                 </div>
               );
             })} */}
-          </div>
-        </div>
-        <div className="flex mx-5 my-3">
-          <div className="w-full p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
-            <div className="flex  gap-x-2 text-[14px]">
-              <img src={rechargeIcon} alt="" className="object-contain" />
-              <p className="  font-semibold text-sm  lg:text-lg lg:text-[#1C1C1C]">
-                Payment gateway
-              </p>
             </div>
+          </div>
+          <div className="flex mx-5 my-3">
+            <div className="w-full p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
+              <div className="flex  gap-x-2 text-[14px]">
+                <img src={rechargeIcon} alt="" className="object-contain" />
+                <p className="  font-semibold text-sm  md:text-lg md:text-[#1C1C1C]">
+                  Payment gateway
+                </p>
+              </div>
 
-            <div className="flex mt-1 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
-              <div className="flex flex-col items-center gap-y-2">
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
-                  }
-                  alt=""
-                  className="ml-0 object-contain w-20 h-20"
-                />
-                <Paytm
-                  isDisabled={isDisabled}
-                  text={"Paytm"}
-                  amt={walletValue}
-                  navigate={`${SELLER_WEB_URL}/dashboard/overview`}
-                />
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
-                  }
-                  alt=""
-                  className="ml-0 object-contain w-20 h-20"
-                />
-                <button
-                  disabled={isDisabled}
-                  type="button"
-                  className={`${
-                    !isDisabled
-                      ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                      : "!bg-opacity-50"
-                  }  flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                  onClick={() =>
-                    loadPhonePeTransaction(
-                      walletValue,
-                      `${SELLER_WEB_URL}/dashboard/overview`,
-                      `${SELLER_WEB_URL}/dashboard/overview`
-                    )
-                  }
-                >
-                  <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                    PhonePe
-                  </p>
-                </button>
-              </div>
-              <div className="flex flex-col items-center gap-y-2">
-                <div className="w-20 h-20 flex justify-center items-center">
+              <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5">
+                <div className="flex flex-col items-center gap-y-2">
                   <img
-                    src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                    src={
+                      "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
+                    }
                     alt=""
-                    className="ml-0 object-contain"
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <Paytm
+                    isDisabled={isDisabled}
+                    text={"Paytm"}
+                    amt={walletValue}
+                    navigate={`${SELLER_WEB_URL}/dashboard/overview`}
                   />
                 </div>
-                <button
-                  disabled={isDisabled}
-                  type="button"
-                  className={` ${
-                    !isDisabled
-                      ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                      : "!bg-opacity-50"
-                  } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                  onClick={handleRazorPayTransaction}
-                >
-                  <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                    RazorPay
-                  </p>
-                </button>
+                <div className="flex flex-col items-center gap-y-2">
+                  <img
+                    src={
+                      "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/phonepe.png"
+                    }
+                    alt=""
+                    className="ml-0 object-contain w-20 h-20"
+                  />
+                  <button
+                    disabled={isDisabled}
+                    type="button"
+                    className={`${
+                      !isDisabled
+                        ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                        : "!bg-opacity-50"
+                    }  flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={() =>
+                      loadPhonePeTransaction(
+                        walletValue,
+                        `${SELLER_WEB_URL}/dashboard/overview`,
+                        `${SELLER_WEB_URL}/dashboard/overview`
+                      )
+                    }
+                  >
+                    <p className="buttonClassName md:text-[14px] whitespace-nowrap">
+                      PhonePe
+                    </p>
+                  </button>
+                </div>
+                <div className="flex flex-col items-center gap-y-2">
+                  <div className="w-20 h-20 flex justify-center items-center">
+                    <img
+                      src="https://sy-seller.s3.ap-south-1.amazonaws.com/logos/razorpay_logo.png"
+                      alt=""
+                      className="ml-0 object-contain"
+                    />
+                  </div>
+                  <button
+                    disabled={isDisabled}
+                    type="button"
+                    className={` ${
+                      !isDisabled
+                        ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                        : "!bg-opacity-50"
+                    } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                    onClick={handleRazorPayTransaction}
+                  >
+                    <p className="buttonClassName md:text-[14px] whitespace-nowrap">
+                      RazorPay
+                    </p>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -311,25 +318,19 @@ const WalletPayment = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={isModalOpen}
-          // onRequestClose={() => setWalletRechargeModalOpen(false)}
-          className="!h-[37.265rem] !w-[21rem] md:!w-[28] lg:!w-[31.25rem]"
-        >
-          {isLoading ? (
-            <img
-              src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
-              className="flex m-auto"
-              alt=""
-            />
-          ) : (
-            WalletRechargePaymentDetails()
-          )}
-        </CenterModal>
-      )}
-      {!isLgScreen && WalletRechargePaymentDetails()}
+      {isMdScreen &&
+        (isLoading ? (
+          <img
+            src="https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif"
+            className="flex m-auto"
+            alt=""
+          />
+        ) : (
+          <div className="h-[100vh] flex justify-center items-center ">
+            {WalletRechargePaymentDetails()}
+          </div>
+        ))}
+      {!isLgScreen && !isMdScreen && WalletRechargePaymentDetails()}
     </>
   );
 };

@@ -12,6 +12,12 @@
   padding: 0;
 }
 
+/* iframe {
+  width: 360px !important;
+  height: 100px !important;
+  margin: auto !important;
+} */
+
 /* .ReactModal__Content{
     width: 388px;
 } */
