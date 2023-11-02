@@ -7,10 +7,11 @@ import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
 import { GlobalToast } from "./components/GlobalToast/GlobalToast";
 import { useStore } from "react-redux";
-
+import { useDispatch } from "react-redux";
 const App = () => {
   /* Socket code */
 
+  // const dispatch = useDispatch();
   //let roomName = sessionStorage.getItem("sellerId");
   //useSelector((state: any) => state?.roles?.roles[0]);
   const [roomName, setRoomName] = useState<any>(
@@ -20,7 +21,6 @@ const App = () => {
   useEffect(() => {
     setRoomName(`${sessionStorage.getItem("sellerId")}`);
     if (roomName) {
-      console.log("userType", roomName);
       socketCallbacks.connectSocket(roomName);
     }
 

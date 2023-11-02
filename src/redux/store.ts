@@ -8,7 +8,6 @@ import { SignInSlice } from "./reducers/signInReducer";
 import { catalogueSlice } from "./reducers/catalogue";
 import { onboardingSlice } from "./reducers/onboarding";
 import { Environment } from "../utils/ApiUrls";
-
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
