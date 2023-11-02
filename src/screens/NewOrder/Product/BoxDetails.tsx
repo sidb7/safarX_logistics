@@ -59,6 +59,14 @@ const BoxDetails = (props: IBoxdetails) => {
 
   const handleCollectableAmmount = (event: any) => {
     const { name, value } = event.target;
+    if (value > selectedBox?.codInfo?.invoiceValue) {
+      setCheckBoxValuePerBox(
+        selectedBox?.codInfo?.invoiceValue,
+        "codAmount",
+        boxIndex
+      );
+      return;
+    }
     setCheckBoxValuePerBox(value, "codAmount", boxIndex);
   };
 
@@ -163,15 +171,17 @@ const BoxDetails = (props: IBoxdetails) => {
           </div>
         </div>
 
-        <div className="max-h-[300px] scroll-smooth  overflow-auto rounded-lg border border-x-[#E8E8E8]">
+        <div
+          className={`!transition-all !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg border border-x-[#E8E8E8] shadow-none hover:shadow-inner`}
+        >
           {!(allProducts.length > 0) && (
             <div className="h-full w-full flex justify-center items-center">
               No Products Added
             </div>
           )}
-          {allProducts?.map((e: any, index: number) => {
+          {allProducts?.map((e: any, index: number, arr: any) => {
             return (
-              <div key={index} className="!text-sm lg:!text-base">
+              <div key={index}>
                 <div className="flex justify-between items-center " key={index}>
                   <ProductBox
                     key={index}
