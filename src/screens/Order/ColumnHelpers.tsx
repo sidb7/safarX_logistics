@@ -1,9 +1,6 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
-import {
-  date_DD_MMM_YYY,
-  date_DD_MMM_YYYY_HH_MM,
-} from "../../utils/dateFormater";
+import { date_DD_MMM_YYYY_HH_MM } from "../../utils/dateFormater";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
@@ -101,12 +98,12 @@ const MainCommonHelper = (navigate: any = "") => {
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toFixed(2)}
+                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toFixed(2)}
+                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
                 </p>
               )}
 
@@ -255,7 +252,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       const { status, awb } = info?.row?.original;
       const rowsData = info?.row?.original;
       const timeStamp = status?.[0]?.timeStamp;
-      const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+      const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus =
         rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
@@ -294,15 +291,19 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           "Partner Name": rowsData?.service?.partnerName,
           "AVN Service": rowsData?.service?.companyServiceName,
           "Service Mode": rowsData?.service?.serviceMode,
-          "Applied Weight": rowsData?.service?.appliedWeight,
-          "Freight Charges": (
+          "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
+          "Freight Charges": `₹ ${(
             rowsData?.service?.add + rowsData?.service?.base
-          )?.toFixed(2),
-          "COD Charges": rowsData?.service?.cod,
-          Insurance: rowsData?.service?.insurance,
-          "Other Charges": rowsData?.service?.variables,
-          Tax: rowsData?.service?.tax?.toFixed(2),
-          Total: rowsData?.service?.total?.toFixed(2),
+          ).toLocaleString("en-IN")}`,
+          "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString("en-IN")}`,
+          Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+            "en-IN"
+          )}`,
+          "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+            "en-IN"
+          )}`,
+          Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
+          Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
         },
       ];
       let boxObj: any = { title: "" };
@@ -316,13 +317,15 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             ...boxObj,
             [`Name ${num + 1}`]: elem?.name,
             [`QTY ${num + 1}`]: elem?.qty,
-            [`Dead Weight ${num + 1}`]: elem?.deadWeight,
-            [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+            [`Dead Weight ${num + 1}`]: `${elem?.deadWeight} Kg`,
+            [`Applied Weight ${num + 1}`]: `${elem?.appliedWeight} Kg`,
             [`Dimensions ${
               num + 1
             }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-            [`Price ${num + 1}`]: elem?.unitPrice,
-            [`Tax ${num + 1}`]: elem?.unitTax,
+            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+              "en-IN"
+            )}`,
+            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
             [`SKU ${num + 1}`]: elem?.sku,
           };
           qty += elem?.qty;
@@ -341,7 +344,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           [`Description ${index + 1}`]: elem.description,
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
-          [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+          [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
         };
         statusObj.title = "Status";
       });
@@ -418,7 +421,7 @@ export const columnHelperForNewOrder = (
         const {
           tempOrderId,
           orderId,
-          status = [],
+          status,
           source,
           updatedAt,
           orderType,
@@ -426,6 +429,11 @@ export const columnHelperForNewOrder = (
           awb,
         } = info?.row?.original;
         // const AWB = otherDetails?.awbNo
+        let updatedAtStatus = 0;
+
+        if (status?.length > 0) {
+          updatedAtStatus = status[status.length - 1]?.timeStamp;
+        }
 
         return (
           <div className="py-3">
@@ -496,7 +504,7 @@ export const columnHelperForNewOrder = (
               </span>
               <div className=" ">
                 <p className="text-sm font-medium">
-                  {date_DD_MMM_YYYY_HH_MM(updatedAt)}
+                  {date_DD_MMM_YYYY_HH_MM(updatedAtStatus || updatedAt)}
                 </p>
               </div>
             </div>
@@ -533,7 +541,7 @@ export const columnHelperForNewOrder = (
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
         const timeStamp = status?.[0]?.timeStamp;
-        const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+        const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
         const rows: any = [
           {
@@ -569,15 +577,21 @@ export const columnHelperForNewOrder = (
             "Partner Name": rowsData?.service?.partnerName,
             "AVN Service": rowsData?.service?.companyServiceName,
             "Service Mode": rowsData?.service?.serviceMode,
-            "Applied Weight": rowsData?.service?.appliedWeight,
-            "Freight Charges": (
+            "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
+            "Freight Charges": `₹ ${(
               rowsData?.service?.add + rowsData?.service?.base
-            )?.toFixed(2),
-            "COD Charges": rowsData?.service?.cod,
-            Insurance: rowsData?.service?.insurance,
-            "Other Charges": rowsData?.service?.variables,
-            GST: rowsData?.service?.gst?.toFixed(2),
-            Total: rowsData?.service?.total?.toFixed(2),
+            ).toLocaleString("en-IN")}`,
+            "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString(
+              "en-IN"
+            )}`,
+            Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+              "en-IN"
+            )}`,
+            "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+              "en-IN"
+            )}`,
+            Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
+            Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -591,13 +605,15 @@ export const columnHelperForNewOrder = (
               ...boxObj,
               [`Name ${num + 1}`]: elem?.name,
               [`QTY ${num + 1}`]: elem?.qty,
-              [`Dead Weight ${num + 1}`]: elem?.deadWeight,
-              [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+              [`Dead Weight ${num + 1}`]: `${elem?.deadWeight} Kg`,
+              [`Applied Weight ${num + 1}`]: `${elem?.appliedWeight} Kg`,
               [`Dimensions ${
                 num + 1
               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-              [`Price ${num + 1}`]: elem?.unitPrice,
-              [`Tax ${num + 1}`]: elem?.unitTax,
+              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+                "en-IN"
+              )}`,
+              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
               [`SKU ${num + 1}`]: elem?.sku,
             };
             qty += elem?.qty;
@@ -616,7 +632,7 @@ export const columnHelperForNewOrder = (
             [`Description ${index + 1}`]: elem.description,
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
-            [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+            [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
           };
           statusObj.title = "Status";
         });
@@ -800,12 +816,12 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toFixed(2)}
+                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toFixed(2)}
+                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
                 </p>
               )}
 
@@ -918,7 +934,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
           <div className=" ">
             <p className="">
               {pickupAddress?.pickupDate
-                ? date_DD_MMM_YYY(pickupAddress?.pickupDate * 1000)
+                ? date_DD_MMM_YYYY_HH_MM(pickupAddress?.pickupDate * 1000)
                 : null}
             </p>
             <div className="py-2 flex flex-col">
@@ -962,9 +978,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                     width={"35px"}
                     // alt="Cancel Order"
                     className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                    onClick={() =>
-                      handleCancellationModal(data?.AWB, data?.orderId)
-                    }
+                    onClick={() => handleCancellationModal(awb, data?.orderId)}
                     data-tooltip-id="my-tooltip-inline"
                     data-tooltip-content="Cancel Order"
                   />
