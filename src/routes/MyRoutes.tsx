@@ -235,9 +235,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-type"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycBusinessTypeScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -252,9 +254,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-form"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycSendOtpFormScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -280,9 +284,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-mobile-verify"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycMobileVerificationScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -329,9 +335,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-aadhar-form"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycAadharForm />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
 

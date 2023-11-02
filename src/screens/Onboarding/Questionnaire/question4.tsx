@@ -109,7 +109,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 mt-10 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[45px]">
+        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[45px]">
           <div>
             <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">

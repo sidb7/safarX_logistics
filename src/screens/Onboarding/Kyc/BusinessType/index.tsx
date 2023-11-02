@@ -66,10 +66,9 @@ const BusinessType = (props: ITypeProps) => {
     return (
       <>
         {loading ? (
-          
           <div className="flex justify-center items-center h-screen">
-              <Spinner />
-            </div>
+            <Spinner />
+          </div>
         ) : (
           <div
             className={`${
@@ -77,8 +76,8 @@ const BusinessType = (props: ITypeProps) => {
             }flex flex-col relative md:px-0 md:gap-y-0`}
           >
             {/* {isLgScreen && modalTitle()} */}
-            <div className={`${isMdScreen ? "custom_shadow" : "product-box"}`}>
-              <div className=" flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+              <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
                   className="my-auto  object-contain"
                   src={CompanyLogo}
@@ -171,8 +170,6 @@ const BusinessType = (props: ITypeProps) => {
         <div className="flex justify-center items-center h-screen">
           {businessTypeComponent()}
         </div>
-        
-        
       );
     } else {
       return loading ? (
