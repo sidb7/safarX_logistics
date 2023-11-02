@@ -34,6 +34,7 @@ import { getSocket, initSocket, socketCallbacks } from "../../Socket";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { io, Socket } from "socket.io-client";
+
 let socket: Socket | null = null;
 
 interface ITopBarProps {
@@ -45,7 +46,6 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const navigate = useNavigate();
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
   const dispatch = useDispatch();
-
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quickData, setQuickData] = useState<any>();
@@ -203,16 +203,15 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
-  // Initialize socket
-  const socket = initSocket();
-
-  // Subscribe to the socket event for wallet balance updates
   useEffect(() => {
+    const socket = initSocket();
+
     if (socket) {
       console.log("socketwallet", socket);
-      socket.on("wallet_balance_update", (newBalance: number) => {
+      socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
+      socket.on("wallet_balance_update", (newBalance: string) => {
         console.log("newWalletBalance", newBalance);
-        dispatch(setWalletBalance({ amt: newBalance }));
+        dispatch(setWalletBalance({ amt: Number(newBalance) }));
       });
 
       return () => {
