@@ -32,7 +32,7 @@ const ShowLabel: React.FunctionComponent<IShowLabelProps> = (props) => {
   };
 
   return (
-    <div className="relative inline-block mx-2">
+    <div className="relative inline-block ">
       <img
         src={downloadIcon}
         alt=""

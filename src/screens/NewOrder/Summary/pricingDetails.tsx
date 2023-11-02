@@ -9,7 +9,7 @@ interface PricingData {
   base?: string | number;
   cod?: string | number;
   variables?: string | number;
-  gst?: number;
+  tax?: number;
   invoiceValue?: number;
   insurance?: number;
   baseWeight?: number;
@@ -22,7 +22,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   base = "",
   cod = "",
   variables = "",
-  gst = "",
+  tax = "",
   invoiceValue = "",
   insurance = "",
   appliedWeight = "",
@@ -44,7 +44,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Invoice Value:
             </p>
-            {`\u20B9`} {invoiceValue}
+            {`\u20B9`} {invoiceValue.toLocaleString("en-IN")}
           </div>
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
@@ -58,7 +58,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p>
               {" "}
-              {`\u20B9`} {orderPrice.toFixed(2)}
+              {`\u20B9`} {orderPrice.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="flex justify-between">
@@ -67,7 +67,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p>
               {" "}
-              {`\u20B9`} {cod}
+              {`\u20B9`} {cod.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="flex justify-between">
@@ -76,7 +76,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p>
               {" "}
-              {`\u20B9`} {insurance}
+              {`\u20B9`} {insurance.toLocaleString("en-IN")}
             </p>
           </div>
           {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] text-[#004EFF] lg:font-semibold">
@@ -106,10 +106,10 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
           </div> */}
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
-              GST :
+              Tax :
             </p>
             <p>
-              {`\u20B9`} {gst}{" "}
+              {`\u20B9`} {tax.toLocaleString("en-IN")}{" "}
             </p>
           </div>
           <hr className="mt-[100px]"></hr>
@@ -119,7 +119,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
             </p>
             <p className="text-[#004EFF]">
               {" "}
-              {`\u20B9`} {price}
+              {`\u20B9`} {price.toLocaleString("en-IN")}
             </p>
           </div>
         </div>
