@@ -203,29 +203,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
-  // // Initialize socket
-  // const socket = getSocket();
-  // initSocket();
+  // Initialize socket
+  const socket = initSocket();
 
-  // // // Subscribe to the socket event for wallet balance updates
-  // useEffect(() => {
-  //   const socket = getSocket();
-  //   console.log("socketwallet", socket);
-  //   if (socket) {
-  //     socket.on("wallet_balance_update", (newBalance: number) => {
-  //       // Update the wallet balance in the Redux store or local state
-  //       console.log("newWalletBalance", newBalance);
-  //       dispatch(setWalletBalance({ amt: newBalance }));
-  //     });
+  // Subscribe to the socket event for wallet balance updates
+  useEffect(() => {
+    if (socket) {
+      console.log("socketwallet", socket);
+      socket.on("wallet_balance_update", (newBalance: number) => {
+        console.log("newWalletBalance", newBalance);
+        dispatch(setWalletBalance({ amt: newBalance }));
+      });
 
-  //     // Clean up the socket subscription on component unmount
-  //     return () => {
-  //       if (socket) {
-  //         socket.off("wallet_balance_update");
-  //       }
-  //     };
-  //   }
-  // }, [socket]);
+      return () => {
+        if (socket) {
+          socket.off("wallet_balance_update");
+        }
+      };
+    }
+  }, []);
 
   return (
     <>
