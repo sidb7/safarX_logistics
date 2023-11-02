@@ -20,7 +20,8 @@ const BusinessType = (props: ITypeProps) => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
   const [loading, setLoading] = useState(false);
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
+
   const [checked, setChecked] = useState<any>({
     individual: false,
     bussiness: false,
@@ -67,67 +68,80 @@ const BusinessType = (props: ITypeProps) => {
         {loading ? (
           <Spinner />
         ) : (
-          <div className="flex flex-col relative w-full !h-full lg:px-0 lg:gap-y-0">
-            {isLgScreen && modalTitle()}
-            <div className="overflow-y-auto">
-              <div className="flex justify-between items-center shadow-md h-[60px] px-6 mb-6 lg:hidden ">
+          <div
+            className={`${
+              isMdScreen ? " m-auto mt-[5%] !w-[500px] " : "w-full !h-full"
+            }flex flex-col relative lg:px-0 lg:gap-y-0`}
+          >
+            {/* {isLgScreen && modalTitle()} */}
+            <div className={`${isMdScreen ? "custom_shadow" : "product-box"}`}>
+              <div className=" flex justify-between items-center w-full h-[60px] top-0 pl-5">
+                <img
+                  className="my-auto  object-contain"
+                  src={CompanyLogo}
+                  alt="Company Logo"
+                />
+              </div>
+              <div className="overflow-y-auto">
+                {/* <div className="flex justify-between items-center h-[60px] px-6 mb-6 lg:hidden ">
                 <img src={CompanyLogo} alt="" />
-              </div>
+              </div> */}
 
-              <WelcomeHeader
-                className="!mt-[44px] lg:!mt-6"
-                title="Welcome to Shipyaari"
-                content="Kindly complete your KYC"
-              />
-
-              <div className="flex flex-col items-center gap-y-4 lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
-                <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
-                  Please confirm your business type
-                </p>
-                <Card
-                  name="business"
-                  value="individual"
-                  title="Individual"
-                  subTitle="Shipper not having GST"
-                  checked={checked.individual}
-                  setChecked={setChecked}
-                  onClick={setChecked}
+                <WelcomeHeader
+                  className="!mt-[44px] lg:!mt-6"
+                  title="Welcome to Shipyaari"
+                  content="Kindly complete your KYC"
                 />
 
-                <Card
-                  name="business"
-                  value="business"
-                  title="Business"
-                  subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
-                  checked={checked.business}
-                  setChecked={setChecked}
-                  onClick={setChecked}
-                />
+                <div className="flex flex-col items-center gap-y-4 lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
+                  <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
+                    Please confirm your business type
+                  </p>
+                  <Card
+                    name="business"
+                    value="individual"
+                    title="Individual"
+                    subTitle="Shipper not having GST"
+                    checked={checked.individual}
+                    setChecked={setChecked}
+                    onClick={setChecked}
+                  />
 
-                <Card
-                  name="business"
-                  value="company"
-                  title="Company"
-                  subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
-                  checked={checked.company}
-                  setChecked={setChecked}
-                  onClick={setChecked}
-                />
-              </div>
-              <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
-                <ServiceButton
-                  text="PROCEED FOR KYC"
-                  className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
-                  onClick={() => {
-                    onSubmitBusinessType();
-                  }}
-                />
+                  <Card
+                    name="business"
+                    value="business"
+                    title="Business"
+                    subTitle="Entity having GST (Proprietorship, Partnership, HUF, AOP, or Charitable Trust etc)"
+                    checked={checked.business}
+                    setChecked={setChecked}
+                    onClick={setChecked}
+                  />
 
-                <ServiceButton
-                  text="SKIP FOR NOW"
-                  className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
-                  onClick={() => navigate("/dashboard/overview")}
-                />
+                  <Card
+                    name="business"
+                    value="company"
+                    title="Company"
+                    subTitle="Entity Registered as Private Ltd, LLP, One Person Company or Public ltd under Companies Act "
+                    checked={checked.company}
+                    setChecked={setChecked}
+                    onClick={setChecked}
+                  />
+                </div>
+                <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
+                  <ServiceButton
+                    text="PROCEED FOR KYC"
+                    className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
+                    onClick={() => {
+                      onSubmitBusinessType();
+                    }}
+                  />
+
+                  <ServiceButton
+                    text="SKIP FOR NOW"
+                    className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
+                    onClick={() => navigate("/dashboard/overview")}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -151,14 +165,14 @@ const BusinessType = (props: ITypeProps) => {
   const renderBusinessType = () => {
     if (isLgScreen && openModal) {
       return (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={openModal}
-          // onRequestClose={() => setOpenModal(false)}
-          className="!w-[500px] lg:!h-[700px]"
-        >
-          {businessTypeComponent()}
-        </CenterModal>
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   isOpen={openModal}
+        //   // onRequestClose={() => setOpenModal(false)}
+        //   className="!w-[500px] lg:!h-[700px]"
+        // >
+        businessTypeComponent()
+        // </CenterModal>
       );
     } else {
       return loading ? (

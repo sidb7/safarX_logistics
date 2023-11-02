@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
 
   const [mobileNumber, setMobileNumber] = useState({
@@ -57,55 +57,57 @@ const Index = () => {
 
   const mobileVerification = () => {
     return (
-      <div className="relative h-full w-full">
-        {isLgScreen && modalTitle()}
-        <div className="xl:mx-[90px] lg:mt-[24px] md:mx-6">
-          <div className="flex flex-col gap-y-8">
-            <div className="product-box flex items-center lg:hidden">
+      <div
+        className={` ${
+          isMdScreen ? "custom_shadow m-auto !w-[500px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
+      >
+        {/* {isLgScreen && modalTitle()} */}
+        <div className="product-box flex items-center ">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
+
+        <div className="flex flex-col  mx-4 md:mx-[90px] gap-y-8">
+          <div className="flex flex-col mt-11 md:mt-6 gap-y-6">
+            <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
+              Mobile Verification
+            </p>
+            <p className="text-center font-Open font-light text-[#494949] leading-[22px]">
+              Please verify your phone number to proceed further.
+            </p>
+          </div>
+          <div className=" flex flex-col gap-y-6 md:mb-11">
+            <div className="flex justify-center">
               <img
-                className="m-4 h-[25px] object-contain"
-                src={CompanyLogo}
-                alt="CompanyLogo"
-              />
+                className="h-[180px] w-[180px] object-contain"
+                src={MobileGif}
+                alt="MobileIcon"
+              />{" "}
             </div>
 
-            <div className="flex flex-col mt-4 mx-4 gap-y-6">
-              <p className="text-center text-[22px] font-bold font-Lato leading-7 ">
-                Mobile Verification
-              </p>
-              <p className="text-center font-Open font-light leading-[22px]">
-                Please verify your phone number to proceed further.
-              </p>
-            </div>
-            <div className=" flex flex-col mx-4 gap-y-6">
-              <div className="flex justify-center">
-                <img
-                  className="h-[180px] w-[180px] object-contain"
-                  src={MobileGif}
-                  alt="MobileIcon"
-                />{" "}
-              </div>
-
-              <CustomInputBox
-                value={mobileNumber?.mobileNo || ""}
-                inputMode="numeric"
-                label="Enter Your Mobile Number"
-                maxLength={10}
-                onChange={(e: any) => {
-                  if (isNaN(e.target.value)) {
-                  } else {
-                    setMobileNumber({
-                      ...mobileNumber,
-                      mobileNo: +e.target.value,
-                    });
-                  }
-                }}
-              />
-              <CustomButton
-                onClick={(e: any) => sendOtpOnClick(body)}
-                text="SEND OTP"
-              />
-            </div>
+            <CustomInputBox
+              value={mobileNumber?.mobileNo || ""}
+              inputMode="numeric"
+              label="Enter Your Mobile Number"
+              maxLength={10}
+              onChange={(e: any) => {
+                if (isNaN(e.target.value)) {
+                } else {
+                  setMobileNumber({
+                    ...mobileNumber,
+                    mobileNo: +e.target.value,
+                  });
+                }
+              }}
+            />
+            <CustomButton
+              onClick={(e: any) => sendOtpOnClick(body)}
+              text="SEND OTP"
+            />
           </div>
         </div>
       </div>
@@ -114,16 +116,21 @@ const Index = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
+      {/* {isLgScreen && isModalOpen && (
         <CenterModal
           shouldCloseOnOverlayClick={false}
           isOpen={isModalOpen}
           // onRequestClose={() => setIsModalOpen(false)}
         >
-          {mobileVerification()}
+          mobileVerification()
         </CenterModal>
-      )}
+      )} */}
 
+      {isMdScreen && (
+        <div className="flex justify-center items-center h-screen">
+          {mobileVerification()}
+        </div>
+      )}
       {!isLgScreen && mobileVerification()}
     </>
   );
