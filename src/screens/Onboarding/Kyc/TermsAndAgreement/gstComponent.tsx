@@ -11,6 +11,8 @@ import { POST } from "../../../../utils/webService";
 import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import { ResponsiveState } from "../../../../utils/responsiveState";
+
 
 interface ITypeProps {}
 
@@ -89,8 +91,14 @@ export const GSTComponent = (props: ITypeProps) => {
   };
 
   const gstCommonComponent = () => {
+    const { isLgScreen, isMdScreen } = ResponsiveState();
+    
     return (
-      <div className="lg:px-0 ">
+      <div 
+      className={`${
+        isMdScreen ? " m-auto mt-[7%] !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative lg:px-0 lg:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
         <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
           <img src={CompanyLogo} alt="" />
         </div>
@@ -233,6 +241,7 @@ export const GSTComponent = (props: ITypeProps) => {
           </div>
         </div>
         {BottomButton()}
+        </div>
       </div>
     );
   };
@@ -240,12 +249,13 @@ export const GSTComponent = (props: ITypeProps) => {
   const renderGstCommonComponent = () => {
     if (isBigScreen && openModal) {
       return (
-        <CustomBottomModal
-          isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px] overflow-x-scroll"
-          overlayClassName="flex  items-center"
-        >
+        // <CustomBottomModal
+        //   isOpen={openModal}
+        //   onRequestClose={closeModal}
+        //   className="!p-0 !w-[500px] !h-[700px] overflow-x-scroll"
+        //   overlayClassName="flex  items-center"
+        // >
+          <>
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <Spinner />
@@ -253,7 +263,8 @@ export const GSTComponent = (props: ITypeProps) => {
           ) : (
             gstCommonComponent()
           )}
-        </CustomBottomModal>
+          </>
+        // </CustomBottomModal>
       );
     } else {
       return loading ? (
