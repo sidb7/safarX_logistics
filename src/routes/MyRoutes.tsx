@@ -260,17 +260,21 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/select-address-billing"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <SelectAddressBilling />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/select-address-pickup"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <SelectAddressPickUp />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -284,34 +288,42 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-terms/gst-agreement"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <GSTComponent />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-terms/service-agreement"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <ServiceComponent />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
 
           <Route
             path="/onboarding/kyc"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycModalScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/select-address"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <SelectAddress />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
