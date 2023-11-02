@@ -299,20 +299,7 @@ const Index = (props: ITypeProps) => {
           </div>
           }
           
-          {
-            otp && 
-            <div className=" md:px-0 ">
-        
-        {
          
-        
-        }
-        
-
-        
-            </div>
-          }
-
           {otp && <div>
           <div className="px-5 md:mb-6">
             <div className="flex flex-col md:items-center ">

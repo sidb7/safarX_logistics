@@ -439,6 +439,44 @@ const Index = (props: ITypeProps) => {
                       </div>
                     )}
                 </div>
+
+                <div className={`${!isMdScreen ? "w-full" : ""}`}>
+              <CustomInputBox
+                containerStyle="md:!w-auto"
+                label="PAN Number"
+                value={panNumber}
+                maxLength={10}
+                isDisabled={
+                  businessType === "individual"
+                    ? false
+                    : panNumber !== undefined
+                }
+                className={`${
+                  panNumberError !== "" &&
+                  panNumberError !== undefined &&
+                  "border-[#F35838]"
+                }   md:!w-[320px] !font-Open`}
+                labelClassName="!font-Open"
+                onChange={(e) => {
+                  if (panRegex.test(e.target.value.toUpperCase())) {
+                    setPanNumberError("");
+                  } else {
+                    setPanNumberError("Enter Valid PAN Number");
+                  }
+                  setPanNumber(e.target.value.toUpperCase());
+                }}
+              />
+              {/* To display error */}
+              {panNumberError !== "" && panNumberError !== undefined && (
+                <div className="flex items-center gap-x-1 mt-1 ">
+                  <img src={ErrorIcon} alt="" width={10} height={10} />
+                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
+                    {panNumberError}
+                  </span>
+                </div>
+              )}
+            </div>
+
                 {showAaddharOtpBox && (
                   <>
                     <div className={`${!isMdScreen ? "w-full" : ""}`}>
@@ -531,7 +569,7 @@ const Index = (props: ITypeProps) => {
               </>
             )}
             <div className={`${!isMdScreen ? "w-full" : ""}`}>
-              <CustomInputBox
+              {/* <CustomInputBox
                 containerStyle="md:!w-auto"
                 label="PAN Number"
                 value={panNumber}
@@ -555,16 +593,16 @@ const Index = (props: ITypeProps) => {
                   }
                   setPanNumber(e.target.value.toUpperCase());
                 }}
-              />
+              /> */}
               {/* To display error */}
-              {panNumberError !== "" && panNumberError !== undefined && (
+              {/* {panNumberError !== "" && panNumberError !== undefined && (
                 <div className="flex items-center gap-x-1 mt-1 ">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal font-Open text-[#F35838] text-[10px]">
                     {panNumberError}
                   </span>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <div className="flex  md:justify-center md:items-center px-5 pb-12">
