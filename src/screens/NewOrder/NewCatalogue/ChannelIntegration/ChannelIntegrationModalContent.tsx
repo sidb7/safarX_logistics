@@ -14,13 +14,32 @@ import {
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import CustomDropDown from "../../../../components/DropDown";
-import { setLocalStorage } from "../../../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  setLocalStorage,
+} from "../../../../utils/utility";
 import axios from "axios";
 
-function ChannelIntegrationModalContent(props: any) {
-  const { setModalData, channelData, setChannelData, indexNum, integrate } =
-    props;
-  let isUpdateModal = !integrate;
+interface IChannelProps {
+  setModalData: any;
+  channelData: any;
+  setChannelData: any;
+  indexNum: number;
+  integrate: boolean;
+  modalData: any;
+}
+
+function ChannelIntegrationModalContent(props: IChannelProps) {
+  const {
+    setModalData,
+    channelData,
+    setChannelData,
+    indexNum,
+    integrate,
+    modalData,
+  } = props;
+  // let isUpdateModal = !integrate;
+  let isUpdateModal = false;
   const [storeData, setStoreData]: any = useState({
     storeName: "",
     storeUrl: "",
@@ -28,7 +47,8 @@ function ChannelIntegrationModalContent(props: any) {
     storeLogo: "",
     channelName: "",
   });
-  const [channel, setChannel] = useState("");
+  const [channel, setChannel] = useState(modalData.modalData.channel);
+
   const [isDisabled, setIsDisabled] = useState(true);
 
   const storeId = channelData?.channels?.[indexNum]?.storeId;
@@ -157,26 +177,31 @@ function ChannelIntegrationModalContent(props: any) {
       <div className="text-[24px] justify-between flex m-5 items-center">
         <p className="flex gap-x-5 items-center">
           <img src={TaskSquare} width="30px" />
-          <span>{!isUpdateModal ? "Create Store" : "Update Store"}</span>
+          <span>
+            {!isUpdateModal
+              ? `Create ${capitalizeFirstLetter(channel)} Store`
+              : "Update Store"}
+          </span>
         </p>
         <img
           className="cursor-pointer"
           src={CloseIcon}
           width="30px"
-          onClick={() => setModalData({ isOpen: false })}
+          onClick={() => setModalData({ ...modalData, isOpen: false })}
         />
       </div>
       <div className="grid gap-y-3 m-5 mt-10">
-        <CustomDropDown
+        {/* <CustomDropDown
           onChange={(e) => {
             handleChannel(e.target.value);
           }}
           options={channelArr}
           heading="Select Channel"
-        />
+        /> */}
         {channel === "SHOPIFY" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               isRequired={true}
               placeholder="Store Name"
               value={storeData.storeName}
@@ -185,6 +210,7 @@ function ChannelIntegrationModalContent(props: any) {
               }
             />
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Store Url - 7fd4c3"
               isRequired={true}
               value={storeData.storeUrl}
@@ -196,6 +222,7 @@ function ChannelIntegrationModalContent(props: any) {
               Example : https://<strong>7fd4c3</strong>.myshopify.com/{" "}
             </p>
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Store Token"
               isRequired={true}
               value={storeData.storeToken}
@@ -204,6 +231,7 @@ function ChannelIntegrationModalContent(props: any) {
               }
             />
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Store Logo"
               value={storeData.storeLogo}
               onChange={(e) =>
@@ -214,6 +242,7 @@ function ChannelIntegrationModalContent(props: any) {
         ) : channel === "WOOCOMMERCE" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Store Url - https://example.com"
               isRequired={true}
               value={storeData.storeUrl}
@@ -222,6 +251,7 @@ function ChannelIntegrationModalContent(props: any) {
               }
             />
             <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Store Name"
               isRequired={true}
               value={storeData.storeName}

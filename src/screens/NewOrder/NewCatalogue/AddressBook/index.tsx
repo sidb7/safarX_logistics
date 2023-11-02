@@ -97,7 +97,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
             );
           })}
         </div>
-        <div className="ml-2 w-[265px]">
+        {/* <div className="ml-2 w-[265px]">
           <CustomDropDown
             value=""
             onChange={() => {}}
@@ -113,7 +113,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
             ]}
             selectClassName="rounded-md bg-[#FEFEFE] !h-[45px]"
           />
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -127,9 +127,9 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
       ) : (
         <div>
           {filterComponent()}
-
           {/* Display Address */}
-          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-0 mt-4">
+          {/* <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-y-6 gap-x-0 mt-4"> */}
+          <div className="flex gap-3 mt-4  flex-wrap">
             {address?.map((data: any, index: any) => {
               return (
                 <AddressCard
