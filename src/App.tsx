@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyRoutes from "./routes/MyRoutes";
@@ -6,17 +6,21 @@ import { socketCallbacks } from "./Socket";
 import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
 import { GlobalToast } from "./components/GlobalToast/GlobalToast";
+import { useStore } from "react-redux";
 
 const App = () => {
   /* Socket code */
 
-  let roomName = sessionStorage.getItem("sellerId");
+  //let roomName = sessionStorage.getItem("sellerId");
   //useSelector((state: any) => state?.roles?.roles[0]);
+  const [roomName, setRoomName] = useState<any>(
+    `${sessionStorage.getItem("sellerId")}`
+  );
 
   useEffect(() => {
+    setRoomName(`${sessionStorage.getItem("sellerId")}`);
     if (roomName) {
       console.log("userType", roomName);
-
       socketCallbacks.connectSocket(roomName);
     }
 
