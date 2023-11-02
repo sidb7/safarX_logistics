@@ -501,7 +501,7 @@ const Index = () => {
   };
 
   const renderSignUp = () => {
-    if (isLgScreen) {
+    if (isMdScreen) {
       return (
         // <CenterModal
         //   shouldCloseOnOverlayClick={false}
