@@ -30,6 +30,11 @@ import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 import { useSelector } from "react-redux";
+import { getSocket, initSocket, socketCallbacks } from "../../Socket";
+import { setWalletBalance } from "../../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
+import { io, Socket } from "socket.io-client";
+let socket: Socket | null = null;
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -39,6 +44,7 @@ interface ITopBarProps {
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const navigate = useNavigate();
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+  const dispatch = useDispatch();
 
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -196,6 +202,26 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     sessionStorage.clear();
     navigate("/");
   };
+
+  // Initialize socket
+  const socket = initSocket();
+
+  // Subscribe to the socket event for wallet balance updates
+  useEffect(() => {
+    if (socket) {
+      console.log("socketwallet", socket);
+      socket.on("wallet_balance_update", (newBalance: number) => {
+        console.log("newWalletBalance", newBalance);
+        dispatch(setWalletBalance({ amt: newBalance }));
+      });
+
+      return () => {
+        if (socket) {
+          socket.off("wallet_balance_update");
+        }
+      };
+    }
+  }, []);
 
   return (
     <>

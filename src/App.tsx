@@ -14,7 +14,6 @@ const App = () => {
   //useSelector((state: any) => state?.roles?.roles[0]);
 
   useEffect(() => {
-    roomName = `${sessionStorage.getItem("sellerId")}`;
     if (roomName) {
       console.log("userType", roomName);
 
