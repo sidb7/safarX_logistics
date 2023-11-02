@@ -27,7 +27,7 @@ const App = () => {
     return () => {
       socketCallbacks.disconnectSocket();
     };
-  }, [roomName]);
+  }, []);
 
   // useEffect(() => {
   //   GlobalToast("Welcome to the application!");
