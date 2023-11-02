@@ -53,6 +53,7 @@ const TimerCounter = (props: IProps) => {
   const resentAadharOtp = async () => {
     try {
       const payload = { adhaar_no: aadharNumber };
+      
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
       if (response?.success) {
         toast.success("Aadhar OTP Resent Successfully");
@@ -90,7 +91,7 @@ const TimerCounter = (props: IProps) => {
   };
 
   const resendOtp = async () => {
-    if (businessType === "individual") {
+    if (businessType === "individual" || businessType === "business"){
       resentAadharOtp();
     } else {
       resentGstOtp();

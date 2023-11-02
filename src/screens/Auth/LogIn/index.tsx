@@ -66,6 +66,7 @@ const Index = () => {
     if (response?.success) {
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
       sessionStorage.setItem("userName", response?.data[0]?.name);
+      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
@@ -103,6 +104,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       // setLocalStorage(tokenKey, response?.data[0]?.token);
+      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
       sessionStorage.setItem("userName", response?.data[0]?.name);
       setLocalStorage(
