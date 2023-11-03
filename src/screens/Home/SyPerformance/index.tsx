@@ -21,30 +21,16 @@ import GreenEllipse from "../../../assets/greenEllipse.svg";
 import LocationIcon from "../../../assets/Location.svg";
 import BarChart from "../Common/BarChart";
 
-const SyPerfromance = () => {
+const SyPerfromance = (props: any) => {
+  const { ordersArr } = props;
   const columnsHelper = createColumnHelper<any>();
-  const ordersArr = [
-    {
-      count: 0,
-      text: "Total NPR",
-      img: CreateOrderIcon,
-    },
-    {
-      count: 0,
-      text: "Total NDR",
-      img: InTransitIcon,
-    },
-    {
-      count: 0,
-      text: "RTO Initiated",
-      img: VanIcon,
-    },
-    {
-      count: 0,
-      text: "RTO Delivered",
-      img: VanIcon,
-    },
-  ];
+
+  const objectIcon: any = {
+    CreateOrderIcon: CreateOrderIcon,
+
+    InTransitIcon: InTransitIcon,
+    VanIcon: VanIcon,
+  };
 
   const piedata = [
     { name: "Group A", value: 1 },
@@ -418,7 +404,7 @@ const SyPerfromance = () => {
                 </p>
               </div>
               <div className="self-center">
-                <img src={order?.img} alt="Box" />
+                <img src={objectIcon[order?.img]} alt="Box" />
               </div>
             </div>
           </div>

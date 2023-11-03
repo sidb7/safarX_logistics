@@ -23,6 +23,8 @@ import { PHONEPE_TRANSACTION_STATUS } from "../../utils/ApiUrls";
 import AccessDenied from "../../components/AccessDenied";
 import { useNavigate } from "react-router-dom";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import { BottomNavBar } from "../../components/BottomNavBar";
+import { GET_DASHBOARD_INFO } from "../../utils/ApiUrls";
 
 interface IOverview {}
 
@@ -37,6 +39,97 @@ export const Home = (props: IOverview) => {
   //     ?.isActive;
 
   const [isActive, setIsActive] = React.useState<any>(false);
+
+  const [dashboardInfo, setDashboardInfo] = React.useState<any>({
+    overview: [
+      {
+        count: 1,
+        text: "Orders need to be proceed",
+        img: "",
+      },
+      {
+        count: 1,
+        text: "Orders delayed for Pickup",
+        img: "",
+      },
+      {
+        count: 0,
+        text: "RTO Orders",
+        img: "",
+      },
+      {
+        count: 0,
+        text: "Orders in Weight Descripancy",
+        img: "",
+      },
+    ],
+    orders: [
+      {
+        count: 1,
+        text: "Created Order",
+        img: "CreateOrderIcon",
+      },
+      {
+        count: 1,
+        text: "Shipped",
+        img: "ShippedIcon",
+      },
+      {
+        count: 0,
+        text: "In Transit",
+        img: "InTransitIcon",
+      },
+      {
+        count: 0,
+        text: "Delivered",
+        img: "InTransitIcon",
+      },
+    ],
+    exception: [
+      {
+        count: 1,
+        text: "Total NPR",
+        img: "CreateOrderIcon",
+      },
+      {
+        count: 1,
+        text: "Total NDR",
+        img: "InTransitIcon",
+      },
+      {
+        count: 0,
+        text: "RTO Initiated",
+        img: "VanIcon",
+      },
+      {
+        count: 0,
+        text: "RTO Delivered",
+        img: "VanIcon",
+      },
+    ],
+    syPerformance: [
+      {
+        count: 1,
+        text: "Total NPR",
+        img: "CreateOrderIcon",
+      },
+      {
+        count: 1,
+        text: "Total NDR",
+        img: "InTransitIcon",
+      },
+      {
+        count: 0,
+        text: "RTO Initiated",
+        img: "VanIcon",
+      },
+      {
+        count: 0,
+        text: "RTO Delivered",
+        img: "VanIcon",
+      },
+    ],
+  });
 
   const arrayData = [
     { index: 0, label: "Overview" },
@@ -124,6 +217,18 @@ export const Home = (props: IOverview) => {
     })();
   }, []);
 
+  React.useMemo(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_DASHBOARD_INFO);
+
+        if (response?.success) {
+          setDashboardInfo(response?.data[0]);
+        }
+      } catch (error) {}
+    })();
+  }, []);
+
   return (
     <>
       {isActive ? (
@@ -131,10 +236,10 @@ export const Home = (props: IOverview) => {
           <div>
             <Breadcrum label="Home" />
           </div>
-          <div className="m-4">
+          <div className="mx-4 mb-4 ">
             <div className="flex justify-between">
               {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
-              <div>
+              <div className="overflow-x-scroll">
                 <ScrollNav
                   arrayData={arrayData}
                   showNumber={false}
@@ -151,10 +256,22 @@ export const Home = (props: IOverview) => {
                 </div>
               )}
             </div>
-            {renderingComponents === 0 && <Overview />}
-            {renderingComponents === 1 && <Orders />}
-            {renderingComponents === 2 && <Exception />}
-            {renderingComponents === 3 && <SyPerfromance />}
+            {renderingComponents === 0 && (
+              <Overview ordersArr={dashboardInfo.overview} />
+            )}
+            {renderingComponents === 1 && (
+              <Orders ordersArr={dashboardInfo.orders} />
+            )}
+            {renderingComponents === 2 && (
+              <Exception ordersArr={dashboardInfo.exception} />
+            )}
+            {renderingComponents === 3 && (
+              <SyPerfromance ordersArr={dashboardInfo.syPerformance} />
+            )}
+          </div>
+
+          <div className="mt-24 lg:hidden">
+            <BottomNavBar />
           </div>
         </div>
       ) : (

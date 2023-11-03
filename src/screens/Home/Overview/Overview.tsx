@@ -15,9 +15,13 @@ import PieChart from "../Common/PieChart";
 import Locations from "../Common/Locations";
 import Invoices from "../Common/Invoices";
 
-interface IOverview {}
+interface IOverview {
+  ordersArr?: any;
+}
 
 export const Overview = (props: IOverview) => {
+  const { ordersArr } = props;
+
   const orderArr = [
     {
       name: "Wed",
@@ -105,25 +109,6 @@ export const Overview = (props: IOverview) => {
     {
       count: 0,
       text: "Average Dispute Amount",
-    },
-  ];
-
-  const ordersArr = [
-    {
-      count: 0,
-      text: "Orders need to be proceed",
-    },
-    {
-      count: 0,
-      text: "Orders delayed for Pickup",
-    },
-    {
-      count: 0,
-      text: "RTO Orders",
-    },
-    {
-      count: 0,
-      text: "Orders in Weight Descripancy",
     },
   ];
 
