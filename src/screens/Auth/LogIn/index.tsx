@@ -386,7 +386,7 @@ const Index = () => {
             </CenterModal>
           )} */}
 
-          {isLgScreen && (
+          {isMdScreen && (
             <div className="flex justify-center items-center h-screen">
               {loginComponent()}
             </div>

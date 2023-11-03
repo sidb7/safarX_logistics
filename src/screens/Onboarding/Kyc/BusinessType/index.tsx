@@ -96,7 +96,7 @@ const BusinessType = (props: ITypeProps) => {
                 />
 
                 <div className="flex flex-col items-center gap-y-4 md:justify-center mx-5 md:mx-[90px] md:mb-3">
-                  <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 md:mb-7">
+                  <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 md:mb-3">
                     Please confirm your business type
                   </p>
                   <Card
@@ -129,7 +129,7 @@ const BusinessType = (props: ITypeProps) => {
                     onClick={setChecked}
                   />
                 </div>
-                <div className="flex flex-col gap-y-4 mx-5 mt-4  md:gap-y-3 md:items-center md:justify-center md:pb-0 md:mb-6">
+                <div className="flex flex-col gap-y-4 mx-5 mt-[96px] md:mt-6 md:gap-y-3 md:items-center md:justify-center md:pb-0 md:mb-3">
                   <ServiceButton
                     text="PROCEED FOR KYC"
                     className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 md:!w-[320px] "
@@ -140,7 +140,7 @@ const BusinessType = (props: ITypeProps) => {
 
                   <ServiceButton
                     text="SKIP FOR NOW"
-                    className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
+                    className="!text-[#004EFF] !font-Open  underline !border-none"
                     onClick={() => navigate("/dashboard/overview")}
                   />
                 </div>
