@@ -153,15 +153,13 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("panNumber", panNumber);
         sessionStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response?.data?.data?.client_id);
-        // let clientIdSession = sessionStorage.getItem("client_id");
-        // console.log("clientIdSe", clientIdSession);
+        let clientIdSession = sessionStorage.getItem("client_id");
+        console.log("clientIdSe", clientIdSession);
 
-        // if (businessType === "individual") {
-        //   setLoading(false);
-        //   navigate("/onboarding/kyc-mobile-verify", {
-        //     state: { path: "aadhaar-verification" },
-        //   });
-        // }
+        if (businessType === "individual") {
+          setLoading(false);
+          
+        }
       } else {
         setLoading(false);
 
@@ -186,17 +184,15 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("client_id", response.data[0].data.client_id);
         setShowgstOtpBox(true);
         setVerifyOTP(true);
-        // if (businessType === "business" || businessType === "company") {
-        //   setLoading(false);
-        //   sessionStorage.setItem("client_id", response.data[0].data.client_id);
-        //   navigate("/onboarding/kyc-mobile-verify", {
-        //     state: { path: "otp-form" },
-        //   });
-        // } else {
-        //   setLoading(false);
-        //   navigate("/onboarding/kyc-mobile-verify");
-        // }
-        // setgstError("");
+        if (businessType === "business" || businessType === "company") {
+          setLoading(false);
+          sessionStorage.setItem("client_id", response.data[0].data.client_id);
+         
+        } else {
+          setLoading(false);
+          
+        }
+        setgstError("");
       } else {
         setLoading(false);
 
@@ -257,9 +253,7 @@ const Index = (props: ITypeProps) => {
       else if (businessType === "business") {
         verifyGST(gstNumber);
       } else if (businessType === "company") {
-        // navigate("/onboarding/kyc-mobile-verify", {
-        //   state: { path: "otp-form" },
-        // });
+        
         verifyGST(gstNumber);
       } else {
         toast.error("Something Went Wrong!!");
@@ -317,46 +311,46 @@ const Index = (props: ITypeProps) => {
             setLoading(false);
           }
         }
-        // else if (businessType === "business") {
-        //   if (location?.state?.path === "aadhar-form") {
-        //     const payload = { client_id: clientId, otp: Number(otpNumber) };
-        //     setLoading(true);
-        //     const { data: response } = await POST(
-        //       POST_VERIFY_AADHAR_OTP_URL,
-        //       payload
-        //     );
-        //     if (response?.success) {
-        //       // setLoading(false);
-        //       verifyPAN(panCard);
-        //       // toast.success(response?.message);
-        //       //Navigate Url's go here
-        //     } else {
-        //       setLoading(false);
-        //       setOTPNumber("");
-        //       toast.error(response?.message);
-        //       navigate("/onboarding/kyc-aadhar-form");
-        //     }
-        //   } else {
-        //     const payload = {
-        //       gstIn: gstNo,
-        //       client_id: clientId,
-        //       otp: Number(otpNumber),
-        //     };
+        else if (businessType === "business") {
+          if (location?.state?.path === "aadhar-form") {
+            const payload = { client_id: clientId, otp: Number(otpNumber) };
+            setLoading(true);
+            const { data: response } = await POST(
+              POST_VERIFY_AADHAR_OTP_URL,
+              payload
+            );
+            if (response?.success) {
+              // setLoading(false);
+              verifyPAN(panNumber);
+              // toast.success(response?.message);
+              //Navigate Url's go here
+            } else {
+              setLoading(false);
+              setOTPNumber("");
+              toast.error(response?.message);
+              navigate("/onboarding/kyc-aadhar-form");
+            }
+          } else {
+            const payload = {
+              gstIn: gstNumber,
+              client_id: clientId,
+              otp: Number(otpNumber),
+            };
 
-        //     setLoading(true);
-        //     const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
-        //     if (response?.success) {
-        //       setLoading(false);
-        //       if (location?.state?.path === "otp-form") {
-        //         navigate("/onboarding/kyc-aadhar-form");
-        //       }
-        //     } else {
-        //       setLoading(false);
-        //       setOTPNumber("");
-        //       toast.error(response?.message);
-        //     }
-        //   }
-        // }
+            setLoading(true);
+            const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
+            if (response?.success) {
+              setLoading(false);
+              if (location?.state?.path === "otp-form") {
+                navigate("/onboarding/kyc-aadhar-form");
+              }
+            } else {
+              setLoading(false);
+              setOTPNumber("");
+              toast.error(response?.message);
+            }
+          }
+        }
         else if (businessType === "company") {
           setLoading(true);
           const payload = {
