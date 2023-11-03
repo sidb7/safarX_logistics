@@ -260,7 +260,7 @@ const Index = () => {
         //   // onRequestClose={() => setIsModalOpen(false)}
         // >
         loading ? (
-          <div className="flex justify-center items-center h-full">
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Spinner />
           </div>
         ) : (
@@ -272,7 +272,7 @@ const Index = () => {
       );
     } else {
       return loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="flex justify-center items-center h-screen">
           <Spinner />
         </div>
       ) : (

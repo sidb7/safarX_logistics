@@ -347,18 +347,22 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-main"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletMain />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
           {/**wallet details page */}
           <Route
             path="/onboarding/wallet-details"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletDetails />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
           {/**wallet payment page */}
@@ -366,9 +370,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-payment"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletPayment />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
 
@@ -384,9 +390,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/recharge-payment"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <RechargePayment />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
         </Route>

@@ -383,193 +383,195 @@ const Index = (props: ITypeProps) => {
 
   const sendOtpFormComponent = () => {
     return (
-      <div className={`${
-        isMdScreen ? " m-auto  !w-[500px] mt-60px" : "w-full !h-full"
-      }flex flex-col relative md:px-0 md:gap-y-0`}>
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] mt-60px" : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-        <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-          <img src={CompanyLogo} alt="" className="h-[25px]"/>
-        </div>
+          <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+            <img src={CompanyLogo} alt="" className="h-[25px]" />
+          </div>
 
-        <WelcomeHeader
-          className="!mt-[44px] md:!mt-6"
-          title="Welcome to Shipyaari"
-          content="Kindly complete your KYC"
-        />
+          <WelcomeHeader
+            className="!mt-[44px] md:!mt-6"
+            title="Welcome to Shipyaari"
+            content="Kindly complete your KYC"
+          />
 
-        <div>
-          <div className="flex flex-col justify-center items-center mt-[104px]  px-5 md:px-0 gap-y-5 mb-6">
-            {businessType === "individual" ? (
-              <>
-                <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                  <CustomInputBox
-                    containerStyle={`md:!w-auto`}
-                    label="Aadhar Number"
-                    inputType="text"
-                    inputMode="numeric"
-                    value={aadharNumber}
-                    maxLength={12}
-                    labelClassName="!font-Open"
-                    className={` ${
-                      aadharNumberError !== "" &&
-                      aadharNumberError !== undefined &&
-                      "!border-[#F35838]"
-                    }
-                  md:!w-[320px]   !font-Open`}
-                    onChange={(e: any) => {
-                      if (aadharRegex.test(e.target.value)) {
-                        setAadharNumberError("");
-                      } else {
-                        setAadharNumberError("Enter Valid Aadhar Number");
+          <div>
+            <div className="flex flex-col justify-center items-center mt-[104px]  px-5 md:px-0 gap-y-5 mb-6">
+              {businessType === "individual" ? (
+                <>
+                  <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                    <CustomInputBox
+                      containerStyle={`md:!w-auto`}
+                      label="Aadhar Number"
+                      inputType="text"
+                      inputMode="numeric"
+                      value={aadharNumber}
+                      maxLength={12}
+                      labelClassName="!font-Open"
+                      className={` ${
+                        aadharNumberError !== "" &&
+                        aadharNumberError !== undefined &&
+                        "!border-[#F35838]"
                       }
-                      setAadharNumber(e.target.value);
-                    }}
-                  />
+                  md:!w-[320px]   !font-Open`}
+                      onChange={(e: any) => {
+                        if (aadharRegex.test(e.target.value)) {
+                          setAadharNumberError("");
+                        } else {
+                          setAadharNumberError("Enter Valid Aadhar Number");
+                        }
+                        setAadharNumber(e.target.value);
+                      }}
+                    />
 
-                  {/* To display error */}
+                    {/* To display error */}
 
-                  {aadharNumberError !== "" &&
-                    aadharNumberError !== undefined && (
+                    {aadharNumberError !== "" &&
+                      aadharNumberError !== undefined && (
+                        <div className="flex items-center gap-x-1 mt-1 ">
+                          <img src={ErrorIcon} alt="" width={10} height={10} />
+
+                          <span className="font-normal font-Open  text-[#F35838] text-[10px]">
+                            {aadharNumberError}
+                          </span>
+                        </div>
+                      )}
+                  </div>
+
+                  <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                    <CustomInputBox
+                      containerStyle="md:!w-auto"
+                      label="PAN Number"
+                      value={panNumber}
+                      maxLength={10}
+                      isDisabled={
+                        businessType === "individual"
+                          ? false
+                          : panNumber !== undefined
+                      }
+                      className={`${
+                        panNumberError !== "" &&
+                        panNumberError !== undefined &&
+                        "border-[#F35838]"
+                      }   md:!w-[320px] !font-Open`}
+                      labelClassName="!font-Open"
+                      onChange={(e) => {
+                        if (panRegex.test(e.target.value.toUpperCase())) {
+                          setPanNumberError("");
+                        } else {
+                          setPanNumberError("Enter Valid PAN Number");
+                        }
+                        setPanNumber(e.target.value.toUpperCase());
+                      }}
+                    />
+                    {/* To display error */}
+                    {panNumberError !== "" && panNumberError !== undefined && (
                       <div className="flex items-center gap-x-1 mt-1 ">
                         <img src={ErrorIcon} alt="" width={10} height={10} />
-
-                        <span className="font-normal font-Open  text-[#F35838] text-[10px]">
-                          {aadharNumberError}
+                        <span className="font-normal font-Open text-[#F35838] text-[10px]">
+                          {panNumberError}
                         </span>
                       </div>
                     )}
-                </div>
+                  </div>
 
-                <div className={`${!isMdScreen ? "w-full" : ""}`}>
-              <CustomInputBox
-                containerStyle="md:!w-auto"
-                label="PAN Number"
-                value={panNumber}
-                maxLength={10}
-                isDisabled={
-                  businessType === "individual"
-                    ? false
-                    : panNumber !== undefined
-                }
-                className={`${
-                  panNumberError !== "" &&
-                  panNumberError !== undefined &&
-                  "border-[#F35838]"
-                }   md:!w-[320px] !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e) => {
-                  if (panRegex.test(e.target.value.toUpperCase())) {
-                    setPanNumberError("");
-                  } else {
-                    setPanNumberError("Enter Valid PAN Number");
-                  }
-                  setPanNumber(e.target.value.toUpperCase());
-                }}
-              />
-              {/* To display error */}
-              {panNumberError !== "" && panNumberError !== undefined && (
-                <div className="flex items-center gap-x-1 mt-1 ">
-                  <img src={ErrorIcon} alt="" width={10} height={10} />
-                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {panNumberError}
-                  </span>
-                </div>
-              )}
-            </div>
-
-                {showAaddharOtpBox && (
-                  <>
-                    <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                      <CustomInputBox
-                        label="Enter Aadhar OTP"
-                        inputType="text"
-                        inputMode="numeric"
-                        containerStyle="md:!w-auto"
-                        className=" md:!w-[320px] !font-Open "
-                        labelClassName="!font-Open"
-                        maxLength={6}
-                        value={otpNumber || ""}
-                        onChange={(e: any) => {
-                          if (isNaN(e.target.value)) {
-                          } else {
-                            setOTPNumber(e.target.value);
-                          }
-                        }}
-                      />
-                    </div>
-                    <TimerCounter sec={60} />
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                  <CustomInputBox
-                    containerStyle="md:!w-auto"
-                    label="GST Number"
-                    value={gstNumber}
-                    maxLength={15}
-                    className={`${
-                      gstError !== "" &&
-                      gstError !== undefined &&
-                      "border-[#F35838]"
-                    }  md:!w-[320px]   !font-Open`}
-                    labelClassName="!font-Open"
-                    onChange={(e) => {
-                      const gstValue = e.target.value.toUpperCase();
-
-                      if (gstRegex.test(gstValue)) {
-                        setGSTNumber(gstValue);
-                        extractPANFromGST(gstValue);
-                        setgstError("");
-                        setPanNumberError("");
-                      } else {
-                        setGSTNumber(gstValue);
-                        setgstError("Enter Valid GST Number");
-                        setPanNumber("");
-                      }
-                    }}
-                  />
-
-                  {/* To display error */}
-
-                  {gstError !== "" && gstError !== undefined && (
-                    <div className="flex items-center gap-x-1 mt-1 ">
-                      <img src={ErrorIcon} alt="" width={10} height={10} />
-                      <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                        {gstError}
-                      </span>
-                    </div>
+                  {showAaddharOtpBox && (
+                    <>
+                      <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                        <CustomInputBox
+                          label="Enter Aadhar OTP"
+                          inputType="text"
+                          inputMode="numeric"
+                          containerStyle="md:!w-auto"
+                          className=" md:!w-[320px] !font-Open "
+                          labelClassName="!font-Open"
+                          maxLength={6}
+                          value={otpNumber || ""}
+                          onChange={(e: any) => {
+                            if (isNaN(e.target.value)) {
+                            } else {
+                              setOTPNumber(e.target.value);
+                            }
+                          }}
+                        />
+                      </div>
+                      <TimerCounter sec={60} />
+                    </>
                   )}
-                </div>
+                </>
+              ) : (
+                <>
+                  <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                    <CustomInputBox
+                      containerStyle="md:!w-auto"
+                      label="GST Number"
+                      value={gstNumber}
+                      maxLength={15}
+                      className={`${
+                        gstError !== "" &&
+                        gstError !== undefined &&
+                        "border-[#F35838]"
+                      }  md:!w-[320px]   !font-Open`}
+                      labelClassName="!font-Open"
+                      onChange={(e) => {
+                        const gstValue = e.target.value.toUpperCase();
 
-                {showGstOtpBox && (
-                  <>
-                    <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                      <CustomInputBox
-                        label="Enter GST OTP"
-                        inputType="text"
-                        inputMode="numeric"
-                        containerStyle="md:!w-auto"
-                        className=" md:!w-[320px] !font-Open "
-                        labelClassName="!font-Open"
-                        maxLength={4}
-                        value={otpNumber || ""}
-                        onChange={(e: any) => {
-                          if (isNaN(e.target.value)) {
-                          } else {
-                            setOTPNumber(e.target.value);
-                          }
-                        }}
-                      />
-                    </div>
-                    <TimerCounter sec={30} />
-                  </>
-                )}
-              </>
-            )}
-            <div className={`${!isMdScreen ? "w-full" : ""}`}>
-              {/* <CustomInputBox
+                        if (gstRegex.test(gstValue)) {
+                          setGSTNumber(gstValue);
+                          extractPANFromGST(gstValue);
+                          setgstError("");
+                          setPanNumberError("");
+                        } else {
+                          setGSTNumber(gstValue);
+                          setgstError("Enter Valid GST Number");
+                          setPanNumber("");
+                        }
+                      }}
+                    />
+
+                    {/* To display error */}
+
+                    {gstError !== "" && gstError !== undefined && (
+                      <div className="flex items-center gap-x-1 mt-1 ">
+                        <img src={ErrorIcon} alt="" width={10} height={10} />
+                        <span className="font-normal font-Open text-[#F35838] text-[10px]">
+                          {gstError}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {showGstOtpBox && (
+                    <>
+                      <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                        <CustomInputBox
+                          label="Enter GST OTP"
+                          inputType="text"
+                          inputMode="numeric"
+                          containerStyle="md:!w-auto"
+                          className=" md:!w-[320px] !font-Open "
+                          labelClassName="!font-Open"
+                          maxLength={4}
+                          value={otpNumber || ""}
+                          onChange={(e: any) => {
+                            if (isNaN(e.target.value)) {
+                            } else {
+                              setOTPNumber(e.target.value);
+                            }
+                          }}
+                        />
+                      </div>
+                      <TimerCounter sec={30} />
+                    </>
+                  )}
+                </>
+              )}
+              <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                {/* <CustomInputBox
                 containerStyle="md:!w-auto"
                 label="PAN Number"
                 value={panNumber}
@@ -594,8 +596,8 @@ const Index = (props: ITypeProps) => {
                   setPanNumber(e.target.value.toUpperCase());
                 }}
               /> */}
-              {/* To display error */}
-              {/* {panNumberError !== "" && panNumberError !== undefined && (
+                {/* To display error */}
+                {/* {panNumberError !== "" && panNumberError !== undefined && (
                 <div className="flex items-center gap-x-1 mt-1 ">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal font-Open text-[#F35838] text-[10px]">
@@ -603,36 +605,36 @@ const Index = (props: ITypeProps) => {
                   </span>
                 </div>
               )} */}
+              </div>
+            </div>
+            <div className="flex  md:justify-center md:items-center px-5 pb-12">
+              {verifyOTP ? (
+                <ServiceButton
+                  text="VERIFY OTP"
+                  btnType="submit"
+                  onClick={() => onVerifyOtp()}
+                  disabled={!verifyBtnStatus}
+                  className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
+                    verifyBtnStatus === true
+                      ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                      : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                  }`}
+                />
+              ) : (
+                <ServiceButton
+                  text="SEND OTP"
+                  disabled={!otpFormBtnStatus}
+                  btnType="submit"
+                  onClick={() => onSendOtp()}
+                  className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
+                    otpFormBtnStatus === true
+                      ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
+                      : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
+                  }`}
+                />
+              )}
             </div>
           </div>
-          <div className="flex  md:justify-center md:items-center px-5 pb-12">
-            {verifyOTP ? (
-              <ServiceButton
-                text="VERIFY OTP & PAN"
-                btnType="submit"
-                onClick={() => onVerifyOtp()}
-                disabled={!verifyBtnStatus}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
-                  verifyBtnStatus === true
-                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                }`}
-              />
-            ) : (
-              <ServiceButton
-                text="SEND OTP"
-                disabled={!otpFormBtnStatus}
-                btnType="submit"
-                onClick={() => onSendOtp()}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
-                  otpFormBtnStatus === true
-                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                }`}
-              />
-            )}
-          </div>
-        </div>
         </div>
       </div>
     );
@@ -643,7 +645,7 @@ const Index = (props: ITypeProps) => {
       return (
         <>
           {loading ? (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center h-screen">
               <Spinner />
             </div>
           ) : (
@@ -655,7 +657,7 @@ const Index = (props: ITypeProps) => {
       );
     } else {
       return loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="flex justify-center items-center h-screen">
           <Spinner />
         </div>
       ) : (

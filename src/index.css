@@ -8,6 +8,12 @@
   font-size: 12px;
 }
 
+@media screen and (min-width: 360px) {
+  #my-tooltip-landing {
+    width: 150px;
+  }
+}
+
 /* iframe {
   width: 360px !important;
   height: 100px !important;
