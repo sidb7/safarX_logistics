@@ -539,29 +539,7 @@ const Index = (props: ITypeProps) => {
                     )}
                   </div>
 
-                  {showGstOtpBox && (
-                    <>
-                      <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                        <CustomInputBox
-                          label="Enter GST OTP"
-                          inputType="text"
-                          inputMode="numeric"
-                          containerStyle="md:!w-auto"
-                          className=" md:!w-[320px] !font-Open "
-                          labelClassName="!font-Open"
-                          maxLength={4}
-                          value={otpNumber || ""}
-                          onChange={(e: any) => {
-                            if (isNaN(e.target.value)) {
-                            } else {
-                              setOTPNumber(e.target.value);
-                            }
-                          }}
-                        />
-                      </div>
-                      <TimerCounter sec={30} />
-                    </>
-                  )}
+                  
                   <div className={`${!isMdScreen ? "w-full" : ""}`}>
                 <CustomInputBox
                 containerStyle="md:!w-auto"
@@ -597,7 +575,30 @@ const Index = (props: ITypeProps) => {
                   </span>
                 </div>
               )}
-              </div>
+                  </div>
+                  {showGstOtpBox && (
+                    <>
+                      <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                        <CustomInputBox
+                          label="Enter GST OTP"
+                          inputType="text"
+                          inputMode="numeric"
+                          containerStyle="md:!w-auto"
+                          className=" md:!w-[320px] !font-Open "
+                          labelClassName="!font-Open"
+                          maxLength={4}
+                          value={otpNumber || ""}
+                          onChange={(e: any) => {
+                            if (isNaN(e.target.value)) {
+                            } else {
+                              setOTPNumber(e.target.value);
+                            }
+                          }}
+                        />
+                      </div>
+                      <TimerCounter sec={30} />
+                    </>
+                  )}
                 </>
               )}
               
