@@ -349,6 +349,10 @@ const MyRoutes: React.FC = () => {
             element={
               // <BankProtected>
               <ProtectedRoute>
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                 <WalletMain />
               </ProtectedRoute>
               // </BankProtected>
