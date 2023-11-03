@@ -347,9 +347,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-main"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletMain />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
           {/**wallet details page */}
