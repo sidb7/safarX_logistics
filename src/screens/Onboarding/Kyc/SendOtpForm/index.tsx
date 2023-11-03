@@ -90,15 +90,15 @@ const Index = (props: ITypeProps) => {
     return panNumber;
   }
 
-  useEffect(() => {
-    if (gstNumber) {
-      extractPANFromGST(gstNumber);
-      setgstError("");
-      setPanNumberError("");
-    } else {
-      setPanNumber("");
-    }
-  }, [gstNumber]);
+  // useEffect(() => {
+  //   if (gstNumber) {
+  //     extractPANFromGST(gstNumber);
+  //     setgstError("");
+  //     setPanNumberError("");
+  //   } else {
+  //     setPanNumber("");
+  //   }
+  // }, [gstNumber]);
 
   const verifyPAN = async (value: any) => {
     try {
@@ -154,7 +154,7 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("client_id", response.data.data.client_id);
         setClientId(response?.data?.data?.client_id);
         let clientIdSession = sessionStorage.getItem("client_id");
-        
+        console.log("clientIdSe", clientIdSession);
 
         if (businessType === "individual") {
           setLoading(false);
@@ -184,11 +184,10 @@ const Index = (props: ITypeProps) => {
         sessionStorage.setItem("client_id", response.data[0].data.client_id);
         setShowgstOtpBox(true);
         setVerifyOTP(true);
-        
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
           sessionStorage.setItem("client_id", response.data[0].data.client_id);
-          
+         
         } else {
           setLoading(false);
           
@@ -334,19 +333,17 @@ const Index = (props: ITypeProps) => {
           } else {
             const payload = {
               gstIn: gstNumber,
-              client_id: clientId_session,
+              client_id: clientId,
               otp: Number(otpNumber),
             };
-            
-            
 
             setLoading(true);
             const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
             if (response?.success) {
               setLoading(false);
-              navigate("/onboarding/kyc-aadhar-form");
-              // if (location?.state?.path === "otp-form") {
-              // }
+              if (location?.state?.path === "otp-form") {
+                navigate("/onboarding/kyc-aadhar-form");
+              }
             } else {
               setLoading(false);
               setOTPNumber("");
@@ -499,7 +496,6 @@ const Index = (props: ITypeProps) => {
                       <TimerCounter sec={60} />
                     </>
                   )}
-<<<<<<< Updated upstream
                 </>
               ) : (
                 <>
@@ -566,13 +562,8 @@ const Index = (props: ITypeProps) => {
                       <TimerCounter sec={30} />
                     </>
                   )}
-                </>
-              )}
-              <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                {/* <CustomInputBox
-=======
-            <div className="mt-5">
-            <CustomInputBox
+                  <div className={`${!isMdScreen ? "w-full" : ""}`}>
+                <CustomInputBox
                 containerStyle="md:!w-auto"
                 label="PAN Number"
                 value={panNumber}
@@ -597,80 +588,19 @@ const Index = (props: ITypeProps) => {
                   setPanNumber(e.target.value.toUpperCase());
                 }}
               />
-              {panNumberError !== "" && panNumberError !== undefined && (
-                <div className="flex items-center gap-x-1 mt-1 ">
-                  <img src={ErrorIcon} alt="" width={10} height={10} />
-                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {panNumberError}
-                  </span>
-                </div>
-              )} 
-              </div> 
-                </div>
-                
-
-                {showGstOtpBox && (
-                  <>
-                    <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                      <CustomInputBox
-                        label="Enter GST OTP"
-                        inputType="text"
-                        inputMode="numeric"
-                        containerStyle="md:!w-auto"
-                        className=" md:!w-[320px] !font-Open "
-                        labelClassName="!font-Open"
-                        maxLength={4}
-                        value={otpNumber || ""}
-                        onChange={(e: any) => {
-                          if (isNaN(e.target.value)) {
-                          } else {
-                            setOTPNumber(e.target.value);
-                          }
-                        }}
-                      />
-                    </div>
-                    <TimerCounter sec={30} />
-                  </>
-                )}
-              </>
-            )}
-            <div className={`${!isMdScreen ? "w-full" : ""}`}>
-              {/* <CustomInputBox
->>>>>>> Stashed changes
-                containerStyle="md:!w-auto"
-                label="PAN Number"
-                value={panNumber}
-                maxLength={10}
-                isDisabled={
-                  businessType === "individual"
-                    ? false
-                    : panNumber !== undefined
-                }
-                className={`${
-                  panNumberError !== "" &&
-                  panNumberError !== undefined &&
-                  "border-[#F35838]"
-                }   md:!w-[320px] !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e) => {
-                  if (panRegex.test(e.target.value.toUpperCase())) {
-                    setPanNumberError("");
-                  } else {
-                    setPanNumberError("Enter Valid PAN Number");
-                  }
-                  setPanNumber(e.target.value.toUpperCase());
-                }}
-              /> */}
                 {/* To display error */}
-                {/* {panNumberError !== "" && panNumberError !== undefined && (
+                {panNumberError !== "" && panNumberError !== undefined && (
                 <div className="flex items-center gap-x-1 mt-1 ">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal font-Open text-[#F35838] text-[10px]">
                     {panNumberError}
                   </span>
                 </div>
-              )} */}
+              )}
               </div>
+                </>
+              )}
+              
             </div>
             <div className="flex  md:justify-center md:items-center px-5 pb-12">
               {verifyOTP ? (
@@ -700,37 +630,6 @@ const Index = (props: ITypeProps) => {
               )}
             </div>
           </div>
-<<<<<<< Updated upstream
-=======
-          <div className="flex  md:justify-center md:items-center px-5 pb-12">
-            {verifyOTP ? (
-              <ServiceButton
-                text="VERIFY OTP"
-                btnType="submit"
-                onClick={() => onVerifyOtp()}
-                disabled={!verifyBtnStatus}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px] !font-Open ${
-                  verifyBtnStatus === true
-                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                }`}
-              />
-            ) : (
-              <ServiceButton
-                text="SEND OTP"
-                disabled={!otpFormBtnStatus}
-                btnType="submit"
-                onClick={() => onSendOtp()}
-                className={`bg-[#1C1C1C] !h-[36px] text-white w-full mb-[180px] md:!w-[320px] !font-Open ${
-                  otpFormBtnStatus === true
-                    ? "!bg-[#1C1C1C] !text-[#FFFFFF]"
-                    : "!bg-[#E8E8E8] !text-[#BBBBBB] !border-0"
-                }`}
-              />
-            )}
-          </div>
-        </div>
->>>>>>> Stashed changes
         </div>
       </div>
     );
