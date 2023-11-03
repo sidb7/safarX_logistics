@@ -248,6 +248,9 @@ const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
 const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 
+//Dashboard URL
+const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails`;
+
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -366,4 +369,5 @@ export {
   ADD_PICKUP_ADDRESS_CATALOGUE,
   CREATE_FEEDBACK,
   GET_FEEDBACK,
+  GET_DASHBOARD_INFO,
 };

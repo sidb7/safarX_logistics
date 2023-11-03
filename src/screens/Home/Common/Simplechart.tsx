@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import SimpleLineChart from "../../../components/SimpleLineChart";
 import AnalyticsIcon from "../../../assets/analytics.svg";
 import CustomDropDown from "../../../components/DropDown";
+import UpArrowIcon from "../../../assets/AccordionUp.svg";
+import DownArrowIcon from "../../../assets/downwardArrow.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 interface ISimplechart {
   yearArr?: any;
@@ -9,6 +12,8 @@ interface ISimplechart {
 
 const SimpleChart = (props: ISimplechart) => {
   const { yearArr } = props;
+  const { isLgScreen } = ResponsiveState();
+  const [isOpen, setIsOpen] = useState(false);
   const data = [
     {
       name: "Jan",
@@ -87,15 +92,30 @@ const SimpleChart = (props: ISimplechart) => {
   return (
     <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
       <div
-        className={`flex justify-between items-center h-[3.125rem] px-2  bg-[#F6F6F6]`}
+        className={`flex flex-col lg:flex-row lg:justify-between lg:items-center lg:h-[3.125rem] ${
+          isOpen ? "" : "h-[40px]"
+        }  px-4 py-2 lg:px-2 lg:py-0  bg-[#F6F6F6]`}
       >
-        <div className="flex">
-          <img src={AnalyticsIcon} alt="AnalyticsIcon" />
-          <span className="text-[1rem] font-semibold text-[#1C1C1C] ml-4">
-            Revenue
-          </span>
+        <div className="flex items-center justify-between mb-6 lg:mb-0">
+          <div className="flex items-center">
+            <img src={AnalyticsIcon} alt="AnalyticsIcon" />
+            <span className="text-[1rem] font-semibold text-[#1C1C1C] ml-4">
+              Revenue
+            </span>
+          </div>
+
+          <img
+            src={isOpen ? UpArrowIcon : DownArrowIcon}
+            alt=""
+            className="cursor-pointer lg:hidden"
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          />
         </div>
-        <div>
+        <div
+          className={`${isLgScreen ? "block" : isOpen ? "block" : "hidden"}`}
+        >
           <CustomDropDown
             onChange={(e) => {}}
             options={yearArr}
@@ -104,7 +124,12 @@ const SimpleChart = (props: ISimplechart) => {
           />
         </div>
       </div>
-      <SimpleLineChart data={data} />
+
+      {isLgScreen ? (
+        <SimpleLineChart data={data} />
+      ) : (
+        isOpen && <SimpleLineChart data={data} />
+      )}
     </div>
   );
 };
