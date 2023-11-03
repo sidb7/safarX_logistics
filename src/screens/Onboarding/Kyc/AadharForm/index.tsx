@@ -127,7 +127,7 @@ const Index = (props: ITypeProps) => {
 
             // toast.success(response?.message);
             //Navigate Url's go here
-            navigate("/onboarding/kyc-terms/service-agreement")
+            navigate("/onboarding/kyc")
           } else {
             toast.error(response?.message);
             setLoading(false);
@@ -193,36 +193,36 @@ const Index = (props: ITypeProps) => {
   }, [seconds]);
 
 
-  const onVerifyOtp = async (e: any) => {
-    try {
-      e.preventDefault();
+  // const onVerifyOtp = async (e: any) => {
+  //   try {
+  //     e.preventDefault();
 
-      if (Number(otpNumber) !== 0) {
-        // if (businessType === "individual") {
-          const payload = { client_id: clientId, otp: Number(otpNumber) };
-          setLoading(true);
-          const { data: response } = await POST(
-            POST_VERIFY_AADHAR_OTP_URL,
-            payload
-          );
-          if (response?.success) {
+  //     if (Number(otpNumber) !== 0) {
+  //       // if (businessType === "individual") {
+  //         const payload = { client_id: clientId, otp: Number(otpNumber) };
+  //         setLoading(true);
+  //         const { data: response } = await POST(
+  //           POST_VERIFY_AADHAR_OTP_URL,
+  //           payload
+  //         );
+  //         if (response?.success) {
             
 
-            // toast.success(response?.message);
-            //Navigate Url's go here
-            navigate("/onboarding/kyc-terms/service-agreement")
-          } else {
-            toast.error(response?.message);
-            setLoading(false);
-          }
-        // } 
-      } else {
-        toast.error("Enter OTP");
-      }
-    } catch (error) {
-      return error;
-    }
-  };
+  //           // toast.success(response?.message);
+  //           //Navigate Url's go here
+  //           navigate("/onboarding/kyc")
+  //         } else {
+  //           toast.error(response?.message);
+  //           setLoading(false);
+  //         }
+  //       // } 
+  //     } else {
+  //       toast.error("Enter OTP");
+  //     }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // };
 
   const aadharFormComponent = () => {
     return (
