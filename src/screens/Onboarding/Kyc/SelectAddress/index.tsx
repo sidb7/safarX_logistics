@@ -227,9 +227,9 @@ const BusinessType = (props: ITypeProps) => {
 
           <div>
             <div className="flex flex-col justify-center items-center px-5">
-              <div className="flex items-center justify-between w-full">
+              <div className="flex items-center justify-between w-full md:!w-[320px] ">
                 {/* <p>Default</p> */}
-                <div className="flex gap-x-2 pl-0 md:pl-[45px] md:pl-0 " onClick={() => addAddress()}>
+                <div className="flex gap-x-2 pl-0 md:pl-[52px] md:pl-0 " onClick={() => addAddress()}>
                   <img src={PlusIcon} alt="" />
                   <p className="font-Open px-[6px] md:px-0 font-semibold text-sm cursor-pointer text-[#004EFF]  ">
                     ADD ADDRESS
