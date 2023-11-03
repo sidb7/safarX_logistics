@@ -8,6 +8,10 @@
   font-size: 12px;
 }
 
+.removePaddingPlaceHolder::placeholder {
+  padding: 0;
+}
+
 /* iframe {
   width: 360px !important;
   height: 100px !important;

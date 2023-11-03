@@ -150,20 +150,22 @@ const Catalogue = () => {
   };
 
   const renderHeaderComponent = (setShowCombo?: any) => {
-    if (tabName === "Channel Integration") {
-      return (
-        <CustomButton
-          icon={addIcon}
-          showIcon={true}
-          text={"INTEGRATE"}
-          className="!p-3"
-          onClick={() => {
-            setModalData({ isOpen: true });
-            setIntegrate(true);
-          }}
-        />
-      );
-    } else if (tabName === "Address Book") {
+    // Code commented as per discussion with akshay and vivek
+    // if (tabName === "Channel Integration") {
+    //   return (
+    //     <CustomButton
+    //       icon={addIcon}
+    //       showIcon={true}
+    //       text={"INTEGRATE"}
+    //       className="!p-3"
+    //       onClick={() => {
+    //         setModalData({ isOpen: true });
+    //         setIntegrate(true);
+    //       }}
+    //     />
+    //   );
+    // } else
+    if (tabName === "Address Book") {
       return (
         <CustomButton
           icon={addIcon}
@@ -320,6 +322,7 @@ const Catalogue = () => {
                 onClose={() => setModalData({ ...modalData, isOpen: false })}
               >
                 <ChannelIntegrationModalContent
+                  modalData={modalData}
                   setModalData={setModalData}
                   channelData={channelData}
                   setChannelData={setChannelData}
