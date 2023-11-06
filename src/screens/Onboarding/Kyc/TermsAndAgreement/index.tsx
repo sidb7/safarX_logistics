@@ -12,6 +12,7 @@ import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -20,11 +21,10 @@ export const ServiceComponent = (props: ITypeProps) => {
   const [checkbox, setCheckbox] = useState();
   const [acceptTnC, setAcceptTnC] = useState<any>();
   const closeModal = () => setOpenModal(true);
+  const [loading, setLoading] = useState(false);
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
   const { isMdScreen } = ResponsiveState();
   const navigate = useNavigate();
-
- 
 
   const acceptService = async () => {
     try {
@@ -34,13 +34,15 @@ export const ServiceComponent = (props: ITypeProps) => {
         acceptNoGST: acceptTnC,
         noGSTVersion: "1.0.0",
       };
-
+      setLoading(true);
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
+        setLoading(false);
         // toast.success(response?.message);
         // navigate("/onboarding/kyc");
         navigate("/onboarding/kyc-form");
       } else {
+        setLoading(false);
         toast.error(response?.message);
         navigate("/onboarding/kyc-terms/service-agreement");
       }
@@ -85,42 +87,58 @@ export const ServiceComponent = (props: ITypeProps) => {
 
   const serviceCommonComponent = () => {
     return (
-      <div 
-      className={`${
-        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
-      }flex flex-col relative md:px-0 md:gap-y-0`}>
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-        <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
-          <img src={CompanyLogo} alt="" className="h-[25px]"/>
-        </div>
-        <WelcomeHeader
-          className="!mt-[44px] md:!mt-6"
-          title="Welcome to Shipyaari"
-          content="Terms & Agreement"
-        />
-        <div className=" px-5  md:mb-0 md:mx-5 ">
-          <Card
-            title="SERVICE AGREEMENT"
-            subTitleOne="Forward delivery of the shipments"
+          <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <img src={CompanyLogo} alt="" className="h-[25px]" />
+          </div>
+          <WelcomeHeader
+            className="!mt-[44px] md:!mt-6"
+            title="Welcome to Shipyaari"
+            content="Terms & Agreement"
           />
-        </div>
-        {BottomButton()}
+          <div className=" px-5  md:mb-0 md:mx-5 ">
+            <Card
+              title="SERVICE AGREEMENT"
+              subTitleOne="Forward delivery of the shipments"
+            />
+          </div>
+          {BottomButton()}
         </div>
       </div>
     );
   };
 
-  
-  return (
-    <div>
-      {!isMdScreen && serviceCommonComponent()}
-
-      {isMdScreen && (
-          <div className="flex justify-center items-center  h-screen">
-            {serviceCommonComponent()}
-          </div>
-        
-      )}
-    </div>
-  );
+  const renderServiceComponent = () => {
+    if (isMdScreen) {
+      return (
+        <>
+          {loading ? (
+            <div className="flex justify-center items-center h-screen">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-[100vh] border-4 ">
+              {serviceCommonComponent()}
+            </div>
+          )}
+        </>
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center">
+          {serviceCommonComponent()}
+        </div>
+      );
+    }
+  };
+  return <div>{renderServiceComponent()}</div>;
 };

@@ -195,41 +195,51 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/questionnaire/question1"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent1 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question2"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent2 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question3"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent3 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question4"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent4 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-welcome"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <WelcomeKyc />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
