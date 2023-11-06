@@ -18,30 +18,16 @@ import ComposedChart from "../Common/ComposedChart";
 import VanWithoutBG from "../../../assets/vanWithoutBG.svg";
 import Whatsapp from "../../../assets/whatsapp.svg";
 
-const Exception = () => {
+const Exception = (props: any) => {
+  const { ordersArr } = props;
+
   const columnsHelper = createColumnHelper<any>();
-  const ordersArr = [
-    {
-      count: 0,
-      text: "Total NPR",
-      img: CreateOrderIcon,
-    },
-    {
-      count: 0,
-      text: "Total NDR",
-      img: InTransitIcon,
-    },
-    {
-      count: 0,
-      text: "RTO Initiated",
-      img: VanIcon,
-    },
-    {
-      count: 0,
-      text: "RTO Delivered",
-      img: VanIcon,
-    },
-  ];
+  const objectIcon: any = {
+    CreateOrderIcon: CreateOrderIcon,
+
+    InTransitIcon: InTransitIcon,
+    VanIcon: VanIcon,
+  };
 
   const orderArr = [
     {
@@ -556,7 +542,7 @@ const Exception = () => {
                 </p>
               </div>
               <div className="self-center">
-                <img src={order?.img} alt="Box" />
+                <img src={objectIcon[order?.img]} alt="Box" />
               </div>
             </div>
           </div>

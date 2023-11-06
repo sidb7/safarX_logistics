@@ -9,6 +9,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { ResponsiveState } from "../../utils/responsiveState";
+
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 const RADIAN = Math.PI / 180;
@@ -39,8 +41,10 @@ const renderCustomizedLabel = ({
 };
 
 const PieChartComponent = ({ data }) => {
+  const { isLgScreen } = ResponsiveState();
+
   return (
-    <ResponsiveContainer width="100%" height="90%">
+    <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
       <PieChart width={400} height={400}>
         <Pie
           data={data}

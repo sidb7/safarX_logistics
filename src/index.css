@@ -12,8 +12,11 @@
   #my-tooltip-landing {
     width: 150px;
   }
+.removePaddingPlaceHolder::placeholder {
+  padding: 0;
 }
 
+}
 /* iframe {
   width: 360px !important;
   height: 100px !important;

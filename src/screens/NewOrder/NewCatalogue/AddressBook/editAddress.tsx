@@ -7,9 +7,11 @@ import { POST } from "../../../../utils/webService";
 import {
   UPDATE_PICKUP_ADDRESS,
   UPDATE_DELIVERY_ADDRESS,
+  GET_PINCODE_DATA,
 } from "../../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
 
 interface IEditAddressProps {}
 
@@ -18,23 +20,38 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   const {
     activeTab,
     addressData: {
-      addressId,
-      addressType,
-      flatNo,
-      sector,
-      landmark,
-      pincode,
-      city,
-      state,
-      country,
       contactName,
+      address,
       mobileNo,
+      companyId,
+      isActive,
+      isDeleted,
+      pickupAddressId,
+      privateCompanyId,
+      addressType,
+      city,
+      contact,
+      country,
+      flatNo,
+      fullAddress,
+      landmark,
+      locality,
+      pincode,
+      sector,
+      sellerId,
+      state,
+      workingDays,
+      workingHours,
+      createdAt,
+      createdBy,
+      updatedAt,
+      updatedBy,
     },
   } = useLocation().state;
 
   const [updateAddress, setUpdateAddress] = useState<any>({
     flatNo: flatNo,
-    address: "",
+    // address,
     sector: sector,
     landmark: landmark,
     pincode: pincode,
@@ -45,8 +62,8 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     contactName: contactName,
     mobileNo: mobileNo,
     alternateMobileNo: 0,
-    emailId: "",
-    contactType: "",
+    // emailId: "",
+    // contactType: "",
     pickupDate: 0,
     customBranding: {
       name: "",
@@ -55,15 +72,41 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
       contactName: "",
       contactNumber: 0,
     },
+    companyId,
+    isActive,
+    isDeleted,
+    pickupAddressId,
+    privateCompanyId,
+    contact,
+    fullAddress,
+    sellerId,
+    locality,
+    workingDays,
+    workingHours,
+    createdAt,
+    createdBy,
+    updatedAt,
+    updatedBy,
   });
   const payload = {
-    addressId: addressId,
-    updateObject: {
-      updateAddress,
-    },
+    ...updateAddress,
   };
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const addressUpdation = async (e: any) => {
+    for (const key in updateAddress) {
+      if (updateAddress.hasOwnProperty(key)) {
+        const value = updateAddress[key];
+        if (
+          value === null ||
+          value === undefined ||
+          (typeof value === "string" && value.trim() === "") ||
+          (Array.isArray(value) && value.length === 0)
+        ) {
+          return toast.error(`${key} Should Not Be Empty`);
+        }
+      }
+    }
     let url = "";
     if (activeTab === "pickup") {
       url = UPDATE_PICKUP_ADDRESS;
@@ -77,6 +120,29 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
       toast.error(updateAddressBook?.message);
     }
   };
+
+  const handlePincode = async (pincode: any) => {
+    if (pincode.length <= 6) {
+      setUpdateAddress({
+        ...updateAddress,
+        pincode,
+      });
+      if (pincode.length === 6) {
+        const { data: response } = await POST(GET_PINCODE_DATA, {
+          pincode,
+        });
+        setUpdateAddress({
+          ...updateAddress,
+          state: capitalizeFirstLetter(response?.data?.[0]?.state),
+          city: capitalizeFirstLetter(response?.data?.[0]?.city),
+          country: "India",
+          pincode,
+        });
+        setIsDisabled(true);
+      } else setIsDisabled(false);
+    }
+  };
+
   return (
     <div className="h-full">
       <Breadcrum label="Edit Address" />
@@ -127,14 +193,10 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             value={updateAddress.pincode || ""}
             inputType="text"
             inputMode="numeric"
-            onChange={(e: any) =>
-              setUpdateAddress({
-                ...updateAddress,
-                pincode: +e.target.value,
-              })
-            }
+            onChange={(e: any) => handlePincode(e.target.value)}
           />
           <CustomInputBox
+            isDisabled={isDisabled}
             label="City"
             value={updateAddress.city}
             onChange={(e: any) =>
@@ -145,6 +207,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             }
           />
           <CustomInputBox
+            isDisabled={isDisabled}
             label="State"
             value={updateAddress.state}
             onChange={(e: any) =>
@@ -155,6 +218,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             }
           />
           <CustomInputBox
+            isDisabled={isDisabled}
             label="Country"
             value={updateAddress.country}
             onChange={(e: any) =>
@@ -179,6 +243,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             value={updateAddress.mobileNo || ""}
             inputType="text"
             inputMode="numeric"
+            maxLength={10}
             onChange={(e: any) =>
               setUpdateAddress({
                 ...updateAddress,

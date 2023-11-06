@@ -30,6 +30,12 @@ import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 import { useSelector } from "react-redux";
+import { getSocket, initSocket, socketCallbacks } from "../../Socket";
+import { setWalletBalance } from "../../redux/reducers/userReducer";
+import { useDispatch } from "react-redux";
+import { io, Socket } from "socket.io-client";
+
+let socket: Socket | null = null;
 
 interface ITopBarProps {
   openMobileSideBar: any;
@@ -39,7 +45,7 @@ interface ITopBarProps {
 const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   const navigate = useNavigate();
   const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
-
+  const dispatch = useDispatch();
   const { openMobileSideBar, setMobileSideBar } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [quickData, setQuickData] = useState<any>();
@@ -197,6 +203,25 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
+  useEffect(() => {
+    const socket = initSocket();
+
+    if (socket) {
+      console.log("socketwallet", socket);
+      socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
+      socket.on("wallet_balance_update", (newBalance: string) => {
+        console.log("newWalletBalance", newBalance);
+        dispatch(setWalletBalance({ amt: Number(newBalance) }));
+      });
+
+      return () => {
+        if (socket) {
+          socket.off("wallet_balance_update");
+        }
+      };
+    }
+  }, []);
+
   return (
     <>
       <nav
@@ -241,11 +266,14 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             ) : (
               <div className="hidden lg:block">
                 <div
-                  className="flex items-center cursor-pointer max-w-[150px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
+                  className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
                   onClick={() => navigate("/wallet/view-wallet")}
                 >
                   <img src={WalletIcon} width={35} alt="" />
-                  <span className="text-[#004EFF] text-sm font-Open font-semibold">{`₹ ${walletBalance}`}</span>
+                  <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div>₹</div>
+                    <div>{walletBalance}</div>
+                  </div>
                 </div>
               </div>
             )}

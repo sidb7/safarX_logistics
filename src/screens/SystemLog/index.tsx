@@ -12,6 +12,10 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import SortIcon from "../../assets/sort.svg";
+import EyeIcon from "../../assets/blueEye.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import CrossIcon from "../../assets/CloseIcon.svg";
 
 const SystemLog = () => {
   const columnsHelper = createColumnHelper<any>();
@@ -19,46 +23,13 @@ const SystemLog = () => {
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
   const [isActive, setIsActive] = useState<any>(false);
+  const [isModal, setIsModal] = useState(false);
+  const [logData, setLogData] = useState<any>({
+    eventName: "",
+    eventRecordData: {},
+  });
 
   const systemLogColumns = [
-    columnsHelper.accessor("companyId", {
-      header: () => {
-        return (
-          <p
-            className={`font-Open  
-               text-base leading-[22px] text-[#004EFF]
-             font-semibold   text-start  whitespace-nowrap `}
-          >
-            CompanyId
-          </p>
-        );
-      },
-
-      cell: (info: any) => {
-        return (
-          <p className="flex items-center  text-[#1C1C1C] font-Open text-sm font-semibold leading-5 ">
-            {info.row.original.companyId}
-          </p>
-        );
-      },
-    }),
-
-    columnsHelper.accessor("eventName", {
-      header: () => {
-        return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
-            Event Name
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
-            {capitalizeFirstLetter(info.row.original.eventName)}
-          </div>
-        );
-      },
-    }),
     columnsHelper.accessor("userId", {
       header: () => {
         return (
@@ -91,6 +62,22 @@ const SystemLog = () => {
         );
       },
     }),
+    columnsHelper.accessor("eventName", {
+      header: () => {
+        return (
+          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center ">
+            Event Name
+          </p>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-center font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
+            {capitalizeFirstLetter(info.row.original.eventName)}
+          </div>
+        );
+      },
+    }),
     columnsHelper.accessor("ipAddress", {
       header: () => {
         return (
@@ -107,22 +94,7 @@ const SystemLog = () => {
         );
       },
     }),
-    columnsHelper.accessor("status", {
-      header: () => {
-        return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
-            Status
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
-            {info.row.original.status === true ? "True" : "False"}
-          </div>
-        );
-      },
-    }),
+
     columnsHelper.accessor("logType", {
       header: () => {
         return (
@@ -139,28 +111,24 @@ const SystemLog = () => {
         );
       },
     }),
-    columnsHelper.accessor("userType", {
-      header: () => {
-        return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
-            User Type
-          </p>
-        );
-      },
-      cell: (info: any) => {
-        return (
-          <div className="flex items-center justify-center font-Open font-semibold text-sm leading-5 text-[#1C1C1C] ">
-            {capitalizeFirstLetter(info.row.original.userType)}
-          </div>
-        );
-      },
-    }),
+
     columnsHelper.accessor("createdAt", {
       header: () => {
         return (
-          <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
-            Created At
-          </p>
+          <div className="flex items-center justify-between">
+            <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+              Created At
+            </p>
+            <img
+              src={SortIcon}
+              alt=""
+              className="cursor-pointer"
+              onClick={() => {
+                console.log("sort");
+                sortBy();
+              }}
+            />
+          </div>
         );
       },
       cell: (info: any) => {
@@ -171,12 +139,63 @@ const SystemLog = () => {
         );
       },
     }),
+
+    columnsHelper.accessor("event", {
+      header: () => {
+        return (
+          <div className="flex items-center justify-center">
+            <p className="font-Open text-sm font-semibold leading-[18px] text-[#004EFF] text-center  ">
+              Event
+            </p>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex items-center justify-center">
+            <img
+              src={EyeIcon}
+              className="cursor-pointer"
+              alt=""
+              onClick={() => {
+                const data = JSON.stringify(
+                  info.row.original.eventRecord?.message,
+                  null,
+                  2
+                );
+
+                setLogData({
+                  eventName: info.row.original.eventName,
+                  eventRecordData: data,
+                });
+                setIsModal(true);
+              }}
+            />
+          </div>
+        );
+      },
+    }),
   ];
+
+  const sortBy = async () => {
+    try {
+      const { data } = await POST(GET_SYSTEM_LOG, {
+        sort: { createdAt: -1 },
+      });
+
+      if (data?.success) {
+        setSystemLogData(data?.data);
+      } else {
+        toast.error(data?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   React.useEffect(() => {
     (async () => {
       try {
-        // setIsActive(checkPageAuthorized("System Logs"));
         const { data } = await POST(GET_SYSTEM_LOG, {});
         if (data?.success) {
           setSystemLogData(data?.data);
@@ -203,6 +222,31 @@ const SystemLog = () => {
           <div className="mx-4">
             <CustomTable data={systemLogData} columns={systemLogColumns} />
           </div>
+          <CenterModal
+            isOpen={isModal}
+            onRequestClose={() => {
+              setIsModal(false);
+            }}
+            className="!w-[50%] !h-[70%]"
+          >
+            <div className=" w-full h-full gap-y-6 p-8 flex flex-col">
+              <div className="flex items-center justify-between">
+                <p className="font-Open text-lg font-bold">{`Event Name:  ${logData.eventName}`}</p>
+                <div
+                  onClick={() => {
+                    setIsModal(false);
+                  }}
+                  className="flex justify-end"
+                >
+                  <img alt="" className="cursor-pointer" src={CrossIcon} />
+                </div>
+              </div>
+
+              <div className="   overflow-y-auto    ">
+                <pre className="font-Open text-lg ">{`${logData.eventRecordData}`}</pre>
+              </div>
+            </div>
+          </CenterModal>
         </div>
       ) : (
         <div>
