@@ -13,7 +13,8 @@ const App = () => {
 
   // const dispatch = useDispatch();
   //let roomName = sessionStorage.getItem("sellerId");
-  //useSelector((state: any) => state?.roles?.roles[0]);
+  const userState = useSelector((state: any) => state);
+  console.log("userState", userState);
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
   );

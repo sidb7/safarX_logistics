@@ -51,10 +51,10 @@ const connectSocket = (roomName: string) => {
     //   //GlobalToast(data.message);
     // });
 
-    socket.on("bulkOrderFailed", (data) => {
-      console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
-      GlobalToast(data);
-    });
+    // socket.on("bulkOrderFailed", (data) => {
+    //   console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
+    //   GlobalToast(data);
+    // });
 
     socket.on("roomWelcomeMessage", (message) => {
       console.log(`Received room welcome message: ${message}`);
