@@ -7,15 +7,18 @@ import { POST } from "../../../../utils/webService";
 import {
   ADD_PICKUP_ADDRESS_CATALOGUE,
   ADD_DELIVERY_ADDRESS,
+  GET_PINCODE_DATA,
 } from "../../../../utils/ApiUrls";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
 
 interface IAddAddressProps {}
 
 const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   const navigate = useNavigate();
   const { activeTab } = useLocation().state;
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const [addAddress, setAddAddress] = useState<any>({
     flatNo: "",
@@ -121,6 +124,20 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
     } else {
       toast.error(createAddressBook?.message);
     }
+  };
+
+  const handlePincode = async (pincode: any) => {
+    if (pincode.length === 6) {
+      const { data: response } = await POST(GET_PINCODE_DATA, { pincode });
+      setAddAddress({
+        ...addAddress,
+        pincode,
+        state: capitalizeFirstLetter(response?.data?.[0]?.state),
+        city: capitalizeFirstLetter(response?.data?.[0]?.city),
+        country: "India",
+      });
+      setIsDisabled(true);
+    } else setIsDisabled(false);
   };
 
   return (
@@ -247,6 +264,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
                 errorAddAddressMessage.pincode !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
+                handlePincode(e.target.value);
                 setAddAddress({ ...addAddress, pincode: +e.target.value });
                 if (e.target.value !== "") {
                   setErrorAddAddressMessage({
@@ -268,6 +286,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
           <div>
             <CustomInputBox
               label="City"
+              isDisabled={isDisabled}
               name="city"
               value={addAddress.city}
               inputClassName={` ${
@@ -295,6 +314,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
           <div>
             <CustomInputBox
               label="State"
+              isDisabled={isDisabled}
               name="state"
               value={addAddress.state}
               inputClassName={` ${
@@ -322,6 +342,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
           <div>
             <CustomInputBox
               label="Country"
+              isDisabled={isDisabled}
               name="country"
               value={addAddress.country}
               inputClassName={` ${

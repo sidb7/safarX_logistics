@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 interface IProps {
   label?: string;
   checked?: boolean;
@@ -31,6 +31,11 @@ const Checkbox: React.FC<IProps> = ({
     setIsChecked(!isChecked);
     onChange({ ...e, name, value: !isChecked });
   };
+
+  useEffect(() => {
+    setIsChecked(checked);
+  }, [checked]);
+
   return (
     <div
       className={`${checkboxClassName} ${className} cursor-pointer flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}

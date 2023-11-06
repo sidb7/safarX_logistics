@@ -3,7 +3,10 @@ const Card = (props: any) => {
     props;
 
   const handleIntegration = (e: any) => {
-    if (setModalData) setModalData({ isOpen: true, modalData: channel });
+    if (setModalData) {
+      if (e.target.textContent === "Integrate")
+        setModalData({ isOpen: true, modalData: channel });
+    }
     if (setIndexNum) setIndexNum(index);
     setIntegrate(false);
   };
@@ -26,12 +29,12 @@ const Card = (props: any) => {
           onClick={handleIntegration}
           className={` ${
             channel.integrated ? " bg-black" : ""
-          }  border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]`}
+          }  border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px] cursor-pointer`}
         >
           <p
             className={` ${
               channel.integrated ? "text-white" : ""
-            } font-semibold cursor-pointer text-[14px] text-[#1C1C1C] uppercase`}
+            } font-semibold text-[14px] text-[#1C1C1C] uppercase`}
           >
             {channel.integrated ? "Integrated" : "Integrate"}
           </p>

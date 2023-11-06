@@ -13,30 +13,15 @@ import TableDetails from "./tableDetails";
 import PaymnetIcon from "../../../assets/payment.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 
-const Orders = () => {
+const Orders = (props: any) => {
+  const { ordersArr } = props;
+
   const columnsHelper = createColumnHelper<any>();
-  const ordersArr = [
-    {
-      count: 0,
-      text: "Created Order",
-      img: CreateOrderIcon,
-    },
-    {
-      count: 0,
-      text: "Shipped",
-      img: ShippedIcon,
-    },
-    {
-      count: 0,
-      text: "In Transit",
-      img: InTransitIcon,
-    },
-    {
-      count: 0,
-      text: "Delivered",
-      img: InTransitIcon,
-    },
-  ];
+  const objectIcon: any = {
+    CreateOrderIcon: CreateOrderIcon,
+    ShippedIcon: ShippedIcon,
+    InTransitIcon: InTransitIcon,
+  };
 
   const orderArr = [
     {
@@ -367,30 +352,30 @@ const Orders = () => {
   ];
 
   return (
-    <div className="m-4">
-      <div className="flex justify-between gap-4 !mt-4 mb-10">
+    <div className="m-4  ">
+      <div className="flex justify-between gap-4 !mt-4 mb-10  overflow-x-scroll  ">
         {ordersArr?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            className="w-[17rem] lg:h-[6.6rem]  rounded-lg lg:overflow-hidden border-2 "
             key={i}
           >
-            <div className="flex justify-between px-6 py-4">
+            <div className="flex justify-between w-[226px] lg:w-[272px] p-3  lg:px-6 lg:py-4  ">
               <div>
-                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
+                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
                   {order?.count}
                 </div>
-                <p className="text-[#1C1C1C] font-normal text-base">
+                <p className="text-[#494949] font-normal lg:text-base font-Open text-sm">
                   {order?.text}
                 </p>
               </div>
-              <div className="self-center">
-                <img src={order?.img} alt="Box" />
+              <div className="self-center hidden lg:block">
+                <img src={objectIcon[order?.img]} alt="Box" />
               </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <BarChart2
           text="Order Count"
           img={Box}
@@ -404,7 +389,7 @@ const Orders = () => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid  grid-cols-1  lg:grid-cols-2  lg:border-2 gap-y-6 lg:gap-4 mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <BarChart2
           text="Channels By Order Comparison"
           img={Box}
@@ -418,7 +403,7 @@ const Orders = () => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2  gap-y-6 lg:gap-4 mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <PieChart
           text="Product Categories"
           img={Layer}
@@ -433,9 +418,9 @@ const Orders = () => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4 mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <PieChart
-          text="Order By Servuce"
+          text="Order By Service"
           img={PlanIcon}
           data={piedata}
           yearArr={yearArr}
@@ -447,7 +432,7 @@ const Orders = () => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1  lg:grid-cols-2  lg:border-2 gap-y-6 lg:gap-4 mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <PieChart
           text="Payment Mode"
           img={PaymnetIcon}
@@ -461,7 +446,7 @@ const Orders = () => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4 mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <TableDetails
           text="Top Products"
           img={Layer}

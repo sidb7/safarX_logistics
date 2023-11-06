@@ -158,9 +158,9 @@ const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 
 // Validate Token
 const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
-const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/createPickupLocation`;
-const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickup/createPickupAddress`;
-const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickup/updatePickupLocation`;
+const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/createPickupLocation`;
+const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickupAddress/createPickupAddress`;
+const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/updatePickupAddress`;
 const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
 const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
 
@@ -247,6 +247,9 @@ const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 //Serviceability URL
 const POST_SERVICEABILITY = `${SELLER_BASE_URL}/order/checkServiceability`;
 const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
+
+//Dashboard URL
+const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -366,4 +369,5 @@ export {
   ADD_PICKUP_ADDRESS_CATALOGUE,
   CREATE_FEEDBACK,
   GET_FEEDBACK,
+  GET_DASHBOARD_INFO,
 };
