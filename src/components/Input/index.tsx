@@ -117,16 +117,16 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
               src={informativeIcon}
               alt=""
               className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
-              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-id="my-tooltip-landing"
               data-tooltip-content={tooltipContent}
             />
           )}
           <Tooltip
-            id="my-tooltip-inline"
+            id="my-tooltip-landing"
             style={{
               backgroundColor: "bg-neutral-900",
               color: "#FFFFFF",
-              // width: "fit-content",
+              // width: "",
               fontSize: "12px",
               lineHeight: "14px",
               textTransform: "capitalize",

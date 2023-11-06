@@ -87,15 +87,15 @@ const WalletDetails = () => {
           {modalTitle()}
 
           <div className="overflow-y-auto ">
-            <div className="text-center md:mt-24 mb-4  mt-[148px]">
+            <div className="text-center md:mt-24 mb-[44px]  mt-[108px]">
               <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
                 Welcome to Shipyaari
               </h1>
-              <p className="mt-3 text-[16px] font-light leading-[22px] font-Open">
+              <p className="mt-3 text-[16px] font-light leading-[22px] text-[#494949] font-Open">
                 Please fill your bank details
               </p>
             </div>
-            <div className="flex flex-col items-center  p-5  ">
+            <div className="flex flex-col items-center mx-5 md:mx-[90px] ">
               <div className="w-full">
                 <CustomInputBox
                   containerStyle={`!w-full`}
