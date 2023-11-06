@@ -287,23 +287,31 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Type: rowsData?.deliveryAddress?.contact?.type,
         },
         {
-          title: rowsData?.service?.companyServiceId && "Services",
-          "Partner Name": rowsData?.service?.partnerName,
-          "AVN Service": rowsData?.service?.companyServiceName,
-          "Service Mode": rowsData?.service?.serviceMode,
-          "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
+          title:
+            rowsData?.boxInfo?.[0]?.service?.companyServiceId && "Services",
+          "Partner Name": rowsData?.boxInfo?.[0]?.service?.partnerName,
+          "AVN Service": rowsData?.boxInfo?.[0]?.service?.companyServiceName,
+          "Service Mode": rowsData?.boxInfo?.[0]?.service?.serviceMode,
+          "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
           "Freight Charges": `₹ ${(
-            rowsData?.service?.add + rowsData?.service?.base
+            rowsData?.boxInfo?.[0]?.service?.add +
+            rowsData?.boxInfo?.[0]?.service?.base
           ).toLocaleString("en-IN")}`,
-          "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString("en-IN")}`,
-          Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod.toLocaleString(
             "en-IN"
           )}`,
-          "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance.toLocaleString(
             "en-IN"
           )}`,
-          Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
-          Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
+          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables.toLocaleString(
+            "en-IN"
+          )}`,
+          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax.toLocaleString(
+            "en-IN"
+          )}`,
+          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total.toLocaleString(
+            "en-IN"
+          )}`,
         },
       ];
       let boxObj: any = { title: "" };
