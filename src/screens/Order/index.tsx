@@ -36,8 +36,6 @@ const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("BETA BRANCH CHECK");
-
   return (
     <div
       className={
