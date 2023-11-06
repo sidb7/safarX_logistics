@@ -30,7 +30,7 @@ import SyAppIcon from "../../assets/quickAction/shipyaarilogo.svg";
 import Serviceability from "./Serviceability";
 import { POST_SERVICEABILITY, GET_COMPANY_SERVICE } from "../../utils/ApiUrls";
 import { useSelector } from "react-redux";
-import { getSocket, initSocket, socketCallbacks } from "../../Socket";
+// import { getSocket, initSocket, socketCallbacks } from "../../Socket";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
 import { useDispatch } from "react-redux";
 import { io, Socket } from "socket.io-client";
@@ -204,30 +204,30 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
-  const socket = initSocket();
+  // const socket = initSocket();
 
-  useEffect(() => {
-    if (socket) {
-      console.log("socketwallet", socket);
-      socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
-      socket.on("wallet_balance_update", (newBalance: string) => {
-        console.log("newWalletBalance", newBalance);
-        dispatch(setWalletBalance({ amt: Number(newBalance) }));
-      });
-      socket.on("bulkOrderFailed", (data) => {
-        console.log(
-          `Received bulk order failed event: ${JSON.stringify(data)}`
-        );
-        GlobalToast(data);
-      });
+  // useEffect(() => {
+  //   if (socket) {
+  //     console.log("socketwallet", socket);
+  //     socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
+  //     socket.on("wallet_balance_update", (newBalance: string) => {
+  //       console.log("newWalletBalance", newBalance);
+  //       dispatch(setWalletBalance({ amt: Number(newBalance) }));
+  //     });
+  //     socket.on("bulkOrderFailed", (data) => {
+  //       console.log(
+  //         `Received bulk order failed event: ${JSON.stringify(data)}`
+  //       );
+  //       GlobalToast(data);
+  //     });
 
-      return () => {
-        if (socket) {
-          socket.off("wallet_balance_update");
-        }
-      };
-    }
-  }, []);
+  //     return () => {
+  //       if (socket) {
+  //         socket.off("wallet_balance_update");
+  //       }
+  //     };
+  //   }
+  // }, []);
 
   return (
     <>
