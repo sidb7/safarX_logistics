@@ -62,7 +62,7 @@ const WalletMain = () => {
           <div className="overflow-y-auto">
             <div className="md:grid md:grid-cols-2 md:py-6  md:mt-6">
               <div className="md:grid">
-                <div className="mx-5  mt-[148px] md:mt-[0px] ">
+                <div className="mx-5  mt-[44px] md:mt-[0px] ">
                   <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
                     Welcome to Shipyaari
                   </h1>
