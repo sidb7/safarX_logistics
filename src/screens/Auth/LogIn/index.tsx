@@ -33,7 +33,7 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
@@ -66,6 +66,7 @@ const Index = () => {
     if (response?.success) {
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
       sessionStorage.setItem("userName", response?.data[0]?.name);
+      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
@@ -103,6 +104,7 @@ const Index = () => {
     dispatch(signInUser(loginCredentials));
     if (response?.success) {
       // setLocalStorage(tokenKey, response?.data[0]?.token);
+      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
       sessionStorage.setItem("userName", response?.data[0]?.name);
       setLocalStorage(
@@ -190,11 +192,14 @@ const Index = () => {
 
   const loginComponent = () => {
     return (
-      <div className="relative h-full w-full overflow-y-auto hide-scrollbar">
-        {isLgScreen && modalTitle()}
-        <div className="lg:mx-24 lg:mt-[25px]">
+      <div
+        className={` ${
+          isMdScreen ? "m-auto  !w-[500px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0`}
+      >
+        <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
           <div className="flex flex-col gap-y-8 w-full">
-            <div className="product-box flex items-center lg:hidden">
+            <div className="product-box flex items-center">
               <img
                 className="m-4 h-[25px] object-contain"
                 src={CompanyLogo}
@@ -202,15 +207,15 @@ const Index = () => {
               />
             </div>
 
-            <div className="flex flex-col mt-4 mx-4 gap-y-6">
+            <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
               <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
                 Welcome to Shipyaari
               </p>
-              <p className="text-center font-Open font-light text-sm leading-[22px]">
+              <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
                 Fast and Easy Shipping from your doorstep to your customer's.
               </p>
             </div>
-            <div className=" flex flex-col mx-4 gap-y-6">
+            <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-6">
               <div className="flex justify-center">
                 <GoogleLogin
                   onSuccess={(googleData) => signInWithGoogle(googleData)}
@@ -341,7 +346,7 @@ const Index = () => {
                 text="LOG IN"
               />
 
-              <div className="flex justify-center">
+              <div className="flex justify-center md:mb-[40px]">
                 <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
                   Don't have an account ?
                 </p>
@@ -353,16 +358,6 @@ const Index = () => {
                   Sign Up
                 </button>
               </div>
-
-              {/* <div className="flex justify-center">
-                <button
-                  type="button"
-                  onClick={() => setForgotPasswordModal(true)}
-                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
-                >
-                  Forgot Password
-                </button>
-              </div> */}
             </div>
           </div>
         </div>
@@ -382,15 +377,20 @@ const Index = () => {
         </div>
       ) : (
         <>
-          {isLgScreen && isModalOpen && (
+          {/* {isLgScreen && isModalOpen && (
             <CenterModal
               isOpen={isModalOpen}
               onRequestClose={() => setIsModalOpen(false)}
             >
               {loginComponent()}
             </CenterModal>
-          )}
+          )} */}
 
+          {isMdScreen && (
+            <div className="flex justify-center items-center h-screen">
+              {loginComponent()}
+            </div>
+          )}
           {!isLgScreen && loginComponent()}
         </>
       )}

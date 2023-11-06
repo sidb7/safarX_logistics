@@ -18,6 +18,7 @@ import { Spinner } from "../../../../components/Spinner";
 // import AddButton from "../../../../components/Button/addButton";
 // import PlusIcon from "../../../../assets/plusIcon.svg";
 import { v4 as uuidv4 } from "uuid";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 
 interface ITypeProps {}
 
@@ -29,6 +30,7 @@ const PickUp = (props: ITypeProps) => {
   const [defaultAddress, setDefaultAddress] = useState<any>([]);
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>();
   const [loading, setLoading] = useState(false);
+  const { isMdScreen } = ResponsiveState();
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
@@ -117,12 +119,17 @@ const PickUp = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div>
-        <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+      <div 
+      className={`${
+        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+      <div className="">
+        <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
           <img src={CompanyLogo} alt="" />
         </div>
         <WelcomeHeader
-          className="!mt-[44px] lg:!mt-6"
+          className="!mt-[44px] md:!mt-6"
           title="Welcome to Shipyaari"
           content="Select your"
           whichAddress="Pickup"
@@ -130,8 +137,8 @@ const PickUp = (props: ITypeProps) => {
         />
 
         <div className="!h-[calc(100%-300px)] overflow-y-auto">
-          <div className="w-full lg:flex lg:justify-center ">
-            <div className="flex items-center justify-between px-4 md:px-12 lg:px-0 lg:w-[320px] ">
+          <div className="w-full pl-4">
+            <div className="flex items-center justify-between  md:px-12 md:px-0 md:w-[320px]">
               {/*commented as instructed */}
               {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
@@ -148,7 +155,7 @@ const PickUp = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3 ">
+          <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
             {/* <div className="  space-y-3 mb-6 "> */}
             {defaultAddress?.map((el: any, i: number) => {
               return (
@@ -176,11 +183,11 @@ const PickUp = (props: ITypeProps) => {
             {/* </div> */}
           </div>
 
-          {isLgScreen ? (
-            <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
+          {isMdScreen ? (
+            <div className="flex mt-6  md:justify-center md:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT"
-                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 lg:!w-[320px]"
+                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px]"
                 onClick={() => onSubmit()}
               />
             </div>
@@ -230,27 +237,28 @@ const PickUp = (props: ITypeProps) => {
         </div> */}
         {/* )} */}
       </div>
+      </div>
+      </div>
     );
   };
 
   const renderAddresscomponent = () => {
-    if (isLgScreen && openModal) {
+    if (isMdScreen) {
       return (
-        <div className="mx-4 hidden lg:block ">
-          <CustomBottomModal
-            isOpen={openModal}
-            onRequestClose={closeModal}
-            className="!p-0 !w-[500px] !h-[700px]"
-            overlayClassName="flex  items-center"
-          >
+        <div className="mx-4">
+          
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <Spinner />
               </div>
             ) : (
-              addressComponent()
+              <div className="flex justify-center items-center h-[100vh]">
+              {addressComponent()}
+              
+            </div>
+              
             )}
-          </CustomBottomModal>
+          
         </div>
       );
     } else {

@@ -91,10 +91,10 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
         {/* absolute -bottom-4 px-2 left-0 */}
 
         <label
-          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label ${
+          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out ${
             (value || tempLabel) && "filled"
           } ${
-            errorMessage !== true && errorMessage !== false && "!text-[red]"
+            errorMessage !== true && errorMessage !== false && "!text-[red] "
           }`}
         >
           {label}
@@ -104,7 +104,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <img
             src={rightIcon}
             alt=""
-            className={`${imageClassName} absolute z-20  right-6  top-[30%] cursor-pointer w-[20px] h-[20px]`}
+            className={`${imageClassName} absolute z-20  right-6  top-[30%] cursor-pointer w-[16px] h-[20px]`}
             onClick={() => {
               setVisibility(!visibility);
               onClick();
@@ -117,16 +117,16 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
               src={informativeIcon}
               alt=""
               className={`${imageClassName} absolute z-20  right-1  top-[34%] cursor-pointer`}
-              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-id="my-tooltip-landing"
               data-tooltip-content={tooltipContent}
             />
           )}
           <Tooltip
-            id="my-tooltip-inline"
+            id="my-tooltip-landing"
             style={{
               backgroundColor: "bg-neutral-900",
               color: "#FFFFFF",
-              // width: "fit-content",
+              // width: "",
               fontSize: "12px",
               lineHeight: "14px",
               textTransform: "capitalize",
@@ -134,11 +134,15 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           />
         </div>
       </div>
-      {errorMessage && (
-        <span className="text-[red] transition font-Open text-[11px] mt-1 px-2 ">
-          {errorMessage && errorMessage}
-        </span>
-      )}
+      <span
+        className={`text-[red] transition-all ease-out h-0 ${
+          errorMessage !== false &&
+          errorMessage !== true &&
+          "opacity-100 h-[18px]"
+        } opacity-0 delay-100 font-Open text-[11px] mt-1 px-2 `}
+      >
+        {errorMessage && errorMessage}
+      </span>
     </div>
   );
 };

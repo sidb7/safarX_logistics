@@ -1,26 +1,16 @@
-import BlackShipIcon from "../../assets/OrderDetails/BlackShipIcon.svg";
-import Delivery from "../../assets/OrderDetails/Delivery.svg";
-import CopyIcon from "../../assets/OrderDetails/CopyIcon.svg";
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
-import { date_DD_MMM_YYY } from "../../utils/dateFormater";
-import HamBurger from "../../assets/HamBurger.svg";
-import MenuForColumnHelper from "./MenuComponent /MenuForColumnHelper";
+import { date_DD_MMM_YYYY_HH_MM } from "../../utils/dateFormater";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
-import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
 import InformativeIcon from "../../assets/I icon.svg";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
-import CustomButton from "../../components/Button";
-import { CANCEL_TEMP_SELLER_ORDER } from "../../utils/ApiUrls";
-import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
-import { useMediaQuery } from "react-responsive";
-import { stat } from "fs";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import editIcon from "../../assets/serv/edit.svg";
+import ShreIcon from "../../assets/ShareIcon.svg";
+import { SELLER_WEB_URL } from "../../utils/ApiUrls";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -107,19 +97,15 @@ const MainCommonHelper = (navigate: any = "") => {
           <>
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
-                <span>Invoice Value : </span>
-                {codInfo?.invoiceValue?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                })}
+                <span>Invoice Value : </span>₹{" "}
+                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
               </p>
-              <p>
-                <span>COD : </span>
-                {codInfo?.collectableAmount?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                })}
-              </p>
+              {codInfo?.isCod && (
+                <p>
+                  <span>COD Amount : </span>₹{" "}
+                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                </p>
+              )}
 
               <span>
                 {codInfo
@@ -176,9 +162,9 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         updatedAt,
         orderType,
         otherDetails,
+        awb,
       } = info?.row?.original;
-      const AWB = otherDetails?.awbNo;
-      console.log("AWB", AWB);
+      // const AWB = otherDetails?.awbNo;
       return (
         <div className="py-3">
           {tempOrderId && (
@@ -206,7 +192,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               </div>
             </div>
           )}
-          {AWB && (
+          {awb && (
             <div className="">
               <span className=" text-sm font-light">Tracking :</span>
               <div className="flex text-base items-center font-medium">
@@ -214,14 +200,14 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
                   onClick={() =>
                     navigate({
                       pathname: "/tracking",
-                      search: `?trackingNo=${AWB}`,
+                      search: `?trackingNo=${awb}`,
                     })
                   }
                   className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                   data-tooltip-id="my-tooltip-inline"
                   data-tooltip-content="Track"
                 >
-                  {AWB}
+                  {awb}
                 </span>
                 <Tooltip
                   id="my-tooltip-inline"
@@ -233,11 +219,11 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
                     lineHeight: "16px",
                   }}
                 />
-                <CopyTooltip stringToBeCopied={AWB} />
+                <CopyTooltip stringToBeCopied={awb} />
               </div>
             </div>
           )}
-          <div className="flex items-center">
+          <div className="flex items-center mt-[0.5rem]">
             <span className=" text-sm font-light">Source :</span>
             <div className=" pl-2 text-base items-center font-medium">
               <span className="">{source}</span>
@@ -263,10 +249,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       );
     },
     cell: (info: any) => {
-      const { status } = info?.row?.original;
+      const { status, awb } = info?.row?.original;
       const rowsData = info?.row?.original;
       const timeStamp = status?.[0]?.timeStamp;
-      const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+      const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus =
         rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
@@ -301,19 +287,31 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Type: rowsData?.deliveryAddress?.contact?.type,
         },
         {
-          title: rowsData?.service?.companyServiceId && "Services",
-          "Partner Name": rowsData?.service?.partnerName,
-          "AVN Service": rowsData?.service?.companyServiceName,
-          "Service Mode": rowsData?.service?.serviceMode,
-          "Applied Weight": rowsData?.service?.appliedWeight,
-          "Freight Charges": (
-            rowsData?.service?.add + rowsData?.service?.base
-          )?.toFixed(2),
-          "COD Charges": rowsData?.service?.cod,
-          Insurance: rowsData?.service?.insurance,
-          "Other Charges": rowsData?.service?.variables,
-          GST: rowsData?.service?.gst?.toFixed(2),
-          Total: rowsData?.service?.total?.toFixed(2),
+          title:
+            rowsData?.boxInfo?.[0]?.service?.companyServiceId && "Services",
+          "Partner Name": rowsData?.boxInfo?.[0]?.service?.partnerName,
+          "AVN Service": rowsData?.boxInfo?.[0]?.service?.companyServiceName,
+          "Service Mode": rowsData?.boxInfo?.[0]?.service?.serviceMode,
+          "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
+          "Freight Charges": `₹ ${(
+            rowsData?.boxInfo?.[0]?.service?.add +
+            rowsData?.boxInfo?.[0]?.service?.base
+          ).toLocaleString("en-IN")}`,
+          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod.toLocaleString(
+            "en-IN"
+          )}`,
+          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance.toLocaleString(
+            "en-IN"
+          )}`,
+          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables.toLocaleString(
+            "en-IN"
+          )}`,
+          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax.toLocaleString(
+            "en-IN"
+          )}`,
+          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total.toLocaleString(
+            "en-IN"
+          )}`,
         },
       ];
       let boxObj: any = { title: "" };
@@ -327,13 +325,15 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             ...boxObj,
             [`Name ${num + 1}`]: elem?.name,
             [`QTY ${num + 1}`]: elem?.qty,
-            [`Dead Weight ${num + 1}`]: elem?.deadWeight,
-            [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+            [`Dead Weight ${num + 1}`]: `${elem?.deadWeight} Kg`,
+            [`Applied Weight ${num + 1}`]: `${elem?.appliedWeight} Kg`,
             [`Dimensions ${
               num + 1
             }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-            [`Price ${num + 1}`]: elem?.unitPrice,
-            [`Tax ${num + 1}`]: elem?.unitTax,
+            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+              "en-IN"
+            )}`,
+            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
             [`SKU ${num + 1}`]: elem?.sku,
           };
           qty += elem?.qty;
@@ -347,12 +347,12 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       rowsData?.status?.map((elem: any, index: any) => {
         statusObj = {
           ...statusObj,
-          [`AWB No ${index + 1}`]: elem.AWB,
+          [`AWB No ${index + 1}`]: awb,
           [`Current Status ${index + 1}`]: elem.currentStatus,
           [`Description ${index + 1}`]: elem.description,
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
-          [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+          [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
         };
         statusObj.title = "Status";
       });
@@ -362,14 +362,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         title: "Other Details",
         "Shipyaari ID": rowsData?.tempOrderId,
         "Order Id": rowsData?.orderId,
-        "Tracking Id": rowsData?.otherDetails?.awbNo,
+        "Tracking Id": awb,
         Source: rowsData?.source,
         "Order Type": rowsData?.orderType,
       });
-
-      // if (rowsData?.orderId === "100175") {
-      //   console.log("rowsData: ", rowsData);
-      // }
 
       const handleInformativeModal = () => {
         setInfoModalContent({
@@ -433,20 +429,25 @@ export const columnHelperForNewOrder = (
         const {
           tempOrderId,
           orderId,
-          status = [],
+          status,
           source,
           updatedAt,
           orderType,
           otherDetails,
+          awb,
         } = info?.row?.original;
-        const AWB = otherDetails?.awbNo;
-        console.log("AWB", AWB);
+        // const AWB = otherDetails?.awbNo
+        let updatedAtStatus = 0;
+
+        if (status?.length > 0) {
+          updatedAtStatus = status[status.length - 1]?.timeStamp;
+        }
 
         return (
           <div className="py-3">
             {tempOrderId && (
               <div className="">
-                <span className="text-sm font-light">Shipyaari ID :</span>
+                <span className="text-sm font-light mr-1">Shipyaari ID :</span>
                 <div className="flex text-base items-center font-medium">
                   <Link
                     to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
@@ -474,7 +475,7 @@ export const columnHelperForNewOrder = (
                 </div>
               </div>
             )}
-            {AWB && (
+            {awb && (
               <div className="">
                 <span className=" text-sm font-light">Tracking :</span>
                 <div className="flex text-base items-center font-medium">
@@ -482,14 +483,14 @@ export const columnHelperForNewOrder = (
                     onClick={() =>
                       navigate({
                         pathname: "/tracking",
-                        search: `?trackingNo=${AWB}`,
+                        search: `?trackingNo=${awb}`,
                       })
                     }
                     className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                     data-tooltip-id="my-tooltip-inline"
                     data-tooltip-content="Track"
                   >
-                    {AWB}
+                    {awb}
                   </span>
                   <Tooltip
                     id="my-tooltip-inline"
@@ -501,18 +502,22 @@ export const columnHelperForNewOrder = (
                       lineHeight: "16px",
                     }}
                   />
-                  <CopyTooltip stringToBeCopied={AWB} />
+                  <CopyTooltip stringToBeCopied={awb} />
                 </div>
               </div>
             )}
-            <div className="">
-              <span className=" text-sm font-light">Order Updated At :</span>
-              <div className=" flex text-base items-center font-medium">
-                <span className="">{date_DD_MMM_YYY(updatedAt)}</span>
+            <div className="  mt-1">
+              <span className="text-sm font-light mr-1">
+                Order Updated At :
+              </span>
+              <div className=" ">
+                <p className="text-sm font-medium">
+                  {date_DD_MMM_YYYY_HH_MM(updatedAtStatus || updatedAt)}
+                </p>
               </div>
             </div>
 
-            <div className="flex items-center">
+            <div className="flex items-center mt-1">
               <span className=" text-sm font-light">Source :</span>
               <div className=" pl-2 text-base items-center font-medium">
                 <span className="">{source}</span>
@@ -543,9 +548,8 @@ export const columnHelperForNewOrder = (
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
-        // console.log("rowData: ", info?.row?.original);
         const timeStamp = status?.[0]?.timeStamp;
-        const time = timeStamp && date_DD_MMM_YYY(timeStamp);
+        const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
         const rows: any = [
           {
@@ -581,15 +585,21 @@ export const columnHelperForNewOrder = (
             "Partner Name": rowsData?.service?.partnerName,
             "AVN Service": rowsData?.service?.companyServiceName,
             "Service Mode": rowsData?.service?.serviceMode,
-            "Applied Weight": rowsData?.service?.appliedWeight,
-            "Freight Charges": (
+            "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
+            "Freight Charges": `₹ ${(
               rowsData?.service?.add + rowsData?.service?.base
-            )?.toFixed(2),
-            "COD Charges": rowsData?.service?.cod,
-            Insurance: rowsData?.service?.insurance,
-            "Other Charges": rowsData?.service?.variables,
-            GST: rowsData?.service?.gst?.toFixed(2),
-            Total: rowsData?.service?.total?.toFixed(2),
+            ).toLocaleString("en-IN")}`,
+            "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString(
+              "en-IN"
+            )}`,
+            Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+              "en-IN"
+            )}`,
+            "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+              "en-IN"
+            )}`,
+            Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
+            Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -603,13 +613,15 @@ export const columnHelperForNewOrder = (
               ...boxObj,
               [`Name ${num + 1}`]: elem?.name,
               [`QTY ${num + 1}`]: elem?.qty,
-              [`Dead Weight ${num + 1}`]: elem?.deadWeight,
-              [`Applied Weight ${num + 1}`]: elem?.appliedWeight,
+              [`Dead Weight ${num + 1}`]: `${elem?.deadWeight} Kg`,
+              [`Applied Weight ${num + 1}`]: `${elem?.appliedWeight} Kg`,
               [`Dimensions ${
                 num + 1
               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-              [`Price ${num + 1}`]: elem?.unitPrice,
-              [`Tax ${num + 1}`]: elem?.unitTax,
+              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+                "en-IN"
+              )}`,
+              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
               [`SKU ${num + 1}`]: elem?.sku,
             };
             qty += elem?.qty;
@@ -623,12 +635,12 @@ export const columnHelperForNewOrder = (
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
             ...statusObj,
-            [`AWB No ${index + 1}`]: elem.AWB,
+            [`AWB No ${index + 1}`]: rowsData.awb,
             [`Current Status ${index + 1}`]: elem.currentStatus,
             [`Description ${index + 1}`]: elem.description,
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
-            [`Time ${index + 1}`]: date_DD_MMM_YYY(elem.timeStamp),
+            [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
           };
           statusObj.title = "Status";
         });
@@ -638,14 +650,10 @@ export const columnHelperForNewOrder = (
           title: "Other Details",
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
-          "Tracking Id": rowsData?.otherDetails?.awbNo,
+          "Tracking Id": rowsData?.awb,
           Source: rowsData?.source,
           "Order Type": rowsData?.orderType,
         });
-
-        // if (rowsData?.orderId === "100175") {
-        //   console.log("rowsData: ", rowsData);
-        // }
 
         const handleInformativeModal = () => {
           setInfoModalContent({
@@ -815,19 +823,15 @@ export const columnHelperForNewOrder = (
           <>
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
-                <span>Invoice Value : </span>
-                {codInfo?.invoiceValue?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                })}
+                <span>Invoice Value : </span>₹{" "}
+                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
               </p>
-              <p>
-                <span>COD : </span>
-                {codInfo?.collectableAmount?.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "INR",
-                })}
-              </p>
+              {codInfo?.isCod && (
+                <p>
+                  <span>COD Amount : </span>₹{" "}
+                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                </p>
+              )}
 
               <span>
                 {codInfo
@@ -934,12 +938,11 @@ export const ColumnHelperForBookedAndReadyToPicked = (
       },
       cell: (info: any) => {
         const { pickupAddress, service } = info?.row?.original;
-        console.log("pickup>>viewOrder", pickupAddress);
         return (
           <div className=" ">
             <p className="">
               {pickupAddress?.pickupDate
-                ? date_DD_MMM_YYY(pickupAddress?.pickupDate * 1000)
+                ? date_DD_MMM_YYYY_HH_MM(pickupAddress?.pickupDate * 1000)
                 : null}
             </p>
             <div className="py-2 flex flex-col">
@@ -964,12 +967,13 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         const { original } = info.cell.row;
         const data = original;
 
-        const { otherDetails = {} } = info?.row?.original;
+        const { otherDetails = {}, awb } = info?.row?.original;
         const { label = [] } = otherDetails;
-        const fileUrl = label[0] || "";
+        const labelUrl = data?.boxInfo?.[0]?.tracking?.label;
+        const fileUrl = labelUrl || "";
         return (
           <>
-            <div className="flex items-center ">
+            <div className="flex items-center gap-x-1 ">
               {fileUrl !== "" ? (
                 <ShowLabel fileUrl={fileUrl} />
               ) : (
@@ -982,12 +986,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                     width={"35px"}
                     // alt="Cancel Order"
                     className=" group-hover:flex cursor-pointer p-[6px] hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
-                    onClick={() =>
-                      handleCancellationModal(
-                        data?.status?.[0]?.AWB,
-                        data?.orderId
-                      )
-                    }
+                    onClick={() => handleCancellationModal(awb, data?.orderId)}
                     data-tooltip-id="my-tooltip-inline"
                     data-tooltip-content="Cancel Order"
                   />
@@ -1003,6 +1002,30 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                   />
                 </div>
               )}
+              <div className="w-[35px]">
+                <img
+                  src={ShreIcon}
+                  className="w-[20px] group-hover:flex cursor-pointer hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                  data-tooltip-id="tracking"
+                  data-tooltip-content="Open Tracking URL"
+                  onClick={() =>
+                    window.open(
+                      `${SELLER_WEB_URL}/shipyaari-tracking?tracking_no=${awb}`,
+                      "_blank"
+                    )
+                  }
+                />
+                <Tooltip
+                  id="tracking"
+                  style={{
+                    backgroundColor: "bg-neutral-900",
+                    color: "#FFFFFF",
+                    width: "fit-content",
+                    fontSize: "14px",
+                    lineHeight: "16px",
+                  }}
+                />
+              </div>
             </div>
           </>
         );
@@ -1047,7 +1070,6 @@ export const columnHelpersForRest = (
     //   },
     //   cell: (info: any) => {
     //     const { original } = info.cell.row;
-    //     console.log("original: ", original);
 
     //     return (
     //       <div className="flex flex-col whitespace-nowrap">

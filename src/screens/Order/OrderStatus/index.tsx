@@ -1,7 +1,7 @@
 import SelectIcon from "../../../assets/Order/SelectIcon.svg";
 import FilterIcon from "../../../assets/Order/FilterIcon.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
@@ -18,6 +18,8 @@ interface IOrderstatusProps {
   handleTabChange: Function;
   setOrders: any;
   currentStatus: string;
+  orders: any;
+  allOrders: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -37,6 +39,8 @@ const statusBar = (statusName: string, orderNumber: string) => {
   );
 };
 
+let insertFirst = true;
+
 export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   filterId = 0,
   setFilterId,
@@ -44,6 +48,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   handleTabChange,
   setOrders,
   currentStatus,
+  orders,
+  allOrders,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -53,9 +59,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [searchedText, setSearchedText] = useState("");
 
   const [filterData, setFilterData] = useState([
-    { label: "All", isActive: false },
-    { label: "Draft", isActive: false },
-    { label: "Failed", isActive: false },
+    { label: "All", isActive: false, value: "all" },
+    { label: "Draft", isActive: false, value: "" },
+    { label: "Failed", isActive: false, value: "failed" },
   ]);
 
   const filterComponent = (className?: string) => {
@@ -64,9 +70,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
-          console.log("index", index);
-          console.log("singleData", singleData);
-
           return (
             <span
               key={index}
@@ -75,7 +78,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   ? "rounded-l-md bg-[#D2D2D2] font-medium text-[#1C1C1C]"
                   : ""
               }`}
-              onClick={() => setFilterId(index)}
+              onClick={() => handleFilterOrders(index)}
             >
               {singleData.label}
             </span>
@@ -83,6 +86,32 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         })}
       </div>
     );
+  };
+
+  const handleFilterOrders = (index: any) => {
+    setFilterId(index);
+    switch (index) {
+      case 0: {
+        setOrders(allOrders);
+        break;
+      }
+      case 1: {
+        const filteredOrder = allOrders.filter(
+          (elem: any) => elem?.status?.length === 0
+        );
+        setOrders(filteredOrder);
+        break;
+      }
+      case 2: {
+        const filteredOrder = allOrders.filter(
+          (elem: any) =>
+            elem?.status?.[elem.status.length - 1]?.currentStatus ===
+            filterData?.[index]?.label?.toUpperCase()
+        );
+        setOrders(filteredOrder);
+        break;
+      }
+    }
   };
 
   const handleSearchOrder = (e: any) => {
@@ -122,6 +151,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
           <div>
             <SearchBox
+              className="removePaddingPlaceHolder"
               label="Search"
               value={searchedText}
               onChange={(e: any) => {
@@ -184,7 +214,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setOrders(OrderData);
   };
 
-  console.log("currentStatus", currentStatus);
   return (
     <div className="flex flex-col pt-7 ">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">

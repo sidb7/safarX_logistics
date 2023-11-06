@@ -22,7 +22,7 @@ const Index = () => {
   const updatedNumber =
     state?.mobileNo?.toString()?.replace(/(?<=\d)\d(?=\d{2})/g, "*") || "";
 
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
 
@@ -138,19 +138,22 @@ const Index = () => {
 
   const verifyOtp = () => {
     return (
-      <div className="relative h-full w-full">
-        {isLgScreen && modalTitle()}
-        <div className="xl:mx-24">
+      <div
+        className={` ${
+          isMdScreen ? "custom_shadow m-auto  !w-[500px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
+      >
+        {/* {isLgScreen && modalTitle()} */}
+        <div className="product-box flex items-center ">
+          <img
+            className="m-4 h-[25px] object-contain"
+            src={CompanyLogo}
+            alt="CompanyLogo"
+          />
+        </div>
+        <div className="md:mx-[90px]">
           <div className="flex flex-col">
-            <div className="product-box flex items-center lg:hidden">
-              <img
-                className="m-4 h-[25px] object-contain"
-                src={CompanyLogo}
-                alt="CompanyLogo"
-              />
-            </div>
-
-            <div className="flex flex-col mx-4 mt-12 gap-y-3">
+            <div className="flex flex-col mx-4 mt-11 md:mt-6 gap-y-3">
               <p className="text-center text-[22px] text-[#323232] font-bold font-Lato leading-7 ">
                 Mobile Verification
               </p>
@@ -234,11 +237,13 @@ const Index = () => {
                 </button> */}
               </div>
 
-              <CustomButton
-                onClick={onClickVerifyOtp}
-                text="SUBMIT"
-                className="mt-4"
-              />
+              <div className="md:mb-11">
+                <CustomButton
+                  onClick={onClickVerifyOtp}
+                  text="SUBMIT"
+                  className="mt-4"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -247,25 +252,27 @@ const Index = () => {
   };
 
   const renderVerifyOtp = () => {
-    if (isLgScreen && isModalOpen) {
+    if (isMdScreen) {
       return (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={isModalOpen}
-          // onRequestClose={() => setIsModalOpen(false)}
-        >
-          {loading ? (
-            <div className="flex justify-center items-center h-full">
-              <Spinner />
-            </div>
-          ) : (
-            verifyOtp()
-          )}
-        </CenterModal>
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   isOpen={isModalOpen}
+        //   // onRequestClose={() => setIsModalOpen(false)}
+        // >
+        loading ? (
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <Spinner />
+          </div>
+        ) : (
+          <div className="flex justify-center items-center h-screen">
+            {verifyOtp()}
+          </div>
+        )
+        // </CenterModal>
       );
     } else {
       return loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="flex justify-center items-center h-screen">
           <Spinner />
         </div>
       ) : (

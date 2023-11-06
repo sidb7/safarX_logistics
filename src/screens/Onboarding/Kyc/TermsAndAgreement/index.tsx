@@ -9,23 +9,22 @@ import CustomBottomModal from "../../../../components/CustomModal/customBottomMo
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
 import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { Spinner } from "../../../../components/Spinner";
 
 interface ITypeProps {}
 
 export const ServiceComponent = (props: ITypeProps) => {
-  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(true);
-  const closeModal = () => setOpenModal(true);
   const [checkbox, setCheckbox] = useState();
   const [acceptTnC, setAcceptTnC] = useState<any>();
-
-  useEffect(() => {
-    const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus");
-    setAcceptTnC(localAcceptTnC);
-  }, []);
+  const closeModal = () => setOpenModal(true);
+  const [loading, setLoading] = useState(false);
+  const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const { isMdScreen } = ResponsiveState();
+  const navigate = useNavigate();
 
   const acceptService = async () => {
     try {
@@ -35,13 +34,15 @@ export const ServiceComponent = (props: ITypeProps) => {
         acceptNoGST: acceptTnC,
         noGSTVersion: "1.0.0",
       };
-
+      setLoading(true);
       const { data: response } = await POST(POST_ACCEPT_AGREEMENTS, payload);
       if (response?.success) {
+        setLoading(false);
         // toast.success(response?.message);
         // navigate("/onboarding/kyc");
         navigate("/onboarding/kyc-form");
       } else {
+        setLoading(false);
         toast.error(response?.message);
         navigate("/onboarding/kyc-terms/service-agreement");
       }
@@ -52,8 +53,8 @@ export const ServiceComponent = (props: ITypeProps) => {
 
   const BottomButton = () => {
     return (
-      <div className="flex flex-col items-center px-5 lg:px-0 pb-4  bg-white">
-        <div className="flex items-center lg:px-9  self-start my-1">
+      <div className="flex flex-col items-center px-5 md:px-0 pb-4  bg-white">
+        <div className="flex items-center md:px-9  self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
             style={{ accentColor: "black" }}
@@ -65,7 +66,7 @@ export const ServiceComponent = (props: ITypeProps) => {
 
         <ServiceButton
           text="ACCEPT AND CONTINUE"
-          className={`w-full lg:!w-[320px] font-Open  mb-0 ${
+          className={`w-full md:!w-[320px] font-Open  mb-0 ${
             checkbox === true
               ? "bg-[#1C1C1C] text-white"
               : "bg-[#E8E8E8] text-[#BBBBBB]"
@@ -79,42 +80,65 @@ export const ServiceComponent = (props: ITypeProps) => {
     );
   };
 
+  useEffect(() => {
+    const localAcceptTnC = sessionStorage.getItem("setAcceptTnCStatus") as any;
+    setAcceptTnC(localAcceptTnC);
+  }, []);
+
   const serviceCommonComponent = () => {
     return (
-      <div className="lg:px-0 ">
-        <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
-          <img src={CompanyLogo} alt="" />
-        </div>
-        <WelcomeHeader
-          className="!mt-[44px] lg:!mt-6"
-          title="Welcome to Shipyaari"
-          content="Terms & Agreement"
-        />
-        <div className=" px-5  lg:mb-0 lg:mx-5 ">
-          <Card
-            title="SERVICE AGREEMENT"
-            subTitleOne="Forward delivery of the shipments"
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+          <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <img src={CompanyLogo} alt="" className="h-[25px]" />
+          </div>
+          <WelcomeHeader
+            className="!mt-[44px] md:!mt-6"
+            title="Welcome to Shipyaari"
+            content="Terms & Agreement"
           />
+          <div className=" px-5  md:mb-0 md:mx-5 ">
+            <Card
+              title="SERVICE AGREEMENT"
+              subTitleOne="Forward delivery of the shipments"
+            />
+          </div>
+          {BottomButton()}
         </div>
-        {BottomButton()}
       </div>
     );
   };
 
-  return (
-    <div>
-      {!isLgScreen && serviceCommonComponent()}
-
-      {isLgScreen && (
-        <CustomBottomModal
-          isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px] overflow-y-scroll"
-          overlayClassName="flex  items-center"
-        >
+  const renderServiceComponent = () => {
+    if (isMdScreen) {
+      return (
+        <>
+          {loading ? (
+            <div className="flex justify-center items-center h-screen">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-[100vh] border-4 ">
+              {serviceCommonComponent()}
+            </div>
+          )}
+        </>
+      );
+    } else {
+      return loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="flex justify-center items-center">
           {serviceCommonComponent()}
-        </CustomBottomModal>
-      )}
-    </div>
-  );
+        </div>
+      );
+    }
+  };
+  return <div>{renderServiceComponent()}</div>;
 };

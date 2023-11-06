@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import SimpleLineChart from "../../../components/SimpleLineChart";
 import AnalyticsIcon from "../../../assets/analytics.svg";
 import CustomDropDown from "../../../components/DropDown";
+import UpArrowIcon from "../../../assets/AccordionUp.svg";
+import DownArrowIcon from "../../../assets/downwardArrow.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 interface ISimplechart {
   yearArr?: any;
@@ -9,93 +12,110 @@ interface ISimplechart {
 
 const SimpleChart = (props: ISimplechart) => {
   const { yearArr } = props;
+  const { isLgScreen } = ResponsiveState();
+  const [isOpen, setIsOpen] = useState(false);
   const data = [
     {
       name: "Jan",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Feb",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Mar",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Apr",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "May",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Jun",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Jul",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Aug",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Sep",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Oct",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Nov",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Dec",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
   return (
     <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
       <div
-        className={`flex justify-between items-center h-[3.125rem] px-2  bg-[#F6F6F6]`}
+        className={`flex flex-col lg:flex-row lg:justify-between lg:items-center lg:h-[3.125rem] ${
+          isOpen ? "" : "h-[40px]"
+        }  px-4 py-2 lg:px-2 lg:py-0  bg-[#F6F6F6]`}
       >
-        <div className="flex">
-          <img src={AnalyticsIcon} alt="AnalyticsIcon" />
-          <span className="text-[1rem] font-semibold text-[#1C1C1C] ml-4">
-            Revenue
-          </span>
+        <div className="flex items-center justify-between mb-6 lg:mb-0">
+          <div className="flex items-center">
+            <img src={AnalyticsIcon} alt="AnalyticsIcon" />
+            <span className="text-[1rem] font-semibold text-[#1C1C1C] ml-4">
+              Revenue
+            </span>
+          </div>
+
+          <img
+            src={isOpen ? UpArrowIcon : DownArrowIcon}
+            alt=""
+            className="cursor-pointer lg:hidden"
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+          />
         </div>
-        <div>
+        <div
+          className={`${isLgScreen ? "block" : isOpen ? "block" : "hidden"}`}
+        >
           <CustomDropDown
             onChange={(e) => {}}
             options={yearArr}
@@ -104,7 +124,12 @@ const SimpleChart = (props: ISimplechart) => {
           />
         </div>
       </div>
-      <SimpleLineChart data={data} />
+
+      {isLgScreen ? (
+        <SimpleLineChart data={data} />
+      ) : (
+        isOpen && <SimpleLineChart data={data} />
+      )}
     </div>
   );
 };

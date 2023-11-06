@@ -18,79 +18,65 @@ import ComposedChart from "../Common/ComposedChart";
 import VanWithoutBG from "../../../assets/vanWithoutBG.svg";
 import Whatsapp from "../../../assets/whatsapp.svg";
 
-const Exception = () => {
+const Exception = (props: any) => {
+  const { ordersArr } = props;
+
   const columnsHelper = createColumnHelper<any>();
-  const ordersArr = [
-    {
-      count: 23,
-      text: "Total NPR",
-      img: CreateOrderIcon,
-    },
-    {
-      count: 20,
-      text: "Total NDR",
-      img: InTransitIcon,
-    },
-    {
-      count: 35,
-      text: "RTO Initiated",
-      img: VanIcon,
-    },
-    {
-      count: 18,
-      text: "RTO Delivered",
-      img: VanIcon,
-    },
-  ];
+  const objectIcon: any = {
+    CreateOrderIcon: CreateOrderIcon,
+
+    InTransitIcon: InTransitIcon,
+    VanIcon: VanIcon,
+  };
 
   const orderArr = [
     {
       name: "10 Jul",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "11 Jul",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "12 Jul",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "13 Jul",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "14 Jul",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "15 Jul",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "16 Jul",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
   const piedata = [
-    { name: "Group A", value: 700 },
-    { name: "Group B", value: 300 },
+    { name: "Group A", value: 1 },
+    { name: "Group B", value: 1 },
   ];
 
   const yearArr = [
@@ -120,31 +106,31 @@ const Exception = () => {
     {
       customer: "Aman Roy",
       product: "MAc Book Pro",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       customer: "Aman Roy",
       product: "MAc Book Pro",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       customer: "Aman Roy",
-      sold: "54",
-      revenue: "₹56,89024",
-    },
-    {
-      customer: "Aman Roy",
-      product: "MAc Book Pro",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
     },
     {
       customer: "Aman Roy",
       product: "MAc Book Pro",
-      sold: "54",
-      revenue: "₹56,89024",
+      sold: "0",
+      revenue: "₹0",
+    },
+    {
+      customer: "Aman Roy",
+      product: "MAc Book Pro",
+      sold: "0",
+      revenue: "₹0",
     },
   ];
 
@@ -224,37 +210,37 @@ const Exception = () => {
   const tableRTOInCities = [
     {
       city: "Kolkata",
-      pincode: "700156",
-      rtoCount: "5",
-      percentage: "5%",
+      pincode: "0",
+      rtoCount: "0",
+      percentage: "0%",
       product: "Mac Book Pro",
     },
     {
       city: "Kolkata",
-      pincode: "700156",
-      rtoCount: "5",
-      percentage: "5%",
+      pincode: "0",
+      rtoCount: "0",
+      percentage: "0%",
       product: "Mac Book Pro",
     },
     {
       city: "Kolkata",
-      pincode: "700156",
-      rtoCount: "5",
-      percentage: "5%",
+      pincode: "0",
+      rtoCount: "0",
+      percentage: "0%",
       product: "Mac Book Pro",
     },
     {
       city: "Kolkata",
-      pincode: "700156",
-      rtoCount: "5",
-      percentage: "5%",
+      pincode: "0",
+      rtoCount: "0",
+      percentage: "0%",
       product: "Mac Book Pro",
     },
     {
       city: "Kolkata",
-      pincode: "700156",
-      rtoCount: "5",
-      percentage: "5%",
+      pincode: "0",
+      rtoCount: "0",
+      percentage: "0%",
       product: "Mac Book Pro",
     },
   ];
@@ -351,84 +337,84 @@ const Exception = () => {
   const ndrDeliveryData = [
     {
       name: "Page A",
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page B",
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page C",
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page D",
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page E",
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page F",
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page G",
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
   const sellerResponseData = [
     {
       name: "Page A",
-      uv: 590,
-      pv: 800,
-      amt: 1400,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page B",
-      uv: 868,
-      pv: 967,
-      amt: 1506,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page C",
-      uv: 1397,
-      pv: 1098,
-      amt: 989,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page D",
-      uv: 1480,
-      pv: 1200,
-      amt: 1228,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page E",
-      uv: 1520,
-      pv: 1108,
-      amt: 1100,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
     {
       name: "Page F",
-      uv: 1400,
-      pv: 680,
-      amt: 1700,
+      uv: 0,
+      pv: 0,
+      amt: 0,
     },
   ];
 
@@ -436,32 +422,32 @@ const Exception = () => {
     {
       product: "Product 1 | Product 2",
       category: "Electronics",
-      priceRange: "₹1 - ₹500",
-      count: "₹499",
+      priceRange: "₹0 - ₹0",
+      count: "₹0",
     },
     {
       product: "Product 1 | Product 2",
       category: "Electronics",
-      priceRange: "₹1 - ₹500",
-      count: "₹499",
+      priceRange: "₹0 - ₹0",
+      count: "₹0",
     },
     {
       product: "Product 1 | Product 2",
       category: "Electronics",
-      priceRange: "₹1 - ₹500",
-      count: "₹499",
+      priceRange: "₹0 - ₹0",
+      count: "₹0",
     },
     {
       product: "Product 1 | Product 2",
       category: "Electronics",
-      priceRange: "₹1 - ₹500",
-      count: "₹499",
+      priceRange: "₹0 - ₹0",
+      count: "₹0",
     },
     {
       product: "Product 1 | Product 2",
       category: "Electronics",
-      priceRange: "₹1 - ₹500",
-      count: "₹499",
+      priceRange: "₹0 - ₹0",
+      count: "₹0",
     },
   ];
 
@@ -556,7 +542,7 @@ const Exception = () => {
                 </p>
               </div>
               <div className="self-center">
-                <img src={order?.img} alt="Box" />
+                <img src={objectIcon[order?.img]} alt="Box" />
               </div>
             </div>
           </div>
@@ -572,7 +558,7 @@ const Exception = () => {
         <div className="mt-[3.125rem] p-4 space-y-[60px]">
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">536</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">0</h1>
               <img src={GreenEllipse} alt="GreenEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -581,7 +567,7 @@ const Exception = () => {
           </div>
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">245</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">0</h1>
               <img src={RedEllipse} alt="RedEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -590,7 +576,7 @@ const Exception = () => {
           </div>
           <div>
             <div className="flex justify-between">
-              <h1 className="text-[2rem] font-bold font-Lato">198</h1>
+              <h1 className="text-[2rem] font-bold font-Lato">0</h1>
               <img src={GreenEllipse} alt="GreenEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">RTO</p>

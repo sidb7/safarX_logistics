@@ -8,6 +8,7 @@ import Card from "./Card";
 import Header from "./Header";
 import { GET_ALL_STORES } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
+import { ChannelIntegrationCarts } from "../../../../utils/dummyData";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -55,9 +56,24 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     </div>
   ) : (
     <>
-      <div>
+      <div className="my-6">
+        <Header title="Available Channels" />
+        <div className="flex gap-x-4 overflow-x-auto flex-wrap ">
+          {ChannelIntegrationCarts?.channels?.map(
+            (eachChannel: any, index: any) => (
+              <Card
+                setModalData={setModalData}
+                channel={eachChannel}
+                key={index}
+                setIndexNum={setIndexNum}
+                index={index}
+                setIntegrate={setIntegrate}
+              />
+            )
+          )}
+        </div>
         <div className="mt-6">
-          <Header title="Channels" />
+          {channelData?.channels && <Header title="Integrated Channels" />}
           <div className="flex gap-x-4 overflow-x-auto flex-wrap ">
             {channelData.channels?.map((eachChannel: any, index: any) => {
               return (

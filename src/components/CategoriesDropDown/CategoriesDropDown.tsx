@@ -56,7 +56,6 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       }, 1000);
     } else {
       setisLoading(false);
-      console.log("No Categories Found");
     }
   };
 

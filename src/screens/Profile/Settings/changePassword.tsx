@@ -31,7 +31,7 @@ export const ChangePassword = () => {
       toast.error(data?.message);
     }
   };
-  console.log("password", password);
+
   return (
     <div className="h-full">
       <Breadcrum label="Change Password" />

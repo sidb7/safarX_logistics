@@ -16,7 +16,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
   const location = useLocation();
   const state = location.state || {};
 
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const questionsData = state?.questionsData;
 
@@ -36,7 +36,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
   const note = () => {
     return (
-      <div className=" absolute bottom-[-250px] md:left-[170px] lg:relative lg:top-7 lg:left-[-15px]  ml-6 text-[#494949] text-xs leading-4 font-Open md:text-center">
+      <div className=" absolute bottom-[-250px]  md:relative md:top-7 md:left-[-15px]  ml-6 text-[#494949] text-xs leading-4 font-Open md:text-center">
         NOTE: KYC is mandatory for shipping orders and identification.
       </div>
     );
@@ -48,26 +48,30 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
   const question5 = () => {
     return (
-      <div className="relative h-full w-full">
-        {isLgScreen && modalTitle()}
-        <div className="product-box flex items-center lg:hidden">
+      <div
+        className={` ${
+          isMdScreen ? "custom_shadow m-auto  !w-[688px]" : ""
+        } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
+      >
+        {/* {isLgScreen && modalTitle()} */}
+        <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
             src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 mt-10 lg:grid lg:grid-cols-2 lg:mt-[100px] lg:gap-x-4">
+        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mx-6 md:mb-[44px]">
           <div>
             <WelcomeHeader
               welcomeLabel="For account activation kindly complete the KYC"
-              welcomeClassName="lg:!mt-0"
+              welcomeClassName="md:!mt-0"
               className="hidden"
             />
-            {isLgScreen && note()}
+            {isMdScreen && note()}
           </div>
           <div>
-            <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px] lg:mt-0">
+            <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-[50px] md:mt-0">
               <div>
                 <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
                   {question}
@@ -103,7 +107,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
             >
               SKIP FOR NOW
             </div>
-            {!isLgScreen && note()}
+            {!isMdScreen && note()}
           </div>
         </div>
       </div>
@@ -112,15 +116,17 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
   return (
     <>
-      {isLgScreen && isModalOpen && (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          className="h-[474px] w-[700px]"
-          isOpen={isModalOpen}
-          // onRequestClose={() => setIsModalOpen(false)}
-        >
+      {isMdScreen && (
+        // <CenterModal
+        //   shouldCloseOnOverlayClick={false}
+        //   className="h-[474px] w-[700px]"
+        //   isOpen={isModalOpen}
+        //   // onRequestClose={() => setIsModalOpen(false)}
+        // >
+        <div className="flex justify-center items-center h-screen">
           {question5()}
-        </CenterModal>
+        </div>
+        // </CenterModal>
       )}
 
       {!isLgScreen && question5()}

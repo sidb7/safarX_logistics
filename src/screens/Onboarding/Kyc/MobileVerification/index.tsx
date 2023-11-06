@@ -17,6 +17,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 
 interface ITypeProps {}
 
@@ -42,6 +43,7 @@ const Index = (props: ITypeProps) => {
   const [heading, setHeading] = useState("");
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const {  isMdScreen } = ResponsiveState();
 
   useEffect(() => {
     if (
@@ -157,7 +159,6 @@ const Index = (props: ITypeProps) => {
       sessionStorage.setItem("fullname", response?.data?.data?.full_name_split);
       if (response?.success) {
         setTimeout(() => {
-          console.log("Delayed for 1 second.");
           // toast.success(response?.message);
         }, 1000);
         setLoading(false);
@@ -272,7 +273,12 @@ const Index = (props: ITypeProps) => {
 
   const mobileVerificationComponent = () => {
     return (
-      <div className=" lg:px-0 ">
+      <div 
+      className={`${
+        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+      <div className=" md:px-0 ">
         <div className="product-box flex  items-center w-full h-[60px] mb-6 ">
           <img
             className="my-auto ml-6  h-[25px] object-contain"
@@ -292,8 +298,8 @@ const Index = (props: ITypeProps) => {
         <WelcomeHeader className="!mt-3" title={heading} content="" />
 
         <form onSubmit={onVerifyOtp}>
-          <div className="px-5 lg:mb-6">
-            <div className="flex flex-col lg:items-center ">
+          <div className="px-5 md:mb-6">
+            <div className="flex flex-col md:items-center ">
               <img
                 src={MobileVerificationIcon}
                 alt=""
@@ -301,13 +307,13 @@ const Index = (props: ITypeProps) => {
                 height={180}
                 className="mb-8 self-center"
               />
-              <div className="!w-full mb-2 lg:mb-2">
+              <div className="!w-full mb-2 md:mb-2">
                 <CustomInputBox
                   label="Enter OTP"
                   inputType="text"
                   inputMode="numeric"
-                  containerStyle="lg:!w-auto"
-                  className=" lg:!w-[320px] !font-Open "
+                  containerStyle="md:!w-auto self-center"
+                  className=" md:!w-[320px] !font-Open "
                   labelClassName="!font-Open"
                   maxLength={businessType === "company" ? 4 : 6}
                   value={otpNumber || ""}
@@ -323,7 +329,7 @@ const Index = (props: ITypeProps) => {
                 {resendOtpTimer()}
               </p>
 
-              <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 lg:mb-0 self-center">
+              <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 md:mb-0 self-center">
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
@@ -344,11 +350,11 @@ const Index = (props: ITypeProps) => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col lg:justify-center px-4 lg:items-center"></div>
-          <div className="flex flex-col lg:justify-center px-4 lg:items-center">
+          <div className="flex flex-col md:justify-center px-4 md:items-center"></div>
+          <div className="flex flex-col md:justify-center px-4 md:items-center">
             <ServiceButton
               text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] !font-Open text-white lg:!w-[320px] mb-5"
+              className="bg-[#1C1C1C] !h-[36px] !font-Open text-white md:!w-[320px] mb-5"
               btnType="submit"
             />
           </div>
@@ -369,26 +375,27 @@ const Index = (props: ITypeProps) => {
           />
         </div> */}
       </div>
+      </div>
+      </div>
     );
   };
 
   const renderMobileVerificationComponent = () => {
-    if (isLgScreen && openModal) {
+    if (isMdScreen) {
       return (
-        <CustomBottomModal
-          isOpen={openModal}
-          onRequestClose={closeModal}
-          className="!p-0 !w-[500px] !h-[700px]"
-          overlayClassName="flex  items-center"
-        >
+        
+          <>
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <Spinner />
             </div>
           ) : (
-            mobileVerificationComponent()
+            <div className="flex justify-center items-center h-screen">
+                {mobileVerificationComponent()}
+            </div>
           )}
-        </CustomBottomModal>
+          </>
+        
       );
     } else {
       return loading ? (

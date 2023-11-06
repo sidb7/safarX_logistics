@@ -103,6 +103,18 @@ const Catalogue = () => {
     } catch (error) {}
   };
 
+  const GetCurrentPath = () => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const location = url;
+    const path = location.pathname;
+    const pathArray = path.split("/");
+    const removedFirstPath = pathArray.slice(1);
+    return removedFirstPath;
+  };
+
+  const data = GetCurrentPath() as any;
+
   useEffect(() => {
     if (
       tabName === "channel-integration" ||
@@ -112,18 +124,6 @@ const Catalogue = () => {
         await getProductDetails();
       })();
     }
-
-    const GetCurrentPath = () => {
-      const currentUrl = window.location.href;
-      const url = new URL(currentUrl);
-      const location = url;
-      const path = location.pathname;
-      const pathArray = path.split("/");
-      const removedFirstPath = pathArray.slice(1);
-      return removedFirstPath;
-    };
-
-    const data = GetCurrentPath() as any;
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
@@ -142,9 +142,7 @@ const Catalogue = () => {
       // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
       setIsActive(checkPageAuthorized("Box Catalogue"));
     }
-
-    console.log("my page autho", checkPageAuthorized("Channel Integration"));
-  }, [tabName, isActive]);
+  }, [tabName, isActive, data]);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");
@@ -152,20 +150,22 @@ const Catalogue = () => {
   };
 
   const renderHeaderComponent = (setShowCombo?: any) => {
-    if (tabName === "Channel Integration") {
-      return (
-        <CustomButton
-          icon={addIcon}
-          showIcon={true}
-          text={"INTEGRATE"}
-          className="!p-3"
-          onClick={() => {
-            setModalData({ isOpen: true });
-            setIntegrate(true);
-          }}
-        />
-      );
-    } else if (tabName === "Address Book") {
+    // Code commented as per discussion with akshay and vivek
+    // if (tabName === "Channel Integration") {
+    //   return (
+    //     <CustomButton
+    //       icon={addIcon}
+    //       showIcon={true}
+    //       text={"INTEGRATE"}
+    //       className="!p-3"
+    //       onClick={() => {
+    //         setModalData({ isOpen: true });
+    //         setIntegrate(true);
+    //       }}
+    //     />
+    //   );
+    // } else
+    if (tabName === "Address Book") {
       return (
         <CustomButton
           icon={addIcon}
@@ -322,6 +322,7 @@ const Catalogue = () => {
                 onClose={() => setModalData({ ...modalData, isOpen: false })}
               >
                 <ChannelIntegrationModalContent
+                  modalData={modalData}
                   setModalData={setModalData}
                   channelData={channelData}
                   setChannelData={setChannelData}

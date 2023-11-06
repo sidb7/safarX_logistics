@@ -25,7 +25,7 @@ const modalTitle = () => {
 };
 
 const WalletDetails = () => {
-  const { isLgScreen } = ResponsiveState();
+  const { isLgScreen, isMdScreen } = ResponsiveState();
   const [openModal, setOpenModal] = useState(true);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -78,47 +78,48 @@ const WalletDetails = () => {
     ];
 
     return (
-      <div className="h-full w-full">
-        {!isLgScreen ? (
-          <header className="fixed top-0 z-50 w-full ">
-            <NavBar />
-          </header>
-        ) : (
-          modalTitle()
-        )}
-        <div className="text-center lg:mt-24 mb-4  mt-[148px]">
-          <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
-            Welcome to Shipyaari
-          </h1>
-          <p className="mt-3 text-[16px] font-light leading-[22px] font-Open">
-            Please fill your bank details
-          </p>
-        </div>
-        <div className="flex flex-col items-center  p-5 ">
-          <div>
-            <CustomInputBox
-              containerStyle={`lg:!w-auto`}
-              value={accountName || ""}
-              inputMode="numeric"
-              label="Account Number"
-              className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem]"
-              maxLength={50}
-              onChange={(e) => setAccountName(+e.target.value)}
-            />
-          </div>
-          <div>
-            <CustomInputBox
-              label="IFSC Code"
-              containerStyle={`lg:!w-auto mt-4`}
-              maxLength={11}
-              value={ifscCode}
-              inputType="text"
-              className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem]"
-              onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
-            />
-          </div>
+      <div
+        className={`${
+          isMdScreen ? " m-auto !w-[500px]  !h-[600px] " : "w-full !h-full"
+        }flex flex-col justify-center relative md:px-0 md:gap-y-0`}
+      >
+        <div className={`${isMdScreen ? "custom_shadow h-full" : ""}`}>
+          {modalTitle()}
 
-          {/* <div>
+          <div className="overflow-y-auto ">
+            <div className="text-center md:mt-24 mb-[44px]  mt-[108px]">
+              <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
+                Welcome to Shipyaari
+              </h1>
+              <p className="mt-3 text-[16px] font-light leading-[22px] text-[#494949] font-Open">
+                Please fill your bank details
+              </p>
+            </div>
+            <div className="flex flex-col items-center mx-5 md:mx-[90px] ">
+              <div className="w-full">
+                <CustomInputBox
+                  containerStyle={`!w-full`}
+                  value={accountName || ""}
+                  inputMode="numeric"
+                  label="Account Number"
+                  className="!w-full "
+                  maxLength={50}
+                  onChange={(e) => setAccountName(+e.target.value)}
+                />
+              </div>
+              <div className="w-full">
+                <CustomInputBox
+                  label="IFSC Code"
+                  containerStyle={`!w-full mt-4`}
+                  maxLength={11}
+                  value={ifscCode}
+                  inputType="text"
+                  className="!w-full"
+                  onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
+                />
+              </div>
+
+              {/* <div>
             <CustomInputBox
               label="Bank Name"
               containerStyle={`lg:!w-auto mt-4`}
@@ -144,11 +145,13 @@ const WalletDetails = () => {
               wrapperClass="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem] lg:m-auto "
             />
           </div> */}
-          <div className="!w-[18rem] sm:!w-[22rem] md:!w-[28rem] lg:!w-[20rem] m-auto mt-4">
-            <CustomButton
-              text={"VERIFY BANK"}
-              onClick={() => postAccountDetails()}
-            />
+              <div className="!w-full m-auto mt-4">
+                <CustomButton
+                  text={"VERIFY BANK"}
+                  onClick={() => postAccountDetails()}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -160,15 +163,8 @@ const WalletDetails = () => {
         <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
-      ) : isLgScreen ? (
-        <CenterModal
-          shouldCloseOnOverlayClick={false}
-          isOpen={openModal}
-          // onRequestClose={() => setIsRechargeModalOpen(false)}
-          className="!h-[36rem] lg:!h-[37.265rem] lg:!w-[31.25rem] !w-[20rem] md:!h-[600px] md:!w-[31.25rem]"
-        >
-          {WalletBankDetails()}
-        </CenterModal>
+      ) : isMdScreen ? (
+        <div className="flex h-[100vh]">{WalletBankDetails()}</div>
       ) : (
         WalletBankDetails()
       )}

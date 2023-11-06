@@ -36,7 +36,6 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
-    console.log("renderingComponents", id);
     render(id);
   };
   return (

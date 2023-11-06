@@ -18,6 +18,7 @@ import { Spinner } from "../../../../components/Spinner";
 // import AddButton from "../../../../components/Button/addButton";
 // import PlusIcon from "../../../../assets/plusIcon.svg";
 import { v4 as uuidv4 } from "uuid";
+import { ResponsiveState } from "../../../../utils/responsiveState";
 
 interface ITypeProps {}
 
@@ -32,6 +33,7 @@ const Billing = (props: ITypeProps) => {
 
   const [loading, setLoading] = useState(false);
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+  const { isMdScreen } = ResponsiveState();
 
   const initialAddressCall = async () => {
     setLoading(true);
@@ -116,21 +118,26 @@ const Billing = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
+      <div 
+      className={`${
+        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+      }flex flex-col relative md:px-0 md:gap-y-0`}>
+        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
       <div className="relative">
         <div>
-          <div className=" lg:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+          <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
             <img src={CompanyLogo} alt="" />
           </div>
           <WelcomeHeader
-            className="!mt-[44px] lg:!mt-6"
+            className="!mt-[44px] md:!mt-6"
             title="Welcome to Shipyaari"
             content="Select your"
             whichAddress="Billing"
             Address="Address"
           />
 
-          <div className="w-full lg:flex lg:justify-center">
-            <div className="flex items-center justify-between px-4 md:px-8 lg:px-0   lg:w-[320px] ">
+          <div className="w-full pl-5 md:pl-8">
+            <div className="flex px-0 md:px-8 md:px-0   md:w-[320px]">
               {/*commented as instructed */}
               {/* <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
@@ -147,10 +154,10 @@ const Billing = (props: ITypeProps) => {
             </div>
           </div>
 
-          <div className="flex flex-col items-center lg:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 lg:px-4 space-y-3">
+          <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3">
             {/* <div className="space-y-3 mb-6 ">
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4"> */}
-            {console.log("defaultAddressSelect :", defaultAddressSelect)}
+
             {defaultAddress?.map((el: any, i: number) => {
               return (
                 <div key={i} ref={bottomRef}>
@@ -176,11 +183,11 @@ const Billing = (props: ITypeProps) => {
           </div>
           {/* </div>
           </div> */}
-          {isLgScreen && (
-            <div className="flex mt-8  lg:justify-center lg:items-center  pb-12 ">
+          {isMdScreen && (
+            <div className="flex mt-8  md:justify-center md:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT"
-                className="bg-[#1C1C1C] text-white w-full mb-5 lg:!w-[320px]"
+                className="bg-[#1C1C1C] text-white w-full mb-5 md:!w-[320px]"
                 onClick={() => {
                   onSubmit();
                 }}
@@ -188,7 +195,7 @@ const Billing = (props: ITypeProps) => {
             </div>
           )}
 
-          {!isLgScreen && (
+          {!isMdScreen && (
             <div
               className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
               style={{ width: "-webkit-fill-available" }}
@@ -204,27 +211,31 @@ const Billing = (props: ITypeProps) => {
           )}
         </div>
       </div>
+      </div>
+      </div>
     );
   };
 
   const renderAddresscomponent = () => {
-    if (isLgScreen && openModal) {
+    if (isMdScreen) {
       return (
-        <div className="mx-4 hidden lg:block ">
-          <CustomBottomModal
+        <div className="mx-4">
+          {/* <CustomBottomModal
             isOpen={openModal}
             onRequestClose={closeModal}
             className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
-          >
+          > */}
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <Spinner />
               </div>
             ) : (
-              addressComponent()
+              <div className="flex justify-center items-center h-[100vh]">
+                  {addressComponent()}
+              </div>
             )}
-          </CustomBottomModal>
+          {/* </CustomBottomModal> */}
         </div>
       );
     } else {

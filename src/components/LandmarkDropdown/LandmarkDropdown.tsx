@@ -99,7 +99,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         className="downarrowImage"
       />
 
-      {isDropdownOpen && (
+      {isDropdownOpen && arrayValue.length > 0 && (
         <div
           ref={dropdownRef}
           className="custom-dropdown absolute mt-2 w-full overflow-y-scroll rounded-md bg-white h-60"

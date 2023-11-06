@@ -36,7 +36,6 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
-    console.log("renderingComponents", id);
     render(id);
   };
   return (

@@ -23,11 +23,13 @@ import AccessDenied from "../../components/AccessDenied";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import { useNavigate } from "react-router-dom";
 
 interface ITypeProps {}
 
 const PlanDetails = (props: ITypeProps) => {
   const columnsHelper = createColumnHelper<any>();
+  const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[4]?.menu?.[1]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("Plan Details");
@@ -732,7 +734,9 @@ const PlanDetails = (props: ITypeProps) => {
             </div>
             <div className="flex   items-center justify-end ">
               <ServiceButton
-                onClick={() => {}}
+                onClick={() => {
+                  navigate("/plans");
+                }}
                 text="UPGRADE"
                 className="lg:!w-full !w-[80px]  !h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  !font-Open"
               />

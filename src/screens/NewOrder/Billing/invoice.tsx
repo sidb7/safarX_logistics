@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InvoiceData from "./BillingData/invoiceData";
 import CreditNoteData from "./BillingData/creditNoteData";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { ScrollNav } from "../../../components/ScrollNav";
 import { SearchBox } from "../../../components/SearchBox";
+import AccessDenied from "../../../components/AccessDenied";
+import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 interface IInvoiceProps {}
 
@@ -13,12 +15,13 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [totalItemCount, setTotalItemCount] = useState(10);
   const [renderingComponents, setRenderingComponents] = useState(0);
   const arrayData = [{ label: "Invoice" }, { label: "Credit Note" }];
+  const [isActive, setIsActive] = useState<any>(false);
 
   const render = (id: any) => {
     if (id === 0) {
-      navigate("/billing/invoice");
+      navigate("/billing/invoices");
     } else if (id === 1) {
-      navigate("/billing/credit-note");
+      navigate("/billing/credit-notes");
     }
   };
 
@@ -30,32 +33,45 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
-    console.log("renderingComponents", id);
+
     render(id);
   };
+
+  useEffect(() => {
+    if (renderingComponents === 0) {
+      setIsActive(checkPageAuthorized("Invoices"));
+    } else {
+      setIsActive(checkPageAuthorized("Credit Notes"));
+    }
+  }, [renderingComponents]);
+
   return (
     <>
-      <div>
-        <Breadcrum label="Billing" />
-        <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-          <div>
-            <ScrollNav
-              arrayData={arrayData}
-              showNumber={false}
-              setScrollIndex={setScrollIndex}
-              defaultIndexValue={1}
-            />
-          </div>
-          <div>
+      {isActive ? (
+        <div>
+          <Breadcrum label="Billing" />
+          <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
             <div>
-              <SearchBox label="Search" value="" onChange={() => {}} />
+              <ScrollNav
+                arrayData={arrayData}
+                showNumber={false}
+                setScrollIndex={setScrollIndex}
+                defaultIndexValue={1}
+              />
+            </div>
+            <div>
+              <div>
+                <SearchBox label="Search" value="" onChange={() => {}} />
+              </div>
             </div>
           </div>
+          <div className="mx-4">
+            {renderingComponents === 0 ? <InvoiceData /> : <CreditNoteData />}
+          </div>
         </div>
-        <div className="mx-4">
-          {renderingComponents === 0 ? <InvoiceData /> : <CreditNoteData />}
-        </div>
-      </div>
+      ) : (
+        <AccessDenied />
+      )}
     </>
   );
 };

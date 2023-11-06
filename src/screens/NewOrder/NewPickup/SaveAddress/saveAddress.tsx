@@ -17,7 +17,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   data: { pickupAddress, setPickupAddress, addressLabel },
 }) => {
   const [isRightAddressTypeModal, setIsRightAddressTypeModal] = useState(false);
-  console.log("pickupAddress>>", pickupAddress);
   const address =
     addressLabel === "Return Address"
       ? pickupAddress.returnAddress
@@ -39,9 +38,6 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
   const handleAddressTypeSelected = (addressName: string) => {
     setCustomAddressType(addressName);
   };
-
-  console.log("addressName", customAddressType);
-
   useEffect(() => {
     if (
       address?.addressType &&

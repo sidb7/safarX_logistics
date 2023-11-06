@@ -107,7 +107,7 @@ const PickupLocation = () => {
         emailId: "",
         type: "warehouse associate",
       },
-      pickupDate: 0,
+      pickupDate: "",
     },
     returnAddress: {
       fullAddress: "",
@@ -178,29 +178,57 @@ const PickupLocation = () => {
     return false;
   };
 
-  console.log("pickupState", pickupDate);
+  const isContactObjectEmpty = (obj: any) => {
+    for (const key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        if (
+          key === "emailId" ||
+          key === "alternateMobileNo" ||
+          key === "type"
+        ) {
+          continue;
+        }
+
+        if (typeof obj[key] === "object") {
+          if (!isObjectEmpty(obj[key])) {
+            return false;
+          }
+        } else if (
+          obj[key] === "" ||
+          obj[key] === null ||
+          obj[key] === undefined
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const postPickupOrderDetails = async () => {
     try {
       const isPickupAddressValid = !isObjectEmpty(pickupAddress.pickupAddress);
       const isReturnAddressValid = !isObjectEmpty(pickupAddress.returnAddress);
 
-      const isContactDetailsValid = !isObjectEmpty(
+      const isContactDetailsValid = !isContactObjectEmpty(
         pickupAddress.pickupAddress.contact
       );
-      const isContactDetailsReturnValid = !isObjectEmpty(
+      const isContactDetailsReturnValid = !isContactObjectEmpty(
         pickupAddress.returnAddress.contact
       );
 
       const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      console.log("pickupaddressPostApicall", pickupAddress);
-      console.log("validPickup", isPickupAddressValid);
-      console.log("isContactDetailsValid", isContactDetailsValid);
-      console.log("isPickupDateValid", isPickupDateValid);
+      // console.log("isPickuPDateValid", isPickupDateValid);
+      // console.log("pickupAddress", pickupAddress);
 
+      // console.log("isPickupAddValid", isPickupAddressValid);
       if (
-        (!isPickupAddressValid && !isReturnAddressValid) ||
+        !isPickupAddressValid ||
         !isContactDetailsValid ||
-        !isContactDetailsReturnValid
+        !isPickupDateValid ||
+        (!isReturnAddress &&
+          !isReturnAddressValid &&
+          !isContactDetailsReturnValid)
       ) {
         setInputError(true);
         return;
@@ -283,7 +311,7 @@ const PickupLocation = () => {
                 emailId: orderData?.pickupAddress?.contact?.emailId,
                 type: orderData?.pickupAddress?.contact?.type,
               },
-              pickupDate: 0,
+              pickupDate: "",
             },
             returnAddress: {
               fullAddress: orderData?.returnAddress?.fullAddress,
@@ -357,8 +385,6 @@ const PickupLocation = () => {
       getReturningUserPickupDetails();
     }
   }, [userType]);
-
-  console.log("inputErrorState", inputError);
 
   return (
     <>
