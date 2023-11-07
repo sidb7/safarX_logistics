@@ -13,17 +13,18 @@ const App = () => {
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
   );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setRoomName(`${sessionStorage.getItem("sellerId")}`);
     if (roomName) {
-      socketCallbacks.connectSocket(roomName);
+      socketCallbacks.connectSocket(dispatch);
     }
 
     return () => {
       socketCallbacks.disconnectSocket();
     };
   }, []);
+
   return (
     <div>
       <MyRoutes />
