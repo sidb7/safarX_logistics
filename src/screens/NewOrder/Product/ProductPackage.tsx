@@ -558,6 +558,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     setBoxIndex={setBoxIndex}
                     openPackageDetailModal={handleOpenPackageDetails}
                     setCheckBoxValuePerBox={handleCheckBoxValuePerBox}
+                    orderType={orderType}
                   />
                 );
               })}
