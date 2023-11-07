@@ -388,18 +388,18 @@ const SyPerfromance = (props: any) => {
 
   return (
     <div className="m-4">
-      <div className="flex justify-between gap-4 !mt-4 mb-10">
+      <div className="flex justify-between gap-4 !mt-4 mb-10 overflow-x-scroll ">
         {ordersArr?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            className="w-[17rem] rounded-lg border-2 lg:overflow-hidden"
             key={i}
           >
-            <div className="flex justify-between px-6 py-4">
+            <div className="flex justify-between w-[226px] lg:w-auto p-3  lg:px-6 lg:py-4">
               <div>
                 <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
                   {order?.count}
                 </div>
-                <p className="text-[#1C1C1C] font-normal text-base">
+                <p className="text-[#494949] font-Open text-sm font-normal leading-5  ">
                   {order?.text}
                 </p>
               </div>
@@ -410,54 +410,56 @@ const SyPerfromance = (props: any) => {
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
-        <h1 className="text-[1.375rem] font-Lato font-semibold capitalize">
+      <div className="lg:flex lg:justify-between mt-4">
+        <h1 className="lg:mt-3 text-sm font-Open lg:text-[1.375rem] lg:font-Lato font-semibold capitalize">
           Top Performing Partners (orders & Revenue)
         </h1>
-        <div>
+        <div className="mt-4 lg:mt-0 lg:self-start">
           <CustomDropDown
             onChange={(e) => {}}
             options={yearArr}
             heading="Top to Least"
+            selectClassName=" !rounded-lg lg:!rounded-md"
           />
         </div>
       </div>
-      <div className="flex justify-between gap-4 !mt-4 mb-10">
+      <div className="flex justify-between gap-x-4 !mt-4 mb-10 overflow-x-scroll ">
         {orderRevenue?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] h-[8.75rem] rounded-lg border-2  px-4 py-2 overflow-hidden"
+            className="w-[17rem] rounded-lg border-2  px-0 pb-[10px] lg:overflow-hidden"
             key={i}
           >
-            <div className="flex justify-between">
+            <div className="flex justify-between w-[226px] lg:w-auto px-2 py-3 lg:p-4">
               <div>
-                <span className="text-[0.875rem] font-Open font-normal">
+                <span className="text-[0.875rem] font-Open font-normal leading-5">
                   Orders
                 </span>
-                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
+                <div className="font-bold font-Lato text-[#1C1C1C] text-[1.5rem] lg:text-[2rem] lg:leading-7">
                   {order?.orderCount}
                 </div>
               </div>
               <div>
-                <span className="text-[0.875rem] font-Open font-normal">
+                <span className="text-[0.875rem] font-Open font-normal leading-5">
                   Revenue
                 </span>
-                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
+                <div className="font-bold font-Lato text-[#1C1C1C] text-[1.5rem] lg:text-[2rem] lg:leading-7">
                   {order?.revenue}
                 </div>
               </div>
-              <div className="self-center">
+              <div className="">
                 <img src={order?.img} alt="Box" />
               </div>
             </div>
             <div>
-              <span className="text-[1rem] font-Open font-normal">
+              <span className="text-[1rem] font-Open font-normal leading-[22px] pl-4">
                 Delivery
               </span>
             </div>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+
+      <div className="grid grid-cols-1 roun lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <TableDetails
           text="Proper Order Location"
           img={LocationIcon}
@@ -472,7 +474,7 @@ const SyPerfromance = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <BarChart
           text="Order Details"
           img={Box}
@@ -486,7 +488,7 @@ const SyPerfromance = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="flex border-2 w-full mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <TableDetails
           text="COD"
           img={Layer}
