@@ -24,7 +24,12 @@ const PieChart = (props: IBarChart) => {
           isOpen ? "" : "h-[40px]"
         }  lg:h-[3.125rem] px-4 py-2 lg:py-0 lg:px-2  bg-[#F6F6F6]`}
       >
-        <div className="flex items-center justify-between mb-6 lg:mb-0">
+        <div
+          className="flex items-center justify-between mb-6 lg:mb-0"
+          onClick={() => {
+            setIsOpen(!isOpen);
+          }}
+        >
           <div className="flex items-center">
             <img src={img} alt="AnalyticsIcon" />
             <span className="text-sm  md:text-[1rem] font-Open font-semibold text-[#1C1C1C] ml-2 lg:ml-4">
@@ -36,9 +41,6 @@ const PieChart = (props: IBarChart) => {
             src={isOpen ? UpArrowIcon : DownArrowIcon}
             alt=""
             className="cursor-pointer lg:hidden"
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
           />
         </div>
         <div
@@ -49,6 +51,7 @@ const PieChart = (props: IBarChart) => {
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
+            selectClassName="!h-9 !rounded-lg lg:!rounded"
           />
         </div>
       </div>
