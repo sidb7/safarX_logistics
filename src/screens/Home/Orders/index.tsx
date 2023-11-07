@@ -359,7 +359,7 @@ const Orders = (props: any) => {
             className="w-[17rem] lg:h-[6.6rem]  rounded-lg lg:overflow-hidden border-2 "
             key={i}
           >
-            <div className="flex justify-between w-[226px] lg:w-[272px] p-3  lg:px-6 lg:py-4  ">
+            <div className="flex items-center justify-between min-w-[226px] p-3   lg:px-6 lg:py-4  ">
               <div>
                 <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
                   {order?.count}
