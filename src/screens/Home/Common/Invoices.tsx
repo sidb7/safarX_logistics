@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomDropDown from "../../../components/DropDown";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 interface IInvoices {
   text?: string;
@@ -10,6 +11,8 @@ interface IInvoices {
 
 const Invoices = (props: IInvoices) => {
   const { text, img, data, yearArr } = props;
+  const { isLgScreen } = ResponsiveState();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <div
