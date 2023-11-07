@@ -37,6 +37,20 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     render(id);
   };
 
+  const GetCurrentPath = () => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const location = url;
+    const path = location.pathname;
+    const pathArray = path.split("/");
+    const removedFirstPath = pathArray.slice(1);
+    return removedFirstPath;
+  };
+
+  const data = GetCurrentPath() as any;
+
+  console.log("data", data);
+
   useEffect(() => {
     if (renderingComponents === 0) {
       setIsActive(checkPageAuthorized("Invoices"));
@@ -44,6 +58,9 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
       setIsActive(checkPageAuthorized("Credit Notes"));
     }
   }, [renderingComponents]);
+
+  const defaultTabIndex = data.includes("invoices") ? 0 : 1;
+  console.log("defaulttabindex", defaultTabIndex);
 
   return (
     <>
@@ -56,7 +73,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
                 arrayData={arrayData}
                 showNumber={false}
                 setScrollIndex={setScrollIndex}
-                defaultIndexValue={1}
+                defaultIndexValue={defaultTabIndex}
               />
             </div>
             <div>
@@ -66,7 +83,11 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             </div>
           </div>
           <div className="mx-4">
-            {renderingComponents === 0 ? <InvoiceData /> : <CreditNoteData />}
+            {renderingComponents === 0 && defaultTabIndex === 0 ? (
+              <InvoiceData />
+            ) : (
+              <CreditNoteData />
+            )}
           </div>
         </div>
       ) : (
