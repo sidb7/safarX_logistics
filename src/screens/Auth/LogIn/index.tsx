@@ -30,6 +30,7 @@ import {
 import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
 import ForgotPassword from "./ForgotPassword";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import { socketCallbacks } from "../../../Socket";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -72,6 +73,17 @@ const Index = () => {
         response?.data[0]?.token
       );
 
+      const token = sessionStorage.getItem("sellerId")
+        ? `${sessionStorage.getItem(
+            "sellerId"
+          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+        : "";
+
+      if (token !== "") {
+        console.log("socketConnectedAfterlogin");
+        socketCallbacks.connectSocket(dispatch);
+      }
+
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");
@@ -111,6 +123,20 @@ const Index = () => {
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
       );
+
+      const token = sessionStorage.getItem("sellerId")
+        ? `${sessionStorage.getItem(
+            "sellerId"
+          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+        : "";
+
+      console.log("tokenafterlogin", token);
+
+      if (token !== "") {
+        console.log("socketConnectedAfterlogin");
+        socketCallbacks.connectSocket(dispatch);
+      }
+
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");
