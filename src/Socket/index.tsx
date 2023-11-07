@@ -40,14 +40,14 @@ const connectSocket = (dispatch?: any) => {
   if (token !== "") {
     socket = initSocket();
 
-    socket.emit("joinRoom", sellerId);
+    socket.emit("joinRoom", `${sellerId}`);
 
     socket.on("wallet_balance_update", (newBalance: string) => {
       console.log("newWalletBalance", newBalance);
       dispatch(setWalletBalance({ amt: Number(newBalance) }));
     });
 
-    socket.on("bulkOrderFailed", (data) => {
+    socket.on("bulkOrderFailed", (data: any) => {
       console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
       GlobalToast(data);
     });
