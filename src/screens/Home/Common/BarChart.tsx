@@ -18,7 +18,6 @@ const BarChart = (props: IBarChart) => {
   const { text, img, data, yearArr } = props;
   const { isLgScreen } = ResponsiveState();
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
       <div
@@ -61,7 +60,6 @@ const BarChart = (props: IBarChart) => {
       ) : (
         isOpen && <BarChartComponent data={data} />
       )}
-      {/* <BarChartComponent data={data} /> */}
     </div>
   );
 };

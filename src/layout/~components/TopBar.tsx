@@ -205,30 +205,30 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
     navigate("/");
   };
 
-  const socket = initSocket();
+  // const socket = initSocket();
 
-  useEffect(() => {
-    if (socket) {
-      console.log("socketwallet", socket);
-      socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
-      socket.on("wallet_balance_update", (newBalance: string) => {
-        console.log("newWalletBalance", newBalance);
-        dispatch(setWalletBalance({ amt: Number(newBalance) }));
-      });
-      socket.on("bulkOrderFailed", (data) => {
-        console.log(
-          `Received bulk order failed event: ${JSON.stringify(data)}`
-        );
-        GlobalToast(data);
-      });
+  // useEffect(() => {
+  //   if (socket) {
+  //     console.log("socketwallet", socket);
+  //     socket.emit("joinRoom", `${sessionStorage.getItem("sellerId")}`);
+  //     socket.on("wallet_balance_update", (newBalance: string) => {
+  //       console.log("newWalletBalance", newBalance);
+  //       dispatch(setWalletBalance({ amt: Number(newBalance) }));
+  //     });
+  //     socket.on("bulkOrderFailed", (data) => {
+  //       console.log(
+  //         `Received bulk order failed event: ${JSON.stringify(data)}`
+  //       );
+  //       GlobalToast(data);
+  //     });
 
-      return () => {
-        if (socket) {
-          socket.off("wallet_balance_update");
-        }
-      };
-    }
-  }, []);
+  //     return () => {
+  //       if (socket) {
+  //         socket.off("wallet_balance_update");
+  //       }
+  //     };
+  //   }
+  // }, []);
 
   return (
     <>

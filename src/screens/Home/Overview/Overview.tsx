@@ -143,26 +143,26 @@ export const Overview = (props: IOverview) => {
           Important Today
         </span>
       </div>
-      <div className="flex justify-between !mt-4 gap-4 mb-10">
+      <div className="flex justify-between !mt-4 gap-4 mb-10 overflow-x-scroll">
         {ordersArr?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            className="w-[17rem] h-[6.6rem] rounded-lg border-2 lg:overflow-hidden"
             key={i}
           >
-            <div className="px-6 py-4">
-              <div className="font-bold font-Lato mb-2 text-[#F57960] text-[2rem]">
+            <div className="px-3 py-2 flex flex-col w-[226px] lg:w-[272px] lg:p-0  lg:px-6 lg:py-2 ">
+              <div className="font-bold font-Lato mb-1 text-[#F57960] text-[22px] text-[2rem]">
                 {order?.count}
               </div>
-              <p className="text-[#1C1C1C] font-normal text-base">
+              <p className="text-[#1C1C1C] font-normal lg:text-base font-Open text-sm">
                 {order?.text}
               </p>
             </div>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 border-2 rounded-lg shadow-xl">
+      <div className="grid grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-0 lg:gap-4  mt-4 rounded-lg">
         <SimpleChart yearArr={yearArr} />
-        <div className="mt-[3.125rem] p-4 space-y-[60px]">
+        <div className="mt-0 lg:mt-[3.125rem] p-4 space-y-[60px]">
           <div>
             <div className="flex justify-between">
               <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
@@ -192,7 +192,7 @@ export const Overview = (props: IOverview) => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-4   mt-4 rounded-lg">
         <BarChart
           text="Order Details"
           img={Box}
@@ -206,7 +206,7 @@ export const Overview = (props: IOverview) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-4 mt-4 rounded-lg">
         <BarChart
           text="Weight Discrenpancy"
           img={Box}
@@ -215,7 +215,7 @@ export const Overview = (props: IOverview) => {
         />
         <BarChart text="COD" img={Box} data={orderArr} yearArr={yearArr} />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-4 mt-4 rounded-lg">
         <BarChart2
           text="TAT Performance"
           img={Box}
@@ -224,7 +224,7 @@ export const Overview = (props: IOverview) => {
         />
         <PieChart text="COD" img={Box} data={piedata} yearArr={yearArr} />
       </div>
-      <div className="border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="border-2 gap-4 mt-4 rounded-lg">
         <Locations
           text="TAT Performance"
           img={Box}
@@ -232,7 +232,7 @@ export const Overview = (props: IOverview) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-4 mt-4 rounded-lg">
         <Invoices
           text="Invoices"
           img={InvoiceIcon}

@@ -18,7 +18,12 @@ const PieChart = (props: IBarChart) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
+    <div
+      className={`border-[1px] border-[#E8E8E8] rounded-lg`}
+      onClick={() => {
+        setIsOpen(!isOpen);
+      }}
+    >
       <div
         className={`flex flex-col lg:flex-row lg:justify-between lg:items-center ${
           isOpen ? "" : "h-[40px]"

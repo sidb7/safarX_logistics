@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 interface IpropTypes {
   data?: any;
@@ -16,10 +17,11 @@ interface IpropTypes {
 
 export default function SimpleLineChart(props: IpropTypes) {
   const { data } = props;
+  const { isLgScreen } = ResponsiveState();
 
   return (
     <>
-      <ResponsiveContainer width="100%" height="90%">
+      <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
         <LineChart
           width={600}
           height={200}
