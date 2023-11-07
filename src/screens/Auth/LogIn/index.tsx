@@ -73,6 +73,17 @@ const Index = () => {
         response?.data[0]?.token
       );
 
+      const token = sessionStorage.getItem("sellerId")
+        ? `${sessionStorage.getItem(
+            "sellerId"
+          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+        : "";
+
+      if (token !== "") {
+        console.log("socketConnectedAfterlogin");
+        socketCallbacks.connectSocket(dispatch);
+      }
+
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");
