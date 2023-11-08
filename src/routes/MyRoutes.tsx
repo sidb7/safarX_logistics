@@ -152,6 +152,7 @@ import BankProtected from "../components/ProtectedRoutes/BankProtected";
 //Public
 //PublicTracking
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
+import InvoicePdf from "../screens/Invoice";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -525,6 +526,14 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <Invoice />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/billing/invoice/:id"
+              element={
+                <ProtectedRoute>
+                  <InvoicePdf />
                 </ProtectedRoute>
               }
             />
