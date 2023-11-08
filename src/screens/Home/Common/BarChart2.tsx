@@ -25,12 +25,7 @@ const BarChart2 = (props: IBarChart) => {
 
   return (
     <>
-      <div
-        className={`border-[1px] border-[#E8E8E8] rounded-lg `}
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
-      >
+      <div className={`border-[1px] border-[#E8E8E8] rounded-lg `}>
         <div
           className={`flex flex-col lg:flex-row lg:justify-between lg:items-center ${
             isOpen ? "" : "h-[40px]"
@@ -48,6 +43,9 @@ const BarChart2 = (props: IBarChart) => {
               src={isOpen ? UpArrowIcon : DownArrowIcon}
               alt=""
               className="cursor-pointer lg:hidden"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
             />
           </div>
 
