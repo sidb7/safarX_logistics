@@ -25,12 +25,7 @@ const BarChart2 = (props: IBarChart) => {
 
   return (
     <>
-      <div
-        className={`border-[1px] border-[#E8E8E8] rounded-lg `}
-        onClick={() => {
-          setIsOpen(!isOpen);
-        }}
-      >
+      <div className={`border-[1px] border-[#E8E8E8] rounded-lg `}>
         <div
           className={`flex flex-col lg:flex-row lg:justify-between lg:items-center ${
             isOpen ? "" : "h-[40px]"
@@ -39,7 +34,7 @@ const BarChart2 = (props: IBarChart) => {
           <div className="flex items-center justify-between mb-6 lg:mb-0  ">
             <div className="flex items-center">
               <img src={img} alt="AnalyticsIcon" />
-              <span className=" text-sm md:text-[1rem]   font-Open font-semibold text-[#1C1C1C] ml-2 lg:ml-4">
+              <span className="text-[1rem] font-Open font-semibold text-[#1C1C1C] leading-[22px] ml-2">
                 {text}
               </span>
             </div>
@@ -48,6 +43,9 @@ const BarChart2 = (props: IBarChart) => {
               src={isOpen ? UpArrowIcon : DownArrowIcon}
               alt=""
               className="cursor-pointer lg:hidden"
+              onClick={() => {
+                setIsOpen(!isOpen);
+              }}
             />
           </div>
 
@@ -59,6 +57,7 @@ const BarChart2 = (props: IBarChart) => {
               options={yearArr}
               heading="Select Filter"
               wrapperClass="!bg-white"
+              selectClassName="!h-9 !rounded-lg lg:!rounded !text-[#494949]"
             />
           </div>
         </div>
