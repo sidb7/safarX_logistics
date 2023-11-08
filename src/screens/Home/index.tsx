@@ -168,6 +168,7 @@ export const Home = (props: IOverview) => {
       .replace(/ /g, "-");
 
     const newUrl = `/dashboard/${filterNewUrl}`; // Specify the new URL here
+    console.log("newurldasboard", newUrl);
 
     window.history.pushState(null, "", newUrl);
     setRenderingComponents(id);
@@ -185,6 +186,7 @@ export const Home = (props: IOverview) => {
     };
 
     const data = GetCurrentPath() as any;
+    console.log("dataOverview", data);
 
     if (data[1] === "overview") {
       setRenderingComponents(0);

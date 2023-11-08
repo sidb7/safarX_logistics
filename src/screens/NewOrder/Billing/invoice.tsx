@@ -1,43 +1,61 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import InvoiceData from "./BillingData/invoiceData";
 import CreditNoteData from "./BillingData/creditNoteData";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
-import { ScrollNav } from "../../../components/ScrollNav";
 import { SearchBox } from "../../../components/SearchBox";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 
 interface IInvoiceProps {}
 
+interface ITab {
+  statusName: string;
+  index: number;
+}
+
 const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
-  const [totalItemCount, setTotalItemCount] = useState(10);
-  const [renderingComponents, setRenderingComponents] = useState(0);
-  const arrayData = [{ label: "Invoice" }, { label: "Credit Note" }];
+  const [totalItemCount, setTotalItemCount] = useState<number>(10);
+  const [renderingComponents, setRenderingComponents] = useState<number>(0);
   const [isActive, setIsActive] = useState<any>(false);
 
-  const render = (id: any) => {
-    if (id === 0) {
-      navigate("/billing/invoices");
-    } else if (id === 1) {
-      navigate("/billing/credit-notes");
-    }
-  };
-
-  //on page change index
-  const onPageIndexChange = () => {};
-
-  // on per page item change
-  const onPerPageItemChange = () => {};
+  const listTab: ITab[] = useMemo(
+    () => [
+      {
+        statusName: "Invoices",
+        index: 0,
+      },
+      {
+        statusName: "Credit Notes",
+        index: 1,
+      },
+    ],
+    []
+  );
 
   const setScrollIndex = (id: number) => {
-    setRenderingComponents(id);
+    const filterName = listTab.find((array) => array.index === id);
+    const filterNewUrl = filterName?.statusName
+      .toLocaleLowerCase()
+      .replace(/ /g, "-");
 
-    render(id);
+    const newUrl = `/billing/${filterNewUrl}`;
+
+    window.history.pushState(null, "", newUrl);
+    setRenderingComponents(id);
   };
 
-  const GetCurrentPath = () => {
+  const renderComponent = () => {
+    if (renderingComponents === 0) {
+      return <InvoiceData />;
+    } else if (renderingComponents === 1) {
+      return <CreditNoteData />;
+    }
+    return null;
+  };
+
+  const getCurrentPath = () => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
     const location = url;
@@ -47,20 +65,49 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     return removedFirstPath;
   };
 
-  const data = GetCurrentPath() as any;
-
-  console.log("data", data);
+  const data = getCurrentPath() as string[];
 
   useEffect(() => {
-    if (renderingComponents === 0) {
+    if (data[1] === "invoices") {
       setIsActive(checkPageAuthorized("Invoices"));
+      setRenderingComponents(0);
+      setScrollIndex(0);
     } else {
       setIsActive(checkPageAuthorized("Credit Notes"));
+      setRenderingComponents(1);
+      setScrollIndex(1);
     }
-  }, [renderingComponents]);
+  }, [data]);
 
-  const defaultTabIndex = data.includes("invoices") ? 0 : 1;
-  console.log("defaulttabindex", defaultTabIndex);
+  const renderTabs = () => {
+    const tabs: React.ReactNode[] = [];
+    for (let index = 0; index < listTab.length; index++) {
+      const { statusName } = listTab[index];
+      tabs.push(
+        <div
+          className={`flex lg:justify-center items-center border-b-2 cursor-pointer border-[#777777] px-4
+            ${renderingComponents === index && "!border-[#004EFF]"}
+          `}
+          onClick={() => {
+            sessionStorage.setItem("billingTab", statusName);
+            setScrollIndex(index);
+          }}
+          key={index}
+        >
+          <span
+            className={`text-[#777777] text-[14px] lg:text-[18px]
+              ${
+                renderingComponents === index &&
+                "!text-[#004EFF] lg:text-[18px]"
+              }`}
+          >
+            {statusName}
+          </span>
+        </div>
+      );
+    }
+    return tabs;
+  };
 
   return (
     <>
@@ -68,13 +115,8 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
         <div>
           <Breadcrum label="Billing" />
           <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
-            <div>
-              <ScrollNav
-                arrayData={arrayData}
-                showNumber={false}
-                setScrollIndex={setScrollIndex}
-                defaultIndexValue={defaultTabIndex}
-              />
+            <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
+              {renderTabs()}
             </div>
             <div>
               <div>
@@ -82,16 +124,12 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
               </div>
             </div>
           </div>
-          <div className="mx-4">
-            {renderingComponents === 0 && defaultTabIndex === 0 ? (
-              <InvoiceData />
-            ) : (
-              <CreditNoteData />
-            )}
-          </div>
+          <div className="mx-4">{renderComponent()}</div>
         </div>
       ) : (
-        <AccessDenied />
+        <div>
+          <AccessDenied />
+        </div>
       )}
     </>
   );
