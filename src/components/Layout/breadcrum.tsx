@@ -57,7 +57,7 @@ export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
           </div>
         )}
       </div>
-      <div className="p-5">
+      <div className="pl-5 pt-5 pr-5 lg:p-5">
         <div className={`hidden lg:flex gap-x-2 pl-8 font-Lato `}>
           <div
             className={`flex items-center gap-x-2 cursor-pointer`}
@@ -121,7 +121,7 @@ export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
               onClick={() => navigate(-1)}
             />
 
-            <p className="pl-2 text-lg font-bold text-center  text-[#1C1C1C] lg:text-[28px] lg:font-Lato lg:font-semibold lg:leading-9 capitalize">
+            <p className="pl-2 text-lg font-bold text-center leading-6 text-[#1C1C1C] lg:text-[28px] font-Lato lg:font-semibold lg:leading-9 capitalize">
               {label}
             </p>
           </div>

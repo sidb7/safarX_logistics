@@ -526,7 +526,7 @@ const Exception = (props: any) => {
 
   return (
     <div className="m-4">
-      <div className="flex justify-between gap-4 !mt-4 mb-10 overflow-x-scroll">
+      <div className="flex justify-between gap-4 mt-6 mb-10 overflow-x-scroll">
         {ordersArr?.map((order: any, i: number) => (
           <div
             className="w-[17rem] lg:h-[6.6rem] rounded-lg border-2 lg:overflow-hidden"
@@ -584,7 +584,7 @@ const Exception = (props: any) => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1  lg:grid-cols-2 lg:border-2 gap-y-6 mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
+      <div className="grid grid-cols-1  lg:grid-cols-2 gap-y-6 mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
         <PieChart
           text="NDR Communication"
           img={Whatsapp}
@@ -598,7 +598,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2  gap-y-6  mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-y-6  mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
         <ComposedChart
           text="Seller Reponse"
           img={Profile}
@@ -612,7 +612,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 lg:gap-4 gap-y-6  mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4 gap-y-6  mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="Partner Wise RTO Ratio"
           img={PlanIcon}
@@ -626,7 +626,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid  grid-cols-1 lg:grid-cols-2 lg:border-2 lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
+      <div className="grid  grid-cols-1 lg:grid-cols-2 lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="Courier And Attempts"
           img={PaymnetIcon}
@@ -640,7 +640,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1  lg:grid-cols-2 lg:border-2 lg:gap-4  gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
+      <div className="grid grid-cols-1  lg:grid-cols-2 lg:gap-4  gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="RTO Initiated"
           img={VanWithoutBG}
@@ -654,7 +654,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2  lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2  lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <TableDetails
           text="Top RTO Customer"
           img={Layer}
@@ -670,7 +670,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="flex lg:border-2 w-full mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
+      <div className="flex w-full mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <TableDetails
           text="COD"
           img={Layer}
