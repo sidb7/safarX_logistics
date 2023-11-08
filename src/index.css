@@ -12,6 +12,19 @@
   padding: 0;
 }
 
+.fluid-table thead tr{
+  border-bottom: 1px solid #7f7f7f;
+  padding: 3mm;
+}
+
+.fluid-table td, th{
+  border-right: none !important;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f8f8f8;
+}
+
 @media screen and (min-width: 360px) {
   #my-tooltip-landing {
     width: 150px;
