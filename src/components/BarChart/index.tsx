@@ -1,4 +1,5 @@
 import React from "react";
+import { ResponsiveState } from "../../utils/responsiveState";
 import {
   BarChart,
   Bar,
@@ -18,9 +19,10 @@ interface IpropTypes {
 export const BarChartComponent = (props: IpropTypes) => {
   const { data } = props;
 
+  const { isLgScreen } = ResponsiveState();
   return (
     <>
-      <ResponsiveContainer width="100%" height="90%">
+      <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
         <BarChart
           width={600}
           height={500}

@@ -11,6 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 interface ISameDataComposedChart {
   data?: any;
@@ -18,8 +19,9 @@ interface ISameDataComposedChart {
 
 export const SameDataComposedChart = (props: ISameDataComposedChart) => {
   const { data } = props;
+  const { isLgScreen } = ResponsiveState();
   return (
-    <ResponsiveContainer width="100%" height="90%">
+    <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
       <ComposedChart
         width={500}
         height={400}

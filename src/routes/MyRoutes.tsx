@@ -196,49 +196,61 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/questionnaire/question1"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent1 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question2"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent2 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question3"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent3 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question4"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent4 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-welcome"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <WelcomeKyc />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-type"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycBusinessTypeScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -253,9 +265,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-form"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycSendOtpFormScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -281,9 +295,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-mobile-verify"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycMobileVerificationScreen />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -330,9 +346,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/kyc-aadhar-form"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <KycAadharForm />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
 
@@ -340,18 +358,22 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-main"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletMain />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
           {/**wallet details page */}
           <Route
             path="/onboarding/wallet-details"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletDetails />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
           {/**wallet payment page */}
@@ -359,9 +381,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-payment"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <WalletPayment />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
 
@@ -377,9 +401,11 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/recharge-payment"
             element={
-              <BankProtected>
+              // <BankProtected>
+              <ProtectedRoute>
                 <RechargePayment />
-              </BankProtected>
+              </ProtectedRoute>
+              // </BankProtected>
             }
           />
         </Route>

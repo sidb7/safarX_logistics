@@ -188,7 +188,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
             inputMode="numeric"
             onChange={(e) => {
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
-              handleContactChange("alternateMobileNo", e.target.value);
+              handleContactChange("alternateMobileNo", numericValue);
               setValidationError(
                 "alternateMobileNo",
                 validateAlternateMobileNo(numericValue)

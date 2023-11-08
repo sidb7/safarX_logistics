@@ -44,6 +44,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const walletBalance = props?.ProfileDetails?.walletBalance;
   const companyDisplayName = props?.ProfileDetails?.privateCompany?.name;
   const activePlanExpiry = props?.ProfileDetails?.activePlanExpiry;
+  const planStartDate = props?.ProfileDetails?.planStartDate;
   const [kycValue, setKycValue] = useState();
 
   useEffect(() => {
@@ -159,7 +160,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <div className="flex mt-2">
               <span className="text-[14px] text-[#494949]">
                 {/* Activited since Jun 2023 */}
-                {`Activated Since ${date_DD_MMM_YYY(activePlanExpiry)}`}
+                {`Activated Since ${date_DD_MMM_YYY(planStartDate)}`}
               </span>
             </div>
           </div>
@@ -198,7 +199,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
             </div>
             <div className="flex mt-2">
               <span className="font-Open font-normal text-sm text-[#1C1C1C] leading-[18px]">
-                {`Activated Since ${date_DD_MMM_YYY(activePlanExpiry)}`}
+                {`Activated Since ${date_DD_MMM_YYY(planStartDate)}`}
               </span>
             </div>
           </div>

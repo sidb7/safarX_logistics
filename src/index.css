@@ -25,6 +25,12 @@ tbody tr:nth-child(odd) {
   background-color: #f8f8f8;
 }
 
+@media screen and (min-width: 360px) {
+  #my-tooltip-landing {
+    width: 150px;
+  }
+}
+
 /* iframe {
   width: 360px !important;
   height: 100px !important;

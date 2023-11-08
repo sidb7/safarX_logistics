@@ -47,7 +47,7 @@ const CustomButton = (props: CustomButtonProps) => {
               alt=""
             />
           )}
-          <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+          <p className="buttonClassName md:text-[14px] whitespace-nowrap">
             {text}
           </p>
         </button>

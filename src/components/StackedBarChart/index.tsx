@@ -12,14 +12,17 @@ import {
   Bar,
 } from "recharts";
 
+import { ResponsiveState } from "../../utils/responsiveState";
+
 interface IBarChart {
   data?: any;
 }
 
 const StackedBarChart = (props: IBarChart) => {
   const { data } = props;
+  const { isLgScreen } = ResponsiveState();
   return (
-    <ResponsiveContainer width="100%" height="90%">
+    <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
       <BarChart
         width={500}
         height={300}

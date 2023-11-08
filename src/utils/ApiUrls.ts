@@ -237,7 +237,7 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
+const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
 
 //feedback
 //feedback
