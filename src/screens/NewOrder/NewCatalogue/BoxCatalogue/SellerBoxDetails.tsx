@@ -19,11 +19,16 @@ interface ISellerBoxDetailsProps {
   setSellerBoxDetailsModal?: any;
   tempSellerBoxDetails?: any;
   updateBoxApi?: any;
+  isMobileView?: any;
 }
 
 const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
-  const { tempSellerBoxDetails, setSellerBoxDetailsModal, updateBoxApi } =
-    props;
+  const {
+    tempSellerBoxDetails,
+    setSellerBoxDetailsModal,
+    updateBoxApi,
+    isMobileView,
+  } = props;
   const [sellerBoxDetails, setSellerBoxDetails] = useState<any>({
     name: "",
     length: 0,
@@ -255,7 +260,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
         </div>
       </div>
       <div
-        className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+        className="flex justify-between lg:justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
         style={{ width: "-webkit-fill-available" }}
       >
         <ServiceButton
@@ -263,12 +268,16 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           onClick={() => {
             setSellerBoxDetailsModal(false);
           }}
-          className="bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 "
+          className={`${
+            isMobileView ? "w-[100%]" : ""
+          } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4  `}
         />
         <ServiceButton
           text={`${isEditMode ? "UPDATE" : "SAVE"}`}
           onClick={() => createAndUpdateSellerBoxDetails()}
-          className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
+          className={`${
+            isMobileView ? "w-[100%]" : ""
+          } bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2  lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
     </>

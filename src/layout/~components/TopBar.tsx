@@ -272,7 +272,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   <img src={WalletIcon} width={35} alt="" />
                   <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>₹</div>
-                    <div>{walletBalance}</div>
+                    <div>{walletBalance?.toLocaleString("en-IN")}</div>
                   </div>
                 </div>
               </div>
