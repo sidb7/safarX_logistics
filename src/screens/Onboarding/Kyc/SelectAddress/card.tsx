@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
 import EditIcon from "../../../../assets/OrderDetails/EditIcon.svg";
 interface ITypesProps {
@@ -53,6 +53,12 @@ const Card = (props: ITypesProps) => {
     setEditAdd(-1);
     updatedAddress(updateTempAdd, index);
   };
+
+  useEffect(() => {
+    if (doctype === "OTHERS") {
+      editAddress(index);
+    }
+  }, []);
 
   return (
     <>

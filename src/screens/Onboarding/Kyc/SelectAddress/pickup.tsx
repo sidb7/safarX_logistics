@@ -119,95 +119,96 @@ const PickUp = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div 
-      className={`${
-        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
-      }flex flex-col relative md:px-0 md:gap-y-0`}>
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-      <div className="">
-        <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-          <img src={CompanyLogo} alt="" />
-        </div>
-        <WelcomeHeader
-          className="!mt-[44px] md:!mt-6"
-          title="Welcome to Shipyaari"
-          content="Select your"
-          whichAddress="Pickup"
-          Address="Address"
-        />
+          <div className="">
+            <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+              <img src={CompanyLogo} alt="" />
+            </div>
+            <WelcomeHeader
+              className="!mt-[44px] md:!mt-6"
+              title="Welcome to Shipyaari"
+              content="Select your"
+              whichAddress="Pickup"
+              Address="Address"
+            />
 
-        <div className="!h-[calc(100%-300px)] overflow-y-auto">
-          <div className="w-full pl-4">
-            <div className="flex items-center justify-between  md:px-12 md:px-0 md:w-[320px]">
-              {/*commented as instructed */}
-              {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
+            <div className="!h-[calc(100%-300px)] overflow-y-auto">
+              <div className="w-full pl-4">
+                <div className="flex items-center justify-between  md:px-12 md:px-0 md:w-[320px]">
+                  {/*commented as instructed */}
+                  {/* <p className="font-Open font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p> */}
 
-              <AddButton
-                onClick={() => addAddress()}
-                text={"ADD ADDRESS"}
-                icon={PlusIcon}
-                showIcon={true}
-                className="!bg-transparent !border-0"
-                textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
-            {/* <div className="  space-y-3 mb-6 "> */}
-            {defaultAddress?.map((el: any, i: number) => {
-              return (
-                <div key={i} ref={bottomRef}>
-                  {el?.fullAddress !== "" && (
-                    <Card
-                      // onClick={(e) => setDefaultAddressSelect(e.target.value)}
-                      onClick={setDefaultAddressSelect}
-                      name="address"
-                      value={el}
-                      title={el?.fullAddress}
-                      updatedAddress={updatedAddress}
-                      index={i}
-                      checked={
-                        defaultAddressSelect?.addressId === el?.addressId
-                      }
-                      doctype={el?.doctype}
-                      titleClassName="!font-normal !text-[12px]"
-                      cardClassName="!mt-1 !cursor-pointer"
-                    />
-                  )}
+                  <AddButton
+                    onClick={() => addAddress()}
+                    text={"ADD ADDRESS"}
+                    icon={PlusIcon}
+                    showIcon={true}
+                    className="!bg-transparent !border-0"
+                    textClassName="!font-semibold !text-sm !leading-5 !font-Open"
+                  />
                 </div>
-              );
-            })}
-            {/* </div> */}
-          </div>
+              </div>
 
-          {isMdScreen ? (
-            <div className="flex mt-6  md:justify-center md:items-center  pb-12 ">
-              <ServiceButton
-                text="SUBMIT"
-                className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px]"
-                onClick={() => onSubmit()}
-              />
-            </div>
-          ) : (
-            <div
-              className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
-              style={{ width: "-webkit-fill-available" }}
-            >
-              <ServiceButton
-                text="SUBMIT"
-                className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
-                onClick={() => {
-                  // navigate("/account/kyc-photo");
-                  onSubmit();
-                }}
-              />
-            </div>
-          )}
+              <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
+                {/* <div className="  space-y-3 mb-6 "> */}
+                {defaultAddress?.map((el: any, i: number) => {
+                  return (
+                    <div key={i} ref={bottomRef}>
+                      {el?.fullAddress !== "" && (
+                        <Card
+                          // onClick={(e) => setDefaultAddressSelect(e.target.value)}
+                          onClick={setDefaultAddressSelect}
+                          name="address"
+                          value={el}
+                          title={el?.fullAddress}
+                          updatedAddress={updatedAddress}
+                          index={i}
+                          checked={
+                            defaultAddressSelect?.addressId === el?.addressId
+                          }
+                          doctype={el?.doctype}
+                          titleClassName="!font-normal !text-[12px]"
+                          cardClassName="!mt-1 !cursor-pointer"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+                {/* </div> */}
+              </div>
 
-          {/* {isLgScreen && (
+              {isMdScreen ? (
+                <div className="flex mt-6  md:justify-center md:items-center  pb-12 ">
+                  <ServiceButton
+                    text="SUBMIT"
+                    className="bg-[#1C1C1C] !h-[36px] text-white w-full mb-5 md:!w-[320px]"
+                    onClick={() => onSubmit()}
+                  />
+                </div>
+              ) : (
+                <div
+                  className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
+                  style={{ width: "-webkit-fill-available" }}
+                >
+                  <ServiceButton
+                    text="SUBMIT"
+                    className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
+                    onClick={() => {
+                      // navigate("/account/kyc-photo");
+                      onSubmit();
+                    }}
+                  />
+                </div>
+              )}
+
+              {/* {isLgScreen && (
             <div className="flex mt-6  lg:justify-center lg:items-center  pb-12 ">
               <ServiceButton
                 text="SUBMIT 3"
@@ -216,14 +217,14 @@ const PickUp = (props: ITypeProps) => {
               />
             </div>
           )} */}
-          {/* </div> */}
-          {/* {!isLgScreen && ( */}
+              {/* </div> */}
+              {/* {!isLgScreen && ( */}
 
-          {/* )} */}
-        </div>
+              {/* )} */}
+            </div>
 
-        {/* {!isLgScreen && ( */}
-        {/* <div
+            {/* {!isLgScreen && ( */}
+            {/* <div
           className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
           style={{ width: "-webkit-fill-available" }}
         >
@@ -235,9 +236,9 @@ const PickUp = (props: ITypeProps) => {
             }}
           />
         </div> */}
-        {/* )} */}
-      </div>
-      </div>
+            {/* )} */}
+          </div>
+        </div>
       </div>
     );
   };
@@ -246,19 +247,15 @@ const PickUp = (props: ITypeProps) => {
     if (isMdScreen) {
       return (
         <div className="mx-4">
-          
-            {loading ? (
-              <div className="flex justify-center items-center h-full">
-                <Spinner />
-              </div>
-            ) : (
-              <div className="flex justify-center items-center h-[100vh]">
-              {addressComponent()}
-              
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
             </div>
-              
-            )}
-          
+          ) : (
+            <div className="flex justify-center items-center h-[100vh]">
+              {addressComponent()}
+            </div>
+          )}
         </div>
       );
     } else {
