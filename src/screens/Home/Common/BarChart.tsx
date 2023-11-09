@@ -33,7 +33,7 @@ const BarChart = (props: IBarChart) => {
         >
           <div className="flex items-center">
             <img src={img} alt="AnalyticsIcon" />
-            <span className="text-sm  md:text-[1rem] font-Open font-semibold text-[#1C1C1C] ml-2 lg:ml-4">
+            <span className="text-[1rem] font-Open font-semibold text-[#1C1C1C] leading-[22px] ml-2">
               {text}
             </span>
           </div>

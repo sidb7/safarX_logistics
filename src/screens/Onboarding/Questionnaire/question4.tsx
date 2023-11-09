@@ -43,8 +43,9 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   // };
 
   function handleCheckBox(element: any, index: any) {
+    const { value = false } = element;
     let tempArr = questionsData;
-    tempArr[3].options[index].isChecked = element;
+    tempArr[3].options[index].isChecked = value;
     setQuestionsData([...tempArr]);
   }
 
@@ -138,9 +139,10 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                           <Checkbox
                             key={index}
                             onChange={(element) => {
-                              handleCheckBox(element.target.checked, index);
+                              handleCheckBox(element, index);
                             }}
                             checked={element.isChecked}
+                            name={element.value}
                             label={element.value}
                             style={{ accentColor: "black" }}
                           />

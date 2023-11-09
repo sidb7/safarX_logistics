@@ -387,8 +387,8 @@ const SyPerfromance = (props: any) => {
   ];
 
   return (
-    <div className="m-4">
-      <div className="flex justify-between gap-4 !mt-4 mb-10 overflow-x-scroll ">
+    <div className="">
+      <div className="flex justify-between gap-4 mt-6 mb-10 overflow-x-scroll ">
         {ordersArr?.map((order: any, i: number) => (
           <div
             className="w-[17rem] rounded-lg border-2 lg:overflow-hidden"
@@ -426,7 +426,7 @@ const SyPerfromance = (props: any) => {
       <div className="flex justify-between gap-x-4 !mt-4 mb-10 overflow-x-scroll ">
         {orderRevenue?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] rounded-lg border-2  px-0 pb-[10px] lg:overflow-hidden"
+            className="w-[17rem] rounded-lg border-2 px-0 pb-[10px] lg:overflow-hidden"
             key={i}
           >
             <div className="flex justify-between w-[226px] lg:w-auto px-2 py-3 lg:p-4">
@@ -459,7 +459,7 @@ const SyPerfromance = (props: any) => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 roun lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
+      <div className="grid grid-cols-1 roun lg:grid-cols-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <TableDetails
           text="Proper Order Location"
           img={LocationIcon}
@@ -474,7 +474,7 @@ const SyPerfromance = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <BarChart
           text="Order Details"
           img={Box}
@@ -488,7 +488,7 @@ const SyPerfromance = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-1 lg:border-2 gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
+      <div className="grid grid-cols-1  gap-y-6 lg:gap-4  mt-4 rounded-lg lg:shadow-xl mb-6 lg:mb-0">
         <TableDetails
           text="COD"
           img={Layer}
