@@ -11,6 +11,7 @@ interface IProps {
   disabled?: any;
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showCase?: boolean;
 }
 const Checkbox: React.FC<IProps> = ({
   label,
@@ -24,10 +25,12 @@ const Checkbox: React.FC<IProps> = ({
   value = false,
   style,
   required,
+  showCase = false,
 }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleCheckboxChange = (e: any) => {
+    if (showCase) return;
     if (disabled) return;
     setIsChecked(!isChecked);
     onChange({ ...e, name, value: !isChecked });
