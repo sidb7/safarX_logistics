@@ -509,7 +509,7 @@ const Tracking = () => {
                                   </div>
                                 </div>
                                 {each?.currentStatus === "CANCELLED" ? (
-                                  <div className="mt-4 flex justify-center text-white bg-[#80A7FF] border border-2 border-red-600 rounded-lg absoute top-10">
+                                  <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
                                     <p>Cancelled Order</p>
                                   </div>
                                 ) : (
