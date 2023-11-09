@@ -6,6 +6,7 @@ module.exports = {
       Lato: ["Lato", "sans-serif"],
       Noto: ["Noto Sans", "sans-serif"],
       Open: ["Open Sans", "sans-serif"],
+      Arial: ["arial", "sans-serif"],
     },
   },
   plugins: [],

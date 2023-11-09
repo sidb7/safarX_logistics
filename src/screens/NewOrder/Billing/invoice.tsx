@@ -6,6 +6,9 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { SearchBox } from "../../../components/SearchBox";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import { POST } from "../../../utils/webService";
+import { GET_ALL_INVOICES } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 interface IInvoiceProps {}
 
@@ -19,6 +22,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [totalItemCount, setTotalItemCount] = useState<number>(10);
   const [renderingComponents, setRenderingComponents] = useState<number>(0);
   const [isActive, setIsActive] = useState<any>(false);
+  const [invoiceArray, setInvoiceArray] = useState<any>([]);
 
   const listTab: ITab[] = useMemo(
     () => [
@@ -48,7 +52,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   const renderComponent = () => {
     if (renderingComponents === 0) {
-      return <InvoiceData />;
+      return <InvoiceData invoiceData={invoiceArray} />;
     } else if (renderingComponents === 1) {
       return <CreditNoteData />;
     }
@@ -109,6 +113,17 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     return tabs;
   };
 
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_ALL_INVOICES, {});
+      if (data?.success) {
+        setInvoiceArray(data?.data);
+      } else {
+        toast.error(data?.message);
+      }
+    })();
+  }, []);
+
   return (
     <>
       {isActive ? (
@@ -125,6 +140,13 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             </div>
           </div>
           <div className="mx-4">{renderComponent()}</div>
+          {/* <div className="mx-4">
+            {renderingComponents === 0 ? (
+              <InvoiceData invoiceData={invoiceArray} />
+            ) : (
+              <CreditNoteData />
+            )}
+          </div> */}
         </div>
       ) : (
         <div>
