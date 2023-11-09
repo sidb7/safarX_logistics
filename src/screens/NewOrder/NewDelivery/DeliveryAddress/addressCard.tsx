@@ -409,7 +409,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
                   const isValidGST = validateGST(gstValue);
                   setValidationErrorGST(
-                    isValidGST ? null : "Invalid GST number"
+                    isValidGST && !gstValue ? null : "Invalid GST number"
                   );
 
                   setDeliveryAddress((prevData: any) => ({
