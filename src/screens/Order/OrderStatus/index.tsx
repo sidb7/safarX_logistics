@@ -9,7 +9,17 @@ import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
-import { GET_ORDER_BY_ID, GET_SELLER_ORDER } from "../../../utils/ApiUrls";
+import {
+  FETCH_ALL_PARTNER,
+  FETCH_MANIFEST_DATA,
+  GET_ORDER_BY_ID,
+  GET_SELLER_ORDER,
+} from "../../../utils/ApiUrls";
+import CustomButton from "../../../components/Button";
+import { toast } from "react-toastify";
+import CustomDropDown from "../../../components/DropDown";
+import DatePicker from "react-datepicker";
+import CenterModal from "../../../components/CustomModal/customCenterModal";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -57,12 +67,74 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [statusId, setStatusId] = useState(0);
   const [filterModal, setFilterModal] = useState(false);
   const [searchedText, setSearchedText] = useState("");
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+  const [partnerMenu, setPartnerMenu] = useState<any>([]);
+  const [partnerValue, setPartnerValue] = useState<any>();
+  const [manifestModal, setManifestModal]: any = useState({
+    isOpen: false,
+  });
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false, value: "all" },
     { label: "Draft", isActive: false, value: "" },
     { label: "Failed", isActive: false, value: "failed" },
   ]);
+
+  const fetchManifest = async () => {
+    let varstartDate: any = startDate;
+    let varendDate: any = endDate;
+
+    let epochStartDate: any = new Date(varstartDate);
+    epochStartDate = epochStartDate.getTime() / 1000;
+    let epochEndDate: any = new Date(varendDate);
+    epochEndDate = epochEndDate.getTime() / 1000;
+
+    console.log("data :", partnerValue, epochStartDate, epochEndDate);
+    let payload = {
+      startDate: epochStartDate,
+      endDate: epochEndDate,
+      partnerName: partnerValue,
+    };
+    const data = await POST(FETCH_MANIFEST_DATA, payload, {
+      responseType: "blob", // Pass option data for pdf
+    });
+
+    var blob = new Blob([data?.data], { type: "application/pdf" });
+    var url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Manifest_Report.pdf`;
+    a.click();
+  };
+
+  const fetchPartnerList = async () => {
+    try {
+      const { data } = await POST(FETCH_ALL_PARTNER, {});
+
+      if (data?.success) {
+        let temp: any = [];
+        data?.data.map((partner: any, index: number) => {
+          let newData = {
+            label: partner.partnerName,
+            value: partner.partnerName,
+          };
+          temp.push(newData);
+        });
+        setPartnerMenu(temp);
+      } else {
+        throw new Error(data?.meesage);
+      }
+    } catch (error: any) {
+      toast.error(error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    fetchPartnerList();
+  }, []);
 
   const filterComponent = (className?: string) => {
     return (
@@ -149,6 +221,19 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+          {currentStatus === "BOOKED" && (
+            <>
+              <CustomButton
+                className="px-1 py-1 font-semibold text-[14px]"
+                text="Manfest Report"
+                onClick={() =>
+                  setManifestModal({ ...manifestModal, isOpen: true })
+                }
+                showIcon={true}
+                icon={""}
+              />
+            </>
+          )}
           <div>
             <SearchBox
               className="removePaddingPlaceHolder"
@@ -309,6 +394,59 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           </div>
         </RightSideModal>
       )}
+
+      <CenterModal
+        isOpen={manifestModal.isOpen}
+        onRequestClose={() => {}}
+        className="w-[50%] lg:w-[30%] h-[40%]"
+      >
+        <div className="h-full w-full">
+          <div
+            onClick={() =>
+              setManifestModal({ ...manifestModal, isOpen: false })
+            }
+            className="flex justify-end p-5 cursor-pointer"
+          >
+            <img
+              src="/static/media/CloseIcon.9de23f841ff625663fc738c4125c4fda.svg"
+              alt=""
+            />
+          </div>
+          <div className="grid grid-cols-2 p-4 gap-2">
+            <div className="w-[250px] md:w-[250px]">
+              <CustomDropDown
+                heading="Select Courier Partner"
+                value={partnerValue}
+                options={partnerMenu}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  setPartnerValue(event.target.value);
+                }}
+              />
+            </div>
+            <div className="w-[350px] md:w-[250px]">
+              <DatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update: any) => {
+                  setDateRange(update);
+                }}
+                isClearable={true}
+                placeholderText="Select From & To Date"
+                className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
+                dateFormat="dd/MM/yyyy"
+              />
+            </div>
+          </div>
+          <div className="mt-5 p-4">
+            <ServiceButton
+              text={"MANIFEST REPORT"}
+              className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
+              onClick={() => fetchManifest()}
+            />
+          </div>
+        </div>
+      </CenterModal>
     </div>
   );
 };
