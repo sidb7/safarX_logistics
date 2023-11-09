@@ -526,36 +526,37 @@ const Exception = (props: any) => {
 
   return (
     <div className="m-4">
-      <div className="flex justify-between gap-4 !mt-4 mb-10">
+      <div className="flex justify-between gap-4 mt-6 mb-10 overflow-x-scroll">
         {ordersArr?.map((order: any, i: number) => (
           <div
-            className="w-[17rem] h-[6.6rem] rounded-lg border-2 overflow-hidden"
+            className="w-[17rem] lg:h-[6.6rem] rounded-lg border-2 lg:overflow-hidden"
             key={i}
           >
-            <div className="flex justify-between px-6 py-4">
+            <div className="flex justify-between min-w-[226px] p-3 lg:px-6 lg:py-4">
               <div>
-                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[2rem]">
+                <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
                   {order?.count}
                 </div>
-                <p className="text-[#1C1C1C] font-normal text-base">
+                <p className="text-[#1C1C1C] font-normal font-Open text-sm lg:text-base">
                   {order?.text}
                 </p>
               </div>
-              <div className="self-center">
+              <div className="self-center  hidden lg:block">
                 <img src={objectIcon[order?.img]} alt="Box" />
               </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-2 border-2 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-6 mb-6 lg:mb-4  lg:gap-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="Total NDR"
           img={Box}
           data={orderArr}
           yearArr={yearArr}
+          ndr={true}
         />
-        <div className="mt-[3.125rem] p-4 space-y-[60px]">
+        <div className="lg:mt-[3.125rem] p-4 gap-6 lg:space-y-[60px] lg:grid grid-cols-2 lg:grid-cols-1 hidden ">
           <div>
             <div className="flex justify-between">
               <h1 className="text-[2rem] font-bold font-Lato">0</h1>
@@ -583,7 +584,7 @@ const Exception = (props: any) => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1  lg:grid-cols-2 gap-y-6 mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
         <PieChart
           text="NDR Communication"
           img={Whatsapp}
@@ -597,7 +598,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-y-6  mb-6 lg:mb-4 lg:gap-4  rounded-lg lg:shadow-xl">
         <ComposedChart
           text="Seller Reponse"
           img={Profile}
@@ -611,7 +612,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4 gap-y-6  mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="Partner Wise RTO Ratio"
           img={PlanIcon}
@@ -625,7 +626,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid  grid-cols-1 lg:grid-cols-2 lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="Courier And Attempts"
           img={PaymnetIcon}
@@ -639,7 +640,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1  lg:grid-cols-2 lg:gap-4  gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <BarChart2
           text="RTO Initiated"
           img={VanWithoutBG}
@@ -653,7 +654,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="grid grid-cols-2 border-2 gap-4 mt-4 rounded-lg shadow-xl">
+      <div className="grid grid-cols-1 lg:grid-cols-2  lg:gap-4 gap-y-6 mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <TableDetails
           text="Top RTO Customer"
           img={Layer}
@@ -669,7 +670,7 @@ const Exception = (props: any) => {
           yearArr={yearArr}
         />
       </div>
-      <div className="flex border-2 w-full mt-4 rounded-lg shadow-xl">
+      <div className="flex w-full mb-6 lg:mb-4 rounded-lg lg:shadow-xl">
         <TableDetails
           text="COD"
           img={Layer}

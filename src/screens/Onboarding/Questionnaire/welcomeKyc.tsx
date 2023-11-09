@@ -43,7 +43,8 @@ export const WelcomeKyc: React.FunctionComponent = () => {
   };
 
   function handleCheckBox(element: any, index: any) {
-    questionsData[4].options[index].isChecked = element;
+    const { value = false } = element;
+    questionsData[4].options[index].isChecked = value;
   }
 
   const question5 = () => {
@@ -61,7 +62,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 mt-10 md:grid md:grid-cols-2 md:mt-[32x] md:gap-x-4 md:mx-6 md:mb-[44px]">
+        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mx-6 md:mb-[44px]">
           <div>
             <WelcomeHeader
               welcomeLabel="For account activation kindly complete the KYC"
@@ -83,10 +84,12 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                     <Checkbox
                       key={index}
                       // disabled={true}
+                      showCase={true}
                       checked={true}
                       onChange={(element) => {
-                        handleCheckBox(element.target.checked, index);
+                        handleCheckBox(element, index);
                       }}
+                      name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
                     />

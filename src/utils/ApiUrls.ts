@@ -237,7 +237,7 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
+const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
 
 //feedback
 //feedback
@@ -250,6 +250,10 @@ const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 
 //Dashboard URL
 const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails`;
+
+//Invoice Download
+const INVOICE_DOWNLOAD_URL = `${SELLER_BASE_URL}/order/generateInvoicePDF`;
+const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -370,4 +374,6 @@ export {
   CREATE_FEEDBACK,
   GET_FEEDBACK,
   GET_DASHBOARD_INFO,
+  INVOICE_DOWNLOAD_URL,
+  GET_ALL_INVOICES,
 };

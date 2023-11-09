@@ -12,7 +12,6 @@ import { useMediaQuery } from "react-responsive";
 import { POST } from "../utils/webService";
 import { LOGOUT } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
-import { getSocket } from "../Socket";
 
 type Props = {};
 
@@ -41,8 +40,6 @@ export const CommonLayout = (props: Props) => {
       console.error(error);
     }
 
-    const socket = getSocket();
-    console.log("socket", socket);
     clearLocalStorage();
     sessionStorage.clear();
 

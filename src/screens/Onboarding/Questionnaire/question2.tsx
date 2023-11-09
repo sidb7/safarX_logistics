@@ -34,8 +34,9 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
   };
 
   function handleCheckBox(element: any, index: any) {
+    const { value = false } = element;
     let tempArr = questionsData;
-    tempArr[1].options[index].isChecked = element;
+    tempArr[1].options[index].isChecked = value;
     setQuestionsData([...tempArr]);
   }
 
@@ -83,7 +84,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 mt-[68px] md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
+        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
           <div>
             <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">
@@ -104,8 +105,9 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                       key={index}
                       checked={element?.isChecked}
                       onChange={(element) => {
-                        handleCheckBox(element.target.checked, index);
+                        handleCheckBox(element, index);
                       }}
+                      name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
                     />

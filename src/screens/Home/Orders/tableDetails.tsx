@@ -19,7 +19,12 @@ const TableDetails = (props: ITable) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
+    <div
+      className={`border-[1px] border-[#E8E8E8] rounded-lg`}
+      onClick={() => {
+        setIsOpen(!isOpen);
+      }}
+    >
       <div
         className={`flex flex-col lg:flex-row  lg:justify-between lg:items-center ${
           isOpen ? "" : "h-[40px]"
@@ -36,9 +41,6 @@ const TableDetails = (props: ITable) => {
             src={isOpen ? UpArrowIcon : DownArrowIcon}
             alt=""
             className="cursor-pointer lg:hidden"
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
           />
         </div>
         <div
@@ -49,6 +51,7 @@ const TableDetails = (props: ITable) => {
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
+            selectClassName="!h-9 !rounded-lg lg:!rounded !text-[#494949]"
           />
         </div>
       </div>
@@ -56,7 +59,11 @@ const TableDetails = (props: ITable) => {
       {isLgScreen ? (
         <CustomTable columns={col} data={data} />
       ) : (
-        isOpen && <CustomTable columns={col} data={data} />
+        isOpen && (
+          <div className="overflow-x-scroll">
+            <CustomTable columns={col} data={data} />
+          </div>
+        )
       )}
     </div>
   );

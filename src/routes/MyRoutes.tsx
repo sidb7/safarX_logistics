@@ -152,6 +152,7 @@ import BankProtected from "../components/ProtectedRoutes/BankProtected";
 //Public
 //PublicTracking
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
+import InvoicePdf from "../screens/Invoice";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -196,7 +197,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/questionnaire/question1"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <QuestionComponent1 />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -204,7 +207,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/questionnaire/question2"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <QuestionComponent2 />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -212,7 +217,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/questionnaire/question3"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <QuestionComponent3 />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -220,7 +227,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/questionnaire/question4"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <QuestionComponent4 />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -228,7 +237,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/kyc-welcome"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <WelcomeKyc />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -236,7 +247,9 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/kyc-type"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <KycBusinessTypeScreen />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -253,84 +266,90 @@ const MyRoutes: React.FC = () => {
             path="/onboarding/kyc-form"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <KycSendOtpFormScreen />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/select-address-billing"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <SelectAddressBilling />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/select-address-pickup"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <SelectAddressPickUp />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-mobile-verify"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <KycMobileVerificationScreen />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-terms/gst-agreement"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <GSTComponent />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-terms/service-agreement"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <ServiceComponent />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
 
           <Route
             path="/onboarding/kyc"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <KycModalScreen />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/select-address"
             element={
-              // <KycProtectedRoute>
-              <ProtectedRoute>
+              <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <SelectAddress />
-              </ProtectedRoute>
-              // </KycProtectedRoute>
+                {/* </ProtectedRoute> */}
+              </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-aadhar-form"
             element={
               <KycProtectedRoute>
+                {/* <ProtectedRoute> */}
                 <KycAadharForm />
+                {/* </ProtectedRoute> */}
               </KycProtectedRoute>
             }
           />
@@ -525,6 +544,14 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <Invoice />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/billing/invoice/:id"
+              element={
+                <ProtectedRoute>
+                  <InvoicePdf />
                 </ProtectedRoute>
               }
             />

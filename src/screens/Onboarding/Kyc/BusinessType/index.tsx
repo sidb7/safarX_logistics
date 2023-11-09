@@ -66,16 +66,18 @@ const BusinessType = (props: ITypeProps) => {
     return (
       <>
         {loading ? (
-          <Spinner />
+          <div className="flex justify-center items-center h-screen">
+            <Spinner />
+          </div>
         ) : (
           <div
             className={`${
-              isMdScreen ? " m-auto mt-[5%] !w-[500px] " : "w-full !h-full"
-            }flex flex-col relative lg:px-0 lg:gap-y-0`}
+              isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+            }flex flex-col relative md:px-0 md:gap-y-0`}
           >
             {/* {isLgScreen && modalTitle()} */}
-            <div className={`${isMdScreen ? "custom_shadow" : "product-box"}`}>
-              <div className=" flex justify-between items-center w-full h-[60px] top-0 pl-5">
+            <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+              <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
                 <img
                   className="my-auto  object-contain"
                   src={CompanyLogo}
@@ -88,13 +90,13 @@ const BusinessType = (props: ITypeProps) => {
               </div> */}
 
                 <WelcomeHeader
-                  className="!mt-[44px] lg:!mt-6"
+                  className="!mt-[44px] md:!mt-6"
                   title="Welcome to Shipyaari"
                   content="Kindly complete your KYC"
                 />
 
-                <div className="flex flex-col items-center gap-y-4 lg:justify-center mx-5 lg:mx-[90px] lg:mb-3">
-                  <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 lg:mb-7">
+                <div className="flex flex-col items-center gap-y-4 md:justify-center mx-5 md:mx-[90px] md:mb-3">
+                  <p className="font-semibold font-Lato text-center text-lg leading-6 text-[#1C1C1C] mb-7 md:mb-3">
                     Please confirm your business type
                   </p>
                   <Card
@@ -127,10 +129,10 @@ const BusinessType = (props: ITypeProps) => {
                     onClick={setChecked}
                   />
                 </div>
-                <div className="flex flex-col gap-y-4 mx-5 mt-4  lg:gap-y-3 lg:items-center lg:justify-center lg:pb-0 lg:mb-6">
+                <div className="flex flex-col gap-y-4 mx-5 mt-[96px] md:mt-6 md:gap-y-3 md:items-center md:justify-center md:pb-0 md:mb-3">
                   <ServiceButton
                     text="PROCEED FOR KYC"
-                    className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 lg:!w-[320px] "
+                    className="bg-[#1C1C1C] !font-Open !w-full text-white  !px-4 md:!w-[320px] "
                     onClick={() => {
                       onSubmitBusinessType();
                     }}
@@ -138,7 +140,7 @@ const BusinessType = (props: ITypeProps) => {
 
                   <ServiceButton
                     text="SKIP FOR NOW"
-                    className="!text-[#004EFF] !font-Open  underline !border-none mt-3"
+                    className="!text-[#004EFF] !font-Open  underline !border-none"
                     onClick={() => navigate("/dashboard/overview")}
                   />
                 </div>
@@ -163,20 +165,15 @@ const BusinessType = (props: ITypeProps) => {
   };
 
   const renderBusinessType = () => {
-    if (isLgScreen && openModal) {
+    if (isMdScreen) {
       return (
-        // <CenterModal
-        //   shouldCloseOnOverlayClick={false}
-        //   isOpen={openModal}
-        //   // onRequestClose={() => setOpenModal(false)}
-        //   className="!w-[500px] lg:!h-[700px]"
-        // >
-        businessTypeComponent()
-        // </CenterModal>
+        <div className="flex justify-center items-center h-screen">
+          {businessTypeComponent()}
+        </div>
       );
     } else {
       return loading ? (
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <div className="fixed top-2/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <Spinner />
         </div>
       ) : (

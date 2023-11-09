@@ -66,7 +66,7 @@ export const Breadcrum = ({
           </div>
         )}
       </div>
-      <div className="p-5">
+      <div className="pl-5 pt-5 pr-5 lg:p-5">
         <div className={`hidden lg:flex gap-x-2 pl-8 font-Lato `}>
           <div
             className={`flex items-center gap-x-2 cursor-pointer`}
