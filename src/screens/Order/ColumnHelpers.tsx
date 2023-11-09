@@ -1010,7 +1010,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                   data-tooltip-content="Open Tracking URL"
                   onClick={() =>
                     window.open(
-                      `${SELLER_WEB_URL}/shipyaari-tracking?tracking_no=${awb}`,
+                      `/shipyaari-tracking?trackingNo=${awb}`,
                       "_blank"
                     )
                   }
