@@ -258,6 +258,7 @@ const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 //Get all ParterList
 const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
+const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -382,4 +383,5 @@ export {
   GET_ALL_INVOICES,
   FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
+  FETCH_MANIFEST_REPORT_DATA,
 };
