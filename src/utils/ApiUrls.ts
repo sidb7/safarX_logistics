@@ -255,6 +255,10 @@ const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails
 const INVOICE_DOWNLOAD_URL = `${SELLER_BASE_URL}/order/generateInvoicePDF`;
 const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 
+//Get all ParterList
+const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
+const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
+
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -376,4 +380,6 @@ export {
   GET_DASHBOARD_INFO,
   INVOICE_DOWNLOAD_URL,
   GET_ALL_INVOICES,
+  FETCH_ALL_PARTNER,
+  FETCH_MANIFEST_DATA,
 };
