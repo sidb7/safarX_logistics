@@ -28,6 +28,7 @@ const Checkbox: React.FC<IProps> = ({
   const [isChecked, setIsChecked] = useState(checked);
 
   const handleCheckboxChange = (e: any) => {
+    if (disabled) return;
     setIsChecked(!isChecked);
     onChange({ ...e, name, value: !isChecked });
   };
@@ -38,7 +39,9 @@ const Checkbox: React.FC<IProps> = ({
 
   return (
     <div
-      className={`${checkboxClassName} ${className} cursor-pointer flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
+      className={`${checkboxClassName} ${className} ${
+        disabled ? "text-[gray] bg-gray-100" : ""
+      } cursor-pointer flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
       onClick={handleCheckboxChange}
     >
       <input

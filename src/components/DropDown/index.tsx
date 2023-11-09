@@ -64,7 +64,7 @@ const CustomDropDown = (props: IDropDownProps) => {
         </select>
         <label
           htmlFor="selectDropdown"
-          className={` text-[12px] text-[#777777] absolute ${
+          className={` text-[12px] text-[#777777] font-normal font-sans absolute ${
             value && "valueFilled"
           } `}
         >

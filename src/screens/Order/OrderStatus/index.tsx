@@ -151,6 +151,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
           <div>
             <SearchBox
+              className="removePaddingPlaceHolder"
               label="Search"
               value={searchedText}
               onChange={(e: any) => {

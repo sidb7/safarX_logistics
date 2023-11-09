@@ -152,6 +152,7 @@ import BankProtected from "../components/ProtectedRoutes/BankProtected";
 //Public
 //PublicTracking
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
+import InvoicePdf from "../screens/Invoice";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -195,41 +196,51 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/questionnaire/question1"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent1 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question2"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent2 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question3"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent3 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/questionnaire/question4"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <QuestionComponent4 />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
             path="/onboarding/kyc-welcome"
             element={
-              <KycProtectedRoute>
+              // <KycProtectedRoute>
+              <ProtectedRoute>
                 <WelcomeKyc />
-              </KycProtectedRoute>
+              </ProtectedRoute>
+              // </KycProtectedRoute>
             }
           />
           <Route
@@ -541,6 +552,14 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <Invoice />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/billing/invoice/:id"
+              element={
+                <ProtectedRoute>
+                  <InvoicePdf />
                 </ProtectedRoute>
               }
             />

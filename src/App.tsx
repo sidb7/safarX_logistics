@@ -2,36 +2,28 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MyRoutes from "./routes/MyRoutes";
-import { socketCallbacks } from "./Socket";
 import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
 import { GlobalToast } from "./components/GlobalToast/GlobalToast";
 import { useStore } from "react-redux";
 import { useDispatch } from "react-redux";
+import { setWalletBalance } from "./redux/reducers/userReducer";
+import { socketCallbacks } from "./Socket";
 const App = () => {
-  /* Socket code */
-
-  // const dispatch = useDispatch();
-  //let roomName = sessionStorage.getItem("sellerId");
-  //useSelector((state: any) => state?.roles?.roles[0]);
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
   );
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    setRoomName(`${sessionStorage.getItem("sellerId")}`);
     if (roomName) {
-      socketCallbacks.connectSocket(roomName);
+      socketCallbacks.connectSocket(dispatch);
     }
 
     return () => {
       socketCallbacks.disconnectSocket();
     };
   }, []);
-
-  // useEffect(() => {
-  //   GlobalToast("Welcome to the application!");
-  // }, []);
 
   return (
     <div>

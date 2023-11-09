@@ -158,7 +158,6 @@ const Index = (props: ITypeProps) => {
 
         if (businessType === "individual") {
           setLoading(false);
-          
         }
       } else {
         setLoading(false);
@@ -187,10 +186,8 @@ const Index = (props: ITypeProps) => {
         if (businessType === "business" || businessType === "company") {
           setLoading(false);
           sessionStorage.setItem("client_id", response.data[0].data.client_id);
-         
         } else {
           setLoading(false);
-          
         }
         setgstError("");
       } else {
@@ -253,7 +250,6 @@ const Index = (props: ITypeProps) => {
       else if (businessType === "business") {
         verifyGST(gstNumber);
       } else if (businessType === "company") {
-        
         verifyGST(gstNumber);
       } else {
         toast.error("Something Went Wrong!!");
@@ -310,8 +306,7 @@ const Index = (props: ITypeProps) => {
             toast.error(response?.message);
             setLoading(false);
           }
-        }
-        else if (businessType === "business") {
+        } else if (businessType === "business") {
           if (location?.state?.path === "aadhar-form") {
             const payload = { client_id: clientId, otp: Number(otpNumber) };
             setLoading(true);
@@ -333,7 +328,7 @@ const Index = (props: ITypeProps) => {
           } else {
             const payload = {
               gstIn: gstNumber,
-              client_id: clientId,
+              client_id: clientId_session,
               otp: Number(otpNumber),
             };
 
@@ -341,17 +336,16 @@ const Index = (props: ITypeProps) => {
             const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
             if (response?.success) {
               setLoading(false);
-              if (location?.state?.path === "otp-form") {
-                navigate("/onboarding/kyc-aadhar-form");
-              }
+              toast.success(response?.message);
+              // if (location?.state?.path === "otp-form") {
+              navigate("/onboarding/kyc-aadhar-form");
             } else {
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);
             }
           }
-        }
-        else if (businessType === "company") {
+        } else if (businessType === "company") {
           setLoading(true);
           const payload = {
             gstIn: gstNumber,
@@ -539,42 +533,41 @@ const Index = (props: ITypeProps) => {
                     )}
                   </div>
 
-                  
                   <div className={`${!isMdScreen ? "w-full" : ""}`}>
-                <CustomInputBox
-                containerStyle="md:!w-auto"
-                label="PAN Number"
-                value={panNumber}
-                maxLength={10}
-                isDisabled={
-                  businessType === "individual"
-                    ? false
-                    : panNumber !== undefined
-                }
-                className={`${
-                  panNumberError !== "" &&
-                  panNumberError !== undefined &&
-                  "border-[#F35838]"
-                }   md:!w-[320px] !font-Open`}
-                labelClassName="!font-Open"
-                onChange={(e) => {
-                  if (panRegex.test(e.target.value.toUpperCase())) {
-                    setPanNumberError("");
-                  } else {
-                    setPanNumberError("Enter Valid PAN Number");
-                  }
-                  setPanNumber(e.target.value.toUpperCase());
-                }}
-              />
-                {/* To display error */}
-                {panNumberError !== "" && panNumberError !== undefined && (
-                <div className="flex items-center gap-x-1 mt-1 ">
-                  <img src={ErrorIcon} alt="" width={10} height={10} />
-                  <span className="font-normal font-Open text-[#F35838] text-[10px]">
-                    {panNumberError}
-                  </span>
-                </div>
-              )}
+                    <CustomInputBox
+                      containerStyle="md:!w-auto"
+                      label="PAN Number"
+                      value={panNumber}
+                      maxLength={10}
+                      isDisabled={
+                        businessType === "individual"
+                          ? false
+                          : panNumber !== undefined
+                      }
+                      className={`${
+                        panNumberError !== "" &&
+                        panNumberError !== undefined &&
+                        "border-[#F35838]"
+                      }   md:!w-[320px] !font-Open`}
+                      labelClassName="!font-Open"
+                      onChange={(e) => {
+                        if (panRegex.test(e.target.value.toUpperCase())) {
+                          setPanNumberError("");
+                        } else {
+                          setPanNumberError("Enter Valid PAN Number");
+                        }
+                        setPanNumber(e.target.value.toUpperCase());
+                      }}
+                    />
+                    {/* To display error */}
+                    {panNumberError !== "" && panNumberError !== undefined && (
+                      <div className="flex items-center gap-x-1 mt-1 ">
+                        <img src={ErrorIcon} alt="" width={10} height={10} />
+                        <span className="font-normal font-Open text-[#F35838] text-[10px]">
+                          {panNumberError}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   {showGstOtpBox && (
                     <>
@@ -601,7 +594,6 @@ const Index = (props: ITypeProps) => {
                   )}
                 </>
               )}
-              
             </div>
             <div className="flex  md:justify-center md:items-center px-5 pb-12">
               {verifyOTP ? (
