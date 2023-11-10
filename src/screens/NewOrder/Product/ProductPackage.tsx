@@ -40,6 +40,7 @@ import AddPackageDetails from "./AddPackageDetails";
 import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { getQueryJson } from "../../../utils/utility";
+import AddProductPanel from "../NewCatalogue/ProductCatalogue/addProductNew";
 
 interface IPackageProps {}
 const steps = [
@@ -96,6 +97,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
+  const [isProductModal, setProductModal]: any = useState(false);
 
   const [combo, setCombo] = useState<any>(false);
   const [products, setProducts] = useState<any>([]);
@@ -514,9 +516,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
-                navigate(
-                  `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                );
+                setProductModal(true);
+                // navigate(
+                //   `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                // );
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -918,6 +921,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
         handlePackageDetails={handlePackageDetailsForProduct}
       />
+      <AddProductPanel
+        isProductModal={isProductModal}
+        setProductModal={setProductModal}
+      ></AddProductPanel>
     </div>
   );
 };
