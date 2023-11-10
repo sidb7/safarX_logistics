@@ -115,6 +115,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
@@ -252,6 +259,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 ref={inputRef}
                 type="text"
                 value={pastedData}
+                onKeyDown={handleKeyDown}
                 onChange={handleChange}
                 className="magicAddressInput"
                 style={{
