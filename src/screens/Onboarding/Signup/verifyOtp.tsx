@@ -28,7 +28,7 @@ const Index = () => {
 
   const [otp, setOtp] = useState<any>({
     mobileOtp: "",
-    emailOtp: "",
+    // emailOtp: "",
   });
 
   const signUpUser = useSelector((state: any) => state.signup);
@@ -55,7 +55,7 @@ const Index = () => {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
-      setOtp({ ...otp, mobileOtp: "", emailOtp: "" });
+      setOtp({ ...otp, mobileOtp: "",  });
     } else {
       toast.error(response?.message);
     }
@@ -65,7 +65,7 @@ const Index = () => {
       let payload = {
         email: signUpUser.email,
         mobileOtp: otp.mobileOtp,
-        emailOtp: otp.emailOtp,
+        // emailOtp: otp.emailOtp,
       };
       setLoading(true);
       const { data: response } = await POST(POST_VERIFY_OTP, payload);
@@ -190,7 +190,7 @@ const Index = () => {
                     }
                   }}
                 />
-                <CustomInputBox
+                {/* <CustomInputBox
                   inputType="text"
                   inputMode="numeric"
                   value={otp.emailOtp || ""}
@@ -203,7 +203,7 @@ const Index = () => {
                       setOtp({ ...otp, emailOtp: +e.target.value });
                     }
                   }}
-                />
+                /> */}
               </div>
               <div className="flex justify-center">
                 <p className="mt-3 text-[#494949] font-Open text-xs font-semibold leading-4 items-center">
