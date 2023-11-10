@@ -214,7 +214,7 @@ const Tracking = () => {
                   />
                 </div>
 
-                {inValidTrackingState.length > 0 && (
+                {inValidTrackingState?.length > 0 && (
                   <Tooltip
                     position="bottom"
                     content={InvalidTrackingListHover(inValidTrackingState)}

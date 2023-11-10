@@ -169,7 +169,7 @@ const MyRoutes: React.FC = () => {
         />
 
         <Route>
-          <Route path="/shipyaari-tracking" element={<PublicTracking />} />
+          <Route path="/shipyaari-tracking" element={<ClientTracking />} />
         </Route>
 
         {/* onboarding routes  */}
