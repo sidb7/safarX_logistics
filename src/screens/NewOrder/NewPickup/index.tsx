@@ -162,6 +162,9 @@ const PickupLocation = () => {
   const isObjectEmpty = (obj: any) => {
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
+        if (key === "sector") {
+          continue;
+        }
         if (typeof obj[key] === "object") {
           if (!isObjectEmpty(obj[key])) {
             return false;
@@ -218,10 +221,10 @@ const PickupLocation = () => {
       );
 
       const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      // console.log("isPickuPDateValid", isPickupDateValid);
-      // console.log("pickupAddress", pickupAddress);
+      console.log("isPickuPDateValid", isPickupDateValid);
+      console.log("pickupAddress", pickupAddress);
 
-      // console.log("isPickupAddValid", isPickupAddressValid);
+      console.log("isPickupAddValid", isPickupAddressValid);
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||

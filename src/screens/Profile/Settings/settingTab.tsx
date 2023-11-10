@@ -202,7 +202,7 @@ export const SettingTab = () => {
           deleteURL={DELETE_SELLER}
           payloadBody={{}}
         /> */}
-          <BottomLayout callApi={() => {}} />
+          {/* <BottomLayout callApi={() => {}} /> */}
         </div>
       ) : (
         <div>

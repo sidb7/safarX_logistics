@@ -304,10 +304,11 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           inputType="number"
                           name="length"
                           errorMessage={validationErrors?.length}
-                          value={productInputState[index]?.length || ""}
+                          value={productInputState[index]?.length}
                           onChange={(e: any) => {
+                            console.log("products", e.target.value);
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e?.target?.value },
                               index,
                               [isRequired, checkNonNegative]
                             );
@@ -323,7 +324,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           errorMessage={validationErrors?.breadth}
                           onChange={(e: any) => {
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e.target.value },
                               index,
                               [isRequired, checkNonNegative]
                             );
@@ -338,7 +339,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           errorMessage={validationErrors?.height}
                           onChange={(e: any) => {
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e.target.value },
                               index,
                               [isRequired, checkNonNegative]
                             );
@@ -362,7 +363,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           errorMessage={validationErrors?.deadWeight}
                           onChange={(e: any) =>
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e.target.value },
                               index,
                               [isRequired, checkNonNegative]
                             )
@@ -392,7 +393,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           value={productInputState[index].unitPrice || ""}
                           onChange={(e: any) =>
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e.target.value },
                               index,
                               [isRequired, checkNonNegative]
                             )
@@ -406,7 +407,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           value={productInputState[index].unitTax || ""}
                           onChange={(e: any) =>
                             handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
+                              { name: e.target.name, value: e.target.value },
                               index,
                               [isRequired, checkNonNegative]
                             )
