@@ -47,7 +47,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     storeLogo: "",
     channelName: "",
   });
-  const [channel, setChannel] = useState(modalData.modalData.channel);
+  const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
 
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -115,6 +115,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             iconLg: ShopifyLg,
             integrated: true,
             storeId,
+            channel: "",
           },
         ];
         let tempArr = [...channelData.channels];
@@ -174,9 +175,9 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   return (
     <>
-      <div className="text-[24px] justify-between flex m-5 items-center">
+      <div className="text-[20px] lg:text-[24px] justify-between flex m-5 items-center">
         <p className="flex gap-x-5 items-center">
-          <img src={TaskSquare} width="30px" />
+          <img src={TaskSquare} width="25px" />
           <span>
             {!isUpdateModal
               ? `Create ${capitalizeFirstLetter(channel)} Store`
@@ -186,7 +187,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         <img
           className="cursor-pointer"
           src={CloseIcon}
-          width="30px"
+          width="25px"
           onClick={() => setModalData({ ...modalData, isOpen: false })}
         />
       </div>
@@ -270,7 +271,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           disabled={isDisabled}
           onClick={addStore}
           text={!isUpdateModal ? "Add New Channel" : "Update Channel"}
-          className={`bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+          className={`bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 w-[10rem] disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
     </>

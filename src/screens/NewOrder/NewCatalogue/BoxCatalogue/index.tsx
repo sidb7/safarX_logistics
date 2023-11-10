@@ -16,10 +16,15 @@ import {
 } from "../../../../utils/ApiUrls";
 import { Spinner } from "../../../../components/Spinner";
 import SellerBoxDetails from "./SellerBoxDetails";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
+import BottomModal from "../../../../components/CustomModal/customBottomModal";
 
 const BoxCatalogue = forwardRef((props: any, ref: any) => {
   const { filterId, setFilterId } = props;
+  const [isOpenBottomModal, setIsOpenBottomModal] = useState(false);
   const [tempSellerBoxDetails, setTempSellerBoxDetails] = useState<any>({});
+  const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [filterData, setFilterData] = useState([
     { label: "Seller Box", isActive: false },
     { label: "Company Box", isActive: false },
@@ -86,12 +91,20 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
   }, [filterId]);
 
   const handlUpdateSellerBox = (boxDetails: any) => {
+    if (isMobileView) {
+      setIsOpenBottomModal(true);
+    } else {
+      setSellerBoxDetailsModal(true);
+    }
     setTempSellerBoxDetails(boxDetails);
-    setSellerBoxDetailsModal(true);
   };
 
   const handleCloseBoxDetailModal = () => {
-    setSellerBoxDetailsModal(false);
+    if (isMobileView) {
+      setIsOpenBottomModal(false);
+    } else {
+      setSellerBoxDetailsModal(false);
+    }
     getBoxsApi();
   };
 
@@ -157,6 +170,19 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
           tempSellerBoxDetails={tempSellerBoxDetails}
         />
       </CustomRightModal>
+
+      <BottomModal
+        isOpen={isOpenBottomModal}
+        onRequestClose={() => setIsOpenBottomModal(false)}
+        className="h-[30rem] outline-none !p-0"
+      >
+        <SellerBoxDetails
+          updateBoxApi={() => handleCloseBoxDetailModal()}
+          setSellerBoxDetailsModal={setIsOpenBottomModal}
+          tempSellerBoxDetails={tempSellerBoxDetails}
+          isMobileView={isMobileView}
+        />
+      </BottomModal>
     </>
   );
 });

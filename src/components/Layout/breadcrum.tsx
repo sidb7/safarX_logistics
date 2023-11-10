@@ -7,9 +7,18 @@ import infoIcon from "../../assets/info.svg";
 interface IBreadcrumProps {
   label: string;
   component?: ReactElement;
+  componentClass?: any;
+  setState?: any;
+  state?: boolean;
 }
 
-export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
+export const Breadcrum = ({
+  label,
+  component,
+  componentClass,
+  setState,
+  state,
+}: IBreadcrumProps) => {
   const navigate = useNavigate();
 
   const GetCurrentPath = () => {
@@ -118,15 +127,20 @@ export const Breadcrum = ({ label, component }: IBreadcrumProps) => {
               src={BackArrowIcon}
               alt=""
               className="lg:w-[16px] cursor-pointer"
-              onClick={() => navigate(-1)}
+              onClick={() => {
+                if (state) setState();
+                navigate(-1);
+              }}
             />
 
-            <p className="pl-2 text-lg font-bold text-center leading-6 text-[#1C1C1C] lg:text-[28px] font-Lato lg:font-semibold lg:leading-9 capitalize">
+            <p className="pl-2 text-lg font-bold text-center whitespace-nowrap  text-[#1C1C1C] lg:text-[28px] lg:font-Lato lg:font-semibold lg:leading-9 capitalize">
               {label}
             </p>
           </div>
           {component && (
-            <div className="inline-flex space-x-2 items-center justify-start px-5">
+            <div
+              className={`${componentClass} inline-flex space-x-2 items-center justify-start px-5`}
+            >
               {component}
             </div>
           )}
