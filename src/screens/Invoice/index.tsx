@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import DownloadIcon from "../../../src/assets/download.svg";
-import { POST } from "../../utils/webService";
-import { GET_ALL_INVOICES, GET_SINGLE_FILE } from "../../utils/ApiUrls";
+import { GET, POST } from "../../utils/webService";
+import {
+  FETCH_MANIFEST_REPORT_DATA,
+  GET_ALL_INVOICES,
+  GET_SINGLE_FILE,
+} from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { convertEpochToDateTime } from "../../utils/utility";
 
@@ -21,6 +25,22 @@ const InvoicePdf = () => {
     } catch (error) {
       console.log("error :", error);
     }
+  };
+
+  const downloadExcelReport = async () => {
+    const data = await GET(
+      `${FETCH_MANIFEST_REPORT_DATA}?invoiceNo=${invoicData?.invoiceNo}`
+    );
+
+    var blob = new Blob([data], {
+      type: "application/vnd.ms-excel",
+    });
+    var url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Invoice_${invoicData?.invoiceNo}.xlsx`;
+    a.click();
   };
 
   const fetchSinglInvoice = async (id: any) => {
@@ -267,12 +287,12 @@ const InvoicePdf = () => {
       <div className="py-3 flex justify-between px-[60px] mt-3 rounded-xl bg-white">
         <div className="flex gap-2 items-center">
           <p>Download Itemized Shipment Details:</p>
-          <a
-            href="#"
-            className="bg-[#285eda] text-white p-[2px] rounded-sm border-1"
+          <span
+            className="bg-blue-500 text-white rounded-md px-1 cursor-pointer"
+            onClick={() => downloadExcelReport()}
           >
             Download Now
-          </a>
+          </span>
         </div>
         <div>
           <p>* Indicates taxable item</p>

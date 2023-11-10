@@ -17,7 +17,10 @@ import { POST } from "../../utils/webService";
 import {
   CANCEL_TEMP_SELLER_ORDER,
   CANCEL_WAY_BILL,
+  FETCH_ALL_PARTNER,
+  FETCH_MANIFEST_DATA,
   GET_SELLER_ORDER,
+  POST_SERVICEABILITY,
 } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +35,7 @@ import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteMod
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
+
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -165,6 +169,7 @@ const Index = () => {
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
+
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -174,6 +179,7 @@ const Index = () => {
     isOpen: false,
     payload: "",
   });
+
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",

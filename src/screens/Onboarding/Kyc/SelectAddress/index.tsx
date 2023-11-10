@@ -311,10 +311,10 @@ const BusinessType = (props: ITypeProps) => {
                       {/* <div
                     className={` ${!isMdScreen && "w-full"} mb-6 md:mt-5 lg:mt-4`}
                   > */}
-                      <div className="mb-6 mt-4 md:mt-0">
+                      <div className="mb-6 mt-6  ">
                         <CustomInputBox
                           label="Brand Name"
-                          className="font-Open !w-[320px] md:!w-[370px]"
+                          className="font-Open   !w-[320px] md:!w-[370px]"
                           labelClassName="font-Open"
                           onChange={(e) => setBrandName(e.target.value)}
                         />
