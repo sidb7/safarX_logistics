@@ -129,7 +129,7 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
               Create Box
             </h1>
           </div>
-          <div className="grid grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 gap-5">
             <CustomInputBox
               label="Box Name"
               name="name"
