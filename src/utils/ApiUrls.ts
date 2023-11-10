@@ -238,6 +238,7 @@ const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryA
 
 //Tracking
 const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_BASE_URL}/tracking/getTracking`;
 
 //feedback
 //feedback
@@ -362,6 +363,7 @@ export {
   RETURNING_USER_PICKUP,
   RETURNING_USER_DELIVERY,
   TRACKING,
+  GET_CLIENTTRACKING_INFO,
   GET_SYSTEM_LOG,
   LOGOUT,
   PHONEPE_INIT_TRANSACTION,
