@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -221,10 +221,10 @@ const PickupLocation = () => {
       );
 
       const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      console.log("isPickuPDateValid", isPickupDateValid);
-      console.log("pickupAddress", pickupAddress);
+      // console.log("isPickuPDateValid", isPickupDateValid);
+      // console.log("pickupAddress", pickupAddress);
 
-      console.log("isPickupAddValid", isPickupAddressValid);
+      // console.log("isPickupAddValid", isPickupAddressValid);
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||
@@ -234,6 +234,7 @@ const PickupLocation = () => {
           !isContactDetailsReturnValid)
       ) {
         setInputError(true);
+
         return;
       }
 
@@ -389,12 +390,22 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
+  useEffect(() => {
+    if (inputError) {
+      console.log("inputError", inputError);
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
+
   console.log("pickupAddress", pickupAddress);
 
   return (
     <>
       {isActive ? (
-        <div className="w-full">
+        <div className="w-full ">
           <Breadcrum label="Add New Order" />
           <div className=" p-2 mb-4 lg:mb-8">
             <Stepper steps={steps} />
@@ -499,6 +510,8 @@ const PickupLocation = () => {
               }}
             />
           )}
+
+          <div id="scrollDiv" />
 
           <PickupAddress
             data={{
