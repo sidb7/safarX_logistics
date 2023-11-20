@@ -14,16 +14,22 @@ const App = () => {
     `${sessionStorage.getItem("sellerId")}`
   );
   const dispatch = useDispatch();
-
+  const [isSocketInitialized, setIsSocketInitialized] = useState(false);
+  console.log("isSocketconnectedApp.tsx", isSocketInitialized);
   useEffect(() => {
-    if (roomName) {
-      socketCallbacks.connectSocket(dispatch);
-    }
+    const connectSocket = async () => {
+      if (roomName) {
+        await socketCallbacks.connectSocket(dispatch);
+        setIsSocketInitialized(true);
+      }
+    };
+
+    connectSocket();
 
     return () => {
       socketCallbacks.disconnectSocket();
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>

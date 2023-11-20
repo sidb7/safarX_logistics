@@ -50,6 +50,7 @@ const StackedChart = (props: IStackedChart) => {
             options={yearArr}
             heading="Select Filter"
             wrapperClass="!bg-white"
+            selectClassName="!h-9 !rounded-lg lg:!rounded !text-[#494949]"
           />
         </div>
       </div>

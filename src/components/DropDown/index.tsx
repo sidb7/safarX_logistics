@@ -64,13 +64,20 @@ const CustomDropDown = (props: IDropDownProps) => {
         </select>
         <label
           htmlFor="selectDropdown"
-          className={` text-[12px] text-[#777777] absolute ${
+          className={` text-[12px] text-[#777777] font-normal font-sans absolute ${
             value && "valueFilled"
           } `}
         >
           {label}
         </label>
       </div>
+      {inputError && !value && (
+        <span
+          className={`text-[red] transition-all ease-out h-0  h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
+        >
+          Field is required
+        </span>
+      )}
     </>
   );
 };

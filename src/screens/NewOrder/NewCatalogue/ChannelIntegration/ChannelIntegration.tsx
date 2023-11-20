@@ -58,7 +58,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     <>
       <div className="my-6">
         <Header title="Available Channels" />
-        <div className="flex gap-x-4 overflow-x-auto flex-wrap ">
+        <div className="flex gap-x-4 overflow-x-auto flex-nowrap lg:flex-wrap ">
           {ChannelIntegrationCarts?.channels?.map(
             (eachChannel: any, index: any) => (
               <Card

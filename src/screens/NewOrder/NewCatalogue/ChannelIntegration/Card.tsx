@@ -17,7 +17,7 @@ const Card = (props: any) => {
       key={key}
     >
       <div className={`py-[14px] px-[16px] w-[248px] `}>
-        <div className="flex lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 w-[118px]">
+        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 lg:w-[118px]">
           <img src={channel.icon} alt="" className="lg:hidden" />
           <img src={channel.iconLg} alt="" className="hidden lg:block" />
 

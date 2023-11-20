@@ -25,12 +25,13 @@ import { useNavigate } from "react-router-dom";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { GET_DASHBOARD_INFO } from "../../utils/ApiUrls";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
   const navigate = useNavigate();
-
+  const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
@@ -168,6 +169,7 @@ export const Home = (props: IOverview) => {
       .replace(/ /g, "-");
 
     const newUrl = `/dashboard/${filterNewUrl}`; // Specify the new URL here
+    console.log("newurldasboard", newUrl);
 
     window.history.pushState(null, "", newUrl);
     setRenderingComponents(id);
@@ -185,6 +187,7 @@ export const Home = (props: IOverview) => {
     };
 
     const data = GetCurrentPath() as any;
+    console.log("dataOverview", data);
 
     if (data[1] === "overview") {
       setRenderingComponents(0);
@@ -247,11 +250,12 @@ export const Home = (props: IOverview) => {
                 />
               </div>
               {renderingComponents === 0 && (
-                <div>
+                <div className={`${isLgScreen ? "block" : "hidden"}`}>
                   <CustomDropDown
                     onChange={(e) => {}}
                     options={yearArr}
                     heading="Select Filter"
+                    selectClassName="lg:!w-[120px] lg:!h-[34px] mt-1 !rounded-md !text-[#494949]"
                   />
                 </div>
               )}

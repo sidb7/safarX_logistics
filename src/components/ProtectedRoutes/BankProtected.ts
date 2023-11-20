@@ -31,7 +31,7 @@ const BankProtected = ({ children }: Props) => {
         clearLocalStorage();
         navigate("/auth/login");
       } else {
-        const { nextStep } = response?.data?.data[0];
+        const { nextStep, walletBalance } = response?.data?.data[0];
         const { kyc, bank } = nextStep;
 
         //if kyc not verified return to "/"
@@ -41,7 +41,7 @@ const BankProtected = ({ children }: Props) => {
         }
 
         //if bank not verified return to "/"
-        if (!bank) {
+        if (!bank || !(walletBalance > 0)) {
           sessionStorage.setItem(
             "kycValue",
             JSON.stringify(response?.data?.data[0])

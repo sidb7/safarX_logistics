@@ -42,7 +42,7 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
           }
         />
       </div>
-      <p className="text-[16px] font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
+      <p className="text-[16px] break-words font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
         {address}
       </p>
 
