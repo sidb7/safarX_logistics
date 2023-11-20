@@ -22,11 +22,14 @@ import AccessDenied from "../../components/AccessDenied";
 import Pagination from "../../components/Pagination";
 import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
+import editIcon from "../../assets/serv/edit.svg";
 
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
+
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[1]?.pages?.[0]?.isActive;
@@ -39,6 +42,7 @@ export const Transaction = () => {
   const [data, setData]: any = useState([]);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
   useEffect(() => {
     if (renderingComponents === 0) {
@@ -95,7 +99,12 @@ export const Transaction = () => {
   const clearSearchValue = () => {
     setDebouncedSearchValue("");
   };
+
   const filterButton = () => {
+    const actionHandler = () => {
+      console.log("rowSelectedData", rowSelectedData);
+    };
+
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex">
@@ -110,6 +119,24 @@ export const Transaction = () => {
               getFullContent={clearSearchValue}
             />
           </div>
+          {rowSelectedData.length > 0 && (
+            <div className=" flex items-center ">
+              <div className="rounded-md p-1 flex border border-[#A4A4A4]">
+                <div
+                  className="border-r border-[#A4A4A4]  px-3 py-1 flex items-center rounded-l-md cursor-pointer"
+                  onClick={actionHandler}
+                >
+                  <img src={DeleteIconForLg} alt="" className=" w-[17px]" />
+                </div>
+                <div
+                  className="px-3 py-1 flex items-center rounded-r-md cursor-pointer"
+                  onClick={actionHandler}
+                >
+                  <img src={editIcon} alt="" className=" w-[17px]" />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
     } else {
@@ -137,7 +164,11 @@ export const Transaction = () => {
   const render = () => {
     if (renderingComponents === 0) {
       return (
-        <CustomTable data={data} columns={PassbookColumns(setSortOrder)} />
+        <CustomTable
+          data={data}
+          columns={PassbookColumns(setSortOrder)}
+          setRowSelectedData={setRowSelectedData}
+        />
       );
     } else if (renderingComponents === 1) {
       return <CustomTable data={data} columns={cashbackDetailsColumns()} />;

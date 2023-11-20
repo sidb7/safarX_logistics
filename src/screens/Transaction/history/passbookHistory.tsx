@@ -4,7 +4,7 @@ import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
 
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Collapsible from "react-collapsible";
 
 import { createColumnHelper } from "@tanstack/react-table";
@@ -39,6 +39,24 @@ interface IPassbookProps {
 }
 
 const columnsHelper = createColumnHelper<any>();
+
+const PartialChecked = ({ checked, onChange, intermediate }: any) => {
+  const ref: any = useRef(null);
+  useEffect(() => {
+    if (typeof intermediate === "boolean") {
+      ref.current.indeterminate = intermediate;
+    }
+  }, [ref, intermediate]);
+  return (
+    <input
+      type="checkbox"
+      className="mr-3 cursor-pointer"
+      ref={ref}
+      checked={checked}
+      onChange={onChange}
+    />
+  );
+};
 
 export const PassbookColumns = (setSortOrder: any) => {
   const renderStatusComponent = (status: string) => {
@@ -100,10 +118,15 @@ export const PassbookColumns = (setSortOrder: any) => {
 
   return [
     columnsHelper.accessor("createdAt", {
-      header: () => {
+      header: (props) => {
         return (
           <div className="flex justify-between items-center">
-            <div>
+            <div className="flex justify-center items-center">
+              <PartialChecked
+                checked={props.table?.getIsAllRowsSelected()}
+                onChange={props?.table?.getToggleAllRowsSelectedHandler()}
+                intermediate={props?.table?.getIsSomeRowsSelected()}
+              />
               <h1 className="text-sm font-semibold leading-5">Date</h1>
             </div>
             <div className="flex">
@@ -116,8 +139,15 @@ export const PassbookColumns = (setSortOrder: any) => {
         const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
 
         return (
-          <div className="whitespace-nowrap my-4 space-y-2">
-            {formattedDateTime}
+          <div className="flex items-center">
+            <div className="flex items-center justify-center mr-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={info?.row?.getIsSelected()}
+                onChange={info?.row?.getToggleSelectedHandler()}
+              />
+            </div>
+            <div className="whitespace-nowrap my-4 ">{formattedDateTime}</div>
           </div>
         );
       },
@@ -210,9 +240,6 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div>
               <h1 className="text-sm font-semibold leading-5">Status</h1>
             </div>
-            <div className="flex">
-              <img src={sortIconTable} alt="" />
-            </div>
           </div>
         );
       },
@@ -227,9 +254,6 @@ export const PassbookColumns = (setSortOrder: any) => {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-sm font-semibold leading-5">Description</h1>
-            </div>
-            <div className="flex">
-              <img src={sortIconTable} alt="" />
             </div>
           </div>
         );
