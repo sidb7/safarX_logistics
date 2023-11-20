@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   flexRender,
   getCoreRowModel,
@@ -12,16 +13,34 @@ interface ITablePropTypes {
   tdclassName?: any;
   thclassName?: any;
   trclassName?: any;
+  setRowSelectedData?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
-  const { data, columns, tdclassName, thclassName, trclassName } = props;
+  const [rowSelection, setRowSelection]: any = useState([]);
+  const {
+    data,
+    columns,
+    tdclassName,
+    thclassName,
+    trclassName,
+    setRowSelectedData,
+  } = props;
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      rowSelection,
+    },
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  useEffect(() => {
+    setRowSelectedData &&
+      setRowSelectedData(table?.getSelectedRowModel()?.flatRows);
+  }, [table?.getSelectedRowModel()?.flatRows]);
 
   return (
     <div className="py-2">
