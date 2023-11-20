@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import CustomInputBox from "../../../../components/Input";
 import CustomRightModal from "../../../../components/CustomModal/customRightModal";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import BottomModal from "../../../../components/CustomModal/customBottomModal";
+import { useMediaQuery } from "react-responsive";
 
 interface IProductFilledProps {
   editAddressModal: any;
@@ -22,6 +24,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
   editProductData,
 }) => {
   const tempProductData = editProductData;
+  const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [productData, setproductData]: any = useState(tempProductData);
   const divisor = 5000;
 
@@ -96,7 +99,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
     }));
   }, [productData.length, productData.height, productData.breadth]);
 
-  return (
+  return !isMobileView ? (
     <CustomRightModal
       isOpen={editAddressModal}
       onClose={() => setEditAddressModal(false)}
@@ -263,6 +266,178 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
         </div>
       </>
     </CustomRightModal>
+  ) : (
+    <BottomModal
+      isOpen={editAddressModal}
+      onRequestClose={() => setEditAddressModal(false)}
+      className="outline-none h-[35rem] !p-0"
+    >
+      <>
+        <div className="grid mt-6 gap-5">
+          <div className="flex px-5 gap-x-2 pb-2">
+            <img src={ProductIcon} alt="Package Icon" />
+            <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+              Edit Product
+            </h1>
+          </div>
+          <div className="grid grid-cols-2 px-5 gap-5">
+            <CustomInputBox
+              label="Product name"
+              name="name"
+              value={productData?.name}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            />
+            <CustomInputBox
+              label="Product category"
+              name="category"
+              value={productData?.category}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            />
+            <CustomInputBox
+              label="Product Price"
+              name="unitPrice"
+              inputMode="numeric"
+              value={productData?.unitPrice || ""}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: +e.target.value,
+                })
+              }
+            />
+            <CustomInputBox
+              label="Product tax"
+              name="unitTax"
+              inputMode="numeric"
+              value={productData?.unitTax || ""}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: +e.target.value,
+                })
+              }
+            />
+
+            <div className="flex mt-2 md:mt-0 gap-x-3 w-full">
+              <CustomInputBox
+                label="Length (CM)"
+                inputType="number"
+                name="length"
+                value={productData?.length || ""}
+                onChange={(e: any) => {
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: +e.target.value,
+                  });
+                }}
+              />
+
+              <CustomInputBox
+                label="Breadth (CM)"
+                name="breadth"
+                inputType="number"
+                value={productData?.breadth || ""}
+                onChange={(e: any) => {
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: +e.target.value,
+                  });
+                }}
+              />
+              <CustomInputBox
+                label="Height (CM)"
+                inputType="number"
+                name="height"
+                value={productData?.height || ""}
+                onChange={(e: any) => {
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: +e.target.value,
+                  });
+                }}
+              />
+            </div>
+            <div className="flex mt-2 md:mt-0 gap-x-5">
+              <CustomInputBox
+                placeholder="Volumetric Weight (Kg)"
+                label="Volumetric Weight (Kg)"
+                isDisabled={true}
+                value={productData?.volumetricWeight || 0}
+              />
+              <CustomInputBox
+                placeholder="Divisor"
+                label="Divisor"
+                inputMode="numeric"
+                isDisabled={true}
+                value={divisor}
+              />
+            </div>
+            <CustomInputBox
+              label="Weight (Kg)"
+              inputType="number"
+              name="deadWeight"
+              value={productData?.deadWeight || ""}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: +e.target.value,
+                })
+              }
+            />
+
+            <CustomInputBox
+              label="Sku"
+              name="sku"
+              value={productData?.sku || ""}
+              onChange={(e: any) =>
+                handleProductInputChange({
+                  name: e.target.name,
+                  value: e.target.value,
+                })
+              }
+            />
+
+            <div className="grid col-span-2">
+              <InputWithFileUpload
+                type="file"
+                onChange={(e: any) => uploadedInputFile(e, 0)}
+              />
+            </div>
+          </div>
+          <div
+            className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px] bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px] fixed bottom-0"
+            style={{ width: "-webkit-fill-available" }}
+          >
+            <ServiceButton
+              text={"CANCEL"}
+              onClick={() => {
+                setEditAddressModal(false);
+              }}
+              className={`bg-white ${
+                isMobileView ? "w-[100%]" : ""
+              } text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4 `}
+            />
+            <ServiceButton
+              text={"UPDATE"}
+              onClick={() => updateProductDetails()}
+              className={`bg-[#1C1C1C] ${
+                isMobileView ? "w-[100%]" : ""
+              } text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+            />
+          </div>
+        </div>
+      </>
+    </BottomModal>
   );
 };
 

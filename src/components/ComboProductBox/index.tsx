@@ -8,6 +8,8 @@ import addIcon from "../../assets/Catalogue/add.svg";
 import CustomInputBox from "../Input";
 import InputWithFileUpload from "../InputBox/InputWithFileUpload";
 import ViewIcon from "../../assets/Login/eye.svg";
+import BottomModal from "../../components/CustomModal/customBottomModal";
+import { useMediaQuery } from "react-responsive";
 
 interface IPackageBoxProps {
   image?: any;
@@ -48,6 +50,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
   const navigate = useNavigate();
+  const isMobileView = useMediaQuery({ maxWidth: 768 });
 
   return (
     <>
@@ -80,73 +83,141 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
         </div>
       </div>
 
-      <CenterModal
-        className="h-[750px] w-[700px]"
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-      >
-        <div className="h-[100%] w-[100%] p-6 border">
-          <div className="flex justify-between right-4 top-4">
-            <div className="text-[25px] font-bold">{data.name}</div>
-            <img
-              src={CrossIcon}
-              alt="Cross Icon"
-              className="cursor-pointer"
-              onClick={() => setIsModalOpen(false)}
-            />
-          </div>
-          <div className="mt-6">
-            <div className="my-4 max-h-[480px] overflow-auto">
-              {data.products?.map((singleProduct: any, index: any) => {
-                return (
-                  <div className="flex items-center my-3">
-                    <div className="font-normal text-[25px] mr-8">
-                      {index + 1}
+      {!isMobileView ? (
+        <CenterModal
+          className="h-[750px] w-[700px]"
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+        >
+          <div className="h-[100%] w-[100%] p-6 border">
+            <div className="flex justify-between right-4 top-4">
+              <div className="text-[25px] font-bold">{data.name}</div>
+              <img
+                src={CrossIcon}
+                alt="Cross Icon"
+                className="cursor-pointer"
+                onClick={() => setIsModalOpen(false)}
+              />
+            </div>
+            <div className="mt-6">
+              <div className="my-4 max-h-[480px] overflow-auto">
+                {data.products?.map((singleProduct: any, index: any) => {
+                  return (
+                    <div className="flex items-center my-3">
+                      <div className="font-normal text-[25px] mr-8">
+                        {index + 1}
+                      </div>
+                      <ProductBox
+                        image={
+                          (singleProduct?.images?.length > 0 &&
+                            singleProduct?.images[0].url) ||
+                          ""
+                        }
+                        productName={singleProduct?.name}
+                        weight={`${singleProduct?.appliedWeight} ${singleProduct?.weightUnit}`}
+                        height={singleProduct?.height}
+                        breadth={singleProduct?.breadth}
+                        length={singleProduct?.length}
+                        className="w-[100%]"
+                      />
                     </div>
-                    <ProductBox
-                      image={
-                        (singleProduct?.images?.length > 0 &&
-                          singleProduct?.images[0].url) ||
-                        ""
-                      }
-                      productName={singleProduct?.name}
-                      weight={`${singleProduct?.appliedWeight} ${singleProduct?.weightUnit}`}
-                      height={singleProduct?.height}
-                      breadth={singleProduct?.breadth}
-                      length={singleProduct?.length}
-                      className="w-[100%]"
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            <hr />
-            <div className="grid grid-cols-2 gap-5 my-4">
-              <div className="flex-1">
-                <CustomInputBox
-                  label="Total Volumetric Weight (Kg)"
-                  value={data.totalVolumetricWeight}
-                  isDisabled={true}
-                />
+                  );
+                })}
               </div>
-              <div className="flex-1">
-                <CustomInputBox
-                  label="Total Dead Weight"
-                  value={data?.totalDeadWeight}
-                  isDisabled={true}
-                />
-              </div>
-              <div className="flex-1">
-                <CustomInputBox
-                  label="Total Applied Weight"
-                  value={data?.totalAppliedWeight}
-                  isDisabled={true}
-                />
+              <hr />
+              <div className="grid grid-cols-2 gap-5 my-4">
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Volumetric Weight (Kg)"
+                    value={data.totalVolumetricWeight}
+                    isDisabled={true}
+                  />
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Dead Weight"
+                    value={data?.totalDeadWeight}
+                    isDisabled={true}
+                  />
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Applied Weight"
+                    value={data?.totalAppliedWeight}
+                    isDisabled={true}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </CenterModal>
+        </CenterModal>
+      ) : (
+        <BottomModal
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
+        >
+          <div className="h-[100%] w-[100%] p-2 ">
+            <div className="flex justify-between right-4 top-4">
+              <div className="text-[22px] lg:text-[25px] font-bold">
+                {data.name}
+              </div>
+              <img
+                src={CrossIcon}
+                alt="Cross Icon"
+                className="cursor-pointer"
+                onClick={() => setIsModalOpen(false)}
+              />
+            </div>
+            <div className="mt-6">
+              <div className="my-4 max-h-[480px] overflow-auto">
+                {data.products?.map((singleProduct: any, index: any) => {
+                  return (
+                    <div className="flex items-center my-3">
+                      <ProductBox
+                        image={
+                          (singleProduct?.images?.length > 0 &&
+                            singleProduct?.images[0].url) ||
+                          ""
+                        }
+                        productName={singleProduct?.name}
+                        weight={`${singleProduct?.appliedWeight} ${singleProduct?.weightUnit}`}
+                        height={singleProduct?.height}
+                        breadth={singleProduct?.breadth}
+                        length={singleProduct?.length}
+                        className="w-[100%]"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <hr />
+              <div className="grid lg:grid-cols-2 gap-5 my-4">
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Volumetric Weight (Kg)"
+                    value={data.totalVolumetricWeight}
+                    isDisabled={true}
+                  />
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Dead Weight"
+                    value={data?.totalDeadWeight}
+                    isDisabled={true}
+                  />
+                </div>
+                <div className="flex-1">
+                  <CustomInputBox
+                    label="Total Applied Weight"
+                    value={data?.totalAppliedWeight}
+                    isDisabled={true}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </BottomModal>
+      )}
     </>
   );
 };
