@@ -130,8 +130,6 @@ const Index = () => {
           )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
         : "";
 
-      console.log("tokenafterlogin", token);
-
       if (token !== "") {
         console.log("socketConnectedAfterlogin");
         socketCallbacks.connectSocket(dispatch);

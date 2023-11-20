@@ -373,7 +373,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={titleCase(address.state)}
+            value={address.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);

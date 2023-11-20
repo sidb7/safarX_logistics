@@ -389,6 +389,8 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
+  console.log("pickupAddress", pickupAddress);
+
   return (
     <>
       {isActive ? (
@@ -406,17 +408,93 @@ const PickupLocation = () => {
                 returningUserData,
                 setReturningUserData,
                 onAddressSelect: (selectedAddress: any) => {
-                  setPickupAddress((prevPickupAddress: any) => ({
-                    ...prevPickupAddress,
-                    pickupAddress: {
-                      ...prevPickupAddress.pickupAddress,
-                      ...selectedAddress,
-                    },
-                    returnAddress: {
-                      ...prevPickupAddress.returnAddress,
-                      ...selectedAddress,
-                    },
-                  }));
+                  if (selectedAddress) {
+                    setPickupAddress((prevPickupAddress: any) => ({
+                      ...prevPickupAddress,
+                      pickupAddress: {
+                        ...prevPickupAddress.pickupAddress,
+                        ...selectedAddress,
+                      },
+                      returnAddress: {
+                        ...prevPickupAddress.returnAddress,
+                        ...selectedAddress,
+                      },
+                    }));
+                  } else {
+                    setPickupAddress((prevPickupAddress: any) => ({
+                      ...prevPickupAddress,
+                      pickupAddress: {
+                        fullAddress: "",
+                        flatNo: "",
+                        locality: "",
+                        sector: "",
+                        landmark: "",
+                        pincode: "",
+                        city: "",
+                        state: "",
+                        country: "",
+                        addressType: "warehouse",
+                        workingDays: {
+                          monday: true,
+                          tuesday: true,
+                          wednesday: true,
+                          thursday: true,
+                          friday: true,
+                          saturday: true,
+                          sunday: true,
+                        },
+                        workingHours: "09:00",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                          alternateMobileNo: "",
+                          emailId: "",
+                          type: "warehouse associate",
+                        },
+                        pickupDate: "",
+                      },
+                      returnAddress: {
+                        fullAddress: "",
+                        flatNo: "",
+                        locality: "",
+                        sector: "",
+                        landmark: "",
+                        pincode: "",
+                        city: "",
+                        state: "",
+                        country: "",
+                        addressType: "warehouse",
+                        workingDays: {
+                          monday: true,
+                          tuesday: true,
+                          wednesday: true,
+                          thursday: true,
+                          friday: true,
+                          saturday: true,
+                          sunday: true,
+                        },
+                        workingHours: "09:00",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                          alternateMobileNo: "",
+                          emailId: "",
+                          type: "warehouse associate",
+                        },
+                      },
+                      branding: {
+                        id: uuidv4(),
+                        name: "",
+                        logo: "",
+                        address: "",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                        },
+                        isActive: false,
+                      },
+                    }));
+                  }
                 },
               }}
             />
