@@ -392,15 +392,12 @@ const PickupLocation = () => {
 
   useEffect(() => {
     if (inputError) {
-      console.log("inputError", inputError);
       const container = document.getElementById("scrollDiv");
       if (container) {
         container.scrollIntoView({ block: "start", behavior: "smooth" });
       }
     }
   }, [inputError]);
-
-  console.log("pickupAddress", pickupAddress);
 
   return (
     <>

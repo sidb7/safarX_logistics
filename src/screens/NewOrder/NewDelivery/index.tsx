@@ -364,6 +364,15 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
+
+  useEffect(() => {
+    if (inputError) {
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
@@ -470,6 +479,8 @@ const DeliveryLocation = () => {
           }}
         />
       )}
+
+      <div id="scrollDiv" />
 
       <DeliveryAddress
         data={{
