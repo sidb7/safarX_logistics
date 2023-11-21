@@ -364,6 +364,15 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
+
+  useEffect(() => {
+    if (inputError) {
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
@@ -383,21 +392,95 @@ const DeliveryLocation = () => {
             returningUserDeliveryData,
             setReturningUserDeliveryData,
             onAddressSelect: (selectedAddress: any) => {
-              setDeliveryAddress((prevDeliveryAddress: any) => ({
-                ...prevDeliveryAddress,
-                deliveryAddress: {
-                  ...prevDeliveryAddress.deliveryAddress,
-                  ...selectedAddress,
-                },
-                billingAddress: {
-                  ...prevDeliveryAddress.billingAddress,
-                  ...selectedAddress,
-                },
-              }));
+              if (selectedAddress) {
+                setDeliveryAddress((prevDeliveryAddress: any) => ({
+                  ...prevDeliveryAddress,
+                  deliveryAddress: {
+                    ...prevDeliveryAddress.deliveryAddress,
+                    ...selectedAddress,
+                  },
+                  billingAddress: {
+                    ...prevDeliveryAddress.billingAddress,
+                    ...selectedAddress,
+                  },
+                }));
+              } else {
+                setDeliveryAddress((prevDeliveryAddress: any) => ({
+                  ...prevDeliveryAddress,
+                  deliveryAddress: {
+                    recipientType:
+                      prevDeliveryAddress.deliveryAddress.recipientType,
+                    fullAddress: "",
+                    flatNo: "",
+                    locality: "",
+                    sector: "",
+                    landmark: "",
+                    pincode: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    addressType: "warehouse",
+                    workingDays: {
+                      monday: true,
+                      tuesday: true,
+                      wednesday: true,
+                      thursday: true,
+                      friday: true,
+                      saturday: true,
+                      sunday: true,
+                    },
+                    workingHours: "09:00",
+                    contact: {
+                      name: "",
+                      mobileNo: "",
+                      alternateMobileNo: "",
+                      emailId: "",
+                      type: "warehouse associate",
+                    },
+                  },
+                  billingAddress: {
+                    recipientType:
+                      prevDeliveryAddress.billingAddress.recipientType,
+                    fullAddress: "",
+                    flatNo: "",
+                    locality: "",
+                    sector: "",
+                    landmark: "",
+                    pincode: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    addressType: "warehouse",
+                    workingDays: {
+                      monday: true,
+                      tuesday: true,
+                      wednesday: true,
+                      thursday: true,
+                      friday: true,
+                      saturday: true,
+                      sunday: true,
+                    },
+                    workingHours: "09:00",
+                    contact: {
+                      name: "",
+                      mobileNo: "",
+                      alternateMobileNo: "",
+                      emailId: "",
+                      type: "warehouse associate",
+                    },
+                  },
+                  orderType: prevDeliveryAddress.orderType,
+                  gstNumber: "",
+                  tempOrderId: shipyaari_id || "",
+                  source: orderSource || "",
+                }));
+              }
             },
           }}
         />
       )}
+
+      <div id="scrollDiv" />
 
       <DeliveryAddress
         data={{

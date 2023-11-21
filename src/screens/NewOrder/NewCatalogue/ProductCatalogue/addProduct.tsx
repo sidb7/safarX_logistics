@@ -456,7 +456,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
       <div>
         {/* <BottomLayout backButtonText="BACK" nextButtonText="NEXT" /> */}
         <BottomLayout callApi={() => addProductInfo()} />
-      </div>
+      </div>  
     </>
   );
 };

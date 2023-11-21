@@ -129,20 +129,24 @@ const WalletMain = () => {
                   </div>
                 </div>
                 <div className="mx-5 mt-[50px] md:mt-4">
-                  <CustomButton
+                  {/* <CustomButton
                     text={"VERIFY BANK"}
                     // onClick={() => }
                     onClick={() => handleRechargeNow()}
+                  /> */}
+                  <CustomButton
+                    text={"RECHARGE NOW"}
+                    onClick={() => navigate("/onboarding/wallet-payment")}
                   />
                 </div>
 
                 <div
                   className="flex justify-center mt-4 cursor-pointer"
-                  onClick={() => navigate("/dashboard/overview")}
+                  onClick={() => navigate("/onboarding/cash-on-delivery")}
                 >
-                  {/* <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
-                  SKIP FOR NOW{" "}
-                </p> */}
+                  <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
+                    SKIP FOR NOW{" "}
+                  </p>
                 </div>
               </div>
               {!isMdScreen && note()}

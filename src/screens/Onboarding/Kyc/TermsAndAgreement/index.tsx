@@ -13,6 +13,7 @@ import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import Checkbox from "../../../../components/CheckBox";
 
 interface ITypeProps {}
 
@@ -54,7 +55,7 @@ export const ServiceComponent = (props: ITypeProps) => {
   const BottomButton = () => {
     return (
       <div className="flex flex-col items-center px-5 md:px-0 pb-4  bg-white">
-        <div className="flex items-center md:px-9  self-start my-1 mx-1">
+        {/* <div className="flex items-center md:px-9  self-start my-1 mx-1">
           <CustomCheckBox
             onChange={(e: any) => setCheckbox(e.target.checked)}
             style={{ accentColor: "black" }}
@@ -62,6 +63,17 @@ export const ServiceComponent = (props: ITypeProps) => {
           <p className="font-normal text-[12px] text-[#494949]font-Open">
             I Agree with the terms & conditions
           </p>
+        </div> */}
+
+        {/* new checkbox functionality implemented */}
+        <div className="font-normal text-[12px] text-[#494949] font-Open md:px-7 self-start my-1 mx-1">
+          <Checkbox
+            checked={false}
+            onChange={(e: any) => setCheckbox(e.value)}
+            name={"I Agree with the terms & conditions"}
+            label={"I Agree with the terms & conditions"}
+            style={{ accentColor: "black" }}
+          />
         </div>
 
         <ServiceButton

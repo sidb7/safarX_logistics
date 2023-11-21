@@ -48,15 +48,21 @@ const ReturningDelivery: React.FunctionComponent<
   );
 
   const handleCardSelect = (selectedCardId: string) => {
-    setSelectedCardID(selectedCardId);
+    if (selectedCardID === selectedCardId) {
+      setSelectedCardID("");
+      setSelectedAddress(null);
+      onAddressSelect(null);
+    } else {
+      const selected = returningUserAddressData.find(
+        (addressData: any) => addressData.deliveryAddressId === selectedCardId
+      );
 
-    const selected = returningUserAddressData.find(
-      (addressData: any) => addressData.deliveryAddressId === selectedCardId
-    );
+      if (selected) {
+        setSelectedCardID(selectedCardId);
 
-    if (selected) {
-      setSelectedAddress(selected);
-      onAddressSelect(selected);
+        setSelectedAddress(selected);
+        onAddressSelect(selected);
+      }
     }
   };
 
