@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import Stepper from "../../../components/Stepper";
 import CustomCheckbox from "../../../components/CheckBox";
@@ -221,10 +221,10 @@ const PickupLocation = () => {
       );
 
       const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
-      console.log("isPickuPDateValid", isPickupDateValid);
-      console.log("pickupAddress", pickupAddress);
+      // console.log("isPickuPDateValid", isPickupDateValid);
+      // console.log("pickupAddress", pickupAddress);
 
-      console.log("isPickupAddValid", isPickupAddressValid);
+      // console.log("isPickupAddValid", isPickupAddressValid);
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||
@@ -234,6 +234,7 @@ const PickupLocation = () => {
           !isContactDetailsReturnValid)
       ) {
         setInputError(true);
+
         return;
       }
 
@@ -389,10 +390,19 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
+  useEffect(() => {
+    if (inputError) {
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
+
   return (
     <>
       {isActive ? (
-        <div className="w-full">
+        <div className="w-full ">
           <Breadcrum label="Add New Order" />
           <div className=" p-2 mb-4 lg:mb-8">
             <Stepper steps={steps} />
@@ -406,21 +416,99 @@ const PickupLocation = () => {
                 returningUserData,
                 setReturningUserData,
                 onAddressSelect: (selectedAddress: any) => {
-                  setPickupAddress((prevPickupAddress: any) => ({
-                    ...prevPickupAddress,
-                    pickupAddress: {
-                      ...prevPickupAddress.pickupAddress,
-                      ...selectedAddress,
-                    },
-                    returnAddress: {
-                      ...prevPickupAddress.returnAddress,
-                      ...selectedAddress,
-                    },
-                  }));
+                  if (selectedAddress) {
+                    setPickupAddress((prevPickupAddress: any) => ({
+                      ...prevPickupAddress,
+                      pickupAddress: {
+                        ...prevPickupAddress.pickupAddress,
+                        ...selectedAddress,
+                      },
+                      returnAddress: {
+                        ...prevPickupAddress.returnAddress,
+                        ...selectedAddress,
+                      },
+                    }));
+                  } else {
+                    setPickupAddress((prevPickupAddress: any) => ({
+                      ...prevPickupAddress,
+                      pickupAddress: {
+                        fullAddress: "",
+                        flatNo: "",
+                        locality: "",
+                        sector: "",
+                        landmark: "",
+                        pincode: "",
+                        city: "",
+                        state: "",
+                        country: "",
+                        addressType: "warehouse",
+                        workingDays: {
+                          monday: true,
+                          tuesday: true,
+                          wednesday: true,
+                          thursday: true,
+                          friday: true,
+                          saturday: true,
+                          sunday: true,
+                        },
+                        workingHours: "09:00",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                          alternateMobileNo: "",
+                          emailId: "",
+                          type: "warehouse associate",
+                        },
+                        pickupDate: "",
+                      },
+                      returnAddress: {
+                        fullAddress: "",
+                        flatNo: "",
+                        locality: "",
+                        sector: "",
+                        landmark: "",
+                        pincode: "",
+                        city: "",
+                        state: "",
+                        country: "",
+                        addressType: "warehouse",
+                        workingDays: {
+                          monday: true,
+                          tuesday: true,
+                          wednesday: true,
+                          thursday: true,
+                          friday: true,
+                          saturday: true,
+                          sunday: true,
+                        },
+                        workingHours: "09:00",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                          alternateMobileNo: "",
+                          emailId: "",
+                          type: "warehouse associate",
+                        },
+                      },
+                      branding: {
+                        id: uuidv4(),
+                        name: "",
+                        logo: "",
+                        address: "",
+                        contact: {
+                          name: "",
+                          mobileNo: "",
+                        },
+                        isActive: false,
+                      },
+                    }));
+                  }
                 },
               }}
             />
           )}
+
+          <div id="scrollDiv" />
 
           <PickupAddress
             data={{

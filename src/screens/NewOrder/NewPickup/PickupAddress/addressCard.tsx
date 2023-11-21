@@ -111,6 +111,12 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
@@ -230,6 +236,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 ref={inputRef}
                 type="text"
                 value={pastedData}
+                onKeyDown={handleKeyDown}
                 onChange={handleChange}
                 className="magicAddressInput"
                 style={{
@@ -343,7 +350,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={titleCase(address.state)}
+            value={address.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);

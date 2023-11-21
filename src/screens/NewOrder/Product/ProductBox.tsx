@@ -54,7 +54,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       >
         {label}
       </span>
-      <div className="mr-3">
+      <div className="mr-3 lg:mr-0 lg:px-4">
         <img src={image} alt="" />
       </div>
       <div className="flex flex-col w-full">

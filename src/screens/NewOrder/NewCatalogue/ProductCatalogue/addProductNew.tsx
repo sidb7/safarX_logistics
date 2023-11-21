@@ -440,7 +440,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
             />
             <ServiceButton
               text={"SAVE"}
-              disabled={!isLoading}
+              // disabled={!isLoading}
               onClick={() => {
                 addProductInfo();
               }}
