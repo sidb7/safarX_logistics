@@ -16,44 +16,8 @@ const Reports = () => {
 
   const reportMenu = [
     {
-      label: "Select Report Type",
-      value: "Select Report Type",
-    },
-    {
       label: "Shipment Status Report",
       value: "Shipment Status Report",
-    },
-    {
-      label: "COD Report",
-      value: "COD Report",
-    },
-    {
-      label: "RTO OFD Report",
-      value: "RTO OFD Report",
-    },
-    {
-      label: "RTO Physical Receivied Report",
-      value: "RTO Physical Receivied Report",
-    },
-    {
-      label: "RTO Reconciliation Report",
-      value: "RTO Reconciliation Report",
-    },
-    {
-      label: "Not Picked Report",
-      value: "Not Picked Report",
-    },
-    {
-      label: "Physical Picked Report",
-      value: "Physical Picked Report",
-    },
-    {
-      label: "Reconciliation Report",
-      value: "Reconciliation Report",
-    },
-    {
-      label: "Channel Module Report",
-      value: "Channel Module Report",
     },
   ];
 
@@ -101,7 +65,7 @@ const Reports = () => {
                 }}
                 isClearable={true}
                 placeholderText="Select From & To Date"
-                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500"
+                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-0"
                 dateFormat="dd/MM/yyyy"
               />
             </div>
