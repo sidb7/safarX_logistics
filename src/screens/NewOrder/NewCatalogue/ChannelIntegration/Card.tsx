@@ -18,7 +18,13 @@ const Card = (props: any) => {
     >
       <div className={`py-[14px] px-[16px] w-[248px] `}>
         <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 lg:w-[118px]">
-          <img src={channel.icon} alt="" className="lg:hidden" />
+          <img
+            src={channel.icon}
+            alt=""
+            className={`lg:hidden ${
+              channel.icon.includes("ZOHO") ? "w-[100px]" : ""
+            }`}
+          />
           <img src={channel.iconLg} alt="" className="hidden lg:block" />
 
           <p className="font-semibold text-[12px] text-[#323232] line-clamp-1 ">
