@@ -16,18 +16,21 @@ import SortIcon from "../../assets/sort.svg";
 import EyeIcon from "../../assets/blueEye.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import CrossIcon from "../../assets/CloseIcon.svg";
+import PaginationComponent from "../../components/Pagination";
 
 const SystemLog = () => {
   const columnsHelper = createColumnHelper<any>();
   const [systemLogData, setSystemLogData] = React.useState<any>([]);
   const roles = useSelector((state: any) => state?.roles);
   // const isActive = roles.roles?.[0]?.menu?.[8]?.menu?.[0]?.pages?.[3]?.isActive;
+  const [totalItemCount, setTotalItemCount] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
   const [isModal, setIsModal] = useState(false);
   const [logData, setLogData] = useState<any>({
     eventName: "",
     eventRecordData: {},
   });
+  const [sortValue, setSortValue] = useState<any>(-1);
 
   const systemLogColumns = [
     columnsHelper.accessor("userId", {
@@ -124,7 +127,6 @@ const SystemLog = () => {
               alt=""
               className="cursor-pointer"
               onClick={() => {
-                console.log("sort");
                 sortBy();
               }}
             />
@@ -178,13 +180,19 @@ const SystemLog = () => {
   ];
 
   const sortBy = async () => {
+    if (sortValue === 1) {
+      setSortValue(-1);
+    } else {
+      setSortValue(1);
+    }
+
     try {
       const { data } = await POST(GET_SYSTEM_LOG, {
-        sort: { createdAt: -1 },
+        sort: { createdAt: sortValue },
       });
 
       if (data?.success) {
-        setSystemLogData(data?.data);
+        setSystemLogData(data?.data[0]?.data);
       } else {
         toast.error(data?.message);
       }
@@ -198,7 +206,8 @@ const SystemLog = () => {
       try {
         const { data } = await POST(GET_SYSTEM_LOG, {});
         if (data?.success) {
-          setSystemLogData(data?.data);
+          setSystemLogData(data?.data[0]?.data);
+          setTotalItemCount(data?.data[0]?.paginationData[0]?.total);
         } else {
           toast.error(data?.message);
         }
@@ -212,6 +221,34 @@ const SystemLog = () => {
     setIsActive(checkPageAuthorized("System Log"));
   }, [isActive]);
 
+  //on page change index
+  const onPageIndexChange = async (pageIndex: any) => {
+    console.log("pageindex", pageIndex);
+    const { data } = await POST(GET_SYSTEM_LOG, {
+      pageNo: pageIndex?.currentPage,
+      limit: pageIndex?.itemsPerPage,
+    });
+    if (data?.success) {
+      setSystemLogData(data?.data[0]?.data);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+  // on per page item change
+  const onPerPageItemChange = async (ItemChange: any) => {
+    console.log("ItemChange", ItemChange);
+    const { data } = await POST(GET_SYSTEM_LOG, {
+      pageNo: ItemChange?.currentPage,
+      limit: ItemChange?.itemsPerPage,
+    });
+    if (data?.success) {
+      setSystemLogData(data?.data[0]?.data);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
   return (
     <>
       {isActive ? (
@@ -222,6 +259,14 @@ const SystemLog = () => {
           <div className="mx-4">
             <CustomTable data={systemLogData} columns={systemLogColumns} />
           </div>
+          {totalItemCount > 0 && (
+            <PaginationComponent
+              totalItems={totalItemCount}
+              itemsPerPageOptions={[10, 20, 30, 50]}
+              onPageChange={onPageIndexChange}
+              onItemsPerPageChange={onPerPageItemChange}
+            />
+          )}
           <CenterModal
             isOpen={isModal}
             onRequestClose={() => {

@@ -27,14 +27,15 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             Bank Details
           </span>
         </div>
-        {/* <div>
+        <div>
           <img
             src={EditIcon}
             alt=""
             className="mr-4 cursor-pointer"
-            onClick={() => navigate("/profile/edit-bank")}
+            // onClick={() => navigate("/profile/edit-bank")}
+            onClick={() => navigate("/onboarding/wallet-details")}
           />
-        </div> */}
+        </div>
       </div>
 
       {!isItLgScreen ? (
