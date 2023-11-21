@@ -13,6 +13,7 @@ const Reports = () => {
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
+  console.log("isActive", isActive);
 
   const reportMenu = [
     {
@@ -35,11 +36,11 @@ const Reports = () => {
 
   useEffect(() => {
     setIsActive(checkPageAuthorized("Reports"));
-  }, []);
+  }, [isActive]);
 
   return (
     <>
-      {isActive ? (
+      {isActive === undefined || isActive ? (
         <div>
           <div className="w-full">
             <Breadcrum label="Reports" />
