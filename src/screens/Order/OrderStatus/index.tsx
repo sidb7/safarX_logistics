@@ -9,6 +9,7 @@ import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
+import CrossIcon from "../../../assets/cross.svg";
 import {
   FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
@@ -20,6 +21,10 @@ import { toast } from "react-toastify";
 import CustomDropDown from "../../../components/DropDown";
 import DatePicker from "react-datepicker";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
+import editIcon from "../../../assets/serv/edit.svg";
+import DownloadIcon from "../../../assets/download.svg";
+import { Tooltip } from "react-tooltip";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -30,6 +35,8 @@ interface IOrderstatusProps {
   currentStatus: string;
   orders: any;
   allOrders: any;
+  selectedRowdata?: any;
+  setDeleteModalDraftOrder?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -60,6 +67,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   currentStatus,
   orders,
   allOrders,
+  selectedRowdata,
+  setDeleteModalDraftOrder,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -81,6 +90,18 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     { label: "Failed", isActive: false, value: "failed" },
   ]);
 
+  const actionsObject: any = {
+    DRAFT: [{ icon: DeleteIconForLg, hovertext: "Delete Orders" }],
+    BOOKED: [
+      { icon: CrossIcon, hovertext: "Cancel Orders" },
+      { icon: DownloadIcon, hovertext: "Download Manifest Reports" },
+    ],
+  };
+
+  const getActionsIcon = () => {
+    return actionsObject[currentStatus];
+  };
+
   const fetchManifest = async () => {
     let varstartDate: any = startDate;
     let varendDate: any = endDate;
@@ -90,7 +111,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     let epochEndDate: any = new Date(varendDate);
     epochEndDate = epochEndDate.getTime() / 1000;
 
-    console.log("data :", partnerValue, epochStartDate, epochEndDate);
     let payload = {
       startDate: epochStartDate,
       endDate: epochEndDate,
@@ -132,6 +152,28 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
+  const handleActions = (actionName: any, selectedRowdata: any) => {
+    const tempOrderIds = selectedRowdata.map(
+      (data: any, index: any) => data.original.tempOrderId
+    );
+
+    let payload = {
+      tempOrderIdArray: tempOrderIds,
+    };
+
+    switch (actionName) {
+      case "DRAFT": {
+        setDeleteModalDraftOrder &&
+          setDeleteModalDraftOrder({ isOpen: true, payload });
+        break;
+      }
+      case "BOOKED": {
+        setManifestModal({ ...manifestModal, isOpen: true });
+        break;
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPartnerList();
   }, []);
@@ -139,15 +181,19 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const filterComponent = (className?: string) => {
     return (
       <div
-        className={`flex text-[14px] text-[#777777] font-medium mt-4 h-[44px] w-[204px] lg:hidden ${className}`}
+        className={`w-[100%] flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] sm:w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
           return (
             <span
               key={index}
-              className={`flex items-center py-[8px] px-[16px] border-[1px] cursor-pointer border-[#A4A4A4] ${
+              className={`flex flex-1 items-center py-[8px] px-[16px] border-[1px] ${
+                index === 0 && "rounded-l-md"
+              } ${
+                index === filterData.length - 1 && "rounded-r-md"
+              } cursor-pointer border-[#A4A4A4] ${
                 filterId === index
-                  ? "rounded-l-md bg-[#D2D2D2] font-medium text-[#1C1C1C]"
+                  ? ` bg-[#D2D2D2] font-medium text-[#1C1C1C]`
                   : ""
               }`}
               onClick={() => handleFilterOrders(index)}
@@ -221,11 +267,46 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       return (
         <div className="grid grid-cols-3 gap-x-2 lg:flex ">
-          {currentStatus === "BOOKED" && (
+          {selectedRowdata?.length > 0 && getActionsIcon()?.length > 0 && (
+            <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+              {getActionsIcon()?.map((data: any, index: any) => {
+                return (
+                  <>
+                    <div
+                      key={index}
+                      className={`${
+                        index < getActionsIcon().length - 1 &&
+                        "border-r border-[#A4A4A4]"
+                      } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                      onClick={() =>
+                        handleActions(currentStatus, selectedRowdata)
+                      }
+                      data-tooltip-id="my-tooltip-inline"
+                      data-tooltip-content={data.hovertext}
+                    >
+                      <img src={data.icon} alt="" className="w-[17px]" />
+                    </div>
+                    <Tooltip
+                      id="my-tooltip-inline"
+                      style={{
+                        backgroundColor: "bg-neutral-900",
+                        color: "#FFFFFF",
+                        width: "fit-content",
+                        fontSize: "14px",
+                        lineHeight: "16px",
+                      }}
+                    />
+                  </>
+                );
+              })}
+            </div>
+          )}
+
+          {/* {currentStatus === "BOOKED" && (
             <>
               <CustomButton
                 className="px-1 py-1 font-semibold text-[14px]"
-                text="Manfest Report"
+                text="Manifest Report"
                 onClick={() =>
                   setManifestModal({ ...manifestModal, isOpen: true })
                 }
@@ -233,7 +314,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 icon={""}
               />
             </>
-          )}
+          )} */}
           <div>
             <SearchBox
               className="removePaddingPlaceHolder"
@@ -259,20 +340,23 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       );
     } else {
       return (
-        <div className="grid grid-cols-3 gap-x-2">
-          <div className="flex items-center justify-center border-[1px] rounded-md border-[#A4A4A4] col-span-2">
-            <img src={SelectIcon} alt="" />
-            <span className="ml-2 text-[#1C1C1C] text-[14px] font-medium">
-              SELECT
-            </span>
-          </div>
-          <div
-            className="grid justify-center items-center border-[1px] rounded-md border-[#A4A4A4] "
-            onClick={() => {
-              navigate("/neworder/filter");
-            }}
-          >
-            <img src={FilterIcon} alt="Filter Order" width="16px" />
+        <div className="flex items-center justify-between w-[100%]">
+          <div className="text-[14px] text-[#272727]">34 Orders</div>
+          <div className="flex gap-4">
+            <div className="flex items-center justify-center py-2 w-[110px] border-[1px] rounded-md border-[#A4A4A4] col-span-2">
+              <img src={SelectIcon} alt="" />
+              <span className="ml-2 text-[#1C1C1C] text-[12px] font-medium">
+                SELECT
+              </span>
+            </div>
+            <div
+              className="flex justify-center items-center w-[40px] border-[1px] rounded-md border-[#A4A4A4]"
+              onClick={() => {
+                navigate("/neworder/filter");
+              }}
+            >
+              <img src={FilterIcon} alt="Filter Order" width="16px" />
+            </div>
           </div>
         </div>
       );
@@ -331,7 +415,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         })}
       </div>
 
-      <div className="grid grid-cols-2 items-center justify-center my-8 h-[46px] lg:flex lg:justify-between">
+      <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
         <div className="lg:flex lg:gap-x-4">
           <div className="flex items-center">
             {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
@@ -341,8 +425,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           {currentStatus === "DRAFT" &&
             filterComponent("!hidden lg:!flex lg:!mt-0")}
         </div>
-
-        {filterButton()}
+        <div className="">{filterButton()}</div>
       </div>
 
       {currentStatus === "DRAFT" && filterComponent("")}
@@ -397,7 +480,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
       <CenterModal
         isOpen={manifestModal.isOpen}
-        onRequestClose={() => {}}
+        onRequestClose={() =>
+          setManifestModal({ ...manifestModal, isOpen: false })
+        }
         className="w-[50%] lg:w-[30%] h-[40%]"
       >
         <div className="h-full w-full">
@@ -412,38 +497,41 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               alt=""
             />
           </div>
-          <div className="grid grid-cols-2 p-4 gap-2">
-            <div className="w-[250px] md:w-[250px]">
-              <CustomDropDown
-                heading="Select Courier Partner"
-                value={partnerValue}
-                options={partnerMenu}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                  setPartnerValue(event.target.value);
-                }}
+
+          <div className="px-4">
+            <div className="flex gap-4">
+              <div className="w-[250px] md:w-[250px]">
+                <CustomDropDown
+                  heading="Select Courier Partner"
+                  value={partnerValue}
+                  options={partnerMenu}
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    setPartnerValue(event.target.value);
+                  }}
+                />
+              </div>
+              <div className="w-[350px] md:w-[250px]">
+                <DatePicker
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(update: any) => {
+                    setDateRange(update);
+                  }}
+                  isClearable={true}
+                  placeholderText="Select From & To Date"
+                  className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
+                  dateFormat="dd/MM/yyyy"
+                />
+              </div>
+            </div>
+            <div className="mt-10">
+              <ServiceButton
+                text={"MANIFEST REPORT"}
+                className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
+                onClick={() => fetchManifest()}
               />
             </div>
-            <div className="w-[350px] md:w-[250px]">
-              <DatePicker
-                selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
-                onChange={(update: any) => {
-                  setDateRange(update);
-                }}
-                isClearable={true}
-                placeholderText="Select From & To Date"
-                className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
-                dateFormat="dd/MM/yyyy"
-              />
-            </div>
-          </div>
-          <div className="mt-5 p-4">
-            <ServiceButton
-              text={"MANIFEST REPORT"}
-              className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
-              onClick={() => fetchManifest()}
-            />
           </div>
         </div>
       </CenterModal>

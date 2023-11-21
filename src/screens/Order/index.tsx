@@ -2,10 +2,12 @@ import CustomButton from "../../components/Button";
 import AddOrderIcon from "../../assets/Order/AddOrder.svg";
 import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
 import { OrderStatus } from "./OrderStatus";
-import DeliveryGIF from "../../assets/OrderCard/Gif.gif";
+import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
 import { useEffect, useState } from "react";
+import Stepper from "./Stepper";
 import "../../styles/silkStyle.css";
+import DeliveryIcon from "../../assets/Delivery.svg";
 import {
   columnHelperForNewOrder,
   ColumnHelperForBookedAndReadyToPicked,
@@ -22,8 +24,38 @@ import {
   GET_SELLER_ORDER,
   POST_SERVICEABILITY,
 } from "../../utils/ApiUrls";
+import OrderCard from "./OrderCard";
+
+import trackingIcon from "../../assets/trackingShipyaariIcon.jpg";
+import trackingIcon2 from "../../assets/trackingShipyaari2.svg";
+import instagramIcon from "../../assets/instagramIcon.svg";
+import facebook from "../../assets/facebookIcon.svg";
+import Star from "../../assets/Comments.svg";
+import bookedIcon from "../../assets/Transaction/bookedIcon.svg";
+import DelhiveryIcon from "../../assets/Delhivery_Logo_(2019) 2.svg";
+import telephoneIcon from "../../assets/telephoneIcon.svg";
+import TrackingMenu from "../../assets/trackingMenu.svg";
+import DownwardArrow from "../../assets/downwardArrow.svg";
+import UpwardArrow from "../../assets/AccordionUp.svg";
+import Product from "../../assets/layer.svg";
+import GalleryIcon from "../../assets/galleryIcon.svg";
+
+import redirectIcon from "../../assets/redirect.svg";
+import MoreIcon from "../../assets/more.svg";
+import DimensionIcon from "../../assets/3d-cube-scan.svg";
+import SkuBoxIcon from "../../assets/DeliveryOder.svg";
+import BoxSearchIcon from "../../assets/box-search.svg";
+import orderBox from "../../assets/Delivery Icon.svg";
+import DelivertTruckIcon from "../../assets/group.svg";
+import Location from "../../assets/Location.svg";
+import TaskSquare from "../../assets/task-square.svg";
+import profileIcon from "../../assets/Contact.svg";
+import TelePhoneIcon from "../../assets/telephoneIcon.svg";
+import ShareIcon from "../../assets/16.svg";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import TickLogo from "../../assets/tick.gif";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
@@ -36,6 +68,9 @@ import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAc
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 
+import orderCardImg from "../../assets/OrderCard/Gif.gif";
+import CopyTooltip from "../../components/CopyToClipboard";
+import { BottomNavBar } from "../../components/BottomNavBar";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,6 +140,29 @@ const Buttons = (className?: string) => {
 //   "RTO",
 //   "FAILED",
 // ];
+
+const ordersArr = [
+  {
+    count: 23,
+    text: "Today's delivery",
+    img: "CreateOrderIcon",
+  },
+  {
+    count: 34,
+    text: "Today's delivery",
+    img: "ShippedIcon",
+  },
+  {
+    count: 12,
+    text: "Today's delivery",
+    img: "InTransitIcon",
+  },
+  {
+    count: 17,
+    text: "Today's delivery",
+    img: "InTransitIcon",
+  },
+];
 
 const tabs = [
   {
@@ -209,6 +267,15 @@ const Index = () => {
   const navigate = useNavigate();
   const [isDeleted, setIsDeleted] = useState(false);
 
+  const [openSection, setOpenSection] = useState<any>(false);
+  const [selectedRowdata, setSelectedRowData] = useState([]);
+
+  // const toggleSection = (section: string) => {
+  //   setOpenSection((prevOpenSection: any) =>
+  //     prevOpenSection === section ? null : section
+  //   );
+  // };
+
   // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Orders");
   const Buttons = (className?: string) => {
@@ -262,6 +329,37 @@ const Index = () => {
       </div>
     );
   };
+
+  const MobileButtons = (className?: string) => {
+    return (
+      <div
+        className={
+          className ? className : `flex items-center mx-5 mt-2 justify-between`
+        }
+      >
+        <div>
+          <CustomButton
+            className="text-[12px] lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+            text="ADD ORDER"
+            onClick={() => navigate("/orders/add-order/pickup")}
+            showIcon={true}
+            icon={AddOrderIcon}
+          />
+        </div>
+
+        <div className="flex flex-col items-center">
+          <img src={DeliveryIcon} alt="" />
+          <div className="text-[#004EFF] text-[12px]">SYNC CHANNEL</div>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <img src={BlukOrderIcon} alt="" />
+          <div className="text-[#004EFF] text-[12px]">BULK ORDER</div>
+        </div>
+      </div>
+    );
+  };
+
   //  settings for desktop view
   const desktopSettings = {
     dots: true,
@@ -479,65 +577,115 @@ const Index = () => {
     setIsDeleted(false);
   }
 
+  useEffect(() => {
+    console.log("deleteModalDraftOrder", deleteModalDraftOrder);
+  }, [deleteModalDraftOrder]);
+
   return (
     <>
       {isActive ? (
         <div>
           <Breadcrum label="Orders" component={Buttons()} />
-          {
-            <div className="pl-5 pr-6">
-              <OrderStatus
-                filterId={filterId}
-                orders={orders}
-                setFilterId={setFilterId}
-                handleTabChange={handleTabChanges}
-                statusData={statusData}
-                setOrders={setOrders}
-                allOrders={allOrders}
-                currentStatus={tabs[globalIndex].value}
-              />
-              {isLoading ? (
-                <div>
-                  <div className="flex items-stretch h-16 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
+          <div className="flex md:hidden justify-between gap-4 overflow-x-scroll py-4 mx-5">
+            {ordersArr?.map((order: any, i: number) => (
+              <div
+                className="shadow-md w-[30rem] lg:w-[24rem] h-[6.2rem] lg:h-[6.6rem] relative rounded-lg border"
+                key={i}
+              >
+                <div className="flex items-center justify-between min-w-[310px] p-3   lg:px-6 lg:py-4  ">
+                  <div>
+                    <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
+                      {order?.count}
+                    </div>
+                    <p className="text-[#494949] font-normal lg:text-base font-Open text-sm">
+                      {order?.text}
+                    </p>
                   </div>
-                  <div className="flex items-stretch h-44 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                  </div>
-                  <div className="flex items-stretch h-44 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="self-center absolute top-[-35px] right-[10px] w-[120px] h-[120px]">
+                    <img src={orderCardImg} alt="Box" />
                   </div>
                 </div>
-              ) : (
-                <div>
-                  <CustomTable data={orders} columns={columnHelper || []} />
-                  {totalCount > 0 && (
-                    <Pagination
-                      totalItems={totalCount}
-                      itemsPerPageOptions={[10, 20, 30, 50]}
-                      onPageChange={onPageIndexChange}
-                      onItemsPerPageChange={onPerPageItemChange}
+              </div>
+            ))}
+          </div>
+
+          {!isLgScreen && MobileButtons()}
+
+          <div className="px-4 md:pl-5 md:pr-6">
+            <OrderStatus
+              filterId={filterId}
+              orders={orders}
+              setFilterId={setFilterId}
+              handleTabChange={handleTabChanges}
+              statusData={statusData}
+              setOrders={setOrders}
+              allOrders={allOrders}
+              currentStatus={tabs[globalIndex].value}
+              selectedRowdata={selectedRowdata}
+              setDeleteModalDraftOrder={setDeleteModalDraftOrder}
+            />
+            {isLoading ? (
+              <div>
+                <div className="flex items-stretch h-16 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+                <div className="flex items-stretch h-44 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+                <div className="flex items-stretch h-44 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {isLgScreen ? (
+                  <>
+                    <CustomTable
+                      data={orders || []}
+                      columns={columnHelper || []}
+                      setRowSelectedData={setSelectedRowData}
                     />
-                  )}
+                    {totalCount > 0 && (
+                      <Pagination
+                        totalItems={totalCount}
+                        itemsPerPageOptions={[10, 20, 30, 50]}
+                        onPageChange={onPageIndexChange}
+                        onItemsPerPageChange={onPerPageItemChange}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="border border-white my-5">
+                    {orders.length > 0 && (
+                      <>
+                        {orders?.map((data: any, i: any) => (
+                          <OrderCard data={data} />
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
+                <div className="mt-24 lg:hidden">
+                  <BottomNavBar />
                 </div>
-              )}
-            </div>
-          }
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <AccessDenied />
@@ -560,7 +708,7 @@ const Index = () => {
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
+        title={`Are You Sure You Want To Delete this Orders ?`}
       />
 
       <CustomRightModal
