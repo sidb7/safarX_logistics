@@ -8,33 +8,36 @@ import downloadIcon from "../../../../assets/download.svg";
 import exportIcon from "../../../../assets/export.svg";
 import infoIcon from "../../../../assets/info.svg";
 
-interface ICreditNoteDataProps {}
+interface ICreditNoteDataProps {
+  creditData?: any;
+}
 
 const CreditNoteData: React.FunctionComponent<ICreditNoteDataProps> = (
   props
 ) => {
   const columnsHelper = createColumnHelper<any>();
   const [data, setData] = useState([
-    {
-      date: "23 May 2023",
-      recieved: "COUPON",
-      amount: "50",
-      description:
-        "Rs. 50 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
-    },
-    {
-      date: "23 May 2023",
-      recieved: "COUPON",
-      amount: "50",
-      description: "NEFT- INWARD-SBIN323032121145- FROM SRC TECH SOLUTION LTD.",
-    },
-    {
-      date: "23 May 2023",
-      recieved: "NEFT/IMPS/RTGS",
-      amount: "300",
-      description:
-        "Rs. 300 has been credited on 2023-06-04 19:39:04 through NEFT SBIN323032121145- SRC TECH SOLUTION LTD.",
-    },
+    //commented to show no data found, if required uncomment this
+    // {
+    //   date: "23 May 2023",
+    //   recieved: "COUPON",
+    //   amount: "50",
+    //   description:
+    //     "Rs. 50 has been credited on 2023-05-30 19:39:04 during wallet recharge through coupon ASDTS.",
+    // },
+    // {
+    //   date: "23 May 2023",
+    //   recieved: "COUPON",
+    //   amount: "50",
+    //   description: "NEFT- INWARD-SBIN323032121145- FROM SRC TECH SOLUTION LTD.",
+    // },
+    // {
+    //   date: "23 May 2023",
+    //   recieved: "NEFT/IMPS/RTGS",
+    //   amount: "300",
+    //   description:
+    //     "Rs. 300 has been credited on 2023-06-04 19:39:04 through NEFT SBIN323032121145- SRC TECH SOLUTION LTD.",
+    // },
   ]);
   const billingOrdersHeading = [
     columnsHelper.accessor("date", {
