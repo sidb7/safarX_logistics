@@ -31,6 +31,8 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { Spinner } from "flowbite-react";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { socketCallbacks } from "../../../Socket";
+import { useDispatch } from "react-redux";
 
 type Props = {};
 
@@ -39,6 +41,7 @@ const Summary = (props: Props) => {
   const [ishighRisk, setIsHighRisk] = useState(false);
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [ewaybillNumber, setEwaybillNumber] = useState("");
+  const dispatch = useDispatch();
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -184,6 +187,7 @@ const Summary = (props: Props) => {
 
   useEffect(() => {
     getLatestOrderDetails();
+    // socketCallbacks.connectSocket(dispatch);
   }, []);
 
   const pickupLocationDetails = latestOrder?.data?.[0]?.pickupAddress;
