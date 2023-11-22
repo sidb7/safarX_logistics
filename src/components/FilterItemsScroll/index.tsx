@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface IProps {
   onClick: (selectedItems: string[]) => void;
   items: string[];
+  initialSelectedFilter?: any;
 }
 
 const FilterItems: React.FC<IProps> = (props: IProps) => {
-  const { items, onClick } = props;
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const { items, onClick, initialSelectedFilter } = props;
+  const [selectedItem, setSelectedItem] = useState<string>(
+    initialSelectedFilter
+  );
+
+  useEffect(() => {
+    onClick([initialSelectedFilter]);
+  }, []);
 
   const handleItemClick = (item: string) => {
-    const updatedSelection = selectedItems.includes(item)
-      ? selectedItems.filter((selected) => selected !== item)
-      : [...selectedItems, item];
-
-    setSelectedItems(updatedSelection);
-    onClick(updatedSelection);
+    setSelectedItem(item);
+    onClick([item]);
   };
-
   return (
     <div className="flex overflow-x-scroll items-center gap-2 lg:gap-6">
       {items?.map((each: string, index: number) => {
-        const isSelected = selectedItems.includes(each);
+        const isSelected = selectedItem === each;
 
         return (
           <div
