@@ -133,7 +133,6 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     const updatedProductInputState = products.filter(
       (isSelectedFilterData: any) => isSelectedFilterData?.selected
     );
-    console.log("updatedProductInputState", updatedProductInputState);
     if (updatedProductInputState?.length < 2) {
       toast.error("Atleast Two Product's is Required For Combo");
       return;
