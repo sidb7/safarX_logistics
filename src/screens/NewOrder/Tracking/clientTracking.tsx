@@ -407,10 +407,10 @@ const Tracking = () => {
           <div className="flex justify-center p-3">
             <img src={shipyaari} alt="Shipyaari" />
           </div>
-          <div className=" flex flex-col lg:flex lg:justify-center lg:items-center gap-x-2">
+          <div className=" flex flex-col  md:flex-row md:justify-center gap-x-2">
             {/*tracking ID Box */}
             <div className="">
-              <div className="flex items-center gap-x-5 w-full">
+              <div className="flex items-center gap-x-5 w-full md:w-[500px] lg:w-[600px] xl:w-[800px]">
                 <InputBox
                   label="Enter tracking ID"
                   value={trackingNo}
@@ -431,7 +431,7 @@ const Tracking = () => {
               <div className="flex justify-between md:w-auto">
                 {loading ? (
                   <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <Spinner />
+                    <Spinner />{" "}
                   </div>
                 ) : (
                   <div className=" ">
@@ -450,7 +450,7 @@ const Tracking = () => {
                                   />
 
                                   <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
-                                    <p className="flex flex-col text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
+                                    <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
                                       Last Update:
                                       <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
                                         <span>{timeDetails.hours + " |"}</span>
@@ -546,35 +546,36 @@ const Tracking = () => {
                                     </p>
                                   </div>
 
-                                  <img
+                                  {/* <img
                                     src={
                                       openSection === "tracking"
                                         ? UpwardArrow
                                         : DownwardArrow
                                     }
                                     alt=""
-                                  />
+                                  /> */}
                                 </div>
 
                                 <div
-                                  className={`${
-                                    openSection === "tracking"
-                                      ? "max-h-[500px] overflow-y-scroll"
-                                      : ""
-                                  }`}
+                                  // className={`${
+                                  //   openSection === "tracking"
+                                  //     ? "max-h-[500px] overflow-y-scroll"
+                                  //     : ""
+                                  // }`}
+                                  className={`max-h-[200px] overflow-y-scroll`}
                                 >
                                   {true &&
                                     trackingDetails.Scans?.reverse()?.map(
                                       (each: any, index: number) => {
-                                        console.log("each", each);
+                                        // console.log("each", each);
 
                                         return (
                                           <div
-                                            className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                            className="flex gap-x-5 mt-1 h-16  relative overflow-y-scroll mt-2"
                                             key={index}
                                           >
                                             <div className="pt-1">
-                                              <p className="text-xs font-Open font-normal">
+                                              <p className="text-xs font-Open font-normal w-[68px] whitespace-nowrap">
                                                 {`${each?.time.split(" ")[0]} `}
                                               </p>
                                               <p className="text-xs font-Open font-normal">
@@ -620,10 +621,11 @@ const Tracking = () => {
                                   </div>
                                   {openSection === "product" ? (
                                     <div className="flex gap-x-1 flex items-center">
-                                      <img src={GreenTick} />
+                                      {/* commented as not required */}
+                                      {/* <img src={GreenTick} />
                                       <p className="text-[12px] font-normal whitespace-nowrap mt-1 text-[#7CCA62]">
                                         Verified
-                                      </p>
+                                      </p> */}
 
                                       <img
                                         src={
@@ -636,10 +638,11 @@ const Tracking = () => {
                                     </div>
                                   ) : (
                                     <div className="flex gap-x-1 flex items-center">
-                                      <img src={Lock} />
+                                      {/* commented as not required */}
+                                      {/* <img src={Lock} />
                                       <p className="text-[12px] font-normal whitespace-nowrap mt-1 hidden md:block">
                                         To see details please verify with OTP
-                                      </p>
+                                      </p> */}
 
                                       <img
                                         src={
@@ -698,7 +701,7 @@ const Tracking = () => {
                                         <p className="text-[#777777] text-[12px] font-normal leading-5">
                                           Address
                                         </p>
-                                        <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 max-w-[900px] mt-1  w-[280px] md:w-full">
+                                        <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
                                           {each?.pickupAddress?.fullAddress}
                                         </p>
                                       </div>
