@@ -27,40 +27,6 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
     >
       <div className="grid grid-cols-2 gap-3 ">
         <div
-          className={`relative z-1  border-[1px] rounded ${
-            type === "B2B" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
-          } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
-          onClick={() => {
-            setDeliveryAddress((prevData: any) => ({
-              ...prevData,
-              orderType: "B2B",
-              gstNumber: "",
-              deliveryAddress: {
-                ...prevData.deliveryAddress,
-                recipientType: "business",
-              },
-              billingAddress: {
-                ...prevData.billingAddress,
-                recipientType: "business",
-              },
-            }));
-          }}
-        >
-          <img
-            src={CargoRating}
-            alt="Cargo Rating"
-            className="h-[100%] w-[100%] object-contain"
-          />
-          <div className="flex flex-row  items-center  absolute z-2 -top-3 bg-[#FEFEFE] ">
-            {type === "B2B" && (
-              <Checkbox checked={type === "B2B" ? true : false} />
-            )}
-            <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
-              Business
-            </p>
-          </div>
-        </div>
-        <div
           className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
             type === "B2C" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
           }  p-5 cursor-pointer`}
@@ -91,6 +57,40 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
             )}
             <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
               Consumer
+            </p>
+          </div>
+        </div>
+        <div
+          className={`relative z-1  border-[1px] rounded ${
+            type === "B2B" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
+          } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
+          onClick={() => {
+            setDeliveryAddress((prevData: any) => ({
+              ...prevData,
+              orderType: "B2B",
+              gstNumber: "",
+              deliveryAddress: {
+                ...prevData.deliveryAddress,
+                recipientType: "business",
+              },
+              billingAddress: {
+                ...prevData.billingAddress,
+                recipientType: "business",
+              },
+            }));
+          }}
+        >
+          <img
+            src={CargoRating}
+            alt="Cargo Rating"
+            className="h-[100%] w-[100%] object-contain"
+          />
+          <div className="flex flex-row  items-center  absolute z-2 -top-3 bg-[#FEFEFE] ">
+            {type === "B2B" && (
+              <Checkbox checked={type === "B2B" ? true : false} />
+            )}
+            <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
+              Business
             </p>
           </div>
         </div>

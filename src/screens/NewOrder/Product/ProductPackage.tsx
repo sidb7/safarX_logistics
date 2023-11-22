@@ -120,10 +120,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [isFragile, setIsFragile] = useState<any>(false);
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
-    isCod: orderType === "B2C",
     collectableAmount: 0,
     invoiceValue: 0,
   });
+  const [isOrderCOD, setIsOrderCOD] = useState<any>(false);
+
   const [isLoading, setIsLoading]: any = useState(false);
 
   const params = getQueryJson();
@@ -140,6 +141,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   //update invoice value
   useEffect(() => {
     let totalInvoiceValue = 0;
+    let totalCodValue = 0;
     let tempArr = packages;
 
     // if (packages.length === 1 && orderType === "B2C") {
@@ -151,9 +153,25 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     tempArr?.forEach((packages: any) => {
       totalInvoiceValue =
         totalInvoiceValue + +getInvoiceValue(packages?.products);
+      totalCodValue = totalCodValue + packages.codInfo?.collectableAmount;
     });
 
-    setCodData({ ...codData, invoiceValue: totalInvoiceValue });
+    let codInfo: any = {
+      ...codData,
+      invoiceValue: totalInvoiceValue,
+      isCod: false,
+      collectableAmount: 0,
+    };
+
+    if (totalCodValue > 0) {
+      codInfo = {
+        ...codInfo,
+        isCod: true,
+        collectableAmount: +totalCodValue,
+      };
+    }
+
+    setCodData({ ...codInfo });
   }, [packages]);
 
   useEffect(() => {
@@ -227,7 +245,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       ...boxType,
       ...tempArr[boxIndex],
       codInfo: {
-        isCod: false,
+        isCod: isOrderCOD,
         collectableAmount: 0,
         invoiceValue: 0,
       },
@@ -256,13 +274,25 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     let tempArr = packages;
     switch (name) {
       case "cod":
-        tempArr[boxIndex] = {
-          ...tempArr[boxIndex],
-          codInfo: {
-            ...tempArr[boxIndex].codInfo,
-            isCod: value,
-          },
-        };
+        setIsOrderCOD(value);
+        if (value === false) {
+          tempArr.forEach((my_package: any) => {
+            my_package.codInfo.isCod = false;
+            my_package.codInfo.collectableAmount = 0;
+          });
+        } else {
+          tempArr.forEach((my_package: any) => {
+            my_package.codInfo.isCod = true;
+          });
+        }
+
+        // tempArr[boxIndex] = {
+        //   ...tempArr[boxIndex],
+        //   codInfo: {
+        //     ...tempArr[boxIndex].codInfo,
+        //     isCod: value,
+        //   },
+        // };
         break;
       case "pod":
         tempArr[boxIndex] = {
@@ -352,7 +382,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
-        const { boxInfo = [], orderType } = data?.data[0];
+        const { boxInfo = [], orderType, codInfo } = data?.data[0];
+        setCodData(codInfo);
+        setIsOrderCOD(codInfo?.isCod);
         setPackages([...boxInfo]);
         setOrderType(orderType);
       } else {
@@ -411,7 +443,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     let payload = {
       boxInfo: packages,
-      codInfo: { ...codDataInfo },
+      codInfo: { ...codData },
       insurance: {
         isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
@@ -562,6 +594,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     openPackageDetailModal={handleOpenPackageDetails}
                     setCheckBoxValuePerBox={handleCheckBoxValuePerBox}
                     orderType={orderType}
+                    isOrderCOD={isOrderCOD}
+                    setIsOrderCOD={setIsOrderCOD}
                   />
                 );
               })}
