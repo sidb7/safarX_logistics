@@ -153,6 +153,7 @@ import BankProtected from "../components/ProtectedRoutes/BankProtected";
 //PublicTracking
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
 import InvoicePdf from "../screens/Invoice";
+import CashOnDelivery from "../screens/Onboarding/WalletRecharge/cashOnDelivery";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -381,6 +382,11 @@ const MyRoutes: React.FC = () => {
                 <WalletPayment />
               </BankProtected>
             }
+          />
+
+          <Route
+            path="/onboarding/cash-on-delivery"
+            element={<CashOnDelivery />}
           />
 
           {/* <Route

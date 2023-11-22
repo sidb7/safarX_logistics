@@ -244,7 +244,7 @@ const WalletPayment = () => {
                     isDisabled={isDisabled}
                     text={"Paytm"}
                     amt={walletValue}
-                    navigate={`${SELLER_WEB_URL}/dashboard/overview`}
+                    navigate={`${SELLER_WEB_URL}/onboarding/cash-on-delivery`}
                   />
                 </div>
                 <div className="flex flex-col items-center gap-y-2">
@@ -266,8 +266,8 @@ const WalletPayment = () => {
                     onClick={() =>
                       loadPhonePeTransaction(
                         walletValue,
-                        `${SELLER_WEB_URL}/dashboard/overview`,
-                        `${SELLER_WEB_URL}/dashboard/overview`
+                        `${SELLER_WEB_URL}/onboarding/cash-on-delivery`,
+                        `${SELLER_WEB_URL}/onboarding/cash-on-delivery`
                       )
                     }
                   >

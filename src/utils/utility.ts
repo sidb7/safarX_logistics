@@ -135,7 +135,7 @@ export const loadPhonePeTransaction = async (
       paymentGateway: "PHONEPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-   
+
     let phonePayTransactionPage;
     if (!data) {
       phonePayTransactionPage = redirectUrl;
@@ -167,7 +167,7 @@ export const loadRazorPayTransaction = async (
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),
-        callbackUrl: `${SELLER_WEB_URL}/dashboard/overview`,
+        callbackUrl: `${SELLER_WEB_URL}/onboarding/cash-on-delivery`,
       },
       paymentGateway: "RAZORPE",
     };
@@ -203,7 +203,7 @@ export const loadRazorPayTransaction = async (
           paymentGateway: "RAZORPE",
         };
         await POST(RECHARGE_STATUS, body);
-        window.location.reload();
+        window.location.href = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
       },
       prefill: {
         name: userName,

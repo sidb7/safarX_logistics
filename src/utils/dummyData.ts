@@ -27,6 +27,7 @@ import SportsIcon from "../assets/Product/sports.svg";
 import FitnessIcon from "../assets/Product/fitness.svg";
 import GiftIcon from "../assets/Product/gift.svg";
 import ForkIcon from "../assets/Product/ForkKnife.svg";
+import ZohoIcon from "../assets/Catalogue/ZOHO.svg.png";
 
 export const insufficientBalance = [
   {
@@ -666,6 +667,14 @@ export const ChannelIntegrationCarts = {
       integrated: false,
       storesIntegrated: 5,
       channel: "WOOCOMMERCE",
+    },
+    {
+      name: "STORE_NAME",
+      icon: ZohoIcon,
+      iconLg: ZohoIcon,
+      integrated: false,
+      storesIntegrated: 5,
+      channel: "ZOHO",
     },
     // {
     //   name: "Woo",
