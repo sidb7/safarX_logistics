@@ -4,6 +4,7 @@ import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import WooIcon from "../../../../assets/Catalogue/woo.svg";
 import WooLg from "../../../../assets/Catalogue/WooCommerceLg.svg";
+import ZohoIcon from "../../../../assets/Catalogue/ZOHO.svg.png";
 import Card from "./Card";
 import Header from "./Header";
 import { GET_ALL_STORES } from "../../../../utils/ApiUrls";
@@ -38,8 +39,18 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           response?.data?.forEach((item: any) => {
             tempArr.push({
               name: item.storeName,
-              icon: item.channel === "SHOPIFY" ? ShopifyIcon : WooIcon,
-              iconLg: item.channel === "SHOPIFY" ? ShopifyLg : WooLg,
+              icon:
+                item.channel === "SHOPIFY"
+                  ? ShopifyIcon
+                  : item.channel === "WOOCOMMERCE"
+                  ? WooIcon
+                  : ZohoIcon,
+              iconLg:
+                item.channel === "SHOPIFY"
+                  ? ShopifyLg
+                  : item.channel === "WOOCOMMERCE"
+                  ? WooLg
+                  : ZohoIcon,
               integrated: true,
               storeId: item.storeId,
             });
