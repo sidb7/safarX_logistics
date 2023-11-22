@@ -12,6 +12,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
+import CustomDropDown from "../../../../components/DropDown";
 
 interface IAddAddressProps {}
 
@@ -19,7 +20,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   const navigate = useNavigate();
   const { activeTab } = useLocation().state;
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const [addressType, setAddressType] = useState();
   const [addAddress, setAddAddress] = useState<any>({
     flatNo: "",
     locality: "",
@@ -62,6 +63,10 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   });
 
   const createAddress = async (e: any) => {
+    if (!addressType) {
+      toast.error("Please Select Address Type");
+      return;
+    }
     const fullAddress = `${addAddress.flatNo}, ${addAddress.locality}, ${addAddress.sector}, ${addAddress.landmark}, ${addAddress.city}, ${addAddress.state}, ${addAddress.country}, ${addAddress.pincode}`;
 
     setAddAddress((prevAddAddress: any) => ({
@@ -127,21 +132,38 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
     // } else if (activeTab === "delivery") {
     //   url = ADD_DELIVERY_ADDRESS;
     // }
+    if (addressType === "Pickup Address") {
+      const { data: createAddressBook }: any = await POST(
+        ADD_PICKUP_ADDRESS_CATALOGUE,
+        {
+          ...addAddress,
+          fullAddress: fullAddress.trim(),
+        }
+      );
+      if (createAddressBook?.success) {
+        navigate(-1);
+        toast.success(createAddressBook?.message);
 
-    const { data: createAddressBook }: any = await POST(
-      ADD_PICKUP_ADDRESS_CATALOGUE,
-      {
-        ...addAddress,
-        fullAddress: fullAddress.trim(),
+        setAddAddress({});
+      } else {
+        toast.error(createAddressBook?.message);
       }
-    );
-    if (createAddressBook?.success) {
-      navigate(-1);
-      toast.success(createAddressBook?.message);
-
-      setAddAddress({});
     } else {
-      toast.error(createAddressBook?.message);
+      const { data: createDeliveryAddressBook }: any = await POST(
+        ADD_DELIVERY_ADDRESS,
+        {
+          ...addAddress,
+          fullAddress: fullAddress.trim(),
+        }
+      );
+      if (createDeliveryAddressBook?.success) {
+        navigate(-1);
+        toast.success(createDeliveryAddressBook?.message);
+
+        setAddAddress({});
+      } else {
+        toast.error(createDeliveryAddressBook?.message);
+      }
     }
   };
 
@@ -164,6 +186,25 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
       <Breadcrum label="Add Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
+          <div>
+            <CustomDropDown
+              onChange={(e: any) => {
+                setAddressType(e.target.value);
+              }}
+              value={addressType}
+              options={[
+                {
+                  label: "Pickup Address",
+                  value: "Pickup Address",
+                },
+                {
+                  label: "Delivery Address",
+                  value: "Delivery Address",
+                },
+              ]}
+              heading="Address Type"
+            />
+          </div>
           <div>
             <CustomInputBox
               label="Address Name"
@@ -191,6 +232,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               </div>
             )}
           </div>
+
           <div>
             <CustomInputBox
               label="Plot no, Building Name"
