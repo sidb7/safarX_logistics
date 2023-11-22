@@ -29,24 +29,24 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
       date: "08 September",
       time: "12:50 pm",
     },
-    {
-      label:
-        "Your Order no. 1234598765 has been shipped. The ETA of your order is 19th September",
-      date: "08 September",
-      time: "13:00 pm",
-    },
-    {
-      label:
-        "Your Order no. 5678919 has been shipped. The ETA of your order is 25th September",
-      date: "08 July",
-      time: "10:49 am",
-    },
-    {
-      label:
-        "Your Order no. 10098755 has been shipped. The ETA of your order is 15th July",
-      date: "08 July",
-      time: "12:50 pm",
-    },
+    // {
+    //   label:
+    //     "Your Order no. 1234598765 has been shipped. The ETA of your order is 19th September",
+    //   date: "08 September",
+    //   time: "13:00 pm",
+    // },
+    // {
+    //   label:
+    //     "Your Order no. 5678919 has been shipped. The ETA of your order is 25th September",
+    //   date: "08 July",
+    //   time: "10:49 am",
+    // },
+    // {
+    //   label:
+    //     "Your Order no. 10098755 has been shipped. The ETA of your order is 15th July",
+    //   date: "08 July",
+    //   time: "12:50 pm",
+    // },
   ]);
 
   const filterComponent = () => {
@@ -105,12 +105,18 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
           <div className="flex flex-col gap-y-4 mt-7 mx-4">
             {notificationData?.map((data: any, index: any) => {
               return (
-                <NotificationCard
-                  label={data?.label}
-                  date={data?.date}
-                  time={data?.time}
-                  key={index}
-                />
+                //commented as statics data is passing and showing no data found
+                // <NotificationCard
+                //   label={data?.label}
+                //   date={data?.date}
+                //   time={data?.time}
+                //   key={index}
+                // />
+                <>
+                  <div className="w-full h-96 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                    No Data Found
+                  </div>
+                </>
               );
             })}
           </div>

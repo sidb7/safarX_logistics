@@ -28,7 +28,6 @@ import { convertEpochToDateTime } from "../../../utils/utility";
 import { getQueryJson } from "../../../utils/utility";
 import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
 
-
 const Tracking = () => {
   let tracking = [
     {
@@ -109,9 +108,9 @@ const Tracking = () => {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<any>();
   const [loading, setLoading] = useState(false);
-  const [trackingDetails, setTrackingDetails] = useState<any>([])
+  const [trackingDetails, setTrackingDetails] = useState<any>([]);
 
-  console.log("trackingDetails", trackingDetails)
+  console.log("trackingDetails", trackingDetails);
 
   const [cancelled, setCancelled] = useState<any>(false);
   const [timeDetails, setTimeDetails] = useState<any>({
@@ -264,7 +263,7 @@ const Tracking = () => {
     const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
     // console.log("parsedData", dateAndTimings)
     console.log("dateAndTimings12345", dateAndTimings);
-    setTrackingDetails(dateAndTimings)
+    setTrackingDetails(dateAndTimings);
 
     let checkDate = convertEpochToDateTime(dateAndTimings.LastUpdatedAt);
 
@@ -321,6 +320,7 @@ const Tracking = () => {
       setLoading(true);
       setTempSteps(steps);
       setCancelled(false);
+      console.log("GET_CLIENTTRACKING_INFO", GET_CLIENTTRACKING_INFO);
       if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
         urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNoFromUrl}`;
       } else {
@@ -401,69 +401,73 @@ const Tracking = () => {
 
   return (
     <>
-      
       <>
         <div className="mx-5">
           {/*shipyaari icon */}
           <div className="flex justify-center p-3">
             <img src={shipyaari} alt="Shipyaari" />
           </div>
-          <div className="flex justify-center gap-x-5">
+          <div className=" flex flex-col lg:flex lg:justify-center lg:items-center gap-x-2">
             {/*tracking ID Box */}
-            <div className="flex flex-col">
-              <div className="flex items-center xl:pl-[86px] w-[800px]">
+            <div className="">
+              <div className="flex items-center gap-x-5 w-full">
                 <InputBox
                   label="Enter tracking ID"
                   value={trackingNo}
+                  containerStyle="!mt-1"
                   onChange={(e) => setTrackingNo(e.target.value)}
                 />
                 <CustomButton
                   text="Track Order"
-                  className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px]  h-full "
+                  className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap"
                   onClick={() => handleTrackOrderClick()}
                 />
               </div>
 
-              <p className="text-[10px] py-2 font-Open font-bold xl:pl-[86px]">
+              <p className="text-[10px] py-2 font-Open font-bold">
                 For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
               </p>
 
-              <div className="flex justify-between w-[800px]">
+              <div className="flex justify-between md:w-auto">
                 {loading ? (
                   <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <Spinner />{" "}
+                    <Spinner />
                   </div>
                 ) : (
-                  <div className="xl:pl-[86px] ">
+                  <div className=" ">
                     {trackingState?.map((each: any, indexTracking: number) => {
                       return (
                         <div key={indexTracking}>
-                          <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4 ">
-                            <div className="border-l-[24px]  border-l-[#80A7FF] py-4 px-5 rounded-lg">
+                          <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4">
+                            <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
                               {/*delhivery details */}
                               <>
-                                <div className="flex justify-between">
+                                <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
                                   <img
                                     src={each?.logoUrl}
                                     alt=""
                                     className="w-20"
                                   />
-                                  <div className="flex gap-x-2">
-                                    <p className="text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
+
+                                  <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
+                                    <p className="flex flex-col text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
                                       Last Update:
-                                      <div className="flex gap-x-1 ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
+                                      <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
                                         <span>{timeDetails.hours + " |"}</span>
                                         <span>{timeDetails.date + " |"}</span>
                                         <span>{timeDetails.day + " |"}</span>
                                         <span>{timeDetails.time}</span>
                                       </div>
                                     </p>
-                                    <img src={RefreshIcon} />
+                                    <img
+                                      src={RefreshIcon}
+                                      className="w-4 mt-3 md:mt-0"
+                                    />
                                   </div>
                                 </div>
 
                                 <div className="flex justify-between pt-2">
-                                  <div className="flex gap-x-4 items-end xl:pr-4">
+                                  <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
                                     <p className="text-xs font-normal font-Open flex gap-x-1">
                                       Tracking ID:
                                       <span className="font-bold text-[#004EFF]">
@@ -479,7 +483,7 @@ const Tracking = () => {
                                       </span>
                                       <img src={CopyIcon} />
                                     </p>
-                                    <p className="text-xs font-Open font-normal pt-2">
+                                    <p className="text-xs font-Open font-normal md:pt-2">
                                       ETA:
                                       <span className="font-bold">
                                         {
@@ -490,7 +494,7 @@ const Tracking = () => {
                                     </p>
                                   </div>
                                 </div>
-                                <div className="flex ">
+                                <div className="flex flex-col md:flex-row">
                                   <div className="max-w-[300px] mt-2 pr-4">
                                     <p className="text-[14px] font-normal leading-[16px] ">
                                       From:
@@ -499,11 +503,11 @@ const Tracking = () => {
                                       {each.pickupAddress.fullAddress}
                                     </p>
                                   </div>
-                                  <div className="max-w-[300] mt-2 pl-4">
+                                  <div className="max-w-[300] mt-2 pl-0 md:pl-4">
                                     <p className="text-[14px] font-normal leading-[16px]">
                                       To:
                                     </p>
-                                    <p className="text-[12px] font-normal leading-[16px] mt-1">
+                                    <p className="w-[290px] md:w-[300px] text-[12px] font-normal leading-[16px] mt-1">
                                       {each.deliveryAddress.fullAddress}
                                     </p>
                                   </div>
@@ -531,7 +535,7 @@ const Tracking = () => {
                                 </div>
                                 {/*tracking cycle details*/}
                                 <div
-                                  className="flex justify-between cursor-pointer"
+                                  className="w-[280px] md:w-full flex justify-between cursor-pointer"
                                   // onClick={() => setOpenTracking(!openTracking)}
                                   onClick={() => toggleSection("tracking")}
                                 >
@@ -551,59 +555,61 @@ const Tracking = () => {
                                     alt=""
                                   />
                                 </div>
-                                
-                                <div className={`${openSection === "tracking" ? "h-[500px] overflow-y-scroll":""}`}>
-                                {openSection === "tracking" &&
-                                  trackingDetails.Scans.reverse()?.map(
-                                    (each: any, index: number) => {
-                                     console.log("each", each)
 
-                                      return (
-                                        <div
-                                          className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
-                                          key={index}
-                                        >
-                                          <div className="pt-1">
-                                            <p className="text-xs font-Open font-normal">
-                                              {`${each?.time.split(" ")[0]} `} 
-                                              
-                                            </p>
-                                            <p className="text-xs font-Open font-normal">
-                                              {`${each?.time.split(" ")[1]} `} 
-                                              
-                                            </p>
-                                            
-                                          </div>
-                                          <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
-                                            
-                                          <p className="text-xs font-Open font-normal">
-                                              {each?.message}
-                                            </p>
-                                            <p className="text-xs font-Open  font-normal mt-1">
-                                              {each?.status}
-                                            </p>
-                                            <div className="flex pt-1 gap-x-2 mt-1">
-                                              <img
-                                                src={Location}
-                                                alt=""
-                                                className="w-4 h- 4"
-                                              />
+                                <div
+                                  className={`${
+                                    openSection === "tracking"
+                                      ? "max-h-[500px] overflow-y-scroll"
+                                      : ""
+                                  }`}
+                                >
+                                  {true &&
+                                    trackingDetails.Scans?.reverse()?.map(
+                                      (each: any, index: number) => {
+                                        console.log("each", each);
+
+                                        return (
+                                          <div
+                                            className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
+                                            key={index}
+                                          >
+                                            <div className="pt-1">
                                               <p className="text-xs font-Open font-normal">
-                                                {each?.location}
+                                                {`${each?.time.split(" ")[0]} `}
+                                              </p>
+                                              <p className="text-xs font-Open font-normal">
+                                                {`${each?.time.split(" ")[1]} `}
                                               </p>
                                             </div>
-                                            <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
+                                            <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
+                                              <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                                                {each?.message}
+                                              </p>
+                                              <p className="text-xs font-Open  font-normal mt-1 w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                                                {each?.status}
+                                              </p>
+                                              <div className="flex pt-1 gap-x-2 mt-1">
+                                                <img
+                                                  src={Location}
+                                                  alt=""
+                                                  className="w-4 h- 4"
+                                                />
+                                                <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                                                  {each?.location}
+                                                </p>
+                                              </div>
+                                              <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
+                                            </div>
                                           </div>
-                                        </div>
-                                      );
-                                    }
-                                  )}
-                                  </div>
+                                        );
+                                      }
+                                    )}
+                                </div>
                                 <div className="py-3">
                                   <hr />
                                 </div>
                                 <div
-                                  className="flex justify-between cursor-pointer"
+                                  className="flex justify-between cursor-pointer w-[280px] md:w-full"
                                   onClick={() => toggleSection("product")}
                                 >
                                   <div className="flex gap-x-1 ">
@@ -631,7 +637,7 @@ const Tracking = () => {
                                   ) : (
                                     <div className="flex gap-x-1 flex items-center">
                                       <img src={Lock} />
-                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1">
+                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1 hidden md:block">
                                         To see details please verify with OTP
                                       </p>
 
@@ -649,7 +655,7 @@ const Tracking = () => {
                                 <div>
                                   {openSection === "product" && (
                                     <>
-                                      <div className="flex w-full mt-2 gap-x-5">
+                                      <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
                                         <div className="border-r-2 border-[#D9DBDD] pr-6">
                                           <p className="text-[#777777] text-[12px] font-normal leading-5">
                                             Buyer's Name
@@ -688,11 +694,11 @@ const Tracking = () => {
                                           </p>
                                         </div>
                                       </div>
-                                      <div className="mt-2">
+                                      <div className="mt-2 ">
                                         <p className="text-[#777777] text-[12px] font-normal leading-5">
                                           Address
                                         </p>
-                                        <p className=" font-normal font-sans text-[14px] leading-5 max-w-[900px] mt-1">
+                                        <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 max-w-[900px] mt-1  w-[280px] md:w-full">
                                           {each?.pickupAddress?.fullAddress}
                                         </p>
                                       </div>
@@ -754,134 +760,9 @@ const Tracking = () => {
                 )}
               </div>
             </div>
-
-            {/* <div className="flex flex-col gap-y-4 pl-10">
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage1.svg"
-                }
-                alt=""
-                style={{ minWidth: "30%", height: "auto" }}
-              />
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage2.svg"
-                }
-                alt=""
-                style={{ minWidth: "30%", height: "auto" }}
-              />
-            </div> */}
           </div>
-          {/* <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:ml-[86px] xl:py-8">
-            <div className="flex gap-x-2 px-2">
-              <img src={Star} alt="" />
-              <p className="font-Lato text-lg font-semibold xl:max-w-[358px]">
-                How much would you recommend a product to your friends and
-                family?
-              </p>
-            </div>
-            <div className="px-3  pt-2">
-              <StarRating />
-            </div>
-          </div> */}
-          {/* <div className="xl:ml-[86px]">
-            <div>
-              <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
-                From the Collection
-              </p>
-
-              <div className="flex gap-x-5 overflow-x-scroll ">
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
-                  }
-                  alt=""
-                />
-              </div>
-              <div>
-                <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
-                  Social Campaigns
-                </p>
-
-                <div className="flex gap-x-5 overflow-x-scroll ">
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                  <img
-                    src={
-                      "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                    }
-                    alt=""
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="pt-12">
-              <div className="flex justify-between ml-[20px]">
-                <div className="flex gap-x-2">
-                  <img src={telephoneIcon} alt="" />
-                  <p className="text-base font-semibold font-Open whitespace-nowrap">
-                    Call at 9989245464, if have some issue
-                  </p>
-                </div>
-                <div className="flex gap-x-4 mr-32">
-                  <p className="text-[#004EFF] text-lg font-semibold">
-                    Follow us on{" "}
-                  </p>
-                  <img src={instagramIcon} alt="" />
-                  <img src={facebook} alt="" />
-                </div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </>
-      
     </>
   );
 };

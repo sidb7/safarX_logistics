@@ -23,6 +23,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [renderingComponents, setRenderingComponents] = useState<number>(0);
   const [isActive, setIsActive] = useState<any>(false);
   const [invoiceArray, setInvoiceArray] = useState<any>([]);
+  const [creditArray, setCreditArray] = useState<any>([]);
 
   const listTab: ITab[] = useMemo(
     () => [
@@ -54,7 +55,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     if (renderingComponents === 0) {
       return <InvoiceData invoiceData={invoiceArray} />;
     } else if (renderingComponents === 1) {
-      return <CreditNoteData />;
+      return <CreditNoteData creditData={creditArray} />;
     }
     return null;
   };
