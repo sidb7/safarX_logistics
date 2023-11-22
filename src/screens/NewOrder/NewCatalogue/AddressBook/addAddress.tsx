@@ -22,26 +22,29 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
 
   const [addAddress, setAddAddress] = useState<any>({
     flatNo: "",
-    address: "",
+    locality: "",
     sector: "",
     landmark: "",
     pincode: 0,
     city: "",
     state: "",
     country: "",
+    fullAddress: "",
     addressType: "",
-    contactName: "",
-    mobileNo: 0,
-    alternateMobileNo: 0,
-    emailId: "",
-    contactType: "",
-    pickupDate: 0,
-    customBranding: {
+    workingDays: {
+      monday: true,
+      tuesday: true,
+      wednesday: true,
+      thursday: true,
+      friday: true,
+      saturday: true,
+      sunday: true,
+    },
+    workingHours: "09:00",
+    contact: {
       name: "",
-      logo: "",
-      address: "",
-      contactName: "",
-      contactNumber: 0,
+      mobileNo: "",
+      type: "warehouse associate",
     },
   });
 
@@ -59,6 +62,13 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   });
 
   const createAddress = async (e: any) => {
+    const fullAddress = `${addAddress.flatNo}, ${addAddress.locality}, ${addAddress.sector}, ${addAddress.landmark}, ${addAddress.city}, ${addAddress.state}, ${addAddress.country}, ${addAddress.pincode}`;
+
+    setAddAddress((prevAddAddress: any) => ({
+      ...prevAddAddress,
+      fullAddress: fullAddress.trim(),
+    }));
+
     if (addAddress.addressType === "") {
       return setErrorAddAddressMessage({
         ...errorAddAddressMessage,
@@ -111,15 +121,24 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
       });
     }
 
-    let url = "";
-    if (activeTab === "pickup") {
-      url = ADD_PICKUP_ADDRESS_CATALOGUE;
-    } else if (activeTab === "delivery") {
-      url = ADD_DELIVERY_ADDRESS;
-    }
-    const { data: createAddressBook }: any = await POST(url, addAddress);
+    // let url = "";
+    // if (activeTab === "pickup") {
+    //   url = ADD_PICKUP_ADDRESS_CATALOGUE;
+    // } else if (activeTab === "delivery") {
+    //   url = ADD_DELIVERY_ADDRESS;
+    // }
+
+    const { data: createAddressBook }: any = await POST(
+      ADD_PICKUP_ADDRESS_CATALOGUE,
+      {
+        ...addAddress,
+        fullAddress: fullAddress.trim(),
+      }
+    );
     if (createAddressBook?.success) {
       navigate(-1);
+      toast.success(createAddressBook?.message);
+
       setAddAddress({});
     } else {
       toast.error(createAddressBook?.message);
@@ -208,8 +227,13 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
                 errorAddAddressMessage.sector !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
-                setAddAddress({ ...addAddress, sector: e.target.value });
-                if (e.target.value !== "") {
+                const value = e.target.value;
+                setAddAddress({
+                  ...addAddress,
+                  sector: value,
+                  locality: value,
+                });
+                if (value !== "") {
                   setErrorAddAddressMessage({
                     ...errorAddAddressMessage,
                     sector: "",
@@ -371,14 +395,17 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
             <CustomInputBox
               label="Contact Name"
               name="contactName"
-              value={addAddress.contactName}
+              value={addAddress?.contact?.name}
               inputClassName={` ${
                 errorAddAddressMessage.contactName !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({
                   ...addAddress,
-                  contactName: e.target.value,
+                  contact: {
+                    ...addAddress.contact,
+                    name: e.target.value,
+                  },
                 });
                 if (e.target.value !== "") {
                   setErrorAddAddressMessage({
@@ -404,14 +431,17 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
               inputType="text"
               inputMode="numeric"
               maxLength={10}
-              value={addAddress.mobileNo || ""}
+              value={addAddress?.contact?.mobileNo || ""}
               inputClassName={` ${
                 errorAddAddressMessage.mobileNo !== "" && "!border-[#F35838]"
               } `}
               onChange={(e: any) => {
                 setAddAddress({
                   ...addAddress,
-                  mobileNo: +e.target.value,
+                  contact: {
+                    ...addAddress.contact,
+                    mobileNo: +e.target.value,
+                  },
                 });
                 if (e.target.value !== "") {
                   setErrorAddAddressMessage({
