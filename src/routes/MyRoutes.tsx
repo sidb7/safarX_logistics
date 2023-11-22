@@ -988,7 +988,7 @@ const MyRoutes: React.FC = () => {
               path="/tracking"
               element={
                 <ProtectedRoute>
-                  <Tracking />
+                  <ClientTracking />
                 </ProtectedRoute>
               }
             />
