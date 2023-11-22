@@ -338,7 +338,7 @@ const Index = () => {
           (e: any) => e.value === e1._id?.toUpperCase()
         );
         if (matchingStatus) {
-          matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
+          matchingStatus.orderNumber = e1?.count?.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
             useGrouping: false,
           });

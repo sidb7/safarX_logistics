@@ -185,45 +185,57 @@ const AddBox: React.FunctionComponent<IBoxFilledProps> = (props) => {
             />
             <CustomInputBox
               label="Length (cm)"
-              inputType="number"
+              inputType="text"
+              inputMode="numeric"
               name="length"
               maxLength={5}
               errorMessage={validationErrors?.length}
               value={sellerBoxDetails?.length}
-              onChange={(e) => {
-                setSellerBoxDetails({
-                  ...sellerBoxDetails,
-                  length: e.target.value,
-                });
-                handleValidation(e);
+              onChange={(e: any) => {
+                if (isNaN(e.target.value)) {
+                } else {
+                  handleValidation(e);
+                  setSellerBoxDetails({
+                    ...sellerBoxDetails,
+                    length: e.target.value,
+                  });
+                }
               }}
             />
             <CustomInputBox
-              inputType="number"
+              inputType="text"
+              inputMode="numeric"
               name="breadth"
               label="Breadth (cm)"
               errorMessage={validationErrors?.breadth}
               value={sellerBoxDetails?.breadth}
-              onChange={(e) => {
-                setSellerBoxDetails({
-                  ...sellerBoxDetails,
-                  breadth: e.target.value,
-                });
-                handleValidation(e);
+              onChange={(e: any) => {
+                if (isNaN(e.target.value)) {
+                } else {
+                  handleValidation(e);
+                  setSellerBoxDetails({
+                    ...sellerBoxDetails,
+                    breadth: e.target.value,
+                  });
+                }
               }}
             />
             <CustomInputBox
               name="height"
               label="height (cm)"
-              inputType="number"
+              inputType="text"
+              inputMode="numeric"
               errorMessage={validationErrors?.height}
               value={sellerBoxDetails?.height}
-              onChange={(e) => {
-                setSellerBoxDetails({
-                  ...sellerBoxDetails,
-                  height: e.target.value,
-                });
-                handleValidation(e);
+              onChange={(e: any) => {
+                if (isNaN(e.target.value)) {
+                } else {
+                  handleValidation(e);
+                  setSellerBoxDetails({
+                    ...sellerBoxDetails,
+                    height: e.target.value,
+                  });
+                }
               }}
             />
             <CustomInputBox
