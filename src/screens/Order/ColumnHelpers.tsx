@@ -296,20 +296,20 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           "Freight Charges": `₹ ${(
             rowsData?.boxInfo?.[0]?.service?.add +
             rowsData?.boxInfo?.[0]?.service?.base
-          ).toLocaleString("en-IN")}`,
-          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod.toLocaleString(
+          )?.toLocaleString("en-IN")}`,
+          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod?.toLocaleString(
             "en-IN"
           )}`,
-          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance.toLocaleString(
+          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance?.toLocaleString(
             "en-IN"
           )}`,
-          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables.toLocaleString(
+          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables?.toLocaleString(
             "en-IN"
           )}`,
-          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax.toLocaleString(
+          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax?.toLocaleString(
             "en-IN"
           )}`,
-          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total.toLocaleString(
+          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total?.toLocaleString(
             "en-IN"
           )}`,
         },
@@ -330,10 +330,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             [`Dimensions ${
               num + 1
             }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
               "en-IN"
             )}`,
-            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
+            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
             [`SKU ${num + 1}`]: elem?.sku,
           };
           qty += elem?.qty;
@@ -588,18 +588,18 @@ export const columnHelperForNewOrder = (
             "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
             "Freight Charges": `₹ ${(
               rowsData?.service?.add + rowsData?.service?.base
-            ).toLocaleString("en-IN")}`,
-            "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString(
+            )?.toLocaleString("en-IN")}`,
+            "COD Charges": `₹ ${rowsData?.service?.cod?.toLocaleString(
               "en-IN"
             )}`,
-            Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+            Insurance: `₹ ${rowsData?.service?.insurance?.toLocaleString(
               "en-IN"
             )}`,
-            "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+            "Other Charges": `₹ ${rowsData?.service?.variables?.toLocaleString(
               "en-IN"
             )}`,
-            Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
-            Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
+            Tax: `₹ ${rowsData?.service?.tax?.toLocaleString("en-IN")}`,
+            Total: `₹ ${rowsData?.service?.total?.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -618,10 +618,10 @@ export const columnHelperForNewOrder = (
               [`Dimensions ${
                 num + 1
               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice.toLocaleString(
+              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
                 "en-IN"
               )}`,
-              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax.toLocaleString("en-IN")}`,
+              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
               [`SKU ${num + 1}`]: elem?.sku,
             };
             qty += elem?.qty;
@@ -876,7 +876,7 @@ export const columnHelperForNewOrder = (
           Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
           Status: Success
           Payment: ${
-            payment?.amount.toLocaleString("en-US", {
+            payment?.amount?.toLocaleString("en-US", {
               style: "currency",
               currency: "INR",
             }) ?? "0"

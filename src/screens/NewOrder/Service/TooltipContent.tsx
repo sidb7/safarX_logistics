@@ -70,7 +70,7 @@ const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
         </p>
         <p className="">
           Total:
-          <span>{` ${option.text?.total.toLocaleString("en-US", {
+          <span>{` ${option.text?.total?.toLocaleString("en-US", {
             style: "currency",
             currency: "INR",
           })}`}</span>

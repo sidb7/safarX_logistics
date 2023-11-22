@@ -178,7 +178,7 @@ export const Overview = (props: IOverview) => {
               <img src={RedEllipse} alt="RedEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
-              Highest Order Value
+              Avg Order Value
             </p>
           </div>
           <div>
@@ -187,7 +187,7 @@ export const Overview = (props: IOverview) => {
               <img src={GreenEllipse} alt="GreenEllipse" />
             </div>
             <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
-              Highest Order Value
+              Today's Revenue
             </p>
           </div>
         </div>

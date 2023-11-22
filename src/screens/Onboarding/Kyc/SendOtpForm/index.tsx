@@ -112,18 +112,17 @@ const Index = (props: ITypeProps) => {
         //   // toast.success(response?.message);
         // }, 1000);
         setLoading(false);
-        navigate("/onboarding/kyc");
-        // if (businessType === "business") {
-        //   // navigate("/onboarding/kyc-terms/service-agreement");
-        //   navigate("/onboarding/kyc");
-        // } else if (businessType === "company") {
-        //   navigate("/onboarding/kyc");
-        // } else if (businessType === "individual") {
-        //   navigate("/onboarding/kyc");
-        // }
+        // navigate("/onboarding/kyc");
+        if (businessType === "business") {
+          // navigate("/onboarding/kyc-terms/service-agreement");
+          navigate("/onboarding/kyc-aadhar-form");
+        } else {
+          navigate("/onboarding/kyc");
+        }
       } else {
         setLoading(false);
         toast.error(response?.message);
+
         // navigate("/onboarding/kyc-form", {
         //   state: {
         //     aadharNo,
@@ -289,6 +288,9 @@ const Index = (props: ITypeProps) => {
               } else {
                 setLoading(false);
                 toast.error(response?.message);
+                setShowAaddharOtpBox(false);
+                setOTPNumber("");
+                setVerifyOTP(false);
                 //  navigate("/onboarding/kyc-form", {
                 //    state: {
                 //      aadharNo,
@@ -316,7 +318,7 @@ const Index = (props: ITypeProps) => {
             );
             if (response?.success) {
               // setLoading(false);
-              verifyPAN(panNumber);
+              // verifyPAN(panNumber);
               // toast.success(response?.message);
               //Navigate Url's go here
             } else {
@@ -336,6 +338,7 @@ const Index = (props: ITypeProps) => {
             const { data: response } = await POST(POST_VERIFY_GST_OTP, payload);
             if (response?.success) {
               setLoading(false);
+              verifyPAN(panNumber);
               toast.success(response?.message);
               // if (location?.state?.path === "otp-form") {
               navigate("/onboarding/kyc-aadhar-form");

@@ -262,6 +262,9 @@ const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
+//Reports
+const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
+
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -388,4 +391,5 @@ export {
   FETCH_MANIFEST_DATA,
   FETCH_MANIFEST_REPORT_DATA,
   CREATE_ZOHO_STORE,
+  GET_REPORTS,
 };

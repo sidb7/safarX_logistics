@@ -200,12 +200,16 @@ const DeliveryLocation = () => {
       const isContactDetailsBillingValid = !isObjectEmpty(
         deliveryAddress.billingAddress.contact
       );
+      const gstNumberRegex =
+        /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
+
       if (
-        (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
+        (deliveryAddress.orderType === "B2B" &&
+          (!deliveryAddress.gstNumber ||
+            !gstNumberRegex.test(deliveryAddress.gstNumber))) ||
         !isDeliveryAddressValid ||
         (!isBillingAddress &&
-          !isbillingAddressValid &&
-          !isContactDetailsBillingValid)
+          (!isbillingAddressValid || !isContactDetailsBillingValid))
       ) {
         setInputError(true);
         return;
