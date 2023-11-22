@@ -76,9 +76,9 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     }
     setComboData({
       ...comboData,
-      totalVolumetricWeight: volumetricWeightLocal,
-      deadWeight: deadWeightLocal,
-      appliedWeight: appliedWeightLocal,
+      totalVolumetricWeight: volumetricWeightLocal.toFixed(2),
+      deadWeight: deadWeightLocal.toFixed(2),
+      appliedWeight: appliedWeightLocal.toFixed(2),
     });
   };
 
@@ -133,18 +133,24 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     const updatedProductInputState = products.filter(
       (isSelectedFilterData: any) => isSelectedFilterData?.selected
     );
-    const payLoad = {
-      name,
-      images,
-      category,
-      products: [...updatedProductInputState],
-    };
-    const { data: response } = await POST(CREATE_COMBO_PRODUCT, payLoad);
-    if (response?.success) {
-      toast.success(response?.message);
-      setIsSearchProductRightModalOpen(false);
+    console.log("updatedProductInputState", updatedProductInputState);
+    if (updatedProductInputState?.length < 2) {
+      toast.error("Atleast Two Product's is Required For Combo");
+      return;
     } else {
-      toast.error("Failed To Upload!");
+      const payLoad = {
+        name,
+        images,
+        category,
+        products: [...updatedProductInputState],
+      };
+      const { data: response } = await POST(CREATE_COMBO_PRODUCT, payLoad);
+      if (response?.success) {
+        toast.success(response?.message);
+        setIsSearchProductRightModalOpen(false);
+      } else {
+        toast.error(response?.message);
+      }
     }
   };
 
@@ -180,6 +186,19 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
   };
 
   const searchProductContent = () => {
+    const searchProduct = (e: any) => {
+      setSearchedProduct(e.target.value);
+      setClearIconVisible(true);
+      let tempArr: any = products;
+      if (e.target.value.length >= 1) {
+        let searchingProducts = tempArr.filter((item: any, i: number) => {
+          return item?.name.includes(searchedProduct);
+        });
+        setProducts(searchingProducts);
+      } else {
+        setProducts(productsData);
+      }
+    };
     return (
       <div>
         <div className="p-5 ">
@@ -203,12 +222,12 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
                 value={searchedProduct}
                 label="Search any product"
                 onChange={(e) => {
-                  setSearchedProduct(e.target.value);
-                  setClearIconVisible(true);
+                  searchProduct(e);
                 }}
                 onClick={() => {
                   setSearchedProduct("");
                   setClearIconVisible(false);
+                  setProducts(productsData);
                 }}
                 visibility={true}
                 setVisibility={() => {}}
