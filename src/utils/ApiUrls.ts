@@ -161,8 +161,8 @@ const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/createPickupLocation`;
 const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickupAddress/createPickupAddress`;
 const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/updatePickupAddress`;
-const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
-const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
+const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/createDeliveryAddress`;
+const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/updateDeliveryAddress`;
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
