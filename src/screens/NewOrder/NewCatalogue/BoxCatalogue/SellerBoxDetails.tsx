@@ -209,44 +209,56 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
         <div className="grid grid-cols-2 gap-5">
           <CustomInputBox
             label="Length (cm)"
-            inputType="number"
+            inputType="text"
+            inputMode="numeric"
             name="length"
             errorMessage={validationErrors?.length}
             value={sellerBoxDetails?.length}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                length: e.target.value,
-              });
+            onChange={(e: any) => {
+              if (isNaN(e.target.value)) {
+              } else {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  length: e.target.value,
+                });
+              }
             }}
           />
           <CustomInputBox
-            inputType="number"
+            inputType="text"
+            inputMode="numeric"
             name="breadth"
             label="Breadth (cm)"
             errorMessage={validationErrors?.breadth}
             value={sellerBoxDetails?.breadth}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                breadth: e.target.value,
-              });
+            onChange={(e: any) => {
+              if (isNaN(e.target.value)) {
+              } else {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  breadth: e.target.value,
+                });
+              }
             }}
           />
           <CustomInputBox
             name="height"
             label="height (cm)"
-            inputType="number"
+            inputType="text"
+            inputMode="numeric"
             errorMessage={validationErrors?.height}
             value={sellerBoxDetails?.height}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                height: e.target.value,
-              });
+            onChange={(e: any) => {
+              if (isNaN(e.target.value)) {
+              } else {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  height: e.target.value,
+                });
+              }
             }}
           />
           <CustomInputBox
