@@ -41,29 +41,29 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   const [sortingFastest, setSortingFastest] = useState(false);
   const [sortedOptions, setSortedOptions] = useState<IServiceOption[]>([]);
 
-  useEffect(() => {
-    const filters = options.filter((service) => {
-      const serviceMode = service.text.serviceMode.toLowerCase();
+  // useEffect(() => {
+  //   const filters = options.filter((service) => {
+  //     const serviceMode = service.text.serviceMode.toLowerCase();
 
-      if (
-        (surface && serviceMode === "surface") ||
-        (air && serviceMode === "air") ||
-        (!surface && !air)
-      ) {
-        return service;
-      }
-      return null;
-    });
+  //     if (
+  //       (surface && serviceMode === "surface") ||
+  //       (air && serviceMode === "air") ||
+  //       (!surface && !air)
+  //     ) {
+  //       return service;
+  //     }
+  //     return null;
+  //   });
 
-    if (sortingPrice) {
-      filters.sort((a, b) => a.text.total - b.text.total);
-    }
-    if (sortingFastest) {
-      filters.sort((a, b) => a.text.EDT.localeCompare(b.text.EDT));
-    }
+  //   if (sortingPrice) {
+  //     filters.sort((a, b) => a.text.total - b.text.total);
+  //   }
+  //   if (sortingFastest) {
+  //     filters.sort((a, b) => a.text.EDT.localeCompare(b.text.EDT));
+  //   }
 
-    setSortedOptions(filters.slice(0, 10));
-  }, [surface, air, sortingPrice, sortingFastest, options]);
+  //   setSortedOptions(filters.slice(0, 10));
+  // }, [surface, air, sortingPrice, sortingFastest, options]);
 
   const handleOnChange = (option: IServiceOption) => {
     setSelectedOption(option);

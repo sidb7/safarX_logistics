@@ -70,7 +70,7 @@ const DeliveryLocation = () => {
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
-      recipientType: "business",
+      recipientType: "consumer",
       fullAddress: "",
       flatNo: "",
       locality: "",
@@ -100,7 +100,7 @@ const DeliveryLocation = () => {
       },
     },
     billingAddress: {
-      recipientType: "business",
+      recipientType: "consumer",
       fullAddress: "",
       flatNo: "",
       locality: "",
@@ -129,7 +129,7 @@ const DeliveryLocation = () => {
         type: "warehouse associate",
       },
     },
-    orderType: "B2B",
+    orderType: "B2C",
     gstNumber: "",
     tempOrderId: shipyaari_id || "",
     source: orderSource || "",
