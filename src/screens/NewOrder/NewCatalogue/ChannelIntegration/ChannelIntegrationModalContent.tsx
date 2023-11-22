@@ -108,13 +108,6 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           }
           return;
         } else if (channel === "ZOHO") {
-          // try {
-          //   await axios.get(
-          //     "https://accounts.zoho.com/oauth/v2/auth?scope=ZohoInventory.FullAccess.all&client_id=1000.RN8ZN9LHAV6H9MUMMGH9GRHFRDH55S&response_type=code&redirect_uri=http://localhost:8010/callback"
-          //   );
-          // } catch (error) {
-          //   console.log(error);
-          // }
           const { data } = await POST(CREATE_ZOHO_STORE, storeData);
           if (data?.success) {
             toast.success(data?.message);
