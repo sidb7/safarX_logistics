@@ -177,11 +177,6 @@ const tabs = [
     orderNumber: 0,
   },
   {
-    statusName: "Cancelled",
-    value: "CANCELLED",
-    orderNumber: 0,
-  },
-  {
     statusName: "Ready to Pick",
     value: "READY TO PICK",
     orderNumber: 0,
@@ -214,6 +209,11 @@ const tabs = [
   {
     statusName: "Return",
     value: "RETURN",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Cancelled",
+    value: "CANCELLED",
     orderNumber: 0,
   },
 ];

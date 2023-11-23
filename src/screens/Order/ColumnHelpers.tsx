@@ -1181,9 +1181,41 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         const { label = [] } = otherDetails;
         const labelUrl = data?.boxInfo?.[0]?.tracking?.label;
         const fileUrl = labelUrl || "";
+
+        const {
+          payment,
+          boxInfo,
+          codInfo,
+          tempOrderId = "-",
+          sellerId = "-",
+          status,
+
+          source,
+        } = info?.row?.original;
+
+        const copyString = `
+          Order Id: ${tempOrderId} 
+          Shipyaari Id: ${sellerId}
+          Tracking Id: ${awb}
+          Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
+          (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
+        }
+          Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
+          Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
+          Status: Success
+          Payment: ${
+            payment?.amount?.toLocaleString("en-US", {
+              style: "currency",
+              currency: "INR",
+            }) ?? "0"
+          } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
+
+        `;
+
         return (
           <>
-            <div className="flex items-center justify-center gap-x-1 ">
+            <div className="flex items-center gap-x-1 ">
+              <CopyTooltip stringToBeCopied={copyString} />
               {/* {fileUrl !== "" ? (
                 <ShowLabel fileUrl={fileUrl} />
               ) : (
