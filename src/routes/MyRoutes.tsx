@@ -1248,8 +1248,6 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route path="*" element={<NotFound />} />
-
-
         </Route>
       </Routes>
     </BrowserRouter>
