@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 interface IDeleteProps {
   isOpen: boolean;
   setModalClose: any;
-  deleteTextMessage?: string;
+  deleteTextMessage?: any;
   deleteURL?: any;
   payloadBody?: any;
   DeletepincodeHandler?: any;
