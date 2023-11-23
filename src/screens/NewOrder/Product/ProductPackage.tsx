@@ -10,6 +10,8 @@ import toggle from "../../../assets/toggle-off-circle.svg";
 import toggleBlack from "../../../assets/toggleBlack.svg";
 import "../../../styles/productStyle.css";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import CustomRightModal from "../../../components/CustomModal/customRightModal";
+
 import AddButton from "../../../components/Button/addButton";
 import AddComboModal from "./AddComboModal";
 import Stepper from "../../../components/Stepper";
@@ -102,7 +104,6 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [isOpenBottomModal, setIsOpenBottomModal] = useState(false);
   const [tempSellerBoxDetails, setTempSellerBoxDetails] = useState<any>({});
-  const [isNewBoxModal, setIsNewBoxModal]: any = useState(false);
 
   const [isProductModal, setProductModal]: any = useState(false);
   const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
@@ -577,7 +578,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD BOX TO CATALOGUE"
               onClick={() => {
-                setIsNewBoxModal(true);
+                setSellerBoxDetailsModal(true);
                 setTempSellerBoxDetails({});
 
                 // navigate(
@@ -978,8 +979,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         isProductModal={isProductModal}
         setProductModal={setProductModal}
       ></AddProductPanel>
-      <RightSideModal
-        isOpen={isNewBoxModal}
+      <CustomRightModal
+        isOpen={isSellerBoxDetailsModal}
         onClose={() => setSellerBoxDetailsModal(false)}
       >
         <SellerBoxDetails
@@ -987,7 +988,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           setSellerBoxDetailsModal={setSellerBoxDetailsModal}
           tempSellerBoxDetails={tempSellerBoxDetails}
         />
-      </RightSideModal>
+      </CustomRightModal>
     </div>
   );
 };
