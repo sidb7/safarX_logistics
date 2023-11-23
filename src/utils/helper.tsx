@@ -1,15 +1,24 @@
-import React from "react";
 import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import * as FileSaver from "file-saver";
 
-export const convertToXLSX = (data: any, fileName: any) => {
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet 1");
+export const convertXMLToXLSX = async (apiData: any, filename: any) => {
+  try {
+    const ws = XLSX.utils.json_to_sheet(apiData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
 
-  const excelBuffer = XLSX.write(workbook, { bookType: "xlsx" });
+    const blob = await XLSX.write(wb, {
+      bookType: "xlsx",
+      type: "array",
+    } as any);
 
-  const blob = new Blob([excelBuffer], { type: "text/plain;charset=utf-8" });
-  console.log(blob, "hh");
-  saveAs(blob, fileName);
+    const data = new Blob([blob], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+    await FileSaver.saveAs(data, filename);
+    return true;
+  } catch (err: any) {
+    console.log("error", err.message);
+    return false;
+  }
 };
