@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Checkbox from "../../components/CheckBox";
+import Checkbox from "../../components/CheckBox/index2";
 import "../../styles/accordianStyle.css";
 
 // Define the props for the AccordionComponent
@@ -71,6 +71,7 @@ const DynamicAccordion = (props: IPropTypes) => {
               <Checkbox
                 checked={roleData?.isActive}
                 onChange={() => {
+                  console.log("================");
                   handle_Level_1_Menu(roleData?.id, !roleData?.isActive);
                 }}
               />

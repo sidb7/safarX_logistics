@@ -9,6 +9,8 @@ interface TooltipPropTypes {
   showOnHover?: boolean;
   showOnClick?: boolean;
   className?: any;
+  bgColor?: any;
+  textColor?: any;
 }
 
 export const Tooltip = (props: TooltipPropTypes) => {
@@ -19,6 +21,8 @@ export const Tooltip = (props: TooltipPropTypes) => {
     showOnHover = false,
     showOnClick = false,
     className,
+    bgColor = "bg-neutral-900",
+    textColor = "white",
   } = props;
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -52,9 +56,9 @@ export const Tooltip = (props: TooltipPropTypes) => {
       <div className="my-1">{children}</div>
       <span
         className={classNames(
-          "absolute",
+          "absolute rounded-md shadow-lg z-50",
           showTooltip ? "inline-block" : "hidden",
-          "bg-neutral-900 text-white text-xs p-2 whitespace-nowrap rounded",
+          `${bgColor} ${textColor} text-xs whitespace-nowrap rounded`,
           position === "top"
             ? "left-1/2 -translate-x-1/2 bottom-[calc(100%+5px)]"
             : "",
@@ -77,16 +81,16 @@ export const Tooltip = (props: TooltipPropTypes) => {
           showTooltip ? "inline-block" : "hidden",
           "border-[6px]",
           position === "top"
-            ? "left-1/2 -translate-x-1/2 bottom-full border-l-transparent border-r-transparent border-b-0 border-t-neutral-900"
+            ? `left-1/2 -translate-x-1/2 bottom-full border-l-transparent border-r-transparent border-b-0 border-t-${bgColor}`
             : "",
           position === "bottom"
-            ? "left-1/2 -translate-x-1/2 top-full border-l-transparent border-r-transparent border-t-0 border-b-neutral-900"
+            ? `left-1/2 -translate-x-1/2 top-full border-l-transparent border-r-transparent border-t-0 border-b-${bgColor}`
             : "",
           position === "left"
-            ? "top-1/2 -translate-y-1/2 right-full border-t-transparent border-b-transparent border-r-0 border-l-neutral-900"
+            ? `top-1/2 -translate-y-1/2 right-full border-t-transparent border-b-transparent border-r-0 border-l-${bgColor}`
             : "",
           position === "right"
-            ? "top-1/2 -translate-y-1/2 left-full border-t-transparent border-b-transparent border-l-0 border-r-neutral-900"
+            ? `top-1/2 -translate-y-1/2 left-full border-t-transparent border-b-transparent border-l-0 border-r-${bgColor}`
             : ""
         )}
       ></span>

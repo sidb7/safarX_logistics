@@ -240,6 +240,9 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div>
               <h1 className="text-sm font-semibold leading-5">Status</h1>
             </div>
+            {/* <div className="flex">
+              <img src={sortIconTable} alt="" />
+            </div> */}
           </div>
         );
       },
@@ -255,6 +258,9 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div>
               <h1 className="text-sm font-semibold leading-5">Description</h1>
             </div>
+            {/* <div className="flex">
+              <img src={sortIconTable} alt="" />
+            </div> */}
           </div>
         );
       },
