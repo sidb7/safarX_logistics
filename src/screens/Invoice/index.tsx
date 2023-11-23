@@ -100,8 +100,14 @@ const InvoicePdf = () => {
             <p>
               <strong>TAX INVOICE</strong>
             </p>
-            <p className="text-[25px] font-semibold text-[#008000] mt-2">
-              PAID
+            <p
+              className={`text-[25px] font-semibold mt-2 ${
+                invoicData?.status === "PAID"
+                  ? "text-[#008000]"
+                  : "text-red-500"
+              }`}
+            >
+              {invoicData?.status === "PAID" ? "PAID" : "UNPAID"}
             </p>
             <p
               onClick={() => downloadAsPdf(invoicData?.invoiceUrl)}
@@ -112,10 +118,7 @@ const InvoicePdf = () => {
             </p>
           </div>
           <div className="">
-            <img
-              src="https://s3-ap-south-1.amazonaws.com/sr-bills-mum/files/e213741da29f3dedd2a207b8278fde59.png"
-              alt="qrcode"
-            />
+            <img src={invoicData?.companyInfo?.irnUrl || ""} alt="qrcode" />
           </div>
         </div>
         <div className="px-[32px] flex justify-between mt-5">
@@ -291,7 +294,7 @@ const InvoicePdf = () => {
                 Amount Due
               </td>
               {/* <td></td> */}
-              <td className="text-righttext-[0.875rem] font-normal pr-[30px]">
+              <td className="text-right text-[0.875rem] font-normal pr-[30px]">
                 ₹0.00
               </td>
             </tr>
