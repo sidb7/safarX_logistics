@@ -7,6 +7,7 @@ import DeleteIcon from "../../../../assets/Product/Delete.svg";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import DeleteIconForLg from "../../../../assets/DeleteIconRedColor.svg";
 import CustomInputWithDropDown from "../../../../components/CategoriesDropDown/CategoriesDropDown";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
 
 import {
   checkNonNegative,
@@ -207,8 +208,16 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
         className=" w-full lg:w-[52%] h-screen rounded-l-xl"
       >
         <>
-          <div className="font-Lato font-normal text-2xl leading-8 p-6">
-            Add Products
+          <div className="flex justify-between items-center mr-5">
+            <p className="font-Lato font-normal text-2xl leading-8 p-6">
+              Add Products
+            </p>
+            <img
+              className="cursor-pointer"
+              src={CloseIcon}
+              width="25px"
+              onClick={() => setProductModal(false)}
+            />
           </div>
           <div className="px-5 mb-20 overflow-scroll">
             {productInputState?.map((e: any, index: number) => {
@@ -293,7 +302,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                       <div className="flex gap-x-3 w-full">
                         <CustomInputBox
                           label="Length (CM)"
-                          inputType="number"
+                          inputMode="numeric"
                           name="length"
                           errorMessage={validationErrors?.length}
                           value={productInputState[index]?.length}
@@ -314,7 +323,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         <CustomInputBox
                           label="Breadth (CM)"
                           name="breadth"
-                          inputType="number"
+                          inputMode="numeric"
                           value={productInputState[index].breadth || ""}
                           errorMessage={validationErrors?.breadth}
                           onChange={(e: any) => {
@@ -331,7 +340,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         />
                         <CustomInputBox
                           label="Height (CM)"
-                          inputType="number"
+                          inputMode="numeric"
                           name="height"
                           value={productInputState[index].height || ""}
                           errorMessage={validationErrors?.height}
@@ -368,9 +377,9 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                       </div>
                       <CustomInputBox
                         label="Weight (Kg)"
-                        inputType="number"
+                        inputMode="numeric"
                         name="deadWeight"
-                        value={productInputState[index]?.deadWeight || 0}
+                        value={productInputState[index]?.deadWeight}
                         errorMessage={validationErrors?.deadWeight}
                         onChange={(e: any) =>
                           handleProductInputChange(

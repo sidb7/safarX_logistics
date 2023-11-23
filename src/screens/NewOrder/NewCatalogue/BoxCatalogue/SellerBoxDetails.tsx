@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomInputBox from "../../../../components/Input";
 import ProductIcon from "../../../../assets/Product/Product.svg";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
+
 import { POST } from "../../../../utils/webService";
 import {
   CREATE_SELLER_BOX,
@@ -145,11 +147,19 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
   return (
     <>
       <div className="grid px-5 mt-6 gap-5">
-        <div className="flex  gap-x-2 pb-2">
-          <img src={ProductIcon} alt="Package Icon" />
-          <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-            {`${isEditMode ? "Edit Box" : "Create Box"}`}
-          </h1>
+        <div className="flex justify-between items-center gap-x-2 pb-2">
+          <div className="flex gap-x-2">
+            <img src={ProductIcon} alt="Package Icon" />
+            <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+              {`${isEditMode ? "Edit Box" : "Create Box"}`}
+            </h1>
+          </div>
+          <img
+            className="cursor-pointer"
+            src={CloseIcon}
+            width="25px"
+            onClick={() => setSellerBoxDetailsModal(false)}
+          />
         </div>
         <div className="grid grid-cols-2 gap-5">
           <CustomInputBox
@@ -245,7 +255,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           />
           <CustomInputBox
             name="height"
-            label="height (cm)"
+            label="Height (cm)"
             inputType="text"
             inputMode="numeric"
             errorMessage={validationErrors?.height}

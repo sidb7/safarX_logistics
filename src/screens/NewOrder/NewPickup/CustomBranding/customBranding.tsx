@@ -97,11 +97,13 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
               <img
                 src={editIcon}
                 alt=""
-                className="ml-2"
+                className="ml-2 cursor-pointer"
                 onClick={() => setCustomBrandingRightModal(true)}
               />
             )}
-            {isActive && <img src={AccordionUp} alt="" className="ml-2" />}
+            {isActive && (
+              <img src={AccordionUp} alt="" className="ml-2 cursor-pointer" />
+            )}
           </div>
         </div>
         {isActive && (
