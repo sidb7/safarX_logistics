@@ -12,6 +12,8 @@ import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import { SELLER_WEB_URL } from "../../utils/ApiUrls";
 import { useEffect, useRef } from "react";
+import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
+import moreIcon from "../../assets/more.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
 
@@ -30,6 +32,139 @@ const PartialChecked = ({ checked, onChange, intermediate }: any) => {
       checked={checked}
       onChange={onChange}
     />
+  );
+};
+
+const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
+  let payLoad: any;
+  let fileUrl: any;
+
+  if (currentStatus === "DRAFT") {
+    const { orderId, tempOrderId, sellerId } = data;
+    payLoad = {
+      tempOrderIdArray: [tempOrderId],
+    };
+  } else if (
+    currentStatus === "BOOKED" ||
+    "CANCELLED" ||
+    "READY TO PICK" ||
+    "IN TRANSIT" ||
+    "OUT OF DELIVERY" ||
+    "DELIVERED" ||
+    "RETURN"
+  ) {
+    const labelUrl = data?.boxInfo?.[0]?.tracking?.label;
+
+    const taxInvoiceUrl = data?.boxInfo?.[0]?.tracking?.taxInvoice;
+
+    fileUrl = labelUrl || "";
+    payLoad = {
+      cancelOrderPayLoad: { awbNo: data?.awb, orderId: data?.orderId },
+      fileUrl: labelUrl,
+      taxInvoiceUrl: taxInvoiceUrl,
+    };
+  }
+
+  const actionsObject: any = {
+    DRAFT: [{ title: "Delete Order", actionType: "delete" }],
+    BOOKED: [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Cancel Order", actionType: "cancel_order" },
+    ],
+    CANCELLED: [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+    "READY TO PICK": [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+    "IN TRANSIT": [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+    "OUT OF DELIVERY": [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+    DELIVERED: [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+    RETURN: [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
+  };
+
+  const actionClickHandler = (
+    payLoad?: any,
+    actionType?: any,
+    currentStatus?: any,
+    data?: any
+  ) => {
+    if (actionType === "track_order") {
+      window.open(
+        `${SELLER_WEB_URL}/shipyaari-tracking?trackingNo=${data?.awb}`,
+        "_blank"
+      );
+    } else {
+      orderActions(payLoad, actionType, currentStatus);
+    }
+  };
+
+  return (
+    <div className=" min-w-[150px] rounded-md border">
+      {actionsObject[currentStatus]?.map((action: any, index: any) => (
+        <>
+          {action?.actionType === "download_label" ? (
+            <div
+              className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
+              key={`${index}_${action}`}
+              onClick={() =>
+                actionClickHandler(
+                  payLoad,
+                  action.actionType,
+                  currentStatus,
+                  data
+                )
+              }
+            >
+              {fileUrl !== "" ? action?.title : "No Label Found"}
+            </div>
+          ) : (
+            <div
+              className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
+              key={`${index}_${action}`}
+              onClick={() =>
+                actionClickHandler(
+                  payLoad,
+                  action.actionType,
+                  currentStatus,
+                  data
+                )
+              }
+            >
+              {action?.title}
+            </div>
+          )}
+        </>
+      ))}
+    </div>
   );
 };
 
@@ -429,11 +564,13 @@ export const columnHelperForPendingOrder = [];
 export const columnHelperForNewOrder = (
   navigate: any,
   setDeleteModalDraftOrder: any,
-  setInfoModalContent?: any
+  setInfoModalContent?: any,
+  currentStatus?: any,
+  orderActions?: any
 ) => {
-  const handleDeleteModalDraftOrder = (payload: any) => {
-    setDeleteModalDraftOrder({ isOpen: true, payload });
-  };
+  // const handleDeleteModalDraftOrder = (payload: any) => {
+  //   setDeleteModalDraftOrder({ isOpen: true, payload });
+  // };
 
   return [
     ColumnsHelper.accessor("IDs", {
@@ -625,17 +762,17 @@ export const columnHelperForNewOrder = (
             "Freight Charges": `₹ ${(
               rowsData?.service?.add + rowsData?.service?.base
             ).toLocaleString("en-IN")}`,
-            "COD Charges": `₹ ${rowsData?.service?.cod.toLocaleString(
+            "COD Charges": `₹ ${rowsData?.service?.cod?.toLocaleString(
               "en-IN"
             )}`,
-            Insurance: `₹ ${rowsData?.service?.insurance.toLocaleString(
+            Insurance: `₹ ${rowsData?.service?.insurance?.toLocaleString(
               "en-IN"
             )}`,
-            "Other Charges": `₹ ${rowsData?.service?.variables.toLocaleString(
+            "Other Charges": `₹ ${rowsData?.service?.variables?.toLocaleString(
               "en-IN"
             )}`,
-            Tax: `₹ ${rowsData?.service?.tax.toLocaleString("en-IN")}`,
-            Total: `₹ ${rowsData?.service?.total.toLocaleString("en-IN")}`,
+            Tax: `₹ ${rowsData?.service?.tax?.toLocaleString("en-IN")}`,
+            Total: `₹ ${rowsData?.service?.total?.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -925,7 +1062,7 @@ export const columnHelperForNewOrder = (
           <div className="flex items-center">
             <CopyTooltip stringToBeCopied={copyString} />
 
-            <img
+            {/* <img
               src={DeleteIconForLg}
               alt="Delete "
               onClick={() => {
@@ -944,7 +1081,27 @@ export const columnHelperForNewOrder = (
                 fontSize: "14px",
                 lineHeight: "16px",
               }}
-            />
+            /> */}
+
+            <CustomToolTip
+              position="bottom"
+              content={moreDropDown(
+                currentStatus,
+                orderActions,
+                info?.row?.original
+              )}
+              showOnHover={true}
+              bgColor="bg-white"
+              textColor="black"
+            >
+              <div className="mx-2 cursor-pointer">
+                <img
+                  src={moreIcon}
+                  alt="moreIcon"
+                  className="hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                />
+              </div>
+            </CustomToolTip>
           </div>
         );
       },
@@ -955,11 +1112,13 @@ export const columnHelperForNewOrder = (
 export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
   setCancellationModal?: any,
-  setInfoModalContent?: any
+  setInfoModalContent?: any,
+  currentStatus?: any,
+  orderActions?: any
 ) => {
-  const handleCancellationModal = (awbNo: any, orderId: any) => {
-    setCancellationModal({ isOpen: true, awbNo, orderId });
-  };
+  // const handleCancellationModal = (awbNo: any, orderId: any) => {
+  //   setCancellationModal({ isOpen: true, awbNo, orderId });
+  // };
   return [
     // ...commonColumnHelper,
     ColumnsHelper.accessor("Pick up Expected", {
@@ -1024,13 +1183,13 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         const fileUrl = labelUrl || "";
         return (
           <>
-            <div className="flex items-center gap-x-1 ">
-              {fileUrl !== "" ? (
+            <div className="flex items-center justify-center gap-x-1 ">
+              {/* {fileUrl !== "" ? (
                 <ShowLabel fileUrl={fileUrl} />
               ) : (
                 <div className="text-[grey]">No Label Found</div>
-              )}
-              {setCancellationModal && (
+              )} */}
+              {/* {setCancellationModal && (
                 <div>
                   <img
                     src={CrossIcon}
@@ -1076,7 +1235,27 @@ export const ColumnHelperForBookedAndReadyToPicked = (
                     lineHeight: "16px",
                   }}
                 />
-              </div>
+              </div> */}
+
+              <CustomToolTip
+                position="bottom"
+                content={moreDropDown(
+                  currentStatus,
+                  orderActions,
+                  info?.row?.original
+                )}
+                showOnHover={true}
+                bgColor="bg-white"
+                textColor="black"
+              >
+                <div className="mx-2 cursor-pointer">
+                  <img
+                    src={moreIcon}
+                    alt="moreIcon"
+                    className="hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                  />
+                </div>
+              </CustomToolTip>
             </div>
           </>
         );
@@ -1086,7 +1265,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
 };
 export const columnHelpersForRest = (
   navigate: any,
-  setInfoModalContent: any
+  setInfoModalContent: any,
+  currentStatus?: any,
+  orderActions?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -1164,5 +1345,96 @@ export const columnHelpersForRest = (
     //   },
     // }),
     ...MainCommonHelper(),
+
+    ColumnsHelper.accessor("asda", {
+      header: () => {
+        return (
+          <div className="flex justify-between">
+            <h1>Actions</h1>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        //Status is hardcode now
+        const {
+          payment,
+          boxInfo,
+          codInfo,
+          tempOrderId = "-",
+          sellerId = "-",
+          status,
+          source,
+        } = info?.row?.original;
+        const { AWB } = status[0] ?? "";
+        const copyString = `
+          Order Id: ${tempOrderId} 
+          Shipyaari Id: ${sellerId}
+          Tracking Id: ${AWB}
+          Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
+          (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
+        }
+          Pickup Address: ${info?.row?.original?.pickupAddress?.fullAddress}
+          Delivery Address: ${info?.row?.original?.deliveryAddress?.fullAddress}
+          Status: Success
+          Payment: ${
+            payment?.amount?.toLocaleString("en-US", {
+              style: "currency",
+              currency: "INR",
+            }) ?? "0"
+          } ${codInfo ? (codInfo?.isCod ? "COD" : "ONLINE") : "-"}
+
+        `;
+        let draftOrderPayload = {
+          tempOrderId: tempOrderId,
+          source: source,
+        };
+        return (
+          <div className="flex items-center">
+            <CopyTooltip stringToBeCopied={copyString} />
+
+            {/* <img
+              src={DeleteIconForLg}
+              alt="Delete "
+              // onClick={() => {
+              //   handleDeleteModalDraftOrder(draftOrderPayload);
+              // }}
+              className="w-5 h-5 cursor-pointer "
+              data-tooltip-id="my-tooltip-inline"
+              data-tooltip-content="Delete Order"
+            />
+            <Tooltip
+              id="my-tooltip-inline"
+              style={{
+                backgroundColor: "bg-neutral-900",
+                color: "#FFFFFF",
+                width: "fit-content",
+                fontSize: "14px",
+                lineHeight: "16px",
+              }}
+            /> */}
+
+            <CustomToolTip
+              position="bottom"
+              content={moreDropDown(
+                currentStatus,
+                orderActions,
+                info?.row?.original
+              )}
+              showOnHover={true}
+              bgColor="bg-white"
+              textColor="black"
+            >
+              <div className="mx-2 cursor-pointer">
+                <img
+                  src={moreIcon}
+                  alt="moreIcon"
+                  className="hover:-translate-y-[0.1rem] hover:scale-110 duration-300"
+                />
+              </div>
+            </CustomToolTip>
+          </div>
+        );
+      },
+    }),
   ];
 };

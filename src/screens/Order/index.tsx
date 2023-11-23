@@ -22,6 +22,7 @@ import {
   FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
   GET_SELLER_ORDER,
+  GET_SINGLE_FILE,
   POST_SERVICEABILITY,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
@@ -330,6 +331,27 @@ const Index = () => {
     );
   };
 
+  const warningMessage = (data?: any) => {
+    const tempOrderIdArray = data?.tempOrderIdArray?.map(
+      (tempOrderIdObj?: any) => tempOrderIdObj
+    );
+
+    return (
+      <div>
+        <div>
+          <span>
+            {" "}
+            Are You Sure You Want To Delete this
+            {tempOrderIdArray?.length > 1 ? " Orders" : " Order"}
+          </span>
+          <div className="w-[100%] text-[16px] truncate">
+            {tempOrderIdArray?.join(", ")}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const MobileButtons = (className?: string) => {
     return (
       <div
@@ -422,6 +444,54 @@ const Index = () => {
     }
   };
 
+  const getSingleFile = async (url: any, actionType?: any) => {
+    let fileName = "";
+
+    if (actionType === "download_label") {
+      fileName = `labels/${url}`;
+    } else {
+      fileName = `taxinvoices/${url}`;
+    }
+
+    const { data } = await POST(GET_SINGLE_FILE, {
+      fileName,
+    });
+    if (data?.status) {
+      window.location.href = data?.data;
+      toast.success(data?.meesage);
+    } else {
+      toast.error(data?.meesage);
+    }
+  };
+
+  const orderActions = (payLoad: any, actionType: any, currentStatus?: any) => {
+    switch (currentStatus) {
+      case "DRAFT":
+        setDeleteModalDraftOrder({ isOpen: true, payload: payLoad });
+        break;
+      case "BOOKED":
+      case "CANCELLED":
+      case "READY TO PICK":
+      case "IN TRANSIT":
+      case "OUT OF DELIVERY":
+      case "DELIVERED":
+      case "RETURN":
+        if (actionType === "cancel_order") {
+          setCancellationModal({
+            isOpen: true,
+            payload: payLoad.cancelOrderPayLoad,
+          });
+        } else if (actionType === "download_label") {
+          getSingleFile(payLoad.fileUrl, actionType);
+        } else if (actionType === "download_invoice") {
+          getSingleFile(payLoad?.taxInvoiceUrl, actionType);
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleTabChanges = async (index: any = 0) => {
     try {
       const { OrderData, statusList } = await getSellerOrderByStatus(
@@ -443,13 +513,17 @@ const Index = () => {
         }
       });
 
+      let currentStatus = tabs[index].value;
+
       switch (tabs[index].value) {
         case "DRAFT":
           setColumnhelper(
             columnHelperForNewOrder(
               navigate,
               setDeleteModalDraftOrder,
-              setInfoModalContent
+              setInfoModalContent,
+              currentStatus,
+              orderActions
             )
           );
           break;
@@ -458,17 +532,31 @@ const Index = () => {
             ColumnHelperForBookedAndReadyToPicked(
               navigate,
               setCancellationModal,
-              setInfoModalContent
+              setInfoModalContent,
+              currentStatus,
+              orderActions
             )
           );
           break;
         case "READYTOPICK":
           setColumnhelper(
-            ColumnHelperForBookedAndReadyToPicked(navigate, setInfoModalContent)
+            ColumnHelperForBookedAndReadyToPicked(
+              navigate,
+              setInfoModalContent,
+              currentStatus,
+              orderActions
+            )
           );
           break;
         default:
-          setColumnhelper(columnHelpersForRest(navigate, setInfoModalContent));
+          setColumnhelper(
+            columnHelpersForRest(
+              navigate,
+              setInfoModalContent,
+              currentStatus,
+              orderActions
+            )
+          );
           break;
       }
     } catch (error) {
@@ -478,7 +566,7 @@ const Index = () => {
 
   useEffect(() => {
     handleTabChanges();
-  }, [deleteModalDraftOrder]);
+  }, []); //deleteModalDraftOrder
 
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
@@ -576,10 +664,6 @@ const Index = () => {
     setAllOrders(newOrders);
     setIsDeleted(false);
   }
-
-  useEffect(() => {
-    console.log("deleteModalDraftOrder", deleteModalDraftOrder);
-  }, [deleteModalDraftOrder]);
 
   return (
     <>
@@ -695,8 +779,11 @@ const Index = () => {
         setModalClose={() =>
           setCancellationModal({ ...cancellationModal, isOpen: false })
         }
-        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal.orderId} ?`}
-        payloadBody={cancellationModal.awbNo}
+        // deleteTextMessage={warningMessage(
+        //   cancellationModal?.cancelOrderPayLoad
+        // )}
+        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal?.payload?.orderId} ?`}
+        payloadBody={cancellationModal?.payload?.awbNo}
         deleteURL={CANCEL_WAY_BILL}
         setIsDeleted={setIsDeleted}
       />
@@ -705,12 +792,12 @@ const Index = () => {
         url={CANCEL_TEMP_SELLER_ORDER}
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
+        reloadData={handleTabChanges}
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title={`Are You Sure You Want To Delete this Orders ?`}
+        title={warningMessage(deleteModalDraftOrder?.payload)}
       />
-
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false })}
