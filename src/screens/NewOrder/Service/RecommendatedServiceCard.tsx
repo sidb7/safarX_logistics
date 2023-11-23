@@ -94,7 +94,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
           <>
             {/* Cheapest Card */}
             <div
-              key={cheapestService?.value}
+              key={`${cheapestService?.value}-cheapest`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === cheapestService?.value
                   ? "border-[#004EFF] border-2"
@@ -141,7 +141,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
 
             {/* Fastest Card */}
             <div
-              key={fastestService?.value}
+              key={`${fastestService?.value}-fastest`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === fastestService?.value
                   ? "border-blue-500 border-2"
@@ -186,7 +186,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
 
             {/* Balanced Card */}
             <div
-              key={balancedService?.value}
+              key={`${balancedService?.value}-balanced`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === balancedService?.value
                   ? "border-blue-500 border-2"

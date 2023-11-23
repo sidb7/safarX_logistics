@@ -27,101 +27,101 @@ import ServiceBox from "./ServiceBox";
 import FilterItems from "../../../components/FilterItemsScroll";
 import FilterIcon from "../../../assets/serv/filter.svg";
 
-export const RecommendedServiceData = [
-  {
-    isRecommendation: true,
-    recommendation: "Cheapest",
-  },
-];
+// export const RecommendedServiceData = [
+//   {
+//     isRecommendation: true,
+//     recommendation: "Cheapest",
+//   },
+// ];
 
-export const FilterServiceData = [
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "3",
-  },
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "4",
-  },
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "5",
-  },
+// export const FilterServiceData = [
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "3",
+//   },
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "4",
+//   },
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "5",
+//   },
 
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "5",
-  },
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "5",
-  },
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "5",
+//   },
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "5",
+//   },
 
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "5",
-  },
-  {
-    isRecommendation: false,
-    recommendation: "Recipient",
-    courierPartner: "DHL",
-    serviceType: "Economy",
-    weight: 1,
-    totalPrice: 2300,
-    savePrice: 200,
-    etaDate: "24 Jun 23",
-    name: "service",
-    value: "5",
-  },
-];
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "5",
+//   },
+//   {
+//     isRecommendation: false,
+//     recommendation: "Recipient",
+//     courierPartner: "DHL",
+//     serviceType: "Economy",
+//     weight: 1,
+//     totalPrice: 2300,
+//     savePrice: 200,
+//     etaDate: "24 Jun 23",
+//     name: "service",
+//     value: "5",
+//   },
+// ];
 
 interface IServiceOption {
   value: string;
@@ -381,7 +381,6 @@ const Index: React.FC = () => {
       },
       filters[0]
     );
-    console.log("cheapestService", cheapestService);
 
     setRecommendatedOptions([cheapestService, fastestService, balancedService]);
   }, [surface, air]);
