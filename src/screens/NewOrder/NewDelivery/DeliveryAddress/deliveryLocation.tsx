@@ -44,7 +44,7 @@ const DeliveryAddress: React.FunctionComponent<IDeliveryAddress> = ({
       <AddressCard data={{ ...data, inputError, setInputError }} />
       <SaveAddress data={data} />
       <AddressTiming data={data} />
-      <ContactDetails data={{ ...contactData, inputError }} />
+      <ContactDetails data={{ ...contactData, inputError, setInputError }} />
     </div>
   );
 };
