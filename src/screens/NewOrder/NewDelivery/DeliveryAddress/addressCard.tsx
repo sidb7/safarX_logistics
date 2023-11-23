@@ -33,11 +33,18 @@ interface IAddressCardProps {
     setDeliveryAddress: any;
     addressLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { deliveryAddress, setDeliveryAddress, addressLabel, inputError },
+  data: {
+    deliveryAddress,
+    setDeliveryAddress,
+    addressLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const address =
     addressLabel === "Billing Address"
@@ -233,6 +240,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     return gstRegex.test(gstNumber);
   };
 
+  console.log("inputError", inputError);
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
@@ -429,13 +437,17 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                         ? `${gstValue}`
                         : `${validGstStateCode}${gstValue}`,
                   }));
+
+                  if (setInputError) {
+                    setInputError(false);
+                  }
                 }}
               />
-              {validationErrorGST && (
+              {(inputError || validationErrorGST) && (
                 <div className="flex items-center gap-x-1 mt-1">
                   <img src={InfoCircle} alt="" width={10} height={10} />
                   <span className="font-normal text-[#F35838] text-xs leading-3">
-                    {validationErrorGST}
+                    {validationErrorGST || "Invalid GST number"}
                   </span>
                 </div>
               )}

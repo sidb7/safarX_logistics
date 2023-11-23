@@ -14,6 +14,7 @@ interface IContactDetailsProps {
     setPickupAddress: any;
     contactLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -25,7 +26,13 @@ interface ValidationErrorState {
 }
 
 const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
-  data: { pickupAddress, setPickupAddress, contactLabel, inputError },
+  data: {
+    pickupAddress,
+    setPickupAddress,
+    contactLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const [validationErrors, setValidationErrors] =
     useState<ValidationErrorState>({
@@ -147,10 +154,13 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
               handleContactChange("mobileNo", numericValue);
               setValidationError("mobileNo", validateMobileNo(numericValue));
+              if (setInputError) {
+                setInputError(false);
+              }
             }}
             inputError={inputError}
           />
-          {validationErrors.mobileNo && (
+          {inputError && validationErrors.mobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
@@ -169,9 +179,12 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               const emailValue = e.target.value;
               handleContactChange("emailId", emailValue);
               setValidationError("emailId", validateEmailId(emailValue));
+              if (setInputError) {
+                setInputError(false);
+              }
             }}
           />
-          {validationErrors.emailId && (
+          {inputError && validationErrors.emailId && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">

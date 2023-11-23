@@ -11,11 +11,18 @@ interface IDeliveryAddress {
     setDeliveryAddress: any;
     label?: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const DeliveryAddress: React.FunctionComponent<IDeliveryAddress> = ({
-  data: { deliveryAddress, setDeliveryAddress, label, inputError },
+  data: {
+    deliveryAddress,
+    setDeliveryAddress,
+    label,
+    inputError,
+    setInputError,
+  },
 }) => {
   const data = {
     deliveryAddress,
@@ -34,10 +41,10 @@ const DeliveryAddress: React.FunctionComponent<IDeliveryAddress> = ({
 
   return (
     <div className="px-5">
-      <AddressCard data={{ ...data, inputError }} />
+      <AddressCard data={{ ...data, inputError, setInputError }} />
       <SaveAddress data={data} />
       <AddressTiming data={data} />
-      <ContactDetails data={{ ...contactData, inputError }} />
+      <ContactDetails data={{ ...contactData, inputError, setInputError }} />
     </div>
   );
 };

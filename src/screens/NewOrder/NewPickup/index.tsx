@@ -515,6 +515,7 @@ const PickupLocation = () => {
               pickupAddress,
               setPickupAddress,
               inputError,
+              setInputError,
             }}
           />
 
@@ -537,6 +538,7 @@ const PickupLocation = () => {
                 setPickupAddress,
                 label: "return",
                 inputError,
+                setInputError,
               }}
             />
           )}
