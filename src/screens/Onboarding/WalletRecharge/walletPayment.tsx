@@ -297,7 +297,7 @@ const WalletPayment = () => {
                     onClick={handleRazorPayTransaction}
                   >
                     <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-                      RazorPayxcv
+                      RazorPay
                     </p>
                   </button>
                 </div>
