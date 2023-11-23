@@ -486,13 +486,14 @@ function UpdateRole() {
   const getRoleInfo = async () => {
     try {
       const { data } = await POST(POST_GET_ALL_ROLES_DATA, {
-        roleId,
+        searchKey: "roleId",
+        searchText: roleId,
       });
 
       const { data: menus } = await POST(POST_GET_ALL_INITIAL_MENU, {});
 
       if (data?.success) {
-        setMenuData(menus?.data || []);
+        setMenuData(data?.data?.[0]?.menu || []);
         let temp = data?.data?.[0]?.roleName;
         let companyInfoId = data?.data?.[0]?.companyId;
         setRoleName(temp || "N/A");
