@@ -245,7 +245,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           />
           <CustomInputBox
             name="height"
-            label="height (cm)"
+            label="Height (cm)"
             inputType="text"
             inputMode="numeric"
             errorMessage={validationErrors?.height}

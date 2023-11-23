@@ -41,6 +41,8 @@ import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { getQueryJson } from "../../../utils/utility";
 import AddProductPanel from "../NewCatalogue/ProductCatalogue/addProductNew";
+import SellerBoxDetails from "../NewCatalogue/BoxCatalogue/SellerBoxDetails";
+import { useMediaQuery } from "react-responsive";
 
 interface IPackageProps {}
 const steps = [
@@ -97,8 +99,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
-  const [isProductModal, setProductModal]: any = useState(false);
+  const isMobileView = useMediaQuery({ maxWidth: 768 });
+  const [isOpenBottomModal, setIsOpenBottomModal] = useState(false);
+  const [tempSellerBoxDetails, setTempSellerBoxDetails] = useState<any>({});
+  const [isNewBoxModal, setIsNewBoxModal]: any = useState(false);
 
+  const [isProductModal, setProductModal]: any = useState(false);
+  const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
+    useState<any>(false);
   const [combo, setCombo] = useState<any>(false);
   const [products, setProducts] = useState<any>([]);
   const [sellerBox, setSellerBox] = useState<any>([]);
@@ -477,6 +485,14 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
+  const handleCloseBoxDetailModal = () => {
+    if (isMobileView) {
+      setIsOpenBottomModal(false);
+    } else {
+      setSellerBoxDetailsModal(false);
+    }
+  };
+
   return (
     <div>
       <div>
@@ -561,9 +577,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD BOX TO CATALOGUE"
               onClick={() => {
-                navigate(
-                  `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                );
+                setIsNewBoxModal(true);
+                setTempSellerBoxDetails({});
+
+                // navigate(
+                //   `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                // );
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -959,6 +978,16 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         isProductModal={isProductModal}
         setProductModal={setProductModal}
       ></AddProductPanel>
+      <RightSideModal
+        isOpen={isNewBoxModal}
+        onClose={() => setSellerBoxDetailsModal(false)}
+      >
+        <SellerBoxDetails
+          updateBoxApi={() => handleCloseBoxDetailModal()}
+          setSellerBoxDetailsModal={setSellerBoxDetailsModal}
+          tempSellerBoxDetails={tempSellerBoxDetails}
+        />
+      </RightSideModal>
     </div>
   );
 };
