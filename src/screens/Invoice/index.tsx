@@ -220,7 +220,7 @@ const InvoicePdf = () => {
                 996812
               </td>
               <td className="pl-[60px] text-[0.875rem] font-normal p-3 text-left">
-                Shiprocket V2 Freight*
+                Shipyaari Freight*
               </td>
               <td className=" text-right text-[0.625rem] font-normal p-3 pr-[30px]">
                 ₹{invoicData?.charges?.frieghtCharge}
