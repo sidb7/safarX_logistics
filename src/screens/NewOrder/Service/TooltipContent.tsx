@@ -59,9 +59,9 @@ const TooltipContent: React.FC<ServiceTooltipProps> = ({ option }) => {
         <p className="">
           Insurance: <span>{`${option.text?.insurance}`}</span>
         </p>
-        <p className="">
+        {/* <p className="">
           Total-Freight: <span>{`${totalFreight.toFixed(2)}`}</span>
-        </p>
+        </p> */}
         <p className="">
           COD Charges: <span>{`${option.text?.cod}`}</span>
         </p>
