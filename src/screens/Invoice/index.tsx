@@ -147,7 +147,7 @@ const InvoicePdf = () => {
             </p>
             <p>
               <b className="mr-1">Invoice Date :</b>
-              <span>{convertEpochToDateTime(invoicData?.invoiceNo)}</span>
+              <span>{convertEpochToDateTime(invoicData?.startDate)}</span>
             </p>
             <p>
               <b className="mr-1">Due Date :</b>
