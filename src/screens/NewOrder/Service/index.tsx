@@ -24,6 +24,8 @@ import CustomDropDown from "../../../components/DropDown";
 import { getQueryJson } from "../../../utils/utility";
 import RecommendatedServiceCard from "./RecommendatedServiceCard";
 import ServiceBox from "./ServiceBox";
+import FilterItems from "../../../components/FilterItemsScroll";
+import FilterIcon from "../../../assets/serv/filter.svg";
 
 export const RecommendedServiceData = [
   {
@@ -121,16 +123,32 @@ export const FilterServiceData = [
   },
 ];
 
+interface IServiceOption {
+  value: string;
+  text: {
+    partnerName: string;
+    companyServiceName: string;
+    total: number;
+    serviceMode: string;
+    EDT: string;
+  };
+}
+
 const Index: React.FC = () => {
   // const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedOption, setSelectedOption] = useState<any>(null);
-
+  const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const [response, setResponse] = useState<any>();
   const [serviceOptions, setServiceOptions] = useState<any>([]);
   const [recommendedOptions, setRecommendatedOptions] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const [surface, setSurface] = useState(true);
+  const [air, setAir] = useState(true);
+  const [sortingPrice, setSortingPrice] = useState(false);
+  const [sortingFastest, setSortingFastest] = useState(false);
+  const [sortedOptions, setSortedOptions] = useState<IServiceOption[]>([]);
 
   const navigate = useNavigate();
   const params = getQueryJson();
@@ -161,6 +179,9 @@ const Index: React.FC = () => {
           };
         });
 
+        setServiceOptions(options);
+
+        console.log("options", options);
         const cheapestService = options.reduce(
           (minOption: any, currentOption: any) => {
             return currentOption.text.total < minOption.text.total
@@ -179,13 +200,28 @@ const Index: React.FC = () => {
           options[0]
         );
 
-        setRecommendatedOptions([cheapestService, fastestService]);
-        const filteredOptions = options.filter(
-          (option: any) =>
-            option !== cheapestService && option !== fastestService
+        const balancedService = options.reduce(
+          (minOption: any, currentOption: any) => {
+            const minCost = cheapestService.text.total;
+            const maxCost = fastestService.text.total;
+
+            const currentCost = currentOption.text.total;
+
+            return currentCost >= minCost && currentCost <= maxCost
+              ? currentOption
+              : minOption;
+          },
+          options[0]
         );
 
-        setServiceOptions(filteredOptions);
+        setRecommendatedOptions([
+          cheapestService,
+          fastestService,
+          balancedService,
+        ]);
+
+        console.log("cheapestServiceinit", cheapestService);
+
         setLoading(false);
       } else {
         setResponse([]);
@@ -299,6 +335,71 @@ const Index: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    const filters = serviceOptions?.filter((service: any) => {
+      const serviceMode = service.text.serviceMode.toLowerCase();
+
+      if (
+        (surface && serviceMode === "surface") ||
+        (air && serviceMode === "air") ||
+        (!surface && !air)
+      ) {
+        return service;
+      }
+      return null;
+    });
+    console.log("filters", filters);
+
+    const cheapestService = filters.reduce(
+      (minOption: any, currentOption: any) => {
+        return currentOption.text.total < minOption.text.total
+          ? currentOption
+          : minOption;
+      },
+      filters[0]
+    );
+
+    const fastestService = filters.reduce(
+      (minOption: any, currentOption: any) => {
+        return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
+          ? currentOption
+          : minOption;
+      },
+      filters[0]
+    );
+
+    const balancedService = filters.reduce(
+      (minOption: any, currentOption: any) => {
+        const minCost = cheapestService.text.total;
+        const maxCost = fastestService.text.total;
+
+        const currentCost = currentOption.text.total;
+
+        return currentCost >= minCost && currentCost <= maxCost
+          ? currentOption
+          : minOption;
+      },
+      filters[0]
+    );
+    console.log("cheapestService", cheapestService);
+
+    setRecommendatedOptions([cheapestService, fastestService, balancedService]);
+  }, [surface, air]);
+
+  const handleSortBy = (selectedItems: string[]) => {
+    const isSurfaceSelected = selectedItems.includes("Surface");
+    const isAirSelected = selectedItems.includes("Air");
+
+    setSurface(isSurfaceSelected);
+    setAir(isAirSelected);
+  };
+  console.log("serviceOptions", serviceOptions);
+
+  console.log("recommendedOptions", recommendedOptions);
+
+  console.log("surface", surface);
+  console.log("air", air);
+
   return (
     <div className="w-full ">
       <Breadcrum label="Add New Order" />
@@ -320,6 +421,19 @@ const Index: React.FC = () => {
       ) : (
         <>
           <div>
+            <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
+              <img src={FilterIcon} alt="Filter" />
+              <div className="text-[18px] font-bold lg:font-normal lg:text-2xl">
+                Filter by
+              </div>
+            </div>
+            <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
+              <FilterItems
+                items={["All", "Surface", "Air"]}
+                onClick={handleSortBy}
+                initialSelectedFilter="All"
+              />
+            </div>
             <div className="flex flex-col lg:flex-row gap-4 p-2 ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <RecommendatedServiceCard
@@ -333,15 +447,16 @@ const Index: React.FC = () => {
             {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
               <FilterBy />
             </div> */}
+
             <div className="flex flex-col lg:flex-row gap-4 p-2 mb-[10%] ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
-              <ServiceBox
+              {/* <ServiceBox
                 options={serviceOptions}
                 selectedValue={setSelectedService}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
                 ignoreRecommended={true}
-              />
+              /> */}
             </div>
           </div>
         </>

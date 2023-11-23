@@ -53,11 +53,22 @@ const CustomDropDown = (props: IDropDownProps) => {
             inputError && !value
               ? "!border-red-500"
               : "border-[1px] border-[#A4A4A4]"
-          } p-[10px] gap-[10px] h-[48px] font-normal font-sans text-[12px] text-[#1C1C1C] outline-none`}
+          } p-[10px] gap-[10px] h-[48px] font-sans text-[12px] text-[#1C1C1C] outline-none`}
         >
-          {heading && <option value={""}>{heading}</option>}
+          {heading && (
+            <option
+              value={""}
+              className="text-[16px] text-[#777777] absolute leading-4 font-Lato"
+            >
+              {heading}
+            </option>
+          )}
           {options?.map((option: any, index: number) => (
-            <option key={index} value={option.value}>
+            <option
+              key={index}
+              value={option.value}
+              className="text-[14px] text-[#1C1C1C] absolute leading-4 font-Open"
+            >
               {option.label}
             </option>
           ))}

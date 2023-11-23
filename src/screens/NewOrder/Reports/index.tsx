@@ -5,8 +5,13 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { POST } from "../../../utils/webService";
+import { GET_REPORTS } from "../../../utils/ApiUrls";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import { toast } from "react-toastify";
+import * as XLSX from "xlsx";
+import * as FileSaver from "file-saver";
+import { convertToXLSX } from "../../../utils/helper";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
@@ -27,11 +32,27 @@ const Reports = () => {
   };
 
   const fetchReport = async () => {
-    let startEpoch = convertEpoch(startDate && startDate);
-    let endEpoch = convertEpoch(endDate && endDate);
+    let startEpoch = convertEpoch(startDate);
+    let endEpoch = convertEpoch(endDate);
     // const { data } = await POST(GET_CATEGOROIES, {});
     // if (data?.success) {
     // }
+
+    /// console.log("startDate", startDate);
+
+    const payload = {
+      startDate: startEpoch,
+      endDate: endEpoch,
+      apiStatus: "SHIPMENTSTATUS",
+    };
+    const response = await POST(GET_REPORTS, payload);
+
+    FileSaver.saveAs(
+      new Blob([response.data.data], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      }),
+      "filename.xlsx"
+    );
   };
 
   useEffect(() => {
