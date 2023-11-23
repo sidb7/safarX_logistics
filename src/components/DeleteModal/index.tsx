@@ -11,6 +11,7 @@ interface IDeleteModal {
   isOpen: boolean;
   closeModal: any;
   title: any;
+  reloadData?: any;
 }
 
 export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
@@ -19,6 +20,7 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
   isOpen,
   closeModal,
   title,
+  reloadData,
 }) => {
   const [loading, setLoading] = useState(false);
   const deleteApi = async () => {
@@ -27,6 +29,7 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
       const { data: deleteData } = await POST(url, postData);
       if (deleteData?.success) {
         toast.success(deleteData?.message);
+        reloadData();
       } else {
         toast.error(deleteData?.message);
       }
