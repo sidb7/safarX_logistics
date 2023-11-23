@@ -273,12 +273,14 @@ const WalletRecharge = () => {
 
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
+    let redirectUrl = `${SELLER_WEB_URL}/wallet/view-wallet`;
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
-      userDetails.email
+      userDetails.email,
+      redirectUrl
     );
     if (!options?.success && !options?.amount) {
       toast.error(options.message);
