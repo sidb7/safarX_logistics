@@ -293,7 +293,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                       <div className="flex gap-x-3 w-full">
                         <CustomInputBox
                           label="Length (CM)"
-                          inputType="number"
+                          inputMode="numeric"
                           name="length"
                           errorMessage={validationErrors?.length}
                           value={productInputState[index]?.length}
@@ -314,7 +314,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         <CustomInputBox
                           label="Breadth (CM)"
                           name="breadth"
-                          inputType="number"
+                          inputMode="numeric"
                           value={productInputState[index].breadth || ""}
                           errorMessage={validationErrors?.breadth}
                           onChange={(e: any) => {
@@ -331,7 +331,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         />
                         <CustomInputBox
                           label="Height (CM)"
-                          inputType="number"
+                          inputMode="numeric"
                           name="height"
                           value={productInputState[index].height || ""}
                           errorMessage={validationErrors?.height}
@@ -368,7 +368,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                       </div>
                       <CustomInputBox
                         label="Weight (Kg)"
-                        inputType="number"
+                        inputMode="numeric"
                         name="deadWeight"
                         value={productInputState[index]?.deadWeight || 0}
                         errorMessage={validationErrors?.deadWeight}
