@@ -12,12 +12,13 @@
   padding: 0;
 }
 
-.fluid-table thead tr{
+.fluid-table thead tr {
   border-bottom: 1px solid #7f7f7f;
   padding: 3mm;
 }
 
-.fluid-table td, th{
+.fluid-table td,
+th {
   border-right: none !important;
 }
 
@@ -29,6 +30,11 @@ tbody tr:nth-child(odd) {
   #my-tooltip-landing {
     width: 150px;
   }
+
+  .removePaddingPlaceHolder::placeholder {
+    padding: 0;
+  }
+
 }
 
 /* iframe {
