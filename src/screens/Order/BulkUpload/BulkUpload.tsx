@@ -108,14 +108,13 @@ const BulkUpload = (props: ITypeProps) => {
   };
 
   const renderHeaderComponent = () => {
+    const baseUrl = "https://sy-seller.s3.ap-south-1.amazonaws.com/files/";
+
+    const downloadUrlB2B = `${baseUrl}SY_BULK_B2B_ORDER.xlsx`;
+    const downloadUrlB2C = `${baseUrl}SY_BULK_B2C_ORDER.xlsx`;
+
     const downloadUrl =
-      "https://sy-seller.s3.ap-south-1.amazonaws.com/files/SY_BULK_ORDER.xlsx";
-
-    // const downloadUrlB2B = `${baseUrl}B2B_SAMPLE.csv`;
-    // const downloadUrlB2C = `${baseUrl}B2C_SAMPLE.csv`;
-
-    // const downloadUrl =
-    //   selectedOption === "B2B" ? downloadUrlB2B : downloadUrlB2C;
+      selectedOption === "B2B" ? downloadUrlB2B : downloadUrlB2C;
 
     return (
       <a
