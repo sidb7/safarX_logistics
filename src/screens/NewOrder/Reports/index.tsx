@@ -9,16 +9,14 @@ import { GET_REPORTS } from "../../../utils/ApiUrls";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 import { toast } from "react-toastify";
-import * as XLSX from "xlsx";
-import * as FileSaver from "file-saver";
-import { convertToXLSX } from "../../../utils/helper";
+import { convertXMLToXLSX } from "../../../utils/helper";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
-  console.log("isActive", isActive);
+  const [dataset, setDataset] = useState<any>();
 
   const reportMenu = [
     {
@@ -28,17 +26,12 @@ const Reports = () => {
   ];
 
   const convertEpoch = (epochDate: any) => {
-    return epochDate.getTime();
+    return epochDate?.getTime() || "";
   };
 
   const fetchReport = async () => {
     let startEpoch = convertEpoch(startDate);
     let endEpoch = convertEpoch(endDate);
-    // const { data } = await POST(GET_CATEGOROIES, {});
-    // if (data?.success) {
-    // }
-
-    /// console.log("startDate", startDate);
 
     const payload = {
       startDate: startEpoch,
@@ -47,12 +40,23 @@ const Reports = () => {
     };
     const response = await POST(GET_REPORTS, payload);
 
-    FileSaver.saveAs(
-      new Blob([response.data.data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      }),
-      "filename.xlsx"
+    // const apiData = response.data;
+    if (!response?.data?.success) {
+      toast.error(response?.data?.message);
+      return;
+    }
+    const date: any = JSON.stringify(new Date());
+    const result = await convertXMLToXLSX(
+      response?.data?.data,
+      `SellerShipMentReport_${date
+        .substr(1, 10)
+        .split("-")
+        .reverse()
+        .join("-")}.xlsx`
     );
+    if (result) {
+      toast.success(response?.data?.message);
+    }
   };
 
   useEffect(() => {
