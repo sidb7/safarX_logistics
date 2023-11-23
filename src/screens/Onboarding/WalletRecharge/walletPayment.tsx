@@ -117,12 +117,14 @@ const WalletPayment = () => {
 
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
+    let redirectUrl = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
-      userDetails.email
+      userDetails.email,
+      redirectUrl
     );
 
     if (!options?.success && !options?.amount) {
@@ -295,7 +297,7 @@ const WalletPayment = () => {
                     onClick={handleRazorPayTransaction}
                   >
                     <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-                      RazorPay
+                      RazorPayxcv
                     </p>
                   </button>
                 </div>
