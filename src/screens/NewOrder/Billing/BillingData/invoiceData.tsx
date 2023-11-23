@@ -129,10 +129,10 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
       cell: (info: any) => {
         return (
           <div className="">
-            <span className=" border-[#d4b27f] border-[1px] p-2 rounded-md bg-[#f4eee5] text-[#d4b27f] font-semibold">
+            {/* <span className=" border-[#d4b27f] border-[1px] p-2 rounded-md bg-[#f4eee5] text-[#d4b27f] font-semibold">
               PAID
-            </span>
-            {/* {info.row.original.status === "Unpaid" ? (
+            </span> */}
+            {info.row.original.status === "Unpaid" ? (
               <span className=" border-[#d4b27f] border-[1px] p-2 rounded-md bg-[#f4eee5] text-[#d4b27f] font-semibold">
                 {capitalizeFirstLetter(info.row.original.status)}
               </span>
@@ -144,7 +144,7 @@ const InvoiceData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
               <span className=" border-[#f35838] border-[1px] p-2 rounded-md bg-[#f9f0ee] text-[#f35838] font-semibold">
                 {capitalizeFirstLetter(info.row.original.status)}
               </span>
-            )} */}
+            )}
           </div>
         );
       },

@@ -11,13 +11,18 @@ import SampleProduct from "../../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { filterItems } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";
-import { CREATE_COMBO_PRODUCT } from "../../../../utils/ApiUrls";
+import {
+  CREATE_COMBO_PRODUCT,
+  GET_COMBO_PRODUCT,
+  GET_PRODUCTS,
+} from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
 import { toast } from "react-toastify";
 import BottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useMediaQuery } from "react-responsive";
 import { Navigate } from "react-router-dom";
+import PaginationComponent from "../../../../components/Pagination";
 
 interface ISearchProductProps {
   isSearchProductRightModalOpen?: boolean;
@@ -25,6 +30,7 @@ interface ISearchProductProps {
   productsData?: any;
   selectedProducts?: any;
   handlePackageDetails?: any;
+  totalProduct?: any;
 }
 
 const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
@@ -34,6 +40,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     productsData,
     selectedProducts,
     handlePackageDetails,
+    totalProduct,
   } = props;
 
   const navigate = useNavigate();
@@ -43,6 +50,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
   const [clearIconVisible, setClearIconVisible] = useState<any>(false);
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboNameDisabled, setComboNameDisabled] = useState(true);
+  const [totalItemCount, setTotalItemCount] = useState(totalProduct);
   const [comboData, setComboData] = useState<any>({
     name: "",
     category: "mahaveer",
@@ -76,9 +84,9 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     }
     setComboData({
       ...comboData,
-      totalVolumetricWeight: volumetricWeightLocal,
-      deadWeight: deadWeightLocal,
-      appliedWeight: appliedWeightLocal,
+      totalVolumetricWeight: volumetricWeightLocal.toFixed(2),
+      deadWeight: deadWeightLocal.toFixed(2),
+      appliedWeight: appliedWeightLocal.toFixed(2),
     });
   };
 
@@ -133,18 +141,23 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     const updatedProductInputState = products.filter(
       (isSelectedFilterData: any) => isSelectedFilterData?.selected
     );
-    const payLoad = {
-      name,
-      images,
-      category,
-      products: [...updatedProductInputState],
-    };
-    const { data: response } = await POST(CREATE_COMBO_PRODUCT, payLoad);
-    if (response?.success) {
-      toast.success(response?.message);
-      setIsSearchProductRightModalOpen(false);
+    if (updatedProductInputState?.length < 2) {
+      toast.error("Atleast Two Product's is Required For Combo");
+      return;
     } else {
-      toast.error("Failed To Upload!");
+      const payLoad = {
+        name,
+        images,
+        category,
+        products: [...updatedProductInputState],
+      };
+      const { data: response } = await POST(CREATE_COMBO_PRODUCT, payLoad);
+      if (response?.success) {
+        toast.success(response?.message);
+        setIsSearchProductRightModalOpen(false);
+      } else {
+        toast.error(response?.message);
+      }
     }
   };
 
@@ -180,8 +193,54 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
   };
 
   const searchProductContent = () => {
+    const searchProduct = async (e: any) => {
+      setSearchedProduct(e.target.value);
+      setClearIconVisible(true);
+      const { data } = await POST(GET_PRODUCTS, {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+        searchValue: e.target.value,
+      });
+      if (data?.success) {
+        setProducts(data?.data);
+        setTotalItemCount(data?.totalProduct);
+      } else {
+        setProducts([]);
+        toast.error(data?.message);
+      }
+    };
+    const onPageIndexChange = async (pageIndex: any) => {
+      const { data } = await POST(GET_PRODUCTS, {
+        skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
+        limit: pageIndex?.itemsPerPage,
+        pageNo: pageIndex?.currentPage,
+      });
+      if (data?.success) {
+        setProducts(data?.data);
+        setTotalItemCount(data?.totalProduct);
+      } else {
+        setProducts([]);
+        toast.error(data?.message);
+      }
+    };
+
+    const onPerPageItemChange = async (pageperItem: any) => {
+      const { data } = await POST(GET_PRODUCTS, {
+        skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+        limit: pageperItem?.itemsPerPage,
+        pageNo: pageperItem?.currentPage,
+      });
+      if (data?.success) {
+        setProducts(data?.data);
+        setTotalItemCount(data?.totalProduct);
+      } else {
+        setProducts([]);
+        toast.error(data?.message);
+      }
+    };
     return (
-      <div>
+      <div className="overflow-auto h-full">
         <div className="p-5 ">
           <div className="lg:mb-[20px] mb-2">
             <div className="flex items-center justify-between mb-[8px] ">
@@ -203,12 +262,12 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
                 value={searchedProduct}
                 label="Search any product"
                 onChange={(e) => {
-                  setSearchedProduct(e.target.value);
-                  setClearIconVisible(true);
+                  searchProduct(e);
                 }}
                 onClick={() => {
                   setSearchedProduct("");
                   setClearIconVisible(false);
+                  setProducts(productsData);
                 }}
                 visibility={true}
                 setVisibility={() => {}}
@@ -252,6 +311,14 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
                 />
               );
             })}
+            {totalItemCount > 0 && (
+              <PaginationComponent
+                totalItems={totalItemCount}
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
+            )}
           </div>
         </div>
         <hr />

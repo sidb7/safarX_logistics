@@ -100,8 +100,14 @@ const InvoicePdf = () => {
             <p>
               <strong>TAX INVOICE</strong>
             </p>
-            <p className="text-[25px] font-semibold text-[#008000] mt-2">
-              PAID
+            <p
+              className={`text-[25px] font-semibold mt-2 ${
+                invoicData?.status === "PAID"
+                  ? "text-[#008000]"
+                  : "text-red-500"
+              }`}
+            >
+              {invoicData?.status === "PAID" ? "PAID" : "UNPAID"}
             </p>
             <p
               onClick={() => downloadAsPdf(invoicData?.invoiceUrl)}
@@ -112,10 +118,7 @@ const InvoicePdf = () => {
             </p>
           </div>
           <div className="">
-            <img
-              src="https://s3-ap-south-1.amazonaws.com/sr-bills-mum/files/e213741da29f3dedd2a207b8278fde59.png"
-              alt="qrcode"
-            />
+            <img src={invoicData?.companyInfo?.irnUrl || ""} alt="qrcode" />
           </div>
         </div>
         <div className="px-[32px] flex justify-between mt-5">
@@ -144,7 +147,7 @@ const InvoicePdf = () => {
             </p>
             <p>
               <b className="mr-1">Invoice Date :</b>
-              <span>{convertEpochToDateTime(invoicData?.invoiceNo)}</span>
+              <span>{convertEpochToDateTime(invoicData?.startDate)}</span>
             </p>
             <p>
               <b className="mr-1">Due Date :</b>
@@ -217,7 +220,7 @@ const InvoicePdf = () => {
                 996812
               </td>
               <td className="pl-[60px] text-[0.875rem] font-normal p-3 text-left">
-                Shiprocket V2 Freight*
+                Shipyaari Freight*
               </td>
               <td className=" text-right text-[0.625rem] font-normal p-3 pr-[30px]">
                 ₹{invoicData?.charges?.frieghtCharge}
@@ -291,7 +294,7 @@ const InvoicePdf = () => {
                 Amount Due
               </td>
               {/* <td></td> */}
-              <td className="text-righttext-[0.875rem] font-normal pr-[30px]">
+              <td className="text-right text-[0.875rem] font-normal pr-[30px]">
                 ₹0.00
               </td>
             </tr>

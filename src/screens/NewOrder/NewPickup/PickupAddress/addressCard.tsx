@@ -32,11 +32,18 @@ interface IAddressCardProps {
     setPickupAddress: any;
     addressLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { pickupAddress, setPickupAddress, addressLabel, inputError },
+  data: {
+    pickupAddress,
+    setPickupAddress,
+    addressLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const address =
     addressLabel === "Return Address"

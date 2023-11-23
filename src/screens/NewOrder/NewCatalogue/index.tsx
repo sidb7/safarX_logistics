@@ -79,6 +79,7 @@ const Catalogue = () => {
     useState("singleProduct");
   const [showCombo, setShowCombo] = useState<any>(false);
   const [productList, setProductList] = useState<any>(false);
+  const [totalProduct, setTotalProduct] = useState<number>(0);
 
   const renderComponent = () => {
     if (tabName === "Channel Integration") {
@@ -113,6 +114,7 @@ const Catalogue = () => {
       const { data: response } = await POST(GET_PRODUCTS);
       if (response?.success && !productList) {
         setProductList(response.data);
+        setTotalProduct(response?.totalProduct);
       }
     } catch (error) {}
   };
@@ -130,14 +132,17 @@ const Catalogue = () => {
   const data = GetCurrentPath() as any;
 
   useEffect(() => {
-    if (
-      tabName === "channel-integration" ||
-      tabName === "Channel Integration"
-    ) {
-      (async () => {
-        await getProductDetails();
-      })();
-    }
+    // if (
+    //   tabName === "channel-integration" ||
+    //   tabName === "Channel Integration"
+    // ) {
+    //   (async () => {
+    //     await getProductDetails();
+    //   })();
+    // }
+    (async () => {
+      await getProductDetails();
+    })();
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
@@ -392,6 +397,7 @@ const Catalogue = () => {
                     isSearchProductRightModalOpen={showCombo}
                     setIsSearchProductRightModalOpen={setShowCombo}
                     productsData={productList}
+                    totalProduct={totalProduct}
                   />
                 </RightSideModal>
 

@@ -44,12 +44,12 @@ export const Home = (props: IOverview) => {
   const [dashboardInfo, setDashboardInfo] = React.useState<any>({
     overview: [
       {
-        count: 1,
+        count: 0,
         text: "Orders need to be proceed",
         img: "",
       },
       {
-        count: 1,
+        count: 0,
         text: "Orders delayed for Pickup",
         img: "",
       },
@@ -66,12 +66,12 @@ export const Home = (props: IOverview) => {
     ],
     orders: [
       {
-        count: 1,
+        count: 0,
         text: "Created Order",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Shipped",
         img: "ShippedIcon",
       },
@@ -88,12 +88,12 @@ export const Home = (props: IOverview) => {
     ],
     exception: [
       {
-        count: 1,
+        count: 0,
         text: "Total NPR",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Total NDR",
         img: "InTransitIcon",
       },
@@ -110,12 +110,12 @@ export const Home = (props: IOverview) => {
     ],
     syPerformance: [
       {
-        count: 1,
+        count: 0,
         text: "Total NPR",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Total NDR",
         img: "InTransitIcon",
       },

@@ -49,10 +49,42 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   ]);
 
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = async (pageIndex: any) => {
+    const { data } = await POST(
+      filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
+      {
+        skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
+        limit: pageIndex?.itemsPerPage,
+        pageNo: pageIndex?.currentPage,
+      }
+    );
+    if (data?.success) {
+      setProductData(data?.data);
+      setTotalItemCount(data?.totalProduct);
+    } else {
+      setProductData([]);
+      toast.error(data?.message);
+    }
+  };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = async (pageperItem: any) => {
+    const { data } = await POST(
+      filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
+      {
+        skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+        limit: pageperItem?.itemsPerPage,
+        pageNo: pageperItem?.currentPage,
+      }
+    );
+    if (data?.success) {
+      setProductData(data?.data);
+      setTotalItemCount(data?.totalProduct);
+    } else {
+      setProductData([]);
+      toast.error(data?.message);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -66,7 +98,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       );
       if (data?.success) {
         setProductData(data.data);
-        // setTotalItemCount()
+        setTotalItemCount(data?.totalProduct);
       } else {
         setProductData([]);
         toast.error(data?.message);
@@ -297,6 +329,14 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 }
               })}
             </div>
+            {totalItemCount > 0 && (
+              <PaginationComponent
+                totalItems={totalItemCount}
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
+            )}
           </div>
         </div>
 
@@ -363,7 +403,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           </div>
         )}
 
-        <div className="absolute bottom-24">
+        {/* <div className="absolute bottom-24">
           {totalItemCount > 0 && (
             <PaginationComponent
               totalItems={totalItemCount}
@@ -372,7 +412,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               onItemsPerPageChange={onPerPageItemChange}
             />
           )}
-        </div>
+        </div> */}
       </div>
       {editAddressModal && (
         <EditProduct

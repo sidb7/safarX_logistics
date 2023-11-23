@@ -10,6 +10,7 @@ import {
   POST_CREATE_STORE,
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_SINGLE_STORE,
+  CREATE_ZOHO_STORE,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
@@ -46,6 +47,11 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     storeToken: "",
     storeLogo: "",
     channelName: "",
+    clientId: "",
+    clientSecret: "",
+    code: "",
+    organizationId: "",
+    domain: "",
   });
   const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
 
@@ -101,6 +107,14 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             window.location.href = error?.config?.url;
           }
           return;
+        } else if (channel === "ZOHO") {
+          const { data } = await POST(CREATE_ZOHO_STORE, storeData);
+          if (data?.success) {
+            toast.success(data?.message);
+            window.location.reload();
+          } else {
+            toast.error(data?.message);
+          }
         }
         setModalData({ isOpen: false });
       } else {
@@ -131,18 +145,14 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   const channelArr = [
     {
-      label: "Shopify",
-      value: "SHOPIFY",
+      label: "Zoho.com",
+      value: ".com",
     },
     {
-      label: "WooCommerce",
-      value: "WOOCOMMERCE",
+      label: "Zoho.in",
+      value: ".in",
     },
   ];
-
-  const handleChannel = (channelName: string) => {
-    setChannel(channelName);
-  };
 
   useEffect(() => {
     (async () => {
@@ -169,6 +179,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       storeData.storeName !== "" &&
       storeData.storeUrl !== ""
     ) {
+      setIsDisabled(false);
+    } else if (channel === "ZOHO") {
       setIsDisabled(false);
     } else setIsDisabled(true);
   }, [storeData]);
@@ -259,6 +271,53 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               onChange={(e) =>
                 setStoreData({ ...storeData, storeName: e.target.value })
               }
+            />
+          </div>
+        ) : channel === "ZOHO" ? (
+          <div className="grid gap-y-3">
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Client ID"
+              isRequired={true}
+              value={storeData.clientId}
+              onChange={(e) =>
+                setStoreData({ ...storeData, clientId: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Client Secret"
+              isRequired={true}
+              value={storeData.clientSecret}
+              onChange={(e) =>
+                setStoreData({ ...storeData, clientSecret: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Code"
+              isRequired={true}
+              value={storeData.code}
+              onChange={(e) =>
+                setStoreData({ ...storeData, code: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Organization Id"
+              isRequired={true}
+              value={storeData.organizationId}
+              onChange={(e) =>
+                setStoreData({ ...storeData, organizationId: e.target.value })
+              }
+            />
+            <CustomDropDown
+              onChange={(e) => {
+                console.log("e.target.value : ", e.target.value);
+                setStoreData({ ...storeData, domain: e.target.value });
+              }}
+              options={channelArr}
+              heading="Zoho Domain"
             />
           </div>
         ) : null}
