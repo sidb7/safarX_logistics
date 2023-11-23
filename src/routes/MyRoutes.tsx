@@ -154,11 +154,15 @@ import BankProtected from "../components/ProtectedRoutes/BankProtected";
 import PublicTracking from "../screens/PublicScreens/PublicTracking";
 import InvoicePdf from "../screens/Invoice";
 import CashOnDelivery from "../screens/Onboarding/WalletRecharge/cashOnDelivery";
+import AiAddress from "../screens/QuickPages/AiAddress";
+import AiListen from "../screens/QuickPages/AiListen";
 
 const MyRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/ai-address" element={<AiAddress />} />
+        <Route path="/ai-listen" element={<AiListen />} />
         <Route path="/auth/login" element={<LogInScreen />} />
         <Route
           path="/"
