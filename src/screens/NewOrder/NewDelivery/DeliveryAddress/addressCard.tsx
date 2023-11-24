@@ -93,16 +93,18 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         fieldName === "locality" ||
         fieldName === "landmark" ||
         fieldName === "city" ||
+        fieldName === "pincode" ||
         fieldName === "state" ||
         fieldName === "country"
       ) {
-        const { flatNo, locality, landmark, city, state, country } =
+        const { flatNo, locality, landmark, city, pincode, state, country } =
           updatedData[addressName];
         updatedData[addressName].fullAddress = [
           flatNo,
           locality,
           landmark,
           city,
+          pincode,
           state,
           country,
         ]
