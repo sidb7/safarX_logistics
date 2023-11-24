@@ -486,11 +486,23 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     );
   };
 
-  const handleCloseBoxDetailModal = () => {
-    if (isMobileView) {
-      setIsOpenBottomModal(false);
-    } else {
-      setSellerBoxDetailsModal(false);
+  const handleCloseBoxDetailModal = async () => {
+    try {
+      const { data: boxData } = await POST(GET_SELLER_BOX);
+      if (boxData?.success) {
+        const { data = [] } = boxData;
+        setSellerBox(data);
+      }
+      if (isMobileView) {
+        setIsOpenBottomModal(false);
+      } else {
+        setSellerBoxDetailsModal(false);
+      }
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: ProductPackage.tsx:502 ~ handleCloseBoxDetailModal ~ error:",
+        error
+      );
     }
   };
 
