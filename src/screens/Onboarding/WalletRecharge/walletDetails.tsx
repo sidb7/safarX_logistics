@@ -55,7 +55,7 @@ const WalletDetails = () => {
         toast.success("Bank Details verified successfully");
         setWalletRechargeModalOpen(true);
         setLoading(false);
-        navigate("/onboarding/wallet-payment");
+        navigate("/dashboard/overview");
       } else {
         toast.error(datas?.data?.message);
         setLoading(false);

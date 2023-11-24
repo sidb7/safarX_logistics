@@ -202,7 +202,7 @@ const Serviceability = (props: ITypeProps) => {
 
   const tableComponent = () => {
     return (
-      <div className="overflow-x-scroll h-[80%] m-5">
+      <div className="overflow-x-scroll h-full m-5">
         <CustomTable data={serviceabilityTableData} columns={columns} />
       </div>
     );
@@ -231,7 +231,7 @@ const Serviceability = (props: ITypeProps) => {
       {showTable ? (
         tableComponent()
       ) : (
-        <div className="h-[80%] overflow-y-scroll">
+        <div className="h-full">
           <div className="flex items-center justify-start  p-5">
             <GroupRadioButtons
               options={[
