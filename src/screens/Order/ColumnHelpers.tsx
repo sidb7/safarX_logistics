@@ -1151,7 +1151,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
             <div className=" ">
               <p className="">
                 {pickupAddress?.pickupDate
-                  ? date_DD_MMM_YYYY_HH_MM(pickupAddress?.pickupDate * 1000)
+                  ? date_DD_MMM_YYYY_HH_MM(pickupAddress?.pickupDate)
                   : null}
               </p>
               <div className="py-2 flex flex-col">
