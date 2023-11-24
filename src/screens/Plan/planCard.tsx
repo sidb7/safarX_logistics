@@ -20,7 +20,7 @@ const PlanCard = (props: ITypeProps) => {
 
   return (
     <div className="">
-      {planName.toUpperCase() === "PLATINUM" ? (
+      {planName?.toUpperCase() === "PLATINUM" ? (
         <div className="p-3  border-[1px] rounded-t-lg  bg-[#004EFF] w-[273px] h-[44px] ">
           <p className="text-[#FFFFFF] font-Open lg:font-Lato text-sm lg:text-base font-bold leading-4 lg:leading-5 text-center  ">
             MOST POPULAR
@@ -42,7 +42,7 @@ const PlanCard = (props: ITypeProps) => {
 
       <div
         className={`flex flex-col  items-center  ${
-          planName.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
+          planName?.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
           isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
         } py-5 px-4 shadow-sm border-[1px]   border-[#E8E8E8] bg-[#FFFFFF] h-[504px]  lg:h-[433px] w-[288px] lg:w-[273px]`}
@@ -59,8 +59,8 @@ const PlanCard = (props: ITypeProps) => {
           {planName}
         </p>
 
-        {planName.toUpperCase() === "FREEMIUM" ||
-        planName.toUpperCase() === "PLATINUM" ? (
+        {planName?.toUpperCase() === "FREEMIUM" ||
+        planName?.toUpperCase() === "PLATINUM" ? (
           <div className="flex items-center mb-8">
             <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
               <span className="font-Open text-[12px] font-semibold leading-4 ">
