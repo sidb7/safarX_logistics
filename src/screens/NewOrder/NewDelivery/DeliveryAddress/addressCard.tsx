@@ -207,11 +207,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         setValidGstStateCode(gstObject?.["GST State Code"]);
       }
     }
-  }, [
-    deliveryAddress.deliveryAddress.state,
-    deliveryAddress.orderType,
-    deliveryAddress.gstNumber,
-  ]);
+  }, [deliveryAddress.deliveryAddress.state]);
 
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
