@@ -149,6 +149,7 @@ const ComparePlans = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.freemium}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -169,6 +170,7 @@ const ComparePlans = (props: ITypeProps) => {
               checkboxClassName="!text-black"
               checked={info.row.original.silver}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -188,6 +190,7 @@ const ComparePlans = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.gold}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -207,6 +210,7 @@ const ComparePlans = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.platinum}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
