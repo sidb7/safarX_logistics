@@ -304,8 +304,9 @@ const PlanDetails = (props: ITypeProps) => {
         return (
           <div className="flex items-center justify-center">
             <Checkbox
-              checked={info.row.original.freemium}
+              checked={true}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -320,8 +321,9 @@ const PlanDetails = (props: ITypeProps) => {
           <div className="flex items-center justify-center ">
             <Checkbox
               checkboxClassName="!text-black"
-              checked={info.row.original.silver}
+              checked={true}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -337,6 +339,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.gold}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -352,6 +355,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.platinum}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -368,6 +372,7 @@ const PlanDetails = (props: ITypeProps) => {
       platinum: allPlans[3]?.planName,
     },
   ];
+
   const activeColumns = [
     columnsHelper.accessor("pricing", {
       header: () => {
