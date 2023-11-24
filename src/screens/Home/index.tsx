@@ -169,7 +169,6 @@ export const Home = (props: IOverview) => {
       .replace(/ /g, "-");
 
     const newUrl = `/dashboard/${filterNewUrl}`; // Specify the new URL here
-    console.log("newurldasboard", newUrl);
 
     window.history.pushState(null, "", newUrl);
     setRenderingComponents(id);
@@ -187,7 +186,6 @@ export const Home = (props: IOverview) => {
     };
 
     const data = GetCurrentPath() as any;
-    console.log("dataOverview", data);
 
     if (data[1] === "overview") {
       setRenderingComponents(0);
@@ -242,14 +240,17 @@ export const Home = (props: IOverview) => {
           <div className="mx-4 mb-4 ">
             <div className="flex justify-between">
               {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
-              <div className="overflow-x-scroll">
+
+              {/* scrollable nav temp commented  */}
+
+              {/* <div className="overflow-x-scroll">
                 <ScrollNav
                   arrayData={arrayData}
                   showNumber={false}
                   setScrollIndex={setScrollIndex}
                 />
-              </div>
-              {renderingComponents === 0 && (
+              </div> */}
+              {/* {renderingComponents === 0 && (
                 <div className={`${isLgScreen ? "block" : "hidden"}`}>
                   <CustomDropDown
                     onChange={(e) => {}}
@@ -258,9 +259,9 @@ export const Home = (props: IOverview) => {
                     selectClassName="lg:!w-[120px] lg:!h-[34px] mt-1 !rounded-md !text-[#494949]"
                   />
                 </div>
-              )}
+              )} */}
             </div>
-            {renderingComponents === 0 && (
+            {/* {renderingComponents === 0 && (
               <Overview ordersArr={dashboardInfo.overview} />
             )}
             {renderingComponents === 1 && (
@@ -271,7 +272,8 @@ export const Home = (props: IOverview) => {
             )}
             {renderingComponents === 3 && (
               <SyPerfromance ordersArr={dashboardInfo.syPerformance} />
-            )}
+            )} */}
+            <Overview ordersArr={dashboardInfo.overview} />
           </div>
 
           <div className="mt-24 lg:hidden">
