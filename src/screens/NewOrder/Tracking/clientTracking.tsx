@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ClientIcon from "../../../assets/clientIcon.svg";
 import InputBox from "../../../components/Input/index";
 import instagramIcon from "../../../assets/instagramIcon.svg";
@@ -27,88 +27,16 @@ import { toast } from "react-toastify";
 import { convertEpochToDateTime } from "../../../utils/utility";
 import { getQueryJson } from "../../../utils/utility";
 import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 const Tracking = () => {
-  let tracking = [
-    {
-      partner: {
-        partnerIcon: DelhiveryIcon,
-        partnerID: 0,
-        etaDate: "18 Jun 2023",
-        trackingID: "GYSH23678119",
-        orderID: "GYSH23678119",
-        status: "Booked",
-        lastUpdated: "1 hr ago | 05 Jun 23 | Fri | 15:11:23",
-        fromDate:
-          "Vidyavihar Railway Station 19 Vidyavihar station skywalk Rajawad Colony. VidhyaVihar, Delhi, 288211",
-        toDate:
-          "12-A, 3rd Floor, Techniplex - II, Off Veer Savarkar Flyover, Goregaon (W), Mumbai – 400 062",
-      },
-
-      trackingDetails: [
-        {
-          date: "18 Jul, 2023",
-          time: "11:00  am",
-          heading: "Pick-up assigned",
-          locationImage: Location,
-          location: "Mumbai",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Reached Warehouse",
-          locationImage: Location,
-          location: "Bhiwandi",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Delivery assigned",
-          locationImage: telephoneIcon,
-          location: "+91 12345 12345",
-        },
-      ],
-      productDetails: [
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-      ],
-      orderDetails: [
-        {
-          buyersName: "Sandeep Kochar",
-          phoneNumber: "+91 70*****90",
-          invoice: "₹10,000",
-          paymentMode: "Online",
-        },
-      ],
-      isTrackingOpen: false,
-      isProductItemsOpen: false,
-    },
-  ];
-
   const [trackingState, setTrackingState] = useState<any>([]);
   console.log("trackingdata1", trackingState[0]?.currentStatus);
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<any>();
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
+  const { isLgScreen } = ResponsiveState();
 
   console.log("trackingDetails", trackingDetails);
 
@@ -137,7 +65,7 @@ const Tracking = () => {
       label: "In Transit",
       isCompleted: false,
       value: "IN TRANSIT",
-      isActive: true,
+      isActive: false,
       imgSrc: TickLogo,
       timeStatus: "01 Jun | 16:32:46",
     },
@@ -189,75 +117,75 @@ const Tracking = () => {
       statuses["IN TRANSIT"] = true;
       statuses["OUT FOR DELIVERY"] = true;
       statuses["DELIVERED"] = true;
-    } else {
-      return null;
     }
     return statuses;
   }
 
-  const getCurrentCycle = (status: any) => {
-    const statuses = {
-      BOOKED: false,
-      "IN TRANSIT": false,
-      "OUT FOR DELIVERY": false,
-      DELIVERED: false,
-    };
+  // const getCurrentCycle = (status: any) => {
+  //   const statuses = {
+  //     BOOKED: false,
+  //     "IN TRANSIT": false,
+  //     "OUT FOR DELIVERY": false,
+  //     DELIVERED: false,
+  //   };
 
-    if (status === "BOOKED" || status === "NOT PICKED") {
-      statuses.BOOKED = true;
+  //   if (status === "BOOKED" || status === "NOT PICKED") {
+  //     statuses.BOOKED = true;
 
-      tempSteps.map((el: any, i: number) => {
-        if (el.label.toUpperCase() === status) {
-          el.isActive = true;
-          el.isCompleted = true;
-          return el;
-        }
-      });
-    } else if (status === "IN TRANSIT" || status === "OUT FOR DELIVERY") {
-      statuses.BOOKED = true;
-      statuses["IN TRANSIT"] = true;
-      tempSteps.map((el: any, i: number) => {
-        if (
-          el.label.toUpperCase() === status ||
-          "OUT FOR DELIVERY" === status
-        ) {
-          el.isActive = true;
-          el.isCompleted = true;
-          return el;
-        }
-      });
-    } else if (status === "OUT FOR DELIVERY" || status === "DELIVERED") {
-      statuses.BOOKED = true;
-      statuses["IN TRANSIT"] = true;
-      statuses["OUT FOR DELIVERY"] = true;
-      tempSteps.map((el: any, i: number) => {
-        if (el.label.toUpperCase() === status) {
-          el.isActive = true;
-          el.isCompleted = true;
-          return el;
-        }
-      });
-    } else if (status === "DELIVERED") {
-      statuses.BOOKED = true;
-      statuses["IN TRANSIT"] = true;
-      statuses["OUT FOR DELIVERY"] = true;
-      statuses["DELIVERED"] = true;
+  //     tempSteps.map((el: any, i: number) => {
+  //       if (el.label.toUpperCase() === status) {
+  //         el.isActive = true;
+  //         el.isCompleted = true;
+  //         return el;
+  //       }
+  //     });
+  //   } else if (status === "IN TRANSIT" || status === "OUT FOR DELIVERY") {
+  //     statuses.BOOKED = true;
+  //     statuses["IN TRANSIT"] = true;
+  //     tempSteps.map((el: any, i: number) => {
+  //       if (
+  //         el.label.toUpperCase() === status ||
+  //         "OUT FOR DELIVERY" === status
+  //       ) {
+  //         el.isActive = true;
+  //         el.isCompleted = true;
+  //         return el;
+  //       }
+  //     });
+  //   } else if (status === "OUT FOR DELIVERY" || status === "DELIVERED") {
+  //     statuses.BOOKED = true;
+  //     statuses["IN TRANSIT"] = true;
+  //     statuses["OUT FOR DELIVERY"] = true;
+  //     tempSteps.map((el: any, i: number) => {
+  //       if (el.label.toUpperCase() === status) {
+  //         el.isActive = true;
+  //         el.isCompleted = true;
+  //         return el;
+  //       }
+  //     });
+  //   } else if (status === "DELIVERED") {
+  //     statuses.BOOKED = true;
+  //     statuses["IN TRANSIT"] = true;
+  //     statuses["OUT FOR DELIVERY"] = true;
+  //     statuses["DELIVERED"] = true;
 
-      tempSteps.map((el: any, i: number) => {
-        if (el.label.toUpperCase() === status) {
-          el.isActive = true;
-          el.isCompleted = true;
-          return el;
-        }
-      });
-    } else {
-      return null;
-    }
+  //     tempSteps.map((el: any, i: number) => {
+  //       if (el.label.toUpperCase() === status) {
+  //         el.isActive = true;
+  //         el.isCompleted = true;
+  //         return el;
+  //       }
+  //     });
+  //   } else {
+  //     return null;
+  //   }
 
-    // setStatus([])
+  //   // setStatus([])
 
-    return statuses;
-  };
+  //   return statuses;
+  // };
+
+  //this is to get the last updated details
 
   const getTimeDetails = (trackingInfo: any) => {
     const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
@@ -312,6 +240,14 @@ const Tracking = () => {
   const handleTrackOrderClick = async () => {
     let urlWithTrackingNo = "";
 
+    window.history.replaceState(
+      {},
+      "",
+      `/tracking?trackingNo=${
+        trackingNoFromUrl ? trackingNoFromUrl : trackingNo
+      }`
+    );
+
     if (!trackingNoFromUrl && !trackingNo) {
       return toast.warning("Please Enter Tracking Number");
     }
@@ -327,7 +263,10 @@ const Tracking = () => {
         urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`;
       }
       const { data: response } = await GET(urlWithTrackingNo);
-      console.log(response?.data[0]?.trackingInfo[0]?.processedLog);
+      console.log(
+        "checkdata",
+        response?.data[0]?.trackingInfo[0]?.processedLog
+      );
       if (response.success) {
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
@@ -335,19 +274,21 @@ const Tracking = () => {
         const res: any = myStatus(
           response?.data[0].trackingInfo[0]?.currentStatus
         );
+        console.log("res", res);
 
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
+          console.log("keys", Object.keys);
           mysteps.forEach((step: any, index: number) => {
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
-              mysteps[index].isCompleted = stepCurrentStatus;
+              mysteps[index].isCompleted = stepCurrentStatus || false;
             }
           });
         });
-
         setTempSteps([...mysteps]);
+        console.log("mySteps", mysteps);
       } else {
         toast.error(response?.message);
         setTrackingState([]);
@@ -359,34 +300,7 @@ const Tracking = () => {
     }
   };
 
-  // const InvalidTrackingListHover = (inValidTrackingState: any) => {
-  //   return (
-  //     <div className="max-w-[200px] h-fit">
-  //       <div className="border-b  font-semibold py-1 my-2 ">
-  //         INVALID TRACKING NUMBER
-  //       </div>
-
-  //       <div className="flex items-start max-w-[400px]">
-  //         <span> The tracking IDs:</span>
-  //         <div className="flex flex-wrap items-start">
-  //           {inValidTrackingState?.map(
-  //             (inValidTravkingNumber: any, index: any) => (
-  //               <span
-  //                 key={`${inValidTravkingNumber}_${index}`}
-  //                 title={inValidTravkingNumber}
-  //                 className="mx-1 max-w-[100px] font-semibold truncate"
-  //               >
-  //                 {inValidTravkingNumber}
-  //               </span>
-  //             )
-  //           )}
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // };
-
-  console.log("trackingState", trackingState);
+  // console.log("trackingState", trackingState);
 
   const callFunction = async () => {
     await handleTrackOrderClick();
@@ -399,42 +313,83 @@ const Tracking = () => {
     }
   }, [trackingNoFromUrl]);
 
+  const temp = useMemo(() => {
+    return trackingDetails?.Scans?.reverse()?.map(
+      (each: any, index: number) => {
+        return (
+          <div
+            className="flex gap-x-5 mt-1 h-16  relative overflow-y-scroll mt-2"
+            key={index}
+          >
+            <div className="pt-1">
+              <p className="text-xs font-Open font-normal w-[68px] whitespace-nowrap">
+                {`${each?.time.split(" ")[0]} `}
+              </p>
+              <p className="text-xs font-Open font-normal">
+                {`${each?.time.split(" ")[1]} `}
+              </p>
+            </div>
+            <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
+              <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                {each?.message}
+              </p>
+              <p className="text-xs font-Open  font-normal mt-1 w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                {each?.status}
+              </p>
+              <div className="flex pt-1 gap-x-2 mt-1">
+                <img src={Location} alt="" className="w-4 h- 4" />
+                <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                  {each?.location}
+                </p>
+              </div>
+              <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
+            </div>
+          </div>
+        );
+      }
+    );
+  }, [trackingDetails]);
+
   return (
     <>
       <>
         <div className="mx-5">
           {/*shipyaari icon */}
-          <div className="flex justify-center p-3">
+          <div className="flex  justify-center p-3">
             <img src={shipyaari} alt="Shipyaari" />
           </div>
-          <div className=" flex flex-col  md:flex-row md:justify-center gap-x-2">
+          <div className=" flex flex-col justify-center md:flex-row md:justify-center gap-x-2">
             {/*tracking ID Box */}
             <div className="">
-              <div className="flex items-center gap-x-5 w-full md:w-[500px] lg:w-[600px] xl:w-[800px]">
-                <InputBox
-                  label="Enter tracking ID"
-                  value={trackingNo}
-                  containerStyle="!mt-1"
-                  onChange={(e) => setTrackingNo(e.target.value)}
-                />
-                <CustomButton
-                  text="Track Order"
-                  className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap"
-                  onClick={() => handleTrackOrderClick()}
-                />
-              </div>
-
-              <p className="text-[10px] py-2 font-Open font-bold">
-                For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
-              </p>
-
-              <div className="flex justify-between md:w-auto">
+              <div className="flex">
                 {loading ? (
                   <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                     <Spinner />{" "}
                   </div>
                 ) : (
                   <div className=" ">
+                    <div
+                      className={`flex items-center gap-x-5 w-full  ${
+                        isLgScreen ? "lg:w-[800px]" : ""
+                      }`}
+                    >
+                      <InputBox
+                        label="Enter tracking ID"
+                        value={trackingNo}
+                        containerStyle="!mt-1"
+                        onChange={(e) => setTrackingNo(e.target.value)}
+                      />
+                      <CustomButton
+                        text="Track Order"
+                        className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap"
+                        onClick={() => handleTrackOrderClick()}
+                      />
+                    </div>
+
+                    <p className="text-[10px] py-2 font-Open font-bold">
+                      For multiple ID, type GYSH23678119, GYSH23678119,
+                      GYSH23678119
+                    </p>
                     {trackingState?.map((each: any, indexTracking: number) => {
                       return (
                         <div key={indexTracking}>
@@ -459,10 +414,11 @@ const Tracking = () => {
                                         <span>{timeDetails.time}</span>
                                       </div>
                                     </p>
-                                    <img
+                                    {/* commented as it required for now  */}
+                                    {/* <img
                                       src={RefreshIcon}
                                       className="w-4 mt-3 md:mt-0"
-                                    />
+                                    /> */}
                                   </div>
                                 </div>
 
@@ -564,47 +520,7 @@ const Tracking = () => {
                                   // }`}
                                   className={`max-h-[200px] overflow-y-scroll`}
                                 >
-                                  {true &&
-                                    trackingDetails.Scans?.reverse()?.map(
-                                      (each: any, index: number) => {
-                                        // console.log("each", each);
-
-                                        return (
-                                          <div
-                                            className="flex gap-x-5 mt-1 h-16  relative overflow-y-scroll mt-2"
-                                            key={index}
-                                          >
-                                            <div className="pt-1">
-                                              <p className="text-xs font-Open font-normal w-[68px] whitespace-nowrap">
-                                                {`${each?.time.split(" ")[0]} `}
-                                              </p>
-                                              <p className="text-xs font-Open font-normal">
-                                                {`${each?.time.split(" ")[1]} `}
-                                              </p>
-                                            </div>
-                                            <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
-                                              <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
-                                                {each?.message}
-                                              </p>
-                                              <p className="text-xs font-Open  font-normal mt-1 w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
-                                                {each?.status}
-                                              </p>
-                                              <div className="flex pt-1 gap-x-2 mt-1">
-                                                <img
-                                                  src={Location}
-                                                  alt=""
-                                                  className="w-4 h- 4"
-                                                />
-                                                <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
-                                                  {each?.location}
-                                                </p>
-                                              </div>
-                                              <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
-                                            </div>
-                                          </div>
-                                        );
-                                      }
-                                    )}
+                                  {temp}
                                 </div>
                                 <div className="py-3">
                                   <hr />
