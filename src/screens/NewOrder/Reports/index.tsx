@@ -29,6 +29,12 @@ const Reports = () => {
     return epochDate?.getTime() || "";
   };
 
+  const reportEndDate = new Date();
+
+  const isDateDisabled = (date: any) => {
+    return date <= reportEndDate;
+  };
+
   const fetchReport = async () => {
     let startEpoch = convertEpoch(startDate);
     let endEpoch = convertEpoch(endDate);
@@ -89,6 +95,7 @@ const Reports = () => {
                 onChange={(update: any) => {
                   setDateRange(update);
                 }}
+                filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
                 className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-0"
