@@ -36,12 +36,19 @@ const Reports = () => {
   };
 
   const fetchReport = async () => {
-    let startEpoch = convertEpoch(startDate);
-    let endEpoch = convertEpoch(endDate);
+    console.log(startDate, endDate);
+    // const midnight: any = startDate;
+    // midnight.setHours(0, 0, 1, 0);
+    // const midnightEpoch = midnight?.getTime();
+    // let startEpoch = midnightEpoch;
 
+    //let endEpoch = convertEpoch(endDate);
+    const endEpoch: any = endDate;
+    endEpoch.setHours(23, 59, 59, 59);
+    const lastendEpoch = endEpoch?.getTime();
     const payload = {
-      startDate: startEpoch,
-      endDate: endEpoch,
+      startDate: convertEpoch(startDate),
+      endDate: lastendEpoch,
       apiStatus: "SHIPMENTSTATUS",
     };
     const response = await POST(GET_REPORTS, payload);
