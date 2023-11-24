@@ -13,6 +13,7 @@ import { convertXMLToXLSX } from "../../../utils/helper";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
+  console.log("date", dateRange);
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
@@ -27,6 +28,12 @@ const Reports = () => {
 
   const convertEpoch = (epochDate: any) => {
     return epochDate?.getTime() || "";
+  };
+
+  const reportEndDate = new Date();
+
+  const isDateDisabled = (date: any) => {
+    return date <= reportEndDate;
   };
 
   const fetchReport = async () => {
@@ -89,6 +96,7 @@ const Reports = () => {
                 onChange={(update: any) => {
                   setDateRange(update);
                 }}
+                filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
                 className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-0"
