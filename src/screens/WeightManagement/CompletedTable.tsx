@@ -238,9 +238,7 @@ const CompletedTable = () => {
       },
     }),
   ];
-  return (
-    <CustomTable columns={PendingDisputeHeading} data={PendingDisputeData} />
-  );
+  return <CustomTable columns={PendingDisputeHeading} data={[]} />;
 };
 
 export default CompletedTable;
