@@ -123,7 +123,7 @@ const Summary = (props: Props) => {
     try {
       let payload = {
         orderId: orderId,
-        ewaybillNumber: ewaybillNumber,
+        eWayBillNo: ewaybillNumber,
         tempOrderId: +shipyaari_id,
         source: orderSource,
       };

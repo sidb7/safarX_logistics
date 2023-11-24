@@ -192,7 +192,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number (optional)"
-            value={address.alternateMobileNo}
+            value={address.alternateMobileNo ? address.alternateMobileNo : ""}
             maxLength={10}
             inputMode="numeric"
             onChange={(e) => {

@@ -89,22 +89,26 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         fieldName === "locality" ||
         fieldName === "landmark" ||
         fieldName === "city" ||
+        fieldName === "pincode" ||
         fieldName === "state" ||
         fieldName === "country"
       ) {
-        const { flatNo, locality, landmark, city, state, country } =
+        const { flatNo, locality, landmark, city, pincode, state, country } =
           updatedData[addressName];
         updatedData[addressName].fullAddress = [
           flatNo,
           locality,
           landmark,
           city,
+          pincode,
           state,
           country,
         ]
           .filter(Boolean)
           .join(", ");
       }
+
+      console.log("updatedData", updatedData);
 
       return updatedData;
     });
@@ -117,7 +121,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       postServicablePincode(payload);
     }
   };
-
+  console.log("pickupAddress", pickupAddress);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
