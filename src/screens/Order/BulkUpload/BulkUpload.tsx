@@ -72,7 +72,7 @@ const BulkUpload = (props: ITypeProps) => {
       if (response?.success) {
         toast.success(response?.message);
       } else {
-        toast.error("Failed To Upload!");
+        toast.error(response?.message);
       }
     } catch (error) {
       console.error("Error uploading file:", error);

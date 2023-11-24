@@ -18,35 +18,6 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../../redux/reducers/role";
 
-const Buttons = (className?: string) => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      className={
-        className
-          ? className
-          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
-      }
-    >
-      <div className="flex ">
-        <CustomButton
-          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
-          text="ADD USER"
-          onClick={() => navigate(`/settings/user-management/add-user`)}
-        />
-
-        <CustomButton
-          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
-          text="ADD ROLE"
-          onClick={() => navigate("/settings/role-management/add-role")}
-          showIcon={false}
-        />
-      </div>
-    </div>
-  );
-};
-
 // const
 
 function RoleManagement() {
@@ -160,7 +131,7 @@ function RoleManagement() {
 
       if (data?.success) {
         setRolesData(data?.data || []);
-        setTotalItemCount(data?.data?.[0]?.totalCount || 100);
+        // setTotalItemCount(data?.data?.[0]?.totalCount || 100);
       } else {
         toast.error(data?.message || "Failed to fetch roles");
       }
@@ -201,6 +172,33 @@ function RoleManagement() {
   useEffect(() => {
     getRolesData();
   }, []);
+
+  const Buttons = (className?: string) => {
+    return (
+      <div
+        className={
+          className
+            ? className
+            : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+        }
+      >
+        <div className="flex ">
+          <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] disabled:bg-[#E8E8E8] disabled:text-[#BBB]"
+            text="ADD USER"
+            onClick={() => navigate(`/settings/user-management/add-user`)}
+          />
+
+          <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
+            text="ADD ROLE"
+            onClick={() => navigate("/settings/role-management/add-role")}
+            showIcon={false}
+          />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
