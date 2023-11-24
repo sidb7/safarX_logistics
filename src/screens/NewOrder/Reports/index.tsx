@@ -13,7 +13,6 @@ import { convertXMLToXLSX } from "../../../utils/helper";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
-  console.log("date", dateRange);
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
