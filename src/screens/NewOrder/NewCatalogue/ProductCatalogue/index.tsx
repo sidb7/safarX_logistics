@@ -208,7 +208,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
 
         {/* Display Address */}
         <div className="mt-4 overflow-y-auto h-[425px]">
-          <div className="flex flex-col mt-1">
+          {/* commented as not required for now */}
+          {/* <div className="flex flex-col mt-1">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
               <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
             </h1>
@@ -265,7 +266,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 productName="Fitness"
               />
             </div>
-          </div>
+          </div> */}
           <div className="mt-[26px]">
             <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
               <img src={DeliveryIcon} alt="" className="mr-2" />
