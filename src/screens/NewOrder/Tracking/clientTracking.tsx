@@ -31,14 +31,15 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
-  console.log("trackingdata1", trackingState[0]?.currentStatus);
+  // console.log("trackingdata1", trackingState[0]?.currentStatus);
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<any>();
+  // console.log("trackingNo", trackingNo);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
   const { isLgScreen } = ResponsiveState();
 
-  console.log("trackingDetails", trackingDetails);
+  // console.log("trackingDetails", trackingDetails);
 
   const [cancelled, setCancelled] = useState<any>(false);
   const [timeDetails, setTimeDetails] = useState<any>({
@@ -121,76 +122,9 @@ const Tracking = () => {
     return statuses;
   }
 
-  // const getCurrentCycle = (status: any) => {
-  //   const statuses = {
-  //     BOOKED: false,
-  //     "IN TRANSIT": false,
-  //     "OUT FOR DELIVERY": false,
-  //     DELIVERED: false,
-  //   };
-
-  //   if (status === "BOOKED" || status === "NOT PICKED") {
-  //     statuses.BOOKED = true;
-
-  //     tempSteps.map((el: any, i: number) => {
-  //       if (el.label.toUpperCase() === status) {
-  //         el.isActive = true;
-  //         el.isCompleted = true;
-  //         return el;
-  //       }
-  //     });
-  //   } else if (status === "IN TRANSIT" || status === "OUT FOR DELIVERY") {
-  //     statuses.BOOKED = true;
-  //     statuses["IN TRANSIT"] = true;
-  //     tempSteps.map((el: any, i: number) => {
-  //       if (
-  //         el.label.toUpperCase() === status ||
-  //         "OUT FOR DELIVERY" === status
-  //       ) {
-  //         el.isActive = true;
-  //         el.isCompleted = true;
-  //         return el;
-  //       }
-  //     });
-  //   } else if (status === "OUT FOR DELIVERY" || status === "DELIVERED") {
-  //     statuses.BOOKED = true;
-  //     statuses["IN TRANSIT"] = true;
-  //     statuses["OUT FOR DELIVERY"] = true;
-  //     tempSteps.map((el: any, i: number) => {
-  //       if (el.label.toUpperCase() === status) {
-  //         el.isActive = true;
-  //         el.isCompleted = true;
-  //         return el;
-  //       }
-  //     });
-  //   } else if (status === "DELIVERED") {
-  //     statuses.BOOKED = true;
-  //     statuses["IN TRANSIT"] = true;
-  //     statuses["OUT FOR DELIVERY"] = true;
-  //     statuses["DELIVERED"] = true;
-
-  //     tempSteps.map((el: any, i: number) => {
-  //       if (el.label.toUpperCase() === status) {
-  //         el.isActive = true;
-  //         el.isCompleted = true;
-  //         return el;
-  //       }
-  //     });
-  //   } else {
-  //     return null;
-  //   }
-
-  //   // setStatus([])
-
-  //   return statuses;
-  // };
-
-  //this is to get the last updated details
-
   const getTimeDetails = (trackingInfo: any) => {
     const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
-    // console.log("parsedData", dateAndTimings)
-    console.log("dateAndTimings12345", dateAndTimings);
+
     setTrackingDetails(dateAndTimings);
 
     let checkDate = convertEpochToDateTime(dateAndTimings.LastUpdatedAt);
@@ -239,47 +173,44 @@ const Tracking = () => {
 
   const handleTrackOrderClick = async () => {
     let urlWithTrackingNo = "";
+    const trackingNoFromUrl = params?.trackingNo;
 
-    window.history.replaceState(
-      {},
-      "",
-      `/tracking?trackingNo=${
-        trackingNoFromUrl ? trackingNoFromUrl : trackingNo
-      }`
-    );
-
+    if (trackingNoFromUrl === undefined) {
+      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
+    } else if (trackingNo === undefined) {
+      window.history.replaceState(
+        {},
+        "",
+        `/tracking?trackingNo=${trackingNoFromUrl}`
+      );
+    } else {
+      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
+    }
     if (!trackingNoFromUrl && !trackingNo) {
       return toast.warning("Please Enter Tracking Number");
     }
-
     try {
       setLoading(true);
       setTempSteps(steps);
       setCancelled(false);
-      console.log("GET_CLIENTTRACKING_INFO", GET_CLIENTTRACKING_INFO);
+      // console.log("GET_CLIENTTRACKING_INFO", GET_CLIENTTRACKING_INFO);
       if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
         urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNoFromUrl}`;
       } else {
         urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`;
       }
       const { data: response } = await GET(urlWithTrackingNo);
-      console.log(
-        "checkdata",
-        response?.data[0]?.trackingInfo[0]?.processedLog
-      );
+
       if (response.success) {
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
-
         const res: any = myStatus(
           response?.data[0].trackingInfo[0]?.currentStatus
         );
-        console.log("res", res);
 
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
-          console.log("keys", Object.keys);
           mysteps.forEach((step: any, index: number) => {
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
@@ -288,7 +219,6 @@ const Tracking = () => {
           });
         });
         setTempSteps([...mysteps]);
-        console.log("mySteps", mysteps);
       } else {
         toast.error(response?.message);
         setTrackingState([]);
@@ -299,8 +229,6 @@ const Tracking = () => {
       setLoading(false);
     }
   };
-
-  // console.log("trackingState", trackingState);
 
   const callFunction = async () => {
     await handleTrackOrderClick();
