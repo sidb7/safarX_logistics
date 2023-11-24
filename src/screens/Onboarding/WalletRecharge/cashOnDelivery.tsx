@@ -4,9 +4,12 @@ import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
+import { POST } from "../../../utils/webService";
+import { PHONEPE_TRANSACTION_STATUS } from "../../../utils/ApiUrls";
 
 const modalTitle = () => {
   return (
@@ -32,6 +35,22 @@ const Cashondelivery = () => {
       setIsRechargeModalOpen(true);
       setIsModalOpen(false);
     };
+
+    useEffect(() => {
+      (async () => {
+        try {
+          const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+          if (phonePeTransactionId) {
+            await POST(PHONEPE_TRANSACTION_STATUS, {
+              orderId: phonePeTransactionId,
+              transactionId: phonePeTransactionId,
+              paymentGateway: "PHONEPE",
+            });
+            removeLocalStorage("phonePeTransactionId");
+          }
+        } catch (error) {}
+      })();
+    }, []);
 
     return (
       <div
