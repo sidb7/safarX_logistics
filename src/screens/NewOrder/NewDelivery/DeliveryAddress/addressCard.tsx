@@ -194,17 +194,24 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   };
 
   useEffect(() => {
-    let gstObject = gstJsonData.find(
-      (elem) => elem.States === deliveryAddress.deliveryAddress.state
-    );
-    if (gstObject && deliveryAddress.orderType === "B2B") {
-      setDeliveryAddress((prevData: any) => ({
-        ...prevData,
-        gstNumber: gstObject?.["GST State Code"],
-      }));
-      setValidGstStateCode(gstObject?.["GST State Code"]);
+    if (!deliveryAddress.gstNumber) {
+      let gstObject = gstJsonData.find(
+        (elem) => elem.States === deliveryAddress.deliveryAddress.state
+      );
+
+      if (gstObject && deliveryAddress.orderType === "B2B") {
+        setDeliveryAddress((prevData: any) => ({
+          ...prevData,
+          gstNumber: gstObject?.["GST State Code"],
+        }));
+        setValidGstStateCode(gstObject?.["GST State Code"]);
+      }
     }
-  }, [deliveryAddress.deliveryAddress.state]);
+  }, [
+    deliveryAddress.deliveryAddress.state,
+    deliveryAddress.orderType,
+    deliveryAddress.gstNumber,
+  ]);
 
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
@@ -241,6 +248,8 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
     return gstRegex.test(gstNumber);
   };
+
+  console.log("deliveryAddress", deliveryAddress);
 
   console.log("inputError", inputError);
   return (
