@@ -5,6 +5,7 @@ import ProductCategoryBox from "../../ReturningUser/SearchFilterProduct/ProductC
 import DeliceryIcon from "../../../../assets/Delivery Icon.svg";
 import DeliveryIcon from "../../../../assets/Product/Delivery (1).svg";
 import ProductIcon from "../../../../assets/Product/Product (3).svg";
+import ItemIcon from "../../../../assets/Product/Item.svg";
 import CategoryLogo from "../../../../assets/Product/Item.svg";
 import Categorylogo2 from "../../../../assets/Product/watch.svg";
 import SportsLogo from "../../../../assets/Product/sports.svg";
@@ -48,10 +49,42 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   ]);
 
   //on page change index
-  const onPageIndexChange = () => {};
+  const onPageIndexChange = async (pageIndex: any) => {
+    const { data } = await POST(
+      filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
+      {
+        skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
+        limit: pageIndex?.itemsPerPage,
+        pageNo: pageIndex?.currentPage,
+      }
+    );
+    if (data?.success) {
+      setProductData(data?.data);
+      setTotalItemCount(data?.totalProduct);
+    } else {
+      setProductData([]);
+      toast.error(data?.message);
+    }
+  };
 
   // on per page item change
-  const onPerPageItemChange = () => {};
+  const onPerPageItemChange = async (pageperItem: any) => {
+    const { data } = await POST(
+      filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
+      {
+        skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+        limit: pageperItem?.itemsPerPage,
+        pageNo: pageperItem?.currentPage,
+      }
+    );
+    if (data?.success) {
+      setProductData(data?.data);
+      setTotalItemCount(data?.totalProduct);
+    } else {
+      setProductData([]);
+      toast.error(data?.message);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -65,7 +98,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       );
       if (data?.success) {
         setProductData(data.data);
-        // setTotalItemCount()
+        setTotalItemCount(data?.totalProduct);
       } else {
         setProductData([]);
         toast.error(data?.message);
@@ -175,12 +208,13 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
 
         {/* Display Address */}
         <div className="mt-4 overflow-y-auto h-[425px]">
-          <div className="flex flex-col mt-1">
+          {/* commented as not required for now */}
+          {/* <div className="flex flex-col mt-1">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
               <img src={DeliceryIcon} alt="" className="mr-2" /> By Category
             </h1>
 
-            <div className="flex gap-x-3">
+            <div className="flex gap-x-3 overflow-auto">
               <ProductCategoryBox
                 className="!border-2 !border-[#1C1C1C]"
                 textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
@@ -205,6 +239,8 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 image={Categorylogo2}
                 productName="LifeStyle"
               />
+            </div>
+            <div className="flex mt-2 gap-x-3 overflow-auto">
               <ProductCategoryBox
                 className="!border-2 !border-[#1C1C1C]"
                 textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
@@ -230,25 +266,25 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 productName="Fitness"
               />
             </div>
-          </div>
+          </div> */}
           <div className="mt-[26px]">
             <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
               <img src={DeliveryIcon} alt="" className="mr-2" />
               Most Viewed
             </h1>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
+            <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
               {productData?.map((data: any, index: number) => {
                 if (filterId === 0) {
                   return (
                     <div
                       key={index}
-                      className="w-[272px] h-[76px]"
+                      className="lg:w-[272px] lg:h-[76px]"
                       // onClick={() => setViewed(index)}
                     >
                       <ProductBox
                         image={
                           (data?.images?.length > 0 && data?.images[0].url) ||
-                          ""
+                          ItemIcon
                         }
                         productName={data?.name}
                         weight={`${data?.appliedWeight} ${data?.weightUnit}`}
@@ -294,11 +330,19 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 }
               })}
             </div>
+            {totalItemCount > 0 && (
+              <PaginationComponent
+                totalItems={totalItemCount}
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
+            )}
           </div>
         </div>
 
         {channels.length > 0 && filterId === 0 && (
-          <div className="flex flex-col mt-1">
+          <div className="flex flex-col mt-4">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
               <img src={DeliceryIcon} alt="" className="mr-2" /> By Channel
             </h1>
@@ -325,16 +369,17 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               ))}
             </div>
             {isActiveChannel && (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
+              <div className="grid mb-[4rem] md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
                 {channelProducts?.map((data: any, index: any) => (
                   <div
                     key={index}
-                    className="w-[272px] h-[76px]"
+                    className="w-[100%] lg:w-[272px] h-[76px]"
                     // onClick={() => setViewed(index)}
                   >
                     <ProductBox
                       image={
-                        (data?.images?.length > 0 && data?.images[0].url) || ""
+                        (data?.images?.length > 0 && data?.images[0].url) ||
+                        ItemIcon
                       }
                       productName={data?.name}
                       weight={`${data?.appliedWeight} ${data?.weightUnit}`}
@@ -346,6 +391,11 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                         setEditProductData(data);
                       }}
                       isActiveChannel={isActiveChannel}
+                      className={`cursor-pointer p-[16px] ${
+                        viewed === index
+                          ? "border-2 border-solid border-[#004EFF]"
+                          : ""
+                      }`}
                     />
                   </div>
                 ))}
@@ -354,7 +404,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           </div>
         )}
 
-        <div className="absolute bottom-24">
+        {/* <div className="absolute bottom-24">
           {totalItemCount > 0 && (
             <PaginationComponent
               totalItems={totalItemCount}
@@ -363,7 +413,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               onItemsPerPageChange={onPerPageItemChange}
             />
           )}
-        </div>
+        </div> */}
       </div>
       {editAddressModal && (
         <EditProduct

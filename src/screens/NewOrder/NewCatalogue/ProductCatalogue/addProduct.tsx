@@ -301,48 +301,60 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       <div className=" flex col-span-2  w-full gap-6">
                         <CustomInputBox
                           label="Length (CM)"
-                          inputType="number"
+                          inputType="text"
+                          inputMode="numeric"
                           name="length"
                           errorMessage={validationErrors?.length}
-                          value={productInputState[index]?.length || ""}
+                          value={productInputState[index]?.length}
                           onChange={(e: any) => {
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            );
-                            handleVolumCalc(index);
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                {
+                                  name: e.target.name,
+                                  value: e?.target?.value,
+                                },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                              handleVolumCalc(index);
+                            }
                           }}
                         />
 
                         <CustomInputBox
                           label="Breadth (CM)"
                           name="breadth"
-                          inputType="number"
+                          inputType="text"
+                          inputMode="numeric"
                           value={productInputState[index].breadth || ""}
                           errorMessage={validationErrors?.breadth}
                           onChange={(e: any) => {
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            );
-                            handleVolumCalc(index);
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                { name: e.target.name, value: e.target.value },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                              handleVolumCalc(index);
+                            }
                           }}
                         />
                         <CustomInputBox
                           label="Height (CM)"
-                          inputType="number"
+                          inputType="text"
+                          inputMode="numeric"
                           name="height"
                           value={productInputState[index].height || ""}
                           errorMessage={validationErrors?.height}
                           onChange={(e: any) => {
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            );
-                            handleVolumCalc(index);
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                { name: e.target.name, value: e.target.value },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                              handleVolumCalc(index);
+                            }
                           }}
                         />
                         <CustomInputBox
@@ -356,17 +368,20 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                       <div className="flex col-span-2 lg:col-span-1 w-full gap-6">
                         <CustomInputBox
                           label="Weight (Kg)"
-                          inputType="number"
+                          inputType="text"
+                          inputMode="numeric"
                           name="deadWeight"
                           value={productInputState[index]?.deadWeight || ""}
                           errorMessage={validationErrors?.deadWeight}
-                          onChange={(e: any) =>
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            )
-                          }
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                { name: e.target.name, value: e.target.value },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                            }
+                          }}
                         />
                         <CustomInputBox
                           placeholder="Volumetric Weight (Kg)"
@@ -387,30 +402,36 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                         <CustomInputBox
                           label="Product Price"
                           name="unitPrice"
+                          inputType="text"
                           inputMode="numeric"
                           errorMessage={validationErrors?.unitPrice}
                           value={productInputState[index].unitPrice || ""}
-                          onChange={(e: any) =>
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            )
-                          }
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                { name: e.target.name, value: e.target.value },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                            }
+                          }}
                         />
                         <CustomInputBox
                           label="Product tax"
                           name="unitTax"
+                          inputType="text"
                           inputMode="numeric"
                           errorMessage={validationErrors?.unitTax}
                           value={productInputState[index].unitTax || ""}
-                          onChange={(e: any) =>
-                            handleProductInputChange(
-                              { name: e.target.name, value: +e.target.value },
-                              index,
-                              [isRequired, checkNonNegative]
-                            )
-                          }
+                          onChange={(e: any) => {
+                            if (!isNaN(e.target.value)) {
+                              handleProductInputChange(
+                                { name: e.target.name, value: e.target.value },
+                                index,
+                                [isRequired, checkNonNegative]
+                              );
+                            }
+                          }}
                         />
                       </div>
                       <div className="w-full"></div>

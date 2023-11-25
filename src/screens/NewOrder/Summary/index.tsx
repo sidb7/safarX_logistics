@@ -31,6 +31,8 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import SummaryIcon from "../../../assets/serv/Summary.svg";
 import { Spinner } from "flowbite-react";
 import ServiceButton from "../../../components/Button/ServiceButton";
+import { socketCallbacks } from "../../../Socket";
+import { useDispatch } from "react-redux";
 
 type Props = {};
 
@@ -39,6 +41,7 @@ const Summary = (props: Props) => {
   const [ishighRisk, setIsHighRisk] = useState(false);
   const [latestOrder, setLatestOrder] = useState<any>([]);
   const [ewaybillNumber, setEwaybillNumber] = useState("");
+  const dispatch = useDispatch();
 
   const [pickupLocation, setPickupLocation] = useState({
     flatNo: "",
@@ -118,72 +121,68 @@ const Summary = (props: Props) => {
   const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
+      // Check if eway-bill No. is required for invoice value greater than or equal to 50000
+      if (invoiceValue >= 50000 && ewaybillNumber === "") {
+        toast.error("Please enter Eway-Bill No.");
+        return;
+      }
+
+      // payload for the first API call
       let payload = {
         orderId: orderId,
-        ewaybillNumber: ewaybillNumber,
+        eWayBillNo: ewaybillNumber,
         tempOrderId: +shipyaari_id,
         source: orderSource,
       };
 
+      // Make the first API call
       const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
-      const placeOrderPromise = await POST(POST_PLACE_ORDER, {
-        tempOrderId: +shipyaari_id,
-        source: orderSource,
-      });
 
-      let promiseSetOrderId = new Promise(function (resolve, reject) {
-        resolve(setOrderIdPromise);
-      });
-
-      let promisePlaceOrder = new Promise(function (resolve, reject) {
-        resolve(placeOrderPromise);
-      });
-
-      if (invoiceValue >= 50000 && ewaybillNumber === "") {
-        toast.error("Please enter eway-bill No.");
-        return;
-      }
-
-      promiseSetOrderId
-        .then((orderIdResponse: any) => {
-          // toast.success(successMessage?.data?.message);
-          promisePlaceOrder
-            .then((orderPlaceResponse: any) => {
-              if (orderPlaceResponse?.data?.success) {
-                toast.success(orderPlaceResponse?.data?.message);
-                navigate("/orders/view-orders");
-              } else {
-                let errorText = orderPlaceResponse?.data?.message;
-                if (errorText.startsWith("Wallet")) {
-                  toast.warning(orderPlaceResponse?.data?.message);
-                  const requiredBalance =
-                    orderPlaceResponse?.data?.data[0]?.requiredBalance;
-
-                  navigate(
-                    `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
-                    {
-                      state: { requiredBalance: requiredBalance },
-                    }
-                  );
-                } else {
-                  toast.error(orderPlaceResponse?.data?.message);
-                }
-              }
-            })
-            .catch(function (errorResponse) {
-              toast.error(errorResponse?.data?.message);
-            });
-        })
-        .catch(function (errorMessage) {
-          toast.error(errorMessage?.data?.message);
+      if (setOrderIdPromise?.data?.success) {
+        // If successful, proceed with the second API call
+        const placeOrderPromise = await POST(POST_PLACE_ORDER, {
+          tempOrderId: +shipyaari_id,
+          source: orderSource,
         });
+
+        // Check the result of the second API call
+        if (placeOrderPromise?.data?.success) {
+          // If both API calls are successful, navigate to the desired page
+          toast.success(placeOrderPromise?.data?.message);
+          navigate("/orders/view-orders");
+        } else {
+          // Handle errors from the second API call
+          let errorText = placeOrderPromise?.data?.message;
+          if (errorText.startsWith("Wallet")) {
+            toast.warning(placeOrderPromise?.data?.message);
+            const requiredBalance =
+              placeOrderPromise?.data?.data[0]?.requiredBalance;
+
+            // Navigate to payment page with required balance information
+            navigate(
+              `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+              {
+                state: { requiredBalance: requiredBalance },
+              }
+            );
+          } else {
+            toast.error(placeOrderPromise?.data?.message);
+          }
+        }
+      } else {
+        // If the first API call fails, handle the error and do not proceed to the second API call
+        const errorMessage = setOrderIdPromise?.data?.message;
+        toast.error(errorMessage);
+      }
     } catch (error) {
-      return error;
+      // Handle any other errors that may occur during API calls
+      toast.error("Please try again.");
     }
   };
 
   useEffect(() => {
     getLatestOrderDetails();
+    // socketCallbacks.connectSocket(dispatch);
   }, []);
 
   const pickupLocationDetails = latestOrder?.data?.[0]?.pickupAddress;

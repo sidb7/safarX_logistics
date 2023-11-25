@@ -25,12 +25,13 @@ import { useNavigate } from "react-router-dom";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { GET_DASHBOARD_INFO } from "../../utils/ApiUrls";
+import { ResponsiveState } from "../../utils/responsiveState";
 
 interface IOverview {}
 
 export const Home = (props: IOverview) => {
   const navigate = useNavigate();
-
+  const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
@@ -43,12 +44,12 @@ export const Home = (props: IOverview) => {
   const [dashboardInfo, setDashboardInfo] = React.useState<any>({
     overview: [
       {
-        count: 1,
+        count: 0,
         text: "Orders need to be proceed",
         img: "",
       },
       {
-        count: 1,
+        count: 0,
         text: "Orders delayed for Pickup",
         img: "",
       },
@@ -65,12 +66,12 @@ export const Home = (props: IOverview) => {
     ],
     orders: [
       {
-        count: 1,
+        count: 0,
         text: "Created Order",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Shipped",
         img: "ShippedIcon",
       },
@@ -87,12 +88,12 @@ export const Home = (props: IOverview) => {
     ],
     exception: [
       {
-        count: 1,
+        count: 0,
         text: "Total NPR",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Total NDR",
         img: "InTransitIcon",
       },
@@ -109,12 +110,12 @@ export const Home = (props: IOverview) => {
     ],
     syPerformance: [
       {
-        count: 1,
+        count: 0,
         text: "Total NPR",
         img: "CreateOrderIcon",
       },
       {
-        count: 1,
+        count: 0,
         text: "Total NDR",
         img: "InTransitIcon",
       },
@@ -239,24 +240,28 @@ export const Home = (props: IOverview) => {
           <div className="mx-4 mb-4 ">
             <div className="flex justify-between">
               {/* <img className="h-[400px]" src={CompanyImage} alt="logo" /> */}
-              <div className="overflow-x-scroll">
+
+              {/* scrollable nav temp commented  */}
+
+              {/* <div className="overflow-x-scroll">
                 <ScrollNav
                   arrayData={arrayData}
                   showNumber={false}
                   setScrollIndex={setScrollIndex}
                 />
-              </div>
-              {renderingComponents === 0 && (
-                <div>
+              </div> */}
+              {/* {renderingComponents === 0 && (
+                <div className={`${isLgScreen ? "block" : "hidden"}`}>
                   <CustomDropDown
                     onChange={(e) => {}}
                     options={yearArr}
                     heading="Select Filter"
+                    selectClassName="lg:!w-[120px] lg:!h-[34px] mt-1 !rounded-md !text-[#494949]"
                   />
                 </div>
-              )}
+              )} */}
             </div>
-            {renderingComponents === 0 && (
+            {/* {renderingComponents === 0 && (
               <Overview ordersArr={dashboardInfo.overview} />
             )}
             {renderingComponents === 1 && (
@@ -267,7 +272,8 @@ export const Home = (props: IOverview) => {
             )}
             {renderingComponents === 3 && (
               <SyPerfromance ordersArr={dashboardInfo.syPerformance} />
-            )}
+            )} */}
+            <Overview ordersArr={dashboardInfo.overview} />
           </div>
 
           <div className="mt-24 lg:hidden">

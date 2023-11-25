@@ -23,6 +23,9 @@ interface IBoxdetails {
   handleEditBoxType?: any;
   removePackage?: any;
   setCheckBoxValuePerBox: any;
+  orderType?: any;
+  isOrderCOD?: any;
+  setIsOrderCOD?: any;
 }
 
 const BoxDetails = (props: IBoxdetails) => {
@@ -36,6 +39,9 @@ const BoxDetails = (props: IBoxdetails) => {
     boxIndex,
     removePackage,
     setCheckBoxValuePerBox,
+    orderType,
+    isOrderCOD,
+    setIsOrderCOD,
   } = props;
 
   const [allProducts, setAllProducts]: any = useState([]);
@@ -302,9 +308,10 @@ const BoxDetails = (props: IBoxdetails) => {
               <div className="flex flex-wrap lg:flex  gap-2 ">
                 <Checkbox
                   label="COD"
+                  disabled={orderType !== "B2C"}
                   name="cod"
                   checkboxClassName="hover:transition-all border shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
-                  checked={selectedBox?.codInfo?.isCod}
+                  checked={isOrderCOD}
                   onChange={handleCheckBox}
                 />
                 <Checkbox

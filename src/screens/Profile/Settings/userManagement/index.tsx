@@ -167,7 +167,7 @@ function UserManagement() {
               <CustomButton
                 text={"UPDATE"}
                 onClick={() =>
-                  navigate(`/profile/settings/user-management/update-user`, {
+                  navigate(`/settings/user-management/update-user`, {
                     state: { data: row?.original },
                   })
                 }

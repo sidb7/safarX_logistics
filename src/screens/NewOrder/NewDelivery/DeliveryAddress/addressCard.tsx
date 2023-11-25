@@ -33,11 +33,18 @@ interface IAddressCardProps {
     setDeliveryAddress: any;
     addressLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { deliveryAddress, setDeliveryAddress, addressLabel, inputError },
+  data: {
+    deliveryAddress,
+    setDeliveryAddress,
+    addressLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const address =
     addressLabel === "Billing Address"
@@ -86,16 +93,18 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         fieldName === "locality" ||
         fieldName === "landmark" ||
         fieldName === "city" ||
+        fieldName === "pincode" ||
         fieldName === "state" ||
         fieldName === "country"
       ) {
-        const { flatNo, locality, landmark, city, state, country } =
+        const { flatNo, locality, landmark, city, pincode, state, country } =
           updatedData[addressName];
         updatedData[addressName].fullAddress = [
           flatNo,
           locality,
           landmark,
           city,
+          pincode,
           state,
           country,
         ]
@@ -112,6 +121,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       };
 
       postServicablePincode(payload);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
     }
   };
 
@@ -178,15 +194,18 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
   };
 
   useEffect(() => {
-    let gstObject = gstJsonData.find(
-      (elem) => elem.States === deliveryAddress.deliveryAddress.state
-    );
-    if (gstObject && deliveryAddress.orderType === "B2B") {
-      setDeliveryAddress((prevData: any) => ({
-        ...prevData,
-        gstNumber: gstObject?.["GST State Code"],
-      }));
-      setValidGstStateCode(gstObject?.["GST State Code"]);
+    if (!deliveryAddress.gstNumber) {
+      let gstObject = gstJsonData.find(
+        (elem) => elem.States === deliveryAddress.deliveryAddress.state
+      );
+
+      if (gstObject && deliveryAddress.orderType === "B2B") {
+        setDeliveryAddress((prevData: any) => ({
+          ...prevData,
+          gstNumber: gstObject?.["GST State Code"],
+        }));
+        setValidGstStateCode(gstObject?.["GST State Code"]);
+      }
     }
   }, [deliveryAddress.deliveryAddress.state]);
 
@@ -226,6 +245,9 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     return gstRegex.test(gstNumber);
   };
 
+  console.log("deliveryAddress", deliveryAddress);
+
+  console.log("inputError", inputError);
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
@@ -252,6 +274,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 ref={inputRef}
                 type="text"
                 value={pastedData}
+                onKeyDown={handleKeyDown}
                 onChange={handleChange}
                 className="magicAddressInput"
                 style={{
@@ -365,7 +388,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={titleCase(address.state)}
+            value={address.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);
@@ -408,26 +431,37 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                   const gstValue = e.target.value;
 
                   const isValidGST = validateGST(gstValue);
+                  console.log("isvalid", isValidGST);
                   setValidationErrorGST(
                     isValidGST ? null : "Invalid GST number"
                   );
 
-                  setDeliveryAddress((prevData: any) => ({
-                    ...prevData,
-                    gstNumber:
-                      validGstStateCode.length === 0
-                        ? gstValue
-                        : deliveryAddress.gstNumber.includes(validGstStateCode)
-                        ? `${gstValue}`
-                        : `${validGstStateCode}${gstValue}`,
-                  }));
+                  setDeliveryAddress((prevData: any) => {
+                    let updatedGSTValue = gstValue;
+
+                    if (
+                      validGstStateCode.length > 0 &&
+                      !deliveryAddress.gstNumber.includes(validGstStateCode)
+                    ) {
+                      updatedGSTValue = "";
+                    }
+
+                    return {
+                      ...prevData,
+                      gstNumber: updatedGSTValue,
+                    };
+                  });
+
+                  if (setInputError) {
+                    setInputError(false);
+                  }
                 }}
               />
-              {validationErrorGST && (
+              {(inputError || validationErrorGST) && (
                 <div className="flex items-center gap-x-1 mt-1">
                   <img src={InfoCircle} alt="" width={10} height={10} />
                   <span className="font-normal text-[#F35838] text-xs leading-3">
-                    {validationErrorGST}
+                    {validationErrorGST || "Invalid GST number"}
                   </span>
                 </div>
               )}

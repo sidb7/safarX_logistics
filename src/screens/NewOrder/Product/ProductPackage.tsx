@@ -10,6 +10,8 @@ import toggle from "../../../assets/toggle-off-circle.svg";
 import toggleBlack from "../../../assets/toggleBlack.svg";
 import "../../../styles/productStyle.css";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import CustomRightModal from "../../../components/CustomModal/customRightModal";
+
 import AddButton from "../../../components/Button/addButton";
 import AddComboModal from "./AddComboModal";
 import Stepper from "../../../components/Stepper";
@@ -40,6 +42,9 @@ import AddPackageDetails from "./AddPackageDetails";
 import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { getQueryJson } from "../../../utils/utility";
+import AddProductPanel from "../NewCatalogue/ProductCatalogue/addProductNew";
+import SellerBoxDetails from "../NewCatalogue/BoxCatalogue/SellerBoxDetails";
+import { useMediaQuery } from "react-responsive";
 
 interface IPackageProps {}
 const steps = [
@@ -96,7 +101,13 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     };
   }, []);
   const navigate = useNavigate();
+  const isMobileView = useMediaQuery({ maxWidth: 768 });
+  const [isOpenBottomModal, setIsOpenBottomModal] = useState(false);
+  const [tempSellerBoxDetails, setTempSellerBoxDetails] = useState<any>({});
 
+  const [isProductModal, setProductModal]: any = useState(false);
+  const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
+    useState<any>(false);
   const [combo, setCombo] = useState<any>(false);
   const [products, setProducts] = useState<any>([]);
   const [sellerBox, setSellerBox] = useState<any>([]);
@@ -118,10 +129,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const [isFragile, setIsFragile] = useState<any>(false);
   const [orderType, setOrderType] = useState<any>({});
   const [codData, setCodData] = useState<any>({
-    isCod: orderType === "B2C",
     collectableAmount: 0,
     invoiceValue: 0,
   });
+  const [isOrderCOD, setIsOrderCOD] = useState<any>(false);
+
   const [isLoading, setIsLoading]: any = useState(false);
 
   const params = getQueryJson();
@@ -138,6 +150,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   //update invoice value
   useEffect(() => {
     let totalInvoiceValue = 0;
+    let totalCodValue = 0;
     let tempArr = packages;
 
     // if (packages.length === 1 && orderType === "B2C") {
@@ -149,9 +162,25 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     tempArr?.forEach((packages: any) => {
       totalInvoiceValue =
         totalInvoiceValue + +getInvoiceValue(packages?.products);
+      totalCodValue = totalCodValue + packages.codInfo?.collectableAmount;
     });
 
-    setCodData({ ...codData, invoiceValue: totalInvoiceValue });
+    let codInfo: any = {
+      ...codData,
+      invoiceValue: totalInvoiceValue,
+      isCod: false,
+      collectableAmount: 0,
+    };
+
+    if (totalCodValue > 0) {
+      codInfo = {
+        ...codInfo,
+        isCod: true,
+        collectableAmount: +totalCodValue,
+      };
+    }
+
+    setCodData({ ...codInfo });
   }, [packages]);
 
   useEffect(() => {
@@ -225,7 +254,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       ...boxType,
       ...tempArr[boxIndex],
       codInfo: {
-        isCod: false,
+        isCod: isOrderCOD,
         collectableAmount: 0,
         invoiceValue: 0,
       },
@@ -254,13 +283,25 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     let tempArr = packages;
     switch (name) {
       case "cod":
-        tempArr[boxIndex] = {
-          ...tempArr[boxIndex],
-          codInfo: {
-            ...tempArr[boxIndex].codInfo,
-            isCod: value,
-          },
-        };
+        setIsOrderCOD(value);
+        if (value === false) {
+          tempArr.forEach((my_package: any) => {
+            my_package.codInfo.isCod = false;
+            my_package.codInfo.collectableAmount = 0;
+          });
+        } else {
+          tempArr.forEach((my_package: any) => {
+            my_package.codInfo.isCod = true;
+          });
+        }
+
+        // tempArr[boxIndex] = {
+        //   ...tempArr[boxIndex],
+        //   codInfo: {
+        //     ...tempArr[boxIndex].codInfo,
+        //     isCod: value,
+        //   },
+        // };
         break;
       case "pod":
         tempArr[boxIndex] = {
@@ -350,7 +391,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       const { data: boxData } = await POST(GET_SELLER_BOX);
       const { data: companyBoxData } = await POST(GET_SELLER_COMPANY_BOX);
       if (data?.success) {
-        const { boxInfo = [], orderType } = data?.data[0];
+        const { boxInfo = [], orderType, codInfo } = data?.data[0];
+        setCodData(codInfo);
+        setIsOrderCOD(codInfo?.isCod);
         setPackages([...boxInfo]);
         setOrderType(orderType);
       } else {
@@ -409,7 +452,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
 
     let payload = {
       boxInfo: packages,
-      codInfo: { ...codDataInfo },
+      codInfo: { ...codData },
       insurance: {
         isInsured: selectInsurance.isInsurance ? true : false,
         amount: 0,
@@ -441,6 +484,26 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         return accumulator + totalProductPrice;
       }, 0) || 0
     );
+  };
+
+  const handleCloseBoxDetailModal = async () => {
+    try {
+      const { data: boxData } = await POST(GET_SELLER_BOX);
+      if (boxData?.success) {
+        const { data = [] } = boxData;
+        setSellerBox(data);
+      }
+      if (isMobileView) {
+        setIsOpenBottomModal(false);
+      } else {
+        setSellerBoxDetailsModal(false);
+      }
+    } catch (error) {
+      console.log(
+        "🚀 ~ file: ProductPackage.tsx:502 ~ handleCloseBoxDetailModal ~ error:",
+        error
+      );
+    }
   };
 
   return (
@@ -514,9 +577,10 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD PRODUCT TO CATALOGUE"
               onClick={() => {
-                navigate(
-                  `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                );
+                setProductModal(true);
+                // navigate(
+                //   `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                // );
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -526,9 +590,12 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             <AddButton
               text="ADD BOX TO CATALOGUE"
               onClick={() => {
-                navigate(
-                  `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-                );
+                setSellerBoxDetailsModal(true);
+                setTempSellerBoxDetails({});
+
+                // navigate(
+                //   `/catalogues/catalogue/add-box?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                // );
               }}
               showIcon={true}
               icon={ButtonIcon}
@@ -558,6 +625,9 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     setBoxIndex={setBoxIndex}
                     openPackageDetailModal={handleOpenPackageDetails}
                     setCheckBoxValuePerBox={handleCheckBoxValuePerBox}
+                    orderType={orderType}
+                    isOrderCOD={isOrderCOD}
+                    setIsOrderCOD={setIsOrderCOD}
                   />
                 );
               })}
@@ -917,6 +987,20 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}
         handlePackageDetails={handlePackageDetailsForProduct}
       />
+      <AddProductPanel
+        isProductModal={isProductModal}
+        setProductModal={setProductModal}
+      ></AddProductPanel>
+      <CustomRightModal
+        isOpen={isSellerBoxDetailsModal}
+        onClose={() => setSellerBoxDetailsModal(false)}
+      >
+        <SellerBoxDetails
+          updateBoxApi={() => handleCloseBoxDetailModal()}
+          setSellerBoxDetailsModal={setSellerBoxDetailsModal}
+          tempSellerBoxDetails={tempSellerBoxDetails}
+        />
+      </CustomRightModal>
     </div>
   );
 };

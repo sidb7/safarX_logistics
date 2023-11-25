@@ -32,11 +32,18 @@ interface IAddressCardProps {
     setPickupAddress: any;
     addressLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
 const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
-  data: { pickupAddress, setPickupAddress, addressLabel, inputError },
+  data: {
+    pickupAddress,
+    setPickupAddress,
+    addressLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const address =
     addressLabel === "Return Address"
@@ -82,22 +89,26 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         fieldName === "locality" ||
         fieldName === "landmark" ||
         fieldName === "city" ||
+        fieldName === "pincode" ||
         fieldName === "state" ||
         fieldName === "country"
       ) {
-        const { flatNo, locality, landmark, city, state, country } =
+        const { flatNo, locality, landmark, city, pincode, state, country } =
           updatedData[addressName];
         updatedData[addressName].fullAddress = [
           flatNo,
           locality,
           landmark,
           city,
+          pincode,
           state,
           country,
         ]
           .filter(Boolean)
           .join(", ");
       }
+
+      console.log("updatedData", updatedData);
 
       return updatedData;
     });
@@ -110,7 +121,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       postServicablePincode(payload);
     }
   };
-
+  console.log("pickupAddress", pickupAddress);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleButtonClick();
+    }
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPastedData(e.target.value);
   };
@@ -230,6 +247,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 ref={inputRef}
                 type="text"
                 value={pastedData}
+                onKeyDown={handleKeyDown}
                 onChange={handleChange}
                 className="magicAddressInput"
                 style={{
@@ -343,7 +361,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
 
         <div className="mb-4 lg:mb-6 lg:mr-6">
           <CustomDropDown
-            value={titleCase(address.state)}
+            value={address.state}
             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
               setSelectedOption(event.target.value);
               handlePickupAddressChange("state", event.target.value);

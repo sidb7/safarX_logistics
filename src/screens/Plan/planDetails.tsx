@@ -42,8 +42,8 @@ const PlanDetails = (props: ITypeProps) => {
 
   const arrayData = [
     { index: 0, label: "Courier Pricing" },
-    { index: 1, label: "VAS Pricing" },
-    { index: 2, label: "COD Pricing" },
+    // { index: 1, label: "VAS Pricing" },
+    { index: 1, label: "COD Pricing" },
   ];
   let pricingData = [
     {
@@ -304,8 +304,9 @@ const PlanDetails = (props: ITypeProps) => {
         return (
           <div className="flex items-center justify-center">
             <Checkbox
-              checked={info.row.original.freemium}
+              checked={true}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -320,8 +321,9 @@ const PlanDetails = (props: ITypeProps) => {
           <div className="flex items-center justify-center ">
             <Checkbox
               checkboxClassName="!text-black"
-              checked={info.row.original.silver}
+              checked={true}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -337,6 +339,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.gold}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -352,6 +355,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Checkbox
               checked={info.row.original.platinum}
               style={{ accentColor: "black" }}
+              showCase={true}
             />
           </div>
         );
@@ -368,6 +372,7 @@ const PlanDetails = (props: ITypeProps) => {
       platinum: allPlans[3]?.planName,
     },
   ];
+
   const activeColumns = [
     columnsHelper.accessor("pricing", {
       header: () => {
@@ -709,7 +714,7 @@ const PlanDetails = (props: ITypeProps) => {
             <Breadcrum label="Plans" />
           </div>
           {/* Plan Upgradation */}
-          <div className="flex  items-center h-[124px]  rounded-lg border-[1px] p-1 md:p-4 border-[#E8E8E8] bg-[#F2F6FF] justify-between    mb-7  mx-5 lg:ml-[30px]">
+          {/* <div className="flex  items-center h-[124px]  rounded-lg border-[1px] p-1 md:p-4 border-[#E8E8E8] bg-[#F2F6FF] justify-between    mb-7  mx-5 lg:ml-[30px]">
             <div className="flex    items-center justify-between ">
               <img
                 src={PlanDetailsGif}
@@ -741,7 +746,7 @@ const PlanDetails = (props: ITypeProps) => {
                 className="lg:!w-full !w-[80px]  !h-[36px] !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4  !font-Open"
               />
             </div>
-          </div>
+          </div> */}
           {/* Plan Details */}
           <div className=" mb-9 mx-5 lg:ml-[30px]">
             <PlanDetailsCard planDetails={planData} />
@@ -757,7 +762,7 @@ const PlanDetails = (props: ITypeProps) => {
           {renderingComponents === 0 && <CourierPricing />}
 
           {/* Info Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-2 mx-5 lg:ml-[30px] ">
+          {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
             <InfoCards
               title="Custom Label Usage"
               numerator={3}
@@ -778,10 +783,10 @@ const PlanDetails = (props: ITypeProps) => {
               numerator={23}
               denominator={30}
             />
-          </div>
+          </div> */}
           {/*Active Recommended */}
 
-          <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
+          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
             <CustomTable
               data={activeData}
               columns={activeColumns}
@@ -789,19 +794,19 @@ const PlanDetails = (props: ITypeProps) => {
               tdclassName={"border-none "}
               trclassName={"shadow-none"}
             />
-          </div>
+          </div> */}
           {/*Pricing Table */}
-          <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
+          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
             <CustomTable
               columns={pricingColumns}
               data={pricingData}
               tdclassName={"def"}
               thclassName={"bg-white"}
             />
-          </div>
+          </div> */}
           {/* Change-Upgrade Plans */}
 
-          <div className="overflow-x-scroll mx-5 lg:ml-[30px]">
+          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px]">
             <CustomTable
               data={changePlansData}
               columns={changePlansColumns}
@@ -809,16 +814,16 @@ const PlanDetails = (props: ITypeProps) => {
               tdclassName={"border-none "}
               trclassName={"shadow-none"}
             />
-          </div>
+          </div> */}
           {/* Features Table */}
-          <div className=" mb-[68px] overflow-x-scroll mx-5 lg:ml-[30px]">
+          {/* <div className=" mb-[68px] overflow-x-scroll mx-5 lg:ml-[30px]">
             <CustomTable
               columns={featuresColumns}
               data={featuresData}
               tdclassName={"def"}
               thclassName={"border-none bg-white"}
             />
-          </div>
+          </div> */}
           <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
@@ -826,13 +831,18 @@ const PlanDetails = (props: ITypeProps) => {
             <ServiceButton
               className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
               text="TALK TO OUR SUPPORT"
-              onClick={() => {}}
+              onClick={() => {
+                window.open(
+                  "https://care.shipyaari.com/support/home",
+                  "_blank"
+                );
+              }}
             />
           </div>
 
           {/* Terms & Conditions */}
 
-          <div className="mx-5 lg:ml-[30px]">
+          {/* <div className="mx-5 lg:ml-[30px]">
             <CustomAccordianWithTable
               dummyDatas={DummyData}
               title="Terms & Conditions"
@@ -842,7 +852,7 @@ const PlanDetails = (props: ITypeProps) => {
               data={termsAndConditionsData}
               columns={termsAndConditionsColumns}
             />
-          </div>
+          </div> */}
 
           {/* Bottom NavBar for Mobile */}
           <div className="lg:hidden mt-24">

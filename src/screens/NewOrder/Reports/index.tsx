@@ -5,77 +5,84 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { POST } from "../../../utils/webService";
+import { GET_REPORTS } from "../../../utils/ApiUrls";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import { toast } from "react-toastify";
+import { convertXMLToXLSX } from "../../../utils/helper";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
+  const [dataset, setDataset] = useState<any>();
 
   const reportMenu = [
-    {
-      label: "Select Report Type",
-      value: "Select Report Type",
-    },
     {
       label: "Shipment Status Report",
       value: "Shipment Status Report",
     },
-    {
-      label: "COD Report",
-      value: "COD Report",
-    },
-    {
-      label: "RTO OFD Report",
-      value: "RTO OFD Report",
-    },
-    {
-      label: "RTO Physical Receivied Report",
-      value: "RTO Physical Receivied Report",
-    },
-    {
-      label: "RTO Reconciliation Report",
-      value: "RTO Reconciliation Report",
-    },
-    {
-      label: "Not Picked Report",
-      value: "Not Picked Report",
-    },
-    {
-      label: "Physical Picked Report",
-      value: "Physical Picked Report",
-    },
-    {
-      label: "Reconciliation Report",
-      value: "Reconciliation Report",
-    },
-    {
-      label: "Channel Module Report",
-      value: "Channel Module Report",
-    },
   ];
 
   const convertEpoch = (epochDate: any) => {
-    return epochDate.getTime();
+    return epochDate?.getTime() || "";
+  };
+
+  const reportEndDate = new Date();
+
+  const isDateDisabled = (date: any) => {
+    return date <= reportEndDate;
   };
 
   const fetchReport = async () => {
-    let startEpoch = convertEpoch(startDate && startDate);
-    let endEpoch = convertEpoch(endDate && endDate);
-    // const { data } = await POST(GET_CATEGOROIES, {});
-    // if (data?.success) {
-    // }
+    // console.log("startandenddate", startDate, endDate);
+
+    if (reportValue === "" || reportValue === undefined) {
+      toast.error("Please Select Report Type");
+    } else {
+      if (startDate === null && endDate === null) {
+        toast.error("Please Select Start and End Date");
+      } else if (endDate === null) {
+        toast.error("Please Select End Date");
+      } else {
+        const endEpoch: any = endDate;
+        endEpoch.setHours(23, 59, 59, 59);
+        const lastendEpoch = endEpoch?.getTime();
+        const payload = {
+          startDate: convertEpoch(startDate),
+          endDate: lastendEpoch,
+          apiStatus: "SHIPMENTSTATUS",
+        };
+        const response = await POST(GET_REPORTS, payload);
+        // const apiData = response.data;
+        if (!response?.data?.success) {
+          toast.error(response?.data?.message);
+          return;
+        }
+        const date: any = JSON.stringify(new Date());
+        const result = await convertXMLToXLSX(
+          response?.data?.data,
+          `SellerShipMentReport_${date
+            .substr(1, 10)
+            .split("-")
+            .reverse()
+            .join("-")}.xlsx`
+        );
+        if (result) {
+          toast.success(response?.data?.message);
+        }
+      }
+    }
   };
 
   useEffect(() => {
     setIsActive(checkPageAuthorized("Reports"));
-  }, []);
+  }, [isActive]);
 
   return (
     <>
-      {isActive ? (
+      {isActive === undefined || isActive ? (
         <div>
           <div className="w-full">
             <Breadcrum label="Reports" />
@@ -99,9 +106,10 @@ const Reports = () => {
                 onChange={(update: any) => {
                   setDateRange(update);
                 }}
+                filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
-                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500"
+                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-0"
                 dateFormat="dd/MM/yyyy"
               />
             </div>

@@ -14,6 +14,7 @@ interface IContactDetailsProps {
     setDeliveryAddress: any;
     contactLabel: string;
     inputError: boolean;
+    setInputError?: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 interface ValidationErrorState {
@@ -24,7 +25,13 @@ interface ValidationErrorState {
 }
 
 const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
-  data: { deliveryAddress, setDeliveryAddress, contactLabel, inputError },
+  data: {
+    deliveryAddress,
+    setDeliveryAddress,
+    contactLabel,
+    inputError,
+    setInputError,
+  },
 }) => {
   const [validationErrors, setValidationErrors] =
     useState<ValidationErrorState>({
@@ -143,10 +150,13 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
               handleContactChange("mobileNo", numericValue);
               setValidationError("mobileNo", validateMobileNo(numericValue));
+              if (setInputError) {
+                setInputError(false);
+              }
             }}
             inputError={inputError}
           />
-          {validationErrors.mobileNo && (
+          {inputError && validationErrors.mobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
@@ -165,9 +175,12 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               const emailValue = e.target.value;
               handleContactChange("emailId", emailValue);
               setValidationError("emailId", validateEmailId(emailValue));
+              if (setInputError) {
+                setInputError(false);
+              }
             }}
           />
-          {validationErrors.emailId && (
+          {inputError && validationErrors.emailId && (
             <div className="flex items-center gap-x-1 mt-1">
               <img src={InfoCircle} alt="" width={10} height={10} />
               <span className="font-normal text-[#F35838] text-xs leading-3">
@@ -179,12 +192,12 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         <div className="mb-7 lg:mb-6 lg:mr-6">
           <CustomInputBox
             label="Alternate mobile number (optional)"
-            value={address.alternateMobileNo}
+            value={address.alternateMobileNo ? address.alternateMobileNo : ""}
             maxLength={10}
             inputMode="numeric"
             onChange={(e) => {
               const numericValue = e.target.value.replace(/[^0-9]/g, "");
-              handleContactChange("alternateMobileNo", e.target.value);
+              handleContactChange("alternateMobileNo", numericValue);
               setValidationError(
                 "alternateMobileNo",
                 validateAlternateMobileNo(numericValue)

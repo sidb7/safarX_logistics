@@ -2,10 +2,12 @@ import CustomButton from "../../components/Button";
 import AddOrderIcon from "../../assets/Order/AddOrder.svg";
 import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
 import { OrderStatus } from "./OrderStatus";
-import DeliveryGIF from "../../assets/OrderCard/Gif.gif";
+import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
 import { useEffect, useState } from "react";
+import Stepper from "./Stepper";
 import "../../styles/silkStyle.css";
+import DeliveryIcon from "../../assets/Delivery.svg";
 import {
   columnHelperForNewOrder,
   ColumnHelperForBookedAndReadyToPicked,
@@ -17,10 +19,44 @@ import { POST } from "../../utils/webService";
 import {
   CANCEL_TEMP_SELLER_ORDER,
   CANCEL_WAY_BILL,
+  FETCH_ALL_PARTNER,
+  FETCH_MANIFEST_DATA,
   GET_SELLER_ORDER,
+  GET_SINGLE_FILE,
+  POST_SERVICEABILITY,
 } from "../../utils/ApiUrls";
+import OrderCard from "./OrderCard";
+
+import trackingIcon from "../../assets/trackingShipyaariIcon.jpg";
+import trackingIcon2 from "../../assets/trackingShipyaari2.svg";
+import instagramIcon from "../../assets/instagramIcon.svg";
+import facebook from "../../assets/facebookIcon.svg";
+import Star from "../../assets/Comments.svg";
+import bookedIcon from "../../assets/Transaction/bookedIcon.svg";
+import DelhiveryIcon from "../../assets/Delhivery_Logo_(2019) 2.svg";
+import telephoneIcon from "../../assets/telephoneIcon.svg";
+import TrackingMenu from "../../assets/trackingMenu.svg";
+import DownwardArrow from "../../assets/downwardArrow.svg";
+import UpwardArrow from "../../assets/AccordionUp.svg";
+import Product from "../../assets/layer.svg";
+import GalleryIcon from "../../assets/galleryIcon.svg";
+
+import redirectIcon from "../../assets/redirect.svg";
+import MoreIcon from "../../assets/more.svg";
+import DimensionIcon from "../../assets/3d-cube-scan.svg";
+import SkuBoxIcon from "../../assets/DeliveryOder.svg";
+import BoxSearchIcon from "../../assets/box-search.svg";
+import orderBox from "../../assets/Delivery Icon.svg";
+import DelivertTruckIcon from "../../assets/group.svg";
+import Location from "../../assets/Location.svg";
+import TaskSquare from "../../assets/task-square.svg";
+import profileIcon from "../../assets/Contact.svg";
+import TelePhoneIcon from "../../assets/telephoneIcon.svg";
+import ShareIcon from "../../assets/16.svg";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import TickLogo from "../../assets/tick.gif";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
@@ -32,6 +68,10 @@ import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteMod
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
+
+import orderCardImg from "../../assets/OrderCard/Gif.gif";
+import CopyTooltip from "../../components/CopyToClipboard";
+import { BottomNavBar } from "../../components/BottomNavBar";
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -102,6 +142,29 @@ const Buttons = (className?: string) => {
 //   "FAILED",
 // ];
 
+const ordersArr = [
+  {
+    count: 23,
+    text: "Today's delivery",
+    img: "CreateOrderIcon",
+  },
+  {
+    count: 34,
+    text: "Today's delivery",
+    img: "ShippedIcon",
+  },
+  {
+    count: 12,
+    text: "Today's delivery",
+    img: "InTransitIcon",
+  },
+  {
+    count: 17,
+    text: "Today's delivery",
+    img: "InTransitIcon",
+  },
+];
+
 const tabs = [
   {
     statusName: "Draft",
@@ -111,11 +174,6 @@ const tabs = [
   {
     statusName: "Booked",
     value: "BOOKED",
-    orderNumber: 0,
-  },
-  {
-    statusName: "Cancelled",
-    value: "CANCELLED",
     orderNumber: 0,
   },
   {
@@ -153,6 +211,11 @@ const tabs = [
     value: "RETURN",
     orderNumber: 0,
   },
+  {
+    statusName: "Cancelled",
+    value: "CANCELLED",
+    orderNumber: 0,
+  },
 ];
 
 const Index = () => {
@@ -165,6 +228,7 @@ const Index = () => {
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
+
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -174,6 +238,7 @@ const Index = () => {
     isOpen: false,
     payload: "",
   });
+
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -202,6 +267,15 @@ const Index = () => {
   const { isLgScreen } = ResponsiveState();
   const navigate = useNavigate();
   const [isDeleted, setIsDeleted] = useState(false);
+
+  const [openSection, setOpenSection] = useState<any>(false);
+  const [selectedRowdata, setSelectedRowData] = useState([]);
+
+  // const toggleSection = (section: string) => {
+  //   setOpenSection((prevOpenSection: any) =>
+  //     prevOpenSection === section ? null : section
+  //   );
+  // };
 
   // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Orders");
@@ -256,6 +330,58 @@ const Index = () => {
       </div>
     );
   };
+
+  const warningMessage = (data?: any) => {
+    const tempOrderIdArray = data?.tempOrderIdArray?.map(
+      (tempOrderIdObj?: any) => tempOrderIdObj
+    );
+
+    return (
+      <div>
+        <div>
+          <span>
+            {" "}
+            Are You Sure You Want To Delete this
+            {tempOrderIdArray?.length > 1 ? " Orders" : " Order"}
+          </span>
+          <div className="w-[100%] text-[16px] truncate">
+            {tempOrderIdArray?.join(", ")}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const MobileButtons = (className?: string) => {
+    return (
+      <div
+        className={
+          className ? className : `flex items-center mx-5 mt-2 justify-between`
+        }
+      >
+        <div>
+          <CustomButton
+            className="text-[12px] lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+            text="ADD ORDER"
+            onClick={() => navigate("/orders/add-order/pickup")}
+            showIcon={true}
+            icon={AddOrderIcon}
+          />
+        </div>
+
+        <div className="flex flex-col items-center">
+          <img src={DeliveryIcon} alt="" />
+          <div className="text-[#004EFF] text-[12px]">SYNC CHANNEL</div>
+        </div>
+
+        <div className="flex flex-col items-center">
+          <img src={BlukOrderIcon} alt="" />
+          <div className="text-[#004EFF] text-[12px]">BULK ORDER</div>
+        </div>
+      </div>
+    );
+  };
+
   //  settings for desktop view
   const desktopSettings = {
     dots: true,
@@ -318,6 +444,54 @@ const Index = () => {
     }
   };
 
+  const getSingleFile = async (url: any, actionType?: any) => {
+    let fileName = "";
+
+    if (actionType === "download_label") {
+      fileName = `labels/${url}`;
+    } else {
+      fileName = `taxinvoices/${url}`;
+    }
+
+    const { data } = await POST(GET_SINGLE_FILE, {
+      fileName,
+    });
+    if (data?.status) {
+      window.location.href = data?.data;
+      toast.success(data?.meesage);
+    } else {
+      toast.error(data?.meesage);
+    }
+  };
+
+  const orderActions = (payLoad: any, actionType: any, currentStatus?: any) => {
+    switch (currentStatus) {
+      case "DRAFT":
+        setDeleteModalDraftOrder({ isOpen: true, payload: payLoad });
+        break;
+      case "BOOKED":
+      case "CANCELLED":
+      case "READY TO PICK":
+      case "IN TRANSIT":
+      case "OUT OF DELIVERY":
+      case "DELIVERED":
+      case "RETURN":
+        if (actionType === "cancel_order") {
+          setCancellationModal({
+            isOpen: true,
+            payload: payLoad.cancelOrderPayLoad,
+          });
+        } else if (actionType === "download_label") {
+          getSingleFile(payLoad.fileUrl, actionType);
+        } else if (actionType === "download_invoice") {
+          getSingleFile(payLoad?.taxInvoiceUrl, actionType);
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleTabChanges = async (index: any = 0) => {
     try {
       const { OrderData, statusList } = await getSellerOrderByStatus(
@@ -332,12 +506,14 @@ const Index = () => {
           (e: any) => e.value === e1._id?.toUpperCase()
         );
         if (matchingStatus) {
-          matchingStatus.orderNumber = e1.count.toLocaleString("en-US", {
+          matchingStatus.orderNumber = e1?.count?.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
             useGrouping: false,
           });
         }
       });
+
+      let currentStatus = tabs[index].value;
 
       switch (tabs[index].value) {
         case "DRAFT":
@@ -345,7 +521,9 @@ const Index = () => {
             columnHelperForNewOrder(
               navigate,
               setDeleteModalDraftOrder,
-              setInfoModalContent
+              setInfoModalContent,
+              currentStatus,
+              orderActions
             )
           );
           break;
@@ -354,17 +532,31 @@ const Index = () => {
             ColumnHelperForBookedAndReadyToPicked(
               navigate,
               setCancellationModal,
-              setInfoModalContent
+              setInfoModalContent,
+              currentStatus,
+              orderActions
             )
           );
           break;
         case "READYTOPICK":
           setColumnhelper(
-            ColumnHelperForBookedAndReadyToPicked(navigate, setInfoModalContent)
+            ColumnHelperForBookedAndReadyToPicked(
+              navigate,
+              setInfoModalContent,
+              currentStatus,
+              orderActions
+            )
           );
           break;
         default:
-          setColumnhelper(columnHelpersForRest(navigate, setInfoModalContent));
+          setColumnhelper(
+            columnHelpersForRest(
+              navigate,
+              setInfoModalContent,
+              currentStatus,
+              orderActions
+            )
+          );
           break;
       }
     } catch (error) {
@@ -374,7 +566,7 @@ const Index = () => {
 
   useEffect(() => {
     handleTabChanges();
-  }, [deleteModalDraftOrder]);
+  }, []); //deleteModalDraftOrder
 
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
@@ -478,60 +670,106 @@ const Index = () => {
       {isActive ? (
         <div>
           <Breadcrum label="Orders" component={Buttons()} />
-          {
-            <div className="pl-5 pr-6">
-              <OrderStatus
-                filterId={filterId}
-                orders={orders}
-                setFilterId={setFilterId}
-                handleTabChange={handleTabChanges}
-                statusData={statusData}
-                setOrders={setOrders}
-                allOrders={allOrders}
-                currentStatus={tabs[globalIndex].value}
-              />
-              {isLoading ? (
-                <div>
-                  <div className="flex items-stretch h-16 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
+          <div className="flex md:hidden justify-between gap-4 overflow-x-scroll py-4 mx-5">
+            {ordersArr?.map((order: any, i: number) => (
+              <div
+                className="shadow-md w-[30rem] lg:w-[24rem] h-[6.2rem] lg:h-[6.6rem] relative rounded-lg border"
+                key={i}
+              >
+                <div className="flex items-center justify-between min-w-[310px] p-3   lg:px-6 lg:py-4  ">
+                  <div>
+                    <div className="font-bold font-Lato mb-2 text-[#1C1C1C] text-[22px] lg:text-[2rem]">
+                      {order?.count}
+                    </div>
+                    <p className="text-[#494949] font-normal lg:text-base font-Open text-sm">
+                      {order?.text}
+                    </p>
                   </div>
-                  <div className="flex items-stretch h-44 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                  </div>
-                  <div className="flex items-stretch h-44 rounded-xl">
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
-                    <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="self-center absolute top-[-35px] right-[10px] w-[120px] h-[120px]">
+                    <img src={orderCardImg} alt="Box" />
                   </div>
                 </div>
-              ) : (
-                <div>
-                  <CustomTable data={orders} columns={columnHelper || []} />
-                  {totalCount > 0 && (
-                    <Pagination
-                      totalItems={totalCount}
-                      itemsPerPageOptions={[10, 20, 30, 50]}
-                      onPageChange={onPageIndexChange}
-                      onItemsPerPageChange={onPerPageItemChange}
+              </div>
+            ))}
+          </div>
+
+          {!isLgScreen && MobileButtons()}
+
+          <div className="px-4 md:pl-5 md:pr-6">
+            <OrderStatus
+              filterId={filterId}
+              orders={orders}
+              setFilterId={setFilterId}
+              handleTabChange={handleTabChanges}
+              statusData={statusData}
+              setOrders={setOrders}
+              allOrders={allOrders}
+              currentStatus={tabs[globalIndex].value}
+              selectedRowdata={selectedRowdata}
+              setDeleteModalDraftOrder={setDeleteModalDraftOrder}
+            />
+            {isLoading ? (
+              <div>
+                <div className="flex items-stretch h-16 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+                <div className="flex items-stretch h-44 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+                <div className="flex items-stretch h-44 rounded-xl">
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                  <div className="flex-1 m-2 animated rounded-xl"></div>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {isLgScreen ? (
+                  <>
+                    <CustomTable
+                      data={orders || []}
+                      columns={columnHelper || []}
+                      setRowSelectedData={setSelectedRowData}
                     />
-                  )}
+                    {totalCount > 0 && (
+                      <Pagination
+                        totalItems={totalCount}
+                        itemsPerPageOptions={[10, 20, 30, 50]}
+                        onPageChange={onPageIndexChange}
+                        onItemsPerPageChange={onPerPageItemChange}
+                      />
+                    )}
+                  </>
+                ) : (
+                  <div className="border border-white my-5">
+                    {orders.length > 0 && (
+                      <>
+                        {orders?.map((data: any, i: any) => (
+                          <OrderCard data={data} />
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
+                <div className="mt-24 lg:hidden">
+                  <BottomNavBar />
                 </div>
-              )}
-            </div>
-          }
+              </div>
+            )}
+          </div>
         </div>
       ) : (
         <AccessDenied />
@@ -541,8 +779,11 @@ const Index = () => {
         setModalClose={() =>
           setCancellationModal({ ...cancellationModal, isOpen: false })
         }
-        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal.orderId} ?`}
-        payloadBody={cancellationModal.awbNo}
+        // deleteTextMessage={warningMessage(
+        //   cancellationModal?.cancelOrderPayLoad
+        // )}
+        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal?.payload?.orderId} ?`}
+        payloadBody={cancellationModal?.payload?.awbNo}
         deleteURL={CANCEL_WAY_BILL}
         setIsDeleted={setIsDeleted}
       />
@@ -551,12 +792,12 @@ const Index = () => {
         url={CANCEL_TEMP_SELLER_ORDER}
         postData={deleteModalDraftOrder?.payload}
         isOpen={deleteModalDraftOrder?.isOpen}
+        reloadData={handleTabChanges}
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title={`Are You Sure You Want To Delete this Order ${deleteModalDraftOrder?.payload?.tempOrderId}?`}
+        title={warningMessage(deleteModalDraftOrder?.payload)}
       />
-
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false })}

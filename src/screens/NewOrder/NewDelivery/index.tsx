@@ -70,7 +70,7 @@ const DeliveryLocation = () => {
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
     deliveryAddress: {
-      recipientType: "business",
+      recipientType: "consumer",
       fullAddress: "",
       flatNo: "",
       locality: "",
@@ -100,7 +100,7 @@ const DeliveryLocation = () => {
       },
     },
     billingAddress: {
-      recipientType: "business",
+      recipientType: "consumer",
       fullAddress: "",
       flatNo: "",
       locality: "",
@@ -129,7 +129,7 @@ const DeliveryLocation = () => {
         type: "warehouse associate",
       },
     },
-    orderType: "B2B",
+    orderType: "B2C",
     gstNumber: "",
     tempOrderId: shipyaari_id || "",
     source: orderSource || "",
@@ -185,6 +185,16 @@ const DeliveryLocation = () => {
     return false;
   };
 
+  const isGSTNumberValid = (gstNumber: string) => {
+    const gstNumberRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[0-9A-Z]{1}[0-9A-Z]{1}$/;
+    return gstNumber && gstNumberRegex.test(gstNumber);
+  };
+
+  const isGSTFieldValid = (orderType: string, gstNumber: string) => {
+    return orderType === "B2B" ? isGSTNumberValid(gstNumber) : true;
+  };
+
   const postDeliveryOrderDetails = async () => {
     try {
       const isDeliveryAddressValid = !isObjectEmpty(
@@ -200,12 +210,15 @@ const DeliveryLocation = () => {
       const isContactDetailsBillingValid = !isObjectEmpty(
         deliveryAddress.billingAddress.contact
       );
+
       if (
-        (deliveryAddress.orderType === "B2B" && !deliveryAddress.gstNumber) ||
+        !isGSTFieldValid(
+          deliveryAddress.orderType,
+          deliveryAddress.gstNumber
+        ) ||
         !isDeliveryAddressValid ||
         (!isBillingAddress &&
-          !isbillingAddressValid &&
-          !isContactDetailsBillingValid)
+          (!isbillingAddressValid || !isContactDetailsBillingValid))
       ) {
         setInputError(true);
         return;
@@ -254,7 +267,7 @@ const DeliveryLocation = () => {
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
-
+          console.log("orderData", orderData?.deliveryAddress?.gstNumber);
           if (orderData?.deliveryAddress && orderData?.billingAddress) {
             setDeliveryAddress({
               deliveryAddress: {
@@ -326,7 +339,7 @@ const DeliveryLocation = () => {
                 },
               },
               orderType: orderData?.orderType,
-              gstNumber: orderData?.gstNumber,
+              gstNumber: orderData?.deliveryAddress?.gstNumber,
               tempOrderId: orderData?.tempOrderId || "",
               source: orderData?.source || "",
             });
@@ -364,6 +377,15 @@ const DeliveryLocation = () => {
       getReturningUserDeliveryDetails();
     }
   }, [userType]);
+
+  useEffect(() => {
+    if (inputError) {
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "center", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
   return (
     <div className="w-full mb-24" id="scrollDiv">
       <Breadcrum label="Add New Order" />
@@ -383,27 +405,102 @@ const DeliveryLocation = () => {
             returningUserDeliveryData,
             setReturningUserDeliveryData,
             onAddressSelect: (selectedAddress: any) => {
-              setDeliveryAddress((prevDeliveryAddress: any) => ({
-                ...prevDeliveryAddress,
-                deliveryAddress: {
-                  ...prevDeliveryAddress.deliveryAddress,
-                  ...selectedAddress,
-                },
-                billingAddress: {
-                  ...prevDeliveryAddress.billingAddress,
-                  ...selectedAddress,
-                },
-              }));
+              if (selectedAddress) {
+                setDeliveryAddress((prevDeliveryAddress: any) => ({
+                  ...prevDeliveryAddress,
+                  deliveryAddress: {
+                    ...prevDeliveryAddress.deliveryAddress,
+                    ...selectedAddress,
+                  },
+                  billingAddress: {
+                    ...prevDeliveryAddress.billingAddress,
+                    ...selectedAddress,
+                  },
+                }));
+              } else {
+                setDeliveryAddress((prevDeliveryAddress: any) => ({
+                  ...prevDeliveryAddress,
+                  deliveryAddress: {
+                    recipientType:
+                      prevDeliveryAddress.deliveryAddress.recipientType,
+                    fullAddress: "",
+                    flatNo: "",
+                    locality: "",
+                    sector: "",
+                    landmark: "",
+                    pincode: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    addressType: "warehouse",
+                    workingDays: {
+                      monday: true,
+                      tuesday: true,
+                      wednesday: true,
+                      thursday: true,
+                      friday: true,
+                      saturday: true,
+                      sunday: true,
+                    },
+                    workingHours: "09:00",
+                    contact: {
+                      name: "",
+                      mobileNo: "",
+                      alternateMobileNo: "",
+                      emailId: "",
+                      type: "warehouse associate",
+                    },
+                  },
+                  billingAddress: {
+                    recipientType:
+                      prevDeliveryAddress.billingAddress.recipientType,
+                    fullAddress: "",
+                    flatNo: "",
+                    locality: "",
+                    sector: "",
+                    landmark: "",
+                    pincode: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                    addressType: "warehouse",
+                    workingDays: {
+                      monday: true,
+                      tuesday: true,
+                      wednesday: true,
+                      thursday: true,
+                      friday: true,
+                      saturday: true,
+                      sunday: true,
+                    },
+                    workingHours: "09:00",
+                    contact: {
+                      name: "",
+                      mobileNo: "",
+                      alternateMobileNo: "",
+                      emailId: "",
+                      type: "warehouse associate",
+                    },
+                  },
+                  orderType: prevDeliveryAddress.orderType,
+                  gstNumber: "",
+                  tempOrderId: shipyaari_id || "",
+                  source: orderSource || "",
+                }));
+              }
             },
           }}
         />
       )}
+
+      <div id="scrollDiv" />
 
       <DeliveryAddress
         data={{
           deliveryAddress,
           setDeliveryAddress,
           inputError,
+          setInputError,
         }}
       />
 
@@ -426,6 +523,7 @@ const DeliveryLocation = () => {
             setDeliveryAddress,
             label: "billing",
             inputError,
+            setInputError,
           }}
         />
       )}

@@ -273,12 +273,14 @@ const WalletRecharge = () => {
 
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
+    let redirectUrl = `${SELLER_WEB_URL}/wallet/view-wallet`;
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
-      userDetails.email
+      userDetails.email,
+      redirectUrl
     );
     if (!options?.success && !options?.amount) {
       toast.error(options.message);
@@ -334,12 +336,12 @@ const WalletRecharge = () => {
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
                   <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
                     <img src={Accountlogo} alt="" />
-                    <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6">
+                    <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
                       Your wallet balance
                     </p>
                     <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
                   </div>
-                  <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-1 lg:font-normal">
+                  <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal">
                     Endless wallet balance with automatic add money
                   </p>
                   {/* <p

@@ -117,12 +117,14 @@ const WalletPayment = () => {
 
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
+    let redirectUrl = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
 
     const options: any = await loadRazorPayTransaction(
       replacewalletValue,
       "SHIPYAARI",
       userDetails.name,
-      userDetails.email
+      userDetails.email,
+      redirectUrl
     );
 
     if (!options?.success && !options?.amount) {
@@ -165,14 +167,14 @@ const WalletPayment = () => {
           <div className=" mx-5 mt-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-auto">
             <div className="flex items-center gap-2">
               <img src={Accountlogo} alt="" />
-              <p className="text-sm md:text-[18px] font-semibold md:text-[#1C1C1C]">
+              <p className="text-sm md:text-[18px] font-Open md:font-Lato font-semibold leading-5 md:leading-6 text-[#202427] capitalize">
                 Your wallet balance
               </p>
-              <p className="md:text-[18px] font-semibold md:text-[#1C1C1C]">
+              <p className="text-sm md:text-[18px] font-Open md:font-Lato font-semibold leading-5 md:leading-6 text-[#202427]">
                 ₹ 0
               </p>
             </div>
-            <p className="text-[12px] leading-4 text-[#BBBBBB] my-1 md:font-normal">
+            <p className="text-[14px] leading-4 text-[#BBBBBB] my-3 font-normal font-Open">
               Endless wallet balance with automatic add money
             </p>
             <CustomDropDown
@@ -183,7 +185,7 @@ const WalletPayment = () => {
                 setWalletValue(event.target.value);
               }}
               wrapperClass="w-[200px]"
-              selectClassName="text-[18px]"
+              selectClassName="text-[14px]"
             />
             {/* <p
             onClick={() => convertToEdit()}
@@ -244,7 +246,7 @@ const WalletPayment = () => {
                     isDisabled={isDisabled}
                     text={"Paytm"}
                     amt={walletValue}
-                    navigate={`${SELLER_WEB_URL}/dashboard/overview`}
+                    navigate={`${SELLER_WEB_URL}/onboarding/cash-on-delivery`}
                   />
                 </div>
                 <div className="flex flex-col items-center gap-y-2">
@@ -266,8 +268,8 @@ const WalletPayment = () => {
                     onClick={() =>
                       loadPhonePeTransaction(
                         walletValue,
-                        `${SELLER_WEB_URL}/dashboard/overview`,
-                        `${SELLER_WEB_URL}/dashboard/overview`
+                        `${SELLER_WEB_URL}/onboarding/cash-on-delivery`,
+                        `${SELLER_WEB_URL}/onboarding/cash-on-delivery`
                       )
                     }
                   >

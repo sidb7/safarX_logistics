@@ -161,8 +161,8 @@ const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/createPickupLocation`;
 const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickupAddress/createPickupAddress`;
 const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/updatePickupAddress`;
-const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/createDeliveryLocation`;
-const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/delivery/updateDeliveryLocation`;
+const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/createDeliveryAddress`;
+const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/updateDeliveryAddress`;
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
@@ -231,13 +231,15 @@ const GET_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/getSingleStore`;
 const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/updateStore`;
 const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createWCStore`;
 const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
+const CREATE_ZOHO_STORE = `${SELLER_BASE_URL}/channel/zoho/createZohoStore`;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
+const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_BASE_URL}/tracking/getTracking`;
 
 //feedback
 //feedback
@@ -250,6 +252,18 @@ const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 
 //Dashboard URL
 const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails`;
+
+//Invoice Download
+const INVOICE_DOWNLOAD_URL = `${SELLER_BASE_URL}/order/generateInvoicePDF`;
+const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
+
+//Get all ParterList
+const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
+const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
+const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
+
+//Reports
+const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -353,6 +367,7 @@ export {
   RETURNING_USER_PICKUP,
   RETURNING_USER_DELIVERY,
   TRACKING,
+  GET_CLIENTTRACKING_INFO,
   GET_SYSTEM_LOG,
   LOGOUT,
   PHONEPE_INIT_TRANSACTION,
@@ -370,4 +385,11 @@ export {
   CREATE_FEEDBACK,
   GET_FEEDBACK,
   GET_DASHBOARD_INFO,
+  INVOICE_DOWNLOAD_URL,
+  GET_ALL_INVOICES,
+  FETCH_ALL_PARTNER,
+  FETCH_MANIFEST_DATA,
+  FETCH_MANIFEST_REPORT_DATA,
+  CREATE_ZOHO_STORE,
+  GET_REPORTS,
 };

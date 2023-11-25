@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ClientIcon from "../../../assets/clientIcon.svg";
 import InputBox from "../../../components/Input/index";
 import instagramIcon from "../../../assets/instagramIcon.svg";
 import facebook from "../../../assets/facebookIcon.svg";
 import Star from "../../../assets/Comments.svg";
-import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import DelhiveryIcon from "../../../assets/Delhivery_Logo_(2019) 2.svg";
 import telephoneIcon from "../../../assets/telephoneIcon.svg";
 import TrackingMenu from "../../../assets/trackingMenu.svg";
@@ -14,194 +13,83 @@ import Product from "../../../assets/layer.svg";
 import GalleryIcon from "../../../assets/galleryIcon.svg";
 import Location from "../../../assets/other.png";
 import StarRating from "./starRating";
+import RefreshIcon from "../../../assets/refreshIcon.svg";
+import CopyIcon from "../../../assets/copy.svg";
+import Stepper from "./clientStepper";
+import TickLogo from "../../../assets/common/Tick.svg";
+import Lock from "../../../assets/lock.svg";
+import GreenTick from "../../../assets/greenTick.svg";
+import { Spinner } from "../../../components/Spinner";
+import { GET, POST } from "../../../utils/webService";
+import { GET_CLIENTTRACKING_INFO } from "../../../utils/ApiUrls";
+import CustomButton from "../../../components/Button";
+import { toast } from "react-toastify";
+import { convertEpochToDateTime } from "../../../utils/utility";
+import { getQueryJson } from "../../../utils/utility";
+import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
+import { ResponsiveState } from "../../../utils/responsiveState";
 
 const Tracking = () => {
-  let tracking = [
-    {
-      partner: {
-        partnerIcon: DelhiveryIcon,
-        partnerID: 0,
-        etaDate: "18 Jun 2023",
-        trackingID: "GYSH23678119",
-        orderID: "GYSH23678119",
-        status: "Booked",
-        orderPlaced: "14 Jun",
-      },
-
-      trackingDetails: [
-        {
-          date: "18 Jul, 2023",
-          time: "11:00  am",
-          heading: "Pick-up assigned",
-          locationImage: Location,
-          location: "Mumbai",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Reached Warehouse",
-          locationImage: Location,
-          location: "Bhiwandi",
-        },
-        {
-          date: "18 Jul, 2023",
-          time: "15:20",
-          heading: "Delivery assigned",
-          locationImage: telephoneIcon,
-          location: "+91 12345 12345",
-        },
-      ],
-      productDetails: [
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-        {
-          galleryImage: GalleryIcon,
-          productheading: "Lev's V necked T-shirt",
-          price: "500",
-        },
-      ],
-      isTrackingOpen: false,
-      isProductItemsOpen: false,
-    },
-
-    /*if, want multiple orders then uncomment this */
-
-    // {
-    //   partner: {
-    //     partnerIcon: DelhiveryIcon,
-    //     partnerID: 1,
-    //     etaDate: "18 Jun 2023",
-    //     trackingID: "GYSH23678119",
-    //     orderID: "GYSH23678119",
-    //     status: "Booked",
-    //     orderPlaced: "14 Jun",
-    //   },
-
-    //   trackingDetails: [
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "11:00  am",
-    //       heading: "Pick-up assigned",
-    //       locationImage: Location,
-    //       location: "Mumbai",
-    //     },
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "15:20",
-    //       heading: "Reached Warehouse",
-    //       locationImage: Location,
-    //       location: "Bhiwandi",
-    //     },
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "15:20",
-    //       heading: "Delivery assigned",
-    //       locationImage: telephoneIcon,
-    //       location: "+91 12345 12345",
-    //     },
-    //   ],
-    //   productDetails: [
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //   ],
-    //   isTrackingOpen: false,
-    //   isProductItemsOpen: false,
-    // },
-    // {
-    //   partner: {
-    //     partnerIcon: DelhiveryIcon,
-    //     partnerID: 2,
-    //     etaDate: "18 Jun 2023",
-    //     trackingID: "GYSH23678119",
-    //     orderID: "GYSH23678119",
-    //     status: "Booked",
-    //     orderPlaced: "14 Jun",
-    //   },
-
-    //   trackingDetails: [
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "11:00  am",
-    //       heading: "Pick-up assigned",
-    //       locationImage: Location,
-    //       location: "Mumbai",
-    //     },
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "15:20",
-    //       heading: "Reached Warehouse",
-    //       locationImage: Location,
-    //       location: "Bhiwandi",
-    //     },
-    //     {
-    //       date: "18 Jul, 2023",
-    //       time: "15:20",
-    //       heading: "Delivery assigned",
-    //       locationImage: telephoneIcon,
-    //       location: "+91 12345 12345",
-    //     },
-    //   ],
-    //   productDetails: [
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //     {
-    //       galleryImage: GalleryIcon,
-    //       productheading: "Lev's V necked T-shirt",
-    //       price: "500",
-    //     },
-    //   ],
-    //   isTrackingOpen: false,
-    //   isProductItemsOpen: false,
-    // },
-  ];
-
-  const [trackingState, setTrackingState] = useState<any>([...tracking]);
-
+  const [trackingState, setTrackingState] = useState<any>([]);
+  // console.log("trackingdata1", trackingState[0]?.currentStatus);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [trackingNo, setTrackingNo] = useState<any>();
+  // console.log("trackingNo", trackingNo);
+  const [loading, setLoading] = useState(false);
+  const [trackingDetails, setTrackingDetails] = useState<any>([]);
+
+  const { isLgScreen } = ResponsiveState();
+
+  console.log("trackingDetails", trackingDetails);
+
+  const [cancelled, setCancelled] = useState<any>(false);
+  const [timeDetails, setTimeDetails] = useState<any>({
+    time: "",
+    day: "",
+    date: "",
+    hours: "",
+  });
+
+  const params = getQueryJson();
+
+  const trackingNoFromUrl = params?.trackingNo;
+
+  const steps = [
+    {
+      label: "Order Created",
+      isCompleted: true,
+      value: "BOOKED",
+      isActive: false,
+      imgSrc: TickLogo,
+      timeStatus: "01 Jun | 16:32:46",
+    },
+    {
+      label: "In Transit",
+      isCompleted: false,
+      value: "IN TRANSIT",
+      isActive: false,
+      imgSrc: TickLogo,
+      timeStatus: "01 Jun | 16:32:46",
+    },
+    {
+      label: "Out For Delivery",
+      value: "OUT FOR DELIVERY",
+
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+      timeStatus: "",
+    },
+    {
+      label: "Delivered",
+      isCompleted: false,
+      isActive: false,
+      value: "DELIVERED",
+      imgSrc: TickLogo,
+      timeStatus: "",
+    },
+  ];
+  const [tempSteps, setTempSteps] = useState<any>(steps);
 
   const toggleSection = (section: string) => {
     setOpenSection((prevOpenSection) =>
@@ -209,316 +97,535 @@ const Tracking = () => {
     );
   };
 
-  return (
-    <>
-      <div className="mx-5">
-        {/*shipyaari icon */}
-        <div className="flex justify-center p-3">
-          <img src={ClientIcon} alt="Shipyaari" />
-        </div>
-        <div className="flex gap-x-5  justify-center ">
-          <div className="flex ">
-            {/*tracking ID Box */}
-            <div className="flex flex-col">
-              <div>
-                <InputBox label="Enter tracking ID" />
-                <p className="text-[10px] py-2 font-Open font-bold">
-                  For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
+  function myStatus(status: any) {
+    const statuses = {
+      BOOKED: false,
+      "IN TRANSIT": false,
+      "OUT FOR DELIVERY": false,
+      DELIVERED: false,
+    };
+
+    if (status === "BOOKED" || status === "NOT PICKED") {
+      statuses.BOOKED = true;
+    } else if (status === "IN TRANSIT") {
+      statuses.BOOKED = true;
+      statuses["IN TRANSIT"] = true;
+    } else if (status === "OUT FOR DELIVERY") {
+      statuses.BOOKED = true;
+      statuses["IN TRANSIT"] = true;
+      statuses["OUT FOR DELIVERY"] = true;
+    } else if (status === "DELIVERED") {
+      statuses.BOOKED = true;
+      statuses["IN TRANSIT"] = true;
+      statuses["OUT FOR DELIVERY"] = true;
+      statuses["DELIVERED"] = true;
+    }
+    return statuses;
+  }
+
+  const getTimeDetails = (trackingInfo: any) => {
+    const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
+
+    setTrackingDetails(dateAndTimings);
+
+    let checkDate = convertEpochToDateTime(dateAndTimings.LastUpdatedAt);
+
+    let date: any = new Date(checkDate);
+
+    let [day, dateAndTime] = date.toUTCString().split(",");
+
+    /**this is day */
+    day = day;
+
+    /**this is the date */
+    const latestDate = dateAndTime.slice(1, 12);
+
+    /**this is time */
+    const time = dateAndTime.slice(12).trim().slice(0, -4);
+
+    const timeAgo = (inputDate: any) => {
+      const date = inputDate instanceof Date ? inputDate : new Date(inputDate);
+
+      const FORMATTER: any = new Intl.RelativeTimeFormat("en");
+      const RANGES: any = {
+        years: 3600 * 24 * 365,
+        months: 3600 * 24 * 30,
+        weeks: 3600 * 24 * 7,
+        days: 3600 * 24,
+        hours: 3600,
+        minutes: 60,
+        seconds: 1,
+      };
+
+      const secondsElapsed = (date.getTime() - Date.now()) / 1000;
+
+      for (let key in RANGES) {
+        if (RANGES[key] < Math.abs(secondsElapsed)) {
+          const delta = secondsElapsed / RANGES[key];
+          return FORMATTER.format(Math.round(delta), key);
+        }
+      }
+    };
+    /**this is difference of time */
+    const hours = timeAgo(date);
+
+    setTimeDetails({ time: time, date: latestDate, day: day, hours: hours });
+  };
+
+  const handleTrackOrderClick = async () => {
+    let urlWithTrackingNo = "";
+    const trackingNoFromUrl = params?.trackingNo;
+
+    if (trackingNoFromUrl === undefined) {
+      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
+    } else if (trackingNo === undefined) {
+      window.history.replaceState(
+        {},
+        "",
+        `/tracking?trackingNo=${trackingNoFromUrl}`
+      );
+    } else {
+      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
+    }
+    if (!trackingNoFromUrl && !trackingNo) {
+      return toast.warning("Please Enter Tracking Number");
+    }
+    try {
+      setLoading(true);
+      setTempSteps(steps);
+      setCancelled(false);
+      // console.log("GET_CLIENTTRACKING_INFO", GET_CLIENTTRACKING_INFO);
+      if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+        urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNoFromUrl}`;
+      } else {
+        urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`;
+      }
+      const { data: response } = await GET(urlWithTrackingNo);
+
+      if (response.success) {
+        setTrackingState(response?.data[0]?.trackingInfo);
+        getTimeDetails(response?.data[0]?.trackingInfo);
+        const res: any = myStatus(
+          response?.data[0].trackingInfo[0]?.currentStatus
+        );
+
+        let mysteps = tempSteps;
+
+        Object.keys(res).forEach((status: any) => {
+          mysteps.forEach((step: any, index: number) => {
+            if (status === step?.value) {
+              const stepCurrentStatus = res[status];
+              mysteps[index].isCompleted = stepCurrentStatus || false;
+            }
+          });
+        });
+        setTempSteps([...mysteps]);
+      } else {
+        toast.error(response?.message);
+        setTrackingState([]);
+      }
+    } catch (error: any) {
+      console.error("Error in API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const callFunction = async () => {
+    await handleTrackOrderClick();
+  };
+
+  useEffect(() => {
+    if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
+      setTrackingNo(trackingNoFromUrl);
+      callFunction();
+    }
+  }, [trackingNoFromUrl]);
+
+  const temp = useMemo(() => {
+    return trackingDetails?.Scans?.reverse()?.map(
+      (each: any, index: number) => {
+        return (
+          <div
+            className="flex gap-x-5 mt-1 h-16  relative overflow-y-scroll mt-2"
+            key={index}
+          >
+            <div className="pt-1">
+              <p className="text-xs font-Open font-normal w-[68px] whitespace-nowrap">
+                {`${each?.time.split(" ")[0]} `}
+              </p>
+              <p className="text-xs font-Open font-normal">
+                {`${each?.time.split(" ")[1]} `}
+              </p>
+            </div>
+            <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
+              <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                {each?.message}
+              </p>
+              <p className="text-xs font-Open  font-normal mt-1 w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                {each?.status}
+              </p>
+              <div className="flex pt-1 gap-x-2 mt-1">
+                <img src={Location} alt="" className="w-4 h- 4" />
+                <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll whitespace-nowrap">
+                  {each?.location}
                 </p>
               </div>
-
-              {trackingState?.map((each: any, indexTracking: number) => {
-                return (
-                  <div key={indexTracking}>
-                    <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4 ">
-                      <div className="border-l-[24px]  border-l-[#C5122F] py-4 px-5 rounded-lg">
-                        {/*delhivery details */}
-                        <>
-                          <div className="flex justify-between">
-                            <img src={each?.partner?.partnerIcon} alt="" />
-                            <p className="text-sm font-semibold font-Open">
-                              {each?.partner?.etaDate}
-                            </p>
-                          </div>
-
-                          <div className="flex justify-between pt-2">
-                            <div className="flex gap-x-8 items-end xl:pr-4">
-                              <p className="text-xs font-normal font-Open">
-                                Tracking ID:
-                                <span className="font-bold">
-                                  {each?.partner?.trackingID}
-                                </span>
-                              </p>
-                              <p className="text-xs font-normal font-Open">
-                                Order ID:
-                                <span className="font-bold">
-                                  {each?.partner?.orderID}
-                                </span>
-                              </p>
-                            </div>
-
-                            <div className="inline-flex justify-center gap-x-1 bg-[#F2FAEF] rounded-sm border-[0.5px] border-[#7CCA62] px-3 py-[6px]">
-                              <img src={bookedIcon} alt="" />
-                              <span className="text-xs font-semibold text-[#7CCA62] items-center ">
-                                {each?.partner?.status}
-                              </span>
-                            </div>
-                          </div>
-                          <div>
-                            <p className="text-xs font-Open font-normal pt-2">
-                              Order Placed:
-                              <span className="font-bold">
-                                {each?.partner?.orderPlaced}
-                              </span>
-                            </p>
-                          </div>
-
-                          {/*tracking details */}
-                          <div className="py-3">
-                            <hr />
-                          </div>
-                          {/*tracking cycle details*/}
-                          <div
-                            className="flex justify-between cursor-pointer"
-                            // onClick={() => setOpenTracking(!openTracking)}
-                            onClick={() => toggleSection("tracking")}
-                          >
-                            <div className="flex gap-x-1 ">
-                              <img src={TrackingMenu} alt="" />
-                              <p className="text-sm font-Open font-semibold">
-                                Tracking Cycle Details
-                              </p>
-                            </div>
-
-                            <img
-                              src={
-                                openSection === "tracking"
-                                  ? UpwardArrow
-                                  : DownwardArrow
-                              }
-                              alt=""
-                            />
-                          </div>
-                          {openSection === "tracking" &&
-                            each?.trackingDetails?.map(
-                              (each: any, index: number) => {
-                                return (
-                                  <div
-                                    className="flex gap-x-5 mt-1 h-16 relative  overflow-y-scroll"
-                                    key={index}
-                                  >
-                                    <div className="pt-1">
-                                      <p className="text-xs font-Open font-normal">
-                                        {each?.date}
-                                      </p>
-                                      <p className="text-xs font-Open font-normal">
-                                        {each?.time}
-                                      </p>
-                                    </div>
-                                    <div className="border-l-4 border-l-[#C5122F] pl-5 border-dotted pt-1">
-                                      <p className="text-xs font-Open  font-normal">
-                                        {each?.heading}
-                                      </p>
-                                      <div className="flex pt-1 gap-x-2">
-                                        <img
-                                          src={each?.locationImage}
-                                          alt=""
-                                          className="w-4 h- 4"
-                                        />
-                                        <p className="text-xs font-Open font-normal">
-                                          {each?.location}
-                                        </p>
-                                      </div>
-                                      <div className="w-2 h-2 bg-[#C5122F] rounded-full absolute top-5 left-[83px]"></div>
-                                    </div>
-                                  </div>
-                                );
-                              }
-                            )}
-                          <div className="py-3">
-                            <hr />
-                          </div>
-                          <div
-                            className="flex justify-between cursor-pointer"
-                            onClick={() => toggleSection("product")}
-                          >
-                            <div className="flex gap-x-1 ">
-                              <img src={Product} alt="" />
-                              <p className="text-sm font-Open font-semibold">
-                                Product Details
-                              </p>
-                            </div>
-                            <img
-                              src={
-                                openSection === "product"
-                                  ? UpwardArrow
-                                  : DownwardArrow
-                              }
-                              alt=""
-                            />
-                          </div>
-                          <div
-                            className={
-                              openSection === "product"
-                                ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
-                                : "grid grid-cols-2 "
-                            }
-                          >
-                            {/*mapping product details */}
-                            {openSection === "product" &&
-                              each?.productDetails?.map(
-                                (each: any, index: number) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
-                                    >
-                                      <img src={each?.galleryImage} alt="" />
-                                      <div>
-                                        <p className="text-sm font-Open font-semibold">
-                                          {each?.productheading}
-                                        </p>
-                                        <p className="text-sm font-Open font-normal">
-                                          ₹ {each?.price}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  );
-                                }
-                              )}
-                          </div>
-                        </>
-                      </div>
-                    </div>
-                    <div className="border-[0.5px] border-[#A4A4A4] rounded-lg mt-6 py-2 lg:py-4 xl:py-8">
-                      <div className="flex gap-x-2 px-2">
-                        <img src={Star} alt="" />
-                        <p className="font-Lato text-lg font-semibold xl:max-w-[358px]">
-                          How much would you recommend a product to your friends
-                          and family?
-                        </p>
-                      </div>
-                      <div className="px-3  pt-2">
-                        <StarRating />
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="flex flex-col gap-y-4 pl-10">
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage1.svg"
-                }
-                alt=""
-              />
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientImage2.svg"
-                }
-                alt=""
-              />
+              <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
             </div>
           </div>
-        </div>
-        <div className="xl:ml-[480px] xxl:ml-[200px]">
-          <div>
-            <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
-              From the Collection
-            </p>
+        );
+      }
+    );
+  }, [trackingDetails]);
 
-            <div className="flex gap-x-5 overflow-x-scroll ">
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
-                }
-                alt=""
-              />
-              <img
-                src={
-                  "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/jofofridingImage.svg"
-                }
-                alt=""
-              />
-            </div>
+  return (
+    <>
+      <>
+        <div className="mx-5">
+          {/*shipyaari icon */}
+          <div className="flex  justify-center p-3">
+            <img src={shipyaari} alt="Shipyaari" />
+          </div>
+          <div className="flex md:justify-center">
             <div>
-              <p className="font-Lato text-xl font-bold leading-[26px] my-6 ">
-                Social Campaigns
+              <div className="flex w-full md:w-[682px]">
+                <InputBox
+                  label="Enter tracking ID"
+                  value={trackingNo}
+                  containerStyle="!mt-1"
+                  onChange={(e) => setTrackingNo(e.target.value)}
+                />
+                <CustomButton
+                  text="Track Order"
+                  className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap mt-1"
+                  onClick={() => handleTrackOrderClick()}
+                />
+              </div>
+              <p className="text-[10px] py-2 font-Open font-bold">
+                For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
               </p>
+            </div>
+          </div>
 
-              <div className="flex gap-x-5 overflow-x-scroll ">
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
-                <img
-                  src={
-                    "https://sy-seller.s3.ap-south-1.amazonaws.com/assets/clientProductImage.svg"
-                  }
-                  alt=""
-                />
+          <div className=" flex flex-col justify-center md:flex-row md:justify-center gap-x-2">
+            {/*tracking ID Box */}
+            <div className="">
+              <div className="flex">
+                {loading ? (
+                  <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <Spinner />{" "}
+                  </div>
+                ) : (
+                  <div className="flex justify-center">
+                    <div className="">
+                      {trackingState?.map(
+                        (each: any, indexTracking: number) => {
+                          return (
+                            <div key={indexTracking}>
+                              <div className="border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4">
+                                <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
+                                  {/*delhivery details */}
+                                  <>
+                                    <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
+                                      <img
+                                        src={each?.logoUrl}
+                                        alt=""
+                                        className="w-20"
+                                      />
+
+                                      <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
+                                        <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
+                                          Last Update:
+                                          <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
+                                            <span>
+                                              {timeDetails.hours + " |"}
+                                            </span>
+                                            <span>
+                                              {timeDetails.date + " |"}
+                                            </span>
+                                            <span>
+                                              {timeDetails.day + " |"}
+                                            </span>
+                                            <span>{timeDetails.time}</span>
+                                          </div>
+                                        </p>
+                                        {/* commented as it required for now  */}
+                                        {/* <img
+                                      src={RefreshIcon}
+                                      className="w-4 mt-3 md:mt-0"
+                                    /> */}
+                                      </div>
+                                    </div>
+
+                                    <div className="flex justify-between pt-2">
+                                      <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
+                                        <p className="text-xs font-normal font-Open flex gap-x-1">
+                                          Tracking ID:
+                                          <span className="font-bold text-[#004EFF]">
+                                            {each.awb}
+                                          </span>
+                                          <img src={CopyIcon} />
+                                        </p>
+
+                                        <p className="text-xs font-normal font-Open flex gap-x-1">
+                                          Order ID:
+                                          <span className="font-bold text-[#004EFF]">
+                                            {each?.orderId}
+                                          </span>
+                                          <img src={CopyIcon} />
+                                        </p>
+                                        <p className="text-xs font-Open font-normal md:pt-2">
+                                          ETA:
+                                          <span className="font-bold">
+                                            {
+                                              each?.expectedDelivery
+                                                ?.currentDelivery
+                                            }
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-col md:flex-row">
+                                      <div className="max-w-[300px] mt-2 pr-4">
+                                        <p className="text-[14px] font-normal leading-[16px] ">
+                                          From:
+                                        </p>
+                                        <p className="text-[12px] font-normal leading-[16px] mt-1">
+                                          {each.pickupAddress.fullAddress}
+                                        </p>
+                                      </div>
+                                      <div className="max-w-[300] mt-2 pl-0 md:pl-4">
+                                        <p className="text-[14px] font-normal leading-[16px]">
+                                          To:
+                                        </p>
+                                        <p className="w-[290px] md:w-[300px] text-[12px] font-normal leading-[16px] mt-1">
+                                          {each.deliveryAddress.fullAddress}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    {each?.currentStatus === "CANCELLED" ? (
+                                      <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
+                                        <p>Cancelled Order</p>
+                                      </div>
+                                    ) : (
+                                      <></>
+                                    )}
+                                    <div
+                                      className={`mt-6 ${
+                                        each?.currentStatus === "CANCELLED"
+                                          ? "blur-sm"
+                                          : ""
+                                      }`}
+                                    >
+                                      <Stepper steps={tempSteps} />
+                                    </div>
+
+                                    {/*tracking details */}
+                                    <div className="py-3">
+                                      <hr />
+                                    </div>
+                                    {/*tracking cycle details*/}
+                                    <div
+                                      className="w-[280px] md:w-full flex justify-between cursor-pointer"
+                                      // onClick={() => setOpenTracking(!openTracking)}
+                                      onClick={() => toggleSection("tracking")}
+                                    >
+                                      <div className="flex gap-x-1 ">
+                                        <img src={TrackingMenu} alt="" />
+                                        <p className="text-sm font-Open font-semibold">
+                                          Tracking Cycle Details
+                                        </p>
+                                      </div>
+
+                                      {/* <img
+                                    src={
+                                      openSection === "tracking"
+                                        ? UpwardArrow
+                                        : DownwardArrow
+                                    }
+                                    alt=""
+                                  /> */}
+                                    </div>
+
+                                    <div
+                                      // className={`${
+                                      //   openSection === "tracking"
+                                      //     ? "max-h-[500px] overflow-y-scroll"
+                                      //     : ""
+                                      // }`}
+                                      className={`max-h-[200px] overflow-y-scroll`}
+                                    >
+                                      {temp}
+                                    </div>
+                                    <div className="py-3">
+                                      <hr />
+                                    </div>
+                                    <div
+                                      className="flex justify-between cursor-pointer w-[280px] md:w-full"
+                                      onClick={() => toggleSection("product")}
+                                    >
+                                      <div className="flex gap-x-1 ">
+                                        <img src={Product} alt="" />
+                                        <p className="text-sm font-Open font-semibold">
+                                          Order Details
+                                        </p>
+                                      </div>
+                                      {openSection === "product" ? (
+                                        <div className="flex gap-x-1 flex items-center">
+                                          {/* commented as not required */}
+                                          {/* <img src={GreenTick} />
+                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1 text-[#7CCA62]">
+                                        Verified
+                                      </p> */}
+
+                                          <img
+                                            src={
+                                              openSection === "product"
+                                                ? UpwardArrow
+                                                : DownwardArrow
+                                            }
+                                            alt=""
+                                          />
+                                        </div>
+                                      ) : (
+                                        <div className="flex gap-x-1 flex items-center">
+                                          {/* commented as not required */}
+                                          {/* <img src={Lock} />
+                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1 hidden md:block">
+                                        To see details please verify with OTP
+                                      </p> */}
+
+                                          <img
+                                            src={
+                                              openSection === "product"
+                                                ? UpwardArrow
+                                                : DownwardArrow
+                                            }
+                                            alt=""
+                                          />
+                                        </div>
+                                      )}
+                                    </div>
+                                    <div>
+                                      {openSection === "product" && (
+                                        <>
+                                          <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Buyer's Name
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {
+                                                  each?.pickupAddress?.contact
+                                                    ?.name
+                                                }
+                                              </p>
+                                            </div>
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Phone Number
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {
+                                                  each?.pickupAddress?.contact
+                                                    ?.mobileNo
+                                                }
+                                              </p>
+                                            </div>
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Invoice
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {each?.codInfo?.invoiceValue}
+                                              </p>
+                                            </div>
+                                            <div className="">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Payment Mode
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {each?.codInfo?.isCod ===
+                                                "false"
+                                                  ? "COD"
+                                                  : "Online"}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <div className="mt-2 ">
+                                            <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                              Address
+                                            </p>
+                                            <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
+                                              {each?.pickupAddress?.fullAddress}
+                                            </p>
+                                          </div>
+                                          <p className="mt-4 leading-4 font-normal text-[12px] font-medium">
+                                            Product Details
+                                          </p>
+
+                                          {each?.products?.map(
+                                            (each: any, index: number) => {
+                                              return <>{each?.breadth}</>;
+                                            }
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                    <div
+                                      className={
+                                        openSection === "product"
+                                          ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
+                                          : "grid grid-cols-2 "
+                                      }
+                                    >
+                                      {/*mapping product details */}
+
+                                      {openSection === "product" &&
+                                        each?.boxInfo[0]?.products?.map(
+                                          (each: any, index: number) => {
+                                            return (
+                                              <>
+                                                <div
+                                                  key={index}
+                                                  className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
+                                                >
+                                                  <img
+                                                    src={each?.galleryImage}
+                                                    alt=""
+                                                  />
+                                                  <div>
+                                                    <p className="text-sm font-Open font-semibold">
+                                                      {each?.name}
+                                                    </p>
+                                                    <p className="text-sm font-Open font-normal">
+                                                      ₹ {each?.unitPrice}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </>
+                                            );
+                                          }
+                                        )}
+                                    </div>
+                                  </>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className="pt-12">
-          <div className="flex justify-evenly lg:gap-x-96 xl:justify-center xl:gap-x-[306px]">
-            <div className="flex gap-x-2">
-              <img src={telephoneIcon} alt="" />
-              <p className="text-base font-semibold font-Open whitespace-nowrap">
-                Call at 9989245464, if have some issue
-              </p>
-            </div>
-            <div className="flex gap-x-4">
-              <p className="text-[#004EFF] text-lg font-semibold">
-                Follow us on{" "}
-              </p>
-              <img src={instagramIcon} alt="" />
-              <img src={facebook} alt="" />
-            </div>
-          </div>
-        </div>
-      </div>
+      </>
     </>
   );
 };
+
 export default Tracking;

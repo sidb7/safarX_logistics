@@ -4,7 +4,7 @@ import UpArrowIcon from "../../../assets/Filter/upArrow.svg";
 import RupeeIcon from "../../../assets/common/Rupee.svg";
 
 import sortIconTable from "../../../assets/Transaction/sortIcon.svg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Collapsible from "react-collapsible";
 
 import { createColumnHelper } from "@tanstack/react-table";
@@ -15,6 +15,7 @@ import {
 import bookedIcon from "../../../assets/Transaction/bookedIcon.svg";
 import cancelledicon from "../../../assets/Transaction/cancelledIcon.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
+import PendingIcon from "../../../assets/pendingRed.svg";
 
 interface IPassbookProps {
   data: {
@@ -40,22 +41,41 @@ interface IPassbookProps {
 
 const columnsHelper = createColumnHelper<any>();
 
+const PartialChecked = ({ checked, onChange, intermediate }: any) => {
+  const ref: any = useRef(null);
+  useEffect(() => {
+    if (typeof intermediate === "boolean") {
+      ref.current.indeterminate = intermediate;
+    }
+  }, [ref, intermediate]);
+  return (
+    <input
+      type="checkbox"
+      className="mr-3 cursor-pointer"
+      ref={ref}
+      checked={checked}
+      onChange={onChange}
+    />
+  );
+};
+
 export const PassbookColumns = (setSortOrder: any) => {
   const renderStatusComponent = (status: string) => {
     return (
       <div>
         <div
-          className={`inline-flex justify-center gap-x-1 ${
-            status.toUpperCase() === "SUCCESS" ? "bg-[#F2FAEF]" : "bg-[#FEEEEB]"
-          }  rounded-sm border-[0.5px]${
-            status === "SUCCESS" ? " border-[#7CCA62]" : "border-[#F35838]"
-          } px-3 py-[6px]`}
+          className={`inline-flex items-center justify-center gap-x-2 ${
+            status.toUpperCase() === "SUCCESS"
+              ? "bg-[#F2FAEF] border-[#7CCA62]"
+              : "bg-[#FEEEEB] border-[#F35838]"
+          }  rounded-sm border-[0.5px] px-3 py-[6px]`}
         >
           <img
             src={`${
-              status.toUpperCase() === "SUCCESS" ? bookedIcon : cancelledicon
+              status.toUpperCase() === "SUCCESS" ? bookedIcon : PendingIcon
             }`}
             alt=""
+            width={20}
           />
           <span
             className={`text-xs font-semibold ${
@@ -100,10 +120,15 @@ export const PassbookColumns = (setSortOrder: any) => {
 
   return [
     columnsHelper.accessor("createdAt", {
-      header: () => {
+      header: (props) => {
         return (
           <div className="flex justify-between items-center">
-            <div>
+            <div className="flex justify-center items-center">
+              {/* <PartialChecked
+                checked={props.table?.getIsAllRowsSelected()}
+                onChange={props?.table?.getToggleAllRowsSelectedHandler()}
+                intermediate={props?.table?.getIsSomeRowsSelected()}
+              /> */}
               <h1 className="text-sm font-semibold leading-5">Date</h1>
             </div>
             <div className="flex">
@@ -116,8 +141,18 @@ export const PassbookColumns = (setSortOrder: any) => {
         const formattedDateTime = date_DD_MMM_YYYY_HH_MM(info.getValue());
 
         return (
-          <div className="whitespace-nowrap my-4 space-y-2">
-            {formattedDateTime}
+          <div className="flex items-center">
+            {/* <div className="flex items-center justify-center mr-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={info?.row?.getIsSelected()}
+                onChange={info?.row?.getToggleSelectedHandler()}
+              />
+            </div> */}
+            <div className="flex flex-col  whitespace-nowrap my-4 ">
+              <span>{formattedDateTime.split(",")[0]}</span>
+              <span>{formattedDateTime.split(",")[1]}</span>
+            </div>
           </div>
         );
       },
@@ -125,7 +160,7 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("transactionId", {
       header: () => {
         return (
-          <div className="flex whitespace-nowrap justify-between items-center ">
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px]">
             <h1 className="text-sm font-semibold leading-5 ">Transaction ID</h1>
             {/* <img src={sortIconTable} alt="" /> */}
           </div>
@@ -133,8 +168,77 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex  whitespace-nowrap">
-            {info.row.original.transactionId}
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis ">
+              {info.row.original.transactionId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`${info.row.original.transactionId}
+               `}
+              />
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("shipyaari_id", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center ">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">Shipyaari ID</h1>
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            {info.row.original?.tempOrderId}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("orderId", {
+      header: () => {
+        return (
+          <div className="flex whitespace-nowrap justify-between items-center w-[90px]">
+            <h1 className="text-sm font-semibold leading-5 ">Order ID</h1>
+            {/* <img src={sortIconTable} alt="" /> */}
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex  items-center justify-between ">
+            <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis ">
+              {info.row.original.orderId}
+            </div>
+            <div className="cursor-pointer">
+              <CopyTooltip
+                stringToBeCopied={`${info.row.original.orderId}
+               `}
+              />
+            </div>
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("tracking_no", {
+      header: () => {
+        return (
+          <div className="flex justify-between items-center ">
+            <div>
+              <h1 className="text-sm font-semibold leading-5 ">Tracking No</h1>
+            </div>
+          </div>
+        );
+      },
+      cell: (info: any) => {
+        return (
+          <div className="flex whitespace-nowrap ">
+            {info.row.original.boxInfo?.tracking?.awb}
           </div>
         );
       },
@@ -210,9 +314,9 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div>
               <h1 className="text-sm font-semibold leading-5">Status</h1>
             </div>
-            <div className="flex">
+            {/* <div className="flex">
               <img src={sortIconTable} alt="" />
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -228,9 +332,9 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div>
               <h1 className="text-sm font-semibold leading-5">Description</h1>
             </div>
-            <div className="flex">
+            {/* <div className="flex">
               <img src={sortIconTable} alt="" />
-            </div>
+            </div> */}
           </div>
         );
       },
@@ -255,7 +359,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex  items-center">
+          <div className="flex  items-center justify-center">
             <div className="cursor-pointer">
               <CopyTooltip
                 stringToBeCopied={`

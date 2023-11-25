@@ -135,7 +135,7 @@ export const loadPhonePeTransaction = async (
       paymentGateway: "PHONEPE",
     };
     const { data } = await POST(INITIAL_RECHARGE, payload);
-   
+
     let phonePayTransactionPage;
     if (!data) {
       phonePayTransactionPage = redirectUrl;
@@ -159,7 +159,8 @@ export const loadRazorPayTransaction = async (
   amount: number,
   companyName: string,
   userName: string,
-  email: string
+  email: string,
+  redirectUrl?: any
 ) => {
   try {
     let key = "rzp_test_03BJrYhr9s8YHM";
@@ -167,7 +168,7 @@ export const loadRazorPayTransaction = async (
     const payload = {
       paymentObject: {
         amount: (amount * 100).toString(),
-        callbackUrl: `${SELLER_WEB_URL}/dashboard/overview`,
+        callbackUrl: redirectUrl,
       },
       paymentGateway: "RAZORPE",
     };
@@ -203,7 +204,7 @@ export const loadRazorPayTransaction = async (
           paymentGateway: "RAZORPE",
         };
         await POST(RECHARGE_STATUS, body);
-        window.location.reload();
+        window.location.href = redirectUrl;
       },
       prefill: {
         name: userName,

@@ -32,7 +32,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
             onClick={() => setValue(index)}
           >
             <span
-              className={`text-[#777777] text-[18px] font-Lato font-semibold  ${
+              className={`text-[#777777] font-Open text-sm leading-[18px] font-semibold lg:text-[18px] lg:font-Lato lg:leading-6 ${
                 selectedId === index ? "!text-[#004EFF] " : ""
               }`}
             >

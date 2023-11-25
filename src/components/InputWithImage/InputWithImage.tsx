@@ -43,30 +43,39 @@ const InputWithImage = (props: IInputProps) => {
   const caretColor = value ? "text-[#1C1C1C]" : "transparent";
 
   return (
-    <div
-      className={`${inputClassName} relative flex items-center justify-center `}
-    >
-      {imgSrc && (
-        <img
-          src={imgSrc ? imgSrc : dummyImage}
-          alt=""
-          className="absolute z-2 left-[18px]"
-        />
-      )}
+    <>
+      <div
+        className={`${inputClassName} relative flex items-center justify-center `}
+      >
+        {imgSrc && (
+          <img
+            src={imgSrc ? imgSrc : dummyImage}
+            alt=""
+            className="absolute z-2 left-[18px]"
+          />
+        )}
 
-      <input
-        placeholder={placeholder}
-        type="text"
-        className={`rounded border-[1px]  ${
-          inputError && !value ? "!border-red-500" : "border-[#A4A4A4]"
-        } placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
-        required={isRequired}
-        onChange={onChange}
-        onClick={onClick}
-        value={value}
-        style={{ caretColor }}
-      />
-    </div>
+        <input
+          placeholder={placeholder}
+          type="text"
+          className={`rounded border-[1px]  ${
+            inputError && !value ? "!border-red-500" : "border-[#A4A4A4]"
+          } placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
+          required={isRequired}
+          onChange={onChange}
+          onClick={onClick}
+          value={value}
+          style={{ caretColor }}
+        />
+      </div>
+      {inputError && !value && (
+        <span
+          className={`text-[red] transition-all ease-out h-0  h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
+        >
+          Field is required
+        </span>
+      )}
+    </>
   );
 };
 

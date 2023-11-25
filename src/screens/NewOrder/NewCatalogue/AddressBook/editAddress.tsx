@@ -147,7 +147,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     <div className="h-full">
       <Breadcrum label="Edit Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
-        <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
           <CustomInputBox
             label="Address Name"
             value={updateAddress.addressType}

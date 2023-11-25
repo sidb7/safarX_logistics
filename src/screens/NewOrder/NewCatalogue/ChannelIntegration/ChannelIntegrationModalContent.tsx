@@ -10,6 +10,7 @@ import {
   POST_CREATE_STORE,
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_SINGLE_STORE,
+  CREATE_ZOHO_STORE,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
@@ -46,8 +47,13 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     storeToken: "",
     storeLogo: "",
     channelName: "",
+    clientId: "",
+    clientSecret: "",
+    code: "",
+    organizationId: "",
+    domain: "",
   });
-  const [channel, setChannel] = useState(modalData.modalData.channel);
+  const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
 
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -101,6 +107,14 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             window.location.href = error?.config?.url;
           }
           return;
+        } else if (channel === "ZOHO") {
+          const { data } = await POST(CREATE_ZOHO_STORE, storeData);
+          if (data?.success) {
+            toast.success(data?.message);
+            window.location.reload();
+          } else {
+            toast.error(data?.message);
+          }
         }
         setModalData({ isOpen: false });
       } else {
@@ -115,6 +129,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             iconLg: ShopifyLg,
             integrated: true,
             storeId,
+            channel: "",
           },
         ];
         let tempArr = [...channelData.channels];
@@ -130,18 +145,14 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   const channelArr = [
     {
-      label: "Shopify",
-      value: "SHOPIFY",
+      label: "Zoho.com",
+      value: ".com",
     },
     {
-      label: "WooCommerce",
-      value: "WOOCOMMERCE",
+      label: "Zoho.in",
+      value: ".in",
     },
   ];
-
-  const handleChannel = (channelName: string) => {
-    setChannel(channelName);
-  };
 
   useEffect(() => {
     (async () => {
@@ -169,14 +180,16 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       storeData.storeUrl !== ""
     ) {
       setIsDisabled(false);
+    } else if (channel === "ZOHO") {
+      setIsDisabled(false);
     } else setIsDisabled(true);
   }, [storeData]);
 
   return (
     <>
-      <div className="text-[24px] justify-between flex m-5 items-center">
+      <div className="text-[20px] lg:text-[24px] justify-between flex m-5 items-center">
         <p className="flex gap-x-5 items-center">
-          <img src={TaskSquare} width="30px" />
+          <img src={TaskSquare} width="25px" />
           <span>
             {!isUpdateModal
               ? `Create ${capitalizeFirstLetter(channel)} Store`
@@ -186,7 +199,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         <img
           className="cursor-pointer"
           src={CloseIcon}
-          width="30px"
+          width="25px"
           onClick={() => setModalData({ ...modalData, isOpen: false })}
         />
       </div>
@@ -211,7 +224,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             />
             <CustomInputBox
               className="removePaddingPlaceHolder"
-              placeholder="Store Url - 7fd4c3"
+              placeholder="Store Url - Storename"
               isRequired={true}
               value={storeData.storeUrl}
               onChange={(e) =>
@@ -219,7 +232,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               }
             />
             <p className="text-[15px]">
-              Example : https://<strong>7fd4c3</strong>.myshopify.com/{" "}
+              Example : https://<strong>storename</strong>.myshopify.com/{" "}
             </p>
             <CustomInputBox
               className="removePaddingPlaceHolder"
@@ -260,6 +273,53 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               }
             />
           </div>
+        ) : channel === "ZOHO" ? (
+          <div className="grid gap-y-3">
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Client ID"
+              isRequired={true}
+              value={storeData.clientId}
+              onChange={(e) =>
+                setStoreData({ ...storeData, clientId: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Client Secret"
+              isRequired={true}
+              value={storeData.clientSecret}
+              onChange={(e) =>
+                setStoreData({ ...storeData, clientSecret: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Code"
+              isRequired={true}
+              value={storeData.code}
+              onChange={(e) =>
+                setStoreData({ ...storeData, code: e.target.value })
+              }
+            />
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              placeholder="Organization Id"
+              isRequired={true}
+              value={storeData.organizationId}
+              onChange={(e) =>
+                setStoreData({ ...storeData, organizationId: e.target.value })
+              }
+            />
+            <CustomDropDown
+              onChange={(e) => {
+                console.log("e.target.value : ", e.target.value);
+                setStoreData({ ...storeData, domain: e.target.value });
+              }}
+              options={channelArr}
+              heading="Zoho Domain"
+            />
+          </div>
         ) : null}
       </div>
       <div
@@ -270,7 +330,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           disabled={isDisabled}
           onClick={addStore}
           text={!isUpdateModal ? "Add New Channel" : "Update Channel"}
-          className={`bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+          className={`bg-[#1C1C1C] cursor-pointer text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 w-[10rem] disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
     </>
