@@ -37,9 +37,10 @@ const Tracking = () => {
   // console.log("trackingNo", trackingNo);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
+
   const { isLgScreen } = ResponsiveState();
 
-  // console.log("trackingDetails", trackingDetails);
+  console.log("trackingDetails", trackingDetails);
 
   const [cancelled, setCancelled] = useState<any>(false);
   const [timeDetails, setTimeDetails] = useState<any>({
@@ -286,6 +287,27 @@ const Tracking = () => {
           <div className="flex  justify-center p-3">
             <img src={shipyaari} alt="Shipyaari" />
           </div>
+          <div className="flex md:justify-center">
+            <div>
+              <div className="flex w-full md:w-[682px]">
+                <InputBox
+                  label="Enter tracking ID"
+                  value={trackingNo}
+                  containerStyle="!mt-1"
+                  onChange={(e) => setTrackingNo(e.target.value)}
+                />
+                <CustomButton
+                  text="Track Order"
+                  className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap mt-1"
+                  onClick={() => handleTrackOrderClick()}
+                />
+              </div>
+              <p className="text-[10px] py-2 font-Open font-bold">
+                For multiple ID, type GYSH23678119, GYSH23678119, GYSH23678119
+              </p>
+            </div>
+          </div>
+
           <div className=" flex flex-col justify-center md:flex-row md:justify-center gap-x-2">
             {/*tracking ID Box */}
             <div className="">
@@ -295,142 +317,128 @@ const Tracking = () => {
                     <Spinner />{" "}
                   </div>
                 ) : (
-                  <div className=" ">
-                    <div
-                      className={`flex items-center gap-x-5 w-full  ${
-                        isLgScreen ? "lg:w-[800px]" : ""
-                      }`}
-                    >
-                      <InputBox
-                        label="Enter tracking ID"
-                        value={trackingNo}
-                        containerStyle="!mt-1"
-                        onChange={(e) => setTrackingNo(e.target.value)}
-                      />
-                      <CustomButton
-                        text="Track Order"
-                        className="!ml-2 !w-1/2 md:!w-1/4 text-[15px] md:text-[18px] py-6 whitespace-nowrap"
-                        onClick={() => handleTrackOrderClick()}
-                      />
-                    </div>
+                  <div className="flex justify-center">
+                    <div className="">
+                      {trackingState?.map(
+                        (each: any, indexTracking: number) => {
+                          return (
+                            <div key={indexTracking}>
+                              <div className="border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4">
+                                <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
+                                  {/*delhivery details */}
+                                  <>
+                                    <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
+                                      <img
+                                        src={each?.logoUrl}
+                                        alt=""
+                                        className="w-20"
+                                      />
 
-                    <p className="text-[10px] py-2 font-Open font-bold">
-                      For multiple ID, type GYSH23678119, GYSH23678119,
-                      GYSH23678119
-                    </p>
-                    {trackingState?.map((each: any, indexTracking: number) => {
-                      return (
-                        <div key={indexTracking}>
-                          <div className=" border-[0.5px] border-[#A4A4A4] rounded-lg  mt-4">
-                            <div className="border-l-[12px] md:border-l-[24px]  border-l-[#80A7FF] py-4 px-2 md:px-5 rounded-lg">
-                              {/*delhivery details */}
-                              <>
-                                <div className="flex flex-col md:flex-row justify-between gap-y-1 md:gap-y-0">
-                                  <img
-                                    src={each?.logoUrl}
-                                    alt=""
-                                    className="w-20"
-                                  />
-
-                                  <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
-                                    <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
-                                      Last Update:
-                                      <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
-                                        <span>{timeDetails.hours + " |"}</span>
-                                        <span>{timeDetails.date + " |"}</span>
-                                        <span>{timeDetails.day + " |"}</span>
-                                        <span>{timeDetails.time}</span>
-                                      </div>
-                                    </p>
-                                    {/* commented as it required for now  */}
-                                    {/* <img
+                                      <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
+                                        <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex md:items-center">
+                                          Last Update:
+                                          <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap flex items-center">
+                                            <span>
+                                              {timeDetails.hours + " |"}
+                                            </span>
+                                            <span>
+                                              {timeDetails.date + " |"}
+                                            </span>
+                                            <span>
+                                              {timeDetails.day + " |"}
+                                            </span>
+                                            <span>{timeDetails.time}</span>
+                                          </div>
+                                        </p>
+                                        {/* commented as it required for now  */}
+                                        {/* <img
                                       src={RefreshIcon}
                                       className="w-4 mt-3 md:mt-0"
                                     /> */}
-                                  </div>
-                                </div>
+                                      </div>
+                                    </div>
 
-                                <div className="flex justify-between pt-2">
-                                  <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
-                                    <p className="text-xs font-normal font-Open flex gap-x-1">
-                                      Tracking ID:
-                                      <span className="font-bold text-[#004EFF]">
-                                        {each.awb}
-                                      </span>
-                                      <img src={CopyIcon} />
-                                    </p>
+                                    <div className="flex justify-between pt-2">
+                                      <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
+                                        <p className="text-xs font-normal font-Open flex gap-x-1">
+                                          Tracking ID:
+                                          <span className="font-bold text-[#004EFF]">
+                                            {each.awb}
+                                          </span>
+                                          <img src={CopyIcon} />
+                                        </p>
 
-                                    <p className="text-xs font-normal font-Open flex gap-x-1">
-                                      Order ID:
-                                      <span className="font-bold text-[#004EFF]">
-                                        {each?.orderId}
-                                      </span>
-                                      <img src={CopyIcon} />
-                                    </p>
-                                    <p className="text-xs font-Open font-normal md:pt-2">
-                                      ETA:
-                                      <span className="font-bold">
-                                        {
-                                          each?.expectedDelivery
-                                            ?.currentDelivery
-                                        }
-                                      </span>
-                                    </p>
-                                  </div>
-                                </div>
-                                <div className="flex flex-col md:flex-row">
-                                  <div className="max-w-[300px] mt-2 pr-4">
-                                    <p className="text-[14px] font-normal leading-[16px] ">
-                                      From:
-                                    </p>
-                                    <p className="text-[12px] font-normal leading-[16px] mt-1">
-                                      {each.pickupAddress.fullAddress}
-                                    </p>
-                                  </div>
-                                  <div className="max-w-[300] mt-2 pl-0 md:pl-4">
-                                    <p className="text-[14px] font-normal leading-[16px]">
-                                      To:
-                                    </p>
-                                    <p className="w-[290px] md:w-[300px] text-[12px] font-normal leading-[16px] mt-1">
-                                      {each.deliveryAddress.fullAddress}
-                                    </p>
-                                  </div>
-                                </div>
-                                {each?.currentStatus === "CANCELLED" ? (
-                                  <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
-                                    <p>Cancelled Order</p>
-                                  </div>
-                                ) : (
-                                  <></>
-                                )}
-                                <div
-                                  className={`mt-6 ${
-                                    each?.currentStatus === "CANCELLED"
-                                      ? "blur-sm"
-                                      : ""
-                                  }`}
-                                >
-                                  <Stepper steps={tempSteps} />
-                                </div>
+                                        <p className="text-xs font-normal font-Open flex gap-x-1">
+                                          Order ID:
+                                          <span className="font-bold text-[#004EFF]">
+                                            {each?.orderId}
+                                          </span>
+                                          <img src={CopyIcon} />
+                                        </p>
+                                        <p className="text-xs font-Open font-normal md:pt-2">
+                                          ETA:
+                                          <span className="font-bold">
+                                            {
+                                              each?.expectedDelivery
+                                                ?.currentDelivery
+                                            }
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </div>
+                                    <div className="flex flex-col md:flex-row">
+                                      <div className="max-w-[300px] mt-2 pr-4">
+                                        <p className="text-[14px] font-normal leading-[16px] ">
+                                          From:
+                                        </p>
+                                        <p className="text-[12px] font-normal leading-[16px] mt-1">
+                                          {each.pickupAddress.fullAddress}
+                                        </p>
+                                      </div>
+                                      <div className="max-w-[300] mt-2 pl-0 md:pl-4">
+                                        <p className="text-[14px] font-normal leading-[16px]">
+                                          To:
+                                        </p>
+                                        <p className="w-[290px] md:w-[300px] text-[12px] font-normal leading-[16px] mt-1">
+                                          {each.deliveryAddress.fullAddress}
+                                        </p>
+                                      </div>
+                                    </div>
+                                    {each?.currentStatus === "CANCELLED" ? (
+                                      <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
+                                        <p>Cancelled Order</p>
+                                      </div>
+                                    ) : (
+                                      <></>
+                                    )}
+                                    <div
+                                      className={`mt-6 ${
+                                        each?.currentStatus === "CANCELLED"
+                                          ? "blur-sm"
+                                          : ""
+                                      }`}
+                                    >
+                                      <Stepper steps={tempSteps} />
+                                    </div>
 
-                                {/*tracking details */}
-                                <div className="py-3">
-                                  <hr />
-                                </div>
-                                {/*tracking cycle details*/}
-                                <div
-                                  className="w-[280px] md:w-full flex justify-between cursor-pointer"
-                                  // onClick={() => setOpenTracking(!openTracking)}
-                                  onClick={() => toggleSection("tracking")}
-                                >
-                                  <div className="flex gap-x-1 ">
-                                    <img src={TrackingMenu} alt="" />
-                                    <p className="text-sm font-Open font-semibold">
-                                      Tracking Cycle Details
-                                    </p>
-                                  </div>
+                                    {/*tracking details */}
+                                    <div className="py-3">
+                                      <hr />
+                                    </div>
+                                    {/*tracking cycle details*/}
+                                    <div
+                                      className="w-[280px] md:w-full flex justify-between cursor-pointer"
+                                      // onClick={() => setOpenTracking(!openTracking)}
+                                      onClick={() => toggleSection("tracking")}
+                                    >
+                                      <div className="flex gap-x-1 ">
+                                        <img src={TrackingMenu} alt="" />
+                                        <p className="text-sm font-Open font-semibold">
+                                          Tracking Cycle Details
+                                        </p>
+                                      </div>
 
-                                  {/* <img
+                                      {/* <img
                                     src={
                                       openSection === "tracking"
                                         ? UpwardArrow
@@ -438,171 +446,177 @@ const Tracking = () => {
                                     }
                                     alt=""
                                   /> */}
-                                </div>
+                                    </div>
 
-                                <div
-                                  // className={`${
-                                  //   openSection === "tracking"
-                                  //     ? "max-h-[500px] overflow-y-scroll"
-                                  //     : ""
-                                  // }`}
-                                  className={`max-h-[200px] overflow-y-scroll`}
-                                >
-                                  {temp}
-                                </div>
-                                <div className="py-3">
-                                  <hr />
-                                </div>
-                                <div
-                                  className="flex justify-between cursor-pointer w-[280px] md:w-full"
-                                  onClick={() => toggleSection("product")}
-                                >
-                                  <div className="flex gap-x-1 ">
-                                    <img src={Product} alt="" />
-                                    <p className="text-sm font-Open font-semibold">
-                                      Order Details
-                                    </p>
-                                  </div>
-                                  {openSection === "product" ? (
-                                    <div className="flex gap-x-1 flex items-center">
-                                      {/* commented as not required */}
-                                      {/* <img src={GreenTick} />
+                                    <div
+                                      // className={`${
+                                      //   openSection === "tracking"
+                                      //     ? "max-h-[500px] overflow-y-scroll"
+                                      //     : ""
+                                      // }`}
+                                      className={`max-h-[200px] overflow-y-scroll`}
+                                    >
+                                      {temp}
+                                    </div>
+                                    <div className="py-3">
+                                      <hr />
+                                    </div>
+                                    <div
+                                      className="flex justify-between cursor-pointer w-[280px] md:w-full"
+                                      onClick={() => toggleSection("product")}
+                                    >
+                                      <div className="flex gap-x-1 ">
+                                        <img src={Product} alt="" />
+                                        <p className="text-sm font-Open font-semibold">
+                                          Order Details
+                                        </p>
+                                      </div>
+                                      {openSection === "product" ? (
+                                        <div className="flex gap-x-1 flex items-center">
+                                          {/* commented as not required */}
+                                          {/* <img src={GreenTick} />
                                       <p className="text-[12px] font-normal whitespace-nowrap mt-1 text-[#7CCA62]">
                                         Verified
                                       </p> */}
 
-                                      <img
-                                        src={
-                                          openSection === "product"
-                                            ? UpwardArrow
-                                            : DownwardArrow
-                                        }
-                                        alt=""
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div className="flex gap-x-1 flex items-center">
-                                      {/* commented as not required */}
-                                      {/* <img src={Lock} />
+                                          <img
+                                            src={
+                                              openSection === "product"
+                                                ? UpwardArrow
+                                                : DownwardArrow
+                                            }
+                                            alt=""
+                                          />
+                                        </div>
+                                      ) : (
+                                        <div className="flex gap-x-1 flex items-center">
+                                          {/* commented as not required */}
+                                          {/* <img src={Lock} />
                                       <p className="text-[12px] font-normal whitespace-nowrap mt-1 hidden md:block">
                                         To see details please verify with OTP
                                       </p> */}
 
-                                      <img
-                                        src={
-                                          openSection === "product"
-                                            ? UpwardArrow
-                                            : DownwardArrow
-                                        }
-                                        alt=""
-                                      />
-                                    </div>
-                                  )}
-                                </div>
-                                <div>
-                                  {openSection === "product" && (
-                                    <>
-                                      <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
-                                        <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                          <p className="text-[#777777] text-[12px] font-normal leading-5">
-                                            Buyer's Name
-                                          </p>
-                                          <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                            {each?.pickupAddress?.contact?.name}
-                                          </p>
-                                        </div>
-                                        <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                          <p className="text-[#777777] text-[12px] font-normal leading-5">
-                                            Phone Number
-                                          </p>
-                                          <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                            {
-                                              each?.pickupAddress?.contact
-                                                ?.mobileNo
+                                          <img
+                                            src={
+                                              openSection === "product"
+                                                ? UpwardArrow
+                                                : DownwardArrow
                                             }
-                                          </p>
+                                            alt=""
+                                          />
                                         </div>
-                                        <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                          <p className="text-[#777777] text-[12px] font-normal leading-5">
-                                            Invoice
-                                          </p>
-                                          <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                            {each?.codInfo?.invoiceValue}
-                                          </p>
-                                        </div>
-                                        <div className="">
-                                          <p className="text-[#777777] text-[12px] font-normal leading-5">
-                                            Payment Mode
-                                          </p>
-                                          <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                            {each?.codInfo?.isCod === "false"
-                                              ? "COD"
-                                              : "Online"}
-                                          </p>
-                                        </div>
-                                      </div>
-                                      <div className="mt-2 ">
-                                        <p className="text-[#777777] text-[12px] font-normal leading-5">
-                                          Address
-                                        </p>
-                                        <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
-                                          {each?.pickupAddress?.fullAddress}
-                                        </p>
-                                      </div>
-                                      <p className="mt-4 leading-4 font-normal text-[12px] font-medium">
-                                        Product Details
-                                      </p>
-
-                                      {each?.products?.map(
-                                        (each: any, index: number) => {
-                                          return <>{each?.breadth}</>;
-                                        }
                                       )}
-                                    </>
-                                  )}
-                                </div>
-                                <div
-                                  className={
-                                    openSection === "product"
-                                      ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
-                                      : "grid grid-cols-2 "
-                                  }
-                                >
-                                  {/*mapping product details */}
-
-                                  {openSection === "product" &&
-                                    each?.boxInfo[0]?.products?.map(
-                                      (each: any, index: number) => {
-                                        return (
-                                          <>
-                                            <div
-                                              key={index}
-                                              className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
-                                            >
-                                              <img
-                                                src={each?.galleryImage}
-                                                alt=""
-                                              />
-                                              <div>
-                                                <p className="text-sm font-Open font-semibold">
-                                                  {each?.name}
-                                                </p>
-                                                <p className="text-sm font-Open font-normal">
-                                                  ₹ {each?.unitPrice}
-                                                </p>
-                                              </div>
+                                    </div>
+                                    <div>
+                                      {openSection === "product" && (
+                                        <>
+                                          <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Buyer's Name
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {
+                                                  each?.pickupAddress?.contact
+                                                    ?.name
+                                                }
+                                              </p>
                                             </div>
-                                          </>
-                                        );
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Phone Number
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {
+                                                  each?.pickupAddress?.contact
+                                                    ?.mobileNo
+                                                }
+                                              </p>
+                                            </div>
+                                            <div className="border-r-2 border-[#D9DBDD] pr-6">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Invoice
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {each?.codInfo?.invoiceValue}
+                                              </p>
+                                            </div>
+                                            <div className="">
+                                              <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                Payment Mode
+                                              </p>
+                                              <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                {each?.codInfo?.isCod ===
+                                                "false"
+                                                  ? "COD"
+                                                  : "Online"}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <div className="mt-2 ">
+                                            <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                              Address
+                                            </p>
+                                            <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
+                                              {each?.pickupAddress?.fullAddress}
+                                            </p>
+                                          </div>
+                                          <p className="mt-4 leading-4 font-normal text-[12px] font-medium">
+                                            Product Details
+                                          </p>
+
+                                          {each?.products?.map(
+                                            (each: any, index: number) => {
+                                              return <>{each?.breadth}</>;
+                                            }
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                    <div
+                                      className={
+                                        openSection === "product"
+                                          ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
+                                          : "grid grid-cols-2 "
                                       }
-                                    )}
+                                    >
+                                      {/*mapping product details */}
+
+                                      {openSection === "product" &&
+                                        each?.boxInfo[0]?.products?.map(
+                                          (each: any, index: number) => {
+                                            return (
+                                              <>
+                                                <div
+                                                  key={index}
+                                                  className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
+                                                >
+                                                  <img
+                                                    src={each?.galleryImage}
+                                                    alt=""
+                                                  />
+                                                  <div>
+                                                    <p className="text-sm font-Open font-semibold">
+                                                      {each?.name}
+                                                    </p>
+                                                    <p className="text-sm font-Open font-normal">
+                                                      ₹ {each?.unitPrice}
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </>
+                                            );
+                                          }
+                                        )}
+                                    </div>
+                                  </>
                                 </div>
-                              </>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      );
-                    })}
+                          );
+                        }
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
