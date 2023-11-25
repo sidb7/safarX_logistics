@@ -201,7 +201,7 @@ const Index = () => {
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
-  const [tabStatusId, setTabStatusId] = useState();
+  const [tabStatusId, setTabStatusId] = useState(null);
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
