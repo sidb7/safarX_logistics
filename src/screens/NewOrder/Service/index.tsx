@@ -334,6 +334,7 @@ const Index: React.FC = () => {
       imgSrc: TickLogo,
     },
   ];
+  console.log("services");
 
   useEffect(() => {
     const filters = serviceOptions?.filter((service: any) => {
