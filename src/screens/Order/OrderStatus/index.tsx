@@ -37,6 +37,8 @@ interface IOrderstatusProps {
   allOrders: any;
   selectedRowdata?: any;
   setDeleteModalDraftOrder?: any;
+  setCancellationModal?: any;
+  tabStatusId?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -69,6 +71,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   selectedRowdata,
   setDeleteModalDraftOrder,
+  setCancellationModal,
+  tabStatusId,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -83,6 +87,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [manifestModal, setManifestModal]: any = useState({
     isOpen: false,
   });
+
+  useEffect(() => {
+    setStatusId(tabStatusId || statusId);
+  }, [tabStatusId]);
 
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false, value: "all" },
@@ -153,22 +161,28 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const handleActions = (actionName: any, selectedRowdata: any) => {
-    const tempOrderIds = selectedRowdata.map(
-      (data: any, index: any) => data.original.tempOrderId
-    );
-
-    let payload = {
-      tempOrderIdArray: tempOrderIds,
-    };
-
     switch (actionName) {
       case "DRAFT": {
+        const tempOrderIds = selectedRowdata.map(
+          (data: any, index: any) => data.original.tempOrderId
+        );
+
+        let payload = {
+          tempOrderIdArray: tempOrderIds,
+        };
+
         setDeleteModalDraftOrder &&
           setDeleteModalDraftOrder({ isOpen: true, payload });
         break;
       }
       case "BOOKED": {
-        setManifestModal({ ...manifestModal, isOpen: true });
+        const awbNo = selectedRowdata.map((data: any, index: any) => {
+          return data.original.awb;
+        });
+
+        setCancellationModal &&
+          setCancellationModal({ isOpen: true, payload: awbNo });
+
         break;
       }
     }
@@ -327,15 +341,15 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               customPlaceholder="Search By Order Id, AWB"
             />
           </div>
-          <div
+          {/* <div
             className="flex justify-between items-center p-2 gap-x-2"
             onClick={() => setFilterModal(true)}
           >
             <img src={FilterIcon} alt="" />
-            <span className="text-[#004EFF] text-[14px] font-semibold">
+            <span className="text-[#004EFF] cursor-pointer text-[14px] font-semibold">
               FILTER
             </span>
-          </div>
+          </div> */}
         </div>
       );
     } else {

@@ -17,6 +17,7 @@ import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
 import {
+  CANCEL_MULTIPLE_WAYBILLS,
   CANCEL_TEMP_SELLER_ORDER,
   CANCEL_WAY_BILL,
   FETCH_ALL_PARTNER,
@@ -26,33 +27,6 @@ import {
   POST_SERVICEABILITY,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
-
-import trackingIcon from "../../assets/trackingShipyaariIcon.jpg";
-import trackingIcon2 from "../../assets/trackingShipyaari2.svg";
-import instagramIcon from "../../assets/instagramIcon.svg";
-import facebook from "../../assets/facebookIcon.svg";
-import Star from "../../assets/Comments.svg";
-import bookedIcon from "../../assets/Transaction/bookedIcon.svg";
-import DelhiveryIcon from "../../assets/Delhivery_Logo_(2019) 2.svg";
-import telephoneIcon from "../../assets/telephoneIcon.svg";
-import TrackingMenu from "../../assets/trackingMenu.svg";
-import DownwardArrow from "../../assets/downwardArrow.svg";
-import UpwardArrow from "../../assets/AccordionUp.svg";
-import Product from "../../assets/layer.svg";
-import GalleryIcon from "../../assets/galleryIcon.svg";
-
-import redirectIcon from "../../assets/redirect.svg";
-import MoreIcon from "../../assets/more.svg";
-import DimensionIcon from "../../assets/3d-cube-scan.svg";
-import SkuBoxIcon from "../../assets/DeliveryOder.svg";
-import BoxSearchIcon from "../../assets/box-search.svg";
-import orderBox from "../../assets/Delivery Icon.svg";
-import DelivertTruckIcon from "../../assets/group.svg";
-import Location from "../../assets/Location.svg";
-import TaskSquare from "../../assets/task-square.svg";
-import profileIcon from "../../assets/Contact.svg";
-import TelePhoneIcon from "../../assets/telephoneIcon.svg";
-import ShareIcon from "../../assets/16.svg";
 
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -221,14 +195,13 @@ const tabs = [
 const Index = () => {
   const [filterId, setFilterId] = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
-
   const [orders, setOrders]: any = useState([]);
   const [allOrders, setAllOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
-
+  const [tabStatusId, setTabStatusId] = useState();
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -331,11 +304,10 @@ const Index = () => {
     );
   };
 
-  const warningMessage = (data?: any) => {
+  const warningMessageForDelete = (data?: any) => {
     const tempOrderIdArray = data?.tempOrderIdArray?.map(
       (tempOrderIdObj?: any) => tempOrderIdObj
     );
-
     return (
       <div>
         <div>
@@ -344,8 +316,25 @@ const Index = () => {
             Are You Sure You Want To Delete this
             {tempOrderIdArray?.length > 1 ? " Orders" : " Order"}
           </span>
-          <div className="w-[100%] text-[16px] truncate">
+          <div className="w-[450px] text-[16px]  truncate">
             {tempOrderIdArray?.join(", ")}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const warningMessageForCancel = (data?: any) => {
+    return (
+      <div>
+        <div>
+          <span>
+            {" "}
+            Are You Sure You Want To Cancel This
+            {data > 1 ? " Orders" : " Order"}
+          </span>
+          <div className="w-[450px] text-[16px]  truncate">
+            {data?.join(", ")}
           </div>
         </div>
       </div>
@@ -479,7 +468,7 @@ const Index = () => {
         if (actionType === "cancel_order") {
           setCancellationModal({
             isOpen: true,
-            payload: payLoad.cancelOrderPayLoad,
+            payload: payLoad?.awb,
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad.fileUrl, actionType);
@@ -512,6 +501,7 @@ const Index = () => {
           });
         }
       });
+      setTabStatusId(index);
 
       let currentStatus = tabs[index].value;
 
@@ -707,6 +697,8 @@ const Index = () => {
               currentStatus={tabs[globalIndex].value}
               selectedRowdata={selectedRowdata}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
+              setCancellationModal={setCancellationModal}
+              tabStatusId={tabStatusId}
             />
             {isLoading ? (
               <div>
@@ -775,17 +767,15 @@ const Index = () => {
         <AccessDenied />
       )}
       <DeleteModal
-        isOpen={cancellationModal.isOpen}
+        isOpen={cancellationModal?.isOpen}
         setModalClose={() =>
           setCancellationModal({ ...cancellationModal, isOpen: false })
         }
-        // deleteTextMessage={warningMessage(
-        //   cancellationModal?.cancelOrderPayLoad
-        // )}
-        deleteTextMessage={`Are You Sure You Want To Cancel This Order ${cancellationModal?.payload?.orderId} ?`}
-        payloadBody={cancellationModal?.payload?.awbNo}
-        deleteURL={CANCEL_WAY_BILL}
+        deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
+        payloadBody={cancellationModal.payload}
+        deleteURL={CANCEL_MULTIPLE_WAYBILLS}
         setIsDeleted={setIsDeleted}
+        reloadData={handleTabChanges}
       />
 
       <DeleteModalDraftOrder
@@ -796,7 +786,7 @@ const Index = () => {
         closeModal={() => {
           setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
         }}
-        title={warningMessage(deleteModalDraftOrder?.payload)}
+        title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
       />
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
