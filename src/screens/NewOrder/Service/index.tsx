@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import TruckIcon from "../../../assets/serv/truck.svg";
 import WebTruckIcon from "../../../assets/serv/WebTruck.svg";
 import TickLogo from "../../../assets/common/Tick.svg";
+import DownArrow from "../../../assets/BulkOrder/downArrow.svg";
+
 import ServiceCard from "./ServiceCard";
 import FilterBy from "./FilterBy";
 // import { RecommendedServiceData } from "../../../utils/dummyData";
@@ -149,6 +151,7 @@ const Index: React.FC = () => {
   const [sortingPrice, setSortingPrice] = useState(false);
   const [sortingFastest, setSortingFastest] = useState(false);
   const [sortedOptions, setSortedOptions] = useState<IServiceOption[]>([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const navigate = useNavigate();
   const params = getQueryJson();
@@ -447,16 +450,32 @@ const Index: React.FC = () => {
             </div> */}
 
             <div className=" gap-4 p-2 mb-[10%] ">
-              <h1 className="font-Lato ml-4 mb-3 text-[18px] font-bold lg:font-normal lg:text-2xl ">
-                All Shipyaari Services
-              </h1>
-              <ServiceBox
-                options={serviceOptions}
-                selectedValue={setSelectedService}
-                selectedOption={selectedOption}
-                setSelectedOption={setSelectedOption}
-                ignoreRecommended={true}
-              />
+              <div
+                className="flex gap-x-2"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <h1
+                  className="font-Lato ml-4 mb-3 text-[18px] font-bold lg:font-normal lg:text-2xl cursor-pointer text-blue-500"
+                  // onClick={() => setDropdownOpen(!dropdownOpen)}
+                >
+                  All Shipyaari Services
+                </h1>
+                <img
+                  src={DownArrow}
+                  alt="Downarrow"
+                  className="pb-1 cursor-pointer"
+                />
+              </div>
+
+              {dropdownOpen && (
+                <ServiceBox
+                  options={serviceOptions}
+                  selectedValue={setSelectedService}
+                  selectedOption={selectedOption}
+                  setSelectedOption={setSelectedOption}
+                  ignoreRecommended={true}
+                />
+              )}
             </div>
           </div>
         </>
