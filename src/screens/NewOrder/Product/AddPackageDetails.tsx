@@ -14,8 +14,12 @@ import ComboProductBox from "../../../components/ComboProductBox";
 import { POST } from "../../../utils/webService";
 import { GET_COMBO_PRODUCT, GET_PRODUCTS } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
+import SearchBoxIcon from "../../../assets/SearchBox/SearchIcon.svg";
+
 import StackLogo from "../../../assets/Catalogue/StackIcon.svg";
 import "../../../styles/skeleton.css";
+import PaginationComponent from "../../../components/Pagination";
+
 import { Spinner } from "../../../components/Spinner";
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
@@ -30,7 +34,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const {
     isSearchProductRightModalOpen,
     setIsSearchProductRightModalOpen,
-    selectedProducts,
+    selectedProducts = [],
     handlePackageDetails,
   } = props;
 
@@ -39,12 +43,29 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const [clearIconVisible, setClearIconVisible] = useState(false);
   const [searchResult, setSearchResult] = useState<any>([]);
   const [products, setProducts] = useState<any>([]);
-  const [selectedProduct, setSelectedProduct] = useState<any>([]);
+  console.log("🚀 ~ file: AddPackageDetails.tsx:42 ~ products:", products);
+  // const [totalItemCount, setTotalItemCount] = useState(totalProduct);
+  const [totalProduct, setTotalProduct] = useState<number>(0);
+
+  const [selectedProductTemp, setSelectedProduct] =
+    useState<any>(selectedProducts);
+  console.log(
+    "🚀 ~ file: AddPackageDetails.tsx:49 ~ selectedProduct:",
+    selectedProductTemp
+  );
   const [comboProducts, setComboProducts] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [productsFromAPI, setProductsFromAPI] = useState<any>([]);
+  console.log(
+    "🚀 ~ file: AddPackageDetails.tsx:57 ~ productsFromAPI:",
+    productsFromAPI
+  );
 
   useEffect(() => {
+    console.log(
+      "🚀 ~ file: AddPackageDetails.tsx:60 ~ useEffect ~ isSearchProductRightModalOpen:",
+      isSearchProductRightModalOpen
+    );
     if (isSearchProductRightModalOpen) {
       getProducts(searchedProduct);
     }
@@ -53,14 +74,32 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const getProducts = async (searchValue: any = "") => {
     try {
       setIsLoading(true);
-      const { data } = await POST(GET_PRODUCTS, { searchValue });
+      const { data } = await POST(GET_PRODUCTS, {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+        searchValue,
+      });
+      // setProducts([...filterSelectedProducts(data?.data)]);
       setProductsFromAPI(data?.data);
+      setTotalProduct(data?.totalProduct);
       setIsLoading(false);
     } catch (error) {
       setProductsFromAPI([]);
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log(
+      "🚀 ~ file: AddPackageDetails.tsx:85 ~ useEffect ~ tempSelectedArr:",
+      selectedProducts
+    );
+    setSelectedProduct([]);
+    let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
+
+    setSelectedProduct((s_product: any) => [...s_product, ...tempSelectedArr]);
+  }, [selectedProducts]);
 
   useEffect(() => {
     if (productsFromAPI) {
@@ -70,7 +109,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       //coping arr
       let tempArrProducts = JSON.parse(JSON.stringify(productsFromAPI)); //productsFromAPI => will be replaced by seller's products api
       let tempArrCombos = JSON.parse(JSON.stringify(comboProducts));
-      let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
+      let tempSelectedArr = JSON.parse(JSON.stringify(selectedProductTemp));
 
       //add product mode when adding new or editing product inisde package
       setIsAddProductMode(tempSelectedArr.length > 0 ? true : false);
@@ -82,19 +121,20 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
       //preselect products which are allready selected, when adding a product inside a package(BOX)
       if (tempSelectedArr.length > 0) {
         tempSelectedArr?.forEach((selectedProduct: any) => {
-          tempArrProducts?.forEach((products: any) => {
+          tempArrProducts?.forEach((products: any, index: number) => {
             if (selectedProduct.productId === products.productId) {
-              products.selected = true;
-              products.qty = selectedProduct.qty;
+              tempArrProducts.splice(index, 1);
+              // products.selected = true;
+              // products.qty = selectedProduct.qty;
             }
           });
         });
       }
 
-      setProducts([...sortOnSelected(tempArrProducts)]);
+      setProducts([...tempArrProducts]);
       setComboProducts([...sortOnSelected(tempArrCombos)]);
     }
-  }, [isSearchProductRightModalOpen, selectedProducts, productsFromAPI]);
+  }, [isSearchProductRightModalOpen, productsFromAPI]);
 
   //get combo products
   const getComboProducts = async () => {
@@ -136,7 +176,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     const selectedCombo = tempArrCombo.flatMap((combo: any) => combo.products);
 
     //handlePackageDetails => props function from parents
-    handlePackageDetails([...tempArrProducts, ...selectedCombo]);
+    handlePackageDetails([...selectedProductTemp, ...selectedCombo]);
   };
 
   //desselect an arr (selected:false)
@@ -146,21 +186,45 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     }) || [];
 
   //Select Product for package
-  const selectProduct = (product: any, index: number) => {
+  const toggleSelectionProduct = (
+    product: any,
+    index: number,
+    deselectProduct: boolean = false
+  ) => {
     //deselect or enable multile select when addproductmode is enable
     if (comboProducts.length > 0 && !isAddProductMode) {
       setComboProducts(DeSelectArr(comboProducts));
     }
-
-    const allreadySelected = isProductSelected(index, products);
     let tempArr: any = products;
-    if (allreadySelected) {
-      tempArr[index].selected = false;
-      setProducts([...sortOnSelected(tempArr)]);
-    } else {
-      tempArr[index].selected = true;
-      setProducts([...sortOnSelected(tempArr)]);
+    let tempSelectedProductsArr: any = selectedProductTemp;
+    const tempOrderFromAPI: any = productsFromAPI;
+
+    // deselect product here
+    if (deselectProduct) {
+      const isExist = tempOrderFromAPI.some(
+        (productAPI: any) =>
+          productAPI.productId === tempSelectedProductsArr[index].productId
+      );
+
+      if (isExist) {
+        tempArr.push(tempSelectedProductsArr[index]);
+        setProducts([...tempArr]);
+      }
+
+      tempSelectedProductsArr.splice(index, 1);
+      setSelectedProduct([...tempSelectedProductsArr]);
+
+      return;
     }
+
+    // add to selected products
+    tempArr[index].selected = true;
+
+    tempSelectedProductsArr.push(tempArr[index]);
+    setSelectedProduct([...tempSelectedProductsArr]);
+
+    tempArr.splice(index, 1);
+    setProducts([...tempArr]);
   };
 
   //Select Combo for package
@@ -177,47 +241,90 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     setComboProducts([...sortOnSelected(tempArr)]);
   };
 
-  //returns true if element is selected in that particuler arr
+  //returns true if element is selected in that arr
   const isProductSelected = (index: any, arr: any) => {
+    // return arr[index]?.productI
     return arr[index]?.selected === true ? true : false;
+  };
+
+  const onPageIndexChange = async (pageIndex: any) => {
+    const { data } = await POST(GET_PRODUCTS, {
+      skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
+      limit: pageIndex?.itemsPerPage,
+      pageNo: pageIndex?.currentPage,
+    });
+    if (data?.success) {
+      setProductsFromAPI(data?.data);
+      setTotalProduct(data?.totalProduct);
+    } else {
+      setProductsFromAPI([]);
+      toast.error(data?.message);
+    }
+  };
+
+  const onPerPageItemChange = async (pageperItem: any) => {
+    const { data } = await POST(GET_PRODUCTS, {
+      skip: (pageperItem?.currentPage - 1) * pageperItem?.itemsPerPage,
+      limit: pageperItem?.itemsPerPage,
+      pageNo: pageperItem?.currentPage,
+    });
+    if (data?.success) {
+      setProductsFromAPI(data?.data);
+      setTotalProduct(data?.totalProduct);
+    } else {
+      setProductsFromAPI([]);
+      toast.error(data?.message);
+    }
   };
 
   const ProductDetails = () => {
     return (
       <div className="h-full">
-        <div className="p-5 overflow-scroll h-full">
-          <div className="flex items-center justify-between mb-[27px]">
-            <p className="font-Lato font-normal text-2xl leading-8 text-[#323232]">
-              Search Product
-            </p>
-            <img
-              src={CrossIcon}
-              alt="Cross Icon"
-              className="cursor-pointer self-center"
-              onClick={() => setIsSearchProductRightModalOpen(false)}
-            />
-          </div>
-          {/* Search Box */}
-          <div className="mb-[33px] w-1/2">
-            <CustomInputBox
-              isRightIcon={clearIconVisible}
-              rightIcon={ClearImage}
-              value={searchedProduct}
-              label="Search any product"
-              onChange={(e) => {
-                setSearchedProduct(e.target.value.toString().trim());
-                setClearIconVisible(true);
-              }}
-              onClick={() => {
-                setSearchResult([]);
-                setSearchedProduct("");
-                setClearIconVisible(false);
-              }}
-              visibility={true}
-              setVisibility={() => {}}
-              imageClassName="!w-8 !h-8 !top-[20%]"
-            />
-          </div>
+        <div className="p-5 overflow-scroll relative h-full">
+          <img
+            src={CrossIcon}
+            alt="Cross Icon"
+            className="cursor-pointer self-center absolute right-0  top-6 pr-8"
+            onClick={() => setIsSearchProductRightModalOpen(false)}
+          />
+          <>
+            <div className="flex  items-center ">
+              <div className="flex gap-x-2">
+                <img src={ProductIcon} alt="Product" />
+                <p className="font-Lato font-normal text-2xl leading-8 ">
+                  Selected Products
+                </p>
+              </div>
+              <p className="pl-4">{`(${selectedProductTemp.length} selected)`}</p>
+              {/* //selected products */}
+            </div>
+            <div className="flex flex-wrap  max-h-auto transition-all py-4 max-h-96 mt-2 overflow-scroll">
+              <div className=" w-full ">
+                <div className="flex flex-wrap w-full  gap-y-4 gap-x-2">
+                  {selectedProductTemp?.map(
+                    (eachProduct: any, index: number) => {
+                      return (
+                        <ProductBox
+                          key={index}
+                          image={SampleProduct}
+                          weight={`${eachProduct?.appliedWeight} Kg`}
+                          productName={eachProduct?.name || 0}
+                          breadth={eachProduct?.breadth || 0}
+                          length={eachProduct?.length || 0}
+                          height={eachProduct?.height || 0}
+                          className="!w-56 cursor-pointer hover:!shadow-lg transition-all !shadow-none"
+                          onClick={() =>
+                            toggleSelectionProduct(eachProduct, index, true)
+                          }
+                          isSelected={eachProduct?.selected}
+                        />
+                      );
+                    }
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
           {/* Filter */}
           {/* <div className="mb-8">
             <div className="flex  items-center gap-x-2 mb-4">
@@ -230,18 +337,43 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             <SearchProductFilterItems filterItems={filterItems} />
           </div> */}
 
-          <div className="flex  items-center gap-x-2 py-2">
-            <img src={ProductIcon} alt="Product" />
-            <div className="font-Lato font-normal text-2xl leading-8">
-              Products
+          <div className="flex justify-between  items-center gap-x-2 py-2">
+            <div className="flex items-center gap-x-2">
+              <img src={ProductIcon} alt="Product" />
+              <div className="font-Lato font-normal text-2xl leading-8">
+                Products
+              </div>
+            </div>
+            <div className="w-80 !h-full pr-8 flex items-center">
+              <img src={SearchBoxIcon} alt="" className="w-6 h-6 mx-2" />
+              <CustomInputBox
+                isRightIcon={clearIconVisible}
+                rightIcon={ClearImage}
+                value={searchedProduct}
+                className="!h-full"
+                label="Search any product"
+                onChange={(e) => {
+                  setSearchedProduct(e.target.value.toString().trim());
+                  setClearIconVisible(true);
+                }}
+                onClick={() => {
+                  setSearchResult([]);
+                  setSearchedProduct("");
+                  setClearIconVisible(false);
+                }}
+                // visibility={true}
+                setVisibility={() => {}}
+                imageClassName="!w-8 !h-8 !top-[20%]"
+              />
             </div>
           </div>
-          <div className="flex flex-wrap gap-5 mb-6 py-6 h-96 px-2 overflow-scroll">
+          <div className="flex flex-wrap gap-2 lg:gap-3 transition-all max-h-96 mt-2 overflow-scroll">
             {isLoading ? (
               <div className="w-full h-full justify-center items-center flex ">
                 <div className="flex">
                   <Spinner />
                 </div>
+                q
               </div>
             ) : (
               <>
@@ -256,12 +388,23 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                       length={eachProduct?.length || 0}
                       height={eachProduct?.height || 0}
                       className="!w-56 cursor-pointer "
-                      onClick={() => selectProduct(eachProduct, index)}
-                      isSelected={isProductSelected(index, products)}
+                      onClick={() => toggleSelectionProduct(eachProduct, index)}
+                      // isSelected={isProductSelected(index, products)}
                     />
                   );
                 })}
               </>
+            )}
+          </div>
+          <div className="w-full">
+            {totalProduct > 0 && (
+              <PaginationComponent
+                totalItems={totalProduct}
+                className="`space-x-0 !m-4"
+                itemsPerPageOptions={[10, 20, 30, 50]}
+                onPageChange={onPageIndexChange}
+                onItemsPerPageChange={onPerPageItemChange}
+              />
             )}
           </div>
           <div className="flex  items-center gap-x-2 py-2">

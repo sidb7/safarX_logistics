@@ -121,7 +121,6 @@ const Summary = (props: Props) => {
   const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
   const setOrderIdApi = async () => {
     try {
-      // Check if eway-bill No. is required for invoice value greater than or equal to 50000
       if (invoiceValue >= 50000 && ewaybillNumber === "") {
         toast.error("Please enter Eway-Bill No.");
         return;
@@ -158,7 +157,6 @@ const Summary = (props: Props) => {
             const requiredBalance =
               placeOrderPromise?.data?.data[0]?.requiredBalance;
 
-            // Navigate to payment page with required balance information
             navigate(
               `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
               {

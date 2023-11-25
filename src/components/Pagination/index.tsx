@@ -8,6 +8,7 @@ interface PaginationProps {
   onItemsPerPageChange: any;
   pageNo?: number;
   initialItemsPerPage?: number;
+  className?: string;
   rightmodalPagination?: boolean;
 }
 
@@ -18,6 +19,7 @@ const Pagination: React.FC<PaginationProps> = ({
   onItemsPerPageChange,
   rightmodalPagination,
   pageNo,
+  className,
   initialItemsPerPage,
 }) => {
   const [currentPage, setCurrentPage] = useState(pageNo || 1);
@@ -56,7 +58,7 @@ const Pagination: React.FC<PaginationProps> = ({
         rightmodalPagination
           ? "flex flex-col gap-4"
           : "lg:grid grid-cols-2 justify-end items-center space-x-4"
-      }  mt-[2rem] mx-[2rem] mb-[5rem]`}
+      } ${className} mt-[2rem] mx-[2rem] mb-[5rem]`}
     >
       <div className="flex gap-x-4">
         <button
