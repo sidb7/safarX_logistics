@@ -220,8 +220,6 @@ const Index: React.FC = () => {
           balancedService,
         ]);
 
-        console.log("cheapestServiceinit", cheapestService);
-
         setLoading(false);
       } else {
         setResponse([]);
@@ -448,15 +446,17 @@ const Index: React.FC = () => {
               <FilterBy />
             </div> */}
 
-            <div className="flex flex-col lg:flex-row gap-4 p-2 mb-[10%] ">
-              {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
-              {/* <ServiceBox
+            <div className=" gap-4 p-2 mb-[10%] ">
+              <h1 className="font-Lato ml-4 mb-3 text-[18px] font-bold lg:font-normal lg:text-2xl ">
+                All Shipyaari Services
+              </h1>
+              <ServiceBox
                 options={serviceOptions}
                 selectedValue={setSelectedService}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
                 ignoreRecommended={true}
-              /> */}
+              />
             </div>
           </div>
         </>
