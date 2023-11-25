@@ -869,7 +869,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                       >
                         <PackageBox
                           packageType={newpackage?.name}
-                          volumetricWeight={newpackage?.volumetricWeight}
+                          volumetricWeight={newpackage?.appliedWeight}
                           height={newpackage.height}
                           breadth={newpackage.breadth}
                           length={newpackage.length}
@@ -930,7 +930,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                     >
                       <PackageBox
                         packageType={newpackage?.name}
-                        volumetricWeight={newpackage?.volumetricWeight}
+                        volumetricWeight={newpackage?.appliedWeight}
                         height={newpackage.height}
                         breadth={newpackage.breadth}
                         length={newpackage.length}
