@@ -172,12 +172,10 @@ const Summary = (props: Props) => {
       } else {
         // If the first API call fails, handle the error and do not proceed to the second API call
         const errorMessage = setOrderIdPromise?.data?.message;
-        console.log("setorderIderror", errorMessage);
         toast.error(errorMessage);
       }
     } catch (error) {
       // Handle any other errors that may occur during API calls
-      console.error("Error in API call:", error);
       toast.error("Please try again.");
     }
   };
