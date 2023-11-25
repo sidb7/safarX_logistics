@@ -600,7 +600,7 @@ const Tracking = () => {
                                                       {each?.name}
                                                     </p>
                                                     <p className="text-sm font-Open font-normal">
-                                                      ₹ {each?.unitPrice}
+                                                      ₹ {+each?.unitPrice * +each.qty}
                                                     </p>
                                                   </div>
                                                 </div>
