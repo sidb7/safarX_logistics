@@ -39,7 +39,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
     qty: 1,
     currency: "INR",
     unitPrice: "",
-    unitTax: "",
+    unitTax: 0,
     measureUnit: "cm",
     length: "",
     breadth: "",
@@ -270,7 +270,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         label="Product Price"
                         name="unitPrice"
                         errorMessage={validationErrors?.unitPrice}
-                        value={productInputState[index].unitPrice || ""}
+                        value={productInputState[index].unitPrice}
                         onChange={(e: any) => {
                           if (!isNaN(e.target.value)) {
                             handleProductInputChange(
@@ -288,10 +288,10 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                         }}
                       />
                       <CustomInputBox
-                        label="Product tax"
+                        label="Product tax ₹"
                         name="unitTax"
                         errorMessage={validationErrors?.unitTax}
-                        value={productInputState[index].unitTax || ""}
+                        value={productInputState[index].unitTax}
                         onChange={(e: any) => {
                           if (!isNaN(e.target.value)) {
                             handleProductInputChange(
