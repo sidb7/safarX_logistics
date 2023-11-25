@@ -217,7 +217,7 @@ const WeightFreezeTable = () => {
       setSelectedRows([...selectedRows, rowIndex]);
     }
   };
-  return <CustomTable columns={WeightFreezeHeading} data={WeightFreezeData} />;
+  return <CustomTable columns={WeightFreezeHeading} data={[]} />;
 };
 
 export default WeightFreezeTable;

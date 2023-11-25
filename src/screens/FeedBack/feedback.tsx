@@ -37,7 +37,7 @@ function Feedback() {
       setFeedbackDataList(response?.data);
     } else {
       setFeedbackDataList([]);
-      toast.error(response?.message);
+      // toast.error(response?.message);
     }
   };
 

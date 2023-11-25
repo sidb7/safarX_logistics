@@ -247,20 +247,30 @@ const Serviceability = (props: ITypeProps) => {
               label="Pickup Pincode"
               value={serviceabilityData?.pickupPincode}
               onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  pickupPincode: e.target.value ? Number(e.target.value) : "",
-                });
+                if (isNaN(e.target.value)) {
+                } else {
+                  setServiceabilityData({
+                    ...serviceabilityData,
+                    pickupPincode: +e.target.value
+                      ? Number(e.target.value)
+                      : "",
+                  });
+                }
               }}
             />
             <CustomInputBox
               label="Delivery Pincode"
               value={serviceabilityData?.deliveryPincode}
               onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  deliveryPincode: e.target.value ? Number(e.target.value) : "",
-                });
+                if (isNaN(e.target.value)) {
+                } else {
+                  setServiceabilityData({
+                    ...serviceabilityData,
+                    deliveryPincode: +e.target.value
+                      ? Number(e.target.value)
+                      : "",
+                  });
+                }
               }}
             />
             <CustomDropDown
@@ -309,10 +319,13 @@ const Serviceability = (props: ITypeProps) => {
               label="Invoice Value"
               value={serviceabilityData?.invoiceValue}
               onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  invoiceValue: e.target.value ? Number(e.target.value) : "",
-                });
+                if (isNaN(e.target.value)) {
+                } else {
+                  setServiceabilityData({
+                    ...serviceabilityData,
+                    invoiceValue: +e.target.value ? Number(e.target.value) : "",
+                  });
+                }
               }}
             />
           </div>
@@ -321,45 +334,55 @@ const Serviceability = (props: ITypeProps) => {
               label="Length (CM)"
               value={serviceabilityData?.dimension?.length}
               onChange={(e: any) => {
-                let temp = serviceabilityData;
-                if (temp && temp.dimension)
-                  temp.dimension.length = e.target.value
-                    ? Number(e.target.value)
-                    : "";
+                if (isNaN(e.target.value)) {
+                } else {
+                  let temp = serviceabilityData;
+                  if (temp && temp.dimension)
+                    temp.dimension.length = +e.target.value
+                      ? Number(e.target.value)
+                      : "";
 
-                setServiceabilityData({
-                  ...temp,
-                });
+                  setServiceabilityData({
+                    ...temp,
+                  });
+                }
               }}
             />
             <CustomInputBox
               label="Height (CM)"
               value={serviceabilityData?.dimension?.height}
               onChange={(e: any) => {
-                let temp = serviceabilityData;
-                if (temp && temp.dimension)
-                  temp.dimension.height = e.target.value
-                    ? Number(e.target.value)
-                    : "";
+                if (isNaN(e.target.value)) {
+                } else {
+                  let temp = serviceabilityData;
+                  if (temp && temp.dimension)
+                    temp.dimension.height = +e.target.value
+                      ? Number(e.target.value)
+                      : "";
 
-                setServiceabilityData({
-                  ...temp,
-                });
+                  setServiceabilityData({
+                    ...temp,
+                  });
+                }
               }}
             />
             <CustomInputBox
               label="Width (CM)"
-              value={serviceabilityData?.dimension?.width}
+              value={serviceabilityData?.dimension?.width || ""}
+              inputMode="numeric"
               onChange={(e: any) => {
-                let temp = serviceabilityData;
-                if (temp && temp.dimension)
-                  temp.dimension.width = e.target.value
-                    ? Number(e.target.value)
-                    : "";
+                if (isNaN(e.target.value)) {
+                } else {
+                  let temp = serviceabilityData;
+                  if (temp && temp.dimension)
+                    temp.dimension.width = +e.target.value
+                      ? Number(e.target.value)
+                      : "";
 
-                setServiceabilityData({
-                  ...temp,
-                });
+                  setServiceabilityData({
+                    ...temp,
+                  });
+                }
               }}
             />
           </div>

@@ -36,32 +36,43 @@ const Reports = () => {
   };
 
   const fetchReport = async () => {
-    let startEpoch = convertEpoch(startDate);
-    let endEpoch = convertEpoch(endDate);
+    // console.log("startandenddate", startDate, endDate);
 
-    const payload = {
-      startDate: startEpoch,
-      endDate: endEpoch,
-      apiStatus: "SHIPMENTSTATUS",
-    };
-    const response = await POST(GET_REPORTS, payload);
-
-    // const apiData = response.data;
-    if (!response?.data?.success) {
-      toast.error(response?.data?.message);
-      return;
-    }
-    const date: any = JSON.stringify(new Date());
-    const result = await convertXMLToXLSX(
-      response?.data?.data,
-      `SellerShipMentReport_${date
-        .substr(1, 10)
-        .split("-")
-        .reverse()
-        .join("-")}.xlsx`
-    );
-    if (result) {
-      toast.success(response?.data?.message);
+    if (reportValue === "" || reportValue === undefined) {
+      toast.error("Please Select Report Type");
+    } else {
+      if (startDate === null && endDate === null) {
+        toast.error("Please Select Start and End Date");
+      } else if (endDate === null) {
+        toast.error("Please Select End Date");
+      } else {
+        const endEpoch: any = endDate;
+        endEpoch.setHours(23, 59, 59, 59);
+        const lastendEpoch = endEpoch?.getTime();
+        const payload = {
+          startDate: convertEpoch(startDate),
+          endDate: lastendEpoch,
+          apiStatus: "SHIPMENTSTATUS",
+        };
+        const response = await POST(GET_REPORTS, payload);
+        // const apiData = response.data;
+        if (!response?.data?.success) {
+          toast.error(response?.data?.message);
+          return;
+        }
+        const date: any = JSON.stringify(new Date());
+        const result = await convertXMLToXLSX(
+          response?.data?.data,
+          `SellerShipMentReport_${date
+            .substr(1, 10)
+            .split("-")
+            .reverse()
+            .join("-")}.xlsx`
+        );
+        if (result) {
+          toast.success(response?.data?.message);
+        }
+      }
     }
   };
 

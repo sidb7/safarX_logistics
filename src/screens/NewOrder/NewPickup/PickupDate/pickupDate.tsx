@@ -28,7 +28,7 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
       "dd/MM/yyyy hh:mm a",
       new Date()
     );
-    return Math.floor(parsedDateTime.getTime() / 1000);
+    return Math.floor(parsedDateTime.getTime());
   }
 
   const handlePickupTimeSelected = (pickupTime: string) => {

@@ -267,7 +267,7 @@ const DeliveryLocation = () => {
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
-
+          console.log("orderData", orderData?.deliveryAddress?.gstNumber);
           if (orderData?.deliveryAddress && orderData?.billingAddress) {
             setDeliveryAddress({
               deliveryAddress: {
@@ -339,7 +339,7 @@ const DeliveryLocation = () => {
                 },
               },
               orderType: orderData?.orderType,
-              gstNumber: orderData?.gstNumber,
+              gstNumber: orderData?.deliveryAddress?.gstNumber,
               tempOrderId: orderData?.tempOrderId || "",
               source: orderData?.source || "",
             });

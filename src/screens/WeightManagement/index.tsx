@@ -44,37 +44,38 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   const disputeArray = [
     {
-      count: 23,
+      count: 0,
       text: "Total Dispute Raised",
     },
     {
-      count: "23%",
+      count: "0%",
       text: "Weight Dispute Ratio",
     },
     {
-      count: `${`\u20B9`} 24`,
+      count: `${`\u20B9`} 0`,
       text: "Total Dispute Amount",
     },
     {
-      count: 11,
+      count: 0,
       text: "Total Action Taken",
     },
   ];
   const listTab = [
     {
-      statusName: "Weight-Freeze",
+      statusName: "New Discrepancy",
       index: 0,
     },
     {
-      statusName: "New Discrepancy",
+      statusName: "Pending Dispute",
       index: 1,
     },
     {
-      statusName: "Pending Dispute",
+      statusName: "Completed",
       index: 2,
     },
+
     {
-      statusName: "Completed",
+      statusName: "Weight-Freeze",
       index: 3,
     },
   ];
@@ -107,13 +108,13 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   const renderComponent = () => {
     if (renderingComponents === 0) {
-      return <WeightFreezeTable />;
-    } else if (renderingComponents === 1) {
       return <NewDiscrepancyTable />;
-    } else if (renderingComponents === 2) {
+    } else if (renderingComponents === 1) {
       return <PendingDispute />;
-    } else if (renderingComponents === 3) {
+    } else if (renderingComponents === 2) {
       return <CompletedTable />;
+    } else if (renderingComponents === 3) {
+      return <WeightFreezeTable />;
     }
   };
   const GetCurrentPath = () => {
@@ -132,23 +133,23 @@ const WeightFreeze: React.FunctionComponent = () => {
     if (data[1] === "weight-freeze") {
       setIsActive(checkPageAuthorized("Weight Freeze"));
 
-      setRenderingComponents(0);
-      setScrollIndex(0);
+      setRenderingComponents(3);
+      setScrollIndex(3);
     } else if (data[1] === "new-discrepancy") {
       setIsActive(checkPageAuthorized("New Discrepancy"));
 
-      setRenderingComponents(1);
-      setScrollIndex(1);
+      setRenderingComponents(0);
+      setScrollIndex(0);
     } else if (data[1] === "pending-dispute") {
       setIsActive(checkPageAuthorized("Pending Dispute"));
 
-      setRenderingComponents(2);
-      setScrollIndex(2);
+      setRenderingComponents(1);
+      setScrollIndex(1);
     } else if (data[1] === "completed") {
       setIsActive(checkPageAuthorized("Completed"));
 
-      setRenderingComponents(3);
-      setScrollIndex(3);
+      setRenderingComponents(2);
+      setScrollIndex(2);
     }
   }, [data]);
 
@@ -181,11 +182,11 @@ const WeightFreeze: React.FunctionComponent = () => {
               </div>
             </div>
             <div>
-              <div className="m-7">
+              {/* <div className="m-7">
                 <WeightFreezeBanner
                   isActiveFreezeweight={isActiveFreezeweight}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="lg:mb-24">
               <div className="mt-4 px-5 ">
@@ -229,9 +230,9 @@ ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
                   // onCustomLandmarkSelection={handleLandmarkSelected}
                 />
               </RightSideModal>
-              <BottomLayout callApi={() => {}} />
             </div>
           </div>
+          <BottomLayout callApi={() => {}} />
         </div>
       ) : (
         <div>

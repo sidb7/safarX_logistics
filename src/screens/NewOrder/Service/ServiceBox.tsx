@@ -89,22 +89,56 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
+  useEffect(() => {
+    const filters = options.filter((service) => {
+      const serviceMode = service.text.serviceMode.toLowerCase();
+
+      if (
+        (surface && serviceMode === "surface") ||
+        (air && serviceMode === "air") ||
+        (!surface && !air)
+      ) {
+        return service;
+      }
+      return null;
+    });
+
+    filters.sort((a, b) => {
+      if (
+        a.text.partnerName === "BLUEDART" &&
+        b.text.partnerName !== "BLUEDART"
+      ) {
+        return -1;
+      } else if (
+        a.text.partnerName !== "BLUEDART" &&
+        b.text.partnerName === "BLUEDART"
+      ) {
+        return 1;
+      } else {
+        return a.text.total - b.text.total;
+      }
+    });
+    console.log("filters>>", filters);
+
+    setSortedOptions(filters);
+  }, [options, surface, air, sortingPrice, sortingFastest]);
+
   return (
     <div>
-      <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
+      {/* <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
         <img src={FilterIcon} alt="Filter" />
         <div className="text-[18px] font-bold lg:font-normal lg:text-2xl">
           Filter by
         </div>
-      </div>
-      <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
+      </div> */}
+      {/* <div className="grid lg:grid-cols-1 mx-5 mb-5 mt-4 lg:mb-6">
         <FilterItems
           items={["Surface", "Air", "Low Price", "Fastest"]}
           onClick={handleSortBy}
         />
-      </div>
+      </div> */}
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
-        {sortedOptions.map((option) => (
+        {options.map((option) => (
           <div
             key={option?.value}
             className={`flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${

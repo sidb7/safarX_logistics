@@ -171,7 +171,7 @@ export const Transaction = () => {
         />
       );
     } else if (renderingComponents === 1) {
-      return <CustomTable data={data} columns={cashbackDetailsColumns()} />;
+      return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
     }
   };
 
@@ -258,14 +258,17 @@ export const Transaction = () => {
                 </div>
 
                 {/* {totalItemCount > 0 && ( */}
-                <Pagination
-                  totalItems={totalItemCount}
-                  itemsPerPageOptions={[10, 20, 30, 50]}
-                  onPageChange={onPageIndexChange}
-                  onItemsPerPageChange={onPerPageItemChange}
-                  pageNo={currentPage}
-                  initialItemsPerPage={itemsPerPage}
-                />
+
+                {renderingComponents === 0 && (
+                  <Pagination
+                    totalItems={totalItemCount}
+                    itemsPerPageOptions={[10, 20, 30, 50]}
+                    onPageChange={onPageIndexChange}
+                    onItemsPerPageChange={onPerPageItemChange}
+                    pageNo={currentPage}
+                    initialItemsPerPage={itemsPerPage}
+                  />
+                )}
 
                 {/* )} */}
               </div>
