@@ -160,9 +160,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
           <div>
             <CustomDropDown
-              // onChange={(e: any) => {
-              //   setEditAddressType(e.target.value);
-              // }}
+              disabled={true}
               onChange={() => {}}
               value={editAddressType}
               options={[
@@ -171,7 +169,6 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
                   value: editAddressType,
                 },
               ]}
-              // heading="Address Type"
             />
           </div>
 

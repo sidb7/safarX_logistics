@@ -96,7 +96,17 @@ export const PassbookColumns = (setSortOrder: any) => {
   //   const dateB = new Date(rowB.values.createdAt);
   //   return dateA > dateB ? 1 : -1;
   // };
-
+  const isValidJSON = (str: any) => {
+    return /^[\],:{}\s]*$/.test(
+      str
+        .replace(/\\["\\\/bfnrtu]/g, "@")
+        .replace(
+          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+          "]"
+        )
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+    );
+  };
   const handleSortClick = () => {
     if (setSortOrder) {
       setSortOrder((prevOrder: any) => (prevOrder === "desc" ? "asc" : "desc"));
@@ -195,7 +205,9 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap ">
-            {info.row.original?.tempOrderId}
+            {isValidJSON(info.row.original?.remark)
+              ? JSON.parse(info.row.original?.remark)?.tempOrderId
+              : ""}
           </div>
         );
       },
@@ -238,7 +250,10 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap ">
-            {info.row.original.boxInfo?.tracking?.awb}
+            {isValidJSON(info.row.original?.remark)
+              ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]?.tracking
+                  ?.awb
+              : ""}
           </div>
         );
       },
@@ -369,6 +384,17 @@ export const PassbookColumns = (setSortOrder: any) => {
                   info.row?.original?.type === "credit" ? "Credited" : "Debited"
                 }:${info.row?.original?.amount},Balance:${
                   info.row?.original?.balance
+                },
+                TrackingNo:${
+                  isValidJSON(info.row.original?.remark)
+                    ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]
+                        ?.tracking?.awb
+                    : ""
+                },
+                ShipyaariId:${
+                  isValidJSON(info.row.original?.remark)
+                    ? JSON.parse(info.row.original?.remark)?.tempOrderId
+                    : ""
                 },
                 Status:${info.row?.original?.status},
                 Description:${info.row?.original?.description}`}

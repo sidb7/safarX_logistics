@@ -13,6 +13,7 @@ import { Spinner } from "../../../../components/Spinner";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -68,11 +69,12 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     }
   };
 
+  console.log("Hiiiii");
   useEffect(() => {
     (async () => {
       await getAddress();
     })();
-  }, []);
+  }, [filterId]);
 
   const filterComponent = (className?: string) => {
     return (
@@ -132,7 +134,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
 
   const deleteAddress = async () => {
     try {
-      //Get all plans API
+      //Delete PickUpAddress, DeliveryAddress API
       let payload, deleteUrl;
 
       if (activeTab === "pickup") {
@@ -166,6 +168,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
           />
         </div>
         <div className="flex flex-col justify-center  items-center h-full w-full  ">
+          <img src={DeleteGifIcon} alt="" />
           <p className="font-Open text-sm md:text-base font-semibold text-center">
             Are you sure you want to delete this address?
           </p>
@@ -223,7 +226,7 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
           </div>
           <CenterModal
             isOpen={isModalOpen}
-            className="!w-[50%] !h-[50%] "
+            className="!w-[30%] !h-[40%] "
             onRequestClose={() => setIsModalOpen(false)}
           >
             {deleteModalContent()}

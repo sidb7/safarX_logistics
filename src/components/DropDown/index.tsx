@@ -11,6 +11,7 @@ interface IDropDownProps {
   name?: string;
   heading?: string;
   inputError?: boolean;
+  disabled?: boolean;
 }
 
 const CustomDropDown = (props: IDropDownProps) => {
@@ -24,6 +25,7 @@ const CustomDropDown = (props: IDropDownProps) => {
     name,
     heading,
     inputError,
+    disabled,
   } = props;
 
   const dropdownRef: any = useRef(null);
@@ -49,6 +51,7 @@ const CustomDropDown = (props: IDropDownProps) => {
           // className={` ${selectClassName} select-dropdown appearance-none pr-8 pl-2 form-select bg-no-repeat h-[48px] px-2 rounded block w-full bg-transparent border-[1px] border-[#A4A4A4] text-[12px] text-[#777777] outline-none cursor-pointer`}
           placeholder={placeHolder}
           name={name}
+          disabled={disabled}
           className={`${selectClassName} select-dropdown rounded  ${
             inputError && !value
               ? "!border-red-500"
