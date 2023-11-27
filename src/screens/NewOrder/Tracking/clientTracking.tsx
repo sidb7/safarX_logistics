@@ -16,15 +16,15 @@ import { convertEpochToDateTime } from "../../../utils/utility";
 import { getQueryJson } from "../../../utils/utility";
 import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
+import CustomInputBox from "../../../components/Input/index";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<any>();
+  console.log("trackingState", typeof trackingNo);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
-
-  console.log("trackingDetails", trackingDetails);
 
   const [cancelled, setCancelled] = useState<any>(false);
   const [timeDetails, setTimeDetails] = useState<any>({
@@ -174,6 +174,7 @@ const Tracking = () => {
       window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
     }
     if (!trackingNoFromUrl && !trackingNo) {
+      console.log("trackingNo123", trackingNo);
       return toast.warning("Please Enter Tracking Number");
     }
     try {
@@ -273,12 +274,12 @@ const Tracking = () => {
           <div className="flex  justify-center p-3">
             <img src={shipyaari} alt="Shipyaari" />
           </div>
-          <div className="flex justify-center items-center w-full py-4">
-            <div className="max-w-4xl">
-              <div className="flex md:justify-center">
+          <div className="flex justify-center items-center py-4">
+            <div className="w-[50rem]">
+              <div className="flex md:justify-center w-full">
                 <div className="w-full">
-                  <div className="flex">
-                    <InputBox
+                  <div className="flex w-full">
+                    <CustomInputBox
                       label="Enter tracking ID"
                       value={trackingNo}
                       containerStyle="!mt-1"
