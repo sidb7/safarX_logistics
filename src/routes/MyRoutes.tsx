@@ -962,7 +962,7 @@ const MyRoutes: React.FC = () => {
           {/* Plan Routes */}
           <Route>
             <Route
-              path="/plans"
+              path="/subscription/plans"
               element={
                 <ProtectedRoute>
                   <NewUserPlanScreen />
@@ -970,7 +970,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/plans/plan-details"
+              path="/subscription/plan-details"
               element={
                 <ProtectedRoute>
                   <PlanDetails />

@@ -152,7 +152,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
               <span
                 className="text-[14px] text-[#004EFF] underline underline-offset-4 decoration-[#004EFF]"
                 onClick={() => {
-                  navigate("/plans");
+                  navigate("/subscription/plans");
                 }}
               >
                 UPGRADE
