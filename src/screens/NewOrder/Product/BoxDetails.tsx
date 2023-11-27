@@ -274,9 +274,9 @@ const BoxDetails = (props: IBoxdetails) => {
                 <div className="absolute -top-[6px] right-0">
                   <p className="text-base font-semibold leading-4 text-[#494949]">
                     {/* {weight is length x width x height (cm) / 5000.} */}
-                    {selectedBox.volumetricWeight} Kg
+                    {selectedBox.appliedWeight} Kg
                   </p>
-                </div>
+                </div>  
               </div>
             </div>
             {calcAllTotalProductAppliedWeight() >

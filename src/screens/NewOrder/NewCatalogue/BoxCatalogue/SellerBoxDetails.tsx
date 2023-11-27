@@ -62,7 +62,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
     breadth: [isRequired, greaterThenZero],
     height: [isRequired, greaterThenZero],
     color: [isRequired],
-    price: [isRequired, checkNonNegative],
+    price: [isRequired, checkNonNegative, greaterThenZero],
     deadWeight: [isRequired, checkNonNegative],
   };
   const validateOnSubmit = () => {
@@ -146,7 +146,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
 
   return (
     <>
-      <div className="grid px-5 mt-6 gap-5">
+      <div className="grid px-5 mt-6 gap-5 ">
         <div className="flex justify-between items-center gap-x-2 pb-2">
           <div className="flex gap-x-2">
             <img src={ProductIcon} alt="Package Icon" />
@@ -192,13 +192,15 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Box Price"
             name="price"
             errorMessage={validationErrors?.price}
-            value={sellerBoxDetails?.price}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                price: e.target.value,
-              });
+            value={sellerBoxDetails?.price || ""}
+            onChange={(e: any) => {
+              if (!isNaN(e.target.value)) {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  price: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                });
+              }
             }}
           />
           <CustomInputBox
@@ -206,12 +208,14 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             name="deadWeight"
             errorMessage={validationErrors?.deadWeight}
             value={sellerBoxDetails?.deadWeight}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                deadWeight: e.target.value,
-              });
+            onChange={(e: any) => {
+              if (!isNaN(e.target.value)) {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  deadWeight: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                });
+              }
             }}
           />
         </div>
@@ -220,35 +224,31 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           <CustomInputBox
             label="Length (cm)"
             inputType="text"
-            inputMode="numeric"
             name="length"
             errorMessage={validationErrors?.length}
-            value={sellerBoxDetails?.length}
+            value={sellerBoxDetails?.length || ""}
             onChange={(e: any) => {
-              if (isNaN(e.target.value)) {
-              } else {
+              if (!isNaN(e.target.value)) {
                 handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
-                  length: e.target.value,
+                  length: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
                 });
               }
             }}
           />
           <CustomInputBox
             inputType="text"
-            inputMode="numeric"
             name="breadth"
             label="Breadth (cm)"
             errorMessage={validationErrors?.breadth}
-            value={sellerBoxDetails?.breadth}
+            value={sellerBoxDetails?.breadth || ""}
             onChange={(e: any) => {
-              if (isNaN(e.target.value)) {
-              } else {
+              if (!isNaN(e.target.value)) {
                 handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
-                  breadth: e.target.value,
+                  breadth: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
                 });
               }
             }}
@@ -257,16 +257,14 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             name="height"
             label="Height (cm)"
             inputType="text"
-            inputMode="numeric"
             errorMessage={validationErrors?.height}
-            value={sellerBoxDetails?.height}
+            value={sellerBoxDetails?.height || ""}
             onChange={(e: any) => {
-              if (isNaN(e.target.value)) {
-              } else {
+              if (!isNaN(e.target.value)) {
                 handleValidation(e);
                 setSellerBoxDetails({
                   ...sellerBoxDetails,
-                  height: e.target.value,
+                  height: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
                 });
               }
             }}

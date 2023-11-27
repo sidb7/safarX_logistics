@@ -163,6 +163,8 @@ const ADD_PICKUP_ADDRESS_CATALOGUE = `${SELLER_BASE_URL}/pickupAddress/createPic
 const UPDATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/updatePickupAddress`;
 const ADD_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/createDeliveryAddress`;
 const UPDATE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/updateDeliveryAddress`;
+const DELETE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/deletePickupAddress`;
+const DELETE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/deleteDeliveryAddress`;
 
 //servicable-pincode
 const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
@@ -242,7 +244,6 @@ const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
 const GET_CLIENTTRACKING_INFO = `${SELLER_BASE_URL}/tracking/getTracking`;
 
 //feedback
-//feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
 const GET_FEEDBACK = `${SELLER_BASE_URL}/feedback/getFeedback`;
 
@@ -264,6 +265,7 @@ const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrde
 
 //Reports
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
+const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -392,4 +394,7 @@ export {
   FETCH_MANIFEST_REPORT_DATA,
   CREATE_ZOHO_STORE,
   GET_REPORTS,
+  CANCEL_MULTIPLE_WAYBILLS,
+  DELETE_PICKUP_ADDRESS,
+  DELETE_DELIVERY_ADDRESS,
 };

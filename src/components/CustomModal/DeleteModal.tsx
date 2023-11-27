@@ -12,6 +12,7 @@ interface IDeleteProps {
   payloadBody?: any;
   DeletepincodeHandler?: any;
   setIsDeleted?: any;
+  reloadData?: any;
 }
 
 const DeleteModal = (props: IDeleteProps) => {
@@ -22,13 +23,15 @@ const DeleteModal = (props: IDeleteProps) => {
     deleteURL,
     payloadBody,
     setIsDeleted,
+    reloadData,
   } = props;
 
   const deleteApi = async () => {
-    const { data } = await POST(deleteURL, { awbNo: payloadBody });
+    const { data } = await POST(deleteURL, { awbs: payloadBody });
     if (data?.success) {
       setIsDeleted(true);
       toast.success(data?.message);
+      reloadData(7);
     } else {
       toast.error(data?.message);
     }
