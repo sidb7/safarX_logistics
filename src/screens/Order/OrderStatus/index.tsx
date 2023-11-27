@@ -369,7 +369,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 customPlaceholder="Search By Order Id, AWB"
               />
             </div>
-            <div
+            {/* <div
               className="flex justify-between items-center p-2 gap-x-2"
               onClick={() => setFilterModal(true)}
             >
@@ -377,7 +377,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div>
+            </div> */}
           </div>
         );
       } else {

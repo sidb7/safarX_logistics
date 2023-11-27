@@ -1,6 +1,9 @@
 import { createColumnHelper } from "@tanstack/react-table";
 import CopyTooltip from "../../components/CopyToClipboard";
-import { date_DD_MMM_YYYY_HH_MM } from "../../utils/dateFormater";
+import {
+  date_DD_MMM_YYYY_HH_MM,
+  date_DD_MMM_YYYY_HH_MM_SS,
+} from "../../utils/dateFormater";
 import ShowLabel from "./ShowLabel";
 import CrossIcon from "../../assets/cross.svg";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
@@ -400,7 +403,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       const { status, awb } = info?.row?.original;
       const rowsData = info?.row?.original;
       const timeStamp = status?.[0]?.timeStamp;
-      const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
+      const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus =
         rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
@@ -500,7 +503,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           [`Description ${index + 1}`]: elem.description,
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
-          [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
+          [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
         };
         statusObj.title = "Status";
       });
@@ -678,7 +681,7 @@ export const columnHelperForNewOrder = (
                 </span>
                 <div className=" ">
                   <p className="text-sm font-medium">
-                    {date_DD_MMM_YYYY_HH_MM(updatedAtStatus || updatedAt)}
+                    {date_DD_MMM_YYYY_HH_MM_SS(updatedAtStatus || updatedAt)}
                   </p>
                 </div>
               </div>
@@ -716,7 +719,7 @@ export const columnHelperForNewOrder = (
         const { status, tempOrderId, source } = info?.row?.original;
         const rowsData = info?.row?.original;
         const timeStamp = status?.[0]?.timeStamp;
-        const time = timeStamp && date_DD_MMM_YYYY_HH_MM(timeStamp);
+        const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
         const rows: any = [
           {
@@ -807,7 +810,7 @@ export const columnHelperForNewOrder = (
             [`Description ${index + 1}`]: elem.description,
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
-            [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM(elem.timeStamp),
+            [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
           };
           statusObj.title = "Status";
         });
@@ -1145,7 +1148,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
             <div className=" ">
               <p className="">
                 {pickupAddress?.pickupDate
-                  ? date_DD_MMM_YYYY_HH_MM(pickupAddress?.pickupDate)
+                  ? date_DD_MMM_YYYY_HH_MM_SS(pickupAddress?.pickupDate)
                   : null}
               </p>
               <div className="py-2 flex flex-col">
