@@ -1,888 +1,888 @@
 export const module = [
-    {
-        id: "a",
-        name: "Dashboard",
-        pages: [],
-        menu: [
-            {
-                id: "ab",
-                name: "Overview",
-                pages: [
-                    {
-                        id: "abc",
-                        name: "Overview",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/dashboard/overview",
-                isActive: true
+  {
+    id: "a",
+    name: "Dashboard",
+    pages: [],
+    menu: [
+      {
+        id: "ab",
+        name: "Overview",
+        pages: [
+          {
+            id: "abc",
+            name: "Overview",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "abcd",
-                name: "Orders",
-                pages: [
-                    {
-                        id: "abcde",
-                        name: "Orders",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/dashboard/orders",
-                isActive: true
-            },
-            {
-                id: "abcdef",
-                name: "Exception",
-                pages: [
-                    {
-                        id: "abcdefg",
-                        name: "Exception",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/dashboard/exception",
-                isActive: true
-            },
-            {
-                id: "abcdefgh",
-                name: "SY Performance",
-                pages: [
-                    {
-                        id: "abcdefghi",
-                        name: "SY Performance",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/dashboard/sy-performance",
-                isActive: true
-            }
+          },
         ],
-        icon: "Dashboard",
+        menu: [],
+        path: "/dashboard/overview",
         isActive: true,
-        sequence: 0
-    },
-    {
-        id: "b",
+      },
+      {
+        id: "abcd",
         name: "Orders",
-        pages: [],
-        menu: [
-            {
-                id: "bc",
-                name: "View Orders",
-                pages: [
-                    {
-                        id: "bcd",
-                        name: "View Orders",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/orders/view-orders",
-                isActive: true
+        pages: [
+          {
+            id: "abcde",
+            name: "Orders",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "bcde",
-                name: "Add Order",
-                pages: [
-                    {
-                        id: "bcdef",
-                        name: "Pickup",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "bcdefg",
-                        name: "Delivery",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "bcdefgh",
-                        name: "Product",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "bcdefghi",
-                        name: "Service",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "bcdefghij",
-                        name: "Summary",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "bcdefghijk",
-                        name: "Payment",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/orders/add-order/pickup",
-                isActive: true
-            },
-            {
-                id: "bcdefghijkl",
-                name: "Add Bulk",
-                pages: [
-                    {
-                        id: "bcdefghijklm",
-                        name: "Add Bulk",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/orders/add-bulk",
-                isActive: true
-            },
-            {
-                id: "bcdefghijklmn",
-                name: "Sync Channel",
-                pages: [
-                    {
-                        id: "bcdefghijklmno",
-                        name: "Sync Channel",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/orders/sync-channel",
-                isActive: true
-            }
+          },
         ],
-        icon: "Orders",
+        menu: [],
+        path: "/dashboard/orders",
         isActive: true,
-        sequence: 1
-    },
-    {
-        id: "l",
+      },
+      {
+        id: "abcdef",
+        name: "Exception",
+        pages: [
+          {
+            id: "abcdefg",
+            name: "Exception",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/dashboard/exception",
+        isActive: true,
+      },
+      {
+        id: "abcdefgh",
+        name: "SY Performance",
+        pages: [
+          {
+            id: "abcdefghi",
+            name: "SY Performance",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/dashboard/sy-performance",
+        isActive: true,
+      },
+    ],
+    icon: "Dashboard",
+    isActive: true,
+    sequence: 0,
+  },
+  {
+    id: "b",
+    name: "Orders",
+    pages: [],
+    menu: [
+      {
+        id: "bc",
+        name: "View Orders",
+        pages: [
+          {
+            id: "bcd",
+            name: "View Orders",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/orders/view-orders",
+        isActive: true,
+      },
+      {
+        id: "bcde",
+        name: "Add Order",
+        pages: [
+          {
+            id: "bcdef",
+            name: "Pickup",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "bcdefg",
+            name: "Delivery",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "bcdefgh",
+            name: "Product",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "bcdefghi",
+            name: "Service",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "bcdefghij",
+            name: "Summary",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "bcdefghijk",
+            name: "Payment",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/orders/add-order/pickup",
+        isActive: true,
+      },
+      {
+        id: "bcdefghijkl",
+        name: "Add Bulk",
+        pages: [
+          {
+            id: "bcdefghijklm",
+            name: "Add Bulk",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/orders/add-bulk",
+        isActive: true,
+      },
+      {
+        id: "bcdefghijklmn",
+        name: "Sync Channel",
+        pages: [
+          {
+            id: "bcdefghijklmno",
+            name: "Sync Channel",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/orders/sync-channel",
+        isActive: true,
+      },
+    ],
+    icon: "Orders",
+    isActive: true,
+    sequence: 1,
+  },
+  {
+    id: "l",
+    name: "Tracking",
+    pages: [],
+    menu: [
+      {
+        id: "lm",
         name: "Tracking",
-        pages: [],
-        menu: [
-            {
-                id: "lm",
-                name: "Tracking",
-                pages: [
-                    {
-                        id: "lmn",
-                        name: "Tracking",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/tracking",
-                isActive: true
-            }
-        ],
-        icon: "Tracking",
-        isActive: true,
-        sequence: 2
-    },
-    {
-        id: "c",
-        name: "Wallet",
-        pages: [],
-        menu: [
-            {
-                id: "cd",
-                name: "View Wallet",
-                pages: [
-                    {
-                        id: "cde",
-                        name: "View Wallet",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/wallet/view-wallet",
-                isActive: true
+        pages: [
+          {
+            id: "lmn",
+            name: "Tracking",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "cdef",
-                name: "Transaction History",
-                pages: [
-                    {
-                        id: "cdefg",
-                        name: "Transaction History",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/wallet/transaction-history",
-                isActive: true
-            }
+          },
         ],
-        icon: "Wallet",
+        menu: [],
+        path: "/tracking",
         isActive: true,
-        sequence: 3
-    },
-    {
-        id: "d",
+      },
+    ],
+    icon: "Tracking",
+    isActive: true,
+    sequence: 2,
+  },
+  {
+    id: "c",
+    name: "Wallet",
+    pages: [],
+    menu: [
+      {
+        id: "cd",
+        name: "View Wallet",
+        pages: [
+          {
+            id: "cde",
+            name: "View Wallet",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/wallet/view-wallet",
+        isActive: true,
+      },
+      {
+        id: "cdef",
+        name: "Transaction History",
+        pages: [
+          {
+            id: "cdefg",
+            name: "Transaction History",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/wallet/transaction-history",
+        isActive: true,
+      },
+    ],
+    icon: "Wallet",
+    isActive: true,
+    sequence: 3,
+  },
+  {
+    id: "d",
+    name: "Plans",
+    pages: [],
+    menu: [
+      {
+        id: "de",
         name: "Plans",
-        pages: [],
-        menu: [
-            {
-                id: "de",
-                name: "Plans",
-                pages: [
-                    {
-                        id: "def",
-                        name: "Plans",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/plans",
-                isActive: true
+        pages: [
+          {
+            id: "def",
+            name: "Plans",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "defg",
-                name: "Plan Details",
-                pages: [
-                    {
-                        id: "defgh",
-                        name: "Plan Details",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/plans/plan-details",
-                isActive: true
-            }
+          },
         ],
-        icon: "Plans",
+        menu: [],
+        path: "/plans",
         isActive: true,
-        sequence: 4
-    },
-    {
-        id: "e",
-        name: "Catalogues",
-        pages: [],
-        menu: [
-            {
-                id: "ef",
-                name: "Channel Integration",
-                pages: [
-                    {
-                        id: "efg",
-                        name: "Channel Integration",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/catalogues/channel-integration",
-                isActive: true
+      },
+      {
+        id: "defg",
+        name: "Plan Details",
+        pages: [
+          {
+            id: "defgh",
+            name: "Plan Details",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "efgh",
-                name: "Address Book",
-                pages: [
-                    {
-                        id: "efghi",
-                        name: "Address Book",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/catalogues/address-book",
-                isActive: true
-            },
-            {
-                id: "efghij",
-                name: "Product Catalogue",
-                pages: [
-                    {
-                        id: "efghijk",
-                        name: "Product Catalogue",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/catalogues/product-catalogue",
-                isActive: true
-            },
-            {
-                id: "efghijkl",
-                name: "Box Catalogue",
-                pages: [
-                    {
-                        id: "efghijklm",
-                        name: "Box Catalogue",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/catalogues/box-catalogue",
-                isActive: true
-            }
+          },
         ],
-        icon: "Catalogues",
+        menu: [],
+        path: "/subscription/plan-details",
         isActive: true,
-        sequence: 5
-    },
-    {
-        id: "f",
-        name: "Weight Management",
-        pages: [],
-        menu: [
-            {
-                id: "fg",
-                name: "Weight Freeze",
-                pages: [
-                    {
-                        id: "fgh",
-                        name: "Weight Freeze",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/weight-management/weight-freeze",
-                isActive: true
+      },
+    ],
+    icon: "Plans",
+    isActive: true,
+    sequence: 4,
+  },
+  {
+    id: "e",
+    name: "Catalogues",
+    pages: [],
+    menu: [
+      {
+        id: "ef",
+        name: "Channel Integration",
+        pages: [
+          {
+            id: "efg",
+            name: "Channel Integration",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "fghi",
-                name: "New Discrepancy",
-                pages: [
-                    {
-                        id: "fghij",
-                        name: "New Discrepancy",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/weight-management/new-discrepancy",
-                isActive: true
-            },
-            {
-                id: "fghijk",
-                name: "Pending Dispute",
-                pages: [
-                    {
-                        id: "fghijkl",
-                        name: "Pending Dispute",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/weight-management/pending-dispute",
-                isActive: true
-            },
-            {
-                id: "fghijklm",
-                name: "Completed",
-                pages: [
-                    {
-                        id: "fghijklmn",
-                        name: "Completed",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/weight-management/completed",
-                isActive: true
-            }
+          },
         ],
-        icon: "WeightManagement",
+        menu: [],
+        path: "/catalogues/channel-integration",
         isActive: true,
-        sequence: 6
-    },
-    {
-        id: "g",
+      },
+      {
+        id: "efgh",
+        name: "Address Book",
+        pages: [
+          {
+            id: "efghi",
+            name: "Address Book",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/catalogues/address-book",
+        isActive: true,
+      },
+      {
+        id: "efghij",
+        name: "Product Catalogue",
+        pages: [
+          {
+            id: "efghijk",
+            name: "Product Catalogue",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/catalogues/product-catalogue",
+        isActive: true,
+      },
+      {
+        id: "efghijkl",
+        name: "Box Catalogue",
+        pages: [
+          {
+            id: "efghijklm",
+            name: "Box Catalogue",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/catalogues/box-catalogue",
+        isActive: true,
+      },
+    ],
+    icon: "Catalogues",
+    isActive: true,
+    sequence: 5,
+  },
+  {
+    id: "f",
+    name: "Weight Management",
+    pages: [],
+    menu: [
+      {
+        id: "fg",
+        name: "Weight Freeze",
+        pages: [
+          {
+            id: "fgh",
+            name: "Weight Freeze",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/weight-management/weight-freeze",
+        isActive: true,
+      },
+      {
+        id: "fghi",
+        name: "New Discrepancy",
+        pages: [
+          {
+            id: "fghij",
+            name: "New Discrepancy",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/weight-management/new-discrepancy",
+        isActive: true,
+      },
+      {
+        id: "fghijk",
+        name: "Pending Dispute",
+        pages: [
+          {
+            id: "fghijkl",
+            name: "Pending Dispute",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/weight-management/pending-dispute",
+        isActive: true,
+      },
+      {
+        id: "fghijklm",
+        name: "Completed",
+        pages: [
+          {
+            id: "fghijklmn",
+            name: "Completed",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/weight-management/completed",
+        isActive: true,
+      },
+    ],
+    icon: "WeightManagement",
+    isActive: true,
+    sequence: 6,
+  },
+  {
+    id: "g",
+    name: "Reports",
+    pages: [],
+    menu: [
+      {
+        id: "gh",
         name: "Reports",
-        pages: [],
-        menu: [
-            {
-                id: "gh",
-                name: "Reports",
-                pages: [
-                    {
-                        id: "ghi",
-                        name: "Reports",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/reports/reports",
-                isActive: true
-            }
-        ],
-        icon: "Reports",
-        isActive: true,
-        sequence: 7
-    },
-    {
-        id: "h",
-        name: "Settings",
-        pages: [],
-        menu: [
-            {
-                id: "hi",
-                name: "Settings",
-                pages: [
-                    {
-                        id: "hij",
-                        name: "Change Password",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "hijk",
-                        name: "Role Management",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "hijkl",
-                        name: "User Management",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    },
-                    {
-                        id: "hijklm",
-                        name: "System Log",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/settings",
-                isActive: true
-            }
-        ],
-        icon: "Settings",
-        isActive: true,
-        sequence: 8
-    },
-    {
-        id: "i",
-        name: "Notifications",
-        pages: [],
-        menu: [
-            {
-                id: "ij",
-                name: "Notifications",
-                pages: [
-                    {
-                        id: "ijk",
-                        name: "Notifications",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/notifications/notifications",
-                isActive: true
-            }
-        ],
-        icon: "Notification",
-        isActive: true,
-        sequence: 9
-    },
-    {
-        id: "j",
-        name: "Feedback",
-        pages: [],
-        menu: [
-            {
-                id: "jk",
-                name: "Feedback",
-                pages: [
-                    {
-                        id: "jkl",
-                        name: "Feedback",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/feedback/feedback",
-                isActive: true
-            }
-        ],
-        icon: "Feedback",
-        isActive: true,
-        sequence: 10
-    },
-    {
-        id: "k",
-        name: "Help",
-        pages: [],
-        menu: [
-            {
-                id: "kl",
-                name: "FAQs",
-                pages: [
-                    {
-                        id: "klm",
-                        name: "FAQs",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/help/faqs",
-                isActive: true
+        pages: [
+          {
+            id: "ghi",
+            name: "Reports",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
             },
-            {
-                id: "klmn",
-                name: "Ticket",
-                pages: [
-                    {
-                        id: "klmno",
-                        name: "Ticket",
-                        isActive: true,
-                        permissions: {
-                            create: true,
-                            read: true,
-                            update: true,
-                            delete: true,
-                            download: true,
-                            upload: true
-                        }
-                    }
-                ],
-                menu: [],
-                path: "/help/ticket",
-                isActive: true
-            }
+          },
         ],
-        icon: "Help",
+        menu: [],
+        path: "/reports/reports",
         isActive: true,
-        sequence: 11
-    }
-]
+      },
+    ],
+    icon: "Reports",
+    isActive: true,
+    sequence: 7,
+  },
+  {
+    id: "h",
+    name: "Settings",
+    pages: [],
+    menu: [
+      {
+        id: "hi",
+        name: "Settings",
+        pages: [
+          {
+            id: "hij",
+            name: "Change Password",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "hijk",
+            name: "Role Management",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "hijkl",
+            name: "User Management",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+          {
+            id: "hijklm",
+            name: "System Log",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/settings",
+        isActive: true,
+      },
+    ],
+    icon: "Settings",
+    isActive: true,
+    sequence: 8,
+  },
+  {
+    id: "i",
+    name: "Notifications",
+    pages: [],
+    menu: [
+      {
+        id: "ij",
+        name: "Notifications",
+        pages: [
+          {
+            id: "ijk",
+            name: "Notifications",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/notifications/notifications",
+        isActive: true,
+      },
+    ],
+    icon: "Notification",
+    isActive: true,
+    sequence: 9,
+  },
+  {
+    id: "j",
+    name: "Feedback",
+    pages: [],
+    menu: [
+      {
+        id: "jk",
+        name: "Feedback",
+        pages: [
+          {
+            id: "jkl",
+            name: "Feedback",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/feedback/feedback",
+        isActive: true,
+      },
+    ],
+    icon: "Feedback",
+    isActive: true,
+    sequence: 10,
+  },
+  {
+    id: "k",
+    name: "Help",
+    pages: [],
+    menu: [
+      {
+        id: "kl",
+        name: "FAQs",
+        pages: [
+          {
+            id: "klm",
+            name: "FAQs",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/help/faqs",
+        isActive: true,
+      },
+      {
+        id: "klmn",
+        name: "Ticket",
+        pages: [
+          {
+            id: "klmno",
+            name: "Ticket",
+            isActive: true,
+            permissions: {
+              create: true,
+              read: true,
+              update: true,
+              delete: true,
+              download: true,
+              upload: true,
+            },
+          },
+        ],
+        menu: [],
+        path: "/help/ticket",
+        isActive: true,
+      },
+    ],
+    icon: "Help",
+    isActive: true,
+    sequence: 11,
+  },
+];
 
 export const tabs = [
-    {
-        statusName: "All",
-        value: "ALL",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Smart Shipyaari",
-        value: "SMART_SHIPYAARI",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Plan",
-        value: "PLANS",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Catalogue",
-        value: "CATALOGUE",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Tracking",
-        value: "TRACKING",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Wallet",
-        value: "Wallet",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Billing",
-        value: "BILLING",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Weight Management",
-        value: "WEIGHT MANAGEMENT",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Report",
-        value: "REPORTS",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Orders",
-        value: "ORDERS",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Notification",
-        value: "NOTIFICATION",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Feedback",
-        value: "FEEDBACK",
-        orderNumber: 0,
-    },
-    {
-        statusName: "Help",
-        value: "HELP",
-        orderNumber: 0,
-    },
+  {
+    statusName: "All",
+    value: "ALL",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Smart Shipyaari",
+    value: "SMART_SHIPYAARI",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Plan",
+    value: "PLANS",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Catalogue",
+    value: "CATALOGUE",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Tracking",
+    value: "TRACKING",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Wallet",
+    value: "Wallet",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Billing",
+    value: "BILLING",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Weight Management",
+    value: "WEIGHT MANAGEMENT",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Report",
+    value: "REPORTS",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Orders",
+    value: "ORDERS",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Notification",
+    value: "NOTIFICATION",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Feedback",
+    value: "FEEDBACK",
+    orderNumber: 0,
+  },
+  {
+    statusName: "Help",
+    value: "HELP",
+    orderNumber: 0,
+  },
 ];
