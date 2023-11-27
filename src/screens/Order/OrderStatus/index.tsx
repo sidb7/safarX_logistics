@@ -197,7 +197,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           setCancellationModal &&
             setCancellationModal({ isOpen: true, payload: awbNo });
         } else if (identifier === "Download_menifest_report") {
-          console.log("will intigrate Soon");
           setManifestModal({ ...manifestModal, isOpen: true });
         }
 
