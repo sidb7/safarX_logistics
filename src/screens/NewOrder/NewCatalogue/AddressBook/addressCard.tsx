@@ -57,6 +57,7 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
               setIsModalOpen();
               setAddressToBeDeleted();
             }}
+            className="cursor-pointer"
           />
         </div>
       </div>
