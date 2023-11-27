@@ -265,44 +265,45 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const filterButton = () => {
     if (isLgScreen) {
-      return (
-        <div className="grid grid-cols-3 gap-x-2 lg:flex ">
-          {selectedRowdata?.length > 0 && getActionsIcon()?.length > 0 && (
-            <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
-              {getActionsIcon()?.map((data: any, index: any) => {
-                return (
-                  <>
-                    <div
-                      key={index}
-                      className={`${
-                        index < getActionsIcon().length - 1 &&
-                        "border-r border-[#A4A4A4]"
-                      } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
-                      onClick={() =>
-                        handleActions(currentStatus, selectedRowdata)
-                      }
-                      data-tooltip-id="my-tooltip-inline"
-                      data-tooltip-content={data.hovertext}
-                    >
-                      <img src={data.icon} alt="" className="w-[17px]" />
-                    </div>
-                    <Tooltip
-                      id="my-tooltip-inline"
-                      style={{
-                        backgroundColor: "bg-neutral-900",
-                        color: "#FFFFFF",
-                        width: "fit-content",
-                        fontSize: "14px",
-                        lineHeight: "16px",
-                      }}
-                    />
-                  </>
-                );
-              })}
-            </div>
-          )}
+      if (currentStatus === "BOOKED") {
+        return (
+          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+            {getActionsIcon()?.length > 0 && (
+              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <div
+                        key={index}
+                        className={`${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(currentStatus, selectedRowdata)
+                        }
+                        data-tooltip-id="my-tooltip-inline"
+                        data-tooltip-content={data.hovertext}
+                      >
+                        <img src={data.icon} alt="" className="w-[17px]" />
+                      </div>
+                      <Tooltip
+                        id="my-tooltip-inline"
+                        style={{
+                          backgroundColor: "bg-neutral-900",
+                          color: "#FFFFFF",
+                          width: "fit-content",
+                          fontSize: "14px",
+                          lineHeight: "16px",
+                        }}
+                      />
+                    </>
+                  );
+                })}
+              </div>
+            )}
 
-          {/* {currentStatus === "BOOKED" && (
+            {/* {currentStatus === "BOOKED" && (
             <>
               <CustomButton
                 className="px-1 py-1 font-semibold text-[14px]"
@@ -315,29 +316,104 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               />
             </>
           )} */}
-          <div>
-            <SearchBox
-              className="removePaddingPlaceHolder"
-              label="Search"
-              value={searchedText}
-              onChange={(e: any) => {
-                handleSearchOrder(e);
-              }}
-              getFullContent={getAllOrders}
-              customPlaceholder="Search By Order Id, AWB"
-            />
+            <div>
+              <SearchBox
+                className="removePaddingPlaceHolder"
+                label="Search"
+                value={searchedText}
+                onChange={(e: any) => {
+                  handleSearchOrder(e);
+                }}
+                getFullContent={getAllOrders}
+                customPlaceholder="Search By Order Id, AWB"
+              />
+            </div>
+            <div
+              className="flex justify-between items-center p-2 gap-x-2"
+              onClick={() => setFilterModal(true)}
+            >
+              <img src={FilterIcon} alt="" />
+              <span className="text-[#004EFF] text-[14px] font-semibold">
+                FILTER
+              </span>
+            </div>
           </div>
-          <div
-            className="flex justify-between items-center p-2 gap-x-2"
-            onClick={() => setFilterModal(true)}
-          >
-            <img src={FilterIcon} alt="" />
-            <span className="text-[#004EFF] text-[14px] font-semibold">
-              FILTER
-            </span>
+        );
+      } else {
+        return (
+          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+            {selectedRowdata?.length > 0 && getActionsIcon()?.length > 0 && (
+              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <div
+                        key={index}
+                        className={`${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(currentStatus, selectedRowdata)
+                        }
+                        data-tooltip-id="my-tooltip-inline"
+                        data-tooltip-content={data.hovertext}
+                      >
+                        <img src={data.icon} alt="" className="w-[17px]" />
+                      </div>
+                      <Tooltip
+                        id="my-tooltip-inline"
+                        style={{
+                          backgroundColor: "bg-neutral-900",
+                          color: "#FFFFFF",
+                          width: "fit-content",
+                          fontSize: "14px",
+                          lineHeight: "16px",
+                        }}
+                      />
+                    </>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* {currentStatus === "BOOKED" && (
+            <>
+              <CustomButton
+                className="px-1 py-1 font-semibold text-[14px]"
+                text="Manifest Report"
+                onClick={() =>
+                  setManifestModal({ ...manifestModal, isOpen: true })
+                }
+                showIcon={true}
+                icon={""}
+              />
+            </>
+          )} */}
+            <div>
+              <SearchBox
+                className="removePaddingPlaceHolder"
+                label="Search"
+                value={searchedText}
+                onChange={(e: any) => {
+                  handleSearchOrder(e);
+                }}
+                getFullContent={getAllOrders}
+                customPlaceholder="Search By Order Id, AWB"
+              />
+            </div>
+            <div
+              className="flex justify-between items-center p-2 gap-x-2"
+              onClick={() => setFilterModal(true)}
+            >
+              <img src={FilterIcon} alt="" />
+              <span className="text-[#004EFF] text-[14px] font-semibold">
+                FILTER
+              </span>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     } else {
       return (
         <div className="flex items-center justify-between w-[100%]">
