@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomDropDown from "../../../../components/DropDown";
+import { emptyOrFullTextRegex } from "../../../../utils/regexCheck";
 
 interface IEditAddressProps {}
 
@@ -28,6 +29,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
       isActive,
       isDeleted,
       pickupAddressId,
+      deliveryAddressId,
       privateCompanyId,
       addressType,
       city,
@@ -48,6 +50,8 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
       updatedAt,
       updatedBy,
     },
+    name,
+    phoneNumber,
   } = useLocation().state;
 
   const [updateAddress, setUpdateAddress] = useState<any>({
@@ -60,8 +64,8 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     state: state,
     country: country,
     addressType: addressType,
-    contactName: contactName,
-    mobileNo: mobileNo,
+    contactName: name,
+    mobileNo: phoneNumber,
     alternateMobileNo: 0,
     // emailId: "",
     // contactType: "",
@@ -76,7 +80,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     companyId,
     isActive,
     isDeleted,
-    pickupAddressId,
+
     privateCompanyId,
     contact,
     fullAddress,
@@ -89,9 +93,15 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     updatedAt,
     updatedBy,
   });
-  const payload = {
-    ...updateAddress,
-  };
+
+  let payload: any;
+
+  if (activeTab === "pickup") {
+    payload = { ...updateAddress, pickupAddressId };
+  } else {
+    payload = { ...updateAddress, deliveryAddressId };
+  }
+
   const [isDisabled, setIsDisabled] = useState(false);
   const [editAddressType, setEditAddressType] = useState<any>();
 
@@ -255,12 +265,14 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
           <CustomInputBox
             label="Contact Name"
             value={updateAddress.contactName}
-            onChange={(e: any) =>
-              setUpdateAddress({
-                ...updateAddress,
-                contactName: e.target.value,
-              })
-            }
+            onChange={(e: any) => {
+              if (emptyOrFullTextRegex.test(e.target.value)) {
+                const temp = updateAddress;
+                temp.contactName = e.target.value;
+                temp.contact.name = e.target.value;
+                setUpdateAddress({ ...temp });
+              }
+            }}
           />
           <CustomInputBox
             label="Contact Number"
@@ -268,12 +280,12 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             inputType="text"
             inputMode="numeric"
             maxLength={10}
-            onChange={(e: any) =>
-              setUpdateAddress({
-                ...updateAddress,
-                mobileNo: +e.target.value,
-              })
-            }
+            onChange={(e: any) => {
+              const temp = updateAddress;
+              temp.mobileNo = +e.target.value;
+              temp.contact.mobileNo = +e.target.value;
+              setUpdateAddress({ ...temp });
+            }}
           />
         </div>
       </div>

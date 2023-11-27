@@ -69,7 +69,6 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     }
   };
 
-  console.log("Hiiiii");
   useEffect(() => {
     (async () => {
       await getAddress();
