@@ -1120,33 +1120,6 @@ const MyRoutes: React.FC = () => {
               }
             />
           </Route>
-          {/* Plan Routes */}
-          <Route>
-            <Route
-              path="/plans"
-              element={
-                <ProtectedRoute>
-                  <NewUserPlanScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/plans/plan-details"
-              element={
-                <ProtectedRoute>
-                  <PlanDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/plans/compare-plans"
-              element={
-                <ProtectedRoute>
-                  <ComparePlans />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
           <Route>
             <Route
               path="/tracking"
