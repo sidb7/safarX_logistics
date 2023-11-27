@@ -243,7 +243,7 @@ function UserManagement() {
             component={Buttons("", usersData)}
           />
           <div className=" my-3 mx-6">
-            <div className=" flex justify-end">
+            {/* <div className=" flex justify-end">
               <div className="grid grid-cols-3 gap-x-2 lg:flex ">
                 <div>
                   <SearchBox label="Search" value="" onChange={() => {}} />
@@ -257,7 +257,7 @@ function UserManagement() {
                   </span>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className=" mt-6">
               <CustomTable data={usersData || []} columns={columns || []} />

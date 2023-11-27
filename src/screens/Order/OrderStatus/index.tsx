@@ -37,6 +37,8 @@ interface IOrderstatusProps {
   allOrders: any;
   selectedRowdata?: any;
   setDeleteModalDraftOrder?: any;
+  setCancellationModal?: any;
+  tabStatusId?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -69,6 +71,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   selectedRowdata,
   setDeleteModalDraftOrder,
+  setCancellationModal,
+  tabStatusId,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -84,6 +88,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     isOpen: false,
   });
 
+  useEffect(() => {
+    setStatusId(tabStatusId || statusId);
+  }, [tabStatusId]);
+
   const [filterData, setFilterData] = useState([
     { label: "All", isActive: false, value: "all" },
     { label: "Draft", isActive: false, value: "" },
@@ -91,10 +99,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   ]);
 
   const actionsObject: any = {
-    DRAFT: [{ icon: DeleteIconForLg, hovertext: "Delete Orders" }],
+    DRAFT: [
+      {
+        icon: DeleteIconForLg,
+        hovertext: "Delete Orders",
+        identifier: "Delete",
+      },
+    ],
     BOOKED: [
-      { icon: CrossIcon, hovertext: "Cancel Orders" },
-      { icon: DownloadIcon, hovertext: "Download Manifest Reports" },
+      { icon: CrossIcon, hovertext: "Cancel Orders", identifier: "Cancel" },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Manifest Reports",
+        identifier: "Download_menifest_report",
+      },
     ],
   };
 
@@ -152,23 +170,42 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleActions = (actionName: any, selectedRowdata: any) => {
-    const tempOrderIds = selectedRowdata.map(
-      (data: any, index: any) => data.original.tempOrderId
-    );
-
-    let payload = {
-      tempOrderIdArray: tempOrderIds,
-    };
-
+  const handleActions = (
+    actionName: any,
+    selectedRowdata: any,
+    identifier?: any
+  ) => {
     switch (actionName) {
       case "DRAFT": {
+        const tempOrderIds = selectedRowdata.map(
+          (data: any, index: any) => data.original.tempOrderId
+        );
+
+        let payload = {
+          tempOrderIdArray: tempOrderIds,
+        };
+
         setDeleteModalDraftOrder &&
           setDeleteModalDraftOrder({ isOpen: true, payload });
         break;
       }
       case "BOOKED": {
-        setManifestModal({ ...manifestModal, isOpen: true });
+        if (identifier === "Cancel") {
+          if (selectedRowdata.length > 0) {
+            const awbNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+            setCancellationModal &&
+              setCancellationModal({ isOpen: true, payload: awbNo });
+          } else {
+            toast.error(
+              "Please select atleast one for cancel your booked order"
+            );
+          }
+        } else if (identifier === "Download_menifest_report") {
+          setManifestModal({ ...manifestModal, isOpen: true });
+        }
+
         break;
       }
     }
@@ -280,7 +317,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           "border-r border-[#A4A4A4]"
                         } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
                         onClick={() =>
-                          handleActions(currentStatus, selectedRowdata)
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data.identifier
+                          )
                         }
                         data-tooltip-id="my-tooltip-inline"
                         data-tooltip-content={data.hovertext}

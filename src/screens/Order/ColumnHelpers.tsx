@@ -59,7 +59,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
     fileUrl = labelUrl || "";
     payLoad = {
-      cancelOrderPayLoad: { awbNo: data?.awb, orderId: data?.orderId },
+      awb: [data?.awb],
       fileUrl: labelUrl,
       taxInvoiceUrl: taxInvoiceUrl,
     };
@@ -77,37 +77,31 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
     "READY TO PICK": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
     "IN TRANSIT": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
     "OUT OF DELIVERY": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
     DELIVERED: [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
     RETURN: [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
-      { title: "Delete Order", actionType: "delete" },
     ],
   };
 
@@ -1035,13 +1029,13 @@ export const columnHelperForNewOrder = (
           tempOrderId = "-",
           sellerId = "-",
           status,
+          orderId,
           source,
         } = info?.row?.original;
         const { AWB } = status[0] ?? "";
         const copyString = `
-          Order Id: ${tempOrderId} 
-          Shipyaari Id: ${sellerId}
-          Tracking Id: ${AWB}
+          Order Id: ${orderId} 
+          Shipyaari Id: ${tempOrderId}
           Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
           (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
         }
@@ -1187,6 +1181,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
           boxInfo,
           codInfo,
           tempOrderId = "-",
+          orderId,
           sellerId = "-",
           status,
 
@@ -1194,8 +1189,8 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         } = info?.row?.original;
 
         const copyString = `
-          Order Id: ${tempOrderId} 
-          Shipyaari Id: ${sellerId}
+          Order Id: ${orderId} 
+          Shipyaari Id: ${tempOrderId}
           Tracking Id: ${awb}
           Package Details: ${boxInfo?.length > 0 && boxInfo[0].name} ${
           (boxInfo?.length > 0 && boxInfo[1]?.boxInfo) || ""
