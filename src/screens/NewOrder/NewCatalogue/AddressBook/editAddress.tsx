@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import CustomInputBox from "../../../../components/Input";
@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
+import CustomDropDown from "../../../../components/DropDown";
 
 interface IEditAddressProps {}
 
@@ -92,6 +93,7 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     ...updateAddress,
   };
   const [isDisabled, setIsDisabled] = useState(false);
+  const [editAddressType, setEditAddressType] = useState<any>();
 
   const addressUpdation = async (e: any) => {
     for (const key in updateAddress) {
@@ -143,11 +145,36 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     }
   };
 
+  useEffect(() => {
+    if (activeTab === "pickup") {
+      setEditAddressType("Pickup Address");
+    } else {
+      setEditAddressType("Delivery Address");
+    }
+  }, []);
+
   return (
     <div className="h-full">
       <Breadcrum label="Edit Address" />
       <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
+          <div>
+            <CustomDropDown
+              // onChange={(e: any) => {
+              //   setEditAddressType(e.target.value);
+              // }}
+              onChange={() => {}}
+              value={editAddressType}
+              options={[
+                {
+                  label: editAddressType,
+                  value: editAddressType,
+                },
+              ]}
+              // heading="Address Type"
+            />
+          </div>
+
           <CustomInputBox
             label="Address Name"
             value={updateAddress.addressType}

@@ -207,7 +207,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Dead Weight"
             name="deadWeight"
             errorMessage={validationErrors?.deadWeight}
-            value={sellerBoxDetails?.deadWeight || ""}
+            value={sellerBoxDetails?.deadWeight}
             onChange={(e: any) => {
               if (!isNaN(e.target.value)) {
                 handleValidation(e);

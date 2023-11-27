@@ -5,9 +5,14 @@ import { POST } from "../../../../utils/webService";
 import {
   GET_PICKUP_ADDRESS,
   GET_DELIVERY_ADDRESS,
+  DELETE_PICKUP_ADDRESS,
+  DELETE_DELIVERY_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
+import ServiceButton from "../../../../components/Button/ServiceButton";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -20,11 +25,14 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
   const [address, setAddress]: any = useState();
   const [activeTab, setActiveTab] = useState("pickup");
   const [loading, setLoading] = useState(false);
+  const [addressToBeDeleted, setAddressToBeDeleted] = useState<any>("");
 
   const [filterData, setFilterData] = useState([
     { label: "Pickup Address", isActive: false },
     { label: "Delivery Address", isActive: false },
   ]);
+
+  const [isModalOpen, setIsModalOpen] = useState<any>(false);
 
   const cardData = (address: any) => {
     return {
@@ -45,22 +53,26 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     };
   };
 
-  useEffect(() => {
+  const getAddress = async () => {
     setLoading(true);
+    const { data: allAddressData }: any = await POST(
+      filterId === 0 ? GET_PICKUP_ADDRESS : GET_DELIVERY_ADDRESS
+    );
+    if (allAddressData?.success) {
+      setAddress(allAddressData.data);
+      setLoading(false);
+    } else {
+      toast.error(allAddressData?.message);
+      setAddress([]);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     (async () => {
-      const { data: allAddressData }: any = await POST(
-        filterId === 0 ? GET_PICKUP_ADDRESS : GET_DELIVERY_ADDRESS
-      );
-      if (allAddressData?.success) {
-        setAddress(allAddressData.data);
-        setLoading(false);
-      } else {
-        toast.error(allAddressData?.message);
-        setAddress([]);
-        setLoading(false);
-      }
+      await getAddress();
     })();
-  }, [filterId]);
+  }, []);
 
   const filterComponent = (className?: string) => {
     return (
@@ -118,6 +130,66 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
     );
   };
 
+  const deleteAddress = async () => {
+    try {
+      //Get all plans API
+      let payload, deleteUrl;
+
+      if (activeTab === "pickup") {
+        deleteUrl = DELETE_PICKUP_ADDRESS;
+        payload = { pickupAddressId: addressToBeDeleted };
+      } else {
+        deleteUrl = DELETE_DELIVERY_ADDRESS;
+        payload = { deliveryAddressId: addressToBeDeleted };
+      }
+
+      const { data: response }: any = await POST(deleteUrl, payload);
+
+      if (response?.success) {
+        await getAddress();
+      }
+    } catch (error) {
+      console.error(" ERROR", error);
+      return error;
+    }
+  };
+
+  const deleteModalContent = () => {
+    return (
+      <div className="flex flex-col  h-full w-full   p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsModalOpen(false)}
+          />
+        </div>
+        <div className="flex flex-col justify-center  items-center h-full w-full  ">
+          <p className="font-Open text-sm md:text-base font-semibold text-center">
+            Are you sure you want to delete this address?
+          </p>
+          <div className="flex  items-center gap-x-4 mt-10">
+            <ServiceButton
+              text="Yes"
+              className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
+              onClick={() => {
+                // createPlan(onSelectPlan);
+                deleteAddress();
+                setIsModalOpen(false);
+              }}
+            />
+            <ServiceButton
+              text="No"
+              className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+              onClick={() => setIsModalOpen(false)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {loading ? (
@@ -137,10 +209,25 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
                   key={index}
                   addressData={data}
                   activeTab={activeTab}
+                  setIsModalOpen={() => setIsModalOpen(true)}
+                  setAddressToBeDeleted={() =>
+                    setAddressToBeDeleted(
+                      activeTab === "pickup"
+                        ? data.pickupAddressId
+                        : data.deliveryAddressId
+                    )
+                  }
                 />
               );
             })}
           </div>
+          <CenterModal
+            isOpen={isModalOpen}
+            className="!w-[50%] !h-[50%] "
+            onRequestClose={() => setIsModalOpen(false)}
+          >
+            {deleteModalContent()}
+          </CenterModal>
         </div>
       )}
     </>
