@@ -49,6 +49,13 @@ const BoxDetails = (props: IBoxdetails) => {
     setAllProducts([...products]);
   }, [products]);
 
+  useEffect(() => {
+    if (selectedBox?.codInfo?.isCod) {
+      selectedBox.codInfo.collectableAmount =
+        selectedBox?.codInfo?.invoiceValue;
+    }
+  }, [selectedBox?.codInfo?.isCod]);
+
   const calculateVolumeWeight = (
     length: number,
     breadth: number,
@@ -73,7 +80,14 @@ const BoxDetails = (props: IBoxdetails) => {
       );
       return;
     }
-    setCheckBoxValuePerBox(value, "codAmount", boxIndex);
+
+    if (!isNaN(value)) {
+      setCheckBoxValuePerBox(
+        value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+        "codAmount",
+        boxIndex
+      );
+    }
   };
 
   const calcAllTotalProductAppliedWeight: any = () => {
@@ -276,7 +290,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     {/* {weight is length x width x height (cm) / 5000.} */}
                     {selectedBox.appliedWeight} Kg
                   </p>
-                </div>  
+                </div>
               </div>
             </div>
             {calcAllTotalProductAppliedWeight() >
@@ -363,7 +377,6 @@ const BoxDetails = (props: IBoxdetails) => {
                     isDisabled={!selectedBox?.codInfo?.isCod}
                     value={selectedBox?.codInfo?.collectableAmount}
                     onChange={handleCollectableAmmount}
-                    inputType="number"
                   />
                 </div>
               </div>
