@@ -247,60 +247,63 @@ const InvoicePdf = () => {
           </tbody>
         </table>
       </div>
-      <div className="py-3 mt-3 rounded-xl bg-white">
-        <table
-          cellPadding={0}
-          cellSpacing={0}
-          border={0}
-          className="fluid-table w-full"
-        >
-          <thead>
-            <tr>
-              <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
-                Transaction Date
-              </th>
-              <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
-                Gateway
-              </th>
-              <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
-                Transaction ID
-              </th>
-              {/* <th className="w-[20%] pl-[60px] text-left">Amount</th> */}
-              <th className="w-[20%] text-right text-[0.875rem] font-bold pr-[30px]">
-                Amount
-              </th>
-            </tr>
-          </thead>
-          <tbody className="stripedCss">
-            <tr>
-              <td className="pl-[60px] text-[0.875rem] font-normal text-left">
-                30/10/2023
-              </td>
-              <td className="pl-[60px] text-[0.875rem] font-normal text-left">
-                Credit Balance
-              </td>
-              <td className="pl-[60px] text-[0.875rem] font-normal text-left">
-                NA
-              </td>
-              {/* <td className="pl-[60px] text-left"></td> */}
-              <td className="text-right text-[0.625rem] font-normal pr-[30px]">
-                ₹4,431.31
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-              <td className="pl-[60px] text-[0.875rem] font-bold text-left">
-                Amount Due
-              </td>
-              {/* <td></td> */}
-              <td className="text-right text-[0.875rem] font-normal pr-[30px]">
-                ₹0.00
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {invoicData?.status !== "UNPAID" && (
+        <div className="py-3 mt-3 rounded-xl bg-white">
+          <table
+            cellPadding={0}
+            cellSpacing={0}
+            border={0}
+            className="fluid-table w-full"
+          >
+            <thead>
+              <tr>
+                <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
+                  Transaction Date
+                </th>
+                <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
+                  Gateway
+                </th>
+                <th className="w-[20%] pl-[60px] text-[0.875rem] font-bold text-left">
+                  Transaction ID
+                </th>
+                {/* <th className="w-[20%] pl-[60px] text-left">Amount</th> */}
+                <th className="w-[20%] text-right text-[0.875rem] font-bold pr-[30px]">
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody className="stripedCss">
+              <tr>
+                <td className="pl-[60px] text-[0.875rem] font-normal text-left">
+                  --/--/----
+                </td>
+                <td className="pl-[60px] text-[0.875rem] font-normal text-left">
+                  -- ---
+                </td>
+                <td className="pl-[60px] text-[0.875rem] font-normal text-left">
+                  NA
+                </td>
+                {/* <td className="pl-[60px] text-left"></td> */}
+                <td className="text-right text-[0.625rem] font-normal pr-[30px]">
+                  ₹0
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td className="pl-[60px] text-[0.875rem] font-bold text-left">
+                  Amount Due
+                </td>
+                {/* <td></td> */}
+                <td className="text-right text-[0.875rem] font-normal pr-[30px]">
+                  ₹0.00
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+
       <div className="py-3 mt-3 rounded-xl bg-white">
         <p className="pl-[60px]  text-[0.875rem] font-bold mb-3">
           <b>Bank and Other Commercial Details</b>
