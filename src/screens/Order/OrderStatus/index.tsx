@@ -99,10 +99,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   ]);
 
   const actionsObject: any = {
-    DRAFT: [{ icon: DeleteIconForLg, hovertext: "Delete Orders" }],
+    DRAFT: [
+      {
+        icon: DeleteIconForLg,
+        hovertext: "Delete Orders",
+        identifier: "Delete",
+      },
+    ],
     BOOKED: [
-      { icon: CrossIcon, hovertext: "Cancel Orders" },
-      { icon: DownloadIcon, hovertext: "Download Manifest Reports" },
+      { icon: CrossIcon, hovertext: "Cancel Orders", identifier: "Cancel" },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Manifest Reports",
+        identifier: "Download_menifest_report",
+      },
     ],
   };
 
@@ -160,7 +170,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleActions = (actionName: any, selectedRowdata: any) => {
+  const handleActions = (
+    actionName: any,
+    selectedRowdata: any,
+    identifier?: any
+  ) => {
     switch (actionName) {
       case "DRAFT": {
         const tempOrderIds = selectedRowdata.map(
@@ -176,12 +190,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         break;
       }
       case "BOOKED": {
-        const awbNo = selectedRowdata.map((data: any, index: any) => {
-          return data.original.awb;
-        });
-
-        setCancellationModal &&
-          setCancellationModal({ isOpen: true, payload: awbNo });
+        if (identifier === "Cancel") {
+          const awbNo = selectedRowdata.map((data: any, index: any) => {
+            return data.original.awb;
+          });
+          setCancellationModal &&
+            setCancellationModal({ isOpen: true, payload: awbNo });
+        } else if (identifier === "Download_menifest_report") {
+          console.log("will intigrate Soon");
+          setManifestModal({ ...manifestModal, isOpen: true });
+        }
 
         break;
       }
@@ -293,7 +311,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         "border-r border-[#A4A4A4]"
                       } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
                       onClick={() =>
-                        handleActions(currentStatus, selectedRowdata)
+                        handleActions(
+                          currentStatus,
+                          selectedRowdata,
+                          data?.identifier
+                        )
                       }
                       data-tooltip-id="my-tooltip-inline"
                       data-tooltip-content={data.hovertext}
