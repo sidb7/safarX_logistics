@@ -191,11 +191,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       }
       case "BOOKED": {
         if (identifier === "Cancel") {
-          const awbNo = selectedRowdata.map((data: any, index: any) => {
-            return data.original.awb;
-          });
-          setCancellationModal &&
-            setCancellationModal({ isOpen: true, payload: awbNo });
+          if (selectedRowdata.length > 0) {
+            const awbNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+            setCancellationModal &&
+              setCancellationModal({ isOpen: true, payload: awbNo });
+          } else {
+            toast.error(
+              "Please select atleast one for cancel your booked order"
+            );
+          }
         } else if (identifier === "Download_menifest_report") {
           setManifestModal({ ...manifestModal, isOpen: true });
         }
@@ -311,7 +317,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           "border-r border-[#A4A4A4]"
                         } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
                         onClick={() =>
-                          handleActions(currentStatus, selectedRowdata)
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data.identifier
+                          )
                         }
                         data-tooltip-id="my-tooltip-inline"
                         data-tooltip-content={data.hovertext}
