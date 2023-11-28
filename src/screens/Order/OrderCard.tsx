@@ -330,8 +330,9 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
                     alt=""
                     data-tooltip-id="my-order-inline"
                     data-tooltip-content={
-                      openSection &&
-                      "Expand the order to view details of the order"
+                      openSection
+                        ? "Expand the order to view details of the order"
+                        : ""
                     }
                   />
 
