@@ -15,6 +15,7 @@ import {
   greaterThenZero,
   isRequired,
 } from "../../../../utils/validationRules";
+import BoxDetails from "../../Product/BoxDetails";
 
 interface ISellerBoxDetailsProps {
   editMode?: boolean;
@@ -36,10 +37,14 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
     length: 0,
     breadth: 0,
     height: 0,
-    color: "",
-    price: "",
+    color: "brown",
+    price: 0,
     deadWeight: 0,
   });
+  console.log(
+    "🚀 ~ file: SellerBoxDetails.tsx:44 ~ SellerBoxDetails ~ sellerBoxDetails:",
+    sellerBoxDetails
+  );
   const [volumetricWeight, setVolumetricWeight] = useState<any>(0);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [validationErrors, setValidationErrors]: any = useState<any>(null);
@@ -62,12 +67,13 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
     breadth: [isRequired, greaterThenZero],
     height: [isRequired, greaterThenZero],
     color: [isRequired],
-    price: [isRequired, checkNonNegative, greaterThenZero],
+    price: [checkNonNegative],
     deadWeight: [isRequired, checkNonNegative],
   };
   const validateOnSubmit = () => {
     let hasErrors = false;
     for (const inputName in validation) {
+      console.log("sellerBoxDetails[inputName]", sellerBoxDetails);
       const errors = validate(
         sellerBoxDetails[inputName],
         validation[inputName]
@@ -87,9 +93,15 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
 
     if (!valid) return;
 
+    let payload: any = sellerBoxDetails;
+    if (!isEditMode) {
+      let { deadWeight, name } = payload;
+      payload.name = `${Math.max(deadWeight, volumetricWeight)}kg - ${name}`;
+    }
+
     const { data } = await POST(
       isEditMode ? UPDATE_SELLER_BOX : CREATE_SELLER_BOX,
-      sellerBoxDetails
+      payload
     );
     if (data?.success) {
       updateBoxApi();
@@ -105,14 +117,31 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
   }, [sellerBoxDetails]);
 
   useEffect(() => {
+    const { length, height, breadth } = sellerBoxDetails;
+    if (isEditMode) return;
+    if (!length) return;
+    if (!height) return;
+    if (!breadth) return;
+
+    setSellerBoxDetails({
+      ...sellerBoxDetails,
+      name: `${length}x${breadth}x${height}`,
+    });
+  }, [
+    sellerBoxDetails.length,
+    sellerBoxDetails.height,
+    sellerBoxDetails.length,
+  ]);
+
+  useEffect(() => {
     if (Object.keys(tempSellerBoxDetails).length > 0) {
       setIsEditMode(true);
+      setSellerBoxDetails({
+        ...tempSellerBoxDetails,
+      });
     } else {
       setIsEditMode(false);
     }
-    setSellerBoxDetails({
-      ...tempSellerBoxDetails,
-    });
   }, [tempSellerBoxDetails]);
 
   const calculateVolumeWeight = (
@@ -192,7 +221,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Box Price"
             name="price"
             errorMessage={validationErrors?.price}
-            value={sellerBoxDetails?.price || ""}
+            value={sellerBoxDetails?.price}
             onChange={(e: any) => {
               if (!isNaN(e.target.value)) {
                 handleValidation(e);
@@ -226,7 +255,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             inputType="text"
             name="length"
             errorMessage={validationErrors?.length}
-            value={sellerBoxDetails?.length || ""}
+            value={sellerBoxDetails?.length}
             onChange={(e: any) => {
               if (!isNaN(e.target.value)) {
                 handleValidation(e);
@@ -242,7 +271,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             name="breadth"
             label="Breadth (cm)"
             errorMessage={validationErrors?.breadth}
-            value={sellerBoxDetails?.breadth || ""}
+            value={sellerBoxDetails?.breadth}
             onChange={(e: any) => {
               if (!isNaN(e.target.value)) {
                 handleValidation(e);
@@ -258,7 +287,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             label="Height (cm)"
             inputType="text"
             errorMessage={validationErrors?.height}
-            value={sellerBoxDetails?.height || ""}
+            value={sellerBoxDetails?.height}
             onChange={(e: any) => {
               if (!isNaN(e.target.value)) {
                 handleValidation(e);
@@ -272,7 +301,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           <CustomInputBox
             name="volumetricWeight"
             label="Volumetric Weight (Kg)"
-            value={volumetricWeight || ""}
+            value={volumetricWeight}
             inputType="number"
             isDisabled={true}
             tempLabel={true}

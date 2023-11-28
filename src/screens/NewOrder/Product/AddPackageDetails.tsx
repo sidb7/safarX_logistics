@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
 import CrossIcon from "../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../components/Input";
@@ -284,10 +284,15 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
           <img
             src={CrossIcon}
             alt="Cross Icon"
-            className="cursor-pointer self-center absolute right-0  top-6 pr-8"
+            className="cursor-pointer self-center absolute right-0 z-10 top-6 pr-8"
             onClick={() => setIsSearchProductRightModalOpen(false)}
           />
-          <div className="flex  items-center ">
+
+          <div
+            className={`${
+              selectedProductTemp.length > 0 ? "opacity-100 " : "opacity-0 "
+            }  flex duration-100 ease-in-out transition-all items-center `}
+          >
             <div className="flex gap-x-2">
               <img src={ProductIcon} alt="Product" />
               <p className="font-Lato font-normal text-2xl leading-8 ">
@@ -297,11 +302,16 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             <p className="pl-4">{`(${selectedProductTemp.length} selected)`}</p>
             {/* //selected products */}
           </div>
-          <div className="flex flex-wrap max-h-[350px] py-4 transition-all mt-2 overflow-scroll">
+          <div
+            className={`${
+              selectedProductTemp.length > 0
+                ? " !max-h-[300px] opacity-100 py-4 "
+                : "opacity-0 "
+            } flex-wrap  max-h-[0] duration-300 ease-in-out transition-all mt-2 overflow-auto`}
+            // style={{ border: "2px solid red" }}
+          >
             <div
-              className={`${
-                selectedProductTemp.length > 0 ? "flex h-full" : "hidden h-0"
-              }  flex-wrap w-full transition-all ease-in-out  gap-y-4 gap-x-2 `}
+              className={`h-auto flex flex-wrap  duration-300  w-full overflow-scroll transition-all ease-in-out  gap-y-4 gap-x-2 `}
             >
               {selectedProductTemp?.map((eachProduct: any, index: number) => {
                 return (
@@ -370,7 +380,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 <div className="flex">
                   <Spinner />
                 </div>
-                q
               </div>
             ) : (
               <>

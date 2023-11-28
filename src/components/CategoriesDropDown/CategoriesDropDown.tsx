@@ -79,6 +79,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       <CustomInputBox
         inputType="select"
         label="Categories"
+        autoComplete={"off"}
         value={inputValue}
         name="category"
         onChange={(e) => {
