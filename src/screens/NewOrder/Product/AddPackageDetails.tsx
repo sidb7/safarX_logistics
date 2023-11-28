@@ -287,44 +287,42 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             className="cursor-pointer self-center absolute right-0  top-6 pr-8"
             onClick={() => setIsSearchProductRightModalOpen(false)}
           />
-          <>
-            <div className="flex  items-center ">
-              <div className="flex gap-x-2">
-                <img src={ProductIcon} alt="Product" />
-                <p className="font-Lato font-normal text-2xl leading-8 ">
-                  Selected Products
-                </p>
-              </div>
-              <p className="pl-4">{`(${selectedProductTemp.length} selected)`}</p>
-              {/* //selected products */}
+          <div className="flex  items-center ">
+            <div className="flex gap-x-2">
+              <img src={ProductIcon} alt="Product" />
+              <p className="font-Lato font-normal text-2xl leading-8 ">
+                Selected Products
+              </p>
             </div>
-            <div className="flex flex-wrap  max-h-auto transition-all py-4 max-h-96 mt-2 overflow-scroll">
-              <div className=" w-full ">
-                <div className="flex flex-wrap w-full  gap-y-4 gap-x-2">
-                  {selectedProductTemp?.map(
-                    (eachProduct: any, index: number) => {
-                      return (
-                        <ProductBox
-                          key={index}
-                          image={SampleProduct}
-                          weight={`${eachProduct?.appliedWeight} Kg`}
-                          productName={eachProduct?.name || 0}
-                          breadth={eachProduct?.breadth || 0}
-                          length={eachProduct?.length || 0}
-                          height={eachProduct?.height || 0}
-                          className="!w-56 cursor-pointer hover:!shadow-lg transition-all !shadow-none"
-                          onClick={() =>
-                            toggleSelectionProduct(eachProduct, index, true)
-                          }
-                          isSelected={eachProduct?.selected}
-                        />
-                      );
+            <p className="pl-4">{`(${selectedProductTemp.length} selected)`}</p>
+            {/* //selected products */}
+          </div>
+          <div className="flex flex-wrap max-h-[350px] py-4 transition-all mt-2 overflow-scroll">
+            <div
+              className={`${
+                selectedProductTemp.length > 0 ? "flex h-full" : "hidden h-0"
+              }  flex-wrap w-full transition-all ease-in-out  gap-y-4 gap-x-2 `}
+            >
+              {selectedProductTemp?.map((eachProduct: any, index: number) => {
+                return (
+                  <ProductBox
+                    key={index}
+                    image={SampleProduct}
+                    weight={`${eachProduct?.appliedWeight} Kg`}
+                    productName={eachProduct?.name || 0}
+                    breadth={eachProduct?.breadth || 0}
+                    length={eachProduct?.length || 0}
+                    height={eachProduct?.height || 0}
+                    className="!w-56 cursor-pointer hover:!shadow-lg transition-all !shadow-none"
+                    onClick={() =>
+                      toggleSelectionProduct(eachProduct, index, true)
                     }
-                  )}
-                </div>
-              </div>
+                    isSelected={eachProduct?.selected}
+                  />
+                );
+              })}
             </div>
-          </>
+          </div>
           {/* Filter */}
           {/* <div className="mb-8">
             <div className="flex  items-center gap-x-2 mb-4">
@@ -336,7 +334,6 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
             <SearchProductFilterItems filterItems={filterItems} />
           </div> */}
-
           <div className="flex justify-between  items-center gap-x-2 py-2">
             <div className="flex items-center gap-x-2">
               <img src={ProductIcon} alt="Product" />

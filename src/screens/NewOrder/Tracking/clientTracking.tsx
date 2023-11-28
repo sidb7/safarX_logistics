@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from "react";
-import InputBox from "../../../components/Input/index";
 import TrackingMenu from "../../../assets/trackingMenu.svg";
 import DownwardArrow from "../../../assets/downwardArrow.svg";
 import UpwardArrow from "../../../assets/AccordionUp.svg";
@@ -22,10 +21,10 @@ const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [trackingNo, setTrackingNo] = useState<any>();
-  console.log("trackingState", typeof trackingNo);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
 
+  console.log("processedLog", trackingDetails);
   const [cancelled, setCancelled] = useState<any>(false);
   const [timeDetails, setTimeDetails] = useState<any>({
     time: "",
@@ -33,8 +32,6 @@ const Tracking = () => {
     date: "",
     hours: "",
   });
-
-  console.log("lastupdated", timeDetails);
 
   const params = getQueryJson();
 
@@ -174,7 +171,6 @@ const Tracking = () => {
       window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
     }
     if (!trackingNoFromUrl && !trackingNo) {
-      console.log("trackingNo123", trackingNo);
       return toast.warning("Please Enter Tracking Number");
     }
     try {
@@ -298,17 +294,17 @@ const Tracking = () => {
                 </div>
               </div>
 
-              <div className=" flex flex-col justify-center md:flex-row md:justify-center gap-x-2">
+              <div className=" flex flex-col justify-center md:flex-row md:justify-center gap-x-2 w-full">
                 {/*tracking ID Box */}
-                <div className="">
-                  <div className="flex">
+                <div className="w-full">
+                  <div className="flex w-full">
                     {loading ? (
                       <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <Spinner />{" "}
                       </div>
                     ) : (
-                      <div className="flex justify-center">
-                        <div className="">
+                      <div className="flex justify-center w-full">
+                        <div className="w-full">
                           {trackingState?.map(
                             (each: any, indexTracking: number) => {
                               return (
@@ -391,17 +387,12 @@ const Tracking = () => {
                                                     each?.expectedDelivery
                                                       ?.currentDelivery
                                                   }
-                                                  {console.log(
-                                                    "eta",
-                                                    each?.expectedDelivery
-                                                      ?.currentDelivery
-                                                  )}
                                                 </span>
                                               </p>
                                             )}
                                           </div>
                                         </div>
-                                        <div className="flex  flex-col md:flex-row md:gap-x-2">
+                                        <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
                                           <div className="md:flex-1 mt-2">
                                             <p className="text-[14px] font-normal leading-[16px] ">
                                               From:
@@ -410,7 +401,7 @@ const Tracking = () => {
                                               {each.pickupAddress.fullAddress}
                                             </p>
                                           </div>
-                                          <div className="md:flex-1 mt-2">
+                                          <div className="md:flex-1 mt-2 ]">
                                             <p className="text-[14px] font-normal leading-[16px]">
                                               To:
                                             </p>
