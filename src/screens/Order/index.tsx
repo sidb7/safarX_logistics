@@ -777,7 +777,7 @@ const Index = () => {
                         ))}
                       </>
                     ) : (
-                      <div className="w-[100%] h-[400px] bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                      <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
                         No Data Found
                       </div>
                     )}
