@@ -451,19 +451,19 @@ const Index: React.FC = () => {
 
             <div className=" gap-4 p-2 mb-[10%] ">
               <div
-                className="flex gap-x-2"
+                className="flex gap-x-1"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
               >
                 <h1
-                  className="font-Lato ml-4 mb-3 text-[18px] font-bold lg:font-normal lg:text-2xl cursor-pointer text-blue-500"
+                  className="font-Lato ml-4 mb-3 text-[14px] font-bold lg:font-normal cursor-pointer text-blue-500"
                   // onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  All Shipyaari Services
+                  View All Services
                 </h1>
                 <img
                   src={DownArrow}
                   alt="Downarrow"
-                  className="pb-1 cursor-pointer"
+                  className="pb-2  cursor-pointer"
                 />
               </div>
 
