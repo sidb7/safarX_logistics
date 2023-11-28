@@ -78,6 +78,7 @@ const Catalogue = () => {
   const [productCatalogueTab, setProductCatalogueTab] =
     useState("singleProduct");
   const [showCombo, setShowCombo] = useState<any>(false);
+
   const [productList, setProductList] = useState<any>(false);
   const [totalProduct, setTotalProduct] = useState<number>(0);
 
@@ -96,7 +97,10 @@ const Catalogue = () => {
       return <AddressBook setAddressTab={setAddressTab} />;
     } else if (tabName === "Product Catalogue") {
       return (
-        <ProductCatalogue setProductCatalogueTab={setProductCatalogueTab} />
+        <ProductCatalogue
+          setProductCatalogueTab={setProductCatalogueTab}
+          isModalOpen={showCombo}
+        />
       );
     } else if (tabName === "Box Catalogue") {
       return (
@@ -112,6 +116,7 @@ const Catalogue = () => {
   const getProductDetails = async () => {
     try {
       const { data: response } = await POST(GET_PRODUCTS);
+
       if (response?.success && !productList) {
         setProductList(response.data);
         setTotalProduct(response?.totalProduct);
@@ -140,9 +145,6 @@ const Catalogue = () => {
     //     await getProductDetails();
     //   })();
     // }
-    (async () => {
-      await getProductDetails();
-    })();
 
     if (data[1] === "address-book") {
       setTabName("Address Book");
@@ -162,6 +164,12 @@ const Catalogue = () => {
       setIsActive(checkPageAuthorized("Box Catalogue"));
     }
   }, [tabName, isActive, data]);
+
+  useEffect(() => {
+    (async () => {
+      await getProductDetails();
+    })();
+  }, []);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");
@@ -279,7 +287,7 @@ const Catalogue = () => {
     setGlobalIndex(+index);
   };
 
-  const renderMobileComponent = () => {
+  const renderMobileComponent = (showCombo: any) => {
     switch (globalIndex) {
       case 0: {
         return (
@@ -297,7 +305,10 @@ const Catalogue = () => {
       }
       case 2: {
         return (
-          <ProductCatalogue setProductCatalogueTab={setProductCatalogueTab} />
+          <ProductCatalogue
+            setProductCatalogueTab={setProductCatalogueTab}
+            isModalOpen={showCombo}
+          />
         );
       }
       case 3: {
@@ -444,7 +455,7 @@ const Catalogue = () => {
             ))
           ) : (
             <div>
-              <div className="m-[1rem]">{renderMobileComponent()}</div>
+              <div className="m-[1rem]">{renderMobileComponent(showCombo)}</div>
               <div
                 className="flex justify-center gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
                 style={{ width: "-webkit-fill-available" }}
@@ -487,13 +498,11 @@ const Catalogue = () => {
                 isOpen={showCombo}
                 onRequestClose={() => setShowCombo(false)}
               > */}
-              {showCombo && (
-                <CreateCombo
-                  isSearchProductRightModalOpen={showCombo}
-                  setIsSearchProductRightModalOpen={setShowCombo}
-                  productsData={productList}
-                />
-              )}
+              <CreateCombo
+                isSearchProductRightModalOpen={showCombo}
+                setIsSearchProductRightModalOpen={setShowCombo}
+                productsData={productList}
+              />
               {/* </BottomModal> */}
             </div>
           )}
