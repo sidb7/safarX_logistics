@@ -45,7 +45,7 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
             className="cursor-pointer"
             onClick={() =>
               navigate("/catalogues/catalogue/edit-address", {
-                state: { addressData, activeTab },
+                state: { addressData, activeTab, name, phoneNumber },
               })
             }
           />
@@ -61,8 +61,8 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
           />
         </div>
       </div>
-      <p className="text-[16px] break-words font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
-        {address}
+      <p className="text-[16px]  break-words font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
+        {address.replaceAll(",,", ",")}
       </p>
 
       <div className="flex items-center gap-x-2 mt-2">

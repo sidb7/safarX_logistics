@@ -962,7 +962,7 @@ const MyRoutes: React.FC = () => {
           {/* Plan Routes */}
           <Route>
             <Route
-              path="/plans"
+              path="/subscription/plans"
               element={
                 <ProtectedRoute>
                   <NewUserPlanScreen />
@@ -970,7 +970,7 @@ const MyRoutes: React.FC = () => {
               }
             />
             <Route
-              path="/plans/plan-details"
+              path="/subscription/plan-details"
               element={
                 <ProtectedRoute>
                   <PlanDetails />
@@ -1116,33 +1116,6 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <Transaction />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-          {/* Plan Routes */}
-          <Route>
-            <Route
-              path="/plans"
-              element={
-                <ProtectedRoute>
-                  <NewUserPlanScreen />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/plans/plan-details"
-              element={
-                <ProtectedRoute>
-                  <PlanDetails />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/plans/compare-plans"
-              element={
-                <ProtectedRoute>
-                  <ComparePlans />
                 </ProtectedRoute>
               }
             />
