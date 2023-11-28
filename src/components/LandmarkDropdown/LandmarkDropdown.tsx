@@ -42,7 +42,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   }, []);
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
+    if (debouncedSearchTerm !== "") {
       (async () => {
         const payload = {
           address: pastedData,
@@ -76,6 +76,8 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
           console.error("Error:", error);
         }
       })();
+    } else {
+      setArrayValue([]);
     }
   }, [pastedData, debouncedSearchTerm]);
 

@@ -9,7 +9,7 @@ import GPSIcon from "../../../assets/Map/gps.svg";
 import LocationIcon from "../../../assets/Map/Location.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 
-const googleMapApiKey = "AIzaSyBEi1iP1YW3fGeKg---Rn7QCelztyYYfVk";
+const googleMapApiKey = "AIzaSyAKZhK6VLrzuuikYBNLKYdv9tpUTfW5hRQ";
 
 interface IPropsTypes {
   onClick?: () => void;
