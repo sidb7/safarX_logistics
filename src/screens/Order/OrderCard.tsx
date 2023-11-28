@@ -201,13 +201,15 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
       }
     };
 
+    //bg-[#E5E7EB]
+
     return (
-      <div className=" min-w-[150px] rounded-md">
+      <div className=" min-w-[150px] rounded-md ">
         {actionsObject[currentStatus]?.map((action: any, index: any) => (
           <>
             {action?.actionType === "download_label" ? (
               <div
-                className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
+                className=" text-[14px] flex p-3 items-center"
                 key={`${index}_${action}`}
                 onClick={() =>
                   actionClickHandler(
@@ -222,7 +224,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
               </div>
             ) : (
               <div
-                className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
+                className="text-[14px] flex p-3 items-center"
                 key={`${index}_${action}`}
                 onClick={() =>
                   actionClickHandler(
@@ -328,9 +330,8 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
                     alt=""
                     data-tooltip-id="my-order-inline"
                     data-tooltip-content={
-                      openSection
-                        ? "Collapse"
-                        : "Expand the order to view details of the order"
+                      openSection &&
+                      "Expand the order to view details of the order"
                     }
                   />
 
@@ -352,7 +353,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
 
             <div>
               <div className={`${!cartData?.awb && "flex justify-between"} `}>
-                <div className="text-[14px] font-medium">
+                <div className="text-[13px] font-medium">
                   {cartData?.productName?.join(" + ").toUpperCase()}
                 </div>
 
