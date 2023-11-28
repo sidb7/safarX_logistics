@@ -16,8 +16,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  useEffect(() => {}, [entriesHeight]);
-
   return (
     <div className="overflow-auto h-[100%] pb-[2rem]">
       <div className="w-[100%] p-[1rem] items-start overflow-auto">

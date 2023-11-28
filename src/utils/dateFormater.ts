@@ -27,3 +27,11 @@ export const date_DD_MMM_YYYY_HH_MM_SS = (epochTimestamp: number) => {
 
   return `${formattedDate}, ${formattedTime}`;
 };
+
+export const date_DD_MMM = (epochTimestamp: number) => {
+  const date = new Date(epochTimestamp);
+  const options: any = { month: "short", day: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-IN", options)?.format(date);
+
+  return formattedDate;
+};
