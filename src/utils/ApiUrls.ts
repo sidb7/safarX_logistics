@@ -265,7 +265,7 @@ const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrde
 
 //Reports
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
-const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`
+const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
