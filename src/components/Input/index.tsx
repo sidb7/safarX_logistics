@@ -146,7 +146,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
 
       {inputError && !value && (
         <span
-          className={`text-[red] transition-all ease-out h-0  h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
+          className={`text-[red] transition-all ease-out h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
         >
           Field is required
         </span>
