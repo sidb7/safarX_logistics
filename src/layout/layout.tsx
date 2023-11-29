@@ -12,6 +12,7 @@ import { useMediaQuery } from "react-responsive";
 import { POST } from "../utils/webService";
 import { LOGOUT } from "../utils/ApiUrls";
 import { toast } from "react-toastify";
+import { socketCallbacks } from "../Socket";
 
 type Props = {};
 
@@ -32,6 +33,8 @@ export const CommonLayout = (props: Props) => {
     try {
       const { data } = await POST(LOGOUT);
       if (data?.success) {
+        socketCallbacks.disconnectSocket();
+
         toast.success(data?.message);
       } else {
         toast.error(data?.message);
