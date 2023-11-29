@@ -45,8 +45,10 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
         ) : (
           ""
         )}
-        <div className="flex justify-between font-bold leading-6 py-1 font-Open">
-          {packageType}
+        <div className="flex justify-between font-bold leading-6 py-1  font-Open ">
+          <div className="max-w-[140px] whitespace-nowrap truncate">
+            {packageType}
+          </div>
 
           {showAction && (
             <div className="cursor-pointer flex">

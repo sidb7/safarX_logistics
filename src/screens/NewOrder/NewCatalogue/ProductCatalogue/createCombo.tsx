@@ -241,7 +241,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     };
     return (
       <div className="overflow-auto h-full">
-        <div className="p-5 ">
+        <div className="p-5  ">
           <div className="lg:mb-[20px] mb-2">
             <div className="flex items-center justify-between mb-[8px] ">
               <p className="text-[22px] font-Lato font-normal lg:text-2xl leading-8 text-[#323232]">

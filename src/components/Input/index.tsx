@@ -30,6 +30,7 @@ interface propTypes {
   tooltipContent?: string;
   inputError?: boolean;
   errorMessage?: any;
+  autoComplete?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -65,6 +66,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     tooltipContent,
     inputError,
     errorMessage = false,
+    autoComplete = "",
   } = props;
 
   return (
@@ -81,6 +83,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           onBlur={(e: any) => onBlur(e)}
+          autoComplete={autoComplete}
           value={value}
           disabled={isDisabled}
           inputMode={inputMode}

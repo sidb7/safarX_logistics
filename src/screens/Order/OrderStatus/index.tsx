@@ -304,7 +304,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       if (currentStatus === "BOOKED") {
         return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+          <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
               <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
                 {getActionsIcon()?.map((data: any, index: any) => {
@@ -443,7 +443,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 customPlaceholder="Search By Order Id, AWB"
               />
             </div>
-            <div
+            {/* <div
               className="flex justify-between items-center p-2 gap-x-2"
               onClick={() => setFilterModal(true)}
             >
@@ -451,33 +451,34 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div>
+            </div> */}
           </div>
         );
       }
-    } else {
-      return (
-        <div className="flex items-center justify-between w-[100%]">
-          <div className="text-[14px] text-[#272727]">34 Orders</div>
-          <div className="flex gap-4">
-            <div className="flex items-center justify-center py-2 w-[110px] border-[1px] rounded-md border-[#A4A4A4] col-span-2">
-              <img src={SelectIcon} alt="" />
-              <span className="ml-2 text-[#1C1C1C] text-[12px] font-medium">
-                SELECT
-              </span>
-            </div>
-            <div
-              className="flex justify-center items-center w-[40px] border-[1px] rounded-md border-[#A4A4A4]"
-              onClick={() => {
-                navigate("/neworder/filter");
-              }}
-            >
-              <img src={FilterIcon} alt="Filter Order" width="16px" />
-            </div>
-          </div>
-        </div>
-      );
     }
+    //  else {
+    //   return (
+    //     <div className="flex items-center justify-between w-[100%]">
+    //       <div className="text-[14px] text-[#272727]">34 Orders</div>
+    //       <div className="flex gap-4">
+    //         <div className="flex items-center justify-center py-2 w-[110px] border-[1px] rounded-md border-[#A4A4A4] col-span-2">
+    //           <img src={SelectIcon} alt="" />
+    //           <span className="ml-2 text-[#1C1C1C] text-[12px] font-medium">
+    //             SELECT
+    //           </span>
+    //         </div>
+    //         <div
+    //           className="flex justify-center items-center w-[40px] border-[1px] rounded-md border-[#A4A4A4]"
+    //           onClick={() => {
+    //             navigate("/neworder/filter");
+    //           }}
+    //         >
+    //           <img src={FilterIcon} alt="Filter Order" width="16px" />
+    //         </div>
+    //       </div>
+    //     </div>
+    //   );
+    // }
   };
 
   const handleStatusChanges = (index: any) => {
@@ -501,7 +502,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   return (
-    <div className="flex flex-col pt-7 ">
+    <div className="flex flex-col pt-7">
       <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
@@ -532,20 +533,24 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         })}
       </div>
 
-      <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
-        <div className="lg:flex lg:gap-x-4">
-          <div className="flex items-center">
-            {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
+      {isLgScreen && (
+        <>
+          <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
+            <div className="lg:flex lg:gap-x-4">
+              <div className="flex items-center ">
+                {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
             </span> */}
+              </div>
+              {currentStatus === "DRAFT" &&
+                filterComponent("!hidden lg:!flex lg:!mt-0")}
+            </div>
+            <div>{filterButton()}</div>
           </div>
-          {currentStatus === "DRAFT" &&
-            filterComponent("!hidden lg:!flex lg:!mt-0")}
-        </div>
-        <div className="">{filterButton()}</div>
-      </div>
 
-      {currentStatus === "DRAFT" && filterComponent("")}
+          {currentStatus === "DRAFT" && filterComponent("")}
+        </>
+      )}
 
       {/* filter modal */}
 
