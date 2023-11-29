@@ -17,13 +17,13 @@ const App = () => {
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
   useEffect(() => {
-    // const connectSocket1 = async () => {
-    //   if (roomName) {
-    //     await socketCallbacks.connectSocket(dispatch);
-    //     setIsSocketInitialized(true);
-    //   }
-    // };
-    // connectSocket1();
+    const connectSocket1 = async () => {
+      if (roomName) {
+        await socketCallbacks.connectSocket(dispatch);
+        setIsSocketInitialized(true);
+      }
+    };
+    connectSocket1();
     // return () => {
     //   socketCallbacks.disconnectSocket();
     // };

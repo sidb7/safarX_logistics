@@ -57,7 +57,7 @@ import {
   setLocalStorage,
 } from "../../../utils/utility";
 // import Razorpay from "razorpay";
-import useRazorpay from "react-razorpay";
+//import useRazorpay from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
@@ -87,7 +87,7 @@ const WalletRecharge = () => {
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
-  const [Razorpay] = useRazorpay();
+  //const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -289,13 +289,13 @@ const WalletRecharge = () => {
       return;
     }
 
-    const rzp1: any = new Razorpay(options);
+    // const rzp1: any = new Razorpay(options);
 
-    rzp1.on("payment.failed", (response: any) => {
-      console.log("response: ", response);
-    });
+    // rzp1.on("payment.failed", (response: any) => {
+    //   console.log("response: ", response);
+    // });
 
-    rzp1.open();
+    // rzp1.open();
   };
 
   useEffect(() => {

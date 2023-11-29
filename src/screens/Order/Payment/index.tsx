@@ -54,7 +54,7 @@ import {
   loadRazorPayTransaction,
   removeLocalStorage,
 } from "../../../utils/utility";
-import useRazorpay from "react-razorpay";
+//import useRazorpay from "react-razorpay";
 import CustomDropDown from "../../../components/DropDown";
 
 const Payment = () => {
@@ -77,7 +77,7 @@ const Payment = () => {
   const [upiText, setUpiText] = useState<boolean>();
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const requiredBalance = location?.state?.requiredBalance;
-  const [Razorpay] = useRazorpay();
+  //const [Razorpay] = useRazorpay();
   const [isDisabled, setIsDisabled] = useState(false);
 
   let myInterval: number | any;
@@ -371,13 +371,13 @@ const Payment = () => {
       return;
     }
 
-    const rzp1: any = new Razorpay(options);
+    // const rzp1: any = new Razorpay(options);
 
-    rzp1.on("payment.failed", (response: any) => {
-      console.log("response: ", response);
-    });
+    // rzp1.on("payment.failed", (response: any) => {
+    //   console.log("response: ", response);
+    // });
 
-    rzp1.open();
+    // rzp1.open();
   };
 
   useEffect(() => {
