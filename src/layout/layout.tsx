@@ -33,7 +33,7 @@ export const CommonLayout = (props: Props) => {
     try {
       const { data } = await POST(LOGOUT);
       if (data?.success) {
-        socketCallbacks.disconnectSocket();
+        // socketCallbacks.disconnectSocket();
 
         toast.success(data?.message);
       } else {

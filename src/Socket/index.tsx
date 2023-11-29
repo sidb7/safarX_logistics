@@ -18,18 +18,18 @@ export const initSocket = (): Socket => {
 
   return io(`${SELLER_URL}`, {
     secure: true,
-    transports: ["polling", "websocket", "webtransport"],
+    transports: ["websocket"],
 
     path: "/socket.io",
-    reconnectionDelayMax: 5000,
+    //reconnectionDelayMax: 10000,
     auth: {
       token: localStorage.getItem(token),
       sessionID: sessionID,
     },
     autoConnect: true,
-    // query: {
-    //   "my-key": "my-value",
-    // },
+    query: {
+      "my-key": "my-value",
+    },
     // autoUnref: true,
     // addTrailingSlash: false,
   });
