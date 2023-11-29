@@ -15,7 +15,7 @@ export const initSocket = (): Socket => {
     : "";
 
   const sessionID = localStorage.getItem("sessionID");
-
+  // if (sessionID && token && sellerId) {
   return io(`${SELLER_URL}`, {
     secure: true,
     transports: ["websocket"],
@@ -33,6 +33,9 @@ export const initSocket = (): Socket => {
     // autoUnref: true,
     // addTrailingSlash: false,
   });
+  // } else {
+  //   return io();
+  // }
 };
 
 const connectSocket = (dispatch?: any) => {
