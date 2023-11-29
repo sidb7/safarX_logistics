@@ -21,7 +21,7 @@ export const initSocket = (): Socket => {
     transports: ["websocket"],
 
     path: "/socket.io",
-    //reconnectionDelayMax: 10000,
+    reconnectionDelayMax: 1000,
     auth: {
       token: localStorage.getItem(token),
       sessionID: sessionID,
