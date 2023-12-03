@@ -201,7 +201,7 @@ const Index = () => {
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
-  const [tabStatusId, setTabStatusId] = useState(null);
+  const [tabStatusId, setTabStatusId] = useState(0);
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -358,12 +358,15 @@ const Index = () => {
           />
         </div>
 
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <img src={DeliveryIcon} alt="" />
           <div className="text-[#004EFF] text-[12px]">SYNC CHANNEL</div>
-        </div>
+        </div> */}
 
-        <div className="flex flex-col items-center">
+        <div
+          className="flex flex-col items-center "
+          onClick={() => navigate("/orders/add-bulk")}
+        >
           <img src={BlukOrderIcon} alt="" />
           <div className="text-[#004EFF] text-[12px]">BULK ORDER</div>
         </div>
@@ -701,32 +704,48 @@ const Index = () => {
               tabStatusId={tabStatusId}
             />
             {isLoading ? (
-              <div>
-                <div className="flex items-stretch h-16 rounded-xl">
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                </div>
-                <div className="flex items-stretch h-44 rounded-xl">
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                </div>
-                <div className="flex items-stretch h-44 rounded-xl">
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                  <div className="flex-1 m-2 animated rounded-xl"></div>
-                </div>
-              </div>
+              <>
+                {isLgScreen ? (
+                  <div>
+                    <div className="flex items-stretch h-16 rounded-xl">
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                    </div>
+                    <div className="flex items-stretch h-44 rounded-xl">
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                    </div>
+                    <div className="flex items-stretch h-44 rounded-xl">
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                      <div className="flex-1 m-2 animated rounded-xl"></div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-4">
+                    <div className="flex items-stretch h-44 rounded-xl">
+                      <div className="flex-1 my-2 animated rounded-xl"></div>
+                    </div>
+                    <div className="flex items-stretch h-44 rounded-xl">
+                      <div className="flex-1 my-2 animated rounded-xl"></div>
+                    </div>
+                    <div className="flex items-stretch h-44 rounded-xl">
+                      <div className="flex-1 my-2 animated rounded-xl"></div>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               <div>
                 {isLgScreen ? (
@@ -747,12 +766,20 @@ const Index = () => {
                   </>
                 ) : (
                   <div className="border border-white my-5">
-                    {orders.length > 0 && (
+                    {orders.length > 0 ? (
                       <>
                         {orders?.map((data: any, i: any) => (
-                          <OrderCard data={data} />
+                          <OrderCard
+                            data={data}
+                            currentStatus={tabs[tabStatusId].value}
+                            orderActions={orderActions}
+                          />
                         ))}
                       </>
+                    ) : (
+                      <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                        No Data Found
+                      </div>
                     )}
                   </div>
                 )}

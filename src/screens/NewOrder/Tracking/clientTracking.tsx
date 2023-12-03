@@ -20,7 +20,10 @@ import CustomInputBox from "../../../components/Input/index";
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const [trackingNo, setTrackingNo] = useState<any>();
+
+  const { trackingNo: trackingNoParams = "" } = getQueryJson();
+
+  const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
 
@@ -32,10 +35,6 @@ const Tracking = () => {
     date: "",
     hours: "",
   });
-
-  const params = getQueryJson();
-
-  const trackingNoFromUrl = params?.trackingNo;
 
   const steps = [
     {
@@ -156,36 +155,25 @@ const Tracking = () => {
   };
 
   const handleTrackOrderClick = async () => {
-    let urlWithTrackingNo = "";
-    const trackingNoFromUrl = params?.trackingNo;
-
-    if (trackingNoFromUrl === undefined) {
-      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
-    } else if (trackingNo === undefined) {
-      window.history.replaceState(
-        {},
-        "",
-        `/tracking?trackingNo=${trackingNoFromUrl}`
-      );
-    } else {
-      window.history.replaceState({}, "", `/tracking?trackingNo=${trackingNo}`);
-    }
-    if (!trackingNoFromUrl && !trackingNo) {
-      return toast.warning("Please Enter Tracking Number");
-    }
     try {
+      if (trackingNo === "" || !trackingNo || !trackingNo.length) {
+        setTrackingState([]);
+        return toast.error("Please Enter Tracking Number");
+      }
+
       setLoading(true);
       setTempSteps(steps);
       setCancelled(false);
-
-      if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-        urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNoFromUrl}`;
-      } else {
-        urlWithTrackingNo = `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`;
-      }
-      const { data: response } = await GET(urlWithTrackingNo);
+      const { data: response } = await GET(
+        `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
+      );
 
       if (response.success) {
+        window.history.replaceState(
+          {},
+          "",
+          `/tracking?trackingNo=${trackingNo}`
+        );
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
@@ -219,11 +207,10 @@ const Tracking = () => {
   };
 
   useEffect(() => {
-    if (trackingNoFromUrl !== undefined && trackingNoFromUrl !== "") {
-      setTrackingNo(trackingNoFromUrl);
+    if (trackingNo) {
       callFunction();
     }
-  }, [trackingNoFromUrl]);
+  }, []);
 
   const temp = useMemo(() => {
     return trackingDetails?.Scans?.reverse()?.map(
@@ -343,11 +330,6 @@ const Tracking = () => {
                                                   </span>
                                                 </div>
                                               </p>
-                                              {/* commented as it required for now  */}
-                                              {/* <img
-                                      src={RefreshIcon}
-                                      className="w-4 mt-3 md:mt-0"
-                                    /> */}
                                             </div>
                                           )}
                                         </div>
@@ -468,12 +450,6 @@ const Tracking = () => {
                                           </div>
                                           {openSection === "product" ? (
                                             <div className="flex gap-x-1  items-center">
-                                              {/* commented as not required */}
-                                              {/* <img src={GreenTick} />
-                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1 text-[#7CCA62]">
-                                        Verified
-                                      </p> */}
-
                                               <img
                                                 src={
                                                   openSection === "product"
@@ -485,12 +461,6 @@ const Tracking = () => {
                                             </div>
                                           ) : (
                                             <div className="flex gap-x-1  items-center">
-                                              {/* commented as not required */}
-                                              {/* <img src={Lock} />
-                                      <p className="text-[12px] font-normal whitespace-nowrap mt-1 hidden md:block">
-                                        To see details please verify with OTP
-                                      </p> */}
-
                                               <img
                                                 src={
                                                   openSection === "product"

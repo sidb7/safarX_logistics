@@ -26,10 +26,12 @@ import { Spinner } from "../../../../components/Spinner";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
+  isModalOpen?: any;
 }
 
 const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   setProductCatalogueTab,
+  isModalOpen,
 }) => {
   const [productData, setProductData] = useState([]);
   const [channelProducts, setChannelProducts] = useState([]);
@@ -86,79 +88,91 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     }
   };
 
+  const getProducts = async () => {
+    const { data } = await POST(
+      filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
+      {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+      }
+    );
+
+    if (data?.success) {
+      setProductData(data.data);
+      setTotalItemCount(data?.totalProduct);
+    } else {
+      setProductData([]);
+      toast.error(data?.message);
+    }
+    const { data: storeDetails } = await POST(GET_ALL_STORES, {});
+    let channelName: any = [];
+    // storeDetails?.data?.map((item:any)=> {
+    //   if(!channelName.includes(item.channel)) channelName.push()
+    // })
+    let incomingChannelProducts: any = [];
+    let channelProductArr: any = [];
+    try {
+      for (const elem of storeDetails?.data) {
+        if (elem.channel !== "WOOCOMMERCE") continue;
+        let auth = {
+          username: elem.consumerKey,
+          password: elem.consumerSecret,
+        };
+        const { data: products } = await axios.get(
+          `${elem.storeUrl}/wp-json/wc/v3/products`,
+          { auth }
+        );
+        incomingChannelProducts = [...incomingChannelProducts, ...products];
+        if (!channelName.includes(elem.channel)) channelName.push(elem.channel);
+      }
+      setChannels(channelName);
+      incomingChannelProducts.map((item: any) => {
+        channelProductArr.push({
+          name: item?.name,
+          category: "",
+          qty: "",
+          currency: "USD",
+          unitPrice: item?.price,
+          unitTax: "",
+          measureUnit: "cm",
+          length: item?.dimensions?.length,
+          breadth: item?.dimensions?.width,
+          height: item?.dimensions?.height,
+          deadWeight: item?.weight,
+          weightUnit: "kg",
+          volumetricWeight:
+            (item?.dimensions?.length *
+              item?.dimensions?.width *
+              item?.dimensions?.height) /
+            5000,
+          appliedWeight: Math.max(
+            item?.weight,
+            (item?.dimensions?.length *
+              item?.dimensions?.width *
+              item?.dimensions?.height) /
+              5000
+          ),
+          divisor: 5000,
+          images: item?.images?.[0]?.src,
+        });
+      });
+      setChannelProducts(channelProductArr);
+    } catch (error) {}
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      (async () => {
+        await getProducts();
+      })();
+    }
+  }, [isModalOpen]);
+
   useEffect(() => {
     (async () => {
-      const { data } = await POST(
-        filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
-        {
-          skip: 0,
-          limit: 10,
-          pageNo: 1,
-        }
-      );
-      if (data?.success) {
-        setProductData(data.data);
-        setTotalItemCount(data?.totalProduct);
-      } else {
-        setProductData([]);
-        toast.error(data?.message);
-      }
-      const { data: storeDetails } = await POST(GET_ALL_STORES, {});
-      let channelName: any = [];
-      // storeDetails?.data?.map((item:any)=> {
-      //   if(!channelName.includes(item.channel)) channelName.push()
-      // })
-      let incomingChannelProducts: any = [];
-      let channelProductArr: any = [];
-      try {
-        for (const elem of storeDetails?.data) {
-          if (elem.channel !== "WOOCOMMERCE") continue;
-          let auth = {
-            username: elem.consumerKey,
-            password: elem.consumerSecret,
-          };
-          const { data: products } = await axios.get(
-            `${elem.storeUrl}/wp-json/wc/v3/products`,
-            { auth }
-          );
-          incomingChannelProducts = [...incomingChannelProducts, ...products];
-          if (!channelName.includes(elem.channel))
-            channelName.push(elem.channel);
-        }
-        setChannels(channelName);
-        incomingChannelProducts.map((item: any) => {
-          channelProductArr.push({
-            name: item?.name,
-            category: "",
-            qty: "",
-            currency: "USD",
-            unitPrice: item?.price,
-            unitTax: "",
-            measureUnit: "cm",
-            length: item?.dimensions?.length,
-            breadth: item?.dimensions?.width,
-            height: item?.dimensions?.height,
-            deadWeight: item?.weight,
-            weightUnit: "kg",
-            volumetricWeight:
-              (item?.dimensions?.length *
-                item?.dimensions?.width *
-                item?.dimensions?.height) /
-              5000,
-            appliedWeight: Math.max(
-              item?.weight,
-              (item?.dimensions?.length *
-                item?.dimensions?.width *
-                item?.dimensions?.height) /
-                5000
-            ),
-            divisor: 5000,
-            images: item?.images?.[0]?.src,
-          });
-        });
-        setChannelProducts(channelProductArr);
-      } catch (error) {}
-      setLoading(false);
+      await getProducts();
     })();
   }, [filterId, editAddressModal]);
 

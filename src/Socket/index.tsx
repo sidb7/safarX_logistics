@@ -15,20 +15,27 @@ export const initSocket = (): Socket => {
     : "";
 
   const sessionID = localStorage.getItem("sessionID");
-
+  // if (sessionID && token && sellerId) {
   return io(`${SELLER_URL}`, {
     secure: true,
     transports: ["websocket"],
+
     path: "/socket.io",
-    reconnectionDelayMax: 10000,
+    reconnectionDelayMax: 1000,
     auth: {
       token: localStorage.getItem(token),
       sessionID: sessionID,
     },
+    autoConnect: true,
     query: {
       "my-key": "my-value",
     },
+    // autoUnref: true,
+    // addTrailingSlash: false,
   });
+  // } else {
+  //   return io();
+  // }
 };
 
 const connectSocket = (dispatch?: any) => {

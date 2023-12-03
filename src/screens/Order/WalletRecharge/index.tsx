@@ -42,6 +42,7 @@ import {
   RECHARGE_STATUS,
   PHONEPE_TRANSACTION_STATUS,
   SELLER_WEB_URL,
+  SELLER_URL,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -56,10 +57,11 @@ import {
   setLocalStorage,
 } from "../../../utils/utility";
 // import Razorpay from "razorpay";
-import useRazorpay from "react-razorpay";
+//import useRazorpay from "react-razorpay";
 import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
+import JusPayIcon from "../../../assets/juspay.png";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -85,7 +87,7 @@ const WalletRecharge = () => {
   const [currentWalletValue, setCurrentWalletValue] = useState<any>();
   const [loading, setLoading] = useState(false);
   let myInterval: number | any;
-  const [Razorpay] = useRazorpay();
+  //const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -287,13 +289,52 @@ const WalletRecharge = () => {
       return;
     }
 
-    const rzp1: any = new Razorpay(options);
+    // const rzp1: any = new Razorpay(options);
 
-    rzp1.on("payment.failed", (response: any) => {
-      console.log("response: ", response);
+    // rzp1.on("payment.failed", (response: any) => {
+    //   console.log("response: ", response);
+    // });
+
+    // rzp1.open();
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        fetchCurrentWallet();
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          removeLocalStorage("order_id");
+          // window.location.reload();
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
+  const startPayments = async () => {
+    let initialObject = {
+      amount: walletValue,
+      callbackUrl: `${SELLER_WEB_URL}/wallet/view-wallet`,
+    };
+
+    const { data: response } = await POST(INITIAL_RECHARGE, {
+      paymentObject: initialObject,
+      paymentGateway: "JUSPAY",
     });
-
-    rzp1.open();
+    console.log("reponse", response);
+    if (response?.success === true) {
+      if (response?.data?.status === "NEW") {
+        localStorage.setItem("order_id", response?.data?.order_id);
+        window.location.replace(response?.data?.payment_links?.web);
+      }
+    }
   };
 
   useEffect(() => {
@@ -645,7 +686,7 @@ const WalletRecharge = () => {
                   </div>
 
                   <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
-                    <div className="flex flex-col items-center gap-y-2">
+                    {/* <div className="flex flex-col items-center gap-y-2">
                       <img
                         src={
                           "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
@@ -703,6 +744,31 @@ const WalletRecharge = () => {
                       >
                         <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
                           RazorPay
+                        </p>
+                      </button>
+                    </div> */}
+                    <div className="flex flex-col items-center gap-y-2">
+                      <div className="w-20 h-20 flex justify-center items-center">
+                        <img
+                          src={JusPayIcon}
+                          alt=""
+                          height={100}
+                          width={100}
+                          className="ml-0 object-contain"
+                        />
+                      </div>
+                      <button
+                        disabled={isDisabled}
+                        type="button"
+                        className={`${
+                          !isDisabled
+                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+                            : "!bg-opacity-50"
+                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+                        onClick={() => startPayments()}
+                      >
+                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
+                          JusPay
                         </p>
                       </button>
                     </div>
