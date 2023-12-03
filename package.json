@@ -61,7 +61,8 @@
     "dev": "REACT_APP_ENV=development react-scripts start",
     "test": "REACT_APP_ENV=test react-scripts start",
     "prod": "REACT_APP_ENV=production react-scripts start",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "jest": "react-scripts test"
   },
   "eslintConfig": {
     "extends": [
