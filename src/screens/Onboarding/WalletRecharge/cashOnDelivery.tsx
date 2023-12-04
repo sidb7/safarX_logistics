@@ -9,7 +9,10 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
 import { POST } from "../../../utils/webService";
-import { PHONEPE_TRANSACTION_STATUS } from "../../../utils/ApiUrls";
+import {
+  PHONEPE_TRANSACTION_STATUS,
+  RECHARGE_STATUS,
+} from "../../../utils/ApiUrls";
 
 const modalTitle = () => {
   return (
@@ -39,14 +42,14 @@ const Cashondelivery = () => {
     useEffect(() => {
       (async () => {
         try {
-          const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
-          if (phonePeTransactionId) {
-            await POST(PHONEPE_TRANSACTION_STATUS, {
-              orderId: phonePeTransactionId,
-              transactionId: phonePeTransactionId,
-              paymentGateway: "PHONEPE",
+          const juspayOrderId = getLocalStorage("order_id");
+          if (juspayOrderId) {
+            await POST(RECHARGE_STATUS, {
+              orderId: juspayOrderId,
+              paymentGateway: "JUSPAY",
+              transactionId: juspayOrderId,
             });
-            removeLocalStorage("phonePeTransactionId");
+            removeLocalStorage("order_id");
           }
         } catch (error) {}
       })();
