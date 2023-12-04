@@ -1,5 +1,3 @@
-import plusIcon from "../../../assets/Product/plusIcon.svg";
-import upwardArrow from "../../../assets/Product/arrow-up.png";
 import ProductBox from "./ProductBox";
 import ItemIcon from "../../../assets/Product/Item.svg";
 import subtractIcon from "../../../assets/Product/subtract-circle.svg";
@@ -229,16 +227,27 @@ const BoxDetails = (props: IBoxdetails) => {
                     <div>
                       <img
                         src={addIcon}
-                        alt=""
                         className="cursor-pointer"
+                        alt=""
                         onClick={() => addUnit(index)}
                       />
                     </div>
+
                     <div
-                      className="ml-2 cursor-pointer"
+                      className={`${
+                        arr.length === 1
+                          ? "hue-rotate-60 opacity-40 !cursor-not-allowed"
+                          : ""
+                      } ml-2 cursor-pointer `}
                       onClick={() => handleDeleteProduct(index)}
                     >
-                      <img src={DeleteIcon} className="!h-4 !w-4" alt="" />
+                      <img
+                        src={DeleteIcon}
+                        className={`!h-4 !w-4 ${
+                          arr.length === 1 ? "fill-gray-600" : ""
+                        } `}
+                        alt=""
+                      />
                     </div>
                   </div>
                 </div>
