@@ -124,27 +124,38 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     let varstartDate: any = startDate;
     let varendDate: any = endDate;
 
-    let epochStartDate: any = new Date(varstartDate);
-    epochStartDate = epochStartDate.getTime() / 1000;
-    let epochEndDate: any = new Date(varendDate);
-    epochEndDate = epochEndDate.getTime() / 1000;
+    if (partnerValue === undefined || partnerValue === null) {
+      toast.error("Please Select the Courier Partner");
+      return;
+    } else if (
+      (startDate === undefined || startDate === null) &&
+      (startDate === undefined || startDate === null)
+    ) {
+      toast.error("Select Start Date and End Date");
+      return;
+    } else {
+      let epochStartDate: any = new Date(varstartDate);
+      epochStartDate = epochStartDate.getTime() / 1000;
+      let epochEndDate: any = new Date(varendDate);
+      epochEndDate = epochEndDate.getTime() / 1000;
 
-    let payload = {
-      startDate: epochStartDate,
-      endDate: epochEndDate,
-      partnerName: partnerValue,
-    };
-    const data = await POST(FETCH_MANIFEST_DATA, payload, {
-      responseType: "blob", // Pass option data for pdf
-    });
+      let payload = {
+        startDate: epochStartDate,
+        endDate: epochEndDate,
+        partnerName: partnerValue,
+      };
+      const data = await POST(FETCH_MANIFEST_DATA, payload, {
+        responseType: "blob", // Pass option data for pdf
+      });
 
-    var blob = new Blob([data?.data], { type: "application/pdf" });
-    var url = URL.createObjectURL(blob);
+      var blob = new Blob([data?.data], { type: "application/pdf" });
+      var url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Manifest_Report.pdf`;
-    a.click();
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Manifest_Report.pdf`;
+      a.click();
+    }
   };
 
   const fetchPartnerList = async () => {
@@ -538,6 +549,55 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center ">
+                {currentStatus === "BOOKED" &&
+                  manifestModal.isOpen === true && (
+                    <div className="flex">
+                      <div className="flex gap-4">
+                        <div className="w-[250px] md:w-[250px]">
+                          <CustomDropDown
+                            heading="Select Courier Partner"
+                            value={partnerValue}
+                            options={partnerMenu}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLSelectElement>
+                            ) => {
+                              setPartnerValue(event.target.value);
+                            }}
+                          />
+                        </div>
+                        <div className="w-[350px] md:w-[250px]">
+                          <DatePicker
+                            selectsRange={true}
+                            startDate={startDate}
+                            endDate={endDate}
+                            onChange={(update: any) => {
+                              setDateRange(update);
+                            }}
+                            isClearable={true}
+                            placeholderText="Select From & To Date"
+                            className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
+                            dateFormat="dd/MM/yyyy"
+                          />
+                        </div>
+
+                        <ServiceButton
+                          text={"MANIFEST REPORT"}
+                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg py-3 w-[150px]`}
+                          onClick={() => fetchManifest()}
+                        />
+                        <ServiceButton
+                          text={"X"}
+                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg p-3`}
+                          onClick={() =>
+                            setManifestModal({
+                              ...manifestModal,
+                              isOpen: false,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
                 {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
             </span> */}
@@ -600,12 +660,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         </RightSideModal>
       )}
 
-      <CenterModal
+      {/* <CenterModal
         isOpen={manifestModal.isOpen}
         onRequestClose={() =>
           setManifestModal({ ...manifestModal, isOpen: false })
         }
-        className="w-[50%] lg:w-[30%] h-[40%]"
+        className="w-[90%] lg:w-[50%] h-[50%]"
       >
         <div className="h-full w-full">
           <div
@@ -619,8 +679,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               alt=""
             />
           </div>
-
-          <div className="px-4">
+          <div className="px-4 flex flex-col flex-wrap content-center">
             <div className="flex gap-4">
               <div className="w-[250px] md:w-[250px]">
                 <CustomDropDown
@@ -656,7 +715,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             </div>
           </div>
         </div>
-      </CenterModal>
+      </CenterModal> */}
     </div>
   );
 };
