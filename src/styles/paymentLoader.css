@@ -1,0 +1,111 @@
+@keyframes jump {
+    0% {
+        transform: scaleY(0.8);
+    }
+
+    100% {
+        transform: translateY(-75px);
+    }
+}
+
+@keyframes shrink {
+    100% {
+        transform: scaleX(0.5);
+        opacity: 0.01;
+    }
+}
+
+div.jusPayProcessing {
+    display: table;
+    width: 100%;
+    margin: 0 0 3em 0;
+    height: 100vh;
+    background-color: white;
+    z-index: 999999;
+}
+
+div.jusPayProcessing div.animation {
+    display: table-row;
+    height: 50%;
+    width: 100%;
+}
+
+div.jusPayProcessing div.animation div.container {
+    display: table-cell;
+    height: 150px;
+    width: 135px;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+div.jusPayProcessing div.animation div.container div.balls {
+    height: 50px;
+    width: 135px;
+    margin: auto;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.ball {
+    width: 20px;
+    position: relative;
+    display: inline-block;
+    margin: 5px;
+    height: 20px;
+    border-radius: 50%;
+    z-index: 999;
+    background-color: cornflowerblue;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.ball.ball-one {
+    animation: jump 0.5s ease 0s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.ball.ball-two {
+    animation: jump 0.5s ease 0.15s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.ball.ball-three {
+    animation: jump 0.5s ease 0.25s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.ball.ball-four {
+    animation: jump 0.5s ease 0.35s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.shadow {
+    position: relative;
+    opacity: 0.1;
+    bottom: 20px;
+    width: 20px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: black;
+    display: inline-block;
+    margin: 5px;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.shadow.shadow-one {
+    animation: shrink 0.5s ease 0s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.shadow.shadow-two {
+    animation: shrink 0.5s ease 0.15s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.shadow.shadow-three {
+    animation: shrink 0.5s ease 0.25s infinite alternate;
+}
+
+div.jusPayProcessing div.animation div.container div.balls div.shadow.shadow-four {
+    animation: shrink 0.5s ease 0.35s infinite alternate;
+}
+
+div.jusPayProcessing div.text {
+    display: table-row;
+    text-align: center;
+}
+
+div.jusPayProcessing div.text h1 {
+    display: table-cell;
+    vertical-align: middle;
+    color: #191919;
+}

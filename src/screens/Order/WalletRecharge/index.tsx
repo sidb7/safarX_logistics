@@ -62,6 +62,8 @@ import AccessDenied from "../../../components/AccessDenied";
 import CustomDropDown from "../../../components/DropDown";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 import JusPayIcon from "../../../assets/juspay.png";
+import JusPay from "../../../components/JusPay/juspay";
+import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -96,6 +98,7 @@ const WalletRecharge = () => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+  const [paymentLoader, setPaymentLoader] = useState<any>(false);
 
   const fetchCurrentWallet = async () => {
     setLoading(true);
@@ -106,25 +109,25 @@ const WalletRecharge = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        fetchCurrentWallet();
-        const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
-        if (phonePeTransactionId) {
-          await POST(PHONEPE_TRANSACTION_STATUS, {
-            orderId: phonePeTransactionId,
-            transactionId: phonePeTransactionId,
-            paymentGateway: "PHONEPE",
-          });
-          removeLocalStorage("phonePeTransactionId");
-          window.location.reload();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       fetchCurrentWallet();
+  //       const phonePeTransactionId = getLocalStorage("phonePeTransactionId");
+  //       if (phonePeTransactionId) {
+  //         await POST(PHONEPE_TRANSACTION_STATUS, {
+  //           orderId: phonePeTransactionId,
+  //           transactionId: phonePeTransactionId,
+  //           paymentGateway: "PHONEPE",
+  //         });
+  //         removeLocalStorage("phonePeTransactionId");
+  //         window.location.reload();
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   })();
+  // }, []);
 
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
@@ -304,13 +307,20 @@ const WalletRecharge = () => {
         fetchCurrentWallet();
         const juspayOrderId = getLocalStorage("order_id");
         if (juspayOrderId) {
-          await POST(RECHARGE_STATUS, {
+          setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
             orderId: juspayOrderId,
             paymentGateway: "JUSPAY",
             transactionId: juspayOrderId,
           });
+          if (orderStatus?.data?.status === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            toast.success("Wallet Recharge Successfully");
+            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
+          }
+          setPaymentLoader(false);
           removeLocalStorage("order_id");
-          // window.location.reload();
         }
       } catch (error) {
         console.error(error);
@@ -328,7 +338,6 @@ const WalletRecharge = () => {
       paymentObject: initialObject,
       paymentGateway: "JUSPAY",
     });
-    console.log("reponse", response);
     if (response?.success === true) {
       if (response?.data?.status === "NEW") {
         localStorage.setItem("order_id", response?.data?.order_id);
@@ -345,6 +354,7 @@ const WalletRecharge = () => {
 
   return (
     <>
+      {paymentLoader && <PaymentLoader />}
       {isActive ? (
         loading ? (
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -380,7 +390,9 @@ const WalletRecharge = () => {
                     <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
                       Your wallet balance
                     </p>
-                    <p className="text-[#1C1C1C]">₹ {currentWalletValue}</p>
+                    <p className="text-[#1C1C1C]">
+                      ₹ {currentWalletValue?.toLocaleString("en-IN")}
+                    </p>
                   </div>
                   <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal">
                     Endless wallet balance with automatic add money
@@ -747,31 +759,11 @@ const WalletRecharge = () => {
                         </p>
                       </button>
                     </div> */}
-                    <div className="flex flex-col items-center gap-y-2">
-                      <div className="w-20 h-20 flex justify-center items-center">
-                        <img
-                          src={JusPayIcon}
-                          alt=""
-                          height={100}
-                          width={100}
-                          className="ml-0 object-contain"
-                        />
-                      </div>
-                      <button
-                        disabled={isDisabled}
-                        type="button"
-                        className={`${
-                          !isDisabled
-                            ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                            : "!bg-opacity-50"
-                        } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
-                        onClick={() => startPayments()}
-                      >
-                        <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-                          JusPay
-                        </p>
-                      </button>
-                    </div>
+                    <JusPay
+                      isDisabled={isDisabled}
+                      amount={walletValue}
+                      callbackUrl={`${SELLER_WEB_URL}/wallet/view-wallet`}
+                    />
                   </div>
                 </div>
               </div>

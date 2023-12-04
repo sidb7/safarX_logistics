@@ -1,6 +1,8 @@
 import {
+  getLocalStorage,
   loadPhonePeTransaction,
   loadRazorPayTransaction,
+  removeLocalStorage,
 } from "../../../utils/utility";
 //import useRazorpay from "react-razorpay";
 import { useEffect, useRef, useState } from "react";
@@ -9,7 +11,11 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import Accountlogo from "../../../assets/Payment/Account.svg";
 import rechargeIcon from "../../../assets/Payment/rechargeIcon.svg";
 import Paytm from "../../../paytm/Paytm";
-import { SELLER_WEB_URL } from "../../../utils/ApiUrls";
+import {
+  INITIAL_RECHARGE,
+  RECHARGE_STATUS,
+  SELLER_WEB_URL,
+} from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { useNavigate } from "react-router-dom";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -17,6 +23,10 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import NavBar from "../../../layout/Old_NavBar";
 import { toast } from "react-toastify";
 import CustomDropDown from "../../../components/DropDown";
+import { POST } from "../../../utils/webService";
+import JusPayIcon from "../../../assets/juspay.png";
+import JusPay from "../../../components/JusPay/juspay";
+import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
 
 const modalTitle = () => {
   return (
@@ -41,6 +51,7 @@ const WalletPayment = () => {
   const [isEdit, setIsedit] = useState<any>();
 
   const [walletValue, setWalletValue] = useState<any>();
+  const [paymentLoader, setPaymentLoader] = useState<any>(false);
 
   const walletMenu = [
     {
@@ -143,6 +154,35 @@ const WalletPayment = () => {
     if (walletValue) setIsDisabled(false);
     else setIsDisabled(true);
   }, [walletValue]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          console.log("orderStatus", orderStatus);
+
+          if (orderStatus?.data?.status === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            toast.success("Wallet Recharge Successfully");
+            navigate(`${SELLER_WEB_URL}/onboarding/cash-on-boarding`);
+          }
+          setPaymentLoader(false);
+          removeLocalStorage("order_id");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
   const WalletRechargePaymentDetails = () => {
     return (
       <div
@@ -234,7 +274,12 @@ const WalletPayment = () => {
               </div>
 
               <div className="flex mt-1 mb-6 gap-x-[1rem] md:mb-0 ml-4 mr-5">
-                <div className="flex flex-col items-center gap-y-2">
+                <JusPay
+                  isDisabled={isDisabled}
+                  amount={walletValue}
+                  callbackUrl={`${SELLER_WEB_URL}/onboarding/wallet-payment`}
+                />
+                {/* <div className="flex flex-col items-center gap-y-2">
                   <img
                     src={
                       "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/paytm.png"
@@ -300,7 +345,7 @@ const WalletPayment = () => {
                       RazorPay
                     </p>
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -320,6 +365,8 @@ const WalletPayment = () => {
 
   return (
     <>
+      {paymentLoader && <PaymentLoader />}
+
       {isMdScreen &&
         (isLoading ? (
           <img
