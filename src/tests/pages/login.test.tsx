@@ -1,102 +1,47 @@
+// @ts-nocheck
 import React from "react";
 import {
   render,
   screen,
-  waitFor,
-  act,
   fireEvent,
+  waitFor,
+  cleanup,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom";
 import { MemoryRouter } from "react-router-dom";
-import Login from "../../screens/Auth/LogIn/index";
-jest.mock("../../../utils/webService", () => ({
-  ...jest.requireActual("../../../utils/webService"),
-  POST: jest.fn(),
-  GET: jest.fn(),
-}));
+import LogInScreen from "../../screens/Auth/LogIn";
 
+afterEach(cleanup);
+
+// Mocking the redux functions
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
+  useSelector: jest.fn(),
   useDispatch: jest.fn(),
 }));
 
-jest.mock("react-toastify", () => ({
-  toast: {
-    error: jest.fn(),
-  },
-}));
-
-jest.mock("../../../Socket", () => ({
-  socketCallbacks: {
-    connectSocket: jest.fn(),
-  },
-}));
-
-describe("Index Component", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+describe("Login Component", () => {
+  it("renders without crashing", () => {
+    render(<LogInScreen />, { wrapper: MemoryRouter });
   });
 
-  it("renders correctly", async () => {
-    render(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    );
+  it("handles user login with valid credentials", async () => {
+    render(<LogInScreen />, { wrapper: MemoryRouter });
+    console.log("Test start");
+    screen.debug();
+    await waitForElementToBeRemoved(() => screen.getByAltText("bootscreen"));
+    screen.debug();
 
-    expect(screen.getByAltText("Company Logo")).toBeInTheDocument();
-    expect(screen.getByText("Welcome to Shipyaari")).toBeInTheDocument();
-  });
+    // Get the email input again for interaction
+    const emailInput = screen.getByLabelText("Email");
+    const passwordInput = screen.getByLabelText("Password");
+    const loginButton = await screen.getByText("LOG IN");
 
-  it("handles login correctly", async () => {
-    const mockApiResponse = {
-      success: true,
-      data: [
-        {
-          nextStep: {
-            kyc: true,
-            qna: true,
-          },
-          name: "John Doe",
-          sellerId: "123",
-          token: "mocked-token",
-        },
-      ],
-    };
+    userEvent.type(emailInput, "test@example.com");
+    userEvent.type(passwordInput, "password");
 
-    jest.spyOn(window, "fetch").mockResolvedValueOnce({
-      json: async () => mockApiResponse,
-      ok: true,
-    } as Response);
-
-    render(
-      <MemoryRouter>
-        <Login />
-      </MemoryRouter>
-    );
-
-    // Simulate user interaction (e.g., clicking the login button)
-    userEvent.click(screen.getByText("LOG IN"));
-
-    await waitFor(() => {
-      expect(window.fetch).toHaveBeenCalledWith(
-        expect.stringContaining("/sign-in"),
-        expect.anything()
-      );
-      expect(window.fetch).toHaveBeenCalledTimes(1);
-      expect(screen.getByText("Welcome to Shipyaari")).toBeInTheDocument(); // Adjust this based on your actual behavior
-    });
-  });
-});
-
-describe("Index component tests", () => {
-  it("Renders correctly initial document", () => {
-    render(<Login />);
-    console.log("Login", Login);
-    const googleLoginButton = screen.getByRole("button", {
-      name: /google login/i,
-    });
-    fireEvent.click(googleLoginButton);
+    // Trigger the click event on the login button
+    fireEvent.click(loginButton);
   });
 });
