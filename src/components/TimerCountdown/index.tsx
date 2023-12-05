@@ -9,10 +9,11 @@ import { toast } from "react-toastify";
 interface IProps {
   sec?: any;
   routeCheck?: boolean;
+  setOTPNumber?: any;
 }
 
 const TimerCounter = (props: IProps) => {
-  const { sec, routeCheck } = props;
+  const { sec, routeCheck, setOTPNumber } = props;
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(sec);
   const [businessType, setBusinessType] = useState<any>();
@@ -58,6 +59,7 @@ const TimerCounter = (props: IProps) => {
       const { data: response } = await POST(POST_VERIFY_AADHAR_URL, payload);
       if (response?.success) {
         toast.success("Aadhar OTP Resent Successfully");
+        setOTPNumber("");
         setMinutes(0);
         setSeconds(sec);
         sessionStorage.setItem("client_id", response.data.data.client_id);
@@ -79,6 +81,7 @@ const TimerCounter = (props: IProps) => {
 
       if (response?.success) {
         toast.success("GST OTP Resent Successfully");
+        setOTPNumber("");
         sessionStorage.setItem("client_id", response.data[0].data.client_id);
         setClientId(response.data[0].data.client_id);
         setMinutes(0);
