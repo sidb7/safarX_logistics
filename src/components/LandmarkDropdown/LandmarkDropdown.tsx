@@ -41,45 +41,40 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    if (debouncedSearchTerm !== "") {
-      (async () => {
-        const payload = {
-          address: pastedData,
-          searchTerm: debouncedSearchTerm,
-        };
+  // useEffect(() => {
+  //   (async () => {
+  //     const payload = {
+  //       address: pastedData,
+  //     };
 
-        const headers = {
-          Authorization: "6481876edafb412cf0294413",
-          "Content-Type": "application/json",
-        };
+  //     const headers = {
+  //       Authorization: "6481876edafb412cf0294413",
+  //       "Content-Type": "application/json",
+  //     };
 
-        try {
-          const response = await fetch(LANDMARK_API, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(payload),
-          });
+  //     try {
+  //       const response = await fetch(LANDMARK_API, {
+  //         method: "POST",
+  //         headers,
+  //         body: JSON.stringify(payload),
+  //       });
 
-          if (response.ok) {
-            const data = await response.json();
-            if (data && data.data && Array.isArray(data.data)) {
-              const names = data.data?.map((item: any) => item.name);
-              setArrayValue(names);
-            } else {
-              console.error("Data structure is not as expected");
-            }
-          } else {
-            console.error("Error:", response.status, response.statusText);
-          }
-        } catch (error) {
-          console.error("Error:", error);
-        }
-      })();
-    } else {
-      setArrayValue([]);
-    }
-  }, [pastedData, debouncedSearchTerm]);
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         if (data && data.data && Array.isArray(data.data)) {
+  //           const names = data.data?.map((item: any) => item.name);
+  //           setArrayValue(names);
+  //         } else {
+  //           console.error("Data structure is not as expected");
+  //         }
+  //       } else {
+  //         console.error("Error:", response.status, response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     }
+  //   })();
+  // }, [pastedData]);
 
   return (
     <div

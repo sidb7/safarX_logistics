@@ -33,7 +33,7 @@ describe("Login Component", () => {
 
   it("handles user login with valid credentials", async () => {
     render(<LogInScreen />, { wrapper: MemoryRouter });
-    console.log("Test start");
+    // console.log("Test start");
 
     // Wait for the LogInScreen component to be fully rendered
     const emailInput = await screen.findByRole("textbox", { name: /email/i });
