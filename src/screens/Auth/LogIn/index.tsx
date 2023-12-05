@@ -52,6 +52,12 @@ const Index = () => {
   });
 
   const logInOnClick = async (value: any) => {
+    window?.dataLayer?.push({
+      event: "login",
+    });
+
+    console.log("window", window);
+
     const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
     sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
