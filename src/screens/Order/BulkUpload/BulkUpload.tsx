@@ -79,7 +79,10 @@ const BulkUpload = (props: ITypeProps) => {
       toast.error("An error occurred during file upload.");
     } finally {
       setIsLoading(false);
-      navigate("/orders/view-orders");
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // navigate("/orders/view-orders");
+      window.location.replace("/orders/view-orders");
     }
   };
 

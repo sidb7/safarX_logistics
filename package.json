@@ -106,6 +106,8 @@
     "jest-environment-jsdom": "^29.7.0",
     "jest-svg-transformer": "^1.0.0",
     "jest-transform-stub": "^2.0.0",
+    "matchmedia-polyfill": "^0.3.2",
+    "msw": "^2.0.10",
     "postcss": "8.4.24",
     "tailwindcss": "3.3.2",
     "ts-jest": "^29.1.1",
