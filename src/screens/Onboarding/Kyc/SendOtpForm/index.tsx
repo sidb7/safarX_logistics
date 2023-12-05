@@ -490,7 +490,7 @@ const Index = (props: ITypeProps) => {
                           }}
                         />
                       </div>
-                      <TimerCounter sec={60} />
+                      <TimerCounter sec={60} setOTPNumber={setOTPNumber} />
                     </>
                   )}
                 </>
