@@ -26,7 +26,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 2000);
-
+  const [apiCallMade, setApiCallMade] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -42,11 +42,10 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   }, []);
 
   useEffect(() => {
-    if (debouncedSearchTerm !== "") {
+    if (isDropdownOpen && !apiCallMade) {
       (async () => {
         const payload = {
           address: pastedData,
-          searchTerm: debouncedSearchTerm,
         };
 
         const headers = {
@@ -60,7 +59,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
             headers,
             body: JSON.stringify(payload),
           });
-
+          console.log("LandmarkApi called");
           if (response.ok) {
             const data = await response.json();
             if (data && data.data && Array.isArray(data.data)) {
@@ -77,9 +76,9 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         }
       })();
     } else {
-      setArrayValue([]);
+      setApiCallMade(false);
     }
-  }, [pastedData, debouncedSearchTerm]);
+  }, [isDropdownOpen, setApiCallMade]);
 
   return (
     <div

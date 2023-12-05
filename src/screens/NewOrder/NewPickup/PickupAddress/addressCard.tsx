@@ -148,34 +148,45 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
+      console.log("verifyaddressResponse", verifyAddressResponse);
 
-      const parsedData = verifyAddressResponse?.data?.message;
+      if (
+        verifyAddressResponse?.data?.response &&
+        verifyAddressResponse?.data?.response?.error
+      ) {
+        const error = verifyAddressResponse?.data?.response?.error;
 
-      const addressName: any =
-        addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
-      setPickupAddress((prevData: any) => ({
-        ...prevData,
-        [addressName]: {
-          ...prevData[addressName],
-          flatNo:
-            `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
-            "",
-          fullAddress: parsedData.full_address || "",
-          locality: parsedData.locality_name || "",
-          sector: parsedData.locality_name || "",
-          landmark: address.landmark,
-          pincode: parsedData.pincode || "",
-          city: parsedData.city_name || "",
-          state: capitalizeFirstLetter(parsedData.state_name) || "",
-          country: parsedData.country_name || "India",
-          addressType: address.addressType || "warehouse",
-        },
-      }));
+        console.error(
+          `API error - Code: ${error.code}, Type: ${error.type}, Message: ${error.message}`
+        );
+      } else {
+        const parsedData = verifyAddressResponse?.data?.message;
+        const addressName: any =
+          addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+        setPickupAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            flatNo:
+              `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+              "",
+            fullAddress: parsedData.full_address || "",
+            locality: parsedData.locality_name || "",
+            sector: parsedData.locality_name || "",
+            landmark: address.landmark || "",
+            pincode: parsedData.pincode || "",
+            city: parsedData.city_name || "",
+            state: capitalizeFirstLetter(parsedData.state_name) || "",
+            country: parsedData.country_name || "India",
+            addressType: address.addressType || "warehouse",
+          },
+        }));
+      }
 
       setLoading(false);
     } catch (error) {
+      console.error("An error occurred during API request:", error);
       setLoading(false);
-      return error;
     }
   };
 

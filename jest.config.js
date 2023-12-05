@@ -15,8 +15,7 @@ module.exports = {
     '^.+\\.css$': '<rootDir>/src/tests/mocks/styleMock.js',
 },
 
-// setupFilesAfterEnv: ['<rootDir>/src/setuptests.ts'],
-
+setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
  transform: {
   '^.+\\.(ts|tsx|js|jsx)$': 'ts-jest',
 },
