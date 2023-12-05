@@ -184,7 +184,7 @@ const Index: React.FC = () => {
 
         setServiceOptions(options);
 
-        console.log("options", options);
+        // console.log("options", options);
         const cheapestService = options.reduce(
           (minOption: any, currentOption: any) => {
             return currentOption.text.total < minOption.text.total
@@ -258,45 +258,6 @@ const Index: React.FC = () => {
   //   serviceOptions[0]
   // );
 
-  const postServiceDetails = async () => {
-    if (selectedService === null) {
-      toast.error("Please Select a Service");
-      return;
-    }
-
-    let {
-      partnerServiceId,
-      partnerServiceName,
-      companyServiceId,
-      companyServiceName,
-    } = response.data[selectedService];
-
-    const payload = {
-      partnerServiceId,
-      partnerServiceName,
-      companyServiceId,
-      companyServiceName,
-      tempOrderId: +shipyaari_id,
-      source: orderSource,
-    };
-
-    try {
-      const { data: response } = await POST(SET_PARTNER_SERVICE_INFO, payload);
-
-      if (response?.success) {
-        toast.success(response?.message);
-        navigate(
-          `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
-        );
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      //
-      return error;
-    }
-  };
-
   const steps = [
     {
       label: "Pickup",
@@ -335,7 +296,7 @@ const Index: React.FC = () => {
       imgSrc: TickLogo,
     },
   ];
-  console.log("services");
+  // console.log("services");
 
   useEffect(() => {
     const filters = serviceOptions?.filter((service: any) => {
@@ -350,7 +311,7 @@ const Index: React.FC = () => {
       }
       return null;
     });
-    console.log("filters", filters);
+    // console.log("filters", filters);
 
     const cheapestService = filters.reduce(
       (minOption: any, currentOption: any) => {
@@ -394,12 +355,55 @@ const Index: React.FC = () => {
     setSurface(isSurfaceSelected);
     setAir(isAirSelected);
   };
-  console.log("serviceOptions", serviceOptions);
+  // console.log("serviceOptions", serviceOptions);
 
-  console.log("recommendedOptions", recommendedOptions);
+  // console.log("recommendedOptions", recommendedOptions);
 
-  console.log("surface", surface);
-  console.log("air", air);
+  // console.log("surface", surface);
+  // console.log("air", air);
+
+  const postServiceDetails = async () => {
+    try {
+      setLoading(true);
+      if (selectedService === null) {
+        toast.error("Please Select a Service");
+        return;
+      }
+
+      let {
+        partnerServiceId,
+        partnerServiceName,
+        companyServiceId,
+        companyServiceName,
+      } = response.data[selectedService];
+
+      const payload = {
+        partnerServiceId,
+        partnerServiceName,
+        companyServiceId,
+        companyServiceName,
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      };
+      const { data: responseData } = await POST(
+        SET_PARTNER_SERVICE_INFO,
+        payload
+      );
+
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        setLoading(false);
+        navigate(
+          `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        );
+      } else {
+        toast.error(responseData?.message);
+      }
+    } catch (error) {
+      setLoading(false);
+      return error;
+    }
+  };
 
   return (
     <div className="w-full ">
@@ -482,10 +486,8 @@ const Index: React.FC = () => {
       )}
 
       <BottomLayout
+        callApi={() => postServiceDetails()}
         finalButtonText="NEXT"
-        callApi={() => {
-          postServiceDetails();
-        }}
       />
     </div>
   );
