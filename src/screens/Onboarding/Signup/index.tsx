@@ -204,6 +204,7 @@ const Index = () => {
                       <CustomInputBox
                         containerStyle=""
                         // placeholder=""
+                        id="fName"
                         tempLabel={true}
                         label="First Name"
                         maxLength={16}
@@ -252,6 +253,7 @@ const Index = () => {
                         containerStyle=""
                         tempLabel={true}
                         label="Last Name"
+                        id="lName"
                         maxLength={16}
                         // placeholder=""
                         onChange={(e) => {
@@ -298,6 +300,7 @@ const Index = () => {
                     <CustomInputBox
                       label="Email"
                       // placeholder=""
+                      id="email"
                       inputClassName={` ${
                         signUpError.email !== "" && "!border-[#F35838]"
                       } `}
@@ -343,6 +346,7 @@ const Index = () => {
                   <div className="relative">
                     <CustomInputBox
                       inputType={viewPassWord ? "text" : "password"}
+                      id="password"
                       tempLabel={true}
                       minLength={8}
                       maxLength={16}
@@ -422,6 +426,7 @@ const Index = () => {
                       maxLength={20}
                       tempLabel={true}
                       // placeholder=""
+                      id="referalCode"
                       onChange={(e) => {
                         setSignUpError({
                           ...signUpError,
