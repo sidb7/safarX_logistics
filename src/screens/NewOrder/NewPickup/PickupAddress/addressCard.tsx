@@ -151,12 +151,11 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
       console.log("verifyaddressResponse", verifyAddressResponse);
 
       if (
-        verifyAddressResponse.data.response &&
-        verifyAddressResponse.data.response.error
+        verifyAddressResponse?.data?.response &&
+        verifyAddressResponse?.data?.response?.error
       ) {
-        const error = verifyAddressResponse.data.response.error;
+        const error = verifyAddressResponse?.data?.response?.error;
 
-        // Handle the error
         console.error(
           `API error - Code: ${error.code}, Type: ${error.type}, Message: ${error.message}`
         );
