@@ -31,6 +31,7 @@ interface propTypes {
   inputError?: boolean;
   errorMessage?: any;
   autoComplete?: any;
+  id?: any;
 }
 
 const CustomInputBox: React.FunctionComponent<propTypes> = (
@@ -67,6 +68,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     inputError,
     errorMessage = false,
     autoComplete = "",
+    id,
   } = props;
 
   return (
@@ -90,6 +92,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           minLength={minLength}
           maxLength={maxLength}
           onKeyDown={onKeyDown}
+          id={id}
         />
         {/* absolute -bottom-4 px-2 left-0 */}
 
@@ -99,6 +102,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           } ${
             errorMessage !== true && errorMessage !== false && "!text-[red] "
           }`}
+          htmlFor={id}
         >
           {label}
         </label>

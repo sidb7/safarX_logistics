@@ -1,31 +1,29 @@
 import React, { useEffect, useState } from "react";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
+import ButtonIcon from "../../../assets/Product/Button.svg";
 import CrossIcon from "../../../assets/CloseIcon.svg";
-import CustomInputBox from "../../../components/Input";
-import ClearImage from "../../../assets/Product/clear.svg";
 import ProductIcon from "../../../assets/Product/Product.svg";
-import SearchProductFilterItems from "./SearchProductFilterItems";
 import ProductBox from "./ProductBox";
-import { searchProductData } from "../../../utils/dummyData";
 import SampleProduct from "../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { searchResults } from "../../../utils/utility";
 import ComboProductBox from "../../../components/ComboProductBox";
 import { POST } from "../../../utils/webService";
 import { GET_COMBO_PRODUCT, GET_PRODUCTS } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
-import SearchBoxIcon from "../../../assets/SearchBox/SearchIcon.svg";
 
 import StackLogo from "../../../assets/Catalogue/StackIcon.svg";
 import "../../../styles/skeleton.css";
 import PaginationComponent from "../../../components/Pagination";
 
 import { Spinner } from "../../../components/Spinner";
+import { SearchBox } from "../../../components/SearchBox";
+import AddButton from "../../../components/Button/addButton";
 interface ISearchProductProps {
   isSearchProductRightModalOpen: boolean;
   setIsSearchProductRightModalOpen: any;
   selectedProducts?: any;
   handlePackageDetails?: any;
+  handleAddProductPanel?: any;
 }
 
 const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
@@ -36,6 +34,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
     setIsSearchProductRightModalOpen,
     selectedProducts = [],
     handlePackageDetails,
+    handleAddProductPanel,
   } = props;
 
   const [isAddProductMode, setIsAddProductMode] = useState<any>(false);
@@ -352,7 +351,18 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               </div>
             </div>
             <div className="w-80 !h-full pr-8 flex items-center">
-              <img src={SearchBoxIcon} alt="" className="w-6 h-6 mx-2" />
+              <SearchBox
+                label="Search any product"
+                customPlaceholder="Search any product"
+                onChange={(e: any) => {
+                  setSearchedProduct(e.target.value.toString().trim());
+                  setClearIconVisible(true);
+                }}
+                getFullContent={() => setSearchedProduct("")}
+                className="!h-full"
+                value={searchedProduct}
+              />
+              {/* <img src={SearchBoxIcon} alt="" className="w-6 h-6 mx-2" />
               <CustomInputBox
                 isRightIcon={clearIconVisible}
                 rightIcon={ClearImage}
@@ -371,7 +381,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 // visibility={true}
                 setVisibility={() => {}}
                 imageClassName="!w-8 !h-8 !top-[20%]"
-              />
+              /> */}
             </div>
           </div>
           <div className="flex flex-wrap gap-2 lg:gap-3 transition-all max-h-96 mt-2 overflow-scroll">
@@ -383,6 +393,24 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               </div>
             ) : (
               <>
+                {!(products.length > 0) && (
+                  <>
+                    <AddButton
+                      text="ADD PRODUCTS"
+                      onClick={() => {
+                        handleAddProductPanel(true);
+                        // navigate(
+                        //   `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                        // );
+                      }}
+                      showIcon={true}
+                      icon={ButtonIcon}
+                      className="rounded-xl p-6"
+                      alt="Add Product"
+                    />
+                  </>
+                )}
+
                 {products?.map((eachProduct: any, index: number) => {
                   return (
                     <ProductBox

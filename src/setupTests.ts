@@ -1,5 +1,12 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom';
+// setupTests.js
+import 'matchmedia-polyfill';
+import 'matchmedia-polyfill/matchMedia.addListener';
+beforeEach(() => {
+ const div = document.createElement('div');
+ div.id = 'root';
+ document.body.appendChild(div);
+});
+  jest.mock('react-modal', () => ({
+    ...jest.requireActual('react-modal'),
+    setAppElement: () => {},
+  }));

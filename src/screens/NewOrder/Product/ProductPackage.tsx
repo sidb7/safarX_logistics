@@ -1,28 +1,16 @@
 import { useEffect, useState } from "react";
 import ProductIcon from "../../../assets/Product/Product.svg";
-import EditImageWithBlack from "../../../../assets/Catalogue/edit.svg";
-import BookmarkIcon from "../../../assets/Product/Bookmark.svg";
 import ButtonIcon from "../../../assets/Product/Button.svg";
-import CodIcon from "../../../assets/codIcon.svg";
-import ProductBox from "./ProductBox";
-import SampleProduct from "../../../assets/SampleProduct.svg";
-import toggle from "../../../assets/toggle-off-circle.svg";
-import toggleBlack from "../../../assets/toggleBlack.svg";
 import "../../../styles/productStyle.css";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import CustomRightModal from "../../../components/CustomModal/customRightModal";
-
 import AddButton from "../../../components/Button/addButton";
 import AddComboModal from "./AddComboModal";
 import Stepper from "../../../components/Stepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import shieldTick from "../../../assets/shield-tick.svg";
-import shieldcross from "../../../assets/shieldcross.svg";
-import Checkbox from "../../../components/CheckBox";
 import { POST } from "../../../utils/webService";
 import { Spinner } from "../../../components/Spinner";
-import Switch from "react-switch";
 import {
   ADD_BOX_INFO,
   GET_SELLER_COMPANY_BOX,
@@ -35,11 +23,8 @@ import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
 import { toast } from "react-toastify";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
-import CustomInputBox from "../../../components/Input";
-import GroupRadioButtons from "../../../components/GroupRadioButtons/GroupRadioButtons";
 import { useSelector } from "react-redux";
 import AddPackageDetails from "./AddPackageDetails";
-import SearchIcon from "../../../assets/Product/search.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { getQueryJson } from "../../../utils/utility";
 import AddProductPanel from "../NewCatalogue/ProductCatalogue/addProductNew";
@@ -504,6 +489,11 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
         error
       );
     }
+  };
+
+  const handleAddProductPanel = () => {
+    setIsSearchProductRightModalOpen(false);
+    setProductModal(true);
   };
 
   return (
@@ -982,6 +972,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       </div>
       <AddPackageDetails
         // productsFromLatestOrder={products}
+        handleAddProductPanel={handleAddProductPanel}
         selectedProducts={selectedProductsOfPackage}
         isSearchProductRightModalOpen={isSearchProductRightModalOpen}
         setIsSearchProductRightModalOpen={setIsSearchProductRightModalOpen}

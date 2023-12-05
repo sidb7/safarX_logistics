@@ -148,7 +148,14 @@ const Summary = (props: Props) => {
         if (placeOrderPromise?.data?.success) {
           // If both API calls are successful, navigate to the desired page
           toast.success(placeOrderPromise?.data?.message);
-          navigate("/orders/view-orders");
+          // navigate("/orders/view-orders");
+          // // Wait for asynchronous actions to complete, if any
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          // Add a cache-busting parameter and then replace the URL
+          // const newUrl =
+          //   "/orders/view-orders?timestamp=" + new Date().getTime();
+          window.location.replace("/orders/view-orders");
         } else {
           // Handle errors from the second API call
           let errorText = placeOrderPromise?.data?.message;

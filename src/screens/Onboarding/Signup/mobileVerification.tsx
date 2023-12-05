@@ -25,9 +25,9 @@ const Index = () => {
   const signUpUser = useSelector((state: any) => state.signup);
 
   let body = {
-    email: signUpUser.email,
-    firstName: signUpUser.firstName,
-    mobileNo: mobileNumber.mobileNo,
+    email: signUpUser?.email,
+    firstName: signUpUser?.firstName,
+    mobileNo: mobileNumber?.mobileNo,
   };
 
   const sendOtpOnClick = async (value: any) => {

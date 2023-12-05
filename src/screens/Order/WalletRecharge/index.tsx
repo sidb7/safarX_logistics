@@ -69,6 +69,7 @@ const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
+  const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
   // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Wallet");
 
@@ -100,14 +101,14 @@ const WalletRecharge = () => {
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
 
-  const fetchCurrentWallet = async () => {
-    setLoading(true);
-    const { data } = await POST(GET_CURRENT_WALLET, {});
-    if (data?.status) {
-      setCurrentWalletValue(data.data[0][0]?.balance);
-      setLoading(false);
-    }
-  };
+  // const fetchCurrentWallet = async () => {
+  //   setLoading(true);
+  //   const { data } = await POST(GET_CURRENT_WALLET, {});
+  //   if (data?.status) {
+  //     setCurrentWalletValue(data.data[0][0]?.balance);
+  //     setLoading(false);
+  //   }
+  // };
 
   // useEffect(() => {
   //   (async () => {
@@ -304,7 +305,7 @@ const WalletRecharge = () => {
   useEffect(() => {
     (async () => {
       try {
-        fetchCurrentWallet();
+        // fetchCurrentWallet();
         const juspayOrderId = getLocalStorage("order_id");
         if (juspayOrderId) {
           setPaymentLoader(true);
@@ -391,7 +392,7 @@ const WalletRecharge = () => {
                       Your wallet balance
                     </p>
                     <p className="text-[#1C1C1C]">
-                      ₹ {currentWalletValue?.toLocaleString("en-IN")}
+                      ₹ {walletBalance?.toLocaleString("en-IN")}
                     </p>
                   </div>
                   <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal">
