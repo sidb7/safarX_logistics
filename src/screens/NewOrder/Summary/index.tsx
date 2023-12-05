@@ -150,7 +150,7 @@ const Summary = (props: Props) => {
           toast.success(placeOrderPromise?.data?.message);
           // navigate("/orders/view-orders");
           // // Wait for asynchronous actions to complete, if any
-          await new Promise((resolve) => setTimeout(resolve, 500));
+          await new Promise((resolve) => setTimeout(resolve, 800));
 
           // Add a cache-busting parameter and then replace the URL
           // const newUrl =
