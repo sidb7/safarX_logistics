@@ -121,7 +121,7 @@ export const Breadcrum = ({
             );
           })}
         </div>
-        <div className="flex justify-between !h-10 ">
+        <div className={`flex justify-between flex-col`}>
           <div className="inline-flex space-x-1 items-center justify-start ">
             <img
               src={BackArrowIcon}
