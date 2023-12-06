@@ -256,7 +256,7 @@ const SystemLog = () => {
           <div>
             <Breadcrum label="System Log" />
           </div>
-          <div className="mx-4">
+          <div className="mx-4 overflow-auto">
             <CustomTable data={systemLogData} columns={systemLogColumns} />
           </div>
           {totalItemCount > 0 && (
@@ -265,6 +265,7 @@ const SystemLog = () => {
               itemsPerPageOptions={[10, 20, 30, 50]}
               onPageChange={onPageIndexChange}
               onItemsPerPageChange={onPerPageItemChange}
+              rightmodalPagination={true}
             />
           )}
           <CenterModal
@@ -272,7 +273,7 @@ const SystemLog = () => {
             onRequestClose={() => {
               setIsModal(false);
             }}
-            className="!w-[50%] !h-[70%]"
+            className="!w-[400px] md:!w-[50%] !h-[70%]"
           >
             <div className=" w-full h-full gap-y-6 p-8 flex flex-col">
               <div className="flex items-center justify-between">
