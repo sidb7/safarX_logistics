@@ -783,9 +783,9 @@ const Index = () => {
                     )}
                   </div>
                 )}
-                <div className="mt-24 lg:hidden">
+                {/* <div className="mt-24 lg:hidden">
                   <BottomNavBar />
-                </div>
+                </div> */}
               </div>
             )}
           </div>

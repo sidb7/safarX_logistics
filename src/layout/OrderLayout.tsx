@@ -18,7 +18,7 @@ const OrderLayout = () => {
           </div>
         </main>
 
-        <BottomNavBar />
+        {/* <BottomNavBar /> */}
       </div>
     </div>
   );
