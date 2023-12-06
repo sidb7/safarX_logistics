@@ -146,9 +146,9 @@ const Index = (props: ITypeProps) => {
             </div>
           </div>
           {/* Bottom NavBar */}
-          <div className="lg:hidden">
+          {/* <div className="lg:hidden">
             <BottomNavBar />
-          </div>
+          </div> */}
           {/* Modal */}
           <CenterModal
             isOpen={isModalOpen}

@@ -329,7 +329,7 @@ const ViewAllTickets = (props: ITypeProps) => {
         <div className="mx-5">
           <CustomAccordianTickets datas={TicketsData} isTicketDetails={false} />
         </div>
-        <BottomNavBar />
+        {/* <BottomNavBar /> */}
         <CustomCenterModal
           isOpen={isFilterModalOpen}
           onRequestClose={() => {

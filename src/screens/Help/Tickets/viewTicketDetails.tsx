@@ -158,9 +158,7 @@ wrote:`}</p>
           </footer>
         </div>
       ) : (
-        <div className="mt-24">
-          <BottomNavBar />
-        </div>
+        <div className="mt-24">{/* <BottomNavBar /> */}</div>
       )}
     </div>
   );

@@ -276,9 +276,9 @@ export const Home = (props: IOverview) => {
             <Overview ordersArr={dashboardInfo.overview} />
           </div>
 
-          <div className="mt-24 lg:hidden">
+          {/* <div className="mt-24 lg:hidden">
             <BottomNavBar />
-          </div>
+          </div> */}
         </div>
       ) : (
         <div>

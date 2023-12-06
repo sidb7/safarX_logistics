@@ -855,9 +855,9 @@ const PlanDetails = (props: ITypeProps) => {
           </div> */}
 
           {/* Bottom NavBar for Mobile */}
-          <div className="lg:hidden mt-24">
+          {/* <div className="lg:hidden mt-24">
             <BottomNavBar />
-          </div>
+          </div> */}
           {/* end here */}
         </div>
       ) : (

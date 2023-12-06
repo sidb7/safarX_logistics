@@ -231,9 +231,9 @@ const ComparePlans = (props: ITypeProps) => {
           thclassName={"bg-white"}
         />
       </div>
-      <div className="lg:hidden mt-24">
+      {/* <div className="lg:hidden mt-24">
         <BottomNavBar />
-      </div>
+      </div> */}
     </div>
   );
 };

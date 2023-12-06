@@ -60,7 +60,7 @@ const Pagination: React.FC<PaginationProps> = ({
           : "lg:grid grid-cols-2 justify-end items-center space-x-4"
       } ${className} mt-[2rem] mx-[2rem] mb-[5rem]`}
     >
-      <div className="flex gap-x-4">
+      <div className="flex flex-wrap gap-2 gap-x-4">
         <button
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}

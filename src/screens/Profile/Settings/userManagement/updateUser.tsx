@@ -25,7 +25,7 @@ const Buttons = (
       className={
         className
           ? className
-          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+          : `lg:flex lg:flex-row-reverse grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
       }
     >
       <div className="grid col-span-2">
@@ -108,7 +108,7 @@ function UpdateUser() {
         label="UPDATE USER"
         component={Buttons("", updateUserHandler)}
       />
-      <div className="grid grid-cols-3 mx-5 mt-5 gap-6">
+      <div className="flex flex-col md:grid md:grid-cols-3 mx-5 mt-5 gap-6">
         <div>
           <CustomInputBox
             label="First Name"

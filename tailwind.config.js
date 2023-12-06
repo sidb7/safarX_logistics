@@ -9,5 +9,5 @@ module.exports = {
       Arial: ["arial", "sans-serif"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwindcss"), require("autoprefixer")],
 };
