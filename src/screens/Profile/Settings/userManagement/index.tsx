@@ -18,34 +18,6 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../../redux/reducers/role";
 
-const Buttons = (className?: string, usersData?: any) => {
-  const navigate = useNavigate();
-
-  return (
-    <div
-      className={
-        className
-          ? className
-          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
-      }
-    >
-      <div className="flex">
-        <CustomButton
-          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-          text="ADD ROLE"
-          onClick={() => navigate("/settings/role-management/add-role")}
-        />
-
-        <CustomButton
-          className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
-          text="ADD USER"
-          onClick={() => navigate("/settings/user-management/add-user")}
-        />
-      </div>
-    </div>
-  );
-};
-
 function UserManagement() {
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
@@ -56,6 +28,32 @@ function UserManagement() {
   const [totalItemCount, setTotalItemCount] = useState(0);
   const [isModalOpen, setIsModalOpen]: any = useState(false);
   const [deleteUser, setDeleteUser]: any = useState("");
+
+  const Buttons = (className?: string, usersData?: any) => {
+    return (
+      <div
+        className={
+          className
+            ? className
+            : `lg:flex lg:flex-row-reverse grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+        }
+      >
+        <div className="flex">
+          <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+            text="ADD ROLE"
+            onClick={() => navigate("/settings/role-management/add-role")}
+          />
+
+          <CustomButton
+            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px] ml-4"
+            text="ADD USER"
+            onClick={() => navigate("/settings/user-management/add-user")}
+          />
+        </div>
+      </div>
+    );
+  };
 
   const columnsHelper = createColumnHelper<any>();
   const columns = [
@@ -242,7 +240,7 @@ function UserManagement() {
             label="User Management"
             component={Buttons("", usersData)}
           />
-          <div className=" my-3 mx-6">
+          <div className=" my-3 mx-6 overflow-auto">
             {/* <div className=" flex justify-end">
               <div className="grid grid-cols-3 gap-x-2 lg:flex ">
                 <div>
@@ -266,7 +264,7 @@ function UserManagement() {
             <CenterModal
               isOpen={isModalOpen}
               onRequestClose={() => setIsModalOpen(false)}
-              className="!h-[340px] !w-[480px]"
+              className="!h-[340px] !w-[400px] md:!w-[480px]"
             >
               <DeleteConfirmModale
                 userInfo={deleteUser}
