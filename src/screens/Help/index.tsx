@@ -186,9 +186,9 @@ ${renderingComponents === index && "!text-[#004EFF] lg:text-[18px]"}`}
               {renderComponent()}
             </div>
 
-            <div className="lg:hidden mt-24">
+            {/* <div className="lg:hidden mt-24">
               <BottomNavBar />
-            </div>
+            </div> */}
           </div>
         </div>
       ) : (

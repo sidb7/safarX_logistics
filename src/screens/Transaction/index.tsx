@@ -46,7 +46,7 @@ export const Transaction = () => {
 
   useEffect(() => {
     if (renderingComponents === 0) {
-      setLoading(true);
+      // setLoading(true);
       (async () => {
         const { data } = await POST(GET_WALLET_TRANSACTION, {
           filter: {
@@ -64,10 +64,10 @@ export const Transaction = () => {
         if (data?.success) {
           setData(data.data || []);
           setTotalItemCount(data.totalTransactions);
-          setLoading(false);
+          // setLoading(false);
         } else {
           toast.error(data?.message);
-          setLoading(false);
+          // setLoading(false);
         }
       })();
     }
@@ -200,7 +200,7 @@ export const Transaction = () => {
                   <div className="hidden lg:block">{filterButton()}</div>
                 </div>
 
-                <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
+                {/* <div className="grid grid-cols-2 justify-center mt-4 h-[36px] lg:hidden">
                   <div className="flex items-center"></div>
                   <div className="flex items-center justify-end gap-x-2">
                     <div className="flex items-center justify-center border-[1px] py-2 px-4 rounded-md border-[#A4A4A4] col-span-2">
@@ -210,7 +210,7 @@ export const Transaction = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="lg:hidden">
                   {data &&
@@ -267,6 +267,8 @@ export const Transaction = () => {
                     onItemsPerPageChange={onPerPageItemChange}
                     pageNo={currentPage}
                     initialItemsPerPage={itemsPerPage}
+                    className="!mx-0"
+                    rightmodalPagination={true}
                   />
                 )}
 

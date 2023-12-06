@@ -242,7 +242,10 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
           <div className="flex items-center gap-x-3 lg:hidden">
             <img src={HamMenu} alt="" onClick={() => setMobileSideBar(true)} />
 
-            <div className="mt-1 p-1">
+            <div
+              className="mt-1 p-1"
+              onClick={() => navigate("/dashboard/overview")}
+            >
               <img src={ShipyaariLogo} alt="" />
             </div>
           </div>

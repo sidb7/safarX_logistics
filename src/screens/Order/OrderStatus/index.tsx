@@ -1,5 +1,6 @@
 import SelectIcon from "../../../assets/Order/SelectIcon.svg";
 import FilterIcon from "../../../assets/Order/FilterIcon.svg";
+import PlaceChannelOrder from "../../../assets/placeChannelOrder.svg";
 import CloseIcon from "../../../assets/CloseIcon.svg";
 import { SetStateAction, useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
@@ -15,6 +16,7 @@ import {
   FETCH_MANIFEST_DATA,
   GET_ORDER_BY_ID,
   GET_SELLER_ORDER,
+  POST_PLACE_CHANNEL_ORDERS,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-toastify";
@@ -105,6 +107,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         hovertext: "Delete Orders",
         identifier: "Delete",
       },
+      {
+        icon: PlaceChannelOrder,
+        hovertext: "Place Orders",
+        identifier: "PlaceOrder",
+      },
     ],
     BOOKED: [
       { icon: CrossIcon, hovertext: "Cancel Orders", identifier: "Cancel" },
@@ -181,23 +188,47 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleActions = (
+  const handleActions = async (
     actionName: any,
     selectedRowdata: any,
     identifier?: any
   ) => {
     switch (actionName) {
       case "DRAFT": {
-        const tempOrderIds = selectedRowdata.map(
-          (data: any, index: any) => data.original.tempOrderId
-        );
+        if (identifier === "Delete") {
+          const tempOrderIds = selectedRowdata.map(
+            (data: any, index: any) => data.original.tempOrderId
+          );
 
-        let payload = {
-          tempOrderIdArray: tempOrderIds,
-        };
+          let payload = {
+            tempOrderIdArray: tempOrderIds,
+          };
 
-        setDeleteModalDraftOrder &&
-          setDeleteModalDraftOrder({ isOpen: true, payload });
+          setDeleteModalDraftOrder &&
+            setDeleteModalDraftOrder({ isOpen: true, payload });
+        } else {
+          const orderDetails = selectedRowdata?.map((order: any) => {
+            if (order?.original?.source === "SHOPIFY") {
+              return {
+                orderId: order?.original?.orderId,
+                source: "SHOPIFY",
+              };
+            }
+          });
+          try {
+            const { data } = await POST(
+              POST_PLACE_CHANNEL_ORDERS,
+              orderDetails
+            );
+            if (data?.success) {
+              toast.success(
+                data?.message || "Successfully Placed Channel Orders"
+              );
+            }
+          } catch (error: any) {
+            toast.error(error?.message || "Failed to Place Channel Orders");
+          }
+        }
         break;
       }
       case "BOOKED": {
@@ -406,7 +437,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           "border-r border-[#A4A4A4]"
                         } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
                         onClick={() =>
-                          handleActions(currentStatus, selectedRowdata)
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data?.identifier
+                          )
                         }
                         data-tooltip-id="my-tooltip-inline"
                         data-tooltip-content={data.hovertext}

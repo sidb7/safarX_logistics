@@ -1,10 +1,11 @@
 import CustomButton from "../../components/Button";
 import AddOrderIcon from "../../assets/Order/AddOrder.svg";
 import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
+import SyncIcon from "../../assets/Order/SyncIcon.svg";
 import { OrderStatus } from "./OrderStatus";
 import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Stepper from "./Stepper";
 import "../../styles/silkStyle.css";
 import DeliveryIcon from "../../assets/Delivery.svg";
@@ -25,9 +26,10 @@ import {
   GET_SELLER_ORDER,
   GET_SINGLE_FILE,
   POST_SERVICEABILITY,
+  POST_SYNC_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
-
+import "../../styles/index.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import TickLogo from "../../assets/tick.gif";
@@ -202,6 +204,7 @@ const Index = () => {
   const [totalCount, setTotalcount]: any = useState(0);
   const [globalIndex, setGlobalIndex] = useState(0);
   const [tabStatusId, setTabStatusId] = useState(0);
+  const syncRef: any = useRef(null);
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -271,12 +274,16 @@ const Index = () => {
           />
         </div>
 
-        {/* <div className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px]">
-        <img src={SyncIcon} alt="" width="16px" />
-        <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-          SYNC CHANNEL
-        </span>
-      </div> */}
+        <div
+          ref={syncRef}
+          onClick={handleSyncOrder}
+          className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+        >
+          <img src={SyncIcon} alt="" width="16px" />
+          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
+            SYNC CHANNEL
+          </span>
+        </div>
 
         <div
           className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
@@ -302,6 +309,28 @@ const Index = () => {
         )}
       </div>
     );
+  };
+
+  const handleSyncOrder = async () => {
+    try {
+      syncRef.current.childNodes[1].textContent = "SYNC IN PROGRESS...";
+      syncRef.current.style.backgroundColor = "#F8F8F8";
+      syncRef.current.style.pointerEvents = "none";
+      syncRef.current.childNodes[0].classList.add("infinite-rotate");
+
+      const { data } = await POST(POST_SYNC_ORDER);
+      if (data?.success) {
+        toast.success(data?.message || "Sync Successful");
+      }
+    } catch (error: any) {
+      toast.error(error?.message || "Failed To Sync Channel");
+    }
+    if (syncRef.current) {
+      syncRef.current.childNodes[1].textContent = "SYNC CHANNEL";
+      syncRef.current.style.backgroundColor = "white";
+      syncRef.current.style.pointerEvents = "auto";
+      syncRef.current.childNodes[0].classList.remove("infinite-rotate");
+    }
   };
 
   const warningMessageForDelete = (data?: any) => {
@@ -783,9 +812,9 @@ const Index = () => {
                     )}
                   </div>
                 )}
-                <div className="mt-24 lg:hidden">
+                {/* <div className="mt-24 lg:hidden">
                   <BottomNavBar />
-                </div>
+                </div> */}
               </div>
             )}
           </div>
