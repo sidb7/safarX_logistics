@@ -28,7 +28,7 @@ export default function SimpleLineChart(props: IpropTypes) {
           data={data}
           margin={{
             top: 25,
-            right: 30,
+            right: 10,
             left: 0,
             bottom: 5,
           }}
