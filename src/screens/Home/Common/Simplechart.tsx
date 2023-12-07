@@ -80,7 +80,9 @@ const SimpleChart = (props: ISimplechart) => {
               <div>
                 <div className="flex justify-between">
                   <h1 className="font-Lato text-xl font-bold leading-[26px]">
-                    &#8377;0
+                    &#8377;
+                    {revenueDetails?.charges?.HighestOrderValue?.toFixed(2) ||
+                      0}
                   </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>
@@ -91,7 +93,8 @@ const SimpleChart = (props: ISimplechart) => {
               <div>
                 <div className="flex justify-between">
                   <h1 className="font-Lato text-xl font-bold leading-[26px]">
-                    &#8377;0
+                    &#8377;
+                    {revenueDetails?.charges?.AvgOrderValue?.toFixed(2) || 0}
                   </h1>
                   <img src={RedEllipse} alt="RedEllipse" />
                 </div>
@@ -102,7 +105,8 @@ const SimpleChart = (props: ISimplechart) => {
               <div>
                 <div className="flex justify-between">
                   <h1 className="font-Lato text-xl font-bold leading-[26px]">
-                    &#8377;0
+                    &#8377;
+                    {revenueDetails?.charges?.TodaysRevenue?.toFixed(2) || 0}
                   </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>
