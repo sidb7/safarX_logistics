@@ -409,7 +409,7 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className="w-full ">
+    <div className="w-full h-[80vh] overflow-auto">
       <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />

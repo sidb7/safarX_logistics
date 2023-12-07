@@ -106,6 +106,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
     if (data?.success) {
       updateBoxApi();
       toast.success(data?.message);
+      setSellerBoxDetailsModal(false);
     } else {
       toast.error(data?.message);
     }
@@ -319,14 +320,14 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
           }}
           className={`${
             isMobileView ? "w-[100%]" : ""
-          } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4  `}
+          } bg-white text-[#1C1C1C] w-[100%] h-[36px] lg:!py-2 lg:!px-4  `}
         />
         <ServiceButton
           text={`${isEditMode ? "UPDATE" : "SAVE"}`}
           onClick={() => createAndUpdateSellerBoxDetails()}
           className={`${
             isMobileView ? "w-[100%]" : ""
-          } bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2  lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+          } bg-[#1C1C1C] text-[#FFFFFF] w-[100%] h-[36px] lg:!py-2  lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
         />
       </div>
     </>
