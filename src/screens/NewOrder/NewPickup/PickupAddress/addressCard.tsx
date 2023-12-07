@@ -232,6 +232,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   };
 
+  console.log("landmark", address.landmark);
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">

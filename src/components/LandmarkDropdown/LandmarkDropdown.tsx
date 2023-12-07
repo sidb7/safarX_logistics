@@ -22,7 +22,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   inputError,
 }) => {
   const [arrayValue, setArrayValue] = useState<string[]>([]);
-  const [selected, setSelected] = useState(value || "");
+  const [selected, setSelected] = useState(value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 2000);
@@ -42,6 +42,8 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   }, []);
 
   useEffect(() => {
+    console.log("Value prop in useEffect:", selected, value);
+
     if (isDropdownOpen && !apiCallMade) {
       (async () => {
         const payload = {
@@ -80,6 +82,9 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
     }
   }, [isDropdownOpen, setApiCallMade]);
 
+  console.log("value", selected);
+  console.log("valuefromProp", value);
+
   return (
     <div
       className="relative"
@@ -91,7 +96,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       <CustomInputBox
         inputType="text"
         label="Landmark"
-        value={searchTerm || selected}
+        value={searchTerm || value}
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setSelected(e.target.value);
