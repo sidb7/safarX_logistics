@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 
 interface IChannelProps {
+  setIsLoading: any;
   setModalData: any;
   channelData: any;
   setChannelData: any;
@@ -38,6 +39,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     indexNum,
     integrate,
     modalData,
+    setIsLoading,
   } = props;
   // let isUpdateModal = !integrate;
   let isUpdateModal = false;
@@ -61,6 +63,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   const addStore = async () => {
     try {
+      setIsLoading(true);
+      setIsDisabled(true);
       if (!isUpdateModal) {
         if (channel === "SHOPIFY") {
           const { data } = await POST(POST_CREATE_STORE, storeData);
@@ -141,6 +145,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     } catch (error) {
       setModalData({ isOpen: false });
     }
+    setIsLoading(false);
+    setIsDisabled(false);
   };
 
   const channelArr = [
