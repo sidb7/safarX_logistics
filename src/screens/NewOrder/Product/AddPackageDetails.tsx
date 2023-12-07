@@ -350,7 +350,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 Products
               </div>
             </div>
-            <div className="w-80 !h-full pr-8 flex items-center">
+            <div className="w-[13rem] !h-fullflex items-center">
               <SearchBox
                 label="Search any product"
                 customPlaceholder="Search any product"
