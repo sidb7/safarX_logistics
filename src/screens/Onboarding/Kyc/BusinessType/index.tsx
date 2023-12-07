@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useMediaQuery } from "react-responsive";
 import Card from "./card";
 import ServiceButton from "../../../../components/Button/ServiceButton";
-import CenterModal from "../../../../components/CustomModal/customCenterModal";
+// import CenterModal from "../../../../components/CustomModal/customCenterModal";
 // import CustomBottomModal from "../../../../components/CustomModal/customBottomModal";
 import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
