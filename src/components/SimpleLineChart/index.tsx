@@ -34,12 +34,12 @@ export default function SimpleLineChart(props: IpropTypes) {
           }}
         >
           <CartesianGrid strokeDasharray="0" vertical={false} />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="k" />
           <YAxis />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="pv"
+            dataKey="v"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />

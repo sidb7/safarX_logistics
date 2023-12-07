@@ -29,17 +29,17 @@ export const BarChartComponent = (props: IpropTypes) => {
           data={data}
           margin={{
             top: 5,
-            right: 30,
-            left: 20,
+            right: 20,
+            left: 10,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="0" vertical={false} />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="k" />
           <YAxis />
           <Tooltip />
           {/* <Legend /> */}
-          <Bar dataKey="pv" fill="#8884d8" />
+          <Bar dataKey="v" fill="#8884d8" />
           {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
         </BarChart>
       </ResponsiveContainer>
