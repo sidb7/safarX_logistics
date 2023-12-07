@@ -16,15 +16,19 @@ interface ProfileCardProps {
 const LabelComponent: React.FC<{
   label: string;
   className?: string;
-  info: string;
+  info: any;
   classNameInfo?: string;
 }> = ({ label, className, info, classNameInfo }) => {
   return (
     <div className="flex flex-col">
-      <span className={`text-[#1C1C1C] font-semibold ${className}`}>
+      <span
+        className={`text-[#1C1C1C] font-Open text-[18px]  leading-[22px] capitalize font-semibold ${className}`}
+      >
         {label}
       </span>
-      <span className={`text-[16px] text-[#004EFF] ${classNameInfo}`}>
+      <span
+        className={`font-Lato font-semibold leading-9 text-[#004EFF] text-[28px] capitalize lg:mt-1  ${classNameInfo}`}
+      >
         {info}
       </span>
     </div>
@@ -47,7 +51,7 @@ export const ProfileCard = (props: ProfileCardProps) => {
   const planStartDate = props?.ProfileDetails?.planStartDate;
 
   const [kycValue, setKycValue] = useState();
-
+  let currentBalance = parseFloat(walletBalance?.toFixed(2));
   useEffect(() => {
     const kyc = sessionStorage.getItem("setKycValue") as any;
     setKycValue(kyc);
@@ -129,17 +133,17 @@ export const ProfileCard = (props: ProfileCardProps) => {
             <div className="flex flex-col drop-shadow-sm rounded-md bg-[#FDF6EA] w-[148px] h-[74px]">
               <LabelComponent
                 label="Wallet Balance"
-                className={"text-[14px] pl-2 py-2"}
-                info={walletBalance || "0"}
-                classNameInfo="pl-2 py-2"
+                className={"!text-[14px] !leading-5 pl-2 py-2"}
+                info={currentBalance || "0"}
+                classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
               />
             </div>
             <div className="flex flex-col drop-shadow-sm rounded-md bg-[#F2F6FF] w-[148px] h-[74px]">
               <LabelComponent
                 label="Yaari Points"
-                className={"text-[14px] pl-2 py-2"}
+                className={"!text-[14px] !leading-5 pl-2 py-2"}
                 info={yaariPoints || "0"}
-                classNameInfo="pl-2 py-2"
+                classNameInfo="!text-[16px] !leading-[22px] pl-[9px]"
               />
             </div>
           </div>
@@ -173,17 +177,17 @@ export const ProfileCard = (props: ProfileCardProps) => {
           <div className="flex flex-col justify-center rop-shadow-sm rounded-md bg-[#FDF6EA]">
             <LabelComponent
               label="Wallet Balance"
-              className={"text-[18px] pl-3"}
-              info={`${`\u20B9`} ${walletBalance || 0}`}
-              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
+              className={"pl-3"}
+              info={`${`\u20B9`} ${currentBalance || 0}`}
+              classNameInfo="pl-3"
             />
           </div>
           <div className="flex flex-col justify-center drop-shadow-sm rounded-md bg-[#F2F6FF]">
             <LabelComponent
               label="Yaari Points"
-              className={"text-[18px] pl-3"}
+              className={"pl-3"}
               info={yaariPoints || "0"}
-              classNameInfo="!text-[28px] !text-[#004EFF] pl-3"
+              classNameInfo="pl-3"
             />
           </div>
           <div className="flex flex-col font-semibold border-[1px] border-[#E8E8E8] rounded-md p-4">

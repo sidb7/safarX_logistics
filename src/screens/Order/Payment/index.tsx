@@ -401,7 +401,7 @@ const Payment = () => {
             paymentGateway: "JUSPAY",
             transactionId: juspayOrderId,
           });
-          if (orderStatus?.data?.status === false) {
+          if (orderStatus?.data?.success === false) {
             toast.error("Something Went Wrong");
           } else {
             fetchCurrentWallet();
