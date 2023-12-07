@@ -148,18 +148,8 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
-      console.log("verifyaddressResponse", verifyAddressResponse);
 
-      if (
-        verifyAddressResponse?.data?.response &&
-        verifyAddressResponse?.data?.response?.error
-      ) {
-        const error = verifyAddressResponse?.data?.response?.error;
-
-        console.error(
-          `API error - Code: ${error.code}, Type: ${error.type}, Message: ${error.message}`
-        );
-      } else {
+      if (verifyAddressResponse?.success) {
         const parsedData = verifyAddressResponse?.data?.message;
         const addressName: any =
           addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
@@ -181,11 +171,12 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             addressType: address.addressType || "warehouse",
           },
         }));
+      } else {
+        console.error("ChatGpt api error");
       }
-
-      setLoading(false);
     } catch (error) {
       console.error("An error occurred during API request:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -232,7 +223,6 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
     }
   };
 
-  console.log("landmark", address.landmark);
   return (
     <div>
       <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
