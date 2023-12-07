@@ -91,7 +91,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       <CustomInputBox
         inputType="text"
         label="Landmark"
-        value={searchTerm || selected}
+        value={searchTerm || value}
         onChange={(e) => {
           setSearchTerm(e.target.value);
           setSelected(e.target.value);

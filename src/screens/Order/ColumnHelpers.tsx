@@ -338,8 +338,22 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             <div className="">
               <span className=" text-sm font-light">Order ID :</span>
               <div className=" flex text-base items-center font-medium">
-                <span className="">{orderId}</span>
-                <CopyTooltip stringToBeCopied={orderId} />
+                <span className="">
+                  {source === "SHOPIFY"
+                    ? otherDetails?.orderNumber
+                      ? `#${otherDetails?.orderNumber}`
+                      : orderId
+                    : orderId}
+                </span>
+                <CopyTooltip
+                  stringToBeCopied={
+                    source === "SHOPIFY"
+                      ? otherDetails?.orderNumber
+                        ? otherDetails?.orderNumber
+                        : orderId
+                      : orderId
+                  }
+                />
               </div>
             </div>
           )}
@@ -639,8 +653,22 @@ export const columnHelperForNewOrder = (
                 <div className="">
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
-                    <span className="">{orderId}</span>
-                    <CopyTooltip stringToBeCopied={orderId} />
+                    <span className="">
+                      {source === "SHOPIFY"
+                        ? otherDetails?.orderNumber
+                          ? `#${otherDetails?.orderNumber}`
+                          : orderId
+                        : orderId}
+                    </span>
+                    <CopyTooltip
+                      stringToBeCopied={
+                        source === "SHOPIFY"
+                          ? otherDetails?.orderNumber
+                            ? otherDetails?.orderNumber
+                            : orderId
+                          : orderId
+                      }
+                    />
                   </div>
                 </div>
               )}

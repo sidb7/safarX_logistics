@@ -25,7 +25,7 @@ const Buttons = (
       className={
         className
           ? className
-          : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+          : `lg:flex lg:flex-row-reverse grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
       }
     >
       <div className="grid col-span-2">
@@ -545,7 +545,7 @@ function AddRole() {
               />
             </div>
 
-            <div>
+            {/*<div>
               <div className="flex ">
                 <div>
                   <SearchBox label="Search" value="" onChange={() => {}} />
@@ -554,13 +554,13 @@ function AddRole() {
                   className="flex justify-between items-center p-2 gap-x-2"
                   // onClick={() => setFilterModal(true)}
                 >
-                  {/* <img src={FilterIcon} alt="" /> */}
+                  //  <img src={FilterIcon} alt="" /> 
                   <span className="text-[#004EFF] text-[14px] font-semibold">
                     FILTER
                   </span>
                 </div>
               </div>
-            </div>
+            </div>*/}
           </div>
           {/* 
         <div >
