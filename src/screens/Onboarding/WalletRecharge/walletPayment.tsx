@@ -172,7 +172,7 @@ const WalletPayment = () => {
             toast.error("Something Went Wrong");
           } else {
             toast.success("Wallet Recharge Successfully");
-            navigate(`${SELLER_WEB_URL}/onboarding/cash-on-delivery`);
+            window.location.href = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
           }
           setPaymentLoader(false);
           removeLocalStorage("order_id");
