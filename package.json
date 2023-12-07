@@ -64,7 +64,7 @@
     "prod": "REACT_APP_ENV=production react-scripts start",
     "eject": "react-scripts eject",
     "jest": "jest --coverage",
-    "test:watch": " jest  --runInBand --onlyChanged"
+    "test:watch": " jest  --runInBand --onlyChanged "
   },
   "eslintConfig": {
     "extends": [
