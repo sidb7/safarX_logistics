@@ -11,86 +11,13 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 interface ISimplechart {
   yearArr?: any;
   revenue?: boolean;
+  revenueDetails?: any;
 }
 
 const SimpleChart = (props: ISimplechart) => {
-  const { yearArr, revenue } = props;
+  const { yearArr, revenue, revenueDetails } = props;
   const { isLgScreen } = ResponsiveState();
   const [isOpen, setIsOpen] = useState(false);
-  const data = [
-    {
-      name: "Jan",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Feb",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Mar",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Apr",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "May",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Jun",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Jul",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Aug",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Sep",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Oct",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Nov",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-    {
-      name: "Dec",
-      uv: 0,
-      pv: 0,
-      amt: 0,
-    },
-  ];
 
   return (
     <>
@@ -139,9 +66,9 @@ const SimpleChart = (props: ISimplechart) => {
         </div>
 
         {isLgScreen ? (
-          <SimpleLineChart data={data} />
+          <SimpleLineChart data={revenueDetails?.revenue} />
         ) : (
-          isOpen && <SimpleLineChart data={data} />
+          isOpen && <SimpleLineChart data={revenueDetails?.revenue} />
         )}
       </div>
       {revenue === true && (

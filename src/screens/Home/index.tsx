@@ -24,11 +24,63 @@ import AccessDenied from "../../components/AccessDenied";
 import { useNavigate } from "react-router-dom";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { BottomNavBar } from "../../components/BottomNavBar";
-import { GET_DASHBOARD_INFO } from "../../utils/ApiUrls";
+import {
+  GET_DASHBOARD_INFO,
+  GET_DASHBOARD_INFO_REVENUE,
+} from "../../utils/ApiUrls";
 import { ResponsiveState } from "../../utils/responsiveState";
 
 interface IOverview {}
-
+const BarchartData = [
+  {
+    k: "Jan",
+    v: 0,
+  },
+  {
+    k: "Feb",
+    v: 0,
+  },
+  {
+    k: "Mar",
+    v: 0,
+  },
+  {
+    k: "Apr",
+    v: 0,
+  },
+  {
+    k: "May",
+    v: 0,
+  },
+  {
+    k: "Jun",
+    v: 0,
+  },
+  {
+    k: "Jul",
+    v: 0,
+  },
+  {
+    k: "Aug",
+    v: 0,
+  },
+  {
+    k: "Sep",
+    v: 0,
+  },
+  {
+    k: "Oct",
+    v: 0,
+  },
+  {
+    k: "Nov",
+    v: 0,
+  },
+  {
+    k: "Dec",
+    v: 0,
+  },
+];
 export const Home = (props: IOverview) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -131,7 +183,21 @@ export const Home = (props: IOverview) => {
       },
     ],
   });
-
+  const [revenueAndOrderDetails, SetRevenueAndOrderDetails] =
+    React.useState<any>({
+      charges: {
+        HighestOrderValue: 0,
+        AvgOrderValue: 0,
+        TodaysRevenue: 0,
+      },
+      revenue: BarchartData,
+    });
+  const [codCountOrder, setCodCountOrder] = React.useState<any>({
+    data: BarchartData,
+  });
+  const [orderCount, setOrderCount] = React.useState<any>({
+    data: BarchartData,
+  });
   const arrayData = [
     { index: 0, label: "Overview" },
     { index: 1, label: "Orders" },
@@ -218,16 +284,57 @@ export const Home = (props: IOverview) => {
     })();
   }, []);
 
-  React.useMemo(() => {
-    (async () => {
-      try {
-        const { data: response }: any = await POST(GET_DASHBOARD_INFO);
+  const getDashDetails = async () => {
+    try {
+      const { data: response }: any = await POST(GET_DASHBOARD_INFO);
 
-        if (response?.success) {
-          setDashboardInfo(response?.data[0]);
-        }
-      } catch (error) {}
-    })();
+      if (response?.success) {
+        setDashboardInfo(response?.data[0]);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+  const getRevenueAndOrderDetails = async (
+    payload: any,
+    setStateFunction: (data: any) => void
+  ) => {
+    //  const { startDate, endDate, apiStatus, addressType } = req.body;
+    try {
+      const { data: response }: any = await POST(
+        GET_DASHBOARD_INFO_REVENUE,
+        payload
+      );
+
+      if (response?.success) {
+        setStateFunction(response?.data?.[0]);
+      }
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+  React.useMemo(async () => {
+    await Promise.all([
+      getDashDetails(),
+      getRevenueAndOrderDetails(
+        {
+          apiStatus: "REVENUE",
+        },
+        SetRevenueAndOrderDetails
+      ),
+      getRevenueAndOrderDetails(
+        {
+          apiStatus: "ORDERCOUNT",
+        },
+        setOrderCount
+      ),
+      getRevenueAndOrderDetails(
+        {
+          apiStatus: "CODORDERCOUNT",
+        },
+        setCodCountOrder
+      ),
+    ]);
   }, []);
 
   return (
@@ -273,7 +380,12 @@ export const Home = (props: IOverview) => {
             {renderingComponents === 3 && (
               <SyPerfromance ordersArr={dashboardInfo.syPerformance} />
             )} */}
-            <Overview ordersArr={dashboardInfo.overview} />
+            <Overview
+              ordersArr={dashboardInfo.overview}
+              revenueDetails={revenueAndOrderDetails}
+              orderCount={orderCount}
+              codCountOrder={codCountOrder}
+            />
           </div>
 
           {/* <div className="mt-24 lg:hidden">
