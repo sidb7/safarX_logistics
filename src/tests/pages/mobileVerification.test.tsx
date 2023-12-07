@@ -1,13 +1,6 @@
 // @ts-nocheck
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  cleanup,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter as Router } from "react-router-dom";
 import SendOTPScreen from "../../screens/Onboarding/Signup/mobileVerification";
@@ -55,7 +48,7 @@ describe("mobile verification screen", () => {
       </Router>
     );
     // eslint-disable-next-line testing-library/no-debugging-utils
-    screen.debug();
+    // screen.debug();
 
     const mobileElement = screen.getByRole("textbox", {
       inputMode: "numeric",

@@ -20,55 +20,64 @@ import CustomButton from "../../../components/Button";
 
 interface IOverview {
   ordersArr?: any;
+  revenueDetails?: any;
+  codCountOrder?: any;
+  orderCount?: any;
 }
 
 export const Overview = (props: IOverview) => {
   const navigate = useNavigate();
-  const { ordersArr } = props;
+  const { ordersArr, revenueDetails, codCountOrder, orderCount } = props;
   const [userData, setUserData] = React.useState<any>();
 
   const orderArr = [
     {
-      name: "Wed",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Jan",
+      v: 0,
     },
     {
-      name: "Thu",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Feb",
+      v: 0,
     },
     {
-      name: "Fri",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Mar",
+      v: 0,
     },
     {
-      name: "Sat",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Apr",
+      v: 0,
     },
     {
-      name: "Sun",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "May",
+      v: 0,
     },
     {
-      name: "Mon",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Jun",
+      v: 0,
     },
     {
-      name: "Tue",
-      uv: 0,
-      pv: 0,
-      amt: 0,
+      k: "Jul",
+      v: 0,
+    },
+    {
+      k: "Aug",
+      v: 0,
+    },
+    {
+      k: "Sep",
+      v: 0,
+    },
+    {
+      k: "Oct",
+      v: 0,
+    },
+    {
+      k: "Nov",
+      v: 0,
+    },
+    {
+      k: "Dec",
+      v: 0,
     },
   ];
 
@@ -148,6 +157,7 @@ export const Overview = (props: IOverview) => {
       setUserData(data);
     }
   }, []);
+
   return (
     <>
       {userData?.isReturningUser ? (
@@ -176,11 +186,19 @@ export const Overview = (props: IOverview) => {
             ))}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 lg:border-2 gap-y-0 lg:gap-4  mt-4 rounded-lg">
-            <SimpleChart yearArr={yearArr} revenue={true} />
+            <SimpleChart
+              yearArr={yearArr}
+              revenue={true}
+              revenueDetails={revenueDetails}
+            />
             <div className="mt-0 lg:mt-[3.125rem] p-4 space-y-[60px] hidden lg:block">
               <div>
                 <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
+                  <h1 className="text-[2rem] font-bold font-Lato">
+                    &#8377;
+                    {revenueDetails?.charges?.HighestOrderValue?.toFixed(2) ||
+                      0}
+                  </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>
                 <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -189,7 +207,10 @@ export const Overview = (props: IOverview) => {
               </div>
               <div>
                 <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
+                  <h1 className="text-[2rem] font-bold font-Lato">
+                    &#8377;
+                    {revenueDetails?.charges?.AvgOrderValue?.toFixed(2) || 0}
+                  </h1>
                   <img src={RedEllipse} alt="RedEllipse" />
                 </div>
                 <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -198,7 +219,10 @@ export const Overview = (props: IOverview) => {
               </div>
               <div>
                 <div className="flex justify-between">
-                  <h1 className="text-[2rem] font-bold font-Lato">&#8377;0</h1>
+                  <h1 className="text-[2rem] font-bold font-Lato">
+                    &#8377;
+                    {revenueDetails?.charges?.TodaysRevenue?.toFixed(2) || 0}
+                  </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>
                 <p className="text-[1rem] font-Open font-normal mt-[0.75px]">
@@ -208,20 +232,26 @@ export const Overview = (props: IOverview) => {
             </div>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
-            <BarChart
+            {/* <BarChart
               text="Order Details"
               img={Box}
               data={orderArr}
               yearArr={yearArr}
-            />
+            /> */}
             <BarChart
               text="Order Count"
               img={Box}
-              data={orderArr}
+              data={orderCount?.data}
+              yearArr={yearArr}
+            />
+            <BarChart
+              text="COD"
+              img={Box}
+              data={codCountOrder?.data}
               yearArr={yearArr}
             />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
             <BarChart
               text="Weight Discrenpancy"
               img={Box}
@@ -229,8 +259,8 @@ export const Overview = (props: IOverview) => {
               yearArr={yearArr}
             />
             <BarChart text="COD" img={Box} data={orderArr} yearArr={yearArr} />
-          </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
+          </div> */}
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4 rounded-lg">
             <BarChart2
               text="TAT Performance"
               img={Box}
@@ -238,7 +268,7 @@ export const Overview = (props: IOverview) => {
               yearArr={yearArr}
             />
             <PieChart text="COD" img={Box} data={piedata} yearArr={yearArr} />
-          </div>
+          </div> */}
           <div className="border-1 gap-4 mt-4 rounded-lg">
             <Locations
               text="Location"
@@ -247,7 +277,7 @@ export const Overview = (props: IOverview) => {
               yearArr={yearArr}
             />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2  gap-4 mt-4 rounded-lg">
+          {/* <div className="grid grid-cols-1 lg:grid-cols-2  gap-4 mt-4 rounded-lg">
             <Invoices
               text="Invoices"
               img={InvoiceIcon}
@@ -260,7 +290,7 @@ export const Overview = (props: IOverview) => {
               data={invoices2}
               yearArr={yearArr}
             />
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center mt-[255px]">

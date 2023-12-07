@@ -28,18 +28,18 @@ export default function SimpleLineChart(props: IpropTypes) {
           data={data}
           margin={{
             top: 25,
-            right: 30,
+            right: 10,
             left: 0,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="0" vertical={false} />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="k" />
           <YAxis />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="pv"
+            dataKey="v"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
