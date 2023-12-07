@@ -173,7 +173,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             fullAddress: parsedData.full_address || "",
             locality: parsedData.locality_name || "",
             sector: parsedData.locality_name || "",
-            landmark: address.landmark || "",
+            landmark: parsedData.landmark || "",
             pincode: parsedData.pincode || "",
             city: parsedData.city_name || "",
             state: capitalizeFirstLetter(parsedData.state_name) || "",
