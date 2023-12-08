@@ -93,6 +93,7 @@ const Index = () => {
         clientId: googleData?.clientId,
         credential: googleData?.credential,
       };
+      setLoading(true);
       const { data: response } = await POST(
         POST_SIGN_UP_WITH_GOOGLE_URL,
         payload
@@ -100,9 +101,11 @@ const Index = () => {
       if (response?.success === true) {
         sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
+        setLoading(false);
         navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
+        setLoading(false);
       }
     } catch (error) {
       return error;
