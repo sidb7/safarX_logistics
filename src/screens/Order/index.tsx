@@ -319,15 +319,18 @@ const Index = () => {
       syncRef.current.style.pointerEvents = "none";
       syncRef.current.childNodes[0].classList.add("infinite-rotate");
 
-      const { data: response } = await POST(GET_ALL_STORES, {});
-      if (response.data.length === 0) {
-        toast.error("Please Integrate A Channel First");
-        return navigate("/catalogues/channel-integration");
-      }
+      // const { data: response } = await POST(GET_ALL_STORES, {});
+      // if (response.data.length === 0) {
+      //   toast.error("Please Integrate A Channel First");
+      //   return navigate("/catalogues/channel-integration");
+      // }
 
       const { data } = await POST(POST_SYNC_ORDER);
       if (data?.success) {
         toast.success(data?.message || "Sync Successful");
+      } else {
+        toast.error(data?.message || "Please Integrate A Channel First");
+        return navigate("/catalogues/channel-integration");
       }
     } catch (error: any) {
       toast.error(error?.message || "Failed To Sync Channel");
