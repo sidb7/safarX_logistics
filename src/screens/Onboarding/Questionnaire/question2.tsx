@@ -110,6 +110,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
+                      checkboxClassName="gap-2"
                     />
                   );
                 })}

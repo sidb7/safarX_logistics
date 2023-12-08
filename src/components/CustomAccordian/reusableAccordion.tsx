@@ -74,6 +74,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                   console.log("================");
                   handle_Level_1_Menu(roleData?.id, !roleData?.isActive);
                 }}
+                checkboxClassName="gap-2"
               />
               <div className="text-zinc-900   lg:basis_[90%] text_[14px] font-semibold leading-tight">
                 {roleData.name}
@@ -119,6 +120,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                               !menuData?.isActive
                             )
                           }
+                          checkboxClassName="gap-2"
                         />
                         <div className="text-zinc-900   lg:basis_[90%] text_[14px] font-semibold leading-tight">
                           {menuData?.name}
@@ -168,6 +170,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                               !menuPagesData?.isActive
                                             )
                                           }
+                                          checkboxClassName="gap-2"
                                         />
                                         <div className="text-zinc-900   lg:basis_[90%] text_[14px] font-semibold leading-tight">
                                           {menuPagesData?.name}
@@ -217,6 +220,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                           !pagesPermission?.isActive
                                                         )
                                                       }
+                                                      checkboxClassName="gap-2"
                                                     />
                                                     <p className="font-bold w-min whitespace-nowrap		">
                                                       {pagesPermission?.name}
@@ -243,6 +247,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "create"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Create</p>
                                                     </div>
@@ -264,6 +269,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "read"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Read</p>
                                                     </div>
@@ -286,6 +292,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "update"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Edit</p>
                                                     </div>
@@ -308,6 +315,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "delete"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Delete</p>
                                                     </div>
@@ -330,6 +338,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "download"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Download</p>
                                                     </div>
@@ -352,6 +361,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                             "upload"
                                                           )
                                                         }
+                                                        checkboxClassName="gap-2"
                                                       />
                                                       <p>Upload</p>
                                                     </div>
@@ -385,6 +395,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                               !pagesPermission.isActive
                                             )
                                           }
+                                          checkboxClassName="gap-2"
                                         />
                                         <p> {pagesPermission?.name}</p>{" "}
                                       </div>
@@ -406,6 +417,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "create"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Create</p>
                                           </div>
@@ -425,6 +437,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "read"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Read</p>
                                           </div>
@@ -444,6 +457,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "update"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Edit</p>
                                           </div>
@@ -463,6 +477,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "delete"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Delete</p>
                                           </div>
@@ -482,6 +497,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "download"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Download</p>
                                           </div>
@@ -501,6 +517,7 @@ const DynamicAccordion = (props: IPropTypes) => {
                                                   "upload"
                                                 )
                                               }
+                                              checkboxClassName="gap-2"
                                             />
                                             <p>Upload</p>
                                           </div>

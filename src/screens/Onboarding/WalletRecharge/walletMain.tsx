@@ -89,7 +89,7 @@ const WalletMain = () => {
                     <div className="flex mt-[26px]">
                       <Checkbox
                         checked={true}
-                        checkboxClassName="text-black"
+                        checkboxClassName="text-black gap-2"
                         style={{ accentColor: "black" }}
                       />
                       <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
@@ -99,7 +99,7 @@ const WalletMain = () => {
                     <div className="flex">
                       <Checkbox
                         checked={true}
-                        checkboxClassName="text-black"
+                        checkboxClassName="text-black gap-2"
                         style={{ accentColor: "black" }}
                       />
                       <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
@@ -109,7 +109,7 @@ const WalletMain = () => {
                     <div className="flex">
                       <Checkbox
                         checked={true}
-                        checkboxClassName="text-black"
+                        checkboxClassName="text-black gap-2"
                         style={{ accentColor: "black" }}
                       />
                       <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
@@ -119,7 +119,7 @@ const WalletMain = () => {
                     <div className="flex">
                       <Checkbox
                         checked={true}
-                        checkboxClassName="text-black"
+                        checkboxClassName="text-black gap-2"
                         style={{ accentColor: "black" }}
                       />
                       <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">

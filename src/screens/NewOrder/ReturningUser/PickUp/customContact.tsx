@@ -38,7 +38,7 @@ const CustomPickupLocation: React.FunctionComponent<IContactData> = ({
 
             <div className="flex items-center  mt-3">
               <div>
-                <Checkbox />
+                <Checkbox checkboxClassName="gap-2" />
               </div>
               <p className="text-[12px] text-[#3371FF] font-medium">
                 {each.role}

@@ -25,10 +25,14 @@ import { checkPageAuthorized } from "../../redux/reducers/role";
 import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../assets/serv/edit.svg";
 
+import { useErrorBoundary } from "react-error-boundary";
+
 const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
+
+  const { showBoundary } = useErrorBoundary();
 
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
@@ -64,9 +68,12 @@ export const Transaction = () => {
         if (data?.success) {
           setData(data.data || []);
           setTotalItemCount(data.totalTransactions);
+          // throw new Error("Some Issue");
           // setLoading(false);
         } else {
           toast.error(data?.message);
+          showBoundary(data?.message);
+          // throw new Error("Some Issue");
           // setLoading(false);
         }
       })();
@@ -175,6 +182,10 @@ export const Transaction = () => {
     }
   };
 
+  const errorFun = () => {
+    throw new Error("Hii");
+  };
+
   return (
     <>
       {isActive ? (
@@ -184,7 +195,7 @@ export const Transaction = () => {
           </div>
         ) : (
           <>
-            <div>
+            <div onClick={() => errorFun()}>
               <Breadcrum label="Transaction History" />
             </div>
             <div className="flex flex-col">
