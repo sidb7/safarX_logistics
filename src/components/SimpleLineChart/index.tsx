@@ -23,12 +23,12 @@ export default function SimpleLineChart(props: IpropTypes) {
     <>
       <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
         <LineChart
-          width={600}
+          width={700}
           height={200}
           data={data}
           margin={{
-            top: 25,
-            right: 10,
+            top: 23,
+            right: 15,
             left: 0,
             bottom: 5,
           }}
