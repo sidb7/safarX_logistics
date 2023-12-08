@@ -254,6 +254,8 @@ const GET_COMPANY_SERVICE = `${SELLER_URL}/api/v1/seller/getCompanyService`;
 //Dashboard URL
 const GET_DASHBOARD_INFO = `${SELLER_URL}/api/v1/order/orderDashboardCardDetails`;
 
+const GET_DASHBOARD_INFO_REVENUE = `${SELLER_URL}/api/v1/order/orderDashboardCardRevenueAndorderDetails`;
+
 //Invoice Download
 const INVOICE_DOWNLOAD_URL = `${SELLER_BASE_URL}/order/generateInvoicePDF`;
 const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
@@ -266,6 +268,12 @@ const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrde
 //Reports
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
 const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`;
+
+//Sync Order
+const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
+
+//Place Channel Orders
+const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
 
 export {
   DOWNLOAD_SAMPLE_PRODUCT,
@@ -397,4 +405,7 @@ export {
   CANCEL_MULTIPLE_WAYBILLS,
   DELETE_PICKUP_ADDRESS,
   DELETE_DELIVERY_ADDRESS,
+  POST_SYNC_ORDER,
+  POST_PLACE_CHANNEL_ORDERS,
+  GET_DASHBOARD_INFO_REVENUE,
 };

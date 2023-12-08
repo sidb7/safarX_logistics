@@ -235,7 +235,7 @@ const RechargePayment = () => {
                     </div>
                   </div>
                   <div className="flex justify-center items-center mt-12">
-                    <Checkbox />
+                    <Checkbox checkboxClassName="gap-2" />
                     <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#004EFF]">
                       REDEEM ON EVERY ORDER
                     </p>
@@ -278,7 +278,7 @@ const RechargePayment = () => {
         </div>
 
         <div className="flex items-center gap-[8px]">
-          <Checkbox />
+          <Checkbox checkboxClassName="gap-2" />
           <p className="text-[14px] font-medium  lg:font-semibold lg:text-[#004EFF] uppercase text-[#CCDCFF]">
             INSTANT RECHARGE WITH COD
           </p>
@@ -377,7 +377,7 @@ const RechargePayment = () => {
                 </div>
               </div>
               <div className="flex justify-center items-center mt-12">
-                <Checkbox />
+                <Checkbox checkboxClassName="gap-2" />
                 <p className="text-[14px] font-medium uppercase text-[#004EFF]">
                   REDEEM ON EVERY ORDER
                 </p>

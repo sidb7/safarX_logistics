@@ -44,7 +44,7 @@ const Checkbox: React.FC<IProps> = ({
     <div
       className={`${checkboxClassName} ${className} ${
         disabled ? "text-[gray] bg-gray-100" : ""
-      } cursor-pointer flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
+      } cursor-pointer flex items-center justify-start py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
       onClick={handleCheckboxChange}
     >
       <input
@@ -59,7 +59,7 @@ const Checkbox: React.FC<IProps> = ({
         className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <span
-        className={`ml-2 ${labelClassName} select-none text-sm cursor-pointer`}
+        className={`${labelClassName} select-none text-sm cursor-pointer`}
         onClick={handleCheckboxChange} // Handle checkbox change when the span is clicked
       >
         {label}

@@ -81,6 +81,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
               {" "}
               <Checkbox
                 checked={address.workingDays[day as keyof TimingState]}
+                checkboxClassName="gap-2"
               />
               <p
                 className={`bg-white lg:font-semibold lg:font-Open lg:text-sm ${

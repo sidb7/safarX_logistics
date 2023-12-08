@@ -148,18 +148,8 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         VERIFY_ADDRESS,
         verifyAddressPayload
       );
-      console.log("verifyaddressResponse", verifyAddressResponse);
 
-      if (
-        verifyAddressResponse?.data?.response &&
-        verifyAddressResponse?.data?.response?.error
-      ) {
-        const error = verifyAddressResponse?.data?.response?.error;
-
-        console.error(
-          `API error - Code: ${error.code}, Type: ${error.type}, Message: ${error.message}`
-        );
-      } else {
+      if (verifyAddressResponse?.success) {
         const parsedData = verifyAddressResponse?.data?.message;
         const addressName: any =
           addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
@@ -173,7 +163,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             fullAddress: parsedData.full_address || "",
             locality: parsedData.locality_name || "",
             sector: parsedData.locality_name || "",
-            landmark: address.landmark || "",
+            landmark: parsedData.landmark || "",
             pincode: parsedData.pincode || "",
             city: parsedData.city_name || "",
             state: capitalizeFirstLetter(parsedData.state_name) || "",
@@ -181,11 +171,12 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             addressType: address.addressType || "warehouse",
           },
         }));
+      } else {
+        console.error("ChatGpt api error");
       }
-
-      setLoading(false);
     } catch (error) {
       console.error("An error occurred during API request:", error);
+    } finally {
       setLoading(false);
     }
   };
@@ -260,7 +251,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 value={pastedData}
                 onKeyDown={handleKeyDown}
                 onChange={handleChange}
-                className="magicAddressInput"
+                className="magicAddressInput w-full"
                 style={{
                   position: "absolute",
                   border: "none",
@@ -292,10 +283,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               setLocateAddress(e.target.value);
               handlePickupAddressChange("fullAddress", e.target.value);
             }}
+            // onClick={() => {
+            //   isItLgScreen
+            //     ? setIsLocationRightModal(true)
+            //     : navigate("/neworder/map");
+            // }}
             onClick={() => {
-              isItLgScreen
-                ? setIsLocationRightModal(true)
-                : navigate("/neworder/map");
+              setIsLocationRightModal(true);
             }}
           />
         </div>

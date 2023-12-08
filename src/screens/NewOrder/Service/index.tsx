@@ -226,6 +226,7 @@ const Index: React.FC = () => {
         setLoading(false);
       } else {
         setResponse([]);
+        setLoading(false);
 
         if (response?.message) {
           toast.error(response?.message);
@@ -367,6 +368,7 @@ const Index: React.FC = () => {
       setLoading(true);
       if (selectedService === null) {
         toast.error("Please Select a Service");
+        setLoading(false);
         return;
       }
 
@@ -397,6 +399,7 @@ const Index: React.FC = () => {
           `/orders/add-order/summary?shipyaari_id=${shipyaari_id}&source=${orderSource}`
         );
       } else {
+        setLoading(false);
         toast.error(responseData?.message);
       }
     } catch (error) {
@@ -406,7 +409,7 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className="w-full ">
+    <div className="w-full h-[80vh] overflow-auto">
       <Breadcrum label="Add New Order" />
       <div className="lg:mb-8">
         <Stepper steps={steps} />

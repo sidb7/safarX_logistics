@@ -152,35 +152,38 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
         verifyAddressPayload
       );
 
-      const parsedData = verifyAddressResponse?.data?.message;
+      if (verifyAddressResponse?.success) {
+        const parsedData = verifyAddressResponse?.data?.message;
 
-      const addressName: any =
-        addressLabel === "Billing Address"
-          ? "billingAddress"
-          : "deliveryAddress";
-      setDeliveryAddress((prevData: any) => ({
-        ...prevData,
-        [addressName]: {
-          ...prevData[addressName],
-          flatNo:
-            `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
-            "",
-          fullAddress: parsedData.full_address || "",
-          locality: parsedData.locality_name || "",
-          sector: parsedData.locality_name || "",
-          landmark: address.landmark,
-          pincode: parsedData.pincode || "",
-          city: parsedData.city_name || "",
-          state: capitalizeFirstLetter(parsedData.state_name) || "",
-          country: parsedData.country_name || "India",
-          addressType: address.addressType || "warehouse",
-        },
-      }));
-
-      setLoading(false);
+        const addressName: any =
+          addressLabel === "Billing Address"
+            ? "billingAddress"
+            : "deliveryAddress";
+        setDeliveryAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            flatNo:
+              `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+              "",
+            fullAddress: parsedData.full_address || "",
+            locality: parsedData.locality_name || "",
+            sector: parsedData.locality_name || "",
+            landmark: parsedData.landmark || "",
+            pincode: parsedData.pincode || "",
+            city: parsedData.city_name || "",
+            state: capitalizeFirstLetter(parsedData.state_name) || "",
+            country: parsedData.country_name || "India",
+            addressType: address.addressType || "warehouse",
+          },
+        }));
+      } else {
+        console.error("ChatGpt api error");
+      }
     } catch (error) {
+      console.error("An error occurred during API request:", error);
+    } finally {
       setLoading(false);
-      return error;
     }
   };
 
@@ -276,7 +279,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 value={pastedData}
                 onKeyDown={handleKeyDown}
                 onChange={handleChange}
-                className="magicAddressInput"
+                className="magicAddressInput w-full"
                 style={{
                   position: "absolute",
                   border: "none",
@@ -308,10 +311,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               setLocateAddress(e.target.value);
               handlePickupAddressChange("fullAddress", e.target.value);
             }}
+            // onClick={() => {
+            //   isItLgScreen
+            //     ? setIsLocationRightModal(true)
+            //     : navigate("/neworder/map");
+            // }}
             onClick={() => {
-              isItLgScreen
-                ? setIsLocationRightModal(true)
-                : navigate("/neworder/map");
+              setIsLocationRightModal(true);
             }}
           />
         </div>

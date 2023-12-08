@@ -179,7 +179,7 @@ function RoleManagement() {
         className={
           className
             ? className
-            : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
+            : `lg:flex lg:flex-row-reverse grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
         }
       >
         <div className="flex ">
@@ -205,7 +205,7 @@ function RoleManagement() {
       {isActive ? (
         <div>
           <Breadcrum label="Role Management" component={Buttons()} />
-          <div className=" my-3 mx-6">
+          <div className=" my-3 mx-6 overflow-auto">
             {/* <div className=" flex justify-end">
               <div className="grid grid-cols-3 gap-x-2 lg:flex ">
                 <div>

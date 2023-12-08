@@ -28,9 +28,9 @@ const ProfileLayout = () => {
             <Outlet />
           </div>
         </main>
-        <div className="lg:hidden">
+        {/* <div className="lg:hidden">
           <BottomNavBar />
-        </div>
+        </div> */}
       </div>
     </div>
   );

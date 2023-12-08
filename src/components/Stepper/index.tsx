@@ -20,9 +20,9 @@ const Stepper: React.FC<StepperProps> = ({ steps }) => {
             <div className="relative mb-2">
               {index !== 0 && (
                 <div
-                  className="absolute flex align-center items-center align-middle content-center"
+                  className="absolute flex w-[20px] md:w-[calc(100%-2.5rem-1rem)] align-center items-center align-middle content-center"
                   style={{
-                    width: "calc(100% - 2.5rem - 1rem)",
+                    // width: "calc(100% - 2.5rem - 1rem)",
                     top: "50%",
                     transform: "translate(-50%, -50%)",
                   }}
