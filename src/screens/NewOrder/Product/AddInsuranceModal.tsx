@@ -94,7 +94,7 @@ const AddInsuranceModal = (props: IProps) => {
         <div className="flex flex-col justify-center items-center border-2 border-[] py-8 px-28 rounded-md">
           <img src={shieldcross} alt="" className="w-16 h-12" />
           <div className="flex absolute top-2 left-[335px] bg-white">
-            <Checkbox checked={true} />
+            <Checkbox checked={true} checkboxClassName="gap-2" />
             <p>I'll take risk</p>
           </div>
         </div>

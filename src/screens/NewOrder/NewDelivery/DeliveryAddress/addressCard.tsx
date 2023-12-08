@@ -279,7 +279,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 value={pastedData}
                 onKeyDown={handleKeyDown}
                 onChange={handleChange}
-                className="magicAddressInput"
+                className="magicAddressInput w-full"
                 style={{
                   position: "absolute",
                   border: "none",
@@ -311,10 +311,13 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               setLocateAddress(e.target.value);
               handlePickupAddressChange("fullAddress", e.target.value);
             }}
+            // onClick={() => {
+            //   isItLgScreen
+            //     ? setIsLocationRightModal(true)
+            //     : navigate("/neworder/map");
+            // }}
             onClick={() => {
-              isItLgScreen
-                ? setIsLocationRightModal(true)
-                : navigate("/neworder/map");
+              setIsLocationRightModal(true);
             }}
           />
         </div>

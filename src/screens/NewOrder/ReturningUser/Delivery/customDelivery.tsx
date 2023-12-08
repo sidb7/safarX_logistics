@@ -27,7 +27,7 @@ const CustomDelivery: React.FunctionComponent<IPickupData> = ({ props }) => {
           return (
             <div key={index}>
               <div className="flex items-center mt-5">
-                <Checkbox />
+                <Checkbox checkboxClassName="gap-2" />
                 <span className="text-[12px] text-[#3371FF] font-medium">
                   {each.text}
                 </span>
