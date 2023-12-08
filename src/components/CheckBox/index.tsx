@@ -44,7 +44,7 @@ const Checkbox: React.FC<IProps> = ({
     <div
       className={`${checkboxClassName} ${className} ${
         disabled ? "text-[gray] bg-gray-100" : ""
-      } cursor-pointer flex items-center justify-start px-2 py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
+      } cursor-pointer flex items-center justify-start py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
       onClick={handleCheckboxChange}
     >
       <input

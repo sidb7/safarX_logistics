@@ -68,7 +68,7 @@ export const Transaction = () => {
         if (data?.success) {
           setData(data.data || []);
           setTotalItemCount(data.totalTransactions);
-          throw new Error("Some Issue");
+          // throw new Error("Some Issue");
           // setLoading(false);
         } else {
           toast.error(data?.message);

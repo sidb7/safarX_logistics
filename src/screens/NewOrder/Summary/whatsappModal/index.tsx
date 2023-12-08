@@ -28,7 +28,7 @@ export const HighRiskPincodeModal = ({
         </div>
 
         <div className="flex items-center p-[12px] w-full h-[46px] mt-4 border-[1px] rounded-md border-[#E8E8E8]">
-          <Checkbox />
+          <Checkbox checkboxClassName="gap-2" />
           <img src={WhatsappIcon} alt="Whatsapp" className="mr-2" />
           <span className="text-[16px] text-[#1C1C1C] font-semibold">
             Take pre order confirmation
@@ -36,14 +36,14 @@ export const HighRiskPincodeModal = ({
         </div>
 
         <div className="flex items-center p-[12px] w-full h-[46px] mt-4 border-[1px] rounded-md border-[#E8E8E8]">
-          <Checkbox />
+          <Checkbox checkboxClassName="gap-2" />
           <span className="text-[16px] text-[#1C1C1C] font-semibold">
             Pre-charge courier expense
           </span>
         </div>
 
         <div className="flex items-center p-[12px] w-full h-[46px] mt-4 border-[1px] rounded-md border-[#E8E8E8]">
-          <Checkbox />
+          <Checkbox checkboxClassName="gap-2" />
           <span className="text-[16px] text-[#1C1C1C] font-semibold">
             Change COD to Prepaid
           </span>
@@ -62,7 +62,11 @@ export const HighRiskPincodeModal = ({
           {renderComponent()}
         </RightSideModal>
       ) : (
-        <CustomBottomModal className="!z-[5]" isOpen={ishighRisk} onRequestClose={setIsHighRisk}>
+        <CustomBottomModal
+          className="!z-[5]"
+          isOpen={ishighRisk}
+          onRequestClose={setIsHighRisk}
+        >
           {renderComponent()}
         </CustomBottomModal>
       )}

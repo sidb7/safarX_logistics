@@ -206,7 +206,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
         wrapperClassName="rounded overflow-scroll"
         isOpen={isProductModal}
         onClose={() => setProductModal(false)}
-        className=" w-full lg:w-[52%] h-screen rounded-l-xl"
+        className=" w-full md:w-[52%] h-screen rounded-l-xl"
       >
         <>
           <div className="flex justify-between items-center mr-5">

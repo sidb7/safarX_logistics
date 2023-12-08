@@ -734,6 +734,7 @@ const Index = () => {
                   {selectRecipient.business && (
                     <Checkbox
                       checked={selectRecipient.business === true ? true : false}
+                      checkboxClassName="gap-2"
                     />
                   )}
                   <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
@@ -762,6 +763,7 @@ const Index = () => {
                   {selectRecipient.consumer && (
                     <Checkbox
                       checked={selectRecipient.consumer === true ? true : false}
+                      checkboxClassName="gap-2"
                     />
                   )}
                   <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
@@ -1073,7 +1075,10 @@ const Index = () => {
                 onClick={() => handleTimingChange(day as keyof TimingState)}
               >
                 <div className="flex flex-row  items-center  absolute z-2 -top--1 bg-[#FEFEFE] ">
-                  <Checkbox checked={timing[day as keyof TimingState]} />
+                  <Checkbox
+                    checked={timing[day as keyof TimingState]}
+                    checkboxClassName="gap-2"
+                  />
                   <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
                     {day}
                   </p>
