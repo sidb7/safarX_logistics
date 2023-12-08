@@ -30,6 +30,7 @@ import {
 import { emailRegex, strongpasswordRegex } from "../../../utils/regexCheck";
 import ForgotPassword from "./ForgotPassword";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
+import { Spinner } from "../../../components/Spinner";
 import { socketCallbacks } from "../../../Socket";
 
 const Index = () => {
@@ -38,7 +39,7 @@ const Index = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [showBootScreen, setShowBootScreen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState<any>({
@@ -57,7 +58,7 @@ const Index = () => {
     });
 
     console.log("window", window);
-
+    setLoading(true);
     const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
     sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
@@ -89,7 +90,7 @@ const Index = () => {
         console.log("socketConnectedAfterlogin");
         socketCallbacks.connectSocket(dispatch);
       }
-
+      setLoading(false);
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");
@@ -100,6 +101,7 @@ const Index = () => {
       }
     } else {
       toast.error(response?.message);
+      setLoading(false);
     }
   };
 
@@ -112,6 +114,7 @@ const Index = () => {
       clientId: googleData?.clientId,
       credential: googleData?.credential,
     };
+    setLoading(true);
     const { data: response } = await POST(
       POST_SIGN_IN_WITH_GOOGLE_URL,
       payload
@@ -141,6 +144,7 @@ const Index = () => {
         socketCallbacks.connectSocket(dispatch);
       }
 
+      setLoading(false);
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
         navigate("/onboarding/questionnaire/question1");
@@ -151,6 +155,7 @@ const Index = () => {
       }
     } else {
       toast.error(response?.message);
+      setLoading(false);
     }
   };
 
@@ -222,176 +227,187 @@ const Index = () => {
 
   const loginComponent = () => {
     return (
-      <div
-        className={` ${
-          isMdScreen ? "m-auto  !w-[500px]" : ""
-        } flex flex-col relative lg:px-0 lg:gap-y-0`}
-      >
-        <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
-          <div className="flex flex-col gap-y-8 w-full">
-            <div className="product-box flex items-center">
-              <img
-                className="m-4 h-[25px] object-contain"
-                src={CompanyLogo}
-                alt="Company Logo"
-              />
-            </div>
+      <>
+        {loading ? (
+          <div className="flex justify-center items-center h-screen">
+            <Spinner />
+          </div>
+        ) : (
+          <div
+            className={` ${
+              isMdScreen ? "m-auto  !w-[500px]" : ""
+            } flex flex-col relative lg:px-0 lg:gap-y-0`}
+          >
+            <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
+              <div className="flex flex-col gap-y-8 w-full">
+                <div className="product-box flex items-center">
+                  <img
+                    className="m-4 h-[25px] object-contain"
+                    src={CompanyLogo}
+                    alt="Company Logo"
+                  />
+                </div>
 
-            <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
-              <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
-                Welcome to Shipyaari
-              </p>
-              <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
-                Fast and Easy Shipping from your doorstep to your customer's.
-              </p>
-            </div>
-            <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-6">
-              <div className="flex justify-center">
-                <GoogleLogin
-                  onSuccess={(googleData) => signInWithGoogle(googleData)}
-                  onError={() => {}}
-                />
-              </div>
-              <hr className="mb-[-30px] mt-2" />
-              <div className="flex justify-center my-[-4px]">
-                <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
-                  OR
-                </button>
-              </div>
-              <div>
-                <CustomInputBox
-                  containerStyle="mt-[17px]"
-                  label="Email"
-                  tempLabel={true}
-                  inputType="email"
-                  value={loginCredentials.email}
-                  onChange={(e) => {
-                    //
-                    setLoginError({
-                      ...loginError,
-                      email: "",
-                    });
-                    setLoginCredentials({
-                      ...loginCredentials,
-                      email: e.target.value,
-                    });
-                  }}
-                  onBlur={(e) => {
-                    if (!loginCredentials?.email) {
-                      setLoginError({
-                        ...loginError,
-                        email: "Please Enter Your Email ID",
-                      });
-                    } else if (!emailRegex.test(e.target.value)) {
-                      setLoginError({
-                        ...loginError,
-                        email: "Incorrect Email ID",
-                      });
-                    } else {
-                      setLoginError({
-                        ...loginError,
-                        email: "",
-                      });
-                    }
-                  }}
-                />
-                {loginError.email !== "" && (
-                  <div className="flex items-center gap-x-1 mt-1">
-                    <img src={InfoCircle} alt="" width={10} height={10} />
-                    <span className="font-normal text-[#F35838] text-xs leading-3">
-                      {loginError.email}
-                    </span>
+                <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
+                  <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
+                    Welcome to Shipyaari
+                  </p>
+                  <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
+                    Fast and Easy Shipping from your doorstep to your
+                    customer's.
+                  </p>
+                </div>
+                <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-6">
+                  <div className="flex justify-center">
+                    <GoogleLogin
+                      onSuccess={(googleData) => signInWithGoogle(googleData)}
+                      onError={() => {}}
+                    />
                   </div>
-                )}
-              </div>
-
-              <div>
-                <CustomInputBox
-                  inputType={viewPassWord ? "text" : "password"}
-                  onKeyDown={(e: any) => handleEnterLogin(e)}
-                  label="Password"
-                  tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
-                  minLength={8}
-                  maxLength={16}
-                  tempLabel={true}
-                  isRightIcon={true}
-                  isInfoIcon={true}
-                  informativeIcon={InformativeIcon}
-                  value={loginCredentials.password}
-                  visibility={viewPassWord}
-                  onClick={() => {}}
-                  rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
-                  setVisibility={setViewPassWord}
-                  onChange={(e) => {
-                    setLoginError({
-                      ...loginError,
-                      password: "",
-                    });
-                    setLoginCredentials({
-                      ...loginCredentials,
-                      password: e.target.value,
-                    });
-                  }}
-                  onBlur={(e) => {
-                    if (
-                      !strongpasswordRegex.test(e.target.value) ||
-                      loginCredentials.password.length < 8 ||
-                      loginCredentials.password.length > 16
-                    ) {
-                      const passwordError = validatePassword(e.target.value);
-                      setLoginError({
-                        ...loginError,
-                        password: passwordError,
-                      });
-                    } else {
-                      setLoginError({
-                        ...loginError,
-                        password: "",
-                      });
-                    }
-                  }}
-                />
-                {loginError.password !== "" && (
-                  <div className="flex items-center gap-x-1 mt-1">
-                    <img src={InfoCircle} alt="" width={10} height={10} />
-                    <span className="font-normal text-[#F35838] text-xs leading-3">
-                      {loginError.password}
-                    </span>
+                  <hr className="mb-[-30px] mt-2" />
+                  <div className="flex justify-center my-[-4px]">
+                    <button className="bg-[#FEFEFE]  px-2 font-normal text-xs font-Open leading-4">
+                      OR
+                    </button>
                   </div>
-                )}
-              </div>
-              <div className="mt-[-15px]">
-                {" "}
-                <button
-                  type="button"
-                  onClick={() => setForgotPasswordModal(true)}
-                  className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
-                >
-                  Forgot Password
-                </button>
-              </div>
+                  <div>
+                    <CustomInputBox
+                      containerStyle="mt-[17px]"
+                      label="Email"
+                      tempLabel={true}
+                      inputType="email"
+                      value={loginCredentials.email}
+                      onChange={(e) => {
+                        //
+                        setLoginError({
+                          ...loginError,
+                          email: "",
+                        });
+                        setLoginCredentials({
+                          ...loginCredentials,
+                          email: e.target.value,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (!loginCredentials?.email) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Please Enter Your Email ID",
+                          });
+                        } else if (!emailRegex.test(e.target.value)) {
+                          setLoginError({
+                            ...loginError,
+                            email: "Incorrect Email ID",
+                          });
+                        } else {
+                          setLoginError({
+                            ...loginError,
+                            email: "",
+                          });
+                        }
+                      }}
+                    />
+                    {loginError.email !== "" && (
+                      <div className="flex items-center gap-x-1 mt-1">
+                        <img src={InfoCircle} alt="" width={10} height={10} />
+                        <span className="font-normal text-[#F35838] text-xs leading-3">
+                          {loginError.email}
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-              <CustomButton
-                onClick={(e: any) => logInOnClick(loginCredentials)}
-                text="LOG IN"
-              />
+                  <div>
+                    <CustomInputBox
+                      inputType={viewPassWord ? "text" : "password"}
+                      onKeyDown={(e: any) => handleEnterLogin(e)}
+                      label="Password"
+                      tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
+                      minLength={8}
+                      maxLength={16}
+                      tempLabel={true}
+                      isRightIcon={true}
+                      isInfoIcon={true}
+                      informativeIcon={InformativeIcon}
+                      value={loginCredentials.password}
+                      visibility={viewPassWord}
+                      onClick={() => {}}
+                      rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
+                      setVisibility={setViewPassWord}
+                      onChange={(e) => {
+                        setLoginError({
+                          ...loginError,
+                          password: "",
+                        });
+                        setLoginCredentials({
+                          ...loginCredentials,
+                          password: e.target.value,
+                        });
+                      }}
+                      onBlur={(e) => {
+                        if (
+                          !strongpasswordRegex.test(e.target.value) ||
+                          loginCredentials.password.length < 8 ||
+                          loginCredentials.password.length > 16
+                        ) {
+                          const passwordError = validatePassword(
+                            e.target.value
+                          );
+                          setLoginError({
+                            ...loginError,
+                            password: passwordError,
+                          });
+                        } else {
+                          setLoginError({
+                            ...loginError,
+                            password: "",
+                          });
+                        }
+                      }}
+                    />
+                    {loginError.password !== "" && (
+                      <div className="flex items-center gap-x-1 mt-1">
+                        <img src={InfoCircle} alt="" width={10} height={10} />
+                        <span className="font-normal text-[#F35838] text-xs leading-3">
+                          {loginError.password}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-[-15px]">
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={() => setForgotPasswordModal(true)}
+                      className="text-[#004EFF]  font-normal text-xs leading-4 font-Open "
+                    >
+                      Forgot Password
+                    </button>
+                  </div>
 
-              <div className="flex justify-center md:mb-[40px]">
-                <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
-                  Don't have an account ?
-                </p>
-                <button
-                  type="button"
-                  onClick={signUpOnClick}
-                  className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
-                >
-                  Sign Up
-                </button>
+                  <CustomButton
+                    onClick={(e: any) => logInOnClick(loginCredentials)}
+                    text="LOG IN"
+                  />
+
+                  <div className="flex justify-center md:mb-[40px]">
+                    <p className="text-[#777777] font-normal text-xs lg:text-sm leading-4 font-Open">
+                      Don't have an account ?
+                    </p>
+                    <button
+                      type="button"
+                      onClick={signUpOnClick}
+                      className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                    >
+                      Sign Up
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </>
     );
   };
 
