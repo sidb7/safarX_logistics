@@ -145,6 +145,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                             name={element.value}
                             label={element.value}
                             style={{ accentColor: "black" }}
+                            checkboxClassName="gap-2"
                           />
                         );
                       }

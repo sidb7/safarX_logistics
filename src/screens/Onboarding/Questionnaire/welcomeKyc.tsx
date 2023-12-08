@@ -92,6 +92,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
+                      checkboxClassName="gap-2"
                     />
                   );
                 })}
