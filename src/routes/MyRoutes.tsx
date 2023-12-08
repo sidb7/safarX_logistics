@@ -157,13 +157,27 @@ import CashOnDelivery from "../screens/Onboarding/WalletRecharge/cashOnDelivery"
 import AiAddress from "../screens/QuickPages/AiAddress";
 import AiListen from "../screens/QuickPages/AiListen";
 
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
+
 const MyRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/ai-address" element={<AiAddress />} />
         <Route path="/ai-listen" element={<AiListen />} />
-        <Route path="/auth/login" element={<LogInScreen />} />
+        <Route
+          path="/auth/login"
+          element={
+            <ErrorBoundary
+              FallbackComponent={ErrorHandle}
+              onError={() => console.log("Error Occured")}
+            >
+              <LogInScreen />
+            </ErrorBoundary>
+          }
+        />
+
         <Route
           path="/"
           element={
@@ -363,9 +377,9 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/onboarding/wallet-main"
             element={
-              <BankProtected>
-                <WalletMain />
-              </BankProtected>
+              // <BankProtected>
+              <WalletMain />
+              // </BankProtected>
             }
           />
           {/**wallet details page */}
@@ -531,9 +545,9 @@ const MyRoutes: React.FC = () => {
             <Route
               path="/wallet/view-wallet"
               element={
-                <ProtectedRoute>
-                  <WalletRecharge />
-                </ProtectedRoute>
+                // <ProtectedRoute>
+                <WalletRecharge />
+                // </ProtectedRoute>
               }
             />
           </Route>
@@ -954,7 +968,12 @@ const MyRoutes: React.FC = () => {
               path="wallet/transaction-history"
               element={
                 <ProtectedRoute>
-                  <Transaction />
+                  <ErrorBoundary
+                    FallbackComponent={ErrorHandle}
+                    onError={() => console.log("Error Occured")}
+                  >
+                    <Transaction />
+                  </ErrorBoundary>
                 </ProtectedRoute>
               }
             />
