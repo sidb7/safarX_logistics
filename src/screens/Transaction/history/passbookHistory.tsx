@@ -295,11 +295,10 @@ export const PassbookColumns = (setSortOrder: any) => {
         );
       },
       cell: (info: any) => {
+        let debitedAmount = parseFloat(info.row?.original?.amount).toFixed(2);
         return (
           <div className="flex whitespace-nowrap ">
-            {info.row.original.type === "debit"
-              ? `₹ ${info.row?.original?.amount}`
-              : "₹ 0"}
+            {info.row.original.type === "debit" ? `₹ ${debitedAmount}` : "₹ 0"}
           </div>
         );
       },
@@ -314,11 +313,9 @@ export const PassbookColumns = (setSortOrder: any) => {
         );
       },
       cell: (info: any) => {
-        return (
-          <div className="flex whitespace-nowrap ">
-            {`₹ ${(info.getValue() && info.getValue()) || 0}`}
-          </div>
-        );
+        let balance = parseFloat(info.getValue()).toFixed(2);
+
+        return <div className="flex whitespace-nowrap ">₹ {balance}</div>;
       },
     }),
 
@@ -421,6 +418,9 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
     data?.paymentGatewayName
   }`;
 
+  const balance = data?.balance;
+  let walletBalance = parseFloat(balance?.toFixed(2));
+
   const header = () => {
     return (
       <div
@@ -510,7 +510,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
               <div className="flex items-center">
                 <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" />
                 <span className="text-xs text-[#1C1C1C] font-semibold	">
-                  {data?.balance}
+                  {walletBalance}
                 </span>
               </div>
             </div>
