@@ -3,6 +3,7 @@ import JusPayIcon from "../../assets/juspay.png";
 import { INITIAL_RECHARGE } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PaymentLoader from "../paymentLoader/paymentLoader";
+import { Spinner } from "../../components/Spinner";
 
 interface IProps {
   isDisabled?: boolean;
@@ -13,8 +14,10 @@ interface IProps {
 const JusPay = (props: IProps) => {
   const { isDisabled, amount, callbackUrl } = props;
   const [paymentLoader, setpaymentLoader] = useState<any>(false);
+  const [loading, setLoading] = useState<any>(false);
 
   const startPayments = async () => {
+    setLoading(true);
     let initialObject = {
       amount: amount,
       callbackUrl: callbackUrl,
@@ -28,6 +31,7 @@ const JusPay = (props: IProps) => {
       if (response?.data?.status === "NEW") {
         localStorage.setItem("order_id", response?.data?.order_id);
         window.location.replace(response?.data?.payment_links?.web);
+        setLoading(false);
       }
     }
   };
@@ -35,14 +39,16 @@ const JusPay = (props: IProps) => {
     <>
       {paymentLoader ? (
         <PaymentLoader />
+      ) : loading ? (
+        <Spinner />
       ) : (
         <div className="flex flex-col items-center gap-y-2">
           <div className="w-20 h-20 flex justify-center items-center">
             <img
               src={JusPayIcon}
               alt=""
-              height={100}
-              width={100}
+              height={60}
+              width={60}
               className="ml-0 object-contain"
             />
           </div>

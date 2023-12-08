@@ -20,7 +20,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const questionsData = state?.questionsData;
 
-  const question = questionsData[4]?.question;
+  const question = questionsData?.[4]?.question;
 
   const modalTitle = () => {
     return (

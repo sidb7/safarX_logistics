@@ -168,11 +168,11 @@ const WalletPayment = () => {
           });
           console.log("orderStatus", orderStatus);
 
-          if (orderStatus?.data?.status === false) {
+          if (orderStatus?.data?.success === false) {
             toast.error("Something Went Wrong");
           } else {
             toast.success("Wallet Recharge Successfully");
-            navigate(`${SELLER_WEB_URL}/onboarding/cash-on-boarding`);
+            window.location.href = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
           }
           setPaymentLoader(false);
           removeLocalStorage("order_id");
