@@ -507,16 +507,16 @@ const Catalogue = () => {
                   />
                 </BottomModal>
 
-                {/* <BottomModal
-                isOpen={showCombo}
-                onRequestClose={() => setShowCombo(false)}
-              > */}
-                <CreateCombo
-                  isSearchProductRightModalOpen={showCombo}
-                  setIsSearchProductRightModalOpen={setShowCombo}
-                  productsData={productList}
-                />
-                {/* </BottomModal> */}
+                <BottomModal
+                  isOpen={showCombo}
+                  onRequestClose={() => setShowCombo(false)}
+                >
+                  <CreateCombo
+                    isSearchProductRightModalOpen={showCombo}
+                    setIsSearchProductRightModalOpen={setShowCombo}
+                    productsData={productList}
+                  />
+                </BottomModal>
               </div>
             )}
           </div>
