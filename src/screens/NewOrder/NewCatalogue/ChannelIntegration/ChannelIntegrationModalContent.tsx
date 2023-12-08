@@ -11,6 +11,7 @@ import {
   CREATE_WOOCOMMERCE_STORE,
   UPDATE_SINGLE_STORE,
   CREATE_ZOHO_STORE,
+  SELLER_WEB_URL,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
@@ -63,10 +64,10 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
 
   const addStore = async () => {
     try {
-      setIsLoading(true);
       setIsDisabled(true);
       if (!isUpdateModal) {
         if (channel === "SHOPIFY") {
+          setIsLoading(true);
           const { data } = await POST(POST_CREATE_STORE, storeData);
           if (data?.status) {
             // let newStore = [
@@ -90,6 +91,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             toast.error(data?.message);
             setModalData({ isOpen: false });
           }
+          return;
         } else if (channel === "WOOCOMMERCE") {
           let userId = Date.now();
           let wooCommerceContents = {
@@ -101,17 +103,21 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             "wooCommerceContents",
             JSON.stringify(wooCommerceContents)
           );
-          let returnUrl = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}/catalogues/channel-integration`;
+          let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
 
           const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}`;
 
           try {
-            await axios.get(reqUrl);
+            const { data } = await axios.get(reqUrl);
+            console.log("data: ", data);
           } catch (error: any) {
+            console.log("error?.config?.url: ", error?.config?.url);
+            // window.alert(JSON.stringify(error));
             window.location.href = error?.config?.url;
           }
           return;
         } else if (channel === "ZOHO") {
+          setIsLoading(true);
           const { data } = await POST(CREATE_ZOHO_STORE, storeData);
           if (data?.success) {
             toast.success(data?.message);
@@ -121,6 +127,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           }
         }
         setModalData({ isOpen: false });
+        return;
       } else {
         let payload = { ...storeData, storeId };
         const { data } = await POST(UPDATE_SINGLE_STORE, payload);
