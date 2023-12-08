@@ -88,6 +88,7 @@ export const GSTComponent = (props: ITypeProps) => {
             name={"I Agree with the terms & conditions"}
             label={"I Agree with the terms & conditions"}
             style={{ accentColor: "black" }}
+            checkboxClassName="gap-2"
           />
         </div>
 

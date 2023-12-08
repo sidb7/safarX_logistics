@@ -32,6 +32,7 @@ import ForgotPassword from "./ForgotPassword";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { Spinner } from "../../../components/Spinner";
 import { socketCallbacks } from "../../../Socket";
+import { useErrorBoundary } from "react-error-boundary";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -52,56 +53,59 @@ const Index = () => {
     password: "",
   });
 
+  const { showBoundary } = useErrorBoundary();
+
   const logInOnClick = async (value: any) => {
     window?.dataLayer?.push({
       event: "login",
     });
 
-    console.log("window", window);
-    setLoading(true);
-    const { data: response } = await POST(POST_SIGN_IN_URL, value);
+    try {
+      const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
-    sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
 
-    let signInUserReducerDetails = {
-      email: loginCredentials.email,
-      name: response?.data[0]?.name,
-    };
-    //commented as passing the name at signin time
-    // dispatch(signInUser(loginCredentials));
-    dispatch(signInUser(signInUserReducerDetails));
+      let signInUserReducerDetails = {
+        email: loginCredentials.email,
+        name: response?.data[0]?.name,
+      };
+      //commented as passing the name at signin time
+      // dispatch(signInUser(loginCredentials));
+      dispatch(signInUser(signInUserReducerDetails));
 
-    if (response?.success) {
-      sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
-      sessionStorage.setItem("userName", response?.data[0]?.name);
-      sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
-      setLocalStorage(
-        `${response?.data[0]?.sellerId}_${tokenKey}`,
-        response?.data[0]?.token
-      );
+      if (response?.success) {
+        sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
+        sessionStorage.setItem("userName", response?.data[0]?.name);
+        sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
+        setLocalStorage(
+          `${response?.data[0]?.sellerId}_${tokenKey}`,
+          response?.data[0]?.token
+        );
 
-      const token = sessionStorage.getItem("sellerId")
-        ? `${sessionStorage.getItem(
-            "sellerId"
-          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
-        : "";
+        const token = sessionStorage.getItem("sellerId")
+          ? `${sessionStorage.getItem(
+              "sellerId"
+            )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+          : "";
 
-      if (token !== "") {
-        console.log("socketConnectedAfterlogin");
-        socketCallbacks.connectSocket(dispatch);
-      }
-      setLoading(false);
-      // redirect based on qna and kyc done or not
-      if (response?.data?.[0]?.nextStep?.qna === false) {
-        navigate("/onboarding/questionnaire/question1");
-      } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-        navigate("/onboarding/kyc-type");
+        if (token !== "") {
+          console.log("socketConnectedAfterlogin");
+          socketCallbacks.connectSocket(dispatch);
+        }
+
+        // redirect based on qna and kyc done or not
+        if (response?.data?.[0]?.nextStep?.qna === false) {
+          navigate("/onboarding/questionnaire/question1");
+        } else if (response?.data?.[0]?.nextStep?.kyc === false) {
+          navigate("/onboarding/kyc-type");
+        } else {
+          navigate("/dashboard/overview");
+        }
       } else {
-        navigate("/dashboard/overview");
+        toast.error(response?.message);
       }
-    } else {
-      toast.error(response?.message);
-      setLoading(false);
+    } catch (error) {
+      showBoundary("Something Wrong");
     }
   };
 

@@ -119,32 +119,23 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                   {question}
                 </span>
               </div>
-              {loading ? (
-                <div className="flex justify-center items-center">
-                  <Spinner />
-                </div>
-              ) : (
-                <div>
-                  <div className="flex flex-col items-start mt-4 capitalize font-Open text-base font-normal leading-[22px]">
-                    {questionsData[0]?.options?.map(
-                      (element: any, index: any) => {
-                        return (
-                          <Checkbox
-                            key={index}
-                            checked={element.isChecked || false}
-                            onChange={(element) => {
-                              handleCheckBox(element, index);
-                            }}
-                            name={element.value}
-                            label={element.value}
-                            style={{ accentColor: "black" }}
-                          />
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-              )}
+              <div className="flex flex-col items-start mt-4 capitalize font-Open text-base font-normal leading-[22px]">
+                {questionsData[0]?.options?.map((element: any, index: any) => {
+                  return (
+                    <Checkbox
+                      key={index}
+                      checked={element.isChecked || false}
+                      onChange={(element) => {
+                        handleCheckBox(element, index);
+                      }}
+                      name={element.value}
+                      label={element.value}
+                      style={{ accentColor: "black" }}
+                      checkboxClassName="gap-2"
+                    />
+                  );
+                })}
+              </div>
             </div>
             <div className="mt-6">
               <CustomButton
