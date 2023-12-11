@@ -107,7 +107,7 @@ const Locations = (props: IBarChart) => {
           >
             <table
               className="table-auto"
-              style={{ display: "flex", overflow: "scroll", height: "200px" }}
+              style={{ display: "flex", overflow: "scroll", height: "300px" }}
             >
               <tbody className="text-sm lg:text-[1.125rem] font-semibold font-Open leading-5 lg:leading-[22px]">
                 {addressCountOrder?.[status]?.map((item: any) => {
@@ -123,28 +123,6 @@ const Locations = (props: IBarChart) => {
                     </tr>
                   );
                 })}
-
-                {/* <tr>
-                  <td className="border-none px-4 py-2">Delhi</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={RedEllipse} alt="RedEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">M.P</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">Orissa</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr> */}
               </tbody>
             </table>
           </div>
