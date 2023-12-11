@@ -74,7 +74,7 @@ const ModalContent = (props: ITypeProps) => {
         <ServiceButton
           text={buttonText}
           onClick={handleButtonClick}
-          className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-4"
+          className="bg-[#1C1C1C] text-[#FFFFFF] !py-2 !px-4"
         />
       </div>
     </div>

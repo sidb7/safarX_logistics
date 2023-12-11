@@ -186,6 +186,9 @@ const Index = () => {
                     Fast and Easy Shipping from your doorstep to your
                     customer's.{" "}
                   </p>
+                  <p className="text-center	 leading-7 text-[1rem] font-bold font-Open">
+                    Sign up to create your account
+                  </p>
                 </div>
                 <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-7">
                   <div className="flex justify-center">
