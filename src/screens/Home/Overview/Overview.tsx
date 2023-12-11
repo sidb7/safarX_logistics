@@ -23,11 +23,18 @@ interface IOverview {
   revenueDetails?: any;
   codCountOrder?: any;
   orderCount?: any;
+  addressCountOrder?: any;
 }
 
 export const Overview = (props: IOverview) => {
   const navigate = useNavigate();
-  const { ordersArr, revenueDetails, codCountOrder, orderCount } = props;
+  const {
+    ordersArr,
+    revenueDetails,
+    codCountOrder,
+    orderCount,
+    addressCountOrder,
+  } = props;
   const [userData, setUserData] = React.useState<any>();
 
   const orderArr = [
@@ -275,6 +282,7 @@ export const Overview = (props: IOverview) => {
               img={Box}
               data={orderArr}
               yearArr={yearArr}
+              addressCountOrder={addressCountOrder}
             />
           </div>
           {/* <div className="grid grid-cols-1 lg:grid-cols-2  gap-4 mt-4 rounded-lg">
