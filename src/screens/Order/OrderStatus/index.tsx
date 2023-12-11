@@ -152,8 +152,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         partnerName: partnerValue,
       };
       const data = await POST(FETCH_MANIFEST_DATA, payload, {
-        responseType: "blob", // Pass option data for pdf
+        // responseType: "blob", // Pass option data for pdf
       });
+      if (data?.data?.success === false) {
+        toast.error(data?.data?.message);
+        return;
+      }
 
       var blob = new Blob([data?.data], { type: "application/pdf" });
       var url = URL.createObjectURL(blob);
