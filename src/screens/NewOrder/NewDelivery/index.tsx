@@ -212,13 +212,20 @@ const DeliveryLocation = () => {
       );
 
       if (
-        !isGSTFieldValid(
-          deliveryAddress.orderType,
-          deliveryAddress.gstNumber
-        ) ||
         !isDeliveryAddressValid ||
+        !isContactDetailsValid ||
         (!isBillingAddress &&
-          (!isbillingAddressValid || !isContactDetailsBillingValid))
+          !isbillingAddressValid &&
+          !isContactDetailsBillingValid)
+      ) {
+        setInputError(true);
+
+        return;
+      }
+      console.log("isDeliveryAddressValid", isDeliveryAddressValid);
+      if (
+        deliveryAddress.orderType === "B2B" &&
+        !isGSTFieldValid(deliveryAddress.orderType, deliveryAddress.gstNumber)
       ) {
         setInputError(true);
         return;

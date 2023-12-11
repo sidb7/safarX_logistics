@@ -161,8 +161,8 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
               "",
             fullAddress: parsedData.full_address || "",
-            locality: parsedData.locality_name || "",
-            sector: parsedData.locality_name || "",
+            locality: parsedData.locality_name || parsedData.landmark || "",
+            sector: parsedData.locality_name || parsedData.landmark || "",
             landmark: parsedData.landmark || "",
             pincode: parsedData.pincode || "",
             city: parsedData.city_name || "",
