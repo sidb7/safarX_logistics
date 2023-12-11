@@ -147,7 +147,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                 : "border-[#c1c1c1]"
             }`}
             onClick={() => handleOnChange(option)}
-            data-tooltip-id={`my-tooltip-inline-${option.value}`}
+            // data-tooltip-id={`my-tooltip-inline-${option.value}`}
           >
             <div className="self-start px-2">
               <input
@@ -176,7 +176,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                 ETA: {option.text?.EDT || "N/A"}{" "}
               </p>
             </div>
-            <TooltipContent option={option} />
+            {/* <TooltipContent option={option} /> */}
           </div>
         ))}
       </div>
