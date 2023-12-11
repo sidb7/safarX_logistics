@@ -34,27 +34,37 @@ describe("SignUp Component", () => {
 
     const fName = screen.getByLabelText("First Name");
     expect(fName).toBeInTheDocument();
-    userEvent.type(fName, " ");
+    // userEvent.type(fName, " ");
+    fireEvent.change(fName, { target: { value: "Naga" } });
+    expect(fName).toHaveValue("Naga");
 
     const lName = screen.getByLabelText("Last Name");
     expect(lName).toBeInTheDocument();
-    userEvent.type(lName, " ");
+    fireEvent.change(lName, { target: { value: "Naga" } });
+    expect(lName).toHaveValue("Naga");
+    // userEvent.type(lName, " ");
 
     const email = screen.getByLabelText("Email");
     expect(email).toBeInTheDocument();
-    userEvent.type(email, " ");
+    fireEvent.change(email, { target: { value: "Naga@gmail.com" } });
+    expect(email).toHaveValue("Naga@gmail.com");
+    // userEvent.type(email, " ");
 
     const password = screen.getByLabelText("Password");
     expect(password).toBeInTheDocument();
-    userEvent.type(password, " ");
+    fireEvent.change(password, { target: { value: "Test@12345" } });
+    expect(password).toHaveValue("Test@12345");
+    // userEvent.type(password, " ");
 
     const referalCode = screen.getByLabelText("Referal Code");
     expect(referalCode).toBeInTheDocument();
-    userEvent.type(referalCode, " ");
+    fireEvent.change(referalCode, { target: { value: "Test1" } });
+    expect(referalCode).toHaveValue("Test1");
+    // userEvent.type(referalCode, " ");
 
     const signUpButton = screen.getByText("SIGN UP");
     expect(signUpButton).toBeInTheDocument();
-
     fireEvent.click(signUpButton);
+    // expect(signUpButton).toHaveBeenCalledTimes(1);
   });
 });

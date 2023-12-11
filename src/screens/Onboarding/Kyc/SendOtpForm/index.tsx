@@ -437,6 +437,7 @@ const Index = (props: ITypeProps) => {
                     <CustomInputBox
                       containerStyle="md:!w-auto"
                       label="PAN Number"
+                      id="panNumber"
                       value={panNumber}
                       maxLength={10}
                       isDisabled={
@@ -539,6 +540,7 @@ const Index = (props: ITypeProps) => {
                   <div className={`${!isMdScreen ? "w-full" : ""}`}>
                     <CustomInputBox
                       containerStyle="md:!w-auto"
+                      id="pannumber"
                       label="PAN Number"
                       value={panNumber}
                       maxLength={10}
