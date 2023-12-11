@@ -134,11 +134,11 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
             <div className="flex flex-row whitespace-nowrap mt-2 lg:h-[34px]">
               {renderTabs()}
             </div>
-            <div>
+            {/* <div>
               <div>
                 <SearchBox label="Search" value="" onChange={() => {}} />
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="mx-4">{renderComponent()}</div>
           {/* <div className="mx-4">

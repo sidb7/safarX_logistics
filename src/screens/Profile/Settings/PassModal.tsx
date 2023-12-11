@@ -204,14 +204,14 @@ function PassModal(props: PassModalProps) {
       <div style={{ width: "-webkit-fill-available" }}>
         <footer
           style={{ width: "-webkit-fill-available" }}
-          className=" fixed  bottom-0	"
+          // className=" fixed  bottom-0	"
         >
           <div
             style={{
               width: "-webkit-fill-available",
               boxShadow: "0px -4px 8px 0px rgba(0, 0, 0, 0.04)",
             }}
-            className="flex justify-end shadow-lg border-[1px] border-white bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0"
+            className="flex justify-end shadow-lg border-[1px] border-white bg-[#FFFFFF] gap-[32px] p-[10px] rounded-tr-[24px] rounded-tl-[24px] fixed bottom-0"
           >
             <ServiceButton
               className="w-[80px]"

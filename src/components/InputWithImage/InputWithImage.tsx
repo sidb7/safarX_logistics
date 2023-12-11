@@ -44,9 +44,7 @@ const InputWithImage = (props: IInputProps) => {
 
   return (
     <>
-      <div
-        className={`${inputClassName} relative flex items-center justify-center `}
-      >
+      <div className={`${inputClassName} relative flex items-center`}>
         {imgSrc && (
           <img
             src={imgSrc ? imgSrc : dummyImage}
@@ -60,7 +58,7 @@ const InputWithImage = (props: IInputProps) => {
           type="text"
           className={`rounded border-[1px]  ${
             inputError && !value ? "!border-red-500" : "border-[#A4A4A4]"
-          } placeholder:text-[12px] placeholder:text-[#777777] placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
+          } placeholder:text-[12px] placeholder:text-[#777777] w-full placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
           required={isRequired}
           onChange={onChange}
           onClick={onClick}

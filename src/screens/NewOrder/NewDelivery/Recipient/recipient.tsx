@@ -53,7 +53,10 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
           />
           <div className="flex  absolute z-2 -top-3 items-center  bg-[#FEFEFE]">
             {type === "B2C" && (
-              <Checkbox checked={type === "B2C" ? true : false} />
+              <Checkbox
+                checked={type === "B2C" ? true : false}
+                checkboxClassName="gap-2"
+              />
             )}
             <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
               Consumer
@@ -87,7 +90,10 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
           />
           <div className="flex flex-row  items-center  absolute z-2 -top-3 bg-[#FEFEFE] ">
             {type === "B2B" && (
-              <Checkbox checked={type === "B2B" ? true : false} />
+              <Checkbox
+                checked={type === "B2B" ? true : false}
+                checkboxClassName="gap-2"
+              />
             )}
             <p className="bg-white   lg:font-semibold lg:font-Open lg:text-sm">
               Business

@@ -18,7 +18,7 @@ const ServiceType: React.FunctionComponent<IServiceData> = ({ props }) => {
             key={index}
           >
             <div className="flex items-center">
-              <Checkbox />
+              <Checkbox checkboxClassName="gap-2" />
               <p className="text-[16px] font-medium">{each.serviceType}</p>
             </div>
             <div className="flex">
