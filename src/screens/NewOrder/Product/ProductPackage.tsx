@@ -985,6 +985,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       <CustomRightModal
         isOpen={isSellerBoxDetailsModal}
         onClose={() => setSellerBoxDetailsModal(false)}
+        className=" w-full md:w-[52%]"
       >
         <SellerBoxDetails
           updateBoxApi={() => handleCloseBoxDetailModal()}

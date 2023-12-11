@@ -150,6 +150,7 @@ const ComparePlans = (props: ITypeProps) => {
               checked={info.row.original.freemium}
               style={{ accentColor: "black" }}
               showCase={true}
+              checkboxClassName="gap-2"
             />
           </div>
         );
@@ -167,7 +168,7 @@ const ComparePlans = (props: ITypeProps) => {
         return (
           <div className="flex items-center justify-center ">
             <Checkbox
-              checkboxClassName="!text-black"
+              checkboxClassName="!text-black gap-2"
               checked={info.row.original.silver}
               style={{ accentColor: "black" }}
               showCase={true}
@@ -191,6 +192,7 @@ const ComparePlans = (props: ITypeProps) => {
               checked={info.row.original.gold}
               style={{ accentColor: "black" }}
               showCase={true}
+              checkboxClassName="gap-2"
             />
           </div>
         );
@@ -211,6 +213,7 @@ const ComparePlans = (props: ITypeProps) => {
               checked={info.row.original.platinum}
               style={{ accentColor: "black" }}
               showCase={true}
+              checkboxClassName="gap-2"
             />
           </div>
         );

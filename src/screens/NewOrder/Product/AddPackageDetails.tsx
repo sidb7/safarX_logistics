@@ -350,7 +350,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 Products
               </div>
             </div>
-            <div className="w-80 !h-full pr-8 flex items-center">
+            <div className=" !h-full flex items-center">
               <SearchBox
                 label="Search any product"
                 customPlaceholder="Search any product"
@@ -359,7 +359,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                   setClearIconVisible(true);
                 }}
                 getFullContent={() => setSearchedProduct("")}
-                className="!h-full"
+                className="!h-full w-[150px] md:w-[300px]"
                 value={searchedProduct}
               />
               {/* <img src={SearchBoxIcon} alt="" className="w-6 h-6 mx-2" />

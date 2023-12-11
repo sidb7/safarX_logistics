@@ -25,6 +25,7 @@ import LocationIcon from "../../../assets/Location.svg";
 import LayersIcon from "../../../assets/layer.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import BottomModal from "../../../components/CustomModal/customBottomModal";
+import { Spinner } from "../../../components/Spinner";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ const Catalogue = () => {
   const [integrate, setIntegrate] = useState(false);
 
   const [tabNameFromUrl, setTabNameFromUrl] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const listTab = [
     {
       statusName: "Channel Integration",
@@ -355,68 +357,147 @@ const Catalogue = () => {
   return (
     <>
       {isActive ? (
-        <div>
-          <Breadcrum
-            label={`${
-              isMobileChannelPage
-                ? listTab[globalIndex].statusName
-                : "Catalogue"
-            } `}
-            component={renderHeaderComponent(setShowCombo)}
-            componentClass="!px-0 lg:px-5"
-            setState={() => setIsMobileChannelPage(false)}
-            state={isMobileChannelPage}
-          />
-          {!isMobileView ? (
-            <div className="lg:mb-24">
-              <div className="mt-4 px-5 ">
-                <div className="flex flex-row  overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
-                  {listTab?.map(({ statusName }, index) => {
-                    return (
-                      <div
-                        style={{ borderBottomWidth: "3px" }}
-                        className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
+        isLoading ? (
+          <div className="absolute right-[50%] top-[50%] transform -translate-y-1/2 cursor-pointer">
+            <Spinner />
+          </div>
+        ) : (
+          <div>
+            <Breadcrum
+              label={`${
+                isMobileChannelPage
+                  ? listTab[globalIndex].statusName
+                  : "Catalogue"
+              } `}
+              component={renderHeaderComponent(setShowCombo)}
+              componentClass="!px-0 lg:px-5"
+              setState={() => setIsMobileChannelPage(false)}
+              state={isMobileChannelPage}
+            />
+            {!isMobileView ? (
+              <div className="lg:mb-24">
+                <div className="mt-4 px-5 ">
+                  <div className="flex flex-row  overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
+                    {listTab?.map(({ statusName }, index) => {
+                      return (
+                        <div
+                          style={{ borderBottomWidth: "3px" }}
+                          className={`flex lg:justify-center items-center cursor-pointer border-[#777777] px-6
                   ${tabName === statusName && "!border-[#004EFF]"}
                   `}
-                        onClick={() => {
-                          sessionStorage.setItem("catalogueTab", statusName);
-                          changeUrl(statusName);
-                          setTabName(statusName);
-                        }}
-                        key={index}
-                      >
-                        <span
-                          className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
+                          onClick={() => {
+                            sessionStorage.setItem("catalogueTab", statusName);
+                            changeUrl(statusName);
+                            setTabName(statusName);
+                          }}
+                          key={index}
+                        >
+                          <span
+                            className={`text-[#777777] font-medium text-[15px] lg:text-[18px]
                     ${
                       tabName === statusName && "!text-[#004EFF] lg:text-[18px]"
                     }`}
-                        >
-                          {statusName}
-                        </span>
-                      </div>
-                    );
-                  })}
+                          >
+                            {statusName}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {renderComponent()}
+
+                  <RightSideModal
+                    isOpen={showCombo}
+                    onClose={() => setShowCombo(false)}
+                  >
+                    <CreateCombo
+                      isSearchProductRightModalOpen={showCombo}
+                      setIsSearchProductRightModalOpen={setShowCombo}
+                      productsData={productList}
+                      totalProduct={totalProduct}
+                    />
+                  </RightSideModal>
+
+                  <RightSideModal
+                    isOpen={modalData.isOpen}
+                    onClose={() =>
+                      setModalData({ ...modalData, isOpen: false })
+                    }
+                  >
+                    <ChannelIntegrationModalContent
+                      setIsLoading={setIsLoading}
+                      modalData={modalData}
+                      setModalData={setModalData}
+                      channelData={channelData}
+                      setChannelData={setChannelData}
+                      indexNum={indexNum}
+                      integrate={integrate}
+                    />
+                  </RightSideModal>
                 </div>
-
-                {renderComponent()}
-
-                <RightSideModal
-                  isOpen={showCombo}
-                  onClose={() => setShowCombo(false)}
+              </div>
+            ) : !isMobileChannelPage ? (
+              listTab.map((item: any, index: any) => (
+                <div
+                  className={`border-[1px] mx-[1rem] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
+                  // onClick={() => navigate(`/settings/user-management`)}
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                  }}
+                  onClick={() => handleMobileTab(item.statusName, index)}
                 >
-                  <CreateCombo
-                    isSearchProductRightModalOpen={showCombo}
-                    setIsSearchProductRightModalOpen={setShowCombo}
-                    productsData={productList}
-                    totalProduct={totalProduct}
+                  <div className={`flex justify-between items-center h-[44px]`}>
+                    <div className="flex  items-center ml-2">
+                      <span>
+                        <img width={"20px"} src={item.icon} />
+                      </span>
+                      <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
+                        {item.statusName}
+                      </span>
+                    </div>
+                    <div className="mr-4">
+                      <img src={RightArrowIcon} alt="" className="ml-4" />
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div>
+                <div className="m-[1rem]">
+                  {renderMobileComponent(showCombo)}
+                </div>
+                <div
+                  className="flex justify-center gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+                  style={{ width: "-webkit-fill-available" }}
+                >
+                  <ServiceButton
+                    onClick={() => {
+                      setIsMobileChannelPage(false);
+                      navigate(-1);
+                    }}
+                    text={"Back"}
+                    className={`text-[#1C1C1C] w-[100%] cursor-pointer bg-[#FFFFFF] h-[36px] py-2 px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
                   />
-                </RightSideModal>
-
-                <RightSideModal
+                  <ServiceButton
+                    onClick={() => {
+                      setIsMobileChannelPage(false);
+                      navigate(-1);
+                    }}
+                    text={"Save"}
+                    className={`bg-[#1C1C1C] w-[100%] cursor-pointer text-[#FFFFFF] h-[36px] py-2 px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+                  />
+                </div>
+                <BottomModal
                   isOpen={modalData.isOpen}
-                  onClose={() => setModalData({ ...modalData, isOpen: false })}
+                  onRequestClose={() =>
+                    setModalData({ ...modalData, isOpen: false })
+                  }
+                  className="outline-none !p-0 overflow-scroll h-[30rem]"
                 >
                   <ChannelIntegrationModalContent
+                    setIsLoading={setIsLoading}
                     modalData={modalData}
                     setModalData={setModalData}
                     channelData={channelData}
@@ -424,89 +505,22 @@ const Catalogue = () => {
                     indexNum={indexNum}
                     integrate={integrate}
                   />
-                </RightSideModal>
-              </div>
-            </div>
-          ) : !isMobileChannelPage ? (
-            listTab.map((item: any, index: any) => (
-              <div
-                className={`border-[1px] mx-[1rem] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4 cursor-pointer hover:bg-gray-100`}
-                // onClick={() => navigate(`/settings/user-management`)}
-                style={{
-                  boxShadow:
-                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                }}
-                onClick={() => handleMobileTab(item.statusName, index)}
-              >
-                <div className={`flex justify-between items-center h-[44px]`}>
-                  <div className="flex  items-center ml-2">
-                    <span>
-                      <img width={"20px"} src={item.icon} />
-                    </span>
-                    <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
-                      {item.statusName}
-                    </span>
-                  </div>
-                  <div className="mr-4">
-                    <img src={RightArrowIcon} alt="" className="ml-4" />
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div>
-              <div className="m-[1rem]">{renderMobileComponent(showCombo)}</div>
-              <div
-                className="flex justify-center gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
-                style={{ width: "-webkit-fill-available" }}
-              >
-                <ServiceButton
-                  onClick={() => {
-                    setIsMobileChannelPage(false);
-                    navigate(-1);
-                  }}
-                  text={"Back"}
-                  className={`text-[#1C1C1C] w-[100%] cursor-pointer bg-[#FFFFFF] h-[36px] py-2 px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
-                />
-                <ServiceButton
-                  onClick={() => {
-                    setIsMobileChannelPage(false);
-                    navigate(-1);
-                  }}
-                  text={"Save"}
-                  className={`bg-[#1C1C1C] w-[100%] cursor-pointer text-[#FFFFFF] h-[36px] py-2 px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
-                />
-              </div>
-              <BottomModal
-                isOpen={modalData.isOpen}
-                onRequestClose={() =>
-                  setModalData({ ...modalData, isOpen: false })
-                }
-                className="outline-none !p-0 overflow-scroll h-[30rem]"
-              >
-                <ChannelIntegrationModalContent
-                  modalData={modalData}
-                  setModalData={setModalData}
-                  channelData={channelData}
-                  setChannelData={setChannelData}
-                  indexNum={indexNum}
-                  integrate={integrate}
-                />
-              </BottomModal>
+                </BottomModal>
 
-              {/* <BottomModal
-                isOpen={showCombo}
-                onRequestClose={() => setShowCombo(false)}
-              > */}
-              <CreateCombo
-                isSearchProductRightModalOpen={showCombo}
-                setIsSearchProductRightModalOpen={setShowCombo}
-                productsData={productList}
-              />
-              {/* </BottomModal> */}
-            </div>
-          )}
-        </div>
+                <BottomModal
+                  isOpen={showCombo}
+                  onRequestClose={() => setShowCombo(false)}
+                >
+                  <CreateCombo
+                    isSearchProductRightModalOpen={showCombo}
+                    setIsSearchProductRightModalOpen={setShowCombo}
+                    productsData={productList}
+                  />
+                </BottomModal>
+              </div>
+            )}
+          </div>
+        )
       ) : (
         <div>
           <AccessDenied />

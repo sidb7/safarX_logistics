@@ -4,7 +4,8 @@ import CustomButton from "../../../components/Button";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
-import CenterModal from "../../../components/CustomModal/customCenterModal";
+// import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { Spinner } from "../../../components/Spinner";
 import { ResponsiveState } from "../../../utils/responsiveState";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
@@ -15,26 +16,31 @@ import { GET_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const { isLgScreen, isMdScreen } = ResponsiveState();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  // const [isModalOpen, setIsModalOpen] = useState(true);
   const [questionsData, setQuestionsData] = useState<any>([]);
   const [nextBtnStatus, setNextBtnStatus] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const state = location.state || {};
 
   async function getQuestions() {
     try {
+      setLoading(true);
       const { data: response } = await POST(GET_QUESTIONNAIRE);
       if (response?.success === true) {
+        setLoading(false);
         setQuestionsData(response?.data?.questionBank);
         if (Object.keys(state).length > 0 && state?.questionsData) {
           setQuestionsData(state.questionsData);
         }
       } else {
         toast.error(response?.message);
+        setLoading(false);
       }
     } catch {
       toast.error("Failed to fetch the question bank!");
+      setLoading(false);
       return;
     }
   }
@@ -125,6 +131,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
+                      checkboxClassName="gap-2"
                     />
                   );
                 })}

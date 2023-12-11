@@ -69,7 +69,10 @@ const WalletRecharge = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
-  const walletBalance = useSelector((state: any) => state?.user?.walletBalance);
+  const walletBalance = useSelector(
+    (state: any) => state?.user?.walletBalance || 0
+  );
+  let currentBalance = parseFloat(walletBalance?.toFixed(2));
   // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Wallet");
 
@@ -314,7 +317,7 @@ const WalletRecharge = () => {
             paymentGateway: "JUSPAY",
             transactionId: juspayOrderId,
           });
-          if (orderStatus?.data?.status === false) {
+          if (orderStatus?.data?.success === false) {
             toast.error("Something Went Wrong");
           } else {
             toast.success("Wallet Recharge Successfully");
@@ -370,7 +373,8 @@ const WalletRecharge = () => {
                 Payment
               </p>
             </div>
-            <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] max-sm:rounded-none flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
+            {/* promotional banner commented for now */}
+            {/* <div className=" lg:mb-8 h-[49.667px] bg-[#4D83FF] rounded-[4px] max-sm:rounded-none flex justify-center items-center mt-5 lg:mx-5  lg:justify-start">
               <div className="flex text-center  lg:w-full text-sm font-semibold text-[#FFFFFF]  leading-5">
                 <p
                   className={`${
@@ -382,7 +386,7 @@ const WalletRecharge = () => {
                   Get welcome gift of 100 bonus point with wallet payments
                 </p>
               </div>
-            </div>
+            </div> */}
             <div className="mx-5 ">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
@@ -392,7 +396,7 @@ const WalletRecharge = () => {
                       Your wallet balance
                     </p>
                     <p className="text-[#1C1C1C]">
-                      ₹ {walletBalance?.toLocaleString("en-IN")}
+                      ₹ {currentBalance?.toLocaleString("en-IN")}
                     </p>
                   </div>
                   <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal">
@@ -478,7 +482,7 @@ const WalletRecharge = () => {
                       </div>
                     </div>
                     <div className="flex justify-center items-center mt-12">
-                      <Checkbox />
+                      <Checkbox checkboxClassName="gap-2" /> 
                       <p className="text-[14px] font-medium lg:whitespace-nowrap uppercase text-[#004EFF]">
                         REDEEM ON EVERY ORDER
                       </p>
@@ -521,7 +525,7 @@ const WalletRecharge = () => {
               </div>
 
               <div className="flex items-center lg:mb-2">
-                <Checkbox />
+                <Checkbox checkboxClassName="gap-2" />
                 <p className="text-[14px] font-medium lg:font-semibold uppercase text-[#004EFF]">
                   INSTANT RECHARGE WITH COD
                 </p>
@@ -658,7 +662,7 @@ const WalletRecharge = () => {
                       </div>
                     </div>
                     <div className="flex justify-center items-center mt-12">
-                      <Checkbox />
+                      <Checkbox checkboxClassName="gap-2" />
                       <p className="text-[14px] font-medium uppercase text-[#004EFF]">
                         REDEEM ON EVERY ORDER
                       </p>

@@ -23,23 +23,23 @@ export default function SimpleLineChart(props: IpropTypes) {
     <>
       <ResponsiveContainer width="100%" height={isLgScreen ? "90%" : "80%"}>
         <LineChart
-          width={600}
+          width={700}
           height={200}
           data={data}
           margin={{
-            top: 25,
-            right: 30,
+            top: 23,
+            right: 15,
             left: 0,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="0" vertical={false} />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="k" />
           <YAxis />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey="pv"
+            dataKey="v"
             stroke="#8884d8"
             activeDot={{ r: 8 }}
           />
