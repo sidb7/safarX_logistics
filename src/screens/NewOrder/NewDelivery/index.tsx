@@ -222,7 +222,6 @@ const DeliveryLocation = () => {
 
         return;
       }
-      console.log("isDeliveryAddressValid", isDeliveryAddressValid);
       if (
         deliveryAddress.orderType === "B2B" &&
         !isGSTFieldValid(deliveryAddress.orderType, deliveryAddress.gstNumber)
@@ -274,7 +273,6 @@ const DeliveryLocation = () => {
         const { data } = await POST(GET_LATEST_ORDER, payload);
         if (data.success && data?.data.length > 0) {
           const orderData = data?.data[0];
-          console.log("orderData", orderData?.deliveryAddress?.gstNumber);
           if (orderData?.deliveryAddress && orderData?.billingAddress) {
             setDeliveryAddress({
               deliveryAddress: {
