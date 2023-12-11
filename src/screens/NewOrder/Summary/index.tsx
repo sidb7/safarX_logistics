@@ -288,8 +288,10 @@ const Summary = (props: Props) => {
                 summaryTitle="RTO Address"
                 editImage={editIcon}
                 warehouse={
-                  pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
-                  pickupLocationDetails?.addressType.slice(1)
+                  pickupLocationReturnAddress?.addressType
+                    .charAt(0)
+                    .toUpperCase() +
+                  pickupLocationReturnAddress?.addressType.slice(1)
                 }
                 locationImage2={locationIcon}
                 summaryAddres={capitalizeFirstLetter(
@@ -350,18 +352,22 @@ const Summary = (props: Props) => {
                 summaryTitle="Billing Address"
                 editImage={editIcon}
                 warehouse={
-                  deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
-                  deliveryLocationDetails?.addressType.slice(1)
+                  deliveryLocationBillingDetails?.addressType
+                    .charAt(0)
+                    .toUpperCase() +
+                  deliveryLocationBillingDetails?.addressType.slice(1)
                 }
                 locationImage2={locationIcon}
                 summaryAddres={capitalizeFirstLetter(
-                  deliveryLocationDetails?.fullAddress
+                  deliveryLocationBillingDetails?.fullAddress
                 )}
                 city=""
                 profileImage={contactIcon}
-                contactNumber={deliveryLocationDetails?.contact?.mobileNo}
+                contactNumber={
+                  deliveryLocationBillingDetails?.contact?.mobileNo
+                }
                 contactImage={phoneIcon}
-                contactName={deliveryLocationDetails?.contact?.name}
+                contactName={deliveryLocationBillingDetails?.contact?.name}
                 isContactName={true}
                 isContactNumber={true}
               />
