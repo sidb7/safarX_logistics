@@ -273,7 +273,7 @@ const SystemLog = () => {
             onRequestClose={() => {
               setIsModal(false);
             }}
-            className="!w-[380px] md:!w-[50%] !h-[70%]"
+            className="!w-[350px] md:!w-[50%] !h-[70%]"
           >
             <div className=" w-full h-full gap-y-6 p-4 flex flex-col">
               <div className="flex items-center justify-between">
