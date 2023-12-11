@@ -159,6 +159,7 @@ import AiListen from "../screens/QuickPages/AiListen";
 
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
+import Label from "../screens/Profile/Settings/labelSetting";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -708,6 +709,15 @@ const MyRoutes: React.FC = () => {
               element={
                 <ProtectedRoute>
                   <SystemLog />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/settings/label-settings"
+              element={
+                <ProtectedRoute>
+                  <Label />
                 </ProtectedRoute>
               }
             />
