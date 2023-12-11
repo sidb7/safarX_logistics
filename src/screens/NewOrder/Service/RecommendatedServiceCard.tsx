@@ -101,7 +101,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(cheapestService)}
-              data-tooltip-id={`my-tooltip-inline-${cheapestService.value}`}
+              // data-tooltip-id={`my-tooltip-inline-${cheapestService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
                 Cheapest
@@ -136,7 +136,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   ETA: {cheapestService.text?.EDT || "N/A"}{" "}
                 </p>
               </div>
-              <TooltipContent option={cheapestService} />
+              {/* <TooltipContent option={cheapestService} /> */}
             </div>
 
             {/* Fastest Card */}
@@ -148,7 +148,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(fastestService)}
-              data-tooltip-id={`my-tooltip-inline-${fastestService.value}`}
+              // data-tooltip-id={`my-tooltip-inline-${fastestService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
                 Fastest
@@ -181,7 +181,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   ETA: {fastestService.text?.EDT || "N/A"}{" "}
                 </p>
               </div>
-              <TooltipContent option={fastestService} />
+              {/* <TooltipContent option={fastestService} /> */}
             </div>
 
             {/* Balanced Card */}
@@ -193,7 +193,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(balancedService)}
-              data-tooltip-id={`my-tooltip-inline-${balancedService.value}`}
+              // data-tooltip-id={`my-tooltip-inline-${balancedService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
                 Balanced
@@ -228,7 +228,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   ETA: {balancedService.text?.EDT || "N/A"}{" "}
                 </p>
               </div>
-              <TooltipContent option={balancedService} />
+              {/* <TooltipContent option={balancedService} /> */}
             </div>
           </>
         )}
