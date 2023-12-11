@@ -5,7 +5,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter as Router } from "react-router-dom";
 import KycBusinessTypeScreen from "../../screens/Onboarding/Kyc/BusinessType";
 import Card from "../../screens/Onboarding/Kyc/BusinessType/card";
-// import CustomRadioButton from "../../../../components/RadioButton/Index";
+import CustomRadioButton from "../../components/RadioButton/Index";
 import "@testing-library/jest-dom";
 
 afterEach(cleanup);
@@ -21,6 +21,22 @@ describe("test cases for the kyc type screen", () => {
     render(
       <Router>
         <KycBusinessTypeScreen />
+      </Router>
+    );
+  });
+
+  it("the following nested component of the screen renders without crashing", () => {
+    render(
+      <Router>
+        <Card />
+      </Router>
+    );
+  });
+
+  it("the following nested for the checkbox component of the screen renders without crashing", () => {
+    render(
+      <Router>
+        <CustomRadioButton />
       </Router>
     );
   });
