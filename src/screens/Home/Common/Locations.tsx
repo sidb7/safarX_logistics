@@ -14,14 +14,15 @@ interface IBarChart {
   img?: string;
   data: any;
   yearArr?: any;
+  addressCountOrder?: any;
 }
 
 const Locations = (props: IBarChart) => {
-  const { text, img, data, yearArr } = props;
-  const [status, setStatus] = useState("state");
+  const { text, img, data, yearArr, addressCountOrder } = props;
+  const [status, setStatus] = useState("pickUpState");
   const { isLgScreen } = ResponsiveState();
   const [isOpen, setIsOpen] = useState(false);
-
+  console.log(addressCountOrder, "gyu");
   return (
     <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
       <div
@@ -88,7 +89,7 @@ const Locations = (props: IBarChart) => {
               className={`cursor-pointer text-[1rem] font-semibold px-6 py-4 border ${
                 status === "state" ? "bg-[#F6F6F6]" : "bg-white"
               } `}
-              onClick={() => setStatus("state")}
+              onClick={() => setStatus("pickUpState")}
             >
               States
             </span>
@@ -96,7 +97,7 @@ const Locations = (props: IBarChart) => {
               className={`cursor-pointer text-[1rem] font-semibold px-6 py-4 border ${
                 status === "cities" ? "bg-[#F6F6F6]" : "bg-white"
               } `}
-              onClick={() => setStatus("cities")}
+              onClick={() => setStatus("pickUpCity")}
             >
               Cities
             </span>
@@ -104,36 +105,24 @@ const Locations = (props: IBarChart) => {
           <div
             className={`${isLgScreen ? "mt-10" : isOpen ? "block" : "hidden"}`}
           >
-            <table className="table-auto">
+            <table
+              className="table-auto"
+              style={{ display: "flex", overflow: "scroll", height: "300px" }}
+            >
               <tbody className="text-sm lg:text-[1.125rem] font-semibold font-Open leading-5 lg:leading-[22px]">
-                <tr>
-                  <td className="border-none px-4 py-2">Maharashtra</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">Delhi</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={RedEllipse} alt="RedEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">M.P</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">Orissa</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
+                {addressCountOrder?.[status]?.map((item: any) => {
+                  return (
+                    <tr>
+                      <td className="border-none px-4 py-2">{item?._id}</td>
+                      <td className="border-none px-4 py-2">
+                        {item?.orderCount} Orders
+                      </td>
+                      <td className="border-none px-4 py-2">
+                        <img src={GreenEllipse} alt="greenEllipse" />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
