@@ -31,13 +31,7 @@ describe("GetStarted Component", () => {
       </Router>
     );
   });
-  // it("rendering the custom button", () => {
-  //   const { getByText } = render(
-  //     <CustomButton text="SET UP MY ACCOUNT" onClick={() => {}} />
-  //   );
-  //   const buttonElement = getByText("SET UP MY ACCOUNT");
-  //   expect(buttonElement).toBeInTheDocument();
-  // });
+
   //checking whether is button got clicked
   it("calls the onClick function when clicked", () => {
     const mockOnClick = jest.fn(() => {
