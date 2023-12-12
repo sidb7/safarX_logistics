@@ -31,8 +31,7 @@ const arrayData = [{ label: "Passbook" }, { label: "Cashback" }];
 
 export const Transaction = () => {
   const [sortOrder, setSortOrder] = useState("desc");
-
-  const { showBoundary } = useErrorBoundary();
+  const { showBoundary } = useErrorBoundary() || {};
 
   const navigate = useNavigate();
   const roles = useSelector((state: any) => state?.roles);
