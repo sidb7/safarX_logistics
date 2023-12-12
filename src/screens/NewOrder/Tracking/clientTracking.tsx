@@ -520,10 +520,9 @@ const Tracking = () => {
                                                     Payment Mode
                                                   </p>
                                                   <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                                    {each?.codInfo?.isCod ===
-                                                    "false"
+                                                    {each?.codInfo?.isCod
                                                       ? "COD"
-                                                      : "Online"}
+                                                      : "Prepaid"}
                                                   </p>
                                                 </div>
                                               </div>
