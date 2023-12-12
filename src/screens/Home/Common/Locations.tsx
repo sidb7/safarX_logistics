@@ -14,13 +14,15 @@ interface IBarChart {
   img?: string;
   data: any;
   yearArr?: any;
+  addressCountOrder?: any;
 }
 
 const Locations = (props: IBarChart) => {
-  const { text, img, data, yearArr } = props;
+  const { text, img, data, yearArr, addressCountOrder } = props;
   const [status, setStatus] = useState("state");
   const { isLgScreen } = ResponsiveState();
   const [isOpen, setIsOpen] = useState(false);
+  const [arrName, setArrName] = useState<any>("pickUpState");
 
   return (
     <div className={`border-[1px] border-[#E8E8E8] rounded-lg`}>
@@ -69,26 +71,29 @@ const Locations = (props: IBarChart) => {
         </div>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2">
-        {/* <div className= "h-[500px]" > */}
-        {isLgScreen ? (
-          <div className="h-[500px]">
-            <BarChartComponent data={data} />
-          </div>
-        ) : (
-          isOpen && (
+        <div className="h-[auto]">
+          {isLgScreen ? (
             <div className="h-[500px]">
               <BarChartComponent data={data} />
             </div>
-          )
-        )}
-        {/* </div> */}
-        <div>
-          <div className="mt-10 hidden lg:block">
+          ) : (
+            isOpen && (
+              <div className="h-[500px]">
+                <BarChartComponent data={data} />
+              </div>
+            )
+          )}
+        </div>
+        <div className="mt-11 flex flex-col items-center">
+          <div>
             <span
               className={`cursor-pointer text-[1rem] font-semibold px-6 py-4 border ${
                 status === "state" ? "bg-[#F6F6F6]" : "bg-white"
               } `}
-              onClick={() => setStatus("state")}
+              onClick={() => {
+                setStatus("state");
+                setArrName("pickUpState");
+              }}
             >
               States
             </span>
@@ -96,7 +101,10 @@ const Locations = (props: IBarChart) => {
               className={`cursor-pointer text-[1rem] font-semibold px-6 py-4 border ${
                 status === "cities" ? "bg-[#F6F6F6]" : "bg-white"
               } `}
-              onClick={() => setStatus("cities")}
+              onClick={() => {
+                setStatus("cities");
+                setArrName("pickUpCity");
+              }}
             >
               Cities
             </span>
@@ -104,36 +112,24 @@ const Locations = (props: IBarChart) => {
           <div
             className={`${isLgScreen ? "mt-10" : isOpen ? "block" : "hidden"}`}
           >
-            <table className="table-auto">
+            <table
+              className="table-auto mt-5"
+              style={{ display: "flex", overflow: "scroll", height: "300px" }}
+            >
               <tbody className="text-sm lg:text-[1.125rem] font-semibold font-Open leading-5 lg:leading-[22px]">
-                <tr>
-                  <td className="border-none px-4 py-2">Maharashtra</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">Delhi</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={RedEllipse} alt="RedEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">M.P</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border-none px-4 py-2">Orissa</td>
-                  <td className="border-none px-4 py-2">0 Orders</td>
-                  <td className="border-none px-4 py-2">
-                    <img src={GreenEllipse} alt="greenEllipse" />
-                  </td>
-                </tr>
+                {addressCountOrder?.[arrName]?.map((item: any) => {
+                  return (
+                    <tr>
+                      <td className="border-none px-4 py-2">{item?._id}</td>
+                      <td className="border-none px-4 py-2">
+                        {item?.orderCount} Orders
+                      </td>
+                      <td className="border-none px-4 py-2">
+                        <img src={GreenEllipse} alt="greenEllipse" />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

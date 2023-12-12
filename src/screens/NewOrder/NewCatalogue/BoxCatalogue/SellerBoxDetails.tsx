@@ -193,65 +193,6 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
         </div>
         <div className="grid grid-cols-2 gap-5">
           <CustomInputBox
-            label="Box Name"
-            name="name"
-            value={sellerBoxDetails?.name}
-            errorMessage={validationErrors?.name}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                name: e.target.value,
-              });
-            }}
-          />
-          <CustomInputBox
-            label="Box Color"
-            name="color"
-            value={sellerBoxDetails?.color}
-            errorMessage={validationErrors?.color}
-            onChange={(e) => {
-              handleValidation(e);
-              setSellerBoxDetails({
-                ...sellerBoxDetails,
-                color: e.target.value,
-              });
-            }}
-          />
-          <CustomInputBox
-            label="Box Price"
-            name="price"
-            errorMessage={validationErrors?.price}
-            value={sellerBoxDetails?.price}
-            onChange={(e: any) => {
-              if (!isNaN(e.target.value)) {
-                handleValidation(e);
-                setSellerBoxDetails({
-                  ...sellerBoxDetails,
-                  price: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
-                });
-              }
-            }}
-          />
-          <CustomInputBox
-            label="Dead Weight"
-            name="deadWeight"
-            errorMessage={validationErrors?.deadWeight}
-            value={sellerBoxDetails?.deadWeight}
-            onChange={(e: any) => {
-              if (!isNaN(e.target.value)) {
-                handleValidation(e);
-                setSellerBoxDetails({
-                  ...sellerBoxDetails,
-                  deadWeight: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
-                });
-              }
-            }}
-          />
-        </div>
-        <hr />
-        <div className="grid grid-cols-2 gap-5">
-          <CustomInputBox
             label="Length (cm)"
             inputType="text"
             name="length"
@@ -306,6 +247,66 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             inputType="number"
             isDisabled={true}
             tempLabel={true}
+          />
+        </div>
+        <hr />
+
+        <div className="grid grid-cols-2 gap-5">
+          <CustomInputBox
+            label="Box Name"
+            name="name"
+            value={sellerBoxDetails?.name}
+            errorMessage={validationErrors?.name}
+            onChange={(e) => {
+              handleValidation(e);
+              setSellerBoxDetails({
+                ...sellerBoxDetails,
+                name: e.target.value,
+              });
+            }}
+          />
+          <CustomInputBox
+            label="Box Color"
+            name="color"
+            value={sellerBoxDetails?.color}
+            errorMessage={validationErrors?.color}
+            onChange={(e) => {
+              handleValidation(e);
+              setSellerBoxDetails({
+                ...sellerBoxDetails,
+                color: e.target.value,
+              });
+            }}
+          />
+          <CustomInputBox
+            label="Box Price"
+            name="price"
+            errorMessage={validationErrors?.price}
+            value={sellerBoxDetails?.price}
+            onChange={(e: any) => {
+              if (!isNaN(e.target.value)) {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  price: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                });
+              }
+            }}
+          />
+          <CustomInputBox
+            label="Dead Weight"
+            name="deadWeight"
+            errorMessage={validationErrors?.deadWeight}
+            value={sellerBoxDetails?.deadWeight}
+            onChange={(e: any) => {
+              if (!isNaN(e.target.value)) {
+                handleValidation(e);
+                setSellerBoxDetails({
+                  ...sellerBoxDetails,
+                  deadWeight: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                });
+              }
+            }}
           />
         </div>
       </div>

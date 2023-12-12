@@ -390,14 +390,14 @@ const PickupLocation = () => {
     }
   }, [userType]);
 
-  // useEffect(() => {
-  //   if (inputError) {
-  //     const container = document.getElementById("scrollDiv");
-  //     if (container) {
-  //       container.scrollIntoView({ block: "start", behavior: "smooth" });
-  //     }
-  //   }
-  // }, [inputError]);
+  useEffect(() => {
+    if (inputError) {
+      const container = document.getElementById("scrollDiv");
+      if (container) {
+        container.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    }
+  }, [inputError]);
 
   return (
     <>

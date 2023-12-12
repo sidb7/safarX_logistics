@@ -9,6 +9,7 @@ import { QuestionComponent2 } from "../../screens/Onboarding/Questionnaire/quest
 import { QuestionComponent3 } from "../../screens/Onboarding/Questionnaire/question3";
 import { QuestionComponent4 } from "../../screens/Onboarding/Questionnaire/question4";
 import { WelcomeKyc } from "../../screens/Onboarding/Questionnaire/welcomeKyc";
+import Checkbox from "../../components/CheckBox";
 
 afterEach(cleanup);
 // Mocking the redux functions
@@ -19,6 +20,7 @@ jest.mock("react-redux", () => ({
 }));
 
 describe("verify questionnaire screen with above test cases", () => {
+  //rendering the component
   it("the following component of the screen renders without crashing", () => {
     render(
       <Router>
