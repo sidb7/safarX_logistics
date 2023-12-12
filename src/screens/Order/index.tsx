@@ -26,6 +26,7 @@ import {
   GET_ALL_STORES,
   GET_SELLER_ORDER,
   GET_SINGLE_FILE,
+  GET_STATUS_COUNT,
   POST_SERVICEABILITY,
   POST_SYNC_ORDER,
 } from "../../utils/ApiUrls";
@@ -461,11 +462,11 @@ const Index = () => {
         currentStatus,
       });
 
-      const { statusList } = data?.data?.[0];
+      const { orderCount } = data?.data[0];
 
-      let countObj = statusList.find((elem: any) => elem._id === currentStatus);
-
-      setTotalcount(countObj ? countObj.count : 0);
+      // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
+      setStatusCount("", currentStatus, orderCount);
+      setTotalcount(orderCount ? orderCount : 0);
 
       if (data?.status) {
         setIsLoading(false);
@@ -529,26 +530,54 @@ const Index = () => {
     }
   };
 
-  const handleTabChanges = async (index: any = 0) => {
+  const setStatusCount = (
+    statusListFromApi: any,
+    currentStatus: any,
+    updatedCount: any = undefined
+  ) => {
     try {
-      const { OrderData, statusList } = await getSellerOrderByStatus(
-        statusData[index].value
-      );
-      setOrders(OrderData);
-      setAllOrders(OrderData);
-      setGlobalIndex(index);
+      let tempArr = statusData;
 
-      statusList?.forEach((e1: any) => {
-        const matchingStatus = statusData.find(
-          (e: any) => e.value === e1._id?.toUpperCase()
+      if (updatedCount === undefined) {
+        statusListFromApi.length > 0 &&
+          statusListFromApi?.forEach((e1: any) => {
+            const matchingStatus = tempArr.find(
+              (e: any) => e.value === e1._id?.toUpperCase()
+            );
+            if (matchingStatus) {
+              matchingStatus.orderNumber = e1?.count?.toLocaleString("en-US", {
+                minimumIntegerDigits: 2,
+                useGrouping: false,
+              });
+            }
+          });
+      } else {
+        const index = tempArr.findIndex(
+          (statusData: any) => statusData?.value === currentStatus
         );
-        if (matchingStatus) {
-          matchingStatus.orderNumber = e1?.count?.toLocaleString("en-US", {
+
+        if (index > -1) {
+          tempArr[index].orderNumber = updatedCount.toLocaleString("en-US", {
             minimumIntegerDigits: 2,
             useGrouping: false,
           });
         }
-      });
+      }
+
+      setStatusData([...tempArr]);
+    } catch (error) {
+      console.log("🚀 ~ file: index.tsx:537 ~ setStatusCount ~ error:", error);
+    }
+  };
+
+  const handleTabChanges = async (index: any = 0) => {
+    try {
+      const data = await getSellerOrderByStatus(statusData[index].value);
+      const { OrderData } = data;
+      setOrders(OrderData);
+      setAllOrders(OrderData);
+      setGlobalIndex(index);
+
       setTabStatusId(index);
 
       let currentStatus = tabs[index].value;
@@ -602,7 +631,21 @@ const Index = () => {
     }
   };
 
+  const getStatusCount = async () => {
+    try {
+      const { data } = await POST(GET_STATUS_COUNT);
+      const { status: isStatus, data: statusList } = data;
+      if (isStatus) {
+        // return data?.data;
+        setStatusCount(statusList, "DRAFT");
+      }
+    } catch (error) {
+      console.log("🚀 ~ file: index.tsx:609 ~ getStatusCount ~ error:", error);
+    }
+  };
+
   useEffect(() => {
+    getStatusCount();
     handleTabChanges();
   }, []); //deleteModalDraftOrder
 
