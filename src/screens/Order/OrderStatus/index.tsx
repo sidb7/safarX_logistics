@@ -27,6 +27,7 @@ import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import DownloadIcon from "../../../assets/download.svg";
 import { Tooltip } from "react-tooltip";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -152,8 +153,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         partnerName: partnerValue,
       };
       const data = await POST(FETCH_MANIFEST_DATA, payload, {
-        responseType: "blob", // Pass option data for pdf
+        // responseType: "blob", // Pass option data for pdf
       });
+      if (data?.data?.success === false) {
+        toast.error(data?.data?.message);
+        return;
+      }
 
       var blob = new Blob([data?.data], { type: "application/pdf" });
       var url = URL.createObjectURL(blob);
@@ -173,11 +178,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         let temp: any = [];
         data?.data.map((partner: any, index: number) => {
           let newData = {
-            label: partner.partnerName,
+            label: capitalizeFirstLetter(partner.partnerName),
             value: partner.partnerName,
           };
           temp.push(newData);
         });
+        temp.sort((elem: any, i: any) => elem.label.localeCompare(i.label));
         setPartnerMenu(temp);
       } else {
         throw new Error(data?.meesage);

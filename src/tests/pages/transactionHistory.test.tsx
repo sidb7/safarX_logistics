@@ -16,6 +16,7 @@ import "@testing-library/jest-dom";
 import { Transaction } from "../../screens/Transaction/index";
 import { TransactionSearchBox } from "../../components/Transactions/TransactionSearchBox";
 import { PassbookHistory } from "../../screens/Transaction/history/passbookHistory";
+import { useErrorBoundary } from "react-error-boundary";
 
 afterEach(cleanup);
 
@@ -26,28 +27,43 @@ jest.mock("react-redux", () => ({
   useDispatch: jest.fn(),
 }));
 
+// const useErrorBoundary=jest.fn();
+
+jest.mock("react-error-boundary", () => ({
+  ...jest.requireActual("react-error-boundary"),
+  useErrorBoundary: jest.fn(),
+  showBoundary: jest.fn(),
+}));
+
 describe("Transaction History", () => {
   it("Rendering Transacion without crash", () => {
     render(<Transaction />, { wrapper: MemoryRouter });
+    // screen.debug();
   });
 
   it("Rendering Transaction Search Box", () => {
+    const value = "search";
+
     const mockHandleSearch = jest.fn(() => {});
 
-    const { getByPlaceholderText } = render(
+    render(
       <TransactionSearchBox
         customPlaceholder="Search By Transaction Id"
         onChange={mockHandleSearch}
       />
     );
 
-    const inputElement = getByPlaceholderText("Search By Transaction Id");
-
+    const inputElement = screen.getByPlaceholderText(
+      "Search By Transaction Id"
+    );
     expect(inputElement).toBeInTheDocument();
-
-    fireEvent.change(inputElement, { target: { value: "test search" } });
-    expect(inputElement).toHaveValue("test search");
+    fireEvent.change(inputElement, { target: { value: value } });
+    expect(inputElement).toHaveValue(value);
 
     // expect(mockHandleSearch).toHaveBeenCalledWith("test search");
+  });
+
+  it("Rendering Passbook History Component", () => {
+    render(<PassbookHistory />, { wrapper: MemoryRouter });
   });
 });

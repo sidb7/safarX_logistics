@@ -145,7 +145,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
   });
 
   return (
-    <div className="flex flex-col gap-y-8 px-1 h-screen w-full py-5 ">
+    <div className="flex flex-col gap-y-4 px-1 h-screen w-full py-5 ">
       <div className="flex justify-between lg:mb-10 lg:px-5">
         <div className="flex gap-x-2 lg:gap-x-3">
           <img src={ClockIcon} alt="" />

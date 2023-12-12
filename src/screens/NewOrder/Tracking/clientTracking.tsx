@@ -222,10 +222,10 @@ const Tracking = () => {
           >
             <div className="pt-1">
               <p className="text-xs font-Open font-normal w-[68px] ">
-                {`${each?.time.split(" ")[0]} `}
+                {`${each?.time.split(" ")[0] || " "} `}
               </p>
               <p className="text-xs font-Open font-normal">
-                {`${each?.time.split(" ")[1]} `}
+                {`${each?.time.split(" ")[1] || " "} `}
               </p>
             </div>
             <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
@@ -349,7 +349,10 @@ const Tracking = () => {
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
-                                                {each?.orderId}
+                                                {each?.otherDetails?.orderNumber
+                                                  ? each?.otherDetails
+                                                      ?.orderNumber
+                                                  : each?.orderId}
                                               </span>
                                               <CopyTooltip
                                                 stringToBeCopied={each?.orderId}
@@ -560,7 +563,7 @@ const Tracking = () => {
                                                   <>
                                                     <div
                                                       key={index}
-                                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
+                                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 overflow-auto rounded-lg"
                                                     >
                                                       <img
                                                         src={each?.galleryImage}
