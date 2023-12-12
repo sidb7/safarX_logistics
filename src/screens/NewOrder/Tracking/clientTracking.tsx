@@ -19,6 +19,7 @@ import CustomInputBox from "../../../components/Input/index";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
+
   const [openSection, setOpenSection] = useState<string | null>(null);
 
   const { trackingNo: trackingNoParams = "" } = getQueryJson();
@@ -350,8 +351,7 @@ const Tracking = () => {
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
                                                 {each?.otherDetails?.orderNumber
-                                                  ? each?.otherDetails
-                                                      ?.orderNumber
+                                                  ? `#${each?.otherDetails?.orderNumber}`
                                                   : each?.orderId}
                                               </span>
                                               <CopyTooltip
@@ -383,7 +383,7 @@ const Tracking = () => {
                                               From:
                                             </p>
                                             <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] overflow-y-auto">
-                                              {each.pickupAddress.fullAddress}
+                                              {each?.pickupAddress?.fullAddress}
                                             </p>
                                           </div>
                                           <div className="md:flex-1 mt-2 ]">
@@ -391,7 +391,10 @@ const Tracking = () => {
                                               To:
                                             </p>
                                             <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] overflow-y-auto">
-                                              {each.deliveryAddress.fullAddress}
+                                              {
+                                                each?.deliveryAddress
+                                                  ?.fullAddress
+                                              }
                                             </p>
                                           </div>
                                         </div>
@@ -557,7 +560,7 @@ const Tracking = () => {
                                           {/*mapping product details */}
 
                                           {openSection === "product" &&
-                                            each?.boxInfo[0]?.products?.map(
+                                            each?.boxInfo?.[0]?.products?.map(
                                               (each: any, index: number) => {
                                                 return (
                                                   <>
@@ -575,8 +578,11 @@ const Tracking = () => {
                                                         </p>
                                                         <p className="text-sm font-Open font-normal">
                                                           ₹{" "}
-                                                          {+each?.unitPrice *
-                                                            +each.qty}
+                                                          {((+each?.unitPrice ||
+                                                            0) +
+                                                            (+each?.unitTax ||
+                                                              0)) *
+                                                            (+each?.qty || 0)}
                                                         </p>
                                                       </div>
                                                     </div>
