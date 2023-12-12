@@ -38,7 +38,8 @@ export const CustomTable = (props: ITablePropTypes) => {
   });
 
   useEffect(() => {
-    setRowSelectedData &&
+    table?.getSelectedRowModel()?.flatRows.length > 0 &&
+      setRowSelectedData &&
       setRowSelectedData(table?.getSelectedRowModel()?.flatRows);
   }, [table?.getSelectedRowModel()?.flatRows]);
 
