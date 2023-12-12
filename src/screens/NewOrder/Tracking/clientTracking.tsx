@@ -349,7 +349,10 @@ const Tracking = () => {
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
-                                                {each?.orderId}
+                                                {each?.otherDetails?.orderNumber
+                                                  ? each?.otherDetails
+                                                      ?.orderNumber
+                                                  : each?.orderId}
                                               </span>
                                               <CopyTooltip
                                                 stringToBeCopied={each?.orderId}

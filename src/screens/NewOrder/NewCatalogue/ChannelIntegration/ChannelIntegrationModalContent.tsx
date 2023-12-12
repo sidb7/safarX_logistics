@@ -88,6 +88,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             toast.success(data?.message);
             window.location.reload();
           } else {
+            setIsLoading(false);
             toast.error(data?.message);
             setModalData({ isOpen: false });
           }
