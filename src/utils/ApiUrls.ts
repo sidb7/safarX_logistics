@@ -98,6 +98,7 @@ const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
 
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
+const GET_STATUS_COUNT = `${SELLER_BASE_URL}/order/getOrderCountIn`;
 const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
@@ -276,6 +277,7 @@ const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
 
 export {
+  GET_STATUS_COUNT,
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
   GET_CATEGOROIES,
