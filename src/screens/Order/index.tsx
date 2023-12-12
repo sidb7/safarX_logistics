@@ -718,13 +718,8 @@ const Index = () => {
         currentStatus,
       });
 
-      const { statusList } = data?.data?.[0];
-
-      let countObj = statusList.find(
-        (elem: any) => elem._id.toUpperCase() === currentStatus
-      );
-
-      setTotalcount(countObj ? countObj.count : 0);
+      const { orderCount } = data?.data[0];
+      setTotalcount(orderCount ? orderCount : 0);
 
       if (data?.status) {
         return data?.data[0];
