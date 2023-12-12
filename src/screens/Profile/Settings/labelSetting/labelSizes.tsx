@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import singlePageLabel from "../../../../assets/singlePageLabel.svg";
 import singlePageLabelSQ from "../../../../assets/singlePageLabelSQ.svg";
 import multiplePageLabel from "../../../../assets/multiplePageLabel.svg";
@@ -10,9 +10,14 @@ import CustomRadioButton from "../../../../components/RadioButton/Index";
 interface ILabelSizesProps {}
 
 const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
+  const [checked, setChecked] = useState("");
+
+  const handleOptionChange = (e: any) => {
+    setChecked(e);
+  };
   return (
     <>
-      <div className="flex justify-between ">
+      <div className="flex flex-col md:flex-row md:justify-between ">
         <div className="flex-1 px-5">
           <h3 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mt-10">
             Recommended
@@ -21,7 +26,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
             Most Commonly used paper sizes for printing label
           </p>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 hidden md:block">
           <h3 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mt-10">
             other
           </h3>
@@ -31,91 +36,138 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2  divide-x-2 h-[350px] my-6">
+      <div className="flex flex-col md:grid md:grid-cols-2  md:divide-x-2 md:h-[350px] my-6">
         <div className=" flex p-4">
-          <div className="flex-1 flex flex-col justify-center items-center">
+          <div
+            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            onClick={() => handleOptionChange("singlePage")}
+          >
             <img
               src={singlePageLabel}
               alt="singlePageLabel"
-              className="lg:h-[80%]"
+              className="md:h-[80%]"
             />
-            <div className="lg:w-[80%] text-center flex-col flex justify-center items-center">
+            <div className="md:w-[80%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 Single Page(most commonly used label)
               </p>
               <CustomRadioButton
-                // value=""
+                name="singlePage"
+                value="singlePage"
+                checked={checked === "singlePage"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center items-center">
+          <div
+            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            onClick={() => handleOptionChange("multiplePage")}
+          >
             <img
               src={multiplePageLabel}
               alt="multiplePageLabel"
-              className="lg:h-[80%]"
+              className="md:h-[80%]"
             />
-            <div className="lg:w-[80%] text-center flex-col flex justify-center items-center">
+            <div className="md:w-[80%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 Multiple Page (To show detailed SKU info)
               </p>
               <CustomRadioButton
+                name="singlePage"
+                value="multiplePage"
+                checked={checked === "multiplePage"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-center items-center mr-2">
+          <div
+            className="flex-1 flex flex-col justify-center items-center mr-2 cursor-pointer"
+            onClick={() => handleOptionChange("singlePageSquared")}
+          >
             <img
               src={singlePageLabelSQ}
               alt="singlePageLabelSQ"
-              className="lg:h-[80%]"
+              className="md:h-[80%]"
             />
-            <div className="lg:w-[80%] text-center flex-col flex justify-center items-center">
+            <div className="md:w-[80%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 Single Page(square shaped shipping label)
               </p>
               <CustomRadioButton
+                name="singlePage"
+                value="singlePageSquared"
+                checked={checked === "singlePageSquared"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
         </div>
+        <hr className="block md:hidden mx-5" />
+        <div className="block md:hidden">
+          <div></div>
+          <div className="flex-1 px-5 ">
+            <h3 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mt-10">
+              other
+            </h3>
+            <p className="text-[#777777] font-Open text-xs font-normal leading-[22px]">
+              Suitable for small home printer
+            </p>
+          </div>
+        </div>
         <div className="flex p-4">
-          <div className="flex-1 flex flex-col justify-center items-center">
-            <img src={A4PageLabel} alt="A4PageLabel" className="lg:h-[80%]" />
-            <div className="lg:w-[50%] text-center flex-col flex justify-center items-center">
+          <div
+            className="flex-1 flex flex-col justify-center items-center  cursor-pointer"
+            onClick={() => handleOptionChange("a4Size")}
+          >
+            <img src={A4PageLabel} alt="A4PageLabel" className="md:h-[80%]" />
+            <div className="md:w-[50%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 A4 Size 8.3 x 11.7 Inches
               </p>
               <CustomRadioButton
+                name="singlePage"
+                value="a4Size"
+                checked={checked === "a4Size"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-center items-center">
-            <img src={A5PageLabel} alt="A5PageLabel" className="lg:h-[80%]" />
-            <div className="lg:w-[40%] text-center flex-col flex justify-center items-center">
+          <div
+            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            onClick={() => handleOptionChange("a5Size")}
+          >
+            <img src={A5PageLabel} alt="A5PageLabel" className="md:h-[80%]" />
+            <div className="md:w-[40%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 A5 Size 5.8 x 8.3 Inches
               </p>
               <CustomRadioButton
+                name="singlePage"
+                value="a5Size"
+                checked={checked === "a5Size"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
-          <div className="flex-1 flex flex-col justify-center items-center">
-            <img src={A6PageLabel} alt="A6PageLabel" className="lg:h-[80%]" />
-            <div className="lg:w-[40%] text-center flex-col flex justify-center items-center">
+          <div
+            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            onClick={() => handleOptionChange("a6Size")}
+          >
+            <img src={A6PageLabel} alt="A6PageLabel" className="md:h-[80%]" />
+            <div className="md:w-[40%] text-center flex-col flex justify-center items-center">
               <p className="font-Lato text-sm font-semibold leading-5 capitalize pt-[30px] text-[#777777]">
                 A6 Size 4.1 x 5.8 inches
               </p>
               <CustomRadioButton
+                name="singlePage"
+                value="a6Size"
+                checked={checked === "a6Size"}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
