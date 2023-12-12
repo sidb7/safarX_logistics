@@ -53,7 +53,7 @@ const Index = () => {
     password: "",
   });
 
-  const { showBoundary } = useErrorBoundary();
+  const { showBoundary } = useErrorBoundary() || {};
 
   const logInOnClick = async (value: any) => {
     window?.dataLayer?.push({
@@ -260,6 +260,9 @@ const Index = () => {
                     Fast and Easy Shipping from your doorstep to your
                     customer's.
                   </p>
+                  <p className="text-center	 leading-7 text-[1rem] font-bold font-Open">
+                    Login to access your account
+                  </p>
                 </div>
                 <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-6">
                   <div className="flex justify-center">
@@ -278,6 +281,7 @@ const Index = () => {
                     <CustomInputBox
                       containerStyle="mt-[17px]"
                       label="Email"
+                      id="email"
                       tempLabel={true}
                       inputType="email"
                       value={loginCredentials.email}
@@ -326,6 +330,7 @@ const Index = () => {
                       inputType={viewPassWord ? "text" : "password"}
                       onKeyDown={(e: any) => handleEnterLogin(e)}
                       label="Password"
+                      id="password"
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       minLength={8}
                       maxLength={16}

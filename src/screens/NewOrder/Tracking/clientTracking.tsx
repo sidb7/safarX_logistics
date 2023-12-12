@@ -19,6 +19,7 @@ import CustomInputBox from "../../../components/Input/index";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
+
   const [openSection, setOpenSection] = useState<string | null>(null);
 
   const { trackingNo: trackingNoParams = "" } = getQueryJson();
@@ -222,10 +223,10 @@ const Tracking = () => {
           >
             <div className="pt-1">
               <p className="text-xs font-Open font-normal w-[68px] ">
-                {`${each?.time.split(" ")[0]} `}
+                {`${each?.time.split(" ")[0] || " "} `}
               </p>
               <p className="text-xs font-Open font-normal">
-                {`${each?.time.split(" ")[1]} `}
+                {`${each?.time.split(" ")[1] || " "} `}
               </p>
             </div>
             <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
@@ -349,7 +350,9 @@ const Tracking = () => {
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
-                                                {each?.orderId}
+                                                {each?.otherDetails?.orderNumber
+                                                  ? `#${each?.otherDetails?.orderNumber}`
+                                                  : each?.orderId}
                                               </span>
                                               <CopyTooltip
                                                 stringToBeCopied={each?.orderId}
@@ -380,7 +383,7 @@ const Tracking = () => {
                                               From:
                                             </p>
                                             <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] overflow-y-auto">
-                                              {each.pickupAddress.fullAddress}
+                                              {each?.pickupAddress?.fullAddress}
                                             </p>
                                           </div>
                                           <div className="md:flex-1 mt-2 ]">
@@ -388,7 +391,10 @@ const Tracking = () => {
                                               To:
                                             </p>
                                             <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] overflow-y-auto">
-                                              {each.deliveryAddress.fullAddress}
+                                              {
+                                                each?.deliveryAddress
+                                                  ?.fullAddress
+                                              }
                                             </p>
                                           </div>
                                         </div>
@@ -514,10 +520,9 @@ const Tracking = () => {
                                                     Payment Mode
                                                   </p>
                                                   <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                                    {each?.codInfo?.isCod ===
-                                                    "false"
+                                                    {each?.codInfo?.isCod
                                                       ? "COD"
-                                                      : "Online"}
+                                                      : "Prepaid"}
                                                   </p>
                                                 </div>
                                               </div>
@@ -554,13 +559,13 @@ const Tracking = () => {
                                           {/*mapping product details */}
 
                                           {openSection === "product" &&
-                                            each?.boxInfo[0]?.products?.map(
+                                            each?.boxInfo?.[0]?.products?.map(
                                               (each: any, index: number) => {
                                                 return (
                                                   <>
                                                     <div
                                                       key={index}
-                                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 rounded-lg "
+                                                      className="flex gap-x-2 border-[1.5px] border-[#E8E8E8] px-2 py-3 h-16 overflow-auto rounded-lg"
                                                     >
                                                       <img
                                                         src={each?.galleryImage}
@@ -572,8 +577,11 @@ const Tracking = () => {
                                                         </p>
                                                         <p className="text-sm font-Open font-normal">
                                                           ₹{" "}
-                                                          {+each?.unitPrice *
-                                                            +each.qty}
+                                                          {((+each?.unitPrice ||
+                                                            0) +
+                                                            (+each?.unitTax ||
+                                                              0)) *
+                                                            (+each?.qty || 0)}
                                                         </p>
                                                       </div>
                                                     </div>

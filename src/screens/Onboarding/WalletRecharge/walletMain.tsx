@@ -145,7 +145,7 @@ const WalletMain = () => {
                   onClick={() => navigate("/onboarding/cash-on-delivery")}
                 >
                   <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
-                    SKIP FOR NOW{" "}
+                    SKIP FOR NOW
                   </p>
                 </div>
               </div>

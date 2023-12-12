@@ -546,9 +546,9 @@ const MyRoutes: React.FC = () => {
             <Route
               path="/wallet/view-wallet"
               element={
-                // <ProtectedRoute>
-                <WalletRecharge />
-                // </ProtectedRoute>
+                <ProtectedRoute>
+                  <WalletRecharge />
+                </ProtectedRoute>
               }
             />
           </Route>

@@ -1,11 +1,18 @@
 // @ts-nocheck
 import React from "react";
-import { render, screen, waitFor, cleanup } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  cleanup,
+  fireEvent,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter as Router } from "react-router-dom";
 import SendOTPScreen from "../../screens/Onboarding/Signup/mobileVerification";
 import { mobileRegex } from "../../utils/regexCheck";
 import "@testing-library/jest-dom";
+import CustomButton from "../../components/Button";
 
 afterEach(cleanup);
 // Mocking the redux functions
@@ -77,5 +84,17 @@ describe("mobile verification screen", () => {
     const validate = mobileRegex.test(validPhoneNumber);
     // Assert that it returns false
     expect(validate).toBe(true);
+  });
+
+  it("Send Otp Button", () => {
+    const mockOnClick = jest.fn(() => {
+      console.log("Mock on Click");
+    });
+
+    render(<CustomButton onClick={mockOnClick} text="SEND OTP" />);
+
+    const otpButton = screen.getByText("SEND OTP");
+    expect(otpButton).toBeInTheDocument();
+    fireEvent.click(otpButton);
   });
 });

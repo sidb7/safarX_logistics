@@ -198,6 +198,8 @@ export const Home = (props: IOverview) => {
   const [orderCount, setOrderCount] = React.useState<any>({
     data: BarchartData,
   });
+  const [addressCountOrder, setAddressCountOrder] = React.useState<any>([]);
+
   const arrayData = [
     { index: 0, label: "Overview" },
     { index: 1, label: "Orders" },
@@ -334,6 +336,12 @@ export const Home = (props: IOverview) => {
         },
         setCodCountOrder
       ),
+      getRevenueAndOrderDetails(
+        {
+          apiStatus: "ADDRESSORDERCOUNT",
+        },
+        setAddressCountOrder
+      ),
     ]);
   }, []);
 
@@ -385,6 +393,7 @@ export const Home = (props: IOverview) => {
               revenueDetails={revenueAndOrderDetails}
               orderCount={orderCount}
               codCountOrder={codCountOrder}
+              addressCountOrder={addressCountOrder}
             />
           </div>
 

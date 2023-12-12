@@ -398,6 +398,7 @@ const Index = (props: ITypeProps) => {
                     <CustomInputBox
                       containerStyle={`md:!w-auto`}
                       label="Aadhar Number"
+                      id={"aadharNumber"}
                       inputType="text"
                       inputMode="numeric"
                       value={aadharNumber}
@@ -477,6 +478,7 @@ const Index = (props: ITypeProps) => {
                         <CustomInputBox
                           label="Enter Aadhar OTP"
                           inputType="text"
+                          id={"aadharOtp"}
                           inputMode="numeric"
                           containerStyle="md:!w-auto"
                           className=" md:!w-[320px] !font-Open "
@@ -502,6 +504,7 @@ const Index = (props: ITypeProps) => {
                       containerStyle="md:!w-auto"
                       label="GST Number"
                       value={gstNumber}
+                      id={"gstNumber"}
                       maxLength={15}
                       className={`${
                         gstError !== "" &&
@@ -579,6 +582,7 @@ const Index = (props: ITypeProps) => {
                       <div className={`${!isMdScreen ? "w-full" : ""}`}>
                         <CustomInputBox
                           label="Enter GST OTP"
+                          id={"gstOtp"}
                           inputType="text"
                           inputMode="numeric"
                           containerStyle="md:!w-auto"
