@@ -53,7 +53,7 @@ const Index = () => {
     password: "",
   });
 
-  const { showBoundary } = useErrorBoundary();
+  const { showBoundary } = useErrorBoundary() || {};
 
   const logInOnClick = async (value: any) => {
     window?.dataLayer?.push({
@@ -281,6 +281,7 @@ const Index = () => {
                     <CustomInputBox
                       containerStyle="mt-[17px]"
                       label="Email"
+                      id="email"
                       tempLabel={true}
                       inputType="email"
                       value={loginCredentials.email}
@@ -329,6 +330,7 @@ const Index = () => {
                       inputType={viewPassWord ? "text" : "password"}
                       onKeyDown={(e: any) => handleEnterLogin(e)}
                       label="Password"
+                      id="password"
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       minLength={8}
                       maxLength={16}
