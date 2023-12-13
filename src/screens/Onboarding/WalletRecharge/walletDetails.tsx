@@ -105,6 +105,7 @@ const WalletDetails = () => {
                   className="!w-full "
                   maxLength={50}
                   onChange={(e) => setAccountName(+e.target.value)}
+                  id="accountNumber"
                 />
               </div>
               <div className="w-full">
@@ -114,6 +115,7 @@ const WalletDetails = () => {
                   maxLength={11}
                   value={ifscCode}
                   inputType="text"
+                  id="ifscCode"
                   className="!w-full"
                   onChange={(e) => setIfscCode(e.target.value.toUpperCase())}
                 />

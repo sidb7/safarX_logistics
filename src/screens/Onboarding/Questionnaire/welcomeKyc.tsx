@@ -79,23 +79,25 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4 capitalize font-Open text-xs font-normal leading-[22px]">
-                {questionsData[4]?.options?.map((element: any, index: any) => {
-                  return (
-                    <Checkbox
-                      key={index}
-                      // disabled={true}
-                      showCase={true}
-                      checked={true}
-                      onChange={(element) => {
-                        handleCheckBox(element, index);
-                      }}
-                      name={element.value}
-                      label={element.value}
-                      style={{ accentColor: "black" }}
-                      checkboxClassName="gap-2"
-                    />
-                  );
-                })}
+                {questionsData?.[4]?.options?.map(
+                  (element: any, index: any) => {
+                    return (
+                      <Checkbox
+                        key={index}
+                        // disabled={true}
+                        showCase={true}
+                        checked={true}
+                        onChange={(element) => {
+                          handleCheckBox(element, index);
+                        }}
+                        name={element.value}
+                        label={element.value}
+                        style={{ accentColor: "black" }}
+                        checkboxClassName="gap-2"
+                      />
+                    );
+                  }
+                )}
               </div>
             </div>
             <div className="mt-6">

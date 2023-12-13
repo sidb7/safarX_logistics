@@ -178,7 +178,7 @@ const Tracking = () => {
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
-          response?.data[0].trackingInfo[0]?.currentStatus
+          response?.data[0]?.trackingInfo[0]?.currentStatus
         );
 
         let mysteps = tempSteps;
@@ -340,7 +340,7 @@ const Tracking = () => {
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Tracking ID:
                                               <span className="font-bold text-[#004EFF]">
-                                                {each.awb}
+                                                {each?.awb}
                                               </span>
                                               <CopyTooltip
                                                 stringToBeCopied={each?.awb}
