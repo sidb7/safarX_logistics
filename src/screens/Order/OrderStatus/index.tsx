@@ -28,6 +28,8 @@ import editIcon from "../../../assets/serv/edit.svg";
 import DownloadIcon from "../../../assets/download.svg";
 import { Tooltip } from "react-tooltip";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+//import * as FileSaver from "file-saver";
+import { tokenKey } from "../../../utils/utility";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -152,21 +154,37 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         endDate: epochEndDate,
         partnerName: partnerValue,
       };
-      const data = await POST(FETCH_MANIFEST_DATA, payload, {
-        // responseType: "blob", // Pass option data for pdf
+      //  const data = await POST(FETCH_MANIFEST_DATA, payload);
+
+      let header = {
+        Accept: "/",
+        Authorization: `Bearer ${localStorage.getItem(
+          `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+        )}`,
+        "Content-Type": "application/json",
+      };
+      const response = await fetch(FETCH_MANIFEST_DATA, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(payload),
+        // responseType: "blob",
       });
-      if (data?.data?.success === false) {
-        toast.error(data?.data?.message);
+      if (!response.ok) {
+        const errorData = await response.json();
+        toast.error(errorData.message);
         return;
       }
+      const data = await response.blob();
 
-      var blob = new Blob([data?.data], { type: "application/pdf" });
+      const blob = new Blob([data], { type: "application/pdf" });
+
       var url = URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
       a.download = `Manifest_Report.pdf`;
       a.click();
+      // FileSaver.saveAs(data, "Manifest_Report.pdf");
     }
   };
 
