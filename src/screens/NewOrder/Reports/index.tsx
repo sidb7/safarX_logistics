@@ -17,11 +17,18 @@ const Reports = () => {
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
   const [dataset, setDataset] = useState<any>();
-
   const reportMenu = [
     {
       label: "Shipment Status Report",
       value: "Shipment Status Report",
+    },
+    {
+      label: "NPR Report",
+      value: "NPR Report",
+    },
+    {
+      label: "NDR Report",
+      value: "NDR Report",
     },
   ];
 
