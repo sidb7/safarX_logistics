@@ -880,23 +880,27 @@ export const columnHelperForNewOrder = (
                       </div>
                     )}
                   </div>
-                  <div
-                    className="lg:block cursor-pointer pl-1"
-                    onClick={() => {
-                      navigate(
-                        `/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`
-                      );
-                    }}
-                  >
-                    <div style={{ width: "20px", height: "20px" }}>
-                      {" "}
-                      <img
-                        src={editIcon}
-                        alt="editIcon"
-                        className="w-full h-full"
-                      />
-                    </div>
-                  </div>
+                  {source !== "SHOPIFY" ||
+                    source !== "WOOCOMMERCE" ||
+                    (source !== "ZOHO" && (
+                      <div
+                        className="lg:block cursor-pointer pl-1"
+                        onClick={() => {
+                          navigate(
+                            `/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`
+                          );
+                        }}
+                      >
+                        <div style={{ width: "20px", height: "20px" }}>
+                          {" "}
+                          <img
+                            src={editIcon}
+                            alt="editIcon"
+                            className="w-full h-full"
+                          />
+                        </div>
+                      </div>
+                    ))}
                 </div>
                 <div>{time}</div>
               </div>

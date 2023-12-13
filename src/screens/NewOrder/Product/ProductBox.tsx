@@ -54,12 +54,12 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       >
         {label}
       </span>
-      <div className="mr-3 lg:mr-0 lg:px-4">
-        <img src={image} alt="" />
+      <div className="mr-3 lg:mr-0 lg:px-4 w-auto h-[100%] overflow-hidden">
+        <img className="w-[100%] h-[100%] object-contain" src={image} alt="" />
       </div>
       <div className="flex flex-col w-full">
         <div className="flex justify-between">
-          <span className="line-clamp-2">{productName}</span>
+          <span className="line-clamp-1">{productName}</span>
           {editMode && !isActiveChannel && (
             <img
               src={EditIcon}

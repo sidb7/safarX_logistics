@@ -15,6 +15,7 @@ import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
 import { POST } from "../../../../utils/webService";
 import {
   GET_ALL_STORES,
+  GET_CHANNEL_INVENTORY,
   GET_COMBO_PRODUCT,
   GET_PRODUCTS,
 } from "../../../../utils/ApiUrls";
@@ -34,7 +35,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   isModalOpen,
 }) => {
   const [productData, setProductData] = useState([]);
-  const [channelProducts, setChannelProducts] = useState([]);
+  const [channelProducts, setChannelProducts]: any = useState([]);
   const [editProductData, setEditProductData] = useState();
   const [filterId, setFilterId] = useState(0);
   const [totalItemCount, setTotalItemCount] = useState(0);
@@ -105,70 +106,44 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       setProductData([]);
       toast.error(data?.message);
     }
+    if (filterId === 1) return;
+    let incomingChannelProducts = [];
     const { data: storeDetails } = await POST(GET_ALL_STORES, {});
+
     let channelName: any = [];
-    // storeDetails?.data?.map((item:any)=> {
-    //   if(!channelName.includes(item.channel)) channelName.push()
-    // })
-    let incomingChannelProducts: any = [];
-    let channelProductArr: any = [];
-    try {
-      for (const elem of storeDetails?.data) {
-        if (elem.channel !== "WOOCOMMERCE") continue;
-        let auth = {
-          username: elem.consumerKey,
-          password: elem.consumerSecret,
-        };
-        const { data: products } = await axios.get(
-          `${elem.storeUrl}/wp-json/wc/v3/products`,
-          { auth }
-        );
-        incomingChannelProducts = [...incomingChannelProducts, ...products];
-        if (!channelName.includes(elem.channel)) channelName.push(elem.channel);
-      }
-      setChannels(channelName);
-      incomingChannelProducts.map((item: any) => {
-        channelProductArr.push({
-          name: item?.name,
-          category: "",
-          qty: "",
-          currency: "USD",
-          unitPrice: item?.price,
-          unitTax: "",
-          measureUnit: "cm",
-          length: item?.dimensions?.length,
-          breadth: item?.dimensions?.width,
-          height: item?.dimensions?.height,
-          deadWeight: item?.weight,
-          weightUnit: "kg",
-          volumetricWeight:
-            (item?.dimensions?.length *
-              item?.dimensions?.width *
-              item?.dimensions?.height) /
-            5000,
-          appliedWeight: Math.max(
-            item?.weight,
-            (item?.dimensions?.length *
-              item?.dimensions?.width *
-              item?.dimensions?.height) /
-              5000
-          ),
-          divisor: 5000,
-          images: item?.images?.[0]?.src,
-        });
+    storeDetails?.data?.map((elem: any) => {
+      channelName.push(elem.channel);
+    });
+
+    const { data: channelInventory } = await POST(GET_CHANNEL_INVENTORY, {
+      channels: channelName,
+    });
+    setChannels(channelName);
+
+    for (let elem of channelInventory?.data) {
+      incomingChannelProducts.push({
+        image: elem?.images?.[0]?.src || "",
+        productName: elem?.title,
+        weight: +(elem?.variants?.[0]?.grams / 1000).toFixed(2) || "",
+        height: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
+        breadth: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
+        length: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
       });
-      setChannelProducts(channelProductArr);
-    } catch (error) {}
+    }
+
+    setChannelProducts(incomingChannelProducts);
+
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (!isModalOpen) {
-      (async () => {
-        await getProducts();
-      })();
-    }
-  }, [isModalOpen]);
+  // useEffect(() => {
+  //   console.log("isModalOpen: ", isModalOpen);
+  //   if (!isModalOpen) {
+  //     (async () => {
+  //       await getProducts();
+  //     })();
+  //   }
+  // }, [isModalOpen]);
 
   useEffect(() => {
     (async () => {
@@ -221,7 +196,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
         {filterComponent()}
 
         {/* Display Address */}
-        <div className="mt-4 overflow-y-auto h-[425px]">
+        <div className="mt-4 overflow-y-auto">
           {/* commented as not required for now */}
           {/* <div className="flex flex-col mt-1">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
@@ -292,7 +267,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                   return (
                     <div
                       key={index}
-                      className="lg:w-[272px] lg:h-[76px]"
+                      className="lg:w-[272px] lg:min-h-full"
                       // onClick={() => setViewed(index)}
                     >
                       <ProductBox
@@ -344,31 +319,31 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                 }
               })}
             </div>
-            {totalItemCount > 0 && (
+            {/* {totalItemCount > 0 && (
               <PaginationComponent
                 totalItems={totalItemCount}
                 itemsPerPageOptions={[10, 20, 30, 50]}
                 onPageChange={onPageIndexChange}
                 onItemsPerPageChange={onPerPageItemChange}
               />
-            )}
+            )} */}
           </div>
         </div>
 
         {channels.length > 0 && filterId === 0 && (
-          <div className="flex flex-col mt-4">
+          <div className="flex flex-col mt-8">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
               <img src={DeliceryIcon} alt="" className="mr-2" /> By Channel
             </h1>
 
-            <div className="flex gap-x-3">
+            <div className="flex gap-x-3 pt-4 mb-4">
               {channels?.map((channel: any, index) => (
                 <ProductCategoryBox
                   key={index}
-                  className={`!border-2 !border-[#1C1C1C] ${
+                  className={`!border-2 !p-[25px] border-[#d2d5d7] ${
                     isActiveChannel
-                      ? "border !border-[blue]"
-                      : "border !border-black"
+                      ? "!border-2 !border-[blue]"
+                      : "!border-2 !border-[#d2d5d7]"
                   }`}
                   textClassName="!text-[14px] !font-semibold !leading-[18px] !font-Open"
                   image={
@@ -377,7 +352,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                       : "https://sy-seller.s3.ap-south-1.amazonaws.com/logos/woocommerce.png"
                   }
                   productName=""
-                  imageClassName="w-[5rem]"
+                  imageClassName="w-[7rem]"
                   onClick={() => setIsActiveChannel(!isActiveChannel)}
                 />
               ))}
@@ -391,12 +366,9 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                     // onClick={() => setViewed(index)}
                   >
                     <ProductBox
-                      image={
-                        (data?.images?.length > 0 && data?.images[0].url) ||
-                        ItemIcon
-                      }
-                      productName={data?.name}
-                      weight={`${data?.appliedWeight} ${data?.weightUnit}`}
+                      image={data?.image || ItemIcon}
+                      productName={data?.productName}
+                      weight={`${data?.weight} Kg`}
                       height={data?.height}
                       breadth={data?.breadth}
                       length={data?.length}
