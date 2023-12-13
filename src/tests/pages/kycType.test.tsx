@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, MemoryRouter as Router } from "react-router-dom";
 import KycBusinessTypeScreen from "../../screens/Onboarding/Kyc/BusinessType";
 import Card from "../../screens/Onboarding/Kyc/BusinessType/card";
-// import CustomRadioButton from "../../../../components/RadioButton/Index";
+import CustomRadioButton from "../../components/RadioButton/Index";
 import "@testing-library/jest-dom";
 
 import WelcomeHeader from "../../screens/Onboarding/Kyc/welcomeHeader";
