@@ -268,7 +268,7 @@ const MainCommonHelper = (navigate: any = "") => {
                 {codInfo
                   ? codInfo?.isCod
                     ? "Payment Type : COD"
-                    : "Payment Type : PREPAID"
+                    : "Payment Type : Prepaid"
                   : "-"}
               </span>
             </div>
@@ -1055,7 +1055,7 @@ export const columnHelperForNewOrder = (
                 {codInfo
                   ? codInfo?.isCod
                     ? "Payment Type : COD"
-                    : "Payment Type : PREPAID"
+                    : "Payment Type : Prepaid"
                   : "-"}
               </span>
             </div>
