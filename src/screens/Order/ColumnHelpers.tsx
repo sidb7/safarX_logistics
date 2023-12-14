@@ -22,7 +22,7 @@ import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
-const excludeWords = ["B2B", "B2C", "BULK_B2C"];
+const excludeWords = ["B2B", "B2C"];
 
 const PartialChecked = ({ checked, onChange, intermediate }: any) => {
   const ref: any = useRef(null);
@@ -497,29 +497,35 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         {
           title:
             rowsData?.boxInfo?.[0]?.service?.companyServiceId && "Services",
-          "Partner Name": rowsData?.boxInfo?.[0]?.service?.partnerName,
-          "AVN Service": rowsData?.boxInfo?.[0]?.service?.companyServiceName,
-          "Service Mode": rowsData?.boxInfo?.[0]?.service?.serviceMode,
+          "Partner Name": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.partnerName
+          ),
+          "AVN Service": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.companyServiceName
+          ),
+          "Service Mode": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.serviceMode
+          ),
           "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-          "Freight Charges": `₹ ${(
+          "Freight Charges": `₹ ${Math.round(
             rowsData?.boxInfo?.[0]?.service?.add +
-            rowsData?.boxInfo?.[0]?.service?.base
+              rowsData?.boxInfo?.[0]?.service?.base
           )?.toLocaleString("en-IN")}`,
-          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod?.toLocaleString(
-            "en-IN"
-          )}`,
-          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance?.toLocaleString(
-            "en-IN"
-          )}`,
-          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables?.toLocaleString(
-            "en-IN"
-          )}`,
-          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax?.toLocaleString(
-            "en-IN"
-          )}`,
-          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total?.toLocaleString(
-            "en-IN"
-          )}`,
+          "COD Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.cod
+          )?.toLocaleString("en-IN")}`,
+          Insurance: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.insurance
+          )?.toLocaleString("en-IN")}`,
+          "Other Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.variables
+          )?.toLocaleString("en-IN")}`,
+          Tax: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.tax
+          )?.toLocaleString("en-IN")}`,
+          Total: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
         },
       ];
       let boxObj: any = { title: "" };
@@ -538,10 +544,13 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             [`Dimensions ${
               num + 1
             }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
+            [`Price ${num + 1}`]: `₹ ${Math.round(
+              elem?.unitPrice
+            )?.toLocaleString("en-IN")}`,
+            [`Tax ${num + 1}`]: `₹ ${Math.round(elem?.unitTax)?.toLocaleString(
               "en-IN"
             )}`,
-            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
+
             [`SKU ${num + 1}`]: elem?.sku,
           };
           qty += elem?.qty;
@@ -556,7 +565,9 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
-          [`Current Status ${index + 1}`]: elem.currentStatus,
+          [`Current Status ${index + 1}`]: capitalizeFirstLetter(
+            elem.currentStatus
+          ),
           [`Description ${index + 1}`]: elem.description,
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
@@ -571,7 +582,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Shipyaari ID": rowsData?.tempOrderId,
         "Order Id": rowsData?.orderId,
         "Tracking Id": awb,
-        Source: rowsData?.source,
+        Source: capitalizeFirstLetter(rowsData?.source),
         "Order Type": rowsData?.orderType,
       });
 
@@ -829,24 +840,34 @@ export const columnHelperForNewOrder = (
           },
           {
             title: rowsData?.service?.companyServiceId && "Services",
-            "Partner Name": rowsData?.service?.partnerName,
-            "AVN Service": rowsData?.service?.companyServiceName,
-            "Service Mode": rowsData?.service?.serviceMode,
+            "Partner Name": capitalizeFirstLetter(
+              rowsData?.service?.partnerName
+            ),
+            "AVN Service": capitalizeFirstLetter(
+              rowsData?.service?.companyServiceName
+            ),
+            "Service Mode": capitalizeFirstLetter(
+              rowsData?.service?.serviceMode
+            ),
             "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
-            "Freight Charges": `₹ ${(
+            "Freight Charges": `₹ ${Math.round(
               rowsData?.service?.add + rowsData?.service?.base
             )?.toLocaleString("en-IN")}`,
-            "COD Charges": `₹ ${rowsData?.service?.cod?.toLocaleString(
+            "COD Charges": `₹ ${Math.round(
+              rowsData?.service?.cod
+            )?.toLocaleString("en-IN")}`,
+            Insurance: `₹ ${Math.round(
+              rowsData?.service?.insurance
+            )?.toLocaleString("en-IN")}`,
+            "Other Charges": `₹ ${Math.round(
+              rowsData?.service?.variables
+            )?.toLocaleString("en-IN")}`,
+            Tax: `₹ ${Math.round(rowsData?.service?.tax)?.toLocaleString(
               "en-IN"
             )}`,
-            Insurance: `₹ ${rowsData?.service?.insurance?.toLocaleString(
+            Total: `₹ ${Math.round(rowsData?.service?.total)?.toLocaleString(
               "en-IN"
             )}`,
-            "Other Charges": `₹ ${rowsData?.service?.variables?.toLocaleString(
-              "en-IN"
-            )}`,
-            Tax: `₹ ${rowsData?.service?.tax?.toLocaleString("en-IN")}`,
-            Total: `₹ ${rowsData?.service?.total?.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -865,10 +886,12 @@ export const columnHelperForNewOrder = (
               [`Dimensions ${
                 num + 1
               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
-                "en-IN"
-              )}`,
-              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
+              [`Price ${num + 1}`]: `₹ ${Math.round(
+                elem?.unitPrice
+              )?.toLocaleString("en-IN")}`,
+              [`Tax ${num + 1}`]: `₹ ${Math.round(
+                elem?.unitTax
+              )?.toLocaleString("en-IN")}`,
               [`SKU ${num + 1}`]: elem?.sku,
             };
             qty += elem?.qty;
@@ -898,7 +921,7 @@ export const columnHelperForNewOrder = (
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": rowsData?.awb,
-          Source: rowsData?.source,
+          Source: capitalizeFirstLetter(rowsData?.source),
           "Order Type": rowsData?.orderType,
         });
 
