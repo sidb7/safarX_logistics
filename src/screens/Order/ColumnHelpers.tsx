@@ -233,7 +233,7 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Delivery Adreess</h1>
+            <h1>Delivery Address</h1>
           </div>
         );
       },
@@ -473,6 +473,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Country: rowsData?.pickupAddress?.country,
           "Address Type": rowsData?.pickupAddress?.addressType,
           Name: rowsData?.pickupAddress?.contact?.name,
+          MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+
           "Email Id": rowsData?.pickupAddress?.contact?.emailId,
           Type: rowsData?.pickupAddress?.contact?.type,
         },
@@ -487,6 +489,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Country: rowsData?.deliveryAddress?.country,
           "Address Type": rowsData?.deliveryAddress?.addressType,
           Name: rowsData?.deliveryAddress?.contact?.name,
+          MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+
           "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
           Type: rowsData?.deliveryAddress?.contact?.type,
         },
@@ -802,6 +806,8 @@ export const columnHelperForNewOrder = (
             Country: rowsData?.pickupAddress?.country,
             "Address Type": rowsData?.pickupAddress?.addressType,
             Name: rowsData?.pickupAddress?.contact?.name,
+            MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+
             "Email Id": rowsData?.pickupAddress?.contact?.emailId,
             Type: rowsData?.pickupAddress?.contact?.type,
           },
@@ -816,6 +822,8 @@ export const columnHelperForNewOrder = (
             Country: rowsData?.deliveryAddress?.country,
             "Address Type": rowsData?.deliveryAddress?.addressType,
             Name: rowsData?.deliveryAddress?.contact?.name,
+            MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+
             "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
             Type: rowsData?.deliveryAddress?.contact?.type,
           },
