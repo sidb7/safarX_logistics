@@ -336,13 +336,6 @@ const Catalogue = () => {
           userId,
           storeName,
         });
-        console.log("🚀 ~ file: index.tsx:339 ~ data:", data);
-
-        if (data?.success) {
-          toast.success(data?.message);
-        } else {
-          toast.error(data?.message);
-        }
 
         let newAddedChannel = [
           {
@@ -358,6 +351,12 @@ const Catalogue = () => {
         removeLocalStorage("wooCommerceContents");
 
         window.location.reload();
+
+        if (data?.success) {
+          toast.success(data?.message);
+        } else {
+          toast.error(data?.message);
+        }
       }
     })();
   }, [wooCommerceContents]);
