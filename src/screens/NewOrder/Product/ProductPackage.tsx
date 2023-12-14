@@ -869,7 +869,8 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                               : false
                           }
                           boxType={newpackage?.color}
-                          recommended={index === 1 ? true : false}
+                          //commented as instructed
+                          // recommended={index === 1 ? true : false}
                         />
                       </div>
                     );
