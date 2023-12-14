@@ -106,7 +106,9 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           );
           let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
 
-          const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}`;
+          const sellerId = sessionStorage.getItem("sellerId");
+
+          const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}?sellerId=${sellerId}`;
 
           try {
             const { data } = await axios.get(reqUrl);
