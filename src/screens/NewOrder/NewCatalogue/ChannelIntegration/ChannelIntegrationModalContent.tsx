@@ -21,6 +21,7 @@ import {
   setLocalStorage,
 } from "../../../../utils/utility";
 import axios from "axios";
+import { Spinner } from "../../../../components/Spinner";
 
 interface IChannelProps {
   setIsLoading: any;
@@ -57,9 +58,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     domain: "",
   });
   const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
-
   const [isDisabled, setIsDisabled] = useState(true);
-
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const storeId = channelData?.channels?.[indexNum]?.storeId;
 
   const addStore = async () => {
@@ -94,6 +94,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           }
           return;
         } else if (channel === "WOOCOMMERCE") {
+          setIsModalLoading(true);
           let userId = Date.now();
           let wooCommerceContents = {
             storeUrl: storeData.storeUrl,
@@ -118,6 +119,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // window.alert(JSON.stringify(error));
             window.location.href = error?.config?.url;
           }
+          setIsModalLoading(false);
           return;
         } else if (channel === "ZOHO") {
           setIsLoading(true);
@@ -193,10 +195,18 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     } else if (
       channel === "WOOCOMMERCE" &&
       storeData.storeName !== "" &&
-      storeData.storeUrl !== ""
+      storeData.storeUrl.startsWith("https://") &&
+      storeData.storeUrl.endsWith(".com")
     ) {
       setIsDisabled(false);
-    } else if (channel === "ZOHO") {
+    } else if (
+      channel === "ZOHO" &&
+      storeData.clientId !== "" &&
+      storeData.clientSecret !== "" &&
+      storeData.code !== "" &&
+      storeData.organizationId !== "" &&
+      storeData.domain !== ""
+    ) {
       setIsDisabled(false);
     } else setIsDisabled(true);
   }, [storeData]);
@@ -227,7 +237,11 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           options={channelArr}
           heading="Select Channel"
         /> */}
-        {channel === "SHOPIFY" ? (
+        {isModalLoading ? (
+          <div className="absolute right-[50%] top-[50%] transform -translate-y-1/2 cursor-pointer">
+            <Spinner />
+          </div>
+        ) : channel === "SHOPIFY" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
               className="removePaddingPlaceHolder"
