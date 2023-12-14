@@ -167,7 +167,8 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                 )}`}
               </p>
               <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
-                {`\u20B9`} {option.text?.total.toFixed(2)}{" "}
+                {`\u20B9`}{" "}
+                {Math.round(option.text?.total)?.toLocaleString("en-IN")}{" "}
                 <span className="pl-2 text-[#1C1C1C] text-[14px] font-Open">
                   {`${toPascalCase(option.text?.serviceMode)}`}
                 </span>

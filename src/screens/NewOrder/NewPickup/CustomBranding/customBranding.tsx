@@ -89,8 +89,8 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
                 width={14}
               />
 
-              <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[2px] ">
-                {isActive ? "ACTIVE" : "DEACTIVE"}
+              <p className="text-[#FFFFFF] font-semibold font-Open text-[14px] px-[8px] pb-[1px] ">
+                {isActive ? "Active" : "Deactive"}
               </p>
             </button>
             {isActive && (
