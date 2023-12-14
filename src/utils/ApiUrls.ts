@@ -276,6 +276,8 @@ const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 //Place Channel Orders
 const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
 
+//label Setting
+const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 
@@ -413,5 +415,6 @@ export {
   POST_SYNC_ORDER,
   POST_PLACE_CHANNEL_ORDERS,
   GET_DASHBOARD_INFO_REVENUE,
+  POST_ADD_LABEL_DATA,
   GET_CHANNEL_INVENTORY,
 };

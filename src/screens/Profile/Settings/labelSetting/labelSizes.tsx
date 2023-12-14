@@ -7,12 +7,17 @@ import A5PageLabel from "../../../../assets/A5.svg";
 import A6PageLabel from "../../../../assets/A6.svg";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
 
-interface ILabelSizesProps {}
+interface ILabelSizesProps {
+  pageSize?: any;
+}
 
-const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
-  const [checked, setChecked] = useState("");
+const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
+  pageSize,
+}) => {
+  const [checked, setChecked] = useState(null);
 
   const handleOptionChange = (e: any) => {
+    pageSize(e);
     setChecked(e);
   };
   return (
@@ -37,9 +42,9 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
       </div>
 
       <div className="flex flex-col md:grid md:grid-cols-2  md:divide-x-2 md:h-[350px] my-6">
-        <div className=" flex p-4">
+        <div className=" flex ">
           <div
-            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
             onClick={() => handleOptionChange("singlePage")}
           >
             <img
@@ -55,6 +60,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="singlePage"
                 checked={checked === "singlePage"}
+                // defaultChecked=""
+                onChange={() => {}}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
@@ -62,7 +69,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
           </div>
 
           <div
-            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
             onClick={() => handleOptionChange("multiplePage")}
           >
             <img
@@ -78,13 +85,15 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="multiplePage"
                 checked={checked === "multiplePage"}
+                // defaultChecked=""
+                onChange={() => {}}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
           <div
-            className="flex-1 flex flex-col justify-center items-center mr-2 cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center !mr-4 cursor-pointer"
             onClick={() => handleOptionChange("singlePageSquared")}
           >
             <img
@@ -100,13 +109,15 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="singlePageSquared"
                 checked={checked === "singlePageSquared"}
+                // defaultChecked=""
+                onChange={() => {}}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
         </div>
-        <hr className="block md:hidden mx-5" />
+        <hr className="block md:hidden m-5" />
         <div className="block md:hidden">
           <div></div>
           <div className="flex-1 px-5 ">
@@ -120,7 +131,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
         </div>
         <div className="flex p-4">
           <div
-            className="flex-1 flex flex-col justify-center items-center  cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center  cursor-pointer"
             onClick={() => handleOptionChange("a4Size")}
           >
             <img src={A4PageLabel} alt="A4PageLabel" className="md:h-[80%]" />
@@ -132,13 +143,15 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="a4Size"
                 checked={checked === "a4Size"}
+                // defaultChecked=""
+                onChange={() => {}}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
           <div
-            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
             onClick={() => handleOptionChange("a5Size")}
           >
             <img src={A5PageLabel} alt="A5PageLabel" className="md:h-[80%]" />
@@ -150,13 +163,15 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="a5Size"
                 checked={checked === "a5Size"}
+                // defaultChecked=""
+                onChange={() => {}}
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />
             </div>
           </div>
           <div
-            className="flex-1 flex flex-col justify-center items-center cursor-pointer"
+            className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
             onClick={() => handleOptionChange("a6Size")}
           >
             <img src={A6PageLabel} alt="A6PageLabel" className="md:h-[80%]" />
@@ -168,6 +183,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = (props) => {
                 name="singlePage"
                 value="a6Size"
                 checked={checked === "a6Size"}
+                onChange={() => {}}
+                // defaultChecked=""
                 inputClassName="h-full m-2"
                 style={{ accentColor: "black" }}
               />

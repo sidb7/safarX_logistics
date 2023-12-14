@@ -1,117 +1,58 @@
 import React from "react";
 import Checkbox from "../../../../components/CheckBox";
 
-interface ILabelCardProps {}
+interface ILabelCardProps {
+  labelData?: any;
+  setLabelData?: any;
+}
 
-const LabelCard: React.FunctionComponent<ILabelCardProps> = () => {
+const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
+  labelData,
+  setLabelData,
+}) => {
+  console.log();
+  const sellerDetails = Object.entries(labelData?.inputs?.sellerDetails);
+  const buyerDetails = Object.entries(labelData?.inputs?.buyerDetails);
+  const courierDetails = Object.entries(labelData?.inputs?.courierDetails);
+  const orderDetails = Object.entries(labelData?.inputs?.orderDetails);
+
   return (
     <>
       {/* 1 */}
+
       <div className="mx-5 my-10 border-[1px] border-solid border-[#A4A4A4] rounded-lg">
         <div className="p-3">
           <h2 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C]">
             Buyer Details
           </h2>
           <div className="flex flex-col gap-y-5 pt-5 md:grid md:grid-cols-4 md:gap-y-6 md:gap-x-14 md:pt-6">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  name
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  mobile
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  address 1
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  address 2
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  pincode
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  state
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  city
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  country
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Gst Number
-                </p>
-              </div>
-            </div>
+            {buyerDetails.map((value: any) => {
+              const [key, data] = value;
+              return (
+                <div className="flex">
+                  <Checkbox
+                    style={{ accentColor: "black" }}
+                    checkboxClassName="gap-2 !h-6 !w-6"
+                    onChange={(e: any) => {
+                      setLabelData({
+                        ...labelData,
+                        inputs: {
+                          ...labelData.inputs,
+                          buyerDetails: {
+                            ...labelData.inputs.buyerDetails,
+                            [key]: e.value,
+                          },
+                        },
+                      });
+                    }}
+                    label={key}
+                    labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                    name={key}
+                    checked={data || false}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -122,138 +63,33 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = () => {
             Seller Details
           </h2>
           <div className="flex flex-col gap-y-5 pt-5 md:grid md:grid-cols-4 md:gap-y-6 md:gap-x-14 md:pt-6">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  name
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  mobile
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  address 1
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  address 2
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  pincode
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  state
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  city
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  country
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Gst Number
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Company Name
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Seller Logo
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Shipped By
-                </p>
-              </div>
-            </div>
+            {sellerDetails.map((value: any) => {
+              const [key, data] = value;
+              return (
+                <div className="flex">
+                  <Checkbox
+                    style={{ accentColor: "black" }}
+                    checkboxClassName="gap-2 !h-6 !w-6"
+                    onChange={(e: any) => {
+                      setLabelData({
+                        ...labelData,
+                        inputs: {
+                          ...labelData.inputs,
+                          sellerDetails: {
+                            ...labelData.inputs.sellerDetails,
+                            [key]: e.value,
+                          },
+                        },
+                      });
+                    }}
+                    label={key}
+                    labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                    name={key}
+                    checked={data || false}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -264,95 +100,33 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = () => {
             Courier Details
           </h2>
           <div className="flex flex-col gap-y-5 pt-5 md:grid md:grid-cols-4 md:gap-y-6 md:gap-x-14 md:pt-6">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Courier Name
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  AWB Barcode
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  AWB
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Route Code
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Dimension
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Weight
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Cluster Code
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Service Number
-                </p>
-              </div>
-            </div>
+            {courierDetails.map((value: any) => {
+              const [key, data] = value;
+              return (
+                <div className="flex">
+                  <Checkbox
+                    style={{ accentColor: "black" }}
+                    checkboxClassName="gap-2 !h-6 !w-6"
+                    onChange={(e: any) => {
+                      setLabelData({
+                        ...labelData,
+                        inputs: {
+                          ...labelData.inputs,
+                          courierDetails: {
+                            ...labelData.inputs.courierDetails,
+                            [key]: e.value,
+                          },
+                        },
+                      });
+                    }}
+                    label={key}
+                    labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                    name={key}
+                    checked={data || false}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -363,106 +137,33 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = () => {
             Order Details
           </h2>
           <div className="flex flex-col gap-y-5 pt-5 md:grid md:grid-cols-4 md:gap-y-6 md:gap-x-14 md:pt-6">
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Order ID Barcode
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  order ID
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Creation Date
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Invoice Value
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Payment Mode
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Collectable Amount
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Product Details
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Product Dimension
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-y-2">
-              <div className="flex">
-                <Checkbox
-                  style={{ accentColor: "black" }}
-                  checkboxClassName="gap-2 !h-6 !w-6"
-                />
-                <p className="font-Open text-lg text-[#777777] font-semibold leading-[22px] capitalize">
-                  Product Weight
-                </p>
-              </div>
-            </div>
+            {orderDetails.map((value: any) => {
+              const [key, data] = value;
+              return (
+                <div className="flex">
+                  <Checkbox
+                    style={{ accentColor: "black" }}
+                    checkboxClassName="gap-2 !h-6 !w-6"
+                    onChange={(e: any) => {
+                      setLabelData({
+                        ...labelData,
+                        inputs: {
+                          ...labelData.inputs,
+                          orderDetails: {
+                            ...labelData.inputs.orderDetails,
+                            [key]: e.value,
+                          },
+                        },
+                      });
+                    }}
+                    label={key}
+                    labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                    name={key}
+                    checked={data || false}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
