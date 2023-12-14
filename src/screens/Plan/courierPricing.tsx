@@ -9,7 +9,7 @@ import upArrowBlue from "../../assets/upArrorwBlue.svg";
 const CourierPricing = () => {
   const columnsHelper = createColumnHelper<any>();
 
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any>({ b2bData: [], b2cData: [] });
 
   const [renderingComponents, setRenderingComponents] = React.useState(0);
 
@@ -17,6 +17,7 @@ const CourierPricing = () => {
     { index: 0, label: "B2B" },
     { index: 1, label: "B2C" },
   ];
+
   const setScrollIndex = (id: number) => {
     setRenderingComponents(id);
   };
@@ -212,11 +213,15 @@ const CourierPricing = () => {
       const { data } = await POST(COURIER_PRICING);
 
       if (data?.success) {
-        setData(data.data);
+        if (data.data[0].accountType === "B2C") {
+          setData({ ...data, b2cData: data.data[0].rates });
+        } else {
+          setData({ ...data, b2bData: data.data[0].rates });
+        }
       } else {
       }
     })();
-  }, []);
+  }, [renderingComponents]);
 
   return (
     <div>
@@ -229,10 +234,13 @@ const CourierPricing = () => {
       </div>
 
       <div className="mx-5 lg:ml-[30px] mb-[68px] overflow-x-scroll ">
-        <CustomTable
-          columns={columns}
-          data={data[renderingComponents]?.rates || []}
-        />
+        {/* {data[0].accountType==="B2C"} */}
+
+        {renderingComponents === 0 ? (
+          <CustomTable columns={columns} data={data.b2bData || []} />
+        ) : (
+          <CustomTable columns={columns} data={data.b2cData || []} />
+        )}
       </div>
     </div>
   );
