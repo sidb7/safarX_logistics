@@ -22,7 +22,7 @@ import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
-const excludeWords = ["B2B", "B2C", "BULK_B2C"];
+const excludeWords = ["B2B", "B2C"];
 
 const PartialChecked = ({ checked, onChange, intermediate }: any) => {
   const ref: any = useRef(null);
@@ -242,7 +242,7 @@ const MainCommonHelper = (navigate: any = "") => {
           <div className="text-base py-3">
             {info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
-                <div className="text-base">
+                <div className="text-lg font-semibold ">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -460,66 +460,78 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus =
         rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
-        "DRAFT";
+        "Draft";
       const rows: any = [
         {
           title: "Pickup Address",
           FlatNo: rowsData?.pickupAddress?.flatNo,
-          LandkMark: rowsData?.pickupAddress?.landmark,
-          Locality: rowsData?.pickupAddress?.locality,
-          City: rowsData?.pickupAddress?.city,
-          State: rowsData?.pickupAddress?.state,
+          LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+          Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+          City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+          State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
           Pincode: rowsData?.pickupAddress?.pincode,
-          Country: rowsData?.pickupAddress?.country,
-          "Address Type": rowsData?.pickupAddress?.addressType,
-          Name: rowsData?.pickupAddress?.contact?.name,
+          Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+          "Address Type": capitalizeFirstLetter(
+            rowsData?.pickupAddress?.addressType
+          ),
+          Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
           MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
 
-          "Email Id": rowsData?.pickupAddress?.contact?.emailId,
-          Type: rowsData?.pickupAddress?.contact?.type,
+          "Email Id": capitalizeFirstLetter(
+            rowsData?.pickupAddress?.contact?.emailId
+          ),
+          Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
         },
         {
           title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
           FlatNo: rowsData?.deliveryAddress?.flatNo,
-          Landmark: rowsData?.deliveryAddress?.landmark,
-          Locality: rowsData?.deliveryAddress?.locality,
-          City: rowsData?.deliveryAddress?.city,
-          State: rowsData?.deliveryAddress?.state,
+          Landmark: capitalizeFirstLetter(rowsData?.deliveryAddress?.landmark),
+          Locality: capitalizeFirstLetter(rowsData?.deliveryAddress?.locality),
+          City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+          State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
           Pincode: rowsData?.deliveryAddress?.pincode,
-          Country: rowsData?.deliveryAddress?.country,
+          Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
           "Address Type": rowsData?.deliveryAddress?.addressType,
-          Name: rowsData?.deliveryAddress?.contact?.name,
+          Name: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.name),
           MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
 
-          "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
-          Type: rowsData?.deliveryAddress?.contact?.type,
+          "Email Id": capitalizeFirstLetter(
+            rowsData?.deliveryAddress?.contact?.emailId
+          ),
+          Type: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.type),
         },
         {
           title:
             rowsData?.boxInfo?.[0]?.service?.companyServiceId && "Services",
-          "Partner Name": rowsData?.boxInfo?.[0]?.service?.partnerName,
-          "AVN Service": rowsData?.boxInfo?.[0]?.service?.companyServiceName,
-          "Service Mode": rowsData?.boxInfo?.[0]?.service?.serviceMode,
+          "Partner Name": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.partnerName
+          ),
+          "AVN Service": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.companyServiceName
+          ),
+          "Service Mode": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.serviceMode
+          ),
           "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-          "Freight Charges": `₹ ${(
+          "Freight Charges": `₹ ${Math.round(
             rowsData?.boxInfo?.[0]?.service?.add +
-            rowsData?.boxInfo?.[0]?.service?.base
+              rowsData?.boxInfo?.[0]?.service?.base
           )?.toLocaleString("en-IN")}`,
-          "COD Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.cod?.toLocaleString(
-            "en-IN"
-          )}`,
-          Insurance: `₹ ${rowsData?.boxInfo?.[0]?.service?.insurance?.toLocaleString(
-            "en-IN"
-          )}`,
-          "Other Charges": `₹ ${rowsData?.boxInfo?.[0]?.service?.variables?.toLocaleString(
-            "en-IN"
-          )}`,
-          Tax: `₹ ${rowsData?.boxInfo?.[0]?.service?.tax?.toLocaleString(
-            "en-IN"
-          )}`,
-          Total: `₹ ${rowsData?.boxInfo?.[0]?.service?.total?.toLocaleString(
-            "en-IN"
-          )}`,
+          "COD Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.cod
+          )?.toLocaleString("en-IN")}`,
+          Insurance: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.insurance
+          )?.toLocaleString("en-IN")}`,
+          "Other Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.variables
+          )?.toLocaleString("en-IN")}`,
+          Tax: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.tax
+          )?.toLocaleString("en-IN")}`,
+          Total: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
         },
       ];
       let boxObj: any = { title: "" };
@@ -538,10 +550,13 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             [`Dimensions ${
               num + 1
             }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-            [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
+            [`Price ${num + 1}`]: `₹ ${Math.round(
+              elem?.unitPrice
+            )?.toLocaleString("en-IN")}`,
+            [`Tax ${num + 1}`]: `₹ ${Math.round(elem?.unitTax)?.toLocaleString(
               "en-IN"
             )}`,
-            [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
+
             [`SKU ${num + 1}`]: elem?.sku,
           };
           qty += elem?.qty;
@@ -556,8 +571,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
-          [`Current Status ${index + 1}`]: elem.currentStatus,
-          [`Description ${index + 1}`]: elem.description,
+          [`Current Status ${index + 1}`]: capitalizeFirstLetter(
+            elem.currentStatus
+          ),
+          [`Description ${index + 1}`]: capitalizeFirstLetter(elem.description),
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
           [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
@@ -571,7 +588,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Shipyaari ID": rowsData?.tempOrderId,
         "Order Id": rowsData?.orderId,
         "Tracking Id": awb,
-        Source: rowsData?.source,
+        Source: capitalizeFirstLetter(rowsData?.source),
         "Order Type": rowsData?.orderType,
       });
 
@@ -589,16 +606,21 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           {
             <div className="flex flex-col gap-y-1">
               <div className="flex text-base items-center font-medium">
-                <div className="flex gap-x-1 items-center">
+                <div
+                  className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                  onClick={handleInformativeModal}
+                >
                   <div>
-                    <p>{capitalizeFirstLetter(renderStatus)}</p>
+                    <p className="text-lg font-semibold ">
+                      {capitalizeFirstLetter(renderStatus)}
+                    </p>
                   </div>
                   {setInfoModalContent && (
                     <div
-                      className="cursor-pointer"
+                      className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
                       onClick={handleInformativeModal}
                     >
-                      <img src={InformativeIcon} width={"20px"} />
+                      <img src={InformativeIcon} alt="Info Icon" width="28px" />
                     </div>
                   )}
                 </div>
@@ -798,55 +820,81 @@ export const columnHelperForNewOrder = (
           {
             title: "Pickup Address",
             FlatNo: rowsData?.pickupAddress?.flatNo,
-            LandkMark: rowsData?.pickupAddress?.landmark,
-            Locality: rowsData?.pickupAddress?.locality,
-            City: rowsData?.pickupAddress?.city,
-            State: rowsData?.pickupAddress?.state,
+            LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+            Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+            City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
             Pincode: rowsData?.pickupAddress?.pincode,
-            Country: rowsData?.pickupAddress?.country,
-            "Address Type": rowsData?.pickupAddress?.addressType,
-            Name: rowsData?.pickupAddress?.contact?.name,
+            Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.addressType
+            ),
+            Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
             MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
 
-            "Email Id": rowsData?.pickupAddress?.contact?.emailId,
-            Type: rowsData?.pickupAddress?.contact?.type,
+            "Email Id": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.contact?.emailId
+            ),
+            Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
           },
           {
             title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
             FlatNo: rowsData?.deliveryAddress?.flatNo,
-            Landmark: rowsData?.deliveryAddress?.landmark,
-            Locality: rowsData?.deliveryAddress?.locality,
-            City: rowsData?.deliveryAddress?.city,
-            State: rowsData?.deliveryAddress?.state,
+            Landmark: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.landmark
+            ),
+            Locality: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.locality
+            ),
+            City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
             Pincode: rowsData?.deliveryAddress?.pincode,
-            Country: rowsData?.deliveryAddress?.country,
-            "Address Type": rowsData?.deliveryAddress?.addressType,
-            Name: rowsData?.deliveryAddress?.contact?.name,
+            Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.addressType
+            ),
+            Name: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.name
+            ),
             MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
 
-            "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
-            Type: rowsData?.deliveryAddress?.contact?.type,
+            "Email Id": capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.emailId
+            ),
+            Type: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.type
+            ),
           },
           {
             title: rowsData?.service?.companyServiceId && "Services",
-            "Partner Name": rowsData?.service?.partnerName,
-            "AVN Service": rowsData?.service?.companyServiceName,
-            "Service Mode": rowsData?.service?.serviceMode,
+            "Partner Name": capitalizeFirstLetter(
+              rowsData?.service?.partnerName
+            ),
+            "AVN Service": capitalizeFirstLetter(
+              rowsData?.service?.companyServiceName
+            ),
+            "Service Mode": capitalizeFirstLetter(
+              rowsData?.service?.serviceMode
+            ),
             "Applied Weight": `${rowsData?.service?.appliedWeight} Kg`,
-            "Freight Charges": `₹ ${(
+            "Freight Charges": `₹ ${Math.round(
               rowsData?.service?.add + rowsData?.service?.base
             )?.toLocaleString("en-IN")}`,
-            "COD Charges": `₹ ${rowsData?.service?.cod?.toLocaleString(
+            "COD Charges": `₹ ${Math.round(
+              rowsData?.service?.cod
+            )?.toLocaleString("en-IN")}`,
+            Insurance: `₹ ${Math.round(
+              rowsData?.service?.insurance
+            )?.toLocaleString("en-IN")}`,
+            "Other Charges": `₹ ${Math.round(
+              rowsData?.service?.variables
+            )?.toLocaleString("en-IN")}`,
+            Tax: `₹ ${Math.round(rowsData?.service?.tax)?.toLocaleString(
               "en-IN"
             )}`,
-            Insurance: `₹ ${rowsData?.service?.insurance?.toLocaleString(
+            Total: `₹ ${Math.round(rowsData?.service?.total)?.toLocaleString(
               "en-IN"
             )}`,
-            "Other Charges": `₹ ${rowsData?.service?.variables?.toLocaleString(
-              "en-IN"
-            )}`,
-            Tax: `₹ ${rowsData?.service?.tax?.toLocaleString("en-IN")}`,
-            Total: `₹ ${rowsData?.service?.total?.toLocaleString("en-IN")}`,
           },
         ];
         let boxObj: any = { title: "" };
@@ -865,10 +913,12 @@ export const columnHelperForNewOrder = (
               [`Dimensions ${
                 num + 1
               }`]: `${elem?.length} x ${elem?.breadth} x ${elem?.height}`,
-              [`Price ${num + 1}`]: `₹ ${elem?.unitPrice?.toLocaleString(
-                "en-IN"
-              )}`,
-              [`Tax ${num + 1}`]: `₹ ${elem?.unitTax?.toLocaleString("en-IN")}`,
+              [`Price ${num + 1}`]: `₹ ${Math.round(
+                elem?.unitPrice
+              )?.toLocaleString("en-IN")}`,
+              [`Tax ${num + 1}`]: `₹ ${Math.round(
+                elem?.unitTax
+              )?.toLocaleString("en-IN")}`,
               [`SKU ${num + 1}`]: elem?.sku,
             };
             qty += elem?.qty;
@@ -883,8 +933,12 @@ export const columnHelperForNewOrder = (
           statusObj = {
             ...statusObj,
             [`AWB No ${index + 1}`]: rowsData.awb,
-            [`Current Status ${index + 1}`]: elem.currentStatus,
-            [`Description ${index + 1}`]: elem.description,
+            [`Current Status ${index + 1}`]: capitalizeFirstLetter(
+              elem.currentStatus
+            ),
+            [`Description ${index + 1}`]: capitalizeFirstLetter(
+              elem.description
+            ),
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
             [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
@@ -898,7 +952,7 @@ export const columnHelperForNewOrder = (
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": rowsData?.awb,
-          Source: rowsData?.source,
+          Source: capitalizeFirstLetter(rowsData?.source),
           "Order Type": rowsData?.orderType,
         });
 
@@ -916,9 +970,12 @@ export const columnHelperForNewOrder = (
             {
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
-                  <div className="flex gap-x-1 items-center">
+                  <div
+                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
+                    onClick={handleInformativeModal}
+                  >
                     <div>
-                      <p>
+                      <p className="text-lg font-semibold ">
                         {latestStatus
                           ? capitalizeFirstLetter(latestStatus)
                           : "Draft"}
@@ -926,10 +983,14 @@ export const columnHelperForNewOrder = (
                     </div>
                     {setInfoModalContent && (
                       <div
-                        className="cursor-pointer"
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
                       >
-                        <img src={InformativeIcon} width={"20px"} />
+                        <img
+                          src={InformativeIcon}
+                          alt="Info Icon"
+                          width="28px"
+                        />
                       </div>
                     )}
                   </div>
@@ -1445,7 +1506,9 @@ export const columnHelpersForRest = (
             </div>
             <div className="py-2 flex flex-col">
               <span className="text-sm font-light">Delivery Partner</span>
-              <div className="font-semibold">{service?.partnerName}</div>
+              <div className="font-semibold">
+                {capitalizeFirstLetter(service?.partnerName)}
+              </div>
             </div>
           </div>
         );
