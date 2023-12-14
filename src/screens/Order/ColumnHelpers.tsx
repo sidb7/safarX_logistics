@@ -607,7 +607,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
             <div className="flex flex-col gap-y-1">
               <div className="flex text-base items-center font-medium">
                 <div
-                  className="flex gap-x-1 items-center cursor-pointer hover:text-blue-500 transition duration-300"
+                  className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
                   onClick={handleInformativeModal}
                 >
                   <div>
@@ -617,7 +617,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
                   </div>
                   {setInfoModalContent && (
                     <div
-                      className="cursor-pointer  text-blue-500 hover:text-blue-700 transition duration-300"
+                      className="cursor-pointer  text-[#004EFF] hover:text-blue-700 transition duration-300"
                       onClick={handleInformativeModal}
                     >
                       <img src={InformativeIcon} alt="Info Icon" width="28px" />
@@ -971,7 +971,7 @@ export const columnHelperForNewOrder = (
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
                   <div
-                    className="flex gap-x-1 items-center cursor-pointer hover:text-blue-500 transition duration-300"
+                    className="flex gap-x-1 items-center cursor-pointer hover:text-[#004EFF] transition duration-300"
                     onClick={handleInformativeModal}
                   >
                     <div>
