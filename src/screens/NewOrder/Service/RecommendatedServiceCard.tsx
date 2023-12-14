@@ -87,6 +87,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   const toPascalCase = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
+
   return (
     <div>
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
