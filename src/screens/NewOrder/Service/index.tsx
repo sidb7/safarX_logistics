@@ -470,7 +470,7 @@ const Index: React.FC = () => {
                 <img
                   src={DownArrow}
                   alt="Downarrow"
-                  className="pb-2  cursor-pointer"
+                  className="pb-4  cursor-pointer"
                 />
               </div>
 
