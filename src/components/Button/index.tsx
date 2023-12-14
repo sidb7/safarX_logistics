@@ -12,7 +12,10 @@ interface CustomButtonProps {
   loading?: boolean;
   onlyIcon?: boolean;
 }
-const capitalizeFirstLetter = (text: string, excludeWords: string[] = []) => {
+const capitalizeFirstLetterWithExclude = (
+  text: string,
+  excludeWords: string[] = []
+) => {
   return text
     .split(" ")
     .map((word) => {
@@ -63,7 +66,7 @@ const CustomButton = (props: CustomButtonProps) => {
             />
           )}
           <p className="buttonClassName md:text-[14px] whitespace-nowrap capitalize">
-            {capitalizeFirstLetter(text, excludeWords)}
+            {capitalizeFirstLetterWithExclude(text, excludeWords)}
           </p>
         </button>
       )}
