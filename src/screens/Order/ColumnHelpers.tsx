@@ -10,7 +10,10 @@ import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import InformativeIcon from "../../assets/I icon.svg";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  capitalizeFirstLetterWithExclude,
+} from "../../utils/utility";
 import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import { SELLER_WEB_URL } from "../../utils/ApiUrls";
@@ -19,6 +22,7 @@ import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
+const excludeWords = ["B2B", "B2C", "BULK_B2C"];
 
 const PartialChecked = ({ checked, onChange, intermediate }: any) => {
   const ref: any = useRef(null);
@@ -392,8 +396,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           )}
           <div className="flex items-center mt-[0.5rem]">
             <span className=" text-sm font-light">Source :</span>
-            <div className=" pl-2 text-base items-center font-medium">
-              <span className="">{source}</span>
+            <div className=" pl-2 text-base items-center font-medium capitalize">
+              <span className="">
+                {capitalizeFirstLetterWithExclude(source, excludeWords)}
+              </span>
             </div>
           </div>
           <div className="flex items-center">
@@ -550,7 +556,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               <div className="flex text-base items-center font-medium">
                 <div className="flex gap-x-1 items-center">
                   <div>
-                    <p>{renderStatus}</p>
+                    <p>{capitalizeFirstLetter(renderStatus)}</p>
                   </div>
                   {setInfoModalContent && (
                     <div
@@ -719,7 +725,9 @@ export const columnHelperForNewOrder = (
               <div className="flex items-center mt-1">
                 <span className=" text-sm font-light">Source :</span>
                 <div className=" pl-2 text-base items-center font-medium">
-                  <span className="">{source}</span>
+                  <span className="">
+                    {capitalizeFirstLetterWithExclude(source, excludeWords)}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center">
@@ -871,7 +879,11 @@ export const columnHelperForNewOrder = (
                 <div className="flex text-base items-center font-medium">
                   <div className="flex gap-x-1 items-center">
                     <div>
-                      <p>{latestStatus ? latestStatus : "DRAFT"}</p>
+                      <p>
+                        {latestStatus
+                          ? capitalizeFirstLetter(latestStatus)
+                          : "Draft"}
+                      </p>
                     </div>
                     {setInfoModalContent && (
                       <div
@@ -1189,7 +1201,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
               </p>
               <div className="py-2 flex flex-col">
                 <span className="text-sm font-light">Delivery Partner</span>
-                <div className="font-semibold">{service?.partnerName}</div>
+                <div className="font-semibold">
+                  {capitalizeFirstLetter(service?.partnerName)}
+                </div>
               </div>
             </div>
           </div>
