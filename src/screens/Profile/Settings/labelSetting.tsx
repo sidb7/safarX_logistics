@@ -1,85 +1,120 @@
-import React from "react";
+import React, { useState } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import LabelSizes from "./labelSetting/labelSizes";
 import LabelCard from "./labelSetting/labelCard";
 import BottomLayout from "../../../components/Layout/bottomLayout";
+import { v4 as uuidv4 } from "uuid";
+import { POST_ADD_LABEL_DATA } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 interface ILabelProps {}
 
 const Label: React.FunctionComponent = (props: ILabelProps) => {
-  // const payload: any = {
-  //   labelSetting: [
-  //     {
-  //       buyerDetails: {
-  //         name: true,
-  //         mobile: true,
-  //         address: true,
-  //         pincode: true,
-  //         state: true,
-  //         city: true,
-  //         country: true,
-  //         gstNumber: true,
-  //       },
-  //     },
-  //     {
-  //       sellerDetails: {
-  //         name: true,
-  //         mobile: true,
-  //         address: true,
-  //         pincode: true,
-  //         state: true,
-  //         city: true,
-  //         country: true,
-  //         gstNumber: true,
-  //         companyName: true,
-  //         sellerLogo: true,
-  //         shippedBy: true,
-  //       },
-  //     },
-  //     {
-  //       courierDetails: {
-  //         courierName: true,
-  //         awbBarcode: true,
-  //         awb: true,
-  //         routeCode: true,
-  //         dimension: true,
-  //         weight: true,
-  //         clusterCode: true,
-  //         serviceName: true,
-  //       },
-  //     },
-  //     {
-  //       otherDetails: {
-  //         orderIdBarcode: true,
-  //         orderId: true,
-  //         creationDate: true,
-  //         invoiceValue: true,
-  //         paymentMode: true,
-  //         collectableAmount: true,
-  //         productDetails: true,
-  //         productDimension: true,
-  //         productWeight: true,
-  //       },
-  //     },
-  //   ],
-  // };
+  const navigate = useNavigate();
+  const [labelData, setLabelData] = useState({
+    type: "B2C",
+    labelId: uuidv4(),
+    pageSize: "",
+    inputs: {
+      buyerDetails: {
+        name: false,
+        mobile: false,
+        address1: false,
+        address2: false,
+        pincode: false,
+        state: false,
+        city: false,
+        country: false,
+        gstNumber: false,
+      },
+
+      sellerDetails: {
+        name: false,
+        mobile: false,
+        address1: false,
+        address2: false,
+        pincode: false,
+        state: false,
+        city: false,
+        country: false,
+        gstNumber: false,
+        companyName: false,
+        sellerLogo: false,
+        shippedBy: false,
+      },
+
+      courierDetails: {
+        courierName: false,
+        awbBarcode: false,
+        awb: false,
+        routeCode: false,
+        dimension: false,
+        weight: false,
+        clusterCode: false,
+        serviceName: false,
+      },
+      orderDetails: {
+        orderIdBarcode: false,
+        orderId: false,
+        creationDate: false,
+        invoiceValue: false,
+        paymentMode: false,
+        collectableAmount: false,
+        productDetails: false,
+        productDimension: false,
+        productWeight: false,
+      },
+    },
+  });
+
+  const pageSize = (data: any) => {
+    setLabelData({ ...labelData, pageSize: data });
+  };
+
+  const createLabel = async (e: any) => {
+    if (labelData.pageSize !== "") {
+      try {
+        const payload = { labelSetting: labelData };
+        const { data: createLabelResponse }: any = await POST(
+          POST_ADD_LABEL_DATA,
+          payload
+        );
+        if (createLabelResponse?.success) {
+          toast.success(createLabelResponse?.message);
+          navigate("/settings");
+        } else {
+          toast.error(createLabelResponse?.message);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      toast.error("please select anyone of the above page size");
+    }
+  };
+
   return (
     <>
       <div>
         <Breadcrum label="Label Settings" />
       </div>
-      <h1 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mx-4 mt-[10px]">
-        Step 1: Choose the paper size
-      </h1>
+      <div className="!pb-[50px]">
+        <h1 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mx-4 mt-[10px]">
+          Step 1: Choose the paper size
+        </h1>
 
-      <LabelSizes />
+        <LabelSizes pageSize={pageSize} />
 
-      <h1 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mx-4 mt-[10px]">
-        Step 2: Customize your label
-      </h1>
+        <h1 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mx-4 mt-[10px]">
+          Step 2: Customize your label
+        </h1>
 
-      <LabelCard />
+        <LabelCard labelData={labelData} setLabelData={setLabelData} />
 
-      <BottomLayout />
+        <BottomLayout callApi={(e: any) => createLabel(e)} />
+      </div>
     </>
   );
 };
