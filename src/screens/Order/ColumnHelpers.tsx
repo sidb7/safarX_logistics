@@ -568,7 +568,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           [`Current Status ${index + 1}`]: capitalizeFirstLetter(
             elem.currentStatus
           ),
-          [`Description ${index + 1}`]: elem.description,
+          [`Description ${index + 1}`]: capitalizeFirstLetter(elem.description),
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
           [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
@@ -906,8 +906,12 @@ export const columnHelperForNewOrder = (
           statusObj = {
             ...statusObj,
             [`AWB No ${index + 1}`]: rowsData.awb,
-            [`Current Status ${index + 1}`]: elem.currentStatus,
-            [`Description ${index + 1}`]: elem.description,
+            [`Current Status ${index + 1}`]: capitalizeFirstLetter(
+              elem.currentStatus
+            ),
+            [`Description ${index + 1}`]: capitalizeFirstLetter(
+              elem.description
+            ),
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
             [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
