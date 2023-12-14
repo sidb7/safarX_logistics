@@ -242,7 +242,7 @@ const MainCommonHelper = (navigate: any = "") => {
           <div className="text-base py-3">
             {info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
-                <div className="text-base">
+                <div className="text-lg font-semibold ">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -460,7 +460,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus =
         rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
-        "DRAFT";
+        "Draft";
       const rows: any = [
         {
           title: "Pickup Address",
@@ -606,16 +606,21 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           {
             <div className="flex flex-col gap-y-1">
               <div className="flex text-base items-center font-medium">
-                <div className="flex gap-x-1 items-center">
+                <div
+                  className="flex gap-x-1 items-center cursor-pointer hover:text-blue-500 transition duration-300"
+                  onClick={handleInformativeModal}
+                >
                   <div>
-                    <p>{capitalizeFirstLetter(renderStatus)}</p>
+                    <p className="text-lg font-semibold ">
+                      {capitalizeFirstLetter(renderStatus)}
+                    </p>
                   </div>
                   {setInfoModalContent && (
                     <div
-                      className="cursor-pointer"
+                      className="cursor-pointer  text-blue-500 hover:text-blue-700 transition duration-300"
                       onClick={handleInformativeModal}
                     >
-                      <img src={InformativeIcon} width={"20px"} />
+                      <img src={InformativeIcon} alt="Info Icon" width="28px" />
                     </div>
                   )}
                 </div>
@@ -965,9 +970,12 @@ export const columnHelperForNewOrder = (
             {
               <div className="flex flex-col gap-y-1">
                 <div className="flex text-base items-center font-medium">
-                  <div className="flex gap-x-1 items-center">
+                  <div
+                    className="flex gap-x-1 items-center cursor-pointer hover:text-blue-500 transition duration-300"
+                    onClick={handleInformativeModal}
+                  >
                     <div>
-                      <p>
+                      <p className="text-lg font-semibold ">
                         {latestStatus
                           ? capitalizeFirstLetter(latestStatus)
                           : "Draft"}
@@ -975,10 +983,14 @@ export const columnHelperForNewOrder = (
                     </div>
                     {setInfoModalContent && (
                       <div
-                        className="cursor-pointer"
+                        className="cursor-pointer text-blue-500 hover:text-blue-700 transition duration-300"
                         onClick={handleInformativeModal}
                       >
-                        <img src={InformativeIcon} width={"20px"} />
+                        <img
+                          src={InformativeIcon}
+                          alt="Info Icon"
+                          width="28px"
+                        />
                       </div>
                     )}
                   </div>
