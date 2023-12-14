@@ -48,6 +48,12 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
           </div>
           <div className="flex justify-between">
             <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+              Collectible Amount:
+            </p>
+            {`\u20B9`} {codValue?.toLocaleString("en-IN")}
+          </div>
+          <div className="flex justify-between">
+            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
               Billable Weight:
             </p>
             <p> {appliedWeight} kg</p>
