@@ -26,6 +26,7 @@ import LayersIcon from "../../../assets/layer.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import BottomModal from "../../../components/CustomModal/customBottomModal";
 import { Spinner } from "../../../components/Spinner";
+import { toast } from "react-toastify";
 
 const Catalogue = () => {
   const navigate = useNavigate();
@@ -335,6 +336,13 @@ const Catalogue = () => {
           userId,
           storeName,
         });
+        console.log("🚀 ~ file: index.tsx:339 ~ data:", data);
+
+        if (data?.success) {
+          toast.success(data?.message);
+        } else {
+          toast.error(data?.message);
+        }
 
         let newAddedChannel = [
           {
