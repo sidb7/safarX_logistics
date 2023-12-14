@@ -22,6 +22,8 @@ import {
 } from "../../../../utils/utility";
 import axios from "axios";
 import { Spinner } from "../../../../components/Spinner";
+import ErrorIcon from "../../../../assets/info-circle.svg";
+import { woocommerceUrl } from "../../../../utils/regexCheck";
 
 interface IChannelProps {
   setIsLoading: any;
@@ -57,6 +59,9 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     organizationId: "",
     domain: "",
   });
+
+  const [urlError, setUrlError] = useState(false);
+
   const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
   const [isDisabled, setIsDisabled] = useState(true);
   const [isModalLoading, setIsModalLoading] = useState(false);
@@ -194,9 +199,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       setIsDisabled(false);
     } else if (
       channel === "WOOCOMMERCE" &&
-      storeData.storeName !== "" &&
-      storeData.storeUrl.startsWith("https://") &&
-      storeData.storeUrl.endsWith(".com")
+      woocommerceUrl.test(storeData.storeUrl) &&
+      storeData.storeName !== ""
     ) {
       setIsDisabled(false);
     } else if (
@@ -284,15 +288,33 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           </div>
         ) : channel === "WOOCOMMERCE" ? (
           <div className="grid gap-y-3">
-            <CustomInputBox
-              className="removePaddingPlaceHolder"
-              placeholder="Store Url - https://example.com"
-              isRequired={true}
-              value={storeData.storeUrl}
-              onChange={(e) =>
-                setStoreData({ ...storeData, storeUrl: e.target.value })
-              }
-            />
+            <div>
+              <CustomInputBox
+                className="removePaddingPlaceHolder"
+                placeholder="Store Url - https://example.com"
+                isRequired={true}
+                value={storeData.storeUrl}
+                onChange={(e) => {
+                  setStoreData({ ...storeData, storeUrl: e.target.value });
+
+                  if (!woocommerceUrl.test(e.target.value)) {
+                    setUrlError(true);
+                  } else {
+                    setUrlError(false);
+                  }
+                }}
+              />
+
+              {urlError === true && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={ErrorIcon} alt="" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    Url Format is https://example.com
+                  </span>
+                </div>
+              )}
+            </div>
+
             <CustomInputBox
               className="removePaddingPlaceHolder"
               placeholder="Store Name"

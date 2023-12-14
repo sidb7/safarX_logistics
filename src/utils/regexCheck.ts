@@ -13,3 +13,4 @@ export const strongpasswordRegex =
 export const textRegex = /^[a-zA-Z]+$/; ///^[A-Za-z]+$/;
 export const referalRegex = /[A-Z][A-Z0-9]+/;
 export const emptyOrFullTextRegex = /^[a-zA-Z]*$/;
+export const woocommerceUrl = /^https:\/\/.*\.com$/;

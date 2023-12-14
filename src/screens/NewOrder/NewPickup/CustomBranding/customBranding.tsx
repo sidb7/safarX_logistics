@@ -24,7 +24,7 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
   const [customBrandingRightModal, setCustomBrandingRightModal] =
     useState(false);
   const branding = pickupAddress.branding;
-  const isActive = pickupAddress.branding.isActive;
+  const isActive = pickupAddress.branding?.isActive;
 
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
@@ -77,10 +77,10 @@ const CustomBranding: React.FunctionComponent<ICustomBrandingProps> = ({
                     },
                   }));
                 }}
-                checked={isActive}
-                onColor="#FFFFF"
+                checked={isActive || false}
+                onColor="#FFFFFF"
                 onHandleColor="#7CCA62"
-                offColor="#FFFFF"
+                offColor="#FFFFFF"
                 offHandleColor="#F35838"
                 handleDiameter={4}
                 uncheckedIcon={false}
