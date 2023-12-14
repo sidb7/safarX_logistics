@@ -226,9 +226,13 @@ export const loadRazorPayTransaction = async (
 };
 
 export const capitalizeFirstLetterWithExclude = (
-  text: string,
+  text: any,
   excludeWords: string[] = []
 ) => {
+  if (typeof text !== "string") {
+    return text;
+  }
+
   return text
     .split(" ")
     .map((word) => {

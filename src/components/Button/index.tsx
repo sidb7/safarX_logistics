@@ -1,3 +1,4 @@
+import { capitalizeFirstLetterWithExclude } from "../../utils/utility";
 import { Spinner } from "../Spinner";
 
 interface CustomButtonProps {
@@ -12,20 +13,6 @@ interface CustomButtonProps {
   loading?: boolean;
   onlyIcon?: boolean;
 }
-const capitalizeFirstLetterWithExclude = (
-  text: string,
-  excludeWords: string[] = []
-) => {
-  return text
-    .split(" ")
-    .map((word) => {
-      if (excludeWords.includes(word.toUpperCase())) {
-        return word;
-      }
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    })
-    .join(" ");
-};
 
 const CustomButton = (props: CustomButtonProps) => {
   const {
