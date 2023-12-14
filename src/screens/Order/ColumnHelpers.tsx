@@ -465,34 +465,40 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         {
           title: "Pickup Address",
           FlatNo: rowsData?.pickupAddress?.flatNo,
-          LandkMark: rowsData?.pickupAddress?.landmark,
-          Locality: rowsData?.pickupAddress?.locality,
-          City: rowsData?.pickupAddress?.city,
-          State: rowsData?.pickupAddress?.state,
+          LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+          Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+          City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+          State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
           Pincode: rowsData?.pickupAddress?.pincode,
-          Country: rowsData?.pickupAddress?.country,
-          "Address Type": rowsData?.pickupAddress?.addressType,
-          Name: rowsData?.pickupAddress?.contact?.name,
+          Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+          "Address Type": capitalizeFirstLetter(
+            rowsData?.pickupAddress?.addressType
+          ),
+          Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
           MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
 
-          "Email Id": rowsData?.pickupAddress?.contact?.emailId,
-          Type: rowsData?.pickupAddress?.contact?.type,
+          "Email Id": capitalizeFirstLetter(
+            rowsData?.pickupAddress?.contact?.emailId
+          ),
+          Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
         },
         {
           title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
           FlatNo: rowsData?.deliveryAddress?.flatNo,
-          Landmark: rowsData?.deliveryAddress?.landmark,
-          Locality: rowsData?.deliveryAddress?.locality,
-          City: rowsData?.deliveryAddress?.city,
-          State: rowsData?.deliveryAddress?.state,
+          Landmark: capitalizeFirstLetter(rowsData?.deliveryAddress?.landmark),
+          Locality: capitalizeFirstLetter(rowsData?.deliveryAddress?.locality),
+          City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+          State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
           Pincode: rowsData?.deliveryAddress?.pincode,
-          Country: rowsData?.deliveryAddress?.country,
+          Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
           "Address Type": rowsData?.deliveryAddress?.addressType,
-          Name: rowsData?.deliveryAddress?.contact?.name,
+          Name: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.name),
           MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
 
-          "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
-          Type: rowsData?.deliveryAddress?.contact?.type,
+          "Email Id": capitalizeFirstLetter(
+            rowsData?.deliveryAddress?.contact?.emailId
+          ),
+          Type: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.type),
         },
         {
           title:
@@ -809,34 +815,50 @@ export const columnHelperForNewOrder = (
           {
             title: "Pickup Address",
             FlatNo: rowsData?.pickupAddress?.flatNo,
-            LandkMark: rowsData?.pickupAddress?.landmark,
-            Locality: rowsData?.pickupAddress?.locality,
-            City: rowsData?.pickupAddress?.city,
-            State: rowsData?.pickupAddress?.state,
+            LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+            Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+            City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
             Pincode: rowsData?.pickupAddress?.pincode,
-            Country: rowsData?.pickupAddress?.country,
-            "Address Type": rowsData?.pickupAddress?.addressType,
-            Name: rowsData?.pickupAddress?.contact?.name,
+            Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.addressType
+            ),
+            Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
             MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
 
-            "Email Id": rowsData?.pickupAddress?.contact?.emailId,
-            Type: rowsData?.pickupAddress?.contact?.type,
+            "Email Id": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.contact?.emailId
+            ),
+            Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
           },
           {
             title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
             FlatNo: rowsData?.deliveryAddress?.flatNo,
-            Landmark: rowsData?.deliveryAddress?.landmark,
-            Locality: rowsData?.deliveryAddress?.locality,
-            City: rowsData?.deliveryAddress?.city,
-            State: rowsData?.deliveryAddress?.state,
+            Landmark: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.landmark
+            ),
+            Locality: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.locality
+            ),
+            City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
             Pincode: rowsData?.deliveryAddress?.pincode,
-            Country: rowsData?.deliveryAddress?.country,
-            "Address Type": rowsData?.deliveryAddress?.addressType,
-            Name: rowsData?.deliveryAddress?.contact?.name,
+            Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.addressType
+            ),
+            Name: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.name
+            ),
             MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
 
-            "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
-            Type: rowsData?.deliveryAddress?.contact?.type,
+            "Email Id": capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.emailId
+            ),
+            Type: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.contact?.type
+            ),
           },
           {
             title: rowsData?.service?.companyServiceId && "Services",
