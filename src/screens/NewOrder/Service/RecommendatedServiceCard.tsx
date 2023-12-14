@@ -130,7 +130,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   <span className="pr-2  text-[#1C1C1C] text-[16px] font-Open">
                     {`${toPascalCase(cheapestService.text?.serviceMode)}`}
                   </span>
-                  {`\u20B9`} {cheapestService.text?.total.toFixed(2)}{" "}
+                  {`\u20B9`}{" "}
+                  {Math.round(cheapestService.text?.total)?.toLocaleString(
+                    "en-IN"
+                  )}{" "}
                 </p>
                 <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
                   ETA: {cheapestService.text?.EDT || "N/A"}{" "}
@@ -175,7 +178,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   <span className="pr-2 text-[#1C1C1C] text-[14px] font-Open">
                     {`${toPascalCase(fastestService.text?.serviceMode)}`}
                   </span>
-                  {`\u20B9`} {fastestService.text?.total.toFixed(2)}{" "}
+                  {`\u20B9`}{" "}
+                  {Math.round(fastestService.text?.total)?.toLocaleString(
+                    "en-IN"
+                  )}{" "}
                 </p>
                 <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
                   ETA: {fastestService.text?.EDT || "N/A"}{" "}
@@ -222,7 +228,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   <span className="pr-2 text-[#1C1C1C] text-[14px] font-Open">
                     {`${toPascalCase(balancedService.text?.serviceMode)}`}
                   </span>
-                  {`\u20B9`} {balancedService.text?.total.toFixed(2)}{" "}
+                  {`\u20B9`}{" "}
+                  {Math.round(balancedService.text?.total)?.toLocaleString(
+                    "en-IN"
+                  )}{" "}
                 </p>
                 <p className="text-[#004EFF] text-[14px] pt-6 font-semibold font-Open">
                   ETA: {balancedService.text?.EDT || "N/A"}{" "}

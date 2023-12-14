@@ -85,7 +85,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
           </p>
 
           <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
-            {`\u20B9`} {price}
+            {`\u20B9`} {Math.round(price)?.toLocaleString("en-IN")}
           </p>
           <p className="text-[12px] font-medium font-Open lg:text-[16px] font-semibold">
             {mode}

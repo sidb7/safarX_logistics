@@ -1,7 +1,6 @@
 import editIcon from "../../../assets/serv/edit.svg";
 import serviceIcon from "../../../assets/serv/service.svg";
 import { useNavigate } from "react-router-dom";
-
 interface PricingData {
   appliedWeight?: any;
   appliedWeightUnit?: any;
@@ -15,6 +14,7 @@ interface PricingData {
   baseWeight?: number;
   price?: number;
 }
+
 const PricingDetails: React.FunctionComponent<PricingData> = ({
   baseWeight = "",
   price = "",
@@ -28,104 +28,83 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   appliedWeight = "",
   appliedWeightUnit = "",
 }) => {
-  const navigate = useNavigate();
+  // Parse numbers from string inputs
   const baseValue = +base;
   const addValue = +add;
   const codValue = +cod;
   const variablesValue = +variables;
-
   const orderPrice = baseValue + addValue + variablesValue;
 
+  // Round off decimal numbers to the nearest whole number
+  const roundedInvoiceValue = Math.round(+invoiceValue);
+  const roundedCODValue = Math.round(codValue);
+  const roundedOrderPrice = Math.round(orderPrice);
+  const roundedInsuranceValue = Math.round(+insurance);
+  const roundedTaxValue = Math.round(+tax);
+  const roundedPrice = Math.round(+price);
+
   return (
-    <div className="p-[24px]  rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[505px] ">
+    <div className="p-[24px] rounded-lg border-[1px] shadow-lg border-[#E8E8E8] bg-[#F2F6FF] lg:w-[338px] lg:h-[505px]">
       <div className="flex flex-col ">
         <div className="flex flex-col gap-y-4  ">
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Invoice Value:
             </p>
-            {`\u20B9`} {invoiceValue?.toLocaleString("en-IN")}
+            {`\u20B9`} {roundedInvoiceValue?.toLocaleString("en-IN")}
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Collectible Amount:
             </p>
-            {`\u20B9`} {codValue?.toLocaleString("en-IN")}
+            {`\u20B9`} {roundedCODValue?.toLocaleString("en-IN")}
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Billable Weight:
             </p>
             <p> {appliedWeight} kg</p>
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Order Price:
             </p>
             <p>
-              {" "}
-              {`\u20B9`} {orderPrice?.toLocaleString("en-IN")}
+              {`\u20B9`} {roundedOrderPrice?.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               COD:
             </p>
             <p>
-              {" "}
-              {`\u20B9`} {cod?.toLocaleString("en-IN")}
+              {`\u20B9`} {roundedCODValue?.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
               Insurance Price:
             </p>
             <p>
-              {" "}
-              {`\u20B9`} {insurance?.toLocaleString("en-IN")}
+              {`\u20B9`} {roundedInsuranceValue?.toLocaleString("en-IN")}
             </p>
           </div>
-          {/* <p className="text-[12px] font-medium font-Open lg:text-[16px] text-[#004EFF] lg:font-semibold">
-            {`\u20B9`} {price}
-          </p> */}
-          {/* <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
-              Discount Price:
-            </p>
-            <p className="text-[#004EFF]"> - {`\u20B9`} 20</p>
-          </div> */}
-          {/* <div className="flex justify-between mt-4">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
-              Amount:
-            </p>
-            <p>
-              {" "}
-              {`\u20B9`} {price}
-            </p>
-          </div> */}
-          {/* <hr></hr>
-          <div className="flex justify-between ">
-            <p className=" text-[12px] font-medium font-Open   lg:text-[16px] lg:font-semibold">
-              Additional Charges:
-            </p>
-            <p> {`\u20B9`} 3000</p>
-          </div> */}
+          {/* Additional sections... */}
           <div className="flex justify-between">
-            <p className=" text-[12px] font-normal font-Open   lg:text-[16px] ">
-              Tax :
+            <p className="text-[12px] font-normal font-Open lg:text-[16px]">
+              Tax:
             </p>
             <p>
-              {`\u20B9`} {tax?.toLocaleString("en-IN")}{" "}
+              {`\u20B9`} {roundedTaxValue?.toLocaleString("en-IN")}
             </p>
           </div>
           <hr className="mt-[100px]"></hr>
           <div className="flex justify-between mt-[5px] ">
-            <p className=" text-[12px] font-medium font-Open text-[#004EFF]  lg:text-[16px] lg:font-semibold ">
+            <p className="text-[12px] font-medium font-Open text-[#004EFF] lg:text-[16px] lg:font-semibold ">
               Gross Total:
             </p>
             <p className="text-[#004EFF]">
-              {" "}
-              {`\u20B9`} {price?.toLocaleString("en-IN")}
+              {`\u20B9`} {roundedPrice?.toLocaleString("en-IN")}
             </p>
           </div>
         </div>
@@ -133,4 +112,5 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
     </div>
   );
 };
+
 export default PricingDetails;
