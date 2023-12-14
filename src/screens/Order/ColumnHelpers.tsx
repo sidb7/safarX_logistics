@@ -1494,7 +1494,9 @@ export const columnHelpersForRest = (
             </div>
             <div className="py-2 flex flex-col">
               <span className="text-sm font-light">Delivery Partner</span>
-              <div className="font-semibold">{service?.partnerName}</div>
+              <div className="font-semibold">
+                {capitalizeFirstLetter(service?.partnerName)}
+              </div>
             </div>
           </div>
         );
