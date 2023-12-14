@@ -192,21 +192,37 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adress</h1>
+            <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 ]">
+          <div className="text-base py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
-            ) ?? (
+            ) ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.fullAddress
+                  )}
+                </span>
+                <div className="text-base">
+                  {info?.row?.original?.pickupAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
-                onClick={() => navigate("/orders/add-order/pickup")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="decoration-2 text-[black]"
               >
-                ADD PICKUP ADDRESS
+                No Pickup Address Found
               </div>
             )}
           </div>
@@ -223,15 +239,30 @@ const MainCommonHelper = (navigate: any = "") => {
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 ]">
-            {capitalizeFirstLetter(
-              info?.row?.original?.deliveryAddress?.fullAddress
-            ) ?? (
+          <div className="text-base py-3">
+            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.fullAddress
+                  )}
+                </span>
+
+                <div className="text-base">
+                  {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
-                onClick={() => navigate("/orders/add-order/delivery")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="decoration-2 text-[black]"
               >
-                ADD DELIVERY ADDRESS
+                No Delivery Address Found
               </div>
             )}
           </div>
@@ -957,19 +988,35 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adress</h1>
+            <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3]">
+          <div className="text-base py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
-            ) ?? (
+            ) ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.fullAddress
+                  )}
+                </span>
+                <div className="text-base">
+                  {info?.row?.original?.pickupAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="  decoration-2 text-[black]"
+                className="decoration-2 text-[black]"
               >
                 No Pickup Address Found
               </div>
@@ -982,18 +1029,30 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Delivery Adreess</h1>
+            <h1>Delivery Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
-        const deliveryAddress =
-          info?.row?.original?.deliveryAddress?.fullAddress;
-
         return (
           <div className="text-base py-3">
-            {deliveryAddress ? (
-              capitalizeFirstLetter(deliveryAddress)
+            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.fullAddress
+                  )}
+                </span>
+
+                <div className="text-base">
+                  {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+              </>
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
