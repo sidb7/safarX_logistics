@@ -64,7 +64,7 @@ const CustomBulkOrderUploadButton = (props: ICustomuploadButtomProps) => {
         <span>
           <img src={DownloadIconWhite} alt="" />
         </span>
-        <span className="text-white font-semibold text-sm">UPLOAD</span>
+        <span className="text-white font-semibold text-sm">Upload</span>
       </button>
     </>
   );

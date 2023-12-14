@@ -1,3 +1,4 @@
+import { capitalizeFirstLetterWithExclude } from "../../utils/utility";
 import { Spinner } from "../Spinner";
 
 interface CustomButtonProps {
@@ -12,6 +13,7 @@ interface CustomButtonProps {
   loading?: boolean;
   onlyIcon?: boolean;
 }
+
 const CustomButton = (props: CustomButtonProps) => {
   const {
     text,
@@ -25,6 +27,9 @@ const CustomButton = (props: CustomButtonProps) => {
     loading = false,
     onlyIcon = false,
   } = props;
+
+  const excludeWords = ["B2B", "B2C"];
+
   return (
     <>
       {loading ? (
@@ -47,8 +52,8 @@ const CustomButton = (props: CustomButtonProps) => {
               alt=""
             />
           )}
-          <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-            {text}
+          <p className="buttonClassName md:text-[14px] whitespace-nowrap capitalize">
+            {capitalizeFirstLetterWithExclude(text, excludeWords)}
           </p>
         </button>
       )}

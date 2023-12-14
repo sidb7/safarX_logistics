@@ -203,8 +203,9 @@ export const Overview = (props: IOverview) => {
                 <div className="flex justify-between">
                   <h1 className="text-[2rem] font-bold font-Lato">
                     &#8377;
-                    {revenueDetails?.charges?.HighestOrderValue?.toFixed(2) ||
-                      0}
+                    {Math.round(
+                      revenueDetails?.charges?.HighestOrderValue
+                    )?.toLocaleString("en-IN") || 0}
                   </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>
@@ -216,7 +217,9 @@ export const Overview = (props: IOverview) => {
                 <div className="flex justify-between">
                   <h1 className="text-[2rem] font-bold font-Lato">
                     &#8377;
-                    {revenueDetails?.charges?.AvgOrderValue?.toFixed(2) || 0}
+                    {Math.round(
+                      revenueDetails?.charges?.AvgOrderValue
+                    )?.toLocaleString("en-IN") || 0}{" "}
                   </h1>
                   <img src={RedEllipse} alt="RedEllipse" />
                 </div>
@@ -228,7 +231,9 @@ export const Overview = (props: IOverview) => {
                 <div className="flex justify-between">
                   <h1 className="text-[2rem] font-bold font-Lato">
                     &#8377;
-                    {revenueDetails?.charges?.TodaysRevenue?.toFixed(2) || 0}
+                    {Math.round(
+                      revenueDetails?.charges?.TodaysRevenue
+                    )?.toLocaleString("en-IN") || 0}{" "}
                   </h1>
                   <img src={GreenEllipse} alt="GreenEllipse" />
                 </div>

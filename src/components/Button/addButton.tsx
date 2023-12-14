@@ -1,3 +1,5 @@
+import { capitalizeFirstLetterWithExclude } from "../../utils/utility";
+
 interface IAddButtonProps {
   text: any;
   onClick: () => void;
@@ -24,6 +26,8 @@ const AddButton = (props: IAddButtonProps) => {
     alt,
     textClassName,
   } = props;
+  const excludeWords = ["B2B", "B2C"];
+
   return (
     <button
       type={type}
@@ -35,7 +39,7 @@ const AddButton = (props: IAddButtonProps) => {
       <p
         className={`${textClassName} text-[#004EFF] text-sm font-semibold leading-5`}
       >
-        {text}
+        {capitalizeFirstLetterWithExclude(text, excludeWords)}
       </p>
     </button>
   );

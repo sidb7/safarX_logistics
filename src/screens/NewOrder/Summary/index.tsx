@@ -199,7 +199,7 @@ const Summary = (props: Props) => {
   const products = latestOrder?.data?.[0]?.products || [];
   const boxInfo = latestOrder?.data?.[0]?.boxInfo;
   const codInfo = latestOrder?.data?.[0]?.codInfo;
-
+  console.log("codInfo", codInfo);
   return (
     <div>
       <Breadcrum label="Add New Order" />
@@ -425,7 +425,7 @@ const Summary = (props: Props) => {
               add={serviceDetails?.add}
               base={serviceDetails?.base}
               variables={serviceDetails?.variables}
-              cod={serviceDetails?.cod}
+              cod={codInfo?.collectableAmount}
               tax={serviceDetails?.tax}
               invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}

@@ -10,7 +10,10 @@ import DeleteIconForLg from "../../assets/DeleteIconRedColor.svg";
 import InformativeIcon from "../../assets/I icon.svg";
 import { Tooltip } from "react-tooltip";
 import { Link } from "react-router-dom";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  capitalizeFirstLetterWithExclude,
+} from "../../utils/utility";
 import editIcon from "../../assets/serv/edit.svg";
 import ShreIcon from "../../assets/ShareIcon.svg";
 import { SELLER_WEB_URL } from "../../utils/ApiUrls";
@@ -19,6 +22,7 @@ import { Tooltip as CustomToolTip } from "../../components/Tooltip/Tooltip";
 import moreIcon from "../../assets/more.svg";
 
 const ColumnsHelper = createColumnHelper<any>();
+const excludeWords = ["B2B", "B2C", "BULK_B2C"];
 
 const PartialChecked = ({ checked, onChange, intermediate }: any) => {
   const ref: any = useRef(null);
@@ -188,21 +192,37 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adress</h1>
+            <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3 ]">
+          <div className="text-base py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
-            ) ?? (
+            ) ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.fullAddress
+                  )}
+                </span>
+                <div className="text-base">
+                  {info?.row?.original?.pickupAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
-                onClick={() => navigate("/orders/add-order/pickup")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="decoration-2 text-[black]"
               >
-                ADD PICKUP ADDRESS
+                No Pickup Address Found
               </div>
             )}
           </div>
@@ -213,21 +233,36 @@ const MainCommonHelper = (navigate: any = "") => {
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Delivery Adreess</h1>
+            <h1>Delivery Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base  py-3 ]">
-            {capitalizeFirstLetter(
-              info?.row?.original?.deliveryAddress?.fullAddress
-            ) ?? (
+          <div className="text-base py-3">
+            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.fullAddress
+                  )}
+                </span>
+
+                <div className="text-base">
+                  {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
-                onClick={() => navigate("/orders/add-order/delivery")}
-                className="text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
+                // onClick={() => navigate("/orders/add-order/delivery")}
+                className="decoration-2 text-[black]"
               >
-                ADD DELIVERY ADDRESS
+                No Delivery Address Found
               </div>
             )}
           </div>
@@ -249,12 +284,14 @@ const MainCommonHelper = (navigate: any = "") => {
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
+                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
+                    "en-IN"
+                  )}{" "}
                 </p>
               )}
 
@@ -262,7 +299,7 @@ const MainCommonHelper = (navigate: any = "") => {
                 {codInfo
                   ? codInfo?.isCod
                     ? "Payment Type : COD"
-                    : "Payment Type : PREPAID"
+                    : "Payment Type : Prepaid"
                   : "-"}
               </span>
             </div>
@@ -390,8 +427,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           )}
           <div className="flex items-center mt-[0.5rem]">
             <span className=" text-sm font-light">Source :</span>
-            <div className=" pl-2 text-base items-center font-medium">
-              <span className="">{source}</span>
+            <div className=" pl-2 text-base items-center font-medium capitalize">
+              <span className="">
+                {capitalizeFirstLetterWithExclude(source, excludeWords)}
+              </span>
             </div>
           </div>
           <div className="flex items-center">
@@ -434,6 +473,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Country: rowsData?.pickupAddress?.country,
           "Address Type": rowsData?.pickupAddress?.addressType,
           Name: rowsData?.pickupAddress?.contact?.name,
+          MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+
           "Email Id": rowsData?.pickupAddress?.contact?.emailId,
           Type: rowsData?.pickupAddress?.contact?.type,
         },
@@ -448,6 +489,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           Country: rowsData?.deliveryAddress?.country,
           "Address Type": rowsData?.deliveryAddress?.addressType,
           Name: rowsData?.deliveryAddress?.contact?.name,
+          MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+
           "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
           Type: rowsData?.deliveryAddress?.contact?.type,
         },
@@ -548,7 +591,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               <div className="flex text-base items-center font-medium">
                 <div className="flex gap-x-1 items-center">
                   <div>
-                    <p>{renderStatus}</p>
+                    <p>{capitalizeFirstLetter(renderStatus)}</p>
                   </div>
                   {setInfoModalContent && (
                     <div
@@ -717,7 +760,9 @@ export const columnHelperForNewOrder = (
               <div className="flex items-center mt-1">
                 <span className=" text-sm font-light">Source :</span>
                 <div className=" pl-2 text-base items-center font-medium">
-                  <span className="">{source}</span>
+                  <span className="">
+                    {capitalizeFirstLetterWithExclude(source, excludeWords)}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center">
@@ -761,6 +806,8 @@ export const columnHelperForNewOrder = (
             Country: rowsData?.pickupAddress?.country,
             "Address Type": rowsData?.pickupAddress?.addressType,
             Name: rowsData?.pickupAddress?.contact?.name,
+            MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+
             "Email Id": rowsData?.pickupAddress?.contact?.emailId,
             Type: rowsData?.pickupAddress?.contact?.type,
           },
@@ -775,6 +822,8 @@ export const columnHelperForNewOrder = (
             Country: rowsData?.deliveryAddress?.country,
             "Address Type": rowsData?.deliveryAddress?.addressType,
             Name: rowsData?.deliveryAddress?.contact?.name,
+            MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+
             "Email Id": rowsData?.deliveryAddress?.contact?.emailId,
             Type: rowsData?.deliveryAddress?.contact?.type,
           },
@@ -869,7 +918,11 @@ export const columnHelperForNewOrder = (
                 <div className="flex text-base items-center font-medium">
                   <div className="flex gap-x-1 items-center">
                     <div>
-                      <p>{latestStatus ? latestStatus : "DRAFT"}</p>
+                      <p>
+                        {latestStatus
+                          ? capitalizeFirstLetter(latestStatus)
+                          : "Draft"}
+                      </p>
                     </div>
                     {setInfoModalContent && (
                       <div
@@ -943,19 +996,35 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Pickup Adress</h1>
+            <h1>Pickup Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
         return (
-          <div className="text-base py-3]">
+          <div className="text-base py-3">
             {capitalizeFirstLetter(
               info?.row?.original?.pickupAddress?.fullAddress
-            ) ?? (
+            ) ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.pickupAddress?.fullAddress
+                  )}
+                </span>
+                <div className="text-base">
+                  {info?.row?.original?.pickupAddress?.contact?.mobileNo}
+                </div>
+              </>
+            ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
-                className="  decoration-2 text-[black]"
+                className="decoration-2 text-[black]"
               >
                 No Pickup Address Found
               </div>
@@ -968,18 +1037,30 @@ export const columnHelperForNewOrder = (
       header: () => {
         return (
           <div className="flex justify-between">
-            <h1>Delivery Adreess</h1>
+            <h1>Delivery Address</h1>
           </div>
         );
       },
       cell: (info: any) => {
-        const deliveryAddress =
-          info?.row?.original?.deliveryAddress?.fullAddress;
-
         return (
           <div className="text-base py-3">
-            {deliveryAddress ? (
-              capitalizeFirstLetter(deliveryAddress)
+            {info?.row?.original?.deliveryAddress?.fullAddress ? (
+              <>
+                <div className="text-base">
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.contact?.name
+                  )}
+                </div>
+                <span>
+                  {capitalizeFirstLetter(
+                    info?.row?.original?.deliveryAddress?.fullAddress
+                  )}
+                </span>
+
+                <div className="text-base">
+                  {info?.row?.original?.deliveryAddress?.contact?.mobileNo}
+                </div>
+              </>
             ) : (
               <div
                 // onClick={() => navigate("/orders/add-order/delivery")}
@@ -1026,12 +1107,14 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
+                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
+                    "en-IN"
+                  )}
                 </p>
               )}
 
@@ -1039,7 +1122,7 @@ export const columnHelperForNewOrder = (
                 {codInfo
                   ? codInfo?.isCod
                     ? "Payment Type : COD"
-                    : "Payment Type : PREPAID"
+                    : "Payment Type : Prepaid"
                   : "-"}
               </span>
             </div>
@@ -1185,7 +1268,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
               </p>
               <div className="py-2 flex flex-col">
                 <span className="text-sm font-light">Delivery Partner</span>
-                <div className="font-semibold">{service?.partnerName}</div>
+                <div className="font-semibold">
+                  {capitalizeFirstLetter(service?.partnerName)}
+                </div>
               </div>
             </div>
           </div>

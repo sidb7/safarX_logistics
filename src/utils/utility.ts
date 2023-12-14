@@ -224,3 +224,22 @@ export const loadRazorPayTransaction = async (
     return null;
   }
 };
+
+export const capitalizeFirstLetterWithExclude = (
+  text: any,
+  excludeWords: string[] = []
+) => {
+  if (typeof text !== "string") {
+    return text;
+  }
+
+  return text
+    .split(" ")
+    .map((word) => {
+      if (excludeWords.includes(word.toUpperCase())) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(" ");
+};
