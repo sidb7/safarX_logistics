@@ -12,6 +12,18 @@ interface CustomButtonProps {
   loading?: boolean;
   onlyIcon?: boolean;
 }
+const capitalizeFirstLetter = (text: string, excludeWords: string[] = []) => {
+  return text
+    .split(" ")
+    .map((word) => {
+      if (excludeWords.includes(word.toUpperCase())) {
+        return word;
+      }
+      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+    })
+    .join(" ");
+};
+
 const CustomButton = (props: CustomButtonProps) => {
   const {
     text,
@@ -25,6 +37,9 @@ const CustomButton = (props: CustomButtonProps) => {
     loading = false,
     onlyIcon = false,
   } = props;
+
+  const excludeWords = ["B2B", "B2C"];
+
   return (
     <>
       {loading ? (
@@ -47,8 +62,8 @@ const CustomButton = (props: CustomButtonProps) => {
               alt=""
             />
           )}
-          <p className="buttonClassName md:text-[14px] whitespace-nowrap">
-            {text}
+          <p className="buttonClassName md:text-[14px] whitespace-nowrap capitalize">
+            {capitalizeFirstLetter(text, excludeWords)}
           </p>
         </button>
       )}

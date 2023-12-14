@@ -293,8 +293,8 @@ const Index = () => {
           onClick={() => navigate("/orders/add-bulk")}
         >
           <img src={BlukOrderIcon} alt="" width="16px" />
-          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            BULK UPLOAD
+          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C] capitalize">
+            Bulk Upload
           </span>
         </div>
         {isModalOpen && (
