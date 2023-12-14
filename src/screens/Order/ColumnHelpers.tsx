@@ -249,12 +249,14 @@ const MainCommonHelper = (navigate: any = "") => {
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
+                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
+                    "en-IN"
+                  )}{" "}
                 </p>
               )}
 
@@ -1026,12 +1028,14 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {codInfo?.invoiceValue?.toLocaleString("en-IN")}
+                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {codInfo?.collectableAmount?.toLocaleString("en-IN")}
+                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
+                    "en-IN"
+                  )}
                 </p>
               )}
 
