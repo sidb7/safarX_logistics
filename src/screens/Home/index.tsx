@@ -29,6 +29,7 @@ import {
   GET_DASHBOARD_INFO_REVENUE,
 } from "../../utils/ApiUrls";
 import { ResponsiveState } from "../../utils/responsiveState";
+import { tokenKey } from "../../utils/utility";
 
 interface IOverview {}
 const BarchartData = [
@@ -316,33 +317,36 @@ export const Home = (props: IOverview) => {
     }
   };
   React.useMemo(async () => {
-    await Promise.all([
-      getDashDetails(),
-      getRevenueAndOrderDetails(
-        {
-          apiStatus: "REVENUE",
-        },
-        SetRevenueAndOrderDetails
-      ),
-      getRevenueAndOrderDetails(
-        {
-          apiStatus: "ORDERCOUNT",
-        },
-        setOrderCount
-      ),
-      getRevenueAndOrderDetails(
-        {
-          apiStatus: "CODORDERCOUNT",
-        },
-        setCodCountOrder
-      ),
-      getRevenueAndOrderDetails(
-        {
-          apiStatus: "ADDRESSORDERCOUNT",
-        },
-        setAddressCountOrder
-      ),
-    ]);
+    let sellerId = sessionStorage.getItem("sellerId");
+    if (localStorage.getItem(`${sellerId}_${tokenKey}`)) {
+      await Promise.all([
+        getDashDetails(),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "REVENUE",
+          },
+          SetRevenueAndOrderDetails
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "ORDERCOUNT",
+          },
+          setOrderCount
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "CODORDERCOUNT",
+          },
+          setCodCountOrder
+        ),
+        getRevenueAndOrderDetails(
+          {
+            apiStatus: "ADDRESSORDERCOUNT",
+          },
+          setAddressCountOrder
+        ),
+      ]);
+    }
   }, []);
 
   return (
