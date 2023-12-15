@@ -15,6 +15,11 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
+
+  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  kycCheck = JSON.parse(kycCheck);
+  kycCheck = kycCheck?.nextStep?.bank;
+
   return (
     <div
       className={`border-[1px] border-[#E8E8E8] rounded-lg overflow-hidden grid grid-rows-1 mt-4`}
@@ -27,15 +32,18 @@ export const ProfileBankCard = (props: ProfileCardProps) => {
             Bank Details
           </span>
         </div>
-        <div>
-          <img
-            src={EditIcon}
-            alt=""
-            className="mr-4 cursor-pointer"
-            // onClick={() => navigate("/profile/edit-bank")}
-            onClick={() => navigate("/onboarding/wallet-details")}
-          />
-        </div>
+
+        {!kycCheck && (
+          <div>
+            <img
+              src={EditIcon}
+              alt=""
+              className="mr-4 cursor-pointer"
+              // onClick={() => navigate("/profile/edit-bank")}
+              onClick={() => navigate("/onboarding/wallet-details")}
+            />
+          </div>
+        )}
       </div>
 
       {!isItLgScreen ? (

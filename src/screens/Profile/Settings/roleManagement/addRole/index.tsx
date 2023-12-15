@@ -542,6 +542,7 @@ function AddRole() {
                 label="Enter Role Name"
                 value={roleName}
                 onChange={(e) => updateRoleName(e)}
+                id="roleName"
               />
             </div>
 
