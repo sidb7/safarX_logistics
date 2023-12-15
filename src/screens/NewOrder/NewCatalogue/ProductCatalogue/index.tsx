@@ -196,7 +196,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
         {filterComponent()}
 
         {/* Display Address */}
-        <div className="mt-4 overflow-y-auto">
+        <div className="mt-4 overflow-y-auto h-[530px]">
           {/* commented as not required for now */}
           {/* <div className="flex flex-col mt-1">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
@@ -329,7 +329,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             )} */}
           </div>
         </div>
-
         {channels.length > 0 && filterId === 0 && (
           <div className="flex flex-col mt-8">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
@@ -389,7 +388,6 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             )}
           </div>
         )}
-
         {/* <div className="absolute bottom-24">
           {totalItemCount > 0 && (
             <PaginationComponent

@@ -11,6 +11,11 @@ import CustomRightModal from "../../../../components/CustomModal/customRightModa
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import BottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useMediaQuery } from "react-responsive";
+import {
+  checkNonNegative,
+  greaterThenZero,
+  isRequired,
+} from "../../../../utils/validationRules";
 
 interface IProductFilledProps {
   editAddressModal: any;
@@ -26,14 +31,70 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
   const tempProductData = editProductData;
   const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [productData, setproductData]: any = useState(tempProductData);
+  const [validationErrors, setValidationErrors]: any = useState<any>(null);
+  console.log("validationErrors", validationErrors);
   const divisor = 5000;
+
+  const validate = (value: any, validationRule: any) => {
+    let errors = [];
+    for (let index = 0; index < validationRule.length; index++) {
+      const element = validationRule[index];
+      const res = element(value);
+      if (res !== true) {
+        errors.push(res);
+      }
+    }
+    return errors;
+  };
+
+  const validation: any = {
+    name: [isRequired],
+    category: [isRequired],
+    unitPrice: [isRequired, greaterThenZero],
+    unitTax: [isRequired, greaterThenZero],
+    length: [isRequired, greaterThenZero],
+    breadth: [isRequired, greaterThenZero],
+    height: [isRequired, greaterThenZero],
+    price: [checkNonNegative],
+    deadWeight: [isRequired, checkNonNegative, greaterThenZero],
+    sku: [isRequired],
+  };
+
+  const handleValidation = (event: any) => {
+    const { name, value } = event.target;
+    const validationRules = validation[name];
+    const errors = validate(value, validationRules) || true;
+
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      [name]: errors.length > 0 ? errors[0] : true,
+    }));
+  };
 
   const handleProductInputChange = (e: any) => {
     const { name, value } = e;
     setproductData((previousData: any) => ({ ...previousData, [name]: value }));
   };
+  const validateOnSubmit = () => {
+    let hasErrors = false;
+    for (const inputName in validation) {
+      console.log("inputname", inputName);
+      const errors = validate(productData[inputName], validation[inputName]);
+      setValidationErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [inputName]: errors[0] || false,
+      }));
+      if (errors.length > 0) {
+        hasErrors = true;
+      }
+    }
+    return !hasErrors;
+  };
 
   const updateProductDetails = async () => {
+    const valid = validateOnSubmit();
+
+    if (!valid) return;
     const { data: updateProduct } = await POST(
       POST_UPDATE_PRODUCT,
       productData
@@ -103,6 +164,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
     <CustomRightModal
       isOpen={editAddressModal}
       onClose={() => setEditAddressModal(false)}
+      className="!w-[50%]"
     >
       <>
         <div className="grid mt-6 gap-5">
@@ -116,89 +178,146 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
             <CustomInputBox
               label="Product name"
               name="name"
+              errorMessage={validationErrors?.name}
               value={productData?.name}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
             <CustomInputBox
               label="Product category"
               name="category"
+              errorMessage={validationErrors?.category}
               value={productData?.category}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
+
             <CustomInputBox
               label="Product Price"
               name="unitPrice"
-              inputMode="numeric"
+              inputType="text"
+              errorMessage={validationErrors?.unitPrice}
               value={productData?.unitPrice || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                  });
+                }
+              }}
             />
+
             <CustomInputBox
               label="Product tax"
               name="unitTax"
-              inputMode="numeric"
+              inputType="text"
+              errorMessage={validationErrors?.unitTax}
               value={productData?.unitTax || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                  });
+                }
+              }}
             />
 
             <div className="flex gap-x-3 w-full">
-              <CustomInputBox
-                label="Length (CM)"
-                inputType="number"
-                name="length"
-                value={productData?.length || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
+              <div
+                className={`${
+                  validationErrors?.length ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.length === "Field is required"
+                    ? "mb-10"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Length (CM)"
+                  name="length"
+                  inputType="text"
+                  errorMessage={validationErrors?.length}
+                  value={productData?.length || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                      });
+                    }
+                  }}
+                />
+              </div>
 
-              <CustomInputBox
-                label="Breadth (CM)"
-                name="breadth"
-                inputType="number"
-                value={productData?.breadth || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
-              <CustomInputBox
-                label="Height (CM)"
-                inputType="number"
-                name="height"
-                value={productData?.height || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
+              <div
+                className={`${
+                  validationErrors?.breadth ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.breadth === "Field is required"
+                    ? "mb-10"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Breadth (CM)"
+                  name="breadth"
+                  inputType="text"
+                  errorMessage={validationErrors?.breadth}
+                  value={productData?.breadth || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div
+                className={`${
+                  validationErrors?.height ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.height === "Field is required"
+                    ? "mb-10"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Height (CM)"
+                  name="height"
+                  inputType="text"
+                  errorMessage={validationErrors?.height}
+                  value={productData?.height || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value,
+                      });
+                    }
+                  }}
+                />
+              </div>
             </div>
+
             <div className="flex gap-x-5">
               <CustomInputBox
                 placeholder="Volumetric Weight (Kg)"
@@ -216,29 +335,34 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
             </div>
             <CustomInputBox
               label="Weight (Kg)"
-              inputType="number"
               name="deadWeight"
+              inputType="text"
+              errorMessage={validationErrors?.deadWeight}
               value={productData?.deadWeight || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value,
+                  });
+                }
+              }}
             />
 
             <CustomInputBox
               label="Sku"
               name="sku"
+              errorMessage={validationErrors?.sku}
               value={productData?.sku || ""}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
-
             <div className="grid col-span-2">
               <InputWithFileUpload
                 type="file"
@@ -270,7 +394,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
     <BottomModal
       isOpen={editAddressModal}
       onRequestClose={() => setEditAddressModal(false)}
-      className="outline-none h-[35rem] !p-0"
+      className="outline-none h-[36rem] !p-0"
     >
       <>
         <div className="grid mt-6 gap-5">
@@ -284,88 +408,144 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
             <CustomInputBox
               label="Product name"
               name="name"
+              errorMessage={validationErrors?.name}
               value={productData?.name}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
+
             <CustomInputBox
               label="Product category"
               name="category"
+              errorMessage={validationErrors?.category}
               value={productData?.category}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
+
             <CustomInputBox
               label="Product Price"
               name="unitPrice"
-              inputMode="numeric"
+              inputType="text"
+              errorMessage={validationErrors?.unitPrice}
               value={productData?.unitPrice || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                  });
+                }
+              }}
             />
+
             <CustomInputBox
               label="Product tax"
               name="unitTax"
-              inputMode="numeric"
+              inputType="text"
+              errorMessage={validationErrors?.unitTax}
               value={productData?.unitTax || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                  });
+                }
+              }}
             />
 
             <div className="flex mt-2 md:mt-0 gap-x-3 w-full">
-              <CustomInputBox
-                label="Length (CM)"
-                inputType="number"
-                name="length"
-                value={productData?.length || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
-
-              <CustomInputBox
-                label="Breadth (CM)"
-                name="breadth"
-                inputType="number"
-                value={productData?.breadth || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
-              <CustomInputBox
-                label="Height (CM)"
-                inputType="number"
-                name="height"
-                value={productData?.height || ""}
-                onChange={(e: any) => {
-                  handleProductInputChange({
-                    name: e.target.name,
-                    value: +e.target.value,
-                  });
-                }}
-              />
+              <div
+                className={`${
+                  validationErrors?.length ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.length === "Field is required"
+                    ? "mb-16"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Length (CM)"
+                  name="length"
+                  inputType="text"
+                  errorMessage={validationErrors?.length}
+                  value={productData?.length || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div
+                className={`${
+                  validationErrors?.breadth ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.breadth === "Field is required"
+                    ? "mb-16"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Breadth (CM)"
+                  name="breadth"
+                  inputType="text"
+                  errorMessage={validationErrors?.breadth}
+                  value={productData?.breadth || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div
+                className={`${
+                  validationErrors?.height ===
+                    "Value must be greater then zero" ||
+                  validationErrors?.height === "Field is required"
+                    ? "mb-16"
+                    : "mb-0"
+                }`}
+              >
+                <CustomInputBox
+                  label="Height (CM)"
+                  name="height"
+                  inputType="text"
+                  errorMessage={validationErrors?.height}
+                  value={productData?.height || ""}
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      handleValidation(e);
+                      handleProductInputChange({
+                        name: e.target.name,
+                        value: e.target.value,
+                      });
+                    }
+                  }}
+                />
+              </div>
             </div>
             <div className="flex mt-2 md:mt-0 gap-x-5">
               <CustomInputBox
@@ -382,31 +562,37 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
                 value={divisor}
               />
             </div>
+
             <CustomInputBox
               label="Weight (Kg)"
-              inputType="number"
               name="deadWeight"
+              inputType="text"
+              errorMessage={validationErrors?.deadWeight}
               value={productData?.deadWeight || ""}
-              onChange={(e: any) =>
-                handleProductInputChange({
-                  name: e.target.name,
-                  value: +e.target.value,
-                })
-              }
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  handleValidation(e);
+                  handleProductInputChange({
+                    name: e.target.name,
+                    value: e.target.value,
+                  });
+                }
+              }}
             />
 
             <CustomInputBox
               label="Sku"
               name="sku"
+              errorMessage={validationErrors?.sku}
               value={productData?.sku || ""}
-              onChange={(e: any) =>
+              onChange={(e: any) => {
+                handleValidation(e);
                 handleProductInputChange({
                   name: e.target.name,
                   value: e.target.value,
-                })
-              }
+                });
+              }}
             />
-
             <div className="grid col-span-2">
               <InputWithFileUpload
                 type="file"
