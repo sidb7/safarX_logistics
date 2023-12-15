@@ -51,7 +51,6 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     phoneNumber,
   } = useLocation().state;
 
-  console.log("addressData", workingHours);
   const [updateAddress, setUpdateAddress] = useState<any>({
     flatNo: flatNo,
     // address,
@@ -124,7 +123,6 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     } else if (activeTab === "delivery") {
       url = UPDATE_DELIVERY_ADDRESS;
     }
-    console.log("paylaod", payload);
     const { data: updateAddressBook }: any = await POST(url, payload);
     if (updateAddressBook?.success) {
       navigate(-1);
