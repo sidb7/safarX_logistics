@@ -44,7 +44,7 @@ function UpdateUser() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data } = location.state;
+  const { data } = location.state || {};
   const [addUserData, setAddUserData] = useState(data);
   const [viewPassWord, setViewPassWord] = useState(false);
   const [roleData, setRoleData] = useState([]);
@@ -112,7 +112,8 @@ function UpdateUser() {
         <div>
           <CustomInputBox
             label="First Name"
-            value={addUserData?.firstName}
+            value={addUserData?.firstName || ""}
+            id="fName"
             onChange={(e) =>
               onChangeAddUserCardHandler("firstName", e.target.value)
             }
@@ -121,7 +122,8 @@ function UpdateUser() {
         <div>
           <CustomInputBox
             label="Last Name"
-            value={addUserData?.lastName}
+            id="lName"
+            value={addUserData?.lastName || ""}
             onChange={(e) =>
               onChangeAddUserCardHandler("lastName", e.target.value)
             }
@@ -131,7 +133,8 @@ function UpdateUser() {
           <CustomInputBox
             label="Password"
             // isDisabled={true}
-            value={addUserData?.password}
+            value={addUserData?.password || ""}
+            id="password"
             inputType={viewPassWord ? "text" : "password"}
             setVisibility={setViewPassWord}
             isRightIcon={false}
@@ -147,7 +150,8 @@ function UpdateUser() {
         <div>
           <CustomInputBox
             label="Contact Number"
-            value={addUserData?.contactNumber}
+            value={addUserData?.contactNumber || ""}
+            id="contactNumber"
             onChange={(e) =>
               onChangeAddUserCardHandler("contactNumber", e.target.value)
             }
@@ -156,7 +160,8 @@ function UpdateUser() {
         <div>
           <CustomInputBox
             label="Email"
-            value={addUserData?.email}
+            id={"email"}
+            value={addUserData?.email || ""}
             onChange={(e) =>
               onChangeAddUserCardHandler("email", e.target.value)
             }

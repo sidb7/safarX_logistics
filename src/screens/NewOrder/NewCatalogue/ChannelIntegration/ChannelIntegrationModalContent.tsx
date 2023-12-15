@@ -21,6 +21,9 @@ import {
   setLocalStorage,
 } from "../../../../utils/utility";
 import axios from "axios";
+import { Spinner } from "../../../../components/Spinner";
+import ErrorIcon from "../../../../assets/info-circle.svg";
+import { woocommerceUrl } from "../../../../utils/regexCheck";
 
 interface IChannelProps {
   setIsLoading: any;
@@ -56,10 +59,12 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     organizationId: "",
     domain: "",
   });
+
+  const [urlError, setUrlError] = useState(false);
+
   const [channel, setChannel] = useState(modalData?.modalData?.channel || "");
-
   const [isDisabled, setIsDisabled] = useState(true);
-
+  const [isModalLoading, setIsModalLoading] = useState(false);
   const storeId = channelData?.channels?.[indexNum]?.storeId;
 
   const addStore = async () => {
@@ -94,6 +99,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           }
           return;
         } else if (channel === "WOOCOMMERCE") {
+          setIsModalLoading(true);
           let userId = Date.now();
           let wooCommerceContents = {
             storeUrl: storeData.storeUrl,
@@ -118,6 +124,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // window.alert(JSON.stringify(error));
             window.location.href = error?.config?.url;
           }
+          setIsModalLoading(false);
           return;
         } else if (channel === "ZOHO") {
           setIsLoading(true);
@@ -129,6 +136,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             toast.error(data?.message);
           }
         }
+        setIsLoading(false);
         setModalData({ isOpen: false });
         return;
       } else {
@@ -192,11 +200,18 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       setIsDisabled(false);
     } else if (
       channel === "WOOCOMMERCE" &&
-      storeData.storeName !== "" &&
-      storeData.storeUrl !== ""
+      woocommerceUrl.test(storeData.storeUrl) &&
+      storeData.storeName !== ""
     ) {
       setIsDisabled(false);
-    } else if (channel === "ZOHO") {
+    } else if (
+      channel === "ZOHO" &&
+      storeData.clientId !== "" &&
+      storeData.clientSecret !== "" &&
+      storeData.code !== "" &&
+      storeData.organizationId !== "" &&
+      storeData.domain !== ""
+    ) {
       setIsDisabled(false);
     } else setIsDisabled(true);
   }, [storeData]);
@@ -227,7 +242,11 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           options={channelArr}
           heading="Select Channel"
         /> */}
-        {channel === "SHOPIFY" ? (
+        {isModalLoading ? (
+          <div className="absolute right-[50%] top-[50%] transform -translate-y-1/2 cursor-pointer">
+            <Spinner />
+          </div>
+        ) : channel === "SHOPIFY" ? (
           <div className="grid gap-y-3">
             <CustomInputBox
               className="removePaddingPlaceHolder"
@@ -259,26 +278,65 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 setStoreData({ ...storeData, storeToken: e.target.value })
               }
             />
-            <CustomInputBox
-              className="removePaddingPlaceHolder"
-              placeholder="Store Logo"
-              value={storeData.storeLogo}
-              onChange={(e) =>
-                setStoreData({ ...storeData, storeLogo: e.target.value })
-              }
-            />
+
+            {/* <div className="space-y-2">
+              <div>
+                <CustomInputBox
+                  className="removePaddingPlaceHolder"
+                  placeholder="Store Logo"
+                  value={storeData.storeLogo}
+                  onChange={(e) =>
+                    setStoreData({ ...storeData, storeLogo: e.target.value })
+                  }
+                />
+              </div>
+
+              <input
+                type="file"
+                multiple={false}
+                accept="image/*"
+                className="flex items-center justify-center !py-0  !px-0 custom-input !font-Lato"
+                onChange={(e: any) => {
+                  console.log("Images", e.target.files[0]);
+                  console.log("Name of Image", e.target.files[0].name);
+                  setStoreData({
+                    ...storeData,
+                    storeLogo: e.target.files[0].name,
+                  });
+                }}
+              />
+              <p className="text-[15px]">Upload only Images</p>
+            </div> */}
           </div>
         ) : channel === "WOOCOMMERCE" ? (
           <div className="grid gap-y-3">
-            <CustomInputBox
-              className="removePaddingPlaceHolder"
-              placeholder="Store Url - https://example.com"
-              isRequired={true}
-              value={storeData.storeUrl}
-              onChange={(e) =>
-                setStoreData({ ...storeData, storeUrl: e.target.value })
-              }
-            />
+            <div>
+              <CustomInputBox
+                className="removePaddingPlaceHolder"
+                placeholder="Store Url - https://example.com"
+                isRequired={true}
+                value={storeData.storeUrl}
+                onChange={(e) => {
+                  setStoreData({ ...storeData, storeUrl: e.target.value });
+
+                  if (!woocommerceUrl.test(e.target.value)) {
+                    setUrlError(true);
+                  } else {
+                    setUrlError(false);
+                  }
+                }}
+              />
+
+              {urlError === true && (
+                <div className="flex items-center gap-x-1 mt-1">
+                  <img src={ErrorIcon} alt="" width={10} height={10} />
+                  <span className="font-normal text-[#F35838] text-xs leading-3">
+                    Url Format is https://example.com
+                  </span>
+                </div>
+              )}
+            </div>
+
             <CustomInputBox
               className="removePaddingPlaceHolder"
               placeholder="Store Name"
@@ -322,6 +380,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               className="removePaddingPlaceHolder"
               placeholder="Organization Id"
               isRequired={true}
+              inputType="number"
               value={storeData.organizationId}
               onChange={(e) =>
                 setStoreData({ ...storeData, organizationId: e.target.value })

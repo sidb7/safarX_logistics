@@ -20,15 +20,15 @@ const Reports = () => {
   const reportMenu = [
     {
       label: "Shipment Status Report",
-      value: "Shipment Status Report",
+      value: "SHIPMENTSTATUS",
     },
     {
       label: "NPR Report",
-      value: "NPR Report",
+      value: "NPRSTATUS",
     },
     {
       label: "NDR Report",
-      value: "NDR Report",
+      value: "NDRSTATUS",
     },
   ];
 
@@ -59,7 +59,7 @@ const Reports = () => {
         const payload = {
           startDate: convertEpoch(startDate),
           endDate: lastendEpoch,
-          apiStatus: "SHIPMENTSTATUS",
+          apiStatus: reportValue,
         };
         const response = await POST(GET_REPORTS, payload);
         // const apiData = response.data;
@@ -70,7 +70,7 @@ const Reports = () => {
         const date: any = JSON.stringify(new Date());
         const result = await convertXMLToXLSX(
           response?.data?.data,
-          `SellerShipMentReport_${date
+          `${reportValue}${date
             .substr(1, 10)
             .split("-")
             .reverse()
@@ -116,7 +116,7 @@ const Reports = () => {
                 filterDate={isDateDisabled}
                 isClearable={true}
                 placeholderText="Select From & To Date"
-                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-0"
+                className="cursor-pointer border-solid border-2 !w-[350px] datepickerCss border-sky-500 p-6"
                 dateFormat="dd/MM/yyyy"
               />
             </div>

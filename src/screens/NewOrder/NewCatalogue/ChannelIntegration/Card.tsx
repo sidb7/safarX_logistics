@@ -16,8 +16,8 @@ const Card = (props: any) => {
       className="border-[1px] border-[#A4A4A4] rounded relative z-1  mt-5"
       key={key}
     >
-      <div className={`py-[14px] px-[16px] w-[248px] `}>
-        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-3 lg:w-[118px]">
+      <div className={`py-[14px] px-[16px] w-[200px] `}>
+        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-[1rem] lg:w-[118px] min-h-[45px]  ">
           <img
             src={channel.icon}
             alt=""
@@ -25,22 +25,24 @@ const Card = (props: any) => {
               channel.icon.includes("ZOHO") ? "w-[100px]" : ""
             }`}
           />
-          <img src={channel.iconLg} alt="" className="hidden lg:block" />
+          <img src={channel.iconLg} alt="" className="hidden h-max lg:block" />
 
-          <p className="font-semibold text-[12px] text-[#323232] line-clamp-1 ">
-            {channel.name}
-          </p>
+          {channel.integrated && (
+            <p className="font-semibold text-[16px] ml-1 text-[#323232] line-clamp-1 ">
+              {channel.name}
+            </p>
+          )}
         </div>
         <div
           onClick={handleIntegration}
           className={` ${
-            channel.integrated ? " bg-black" : ""
-          }  border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px] cursor-pointer`}
+            channel.integrated ? " bg-black " : "hover:bg-black"
+          } group border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px] cursor-pointer  `}
         >
           <p
             className={` ${
-              channel.integrated ? "text-white" : ""
-            } font-semibold text-[14px] text-[#1C1C1C] uppercase`}
+              channel.integrated ? "text-white" : "group-hover:text-white"
+            } font-semibold text-[14px] text-[#1C1C1C] uppercase  `}
           >
             {channel.integrated ? "Integrated" : "Integrate"}
           </p>
