@@ -242,7 +242,7 @@ const MainCommonHelper = (navigate: any = "") => {
           <div className="text-base py-3">
             {info?.row?.original?.deliveryAddress?.fullAddress ? (
               <>
-                <div className="text-lg font-semibold ">
+                <div className="text-base ">
                   {capitalizeFirstLetter(
                     info?.row?.original?.deliveryAddress?.contact?.name
                   )}
@@ -568,13 +568,16 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
 
       let statusObj: any = { title: "" };
       rowsData?.status?.map((elem: any, index: any) => {
+        console.log("descriptionBookedOrder", elem?.description);
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
           [`Current Status ${index + 1}`]: capitalizeFirstLetter(
             elem.currentStatus
           ),
-          [`Description ${index + 1}`]: capitalizeFirstLetter(elem.description),
+          [`Description ${index + 1}`]: capitalizeFirstLetter(
+            elem?.description
+          ),
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
           [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
@@ -937,7 +940,7 @@ export const columnHelperForNewOrder = (
               elem.currentStatus
             ),
             [`Description ${index + 1}`]: capitalizeFirstLetter(
-              elem.description
+              elem?.description
             ),
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
