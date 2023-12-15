@@ -19,6 +19,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
     pageSize: "",
     inputs: {
       buyerDetails: {
+        required: true,
         name: false,
         mobile: false,
         address1: false,
@@ -31,6 +32,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
       },
 
       sellerDetails: {
+        required: true,
         name: false,
         mobile: false,
         address1: false,
@@ -46,6 +48,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
       },
 
       courierDetails: {
+        required: true,
         courierName: false,
         awbBarcode: false,
         awb: false,
@@ -56,6 +59,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         serviceName: false,
       },
       orderDetails: {
+        required: true,
         orderIdBarcode: false,
         orderId: false,
         creationDate: false,

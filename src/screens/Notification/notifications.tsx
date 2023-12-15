@@ -61,11 +61,9 @@ const Notifications: React.FunctionComponent<INotificationsProps> = (props) => {
                 key={index}
                 className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
                   filterId === index
-                    ? `${
-                        index === filterData.length - 1
-                          ? "rounded-r-md"
-                          : "rounded-l-md"
-                      } bg-[#D2D2D2] font-semibold font-Open text-[#1C1C1C]`
+                    ? `${index === filterData.length - 1 && "rounded-r-md"}
+                         ${index === 0 && "rounded-l-md"}
+                      bg-[#D2D2D2] font-semibold font-Open text-[#1C1C1C]`
                     : ""
                 }`}
                 onClick={() => {
