@@ -376,7 +376,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               <span className=" text-sm font-light">Order ID :</span>
               <div className=" flex text-base items-center font-medium">
                 <span className="">
-                  {source === "SHOPIFY"
+                  {source === "SHOPIFY" || source === "ZOHO"
                     ? otherDetails?.orderNumber
                       ? `#${otherDetails?.orderNumber}`
                       : orderId
@@ -384,7 +384,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
                 </span>
                 <CopyTooltip
                   stringToBeCopied={
-                    source === "SHOPIFY"
+                    source === "SHOPIFY" || source === "ZOHO"
                       ? otherDetails?.orderNumber
                         ? otherDetails?.orderNumber
                         : orderId
@@ -719,7 +719,7 @@ export const columnHelperForNewOrder = (
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
                     <span className="">
-                      {source === "SHOPIFY"
+                      {source === "SHOPIFY" || source === "ZOHO"
                         ? otherDetails?.orderNumber
                           ? `#${otherDetails?.orderNumber}`
                           : orderId
@@ -727,7 +727,7 @@ export const columnHelperForNewOrder = (
                     </span>
                     <CopyTooltip
                       stringToBeCopied={
-                        source === "SHOPIFY"
+                        source === "SHOPIFY" || source === "ZOHO"
                           ? otherDetails?.orderNumber
                             ? otherDetails?.orderNumber
                             : orderId
