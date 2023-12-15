@@ -22,9 +22,6 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   const {
     activeTab,
     addressData: {
-      contactName,
-      address,
-      mobileNo,
       companyId,
       isActive,
       isDeleted,
@@ -54,11 +51,13 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     phoneNumber,
   } = useLocation().state;
 
+  console.log("addressData", workingHours);
   const [updateAddress, setUpdateAddress] = useState<any>({
     flatNo: flatNo,
     // address,
     sector: sector,
     landmark: landmark,
+    locality: locality,
     pincode: pincode,
     city: city,
     state: state,
@@ -85,9 +84,8 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
     contact,
     fullAddress,
     sellerId,
-    locality,
-    workingDays,
-    workingHours,
+    workingDays: workingDays,
+    workingHours: workingHours,
     createdAt,
     createdBy,
     updatedAt,
@@ -106,25 +104,27 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   const [editAddressType, setEditAddressType] = useState<any>();
 
   const addressUpdation = async (e: any) => {
-    for (const key in updateAddress) {
-      if (updateAddress.hasOwnProperty(key)) {
-        const value = updateAddress[key];
-        if (
-          value === null ||
-          value === undefined ||
-          (typeof value === "string" && value.trim() === "") ||
-          (Array.isArray(value) && value.length === 0)
-        ) {
-          return toast.error(`${key} Should Not Be Empty`);
-        }
-      }
-    }
+    // for (const key in updateAddress) {
+    //   if (updateAddress.hasOwnProperty(key)) {
+    //     const value = updateAddress[key];
+    //     console.log("value", value);
+    //     if (
+    //       value === null ||
+    //       value === undefined ||
+    //       (typeof value === "string" && value.trim() === "") ||
+    //       (Array.isArray(value) && value.length === 0)
+    //     ) {
+    //       return toast.error(`${key} Should Not Be Empty`);
+    //     }
+    //   }
+    // }
     let url = "";
     if (activeTab === "pickup") {
       url = UPDATE_PICKUP_ADDRESS;
     } else if (activeTab === "delivery") {
       url = UPDATE_DELIVERY_ADDRESS;
     }
+    console.log("paylaod", payload);
     const { data: updateAddressBook }: any = await POST(url, payload);
     if (updateAddressBook?.success) {
       navigate(-1);
