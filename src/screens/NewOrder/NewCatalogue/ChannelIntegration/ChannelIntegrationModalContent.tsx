@@ -277,14 +277,35 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 setStoreData({ ...storeData, storeToken: e.target.value })
               }
             />
-            <CustomInputBox
-              className="removePaddingPlaceHolder"
-              placeholder="Store Logo"
-              value={storeData.storeLogo}
-              onChange={(e) =>
-                setStoreData({ ...storeData, storeLogo: e.target.value })
-              }
-            />
+
+            {/* <div className="space-y-2">
+              <div>
+                <CustomInputBox
+                  className="removePaddingPlaceHolder"
+                  placeholder="Store Logo"
+                  value={storeData.storeLogo}
+                  onChange={(e) =>
+                    setStoreData({ ...storeData, storeLogo: e.target.value })
+                  }
+                />
+              </div>
+
+              <input
+                type="file"
+                multiple={false}
+                accept="image/*"
+                className="flex items-center justify-center !py-0  !px-0 custom-input !font-Lato"
+                onChange={(e: any) => {
+                  console.log("Images", e.target.files[0]);
+                  console.log("Name of Image", e.target.files[0].name);
+                  setStoreData({
+                    ...storeData,
+                    storeLogo: e.target.files[0].name,
+                  });
+                }}
+              />
+              <p className="text-[15px]">Upload only Images</p>
+            </div> */}
           </div>
         ) : channel === "WOOCOMMERCE" ? (
           <div className="grid gap-y-3">
@@ -358,6 +379,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               className="removePaddingPlaceHolder"
               placeholder="Organization Id"
               isRequired={true}
+              inputType="number"
               value={storeData.organizationId}
               onChange={(e) =>
                 setStoreData({ ...storeData, organizationId: e.target.value })
