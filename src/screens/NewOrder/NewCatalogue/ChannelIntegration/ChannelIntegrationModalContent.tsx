@@ -136,6 +136,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             toast.error(data?.message);
           }
         }
+        setIsLoading(false);
         setModalData({ isOpen: false });
         return;
       } else {
