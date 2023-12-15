@@ -7,7 +7,7 @@ import NotFound from "../../../../components/404NotFound/NotFound";
 
 function UsersList() {
   const location = useLocation();
-  const { data } = location.state;
+  const { data } = location.state || [];
 
   const columnsHelper = createColumnHelper<any>();
   const columns = [
@@ -118,7 +118,7 @@ function UsersList() {
         <Breadcrum label="User List" />
       </div>
       <div className="mx-6">
-        {data.length === 0 ? (
+        {data?.length === 0 ? (
           <NotFound />
         ) : (
           <CustomTable data={data || []} columns={columns || []} />
