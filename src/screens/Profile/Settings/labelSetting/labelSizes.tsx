@@ -41,7 +41,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
         </div>
       </div>
 
-      <div className="flex flex-col md:grid md:grid-cols-2  md:divide-x-2 md:h-[350px] my-6">
+      <div className="flex flex-col md:grid md:grid-cols-2 md:divide-x-2 md:h-[350px] my-6">
         <div className=" flex ">
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
