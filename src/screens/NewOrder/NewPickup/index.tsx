@@ -545,12 +545,12 @@ const PickupLocation = () => {
 
           <PickupDate epochPickupDate={setPickupDate} inputError={inputError} />
 
-          <CustomBranding
+          {/* <CustomBranding
             data={{
               pickupAddress,
               setPickupAddress,
             }}
-          />
+          /> */}
 
           <BottomLayout
             callApi={() => postPickupOrderDetails()}

@@ -38,7 +38,7 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
   };
 
   return (
-    <div className="flex my-5 px-5">
+    <div className="flex my-5 px-5 pb-[100px]">
       <CustomInputWithImage
         placeholder="Pickup Date"
         imgSrc={CalenderIcon}
