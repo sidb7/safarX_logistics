@@ -107,14 +107,16 @@ const Tracking = () => {
   }
 
   const getTimeDetails = (trackingInfo: any) => {
-    const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
+    const { processedLog } = trackingInfo[0];
 
-    setTrackingDetails(dateAndTimings);
+    const processedLogFromAPI = processedLog[0];
 
-    let checkDate = convertEpochToDateTime(dateAndTimings.LastUpdatedAt);
+    //setting to the state
+    setTrackingDetails(processedLogFromAPI);
+
+    let checkDate = convertEpochToDateTime(processedLogFromAPI?.LastUpdatedAt);
 
     let date: any = new Date(checkDate);
-
     let [day, dateAndTime] = date.toUTCString().split(",");
 
     /**this is day */
@@ -161,7 +163,7 @@ const Tracking = () => {
         setTrackingState([]);
         return toast.error("Please Enter Tracking Number");
       }
-
+      setTrackingState([]);
       setLoading(true);
       setTempSteps(steps);
       setCancelled(false);
@@ -179,6 +181,10 @@ const Tracking = () => {
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
           response?.data[0]?.trackingInfo[0]?.currentStatus
+        );
+        console.log(
+          "🚀 ~ file: clientTracking.tsx:183 ~ handleTrackOrderClick ~ res:",
+          res
         );
 
         let mysteps = tempSteps;
