@@ -132,7 +132,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
         <div className="flex p-4">
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center  cursor-pointer"
-            onClick={() => handleOptionChange("a4Size")}
+            onClick={() => handleOptionChange("A4")}
           >
             <img src={A4PageLabel} alt="A4PageLabel" className="md:h-[80%]" />
             <div className="md:w-[50%] text-center flex-col flex justify-center items-center">
@@ -141,8 +141,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
               </p>
               <CustomRadioButton
                 name="singlePage"
-                value="a4Size"
-                checked={checked === "a4Size"}
+                value="A4"
+                checked={checked === "A4"}
                 // defaultChecked=""
                 onChange={() => {}}
                 inputClassName="h-full m-2"
@@ -152,7 +152,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
           </div>
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
-            onClick={() => handleOptionChange("a5Size")}
+            onClick={() => handleOptionChange("A5")}
           >
             <img src={A5PageLabel} alt="A5PageLabel" className="md:h-[80%]" />
             <div className="md:w-[40%] text-center flex-col flex justify-center items-center">
@@ -161,8 +161,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
               </p>
               <CustomRadioButton
                 name="singlePage"
-                value="a5Size"
-                checked={checked === "a5Size"}
+                value="A5"
+                checked={checked === "A5"}
                 // defaultChecked=""
                 onChange={() => {}}
                 inputClassName="h-full m-2"
@@ -172,7 +172,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
           </div>
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
-            onClick={() => handleOptionChange("a6Size")}
+            onClick={() => handleOptionChange("A6")}
           >
             <img src={A6PageLabel} alt="A6PageLabel" className="md:h-[80%]" />
             <div className="md:w-[40%] text-center flex-col flex justify-center items-center">
@@ -181,8 +181,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
               </p>
               <CustomRadioButton
                 name="singlePage"
-                value="a6Size"
-                checked={checked === "a6Size"}
+                value="A6"
+                checked={checked === "A6"}
                 onChange={() => {}}
                 // defaultChecked=""
                 inputClassName="h-full m-2"

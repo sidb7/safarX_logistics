@@ -222,7 +222,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 style={{ accentColor: "black" }}
                 checkboxClassName=" gap-x-2 !w-6 !h-6 "
                 label="Hide the Order Value for Prepaid Orders."
-                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                labelClassName="!font-Open !text-[14px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
                   setLabelData({
                     ...labelData,
