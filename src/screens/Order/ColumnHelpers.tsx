@@ -458,9 +458,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
-      let renderStatus =
-        rowsData?.status?.[rowsData?.status?.length - 1].currentStatus ||
-        "Draft";
+      let renderStatus = rowsData?.currentStatus || "";
       const rows: any = [
         {
           title: "Pickup Address",
@@ -573,7 +571,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
           [`Current Status ${index + 1}`]: capitalizeFirstLetter(
-            elem.currentStatus
+            elem?.currentStatus
           ),
           [`Description ${index + 1}`]: capitalizeFirstLetter(
             elem?.description
@@ -937,7 +935,7 @@ export const columnHelperForNewOrder = (
             ...statusObj,
             [`AWB No ${index + 1}`]: rowsData.awb,
             [`Current Status ${index + 1}`]: capitalizeFirstLetter(
-              elem.currentStatus
+              elem?.currentStatus
             ),
             [`Description ${index + 1}`]: capitalizeFirstLetter(
               elem?.description
