@@ -174,6 +174,8 @@ export const Transaction = () => {
           data={data}
           columns={PassbookColumns(setSortOrder)}
           setRowSelectedData={setRowSelectedData}
+          thclassName={"!w-auto "}
+          tdclassName={"!w-auto"}
         />
       );
     } else if (renderingComponents === 1) {

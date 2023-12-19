@@ -13,17 +13,23 @@ import FitnessCategoryLogo from "../../../../assets/Product/fitness.svg";
 import GiftLogo from "../../../../assets/Product/gift.svg";
 import StackLogo from "../../../../assets/Catalogue/StackIcon.svg";
 import { POST } from "../../../../utils/webService";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import {
   GET_ALL_STORES,
   GET_CHANNEL_INVENTORY,
   GET_COMBO_PRODUCT,
   GET_PRODUCTS,
+  DELETE_PRODUCT,
+  DELETE_COMBO_PRODUCT,
 } from "../../../../utils/ApiUrls";
 import ComboProductBox from "../../../../components/ComboProductBox";
 import { toast } from "react-toastify";
 import EditProduct from "./editProduct";
 import axios from "axios";
 import { Spinner } from "../../../../components/Spinner";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
+import ServiceButton from "../../../../components/Button/ServiceButton";
+import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -39,12 +45,18 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   const [editProductData, setEditProductData] = useState();
   const [filterId, setFilterId] = useState(0);
   const [totalItemCount, setTotalItemCount] = useState(0);
+
   const [viewed, setViewed] = useState(-1);
   const [showComboProductList, setShowComboProductList] = useState(false);
   const [editAddressModal, setEditAddressModal] = useState<any>(false);
   const [channels, setChannels] = useState([]);
   const [isActiveChannel, setIsActiveChannel] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteProductsData, setDeleteProductsData] = useState({
+    singleProduct: "",
+    comboProduct: "",
+  });
 
   const [filterData, setFilterData] = useState([
     { label: "Single Product", isActive: false },
@@ -90,6 +102,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
   };
 
   const getProducts = async () => {
+    setLoading(true);
     const { data } = await POST(
       filterId === 0 ? GET_PRODUCTS : GET_COMBO_PRODUCT,
       {
@@ -100,9 +113,11 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     );
 
     if (data?.success) {
+      setLoading(false);
       setProductData(data.data);
       setTotalItemCount(data?.totalProduct);
     } else {
+      setLoading(false);
       setProductData([]);
       toast.error(data?.message);
     }
@@ -136,14 +151,13 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     setLoading(false);
   };
 
-  // useEffect(() => {
-  //   console.log("isModalOpen: ", isModalOpen);
-  //   if (!isModalOpen) {
-  //     (async () => {
-  //       await getProducts();
-  //     })();
-  //   }
-  // }, [isModalOpen]);
+  useEffect(() => {
+    if (!isModalOpen) {
+      (async () => {
+        await getProducts();
+      })();
+    }
+  }, [isModalOpen]);
 
   useEffect(() => {
     (async () => {
@@ -186,12 +200,68 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     );
   };
 
-  return loading ? (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      <Spinner />
-    </div>
-  ) : (
-    <>
+  const deleteAddress = async () => {
+    try {
+      let payload, deleteUrl;
+
+      if (filterId === 0) {
+        deleteUrl = DELETE_PRODUCT;
+        payload = { productId: deleteProductsData.singleProduct };
+      } else {
+        deleteUrl = DELETE_COMBO_PRODUCT;
+
+        payload = { id: deleteProductsData.comboProduct };
+      }
+
+      const { data: response }: any = await POST(deleteUrl, payload);
+
+      if (response?.success) {
+        await getProducts();
+      }
+    } catch (error) {
+      console.error(" ERROR", error);
+      return error;
+    }
+  };
+
+  const deleteModalContent = () => {
+    return (
+      <div className="flex flex-col  h-full w-full   p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsDeleteModalOpen(false)}
+          />
+        </div>
+        <div className="flex flex-col justify-center  items-center h-full w-full  ">
+          <img src={DeleteGifIcon} alt="" />
+          <p className="font-Open text-sm md:text-base font-semibold text-center">
+            Are you sure you want to delete this product?
+          </p>
+          <div className="flex  items-center gap-x-4 mt-10">
+            <ServiceButton
+              text="Yes"
+              className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
+              onClick={() => {
+                deleteAddress();
+                setIsDeleteModalOpen(false);
+              }}
+            />
+            <ServiceButton
+              text="No"
+              className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+              onClick={() => setIsDeleteModalOpen(false)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div>
       <div>
         {filterComponent()}
 
@@ -261,72 +331,90 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               <img src={DeliveryIcon} alt="" className="mr-2" />
               Most Viewed
             </h1>
-            <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
-              {productData?.map((data: any, index: number) => {
-                if (filterId === 0) {
-                  return (
-                    <div
-                      key={index}
-                      className="lg:w-[272px] lg:min-h-full"
-                      // onClick={() => setViewed(index)}
-                    >
-                      <ProductBox
-                        image={
-                          (data?.images?.length > 0 && data?.images[0].url) ||
-                          ItemIcon
-                        }
-                        productName={data?.name}
-                        weight={`${data?.appliedWeight} ${data?.weightUnit}`}
-                        height={data?.height}
-                        breadth={data?.breadth}
-                        length={data?.length}
-                        editMode={true}
-                        className={`cursor-pointer p-[16px] ${
-                          viewed === index
-                            ? "border-2 border-solid border-[#004EFF]"
-                            : ""
-                        }`}
-                        onClickEdit={() => {
-                          setEditAddressModal(true);
-                          setEditProductData(data);
-                        }}
-                      />
-                    </div>
-                  );
-                } else if (filterId === 1) {
-                  return (
-                    <div
-                      className="w-[272px] h-[76px] my-2"
-                      key={`${data.name}_${index}`}
-                    >
-                      <ComboProductBox
-                        image={StackLogo}
-                        productName={data?.name}
-                        weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
-                        Value={data?.totalValue}
-                        dimension={`${data?.totalPrice}`}
-                        className={`cursor-pointer p-[16px] ${
-                          viewed === index
-                            ? "border-2 border-solid border-[#004EFF]"
-                            : ""
-                        }`}
-                        label={`Product: ${data?.products?.length}`}
-                        data={data}
-                        index={index}
-                      />
-                    </div>
-                  );
-                }
-              })}
-            </div>
-            {/* {totalItemCount > 0 && (
-              <PaginationComponent
-                totalItems={totalItemCount}
-                itemsPerPageOptions={[10, 20, 30, 50]}
-                onPageChange={onPageIndexChange}
-                onItemsPerPageChange={onPerPageItemChange}
-              />
-            )} */}
+
+            {loading ? (
+              <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                <Spinner />
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
+                  {productData?.map((data: any, index: number) => {
+                    if (filterId === 0) {
+                      return (
+                        <div
+                          key={index}
+                          className="lg:w-[272px] lg:min-h-full"
+                          // onClick={() => setViewed(index)}
+                        >
+                          <ProductBox
+                            image={
+                              (data?.images?.length > 0 &&
+                                data?.images[0].url) ||
+                              ItemIcon
+                            }
+                            productName={data?.name}
+                            weight={`${data?.appliedWeight} ${data?.weightUnit}`}
+                            height={data?.height}
+                            breadth={data?.breadth}
+                            length={data?.length}
+                            editMode={true}
+                            productId={data?.productId}
+                            className={`cursor-pointer p-[16px] ${
+                              viewed === index
+                                ? "border-2 border-solid border-[#004EFF]"
+                                : ""
+                            }`}
+                            onClickEdit={() => {
+                              setEditAddressModal(true);
+                              setEditProductData(data);
+                            }}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            setDeleteProductsData={setDeleteProductsData}
+                            deleteProductsData={deleteProductsData}
+                          />
+                        </div>
+                      );
+                    } else if (filterId === 1) {
+                      return (
+                        <div
+                          className="w-[272px] h-[76px] my-2"
+                          key={`${data.name}_${index}`}
+                        >
+                          <ComboProductBox
+                            image={StackLogo}
+                            productName={data?.name}
+                            weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
+                            Value={data?.totalValue}
+                            dimension={`${data?.totalPrice}`}
+                            className={`cursor-pointer p-[16px] ${
+                              viewed === index
+                                ? "border-2 border-solid border-[#004EFF]"
+                                : ""
+                            }`}
+                            label={`Product: ${data?.products?.length || ""}`}
+                            data={data}
+                            index={index}
+                            productId={data?.id}
+                            setIsDeleteModalOpen={setIsDeleteModalOpen}
+                            setDeleteProductsData={setDeleteProductsData}
+                            deleteProductsData={deleteProductsData}
+                          />
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+                {totalItemCount > 0 && (
+                  <PaginationComponent
+                    totalItems={totalItemCount}
+                    itemsPerPageOptions={[10, 20, 30, 50]}
+                    onPageChange={onPageIndexChange}
+                    onItemsPerPageChange={onPerPageItemChange}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
         {channels.length > 0 && filterId === 0 && (
@@ -406,6 +494,15 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           editProductData={editProductData}
         />
       )}
+
+      <CenterModal
+        isOpen={isDeleteModalOpen}
+        className="!w-[30%] !h-[40%] !absolute !z-20 "
+        onRequestClose={() => setIsDeleteModalOpen(false)}
+      >
+        {deleteModalContent()}
+      </CenterModal>
+
       {/* <div className="mt-[26px]">
         <h1 className="text-[#323232] text-[24px] font-normal leading-8 font-Lato flex mb-4">
           <img src={DeliveryIcon} alt="" className="mr-2" />
@@ -473,7 +570,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
           />
         )}
       </div> */}
-    </>
+    </div>
   );
 };
 

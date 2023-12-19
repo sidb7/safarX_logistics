@@ -10,6 +10,7 @@ import InputWithFileUpload from "../InputBox/InputWithFileUpload";
 import ViewIcon from "../../assets/Login/eye.svg";
 import BottomModal from "../../components/CustomModal/customBottomModal";
 import { useMediaQuery } from "react-responsive";
+import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
 
 interface IPackageBoxProps {
   image?: any;
@@ -29,6 +30,10 @@ interface IPackageBoxProps {
   data?: any;
   index?: number;
   selectMode?: boolean;
+  productId?: any;
+  setIsDeleteModalOpen?: any;
+  setDeleteProductsData?: any;
+  deleteProductsData?: any;
 }
 const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   image = "",
@@ -47,6 +52,10 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   index,
   isSelected = false,
   selectMode = false,
+  productId = "",
+  setIsDeleteModalOpen,
+  setDeleteProductsData,
+  deleteProductsData = "",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
   const navigate = useNavigate();
@@ -55,7 +64,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   return (
     <>
       <div
-        className={` ${className} p-2 product-box flex items-center border-2 rounded-md h-20 relative ${
+        className={` ${className} p-2 product-box flex justify-between border-2 rounded-md h-20 relative z-0 ${
           isSelected && "border-[#004EFF]"
         }`}
         onClick={() => (!selectMode ? setIsModalOpen(true) : onClick())}
@@ -68,24 +77,44 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
           onClick={() => (selectMode ? setIsModalOpen(true) : "")}
           className={`${
             label !== "" ? "" : "hidden"
-          } bg-[#6695FF] text-white absolute -top-4 ml-2 rounded-md w-[91px] flex justify-center `}
+          } bg-[#6695FF] text-white absolute -top-4 ml-2  rounded-md w-[91px] flex justify-center `}
         >
           {label}
         </span>
-        <div className="px-2">
-          <img src={image} alt="" />
-        </div>
-        <div className="flex flex-col px-4 ">
-          <div>
-            <span className="line-clamp-1">{productName}</span>
+
+        <div className="flex items-center">
+          <div className="px-2">
+            <img src={image} alt="" />
           </div>
-          <span className="flex ">{`${weight} | ₹${Value}`}</span>
+          <div className="flex flex-col px-4 ">
+            <div>
+              <span className="line-clamp-1">{productName}</span>
+            </div>
+            <span className="flex ">{`${weight} | ₹${Value}`}</span>
+          </div>
         </div>
+
+        <img
+          src={DeleteIcon}
+          alt=""
+          width={18}
+          className=" self-start z-10"
+          onClick={(e: any) => {
+            e.stopPropagation();
+
+            setIsDeleteModalOpen(true);
+
+            setDeleteProductsData({
+              ...deleteProductsData,
+              comboProduct: productId,
+            });
+          }}
+        />
       </div>
 
       {!isMobileView ? (
         <CenterModal
-          className="h-[750px] w-[700px]"
+          className="h-[750px] w-[700px] !absolute !z-2"
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}
         >
