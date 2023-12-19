@@ -14,7 +14,7 @@ interface ILabelSizesProps {
 const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
   pageSize,
 }) => {
-  const [checked, setChecked] = useState(null);
+  const [checked, setChecked] = useState("singlePage");
 
   const handleOptionChange = (e: any) => {
     pageSize(e);
