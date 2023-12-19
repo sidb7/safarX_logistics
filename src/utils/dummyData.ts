@@ -1547,3 +1547,12 @@ export const serviceabilityTableData = [
     zone: "ZONE 2",
   },
 ];
+
+export const keyNameMapping = {
+  deliveryPincode: "Delivery Pincode",
+  pickupPincode: "Pickup Pincode",
+  partners: "Partners",
+  paymentType: "Payment Type",
+  orderType: "Order Type",
+  sellerId: "Seller Id",
+};
