@@ -606,10 +606,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         if (item.isActive) {
           switch (category?.name) {
             case "Delivery Pincode":
-              filterArrTwo[2]["deliveryAddress.pincode"].$in?.push(item?.value);
+              filterArrTwo[2]["deliveryAddress.pincode"].$in?.push(
+                +item?.value
+              );
               break;
             case "Pickup Pincode":
-              filterArrTwo[1]["pickupAddress.pincode"].$in?.push(item?.value);
+              filterArrTwo[1]["pickupAddress.pincode"].$in?.push(+item?.value);
               break;
             case "Payment Type":
               if (item?.value === "Cod") {
@@ -625,7 +627,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               filterArrOne[0].orderType.$in?.push(item?.value);
               break;
             case "Seller Id":
-              filterArrOne[2].sellerId.$in?.push(item?.value);
+              filterArrOne[2].sellerId.$in?.push(+item?.value);
               break;
             default:
               break;
