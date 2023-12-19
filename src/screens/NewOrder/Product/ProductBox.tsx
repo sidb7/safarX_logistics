@@ -1,5 +1,6 @@
 import React from "react";
 import EditIcon from "../../../assets/Product/Edit.svg";
+import DeleteIcon from "../../../assets/DeleteIconRedColor.svg";
 
 interface IPackageBoxProps {
   image?: any;
@@ -17,6 +18,12 @@ interface IPackageBoxProps {
   onClickEdit?: () => void;
   isSelected?: any;
   isActiveChannel?: boolean;
+  setIsDeleteModalOpen?: any;
+  productId?: any;
+  setDeleteProductsData?: any;
+  deleteProductsData?: any;
+
+  filterId?: any;
 }
 
 const productBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -35,6 +42,12 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   isSelected = false,
   isActiveChannel,
   editMode = false,
+  setIsDeleteModalOpen,
+  productId = "",
+  setDeleteProductsData,
+  deleteProductsData,
+
+  filterId,
 }) => {
   return (
     <div
@@ -58,16 +71,34 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
         <img className="w-[100%] h-[100%] object-contain" src={image} alt="" />
       </div>
       <div className="flex flex-col w-full">
-        <div className="flex justify-between">
-          <span className="line-clamp-1">{productName}</span>
-          {editMode && !isActiveChannel && (
+        <div className="flex justify-between ">
+          <span className="line-clamp-1  w-[100px]">{productName}</span>
+
+          <div className="flex items-center ">
+            {editMode && !isActiveChannel && (
+              <img
+                src={EditIcon}
+                alt=""
+                onClick={onClickEdit}
+                className="w-4 mx-2"
+              />
+            )}
+
             <img
-              src={EditIcon}
+              src={DeleteIcon}
               alt=""
-              onClick={onClickEdit}
-              className="w-4 mx-2"
+              width={18}
+              className="cursor-pointer"
+              onClick={() => {
+                setIsDeleteModalOpen(true);
+
+                setDeleteProductsData({
+                  ...deleteProductsData,
+                  singleProduct: productId,
+                });
+              }}
             />
-          )}
+          </div>
         </div>
         <span className="flex text-[12px] lg:text-[14px] ">
           {`${weight} | ${length} x ${breadth} x ${height} cm`}

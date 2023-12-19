@@ -201,10 +201,12 @@ const COURIER_PRICING = `${SELLER_URL}/api/v1/sellerPlans/getSellerPlanWithRates
 // CREATE BULK PRODUCT
 const CREATE_BULK_PRODUCT = `${SELLER_BASE_URL}/product/createBulkProduct`;
 const GET_PRODUCTS = `${SELLER_BASE_URL}/product/getProduct`;
+const DELETE_PRODUCT = `${SELLER_BASE_URL}/product/deleteProduct`;
 
 //COMBO PRODUCTS
 //create combo
 const CREATE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/createComboProduct`;
+const DELETE_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/deleteComboProduct`;
 //get combo
 const GET_COMBO_PRODUCT = `${SELLER_BASE_URL}/comboProduct/getComboProduct`;
 
@@ -417,4 +419,6 @@ export {
   GET_DASHBOARD_INFO_REVENUE,
   POST_ADD_LABEL_DATA,
   GET_CHANNEL_INVENTORY,
+  DELETE_PRODUCT,
+  DELETE_COMBO_PRODUCT,
 };
