@@ -6,7 +6,6 @@ import { SetStateAction, useEffect, useState } from "react";
 import { SearchBox } from "../../../components/SearchBox";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
-import FilterScreen from "../../../screens/NewOrder/Filter/index";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
@@ -30,6 +29,8 @@ import { Tooltip } from "react-tooltip";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 //import * as FileSaver from "file-saver";
 import { tokenKey } from "../../../utils/utility";
+import FilterScreen from "../common/FilterScreen/filterScreen";
+import { Spinner } from "../../../components/Spinner";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -44,6 +45,9 @@ interface IOrderstatusProps {
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
   tabStatusId?: any;
+  setTotalcount?: any;
+  setStatusCount?: any;
+  isOrderTableLoader: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -78,6 +82,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setDeleteModalDraftOrder,
   setCancellationModal,
   tabStatusId,
+  setTotalcount,
+  setStatusCount,
+  isOrderTableLoader,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -91,6 +98,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [partnerValue, setPartnerValue] = useState<any>();
   const [manifestModal, setManifestModal]: any = useState({
     isOpen: false,
+  });
+  const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
+  const [filterState, setFilterState] = useState([]);
+  const [filterPayLoad, setFilterPayLoad] = useState({
+    filterArrOne: [],
+    filterArrTwo: [],
   });
 
   useEffect(() => {
@@ -335,31 +348,47 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleSearchOrder = (e: any) => {
+  const handleSearchOrder = async (e: any) => {
     try {
       clearTimeout(debounceTimer);
       debounceTimer = setTimeout(async () => {
         if (e.target.value.length > 0) {
-          const { data } = await POST(GET_ORDER_BY_ID, {
+          isOrderTableLoader(true);
+          const { data } = await POST(GET_SELLER_ORDER, {
             id: e.target.value,
             currentStatus,
+            filterArrOne: filterPayLoad?.filterArrOne || [],
+            filterArrTwo: filterPayLoad?.filterArrTwo || [],
           });
-          setOrders(data.data);
-        } else {
-          let payload = {
-            skip: 0,
-            limit: 10,
-            pageNo: 1,
-            sort: { _id: -1 },
-            currentStatus,
-          };
-          const { data } = await POST(GET_SELLER_ORDER, payload);
+          const { OrderData, orderCount } = data?.data?.[0];
+          setStatusCount("", currentStatus, orderCount);
+          setTotalcount(orderCount ? orderCount : 0);
 
-          const { OrderData } = data?.data?.[0];
-          setOrders(OrderData);
-
-          clearTimeout(debounceTimer);
+          if (data?.status) {
+            isOrderTableLoader(false);
+            setOrders(OrderData);
+            setFilterModal(false);
+          } else {
+            isOrderTableLoader(false);
+            setFilterModal(false);
+            throw new Error(data?.meesage);
+          }
         }
+        //  else {
+        //   let payload = {
+        //     skip: 0,
+        //     limit: 10,
+        //     pageNo: 1,
+        //     sort: { _id: -1 },
+        //     currentStatus,
+        //   };
+        //   const { data } = await POST(GET_SELLER_ORDER, payload);
+
+        //   const { OrderData } = data?.data?.[0];
+        //   setOrders(OrderData);
+
+        //   clearTimeout(debounceTimer);
+        // }
       }, 800);
     } catch (error: any) {
       console.warn("Error in OrderStatus Debouncing: ", error.message);
@@ -435,15 +464,15 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 customPlaceholder="Search By Order Id, AWB"
               />
             </div>
-            {/* <div
-              className="flex justify-between items-center p-2 gap-x-2"
+            <div
+              className="flex justify-between cursor-pointer items-center p-2 gap-x-2"
               onClick={() => setFilterModal(true)}
             >
               <img src={FilterIcon} alt="" />
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div> */}
+            </div>
           </div>
         );
       } else {
@@ -488,19 +517,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               </div>
             )}
 
-            {/* {currentStatus === "BOOKED" && (
-            <>
-              <CustomButton
-                className="px-1 py-1 font-semibold text-[14px]"
-                text="Manifest Report"
-                onClick={() =>
-                  setManifestModal({ ...manifestModal, isOpen: true })
-                }
-                showIcon={true}
-                icon={""}
-              />
-            </>
-          )} */}
             <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
@@ -513,15 +529,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 customPlaceholder="Search By Order Id, AWB"
               />
             </div>
-            {/* <div
-              className="flex justify-between items-center p-2 gap-x-2"
+
+            <div
+              className="flex justify-between items-center p-2 gap-x-2 cursor-pointer"
               onClick={() => setFilterModal(true)}
             >
               <img src={FilterIcon} alt="" />
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div> */}
+            </div>
           </div>
         );
       }
@@ -566,10 +583,115 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     };
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
-    const { OrderData } = data?.data?.[0];
+    const { OrderData, orderCount } = data?.data?.[0];
 
     setOrders(OrderData);
+    setTotalcount(orderCount || 0);
   };
+
+  function getObjectWithIsActiveTrue(data: any) {
+    const filterArrOne: any = [
+      { orderType: { $in: [] } },
+      { courierPartnerName: { $in: [] } },
+      { sellerId: { $in: [] } },
+    ];
+    const filterArrTwo: any = [
+      { "codInfo.isCod": { $in: [] } },
+      { "pickupAddress.pincode": { $in: [] } },
+      { "deliveryAddress.pincode": { $in: [] } },
+    ];
+
+    for (const category of data) {
+      for (const item of category.menu) {
+        if (item.isActive) {
+          switch (category?.name) {
+            case "Delivery Pincode":
+              filterArrTwo[2]["deliveryAddress.pincode"].$in?.push(
+                +item?.value
+              );
+              break;
+            case "Pickup Pincode":
+              filterArrTwo[1]["pickupAddress.pincode"].$in?.push(+item?.value);
+              break;
+            case "Payment Type":
+              if (item?.value === "Cod") {
+                filterArrTwo[0]["codInfo.isCod"].$in?.push(true);
+              } else {
+                filterArrTwo[0]["codInfo.isCod"].$in?.push(false);
+              }
+              break;
+            case "Partners":
+              filterArrOne[1].courierPartnerName.$in?.push(item?.value);
+              break;
+            case "Order Type":
+              filterArrOne[0].orderType.$in?.push(item?.value);
+              break;
+            case "Seller Id":
+              filterArrOne[2].sellerId.$in?.push(+item?.value);
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+
+    const removeEmptyInArrays = (arr: any[]) => {
+      return arr.filter((obj) => {
+        return (
+          obj[Object.keys(obj)[0]].$in &&
+          obj[Object.keys(obj)[0]].$in.length > 0
+        );
+      });
+    };
+
+    const filteredFilterArrOne = removeEmptyInArrays(filterArrOne);
+    const filteredFilterArrTwo = removeEmptyInArrays(filterArrTwo);
+
+    return {
+      filterArrOne: filteredFilterArrOne,
+      filterArrTwo: filteredFilterArrTwo,
+    };
+  }
+
+  const applyFilterforOrders = async () => {
+    try {
+      setIsFilterLoading(true);
+      let payload = {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+        sort: { _id: -1 },
+        currentStatus,
+        filterArrOne: filterPayLoad?.filterArrOne || [],
+        filterArrTwo: filterPayLoad?.filterArrTwo || [],
+      };
+      const { data } = await POST(GET_SELLER_ORDER, payload);
+      const { OrderData, orderCount } = data?.data?.[0];
+      setStatusCount("", currentStatus, orderCount);
+      setTotalcount(orderCount ? orderCount : 0);
+
+      if (data?.status) {
+        setIsFilterLoading(false);
+        setOrders(OrderData);
+        setFilterModal(false);
+      } else {
+        setIsFilterLoading(false);
+        setFilterModal(false);
+        throw new Error(data?.meesage);
+      }
+    } catch (error: any) {
+      setIsFilterLoading(false);
+      toast.error(error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    const result: any = getObjectWithIsActiveTrue(filterState);
+
+    setFilterPayLoad(result);
+  }, [filterState]);
 
   return (
     <div className="flex flex-col pt-7">
@@ -659,11 +781,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                   )}
                 {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
-            </span> */}
+              </span> */}
               </div>
               {currentStatus === "DRAFT" &&
                 filterComponent("!hidden lg:!flex lg:!mt-0")}
             </div>
+
             <div>{filterButton()}</div>
           </div>
 
@@ -679,7 +802,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           onClose={() => {
             setFilterModal(false);
           }}
-          className="!justify-between !items-stretch !hidden lg:!block"
+          className="w-[30%] !justify-between !items-stretch !hidden lg:!block"
         >
           <div>
             <div className="flex justify-between mt-5 mx-5">
@@ -696,8 +819,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 />
               </div>
             </div>
-            <div className="mx-5">
-              <FilterScreen />
+            <div className="mx-5 ">
+              <FilterScreen
+                filterState={filterState}
+                setFilterState={setFilterState}
+              />
             </div>
 
             <div
@@ -706,14 +832,23 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             >
               <ServiceButton
                 text="RESET ALL"
-                onClick={() => {}}
+                onClick={() => {
+                  setFilterModal(false);
+                  handleTabChange(statusId);
+                }}
                 className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
               />
-              <ServiceButton
-                text="APPLY"
-                onClick={() => {}}
-                className="bg-[#1C1C1C] text-[#FFFFFF] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
-              />
+              {isFilterLoading ? (
+                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
+                  <Spinner />
+                </div>
+              ) : (
+                <ServiceButton
+                  text="APPLY"
+                  onClick={applyFilterforOrders}
+                  className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+                />
+              )}
             </div>
           </div>
         </RightSideModal>

@@ -573,9 +573,10 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
           [`Current Status ${index + 1}`]: capitalizeFirstLetter(
             elem?.currentStatus
           ),
-          [`Description ${index + 1}`]: capitalizeFirstLetter(
-            elem?.description
-          ),
+          // [`Description ${index + 1}`]: capitalizeFirstLetter(
+          //   elem?.description
+          // ),
+          [`Description ${index + 1}`]: elem?.description,
           [`LogId ${index + 1}`]: elem.logId,
           [`Notes ${index + 1}`]: elem.notes,
           [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
@@ -937,9 +938,7 @@ export const columnHelperForNewOrder = (
             [`Current Status ${index + 1}`]: capitalizeFirstLetter(
               elem?.currentStatus
             ),
-            [`Description ${index + 1}`]: capitalizeFirstLetter(
-              elem?.description
-            ),
+            [`Description ${index + 1}`]: elem?.description,
             [`LogId ${index + 1}`]: elem.logId,
             [`Notes ${index + 1}`]: elem.notes,
             [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
