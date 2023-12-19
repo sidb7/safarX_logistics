@@ -27,6 +27,9 @@ export const maskMobileNumber = (mobileNumber: any) => {
 };
 
 export const capitalizeFirstLetter = (str: string) => {
+  if (typeof str !== "string") {
+    return "";
+  }
   return str
     ?.toLowerCase()
     ?.replace(/(?:^|\s|-)\S/g, (match: any) => match?.toUpperCase())

@@ -16,7 +16,7 @@ import { getQueryJson } from "../../../utils/utility";
 import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import CustomInputBox from "../../../components/Input/index";
-
+import "./style.css";
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
 
@@ -107,14 +107,16 @@ const Tracking = () => {
   }
 
   const getTimeDetails = (trackingInfo: any) => {
-    const dateAndTimings = JSON.parse(trackingInfo[0]?.processedLog);
+    const { processedLog } = trackingInfo[0];
 
-    setTrackingDetails(dateAndTimings);
+    const processedLogFromAPI = processedLog[0];
 
-    let checkDate = convertEpochToDateTime(dateAndTimings.LastUpdatedAt);
+    //setting to the state
+    setTrackingDetails(processedLogFromAPI);
+
+    let checkDate = convertEpochToDateTime(processedLogFromAPI?.LastUpdatedAt);
 
     let date: any = new Date(checkDate);
-
     let [day, dateAndTime] = date.toUTCString().split(",");
 
     /**this is day */
@@ -161,7 +163,7 @@ const Tracking = () => {
         setTrackingState([]);
         return toast.error("Please Enter Tracking Number");
       }
-
+      setTrackingState([]);
       setLoading(true);
       setTempSteps(steps);
       setCancelled(false);
@@ -179,6 +181,10 @@ const Tracking = () => {
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
           response?.data[0]?.trackingInfo[0]?.currentStatus
+        );
+        console.log(
+          "🚀 ~ file: clientTracking.tsx:183 ~ handleTrackOrderClick ~ res:",
+          res
         );
 
         let mysteps = tempSteps;
@@ -214,40 +220,37 @@ const Tracking = () => {
   }, []);
 
   const temp = useMemo(() => {
-    return trackingDetails?.Scans?.reverse()?.map(
-      (each: any, index: number) => {
-        return (
-          <div
-            className="flex gap-x-5  h-16 w-full  relative overflow-y-scroll mt-2 overflow-hidden"
-            key={index}
-          >
-            <div className="pt-1">
-              <p className="text-xs font-Open font-normal w-[68px] ">
-                {`${each?.time.split(" ")[0] || " "} `}
-              </p>
-              <p className="text-xs font-Open font-normal">
-                {`${each?.time.split(" ")[1] || " "} `}
-              </p>
+    return trackingDetails?.Scans?.map((each: any, index: number) => {
+      return (
+        <div className="flex gap-x-4  w-full " key={index}>
+          <div className="font-bold pr-2 py-2 ">
+            <p className="text-xs font-Open w-full ">
+              {new Date(each?.time).toDateString().slice(3) || "-"}
+            </p>
+            <p className="text-xs font-Open">
+              {new Date(each?.time).toLocaleTimeString() || "-"}
+            </p>
+          </div>
+          <div className="relative border-l-[2px] mt-[2px]  border-l-[#80A7FF] border-dotted">
+            <div className="w-3 h-3 bg-[#80A7FF] rounded-full absolute top-2 left-[-7px]"></div>
+          </div>
+          <div className="py-2">
+            <div className="text-xs font-Open font-medium  md:w-full ">
+              <p className="capitalize">{each?.message.toLowerCase()}</p>
             </div>
-            <div className="border-l-4 border-l-[#80A7FF] pl-5 border-dotted pt-1">
-              <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll ">
-                {each?.message}
+            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full  ">
+              {each?.status.toLowerCase()}
+            </p>
+            <div className="flex gap-x-1">
+              <img src={Location} alt="" className="w-4 h-4" />
+              <p className="text-xs font-Open font-normal capitalize md:w-full  ">
+                {each?.location.toLowerCase()}
               </p>
-              <p className="text-xs font-Open  font-normal mt-1 w-[150px] md:w-full overflow-x-scroll ">
-                {each?.status}
-              </p>
-              <div className="flex pt-1 gap-x-2 mt-1">
-                <img src={Location} alt="" className="w-4 h- 4" />
-                <p className="text-xs font-Open font-normal w-[150px] md:w-full overflow-x-scroll ">
-                  {each?.location}
-                </p>
-              </div>
-              <div className="w-2 h-2 bg-[#80A7FF] rounded-full absolute top-5 left-[86px]"></div>
             </div>
           </div>
-        );
-      }
-    );
+        </div>
+      );
+    });
   }, [trackingDetails]);
 
   return (
@@ -321,14 +324,14 @@ const Tracking = () => {
                                                     {timeDetails.hours + " |"}
                                                   </span>
                                                   <span>
-                                                    {timeDetails.date + " |"}
+                                                    {timeDetails.date}
                                                   </span>
-                                                  <span>
+                                                  {/* <span>
                                                     {timeDetails.day + " |"}
                                                   </span>
                                                   <span>
                                                     {timeDetails.time}
-                                                  </span>
+                                                  </span> */}
                                                 </div>
                                               </p>
                                             </div>
@@ -435,7 +438,7 @@ const Tracking = () => {
                                         </div>
 
                                         <div
-                                          className={`max-h-[200px] overflow-y-scroll`}
+                                          className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] overflow-y-scroll my-2 py-2 px-4 rounded-lg`}
                                         >
                                           {temp}
                                         </div>
@@ -577,10 +580,8 @@ const Tracking = () => {
                                                         </p>
                                                         <p className="text-sm font-Open font-normal">
                                                           ₹{" "}
-                                                          {((+each?.unitPrice ||
-                                                            0) +
-                                                            (+each?.unitTax ||
-                                                              0)) *
+                                                          {(+each?.unitPrice ||
+                                                            0) *
                                                             (+each?.qty || 0)}
                                                         </p>
                                                       </div>

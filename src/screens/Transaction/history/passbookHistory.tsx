@@ -204,10 +204,12 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex whitespace-nowrap ">
+          <div className="flex justify-center whitespace-nowrap ">
             {isValidJSON(info.row.original?.remark)
-              ? JSON.parse(info.row.original?.remark)?.tempOrderId
-              : ""}
+              ? JSON.parse(info.row.original?.remark)?.tempOrderId !== undefined
+                ? JSON.parse(info.row.original?.remark)?.tempOrderId
+                : "---"
+              : "---"}
           </div>
         );
       },
@@ -249,11 +251,14 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex whitespace-nowrap ">
+          <div className="flex whitespace-nowrap justify-center ">
             {isValidJSON(info.row.original?.remark)
               ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]?.tracking
-                  ?.awb
-              : ""}
+                  ?.awb !== undefined
+                ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]?.tracking
+                    ?.awb
+                : "---"
+              : "---"}
           </div>
         );
       },
@@ -261,7 +266,7 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("amount_credit", {
       header: () => {
         return (
-          <div className="flex justify-between items-center min-w-[142px]">
+          <div className={`flex justify-between items-center   `}>
             <div>
               <h1 className="text-sm font-semibold leading-5 ">Credited </h1>
             </div>
@@ -273,7 +278,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       },
       cell: (info: any) => {
         return (
-          <div className="flex whitespace-nowrap ">
+          <div className="flex  ">
             {info.row.original.type === "credit"
               ? `₹ ${info.row?.original?.amount}`
               : "₹ 0"}
@@ -284,7 +289,7 @@ export const PassbookColumns = (setSortOrder: any) => {
     columnsHelper.accessor("amount", {
       header: () => {
         return (
-          <div className="flex justify-between items-center  min-w-[142px]">
+          <div className="flex justify-between items-center  ">
             <div>
               <h1>Debited</h1>
             </div>
@@ -297,7 +302,7 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         let debitedAmount = parseFloat(info.row?.original?.amount).toFixed(2);
         return (
-          <div className="flex whitespace-nowrap ">
+          <div className="flex whitespace-nowrap   ">
             {info.row.original.type === "debit" ? `₹ ${debitedAmount}` : "₹ 0"}
           </div>
         );
@@ -385,13 +390,19 @@ export const PassbookColumns = (setSortOrder: any) => {
                 TrackingNo:${
                   isValidJSON(info.row.original?.remark)
                     ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]
-                        ?.tracking?.awb
-                    : ""
+                        ?.tracking?.awb !== undefined
+                      ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]
+                          ?.tracking?.awb
+                      : "---"
+                    : "---"
                 },
                 ShipyaariId:${
                   isValidJSON(info.row.original?.remark)
-                    ? JSON.parse(info.row.original?.remark)?.tempOrderId
-                    : ""
+                    ? JSON.parse(info.row.original?.remark)?.tempOrderId !==
+                      undefined
+                      ? JSON.parse(info.row.original?.remark)?.tempOrderId
+                      : "---"
+                    : "---"
                 },
                 Status:${info.row?.original?.status},
                 Description:${info.row?.original?.description}`}
@@ -480,7 +491,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
 
           <div className="grid grid-cols-2 ml-4 mt-2">
             <div className="flex flex-col">
-              <span className="text-[10px] text-[#95d47f] font-semibold">
+              <span className="text-[10px] text-[#95d47f]  font-semibold">
                 Credited
               </span>
               <div className="flex items-center">
