@@ -272,6 +272,8 @@ const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrde
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
 const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`;
 
+const GET_FILTERS_INFO_MENTIONFORORDER = `${SELLER_BASE_URL}/order/getFilltersInforMationForOrder`;
+
 //Sync Order
 const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 
@@ -419,6 +421,7 @@ export {
   GET_DASHBOARD_INFO_REVENUE,
   POST_ADD_LABEL_DATA,
   GET_CHANNEL_INVENTORY,
+  GET_FILTERS_INFO_MENTIONFORORDER,
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
 };

@@ -190,6 +190,11 @@ const tabs = [
     orderNumber: 0,
   },
   {
+    statusName: "Exception",
+    value: "EXCEPTION",
+    orderNumber: 0,
+  },
+  {
     statusName: "Cancelled",
     value: "CANCELLED",
     orderNumber: 0,
@@ -785,6 +790,9 @@ const Index = () => {
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
               tabStatusId={tabStatusId}
+              setTotalcount={setTotalcount}
+              setStatusCount={setStatusCount}
+              isOrderTableLoader={setIsLoading}
             />
             {isLoading ? (
               <>
