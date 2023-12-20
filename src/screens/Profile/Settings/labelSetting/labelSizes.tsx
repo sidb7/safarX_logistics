@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import singlePageLabel from "../../../../assets/singlePageLabel.svg";
 import singlePageLabelSQ from "../../../../assets/singlePageLabelSQ.svg";
 import multiplePageLabel from "../../../../assets/multiplePageLabel.svg";
@@ -9,12 +9,20 @@ import CustomRadioButton from "../../../../components/RadioButton/Index";
 
 interface ILabelSizesProps {
   pageSize?: any;
+  labelData?: any;
 }
 
 const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
   pageSize,
+  labelData,
 }) => {
-  const [checked, setChecked] = useState("singlePage");
+  const [checked, setChecked] = useState();
+
+  useEffect(() => {
+    let tempChecked =
+      labelData && labelData?.pageSize !== undefined && labelData?.pageSize;
+    setChecked(tempChecked);
+  }, [labelData]);
 
   const handleOptionChange = (e: any) => {
     pageSize(e);

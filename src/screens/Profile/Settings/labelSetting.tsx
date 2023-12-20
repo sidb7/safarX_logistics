@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import LabelSizes from "./labelSetting/labelSizes";
 import LabelCard from "./labelSetting/labelCard";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { v4 as uuidv4 } from "uuid";
-import { POST_ADD_LABEL_DATA } from "../../../utils/ApiUrls";
-import { POST } from "../../../utils/webService";
+import {
+  GET_ADD_LABEL_DATA,
+  POST_ADD_LABEL_DATA,
+} from "../../../utils/ApiUrls";
+import { GET, POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -13,10 +16,11 @@ interface ILabelProps {}
 
 const Label: React.FunctionComponent = (props: ILabelProps) => {
   const navigate = useNavigate();
+  const [getDefaultSettings, setDefaultSetting] = useState<any>();
   const [labelData, setLabelData] = useState({
     type: "B2C",
     labelId: uuidv4(),
-    pageSize: "",
+    pageSize: "singlePage",
     inputs: {
       buyerDetails: {
         required: true,
@@ -77,6 +81,15 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
     setLabelData({ ...labelData, pageSize: data });
   };
 
+  const getLabelSettingApi = async () => {
+    const getLabelSetting: any = await POST(GET_ADD_LABEL_DATA);
+    setLabelData(getLabelSetting?.data?.data?.[0]);
+  };
+
+  useEffect(() => {
+    getLabelSettingApi();
+  }, []);
+
   const createLabel = async (e: any) => {
     if (labelData.pageSize !== "") {
       try {
@@ -109,7 +122,11 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
           Step 1: Choose the paper size
         </h1>
 
-        <LabelSizes pageSize={pageSize} />
+        <LabelSizes
+          pageSize={pageSize}
+          labelData={labelData}
+          // defaultLabelSetting={getDefaultSettings}
+        />
 
         <h1 className="font-Lato text-[22px] font-semibold leading-7 capitalize text-[#1C1C1C] mx-4 mt-[10px]">
           Step 2: Customize your label
