@@ -80,17 +80,18 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
       { title: "Download Invoice", actionType: "download_invoice" },
       { title: "Cancel Order", actionType: "cancel_order" },
     ],
-    CANCELLED: [
-      { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
-      { title: "Download Invoice", actionType: "download_invoice" },
-    ],
+    CANCELLED: [{ title: "Track Order", actionType: "track_order" }],
     "READY TO PICK": [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
     "IN TRANSIT": [
+      { title: "Track Order", actionType: "track_order" },
+      { title: "Download Label", actionType: "download_label" },
+      { title: "Download Invoice", actionType: "download_invoice" },
+    ],
+    EXCEPTION: [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
