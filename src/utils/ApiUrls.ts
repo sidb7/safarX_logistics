@@ -282,6 +282,8 @@ const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`
 
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
+const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
+
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 
@@ -424,4 +426,5 @@ export {
   GET_FILTERS_INFO_MENTIONFORORDER,
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
+  GET_ADD_LABEL_DATA,
 };
