@@ -517,10 +517,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           src={AddBulkIcon}
                           alt=""
                           className="self-center"
-                          width={"30px"}
+                          height={"40px"}
+                          width={"40px"}
                         />
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Add Bulk
+                          Add Bulk Order
                         </span>
                       </div>
                       <div
