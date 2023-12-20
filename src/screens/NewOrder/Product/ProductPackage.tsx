@@ -877,7 +877,23 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   })
                 ) : (
                   <>
-                    <div className="text-[grey] py-6">Not Available</div>
+                    <>
+                      <AddButton
+                        text="ADD BOX"
+                        onClick={() => {
+                          setSellerBoxDetailsModal(true);
+                          setTempSellerBoxDetails({});
+                          // handleAddProductPanel(true);
+                          // navigate(
+                          //   `/catalogues/catalogue/add-product?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                          // );
+                        }}
+                        showIcon={true}
+                        icon={ButtonIcon}
+                        className="rounded-xl p-6"
+                        alt="Add Product"
+                      />
+                    </>
                   </>
                 )}
               </div>
@@ -903,38 +919,45 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
 
             <div>
-              <div className="flex py-5 gap-2">
-                <img src={ProductIcon} alt="Package Icon" />
-                <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
-                  Shipyaari Box Types
-                </h1>
-              </div>
-              <div className="flex w-full items-center flex-col gap-3 justify-center">
-                {companyBox?.map((newpackage: any, index: number) => {
-                  return (
-                    <div
-                      key={index}
-                      className="cursor-pointer w-full"
-                      onClick={() => {
-                        setSelectedBox(newpackage);
-                      }}
-                    >
-                      <PackageBox
-                        packageType={newpackage?.name}
-                        volumetricWeight={newpackage?.appliedWeight}
-                        height={newpackage.height}
-                        breadth={newpackage.breadth}
-                        length={newpackage.length}
-                        selected={
-                          selectedBox.boxId === newpackage.boxId ? true : false
-                        }
-                        boxType={newpackage?.color}
-                        recommended={index === 1 ? true : false}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+              {companyBox.length > 0 && (
+                <div>
+                  <div className="flex py-5 gap-2">
+                    <img src={ProductIcon} alt="Package Icon" />
+                    <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
+                      Shipyaari Box Types
+                    </h1>
+                  </div>
+                  <div className="flex w-full items-center flex-col gap-3 justify-center">
+                    {companyBox?.map((newpackage: any, index: number) => {
+                      return (
+                        <div
+                          key={index}
+                          className="cursor-pointer w-full"
+                          onClick={() => {
+                            setSelectedBox(newpackage);
+                          }}
+                        >
+                          <PackageBox
+                            packageType={newpackage?.name}
+                            volumetricWeight={newpackage?.appliedWeight}
+                            height={newpackage.height}
+                            breadth={newpackage.breadth}
+                            length={newpackage.length}
+                            selected={
+                              selectedBox.boxId === newpackage.boxId
+                                ? true
+                                : false
+                            }
+                            boxType={newpackage?.color}
+                            recommended={index === 1 ? true : false}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               <div
                 className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
                 style={{ width: "-webkit-fill-available" }}

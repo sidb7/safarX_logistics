@@ -9,6 +9,7 @@ interface IProps {
   value?: boolean;
   style?: any;
   disabled?: any;
+  inputElementClass?: any;
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showCase?: boolean;
@@ -24,6 +25,7 @@ const Checkbox: React.FC<IProps> = ({
   name,
   value = false,
   style,
+  inputElementClass,
   required,
   showCase = false,
 }) => {
@@ -56,7 +58,7 @@ const Checkbox: React.FC<IProps> = ({
         onChange={(e) => handleCheckboxChange(e)}
         title="Checkbox"
         style={style}
-        className={`${checkboxClassName} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
+        className={`${checkboxClassName} ${inputElementClass} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <span
         className={`${labelClassName} select-none text-sm cursor-pointer`}
