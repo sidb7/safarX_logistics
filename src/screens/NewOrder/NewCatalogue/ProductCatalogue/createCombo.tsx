@@ -196,20 +196,32 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     const searchProduct = async (e: any) => {
       setSearchedProduct(e.target.value);
       setClearIconVisible(true);
-      const { data } = await POST(GET_PRODUCTS, {
-        skip: 0,
-        limit: 10,
-        pageNo: 1,
-        searchValue: e.target.value,
-      });
-      if (data?.success) {
-        setProducts(data?.data);
-        setTotalItemCount(data?.totalProduct);
+
+      if (e.target.value) {
+        const searchedProduct = products.filter((product: any, i: any) => {
+          const productName = product?.name.toLowerCase();
+          return productName.includes(e.target.value.toLowerCase());
+        });
+        setProducts(searchedProduct);
       } else {
-        setProducts([]);
-        toast.error(data?.message);
+        setProducts(products);
       }
+
+      // const { data } = await POST(GET_PRODUCTS, {
+      //   skip: 0,
+      //   limit: 10,
+      //   pageNo: 1,
+      //   searchValue: e.target.value,
+      // });
+      // if (data?.success) {
+      //   setProducts(data?.data);
+      //   setTotalItemCount(data?.totalProduct);
+      // } else {
+      //   setProducts([]);
+      //   toast.error(data?.message);
+      // }
     };
+
     const onPageIndexChange = async (pageIndex: any) => {
       const { data } = await POST(GET_PRODUCTS, {
         skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,

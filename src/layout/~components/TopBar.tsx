@@ -113,17 +113,19 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
   };
 
   //Creating Dropdown data for service in serviceability
-  const setDropDownData = (data: any) => {
-    data.map((eachData: any, index: number) => {
-      let temp = servicesData;
-      let newData = {
-        label: eachData.serviceName + " - " + eachData.serviceMode,
-        value: eachData.serviceId,
-      };
-      temp.push(newData);
-      setServicesData(temp);
-    });
-  };
+  // const setDropDownData = (data: any) => {
+  //   data.map((eachData: any, index: number) => {
+  //     let temp = servicesData;
+  //     if (eachData?.type === "B2B") {
+  //       let newData = {
+  //         label: eachData.serviceName + " - " + eachData.serviceMode,
+  //         value: eachData.serviceId,
+  //       };
+  //       temp.push(newData);
+  //       setServicesData(temp);
+  //     }
+  //   });
+  // };
 
   const onSubmitServiceability = async (payload: any) => {
     try {
@@ -166,7 +168,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
 
       if (response?.success) {
         setCompanyServices(response?.data);
-        setDropDownData(response?.data);
+        setServicesData(response?.data);
       }
     } catch (error) {
       console.error("GET SERVICES API ERROR", error);
@@ -517,10 +519,11 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                           src={AddBulkIcon}
                           alt=""
                           className="self-center"
-                          width={"30px"}
+                          height={"40px"}
+                          width={"40px"}
                         />
                         <span className="text-[0.700rem] md:text-[0.875rem] font-Open font-normal">
-                          Add Bulk
+                          Add Bulk Order
                         </span>
                       </div>
                       <div
