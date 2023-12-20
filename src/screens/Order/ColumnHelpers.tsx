@@ -379,7 +379,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
                 <span className="">
                   {source === "SHOPIFY" || source === "ZOHO"
                     ? otherDetails?.orderNumber
-                      ? `#${otherDetails?.orderNumber}`
+                      ? `${otherDetails?.orderNumber}`
                       : orderId
                     : orderId}
                 </span>
@@ -454,7 +454,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       );
     },
     cell: (info: any) => {
-      const { status, awb } = info?.row?.original;
+      const { status, awb, source, otherDetails } = info?.row?.original;
       const rowsData = info?.row?.original;
       const timeStamp = status?.[0]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
@@ -567,7 +567,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
 
       let statusObj: any = { title: "" };
       rowsData?.status?.map((elem: any, index: any) => {
-        console.log("descriptionBookedOrder", elem?.description);
+        // console.log("descriptionBookedOrder", elem?.description);
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
@@ -599,9 +599,13 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         setInfoModalContent({
           isOpen: true,
           data: rows,
-          orderId: rowsData.orderId
-            ? rowsData.orderId
-            : `T${rowsData.tempOrderId}`,
+          orderId:
+            (source === "SHOPIFY" || source === "ZOHO") &&
+            otherDetails?.orderNumber
+              ? otherDetails?.orderNumber
+              : rowsData.orderId
+              ? rowsData.orderId
+              : `T${rowsData.tempOrderId}`,
         });
       };
       return (
@@ -724,7 +728,7 @@ export const columnHelperForNewOrder = (
                     <span className="">
                       {source === "SHOPIFY" || source === "ZOHO"
                         ? otherDetails?.orderNumber
-                          ? `#${otherDetails?.orderNumber}`
+                          ? `${otherDetails?.orderNumber}`
                           : orderId
                         : orderId}
                     </span>
@@ -814,7 +818,8 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status, tempOrderId, source } = info?.row?.original;
+        const { status, tempOrderId, source, otherDetails } =
+          info?.row?.original;
         const rowsData = info?.row?.original;
         const timeStamp = status?.[0]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
@@ -961,9 +966,13 @@ export const columnHelperForNewOrder = (
           setInfoModalContent({
             isOpen: true,
             data: rows,
-            orderId: rowsData.orderId
-              ? rowsData.orderId
-              : `T${rowsData.tempOrderId}`,
+            orderId:
+              (source === "SHOPIFY" || source === "ZOHO") &&
+              otherDetails?.otherNumber
+                ? otherDetails?.otherNumber
+                : rowsData.orderId
+                ? rowsData.orderId
+                : `T${rowsData.tempOrderId}`,
           });
         };
         return (
