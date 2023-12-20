@@ -31,6 +31,8 @@ interface propTypes {
   inputError?: boolean;
   errorMessage?: any;
   autoComplete?: any;
+  ref?: any;
+  title?: any;
   id?: any;
 }
 
@@ -68,6 +70,8 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     inputError,
     errorMessage = false,
     autoComplete = "",
+    title = "",
+    ref = {},
     id,
   } = props;
 
@@ -75,6 +79,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
     <div className="flex  flex-col text-start  w-full">
       <div className={`relative w-[100%]  ${containerStyle}`}>
         <input
+          ref={ref}
           name={name}
           type={inputType}
           placeholder={placeholder}
@@ -92,6 +97,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           minLength={minLength}
           maxLength={maxLength}
           onKeyDown={onKeyDown}
+          title={title}
           id={id}
         />
         {/* absolute -bottom-4 px-2 left-0 */}

@@ -93,23 +93,24 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
             <span className="flex ">{`${weight} | ₹${Value}`}</span>
           </div>
         </div>
+        {deleteProductsData && (
+          <img
+            src={DeleteIcon}
+            alt=""
+            width={18}
+            className=" self-start z-10"
+            onClick={(e: any) => {
+              e.stopPropagation();
 
-        <img
-          src={DeleteIcon}
-          alt=""
-          width={18}
-          className=" self-start z-10"
-          onClick={(e: any) => {
-            e.stopPropagation();
+              setIsDeleteModalOpen(true);
 
-            setIsDeleteModalOpen(true);
-
-            setDeleteProductsData({
-              ...deleteProductsData,
-              comboProduct: productId,
-            });
-          }}
-        />
+              setDeleteProductsData({
+                ...deleteProductsData,
+                comboProduct: productId,
+              });
+            }}
+          />
+        )}
       </div>
 
       {!isMobileView ? (

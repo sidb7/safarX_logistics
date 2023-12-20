@@ -343,7 +343,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
 
             <SearchProductFilterItems filterItems={filterItems} />
           </div> */}
-          <div className="flex justify-between  items-center gap-x-2 py-2">
+          <div className="flex   items-center gap-x-6 py-2">
             <div className="flex items-center gap-x-2">
               <img src={ProductIcon} alt="Product" />
               <div className="font-Lato font-normal text-2xl leading-8">
@@ -353,35 +353,15 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             <div className=" !h-full flex items-center">
               <SearchBox
                 label="Search any product"
-                customPlaceholder="Search any product"
+                customPlaceholder="Search Products"
                 onChange={(e: any) => {
                   setSearchedProduct(e.target.value.toString().trim());
                   setClearIconVisible(true);
                 }}
                 getFullContent={() => setSearchedProduct("")}
-                className="!h-full w-[150px] md:w-[300px]"
+                className="!h-full !p-2 focus:!w-[200px] !w-[160px] py-[8px] pr-[1px] !pl-[25px]"
                 value={searchedProduct}
               />
-              {/* <img src={SearchBoxIcon} alt="" className="w-6 h-6 mx-2" />
-              <CustomInputBox
-                isRightIcon={clearIconVisible}
-                rightIcon={ClearImage}
-                value={searchedProduct}
-                className="!h-full"
-                label="Search any product"
-                onChange={(e) => {
-                  setSearchedProduct(e.target.value.toString().trim());
-                  setClearIconVisible(true);
-                }}
-                onClick={() => {
-                  setSearchResult([]);
-                  setSearchedProduct("");
-                  setClearIconVisible(false);
-                }}
-                // visibility={true}
-                setVisibility={() => {}}
-                imageClassName="!w-8 !h-8 !top-[20%]"
-              /> */}
             </div>
           </div>
           <div className="flex flex-wrap gap-2 lg:gap-3 transition-all max-h-96 mt-2 overflow-scroll">
@@ -430,8 +410,8 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               </>
             )}
           </div>
-          <div className="w-full">
-            {totalProduct > 0 && (
+          <div className="w-full py-2">
+            {totalProduct > 10 && (
               <PaginationComponent
                 totalItems={totalProduct}
                 className="`space-x-0 !m-4"
@@ -441,32 +421,37 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               />
             )}
           </div>
-          <div className="flex  items-center gap-x-2 py-2">
-            <img src={ProductIcon} alt="Product" />
-            <div className="font-Lato font-normal text-2xl leading-8">
-              Combo Products
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
-            {comboProducts?.map((combo: any, index: number) => {
-              return (
-                <ComboProductBox
-                  image={StackLogo}
-                  productName={combo?.name}
-                  weight={`${combo?.totalDeadWeight} ${combo?.weightUnit}`}
-                  Value={combo?.totalValue}
-                  dimension={`${combo?.totalPrice}`}
-                  className={`cursor-pointer`}
-                  label={`Product: ${combo?.products?.length}`}
-                  selectMode={true}
-                  data={combo}
-                  onClick={() => selectComboProduct(combo, index)}
-                  isSelected={isProductSelected(index, comboProducts)}
-                  index={index}
-                />
-              );
-            })}
-          </div>
+
+          {comboProducts.length > 0 && (
+            <>
+              <div className="flex  items-center gap-x-2 py-2">
+                <img src={ProductIcon} alt="Product" />
+                <div className="font-Lato font-normal text-2xl leading-8">
+                  Combo Products
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
+                {comboProducts?.map((combo: any, index: number) => {
+                  return (
+                    <ComboProductBox
+                      image={StackLogo}
+                      productName={combo?.name}
+                      weight={`${combo?.totalDeadWeight} ${combo?.weightUnit}`}
+                      Value={combo?.totalValue}
+                      dimension={`${combo?.totalPrice}`}
+                      className={`cursor-pointer`}
+                      label={`Product: ${combo?.products?.length}`}
+                      selectMode={true}
+                      data={combo}
+                      onClick={() => selectComboProduct(combo, index)}
+                      isSelected={isProductSelected(index, comboProducts)}
+                      index={index}
+                    />
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
         <div
           className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "

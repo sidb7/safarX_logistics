@@ -45,7 +45,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   setIsDeleteModalOpen,
   productId = "",
   setDeleteProductsData,
-  deleteProductsData,
+  deleteProductsData = false,
 
   filterId,
 }) => {
@@ -67,9 +67,12 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       >
         {label}
       </span>
-      <div className="mr-3 lg:mr-0 lg:px-4 w-auto h-[100%] overflow-hidden">
-        <img className="w-[100%] h-[100%] object-contain" src={image} alt="" />
+      <div className="w-20 p-3.5 flex justify-center items-center">
+        <img src={image} className="" alt="" />
       </div>
+      {/* <div className="mr-3 lg:mr-0 lg:px-4 w-auto h-[100%] overflow-hidden">
+        <img className="w-[100%]  h-[100%] object-contain" src={image} alt="" />
+      </div> */}
       <div className="flex flex-col w-full">
         <div className="flex justify-between ">
           <span className="line-clamp-1  w-[100px]">{productName}</span>
@@ -84,20 +87,22 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
               />
             )}
 
-            <img
-              src={DeleteIcon}
-              alt=""
-              width={18}
-              className="cursor-pointer"
-              onClick={() => {
-                setIsDeleteModalOpen(true);
+            {deleteProductsData && (
+              <img
+                src={DeleteIcon}
+                alt=""
+                width={18}
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsDeleteModalOpen(true);
 
-                setDeleteProductsData({
-                  ...deleteProductsData,
-                  singleProduct: productId,
-                });
-              }}
-            />
+                  setDeleteProductsData({
+                    ...deleteProductsData,
+                    singleProduct: productId,
+                  });
+                }}
+              />
+            )}
           </div>
         </div>
         <span className="flex text-[12px] lg:text-[14px] ">
