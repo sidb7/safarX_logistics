@@ -168,7 +168,7 @@ const DELETE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/deletePickupAddr
 const DELETE_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/deleteDeliveryAddress`;
 
 //servicable-pincode
-const GET_SERVICABLE_PINCODE = `${PARTNER_BASE_URL}/pincodes/checkServiceable`;
+const GET_SERVICABLE_PINCODE = `${SELLER_BASE_URL}/pincodes/checkServiceable`;
 
 //Pincode Data for Address
 const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;

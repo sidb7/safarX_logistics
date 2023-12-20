@@ -27,7 +27,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
   const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [filterData, setFilterData] = useState([
     { label: "Seller Box", isActive: false },
-    { label: "Company Box", isActive: false },
+    // { label: "Company Box", isActive: false },
   ]);
   const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
     useState<any>(false);
@@ -51,15 +51,16 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
             return (
               <span
                 key={index}
-                className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
-                  filterId === index
-                    ? `${
-                        index === filterData.length - 1
-                          ? "rounded-r-md"
-                          : "rounded-l-md"
-                      } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
-                    : ""
-                }`}
+                // className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] ${
+                //   filterId === index
+                //     ? `${
+                //         index === filterData.length - 1
+                //           ? "rounded-r-md"
+                //           : "rounded-l-md"
+                //       } bg-[#D2D2D2] font-medium text-[#1C1C1C]`
+                //     : ""
+                // }`}
+                className={`flex items-center py-[8px] px-[16px] border-[1px] border-[#A4A4A4] bg-[#D2D2D2] font-medium text-[#1C1C1C]`}
                 onClick={() => setFilterId(index)}
               >
                 {singleData.label}
@@ -105,7 +106,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     } else {
       setSellerBoxDetailsModal(false);
     }
-    getBoxsApi();
+    // getBoxsApi();
   };
 
   const deleteSellerBox = async (boxDetailsData: any, index: number) => {
