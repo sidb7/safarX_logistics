@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CrossIcon from "../../assets/CloseIcon.svg";
 import GroupRadioButtons from "../../components/GroupRadioButtons/GroupRadioButtons";
 import CustomInputBox from "../../components/Input";
@@ -40,8 +40,25 @@ const Serviceability = (props: ITypeProps) => {
   const [serviceValue, setServiceValue] = useState(
     serviceabilityData?.orderType
   );
+  const [servicesDataArray, setServicesDataArray] = useState<any>();
 
   const weightData: any = [];
+  let temp: any = [];
+
+  useEffect(() => {
+    servicesData &&
+      servicesData?.map((eachData: any, index: number) => {
+        if (eachData?.type === serviceValue) {
+          let newData = {
+            label: eachData.serviceName + " - " + eachData.serviceMode,
+            value: eachData.serviceId,
+          };
+          temp.push(newData);
+        }
+      });
+    setServicesDataArray(temp);
+  }, [servicesData, serviceValue]);
+
   const columns = [
     columnsHelper.accessor("partnerName", {
       header: () => {
@@ -312,7 +329,7 @@ const Serviceability = (props: ITypeProps) => {
                 });
               }}
               value={serviceabilityData?.serviceId}
-              options={servicesData}
+              options={servicesDataArray}
               heading="Select Service"
             />
             <CustomInputBox
