@@ -333,28 +333,32 @@ const BoxDetails = (props: IBoxdetails) => {
                   label="COD"
                   disabled={orderType !== "B2C"}
                   name="cod"
-                  checkboxClassName="hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                   checked={isOrderCOD}
+                  inputElementClass="!h-3 !w-3 "
                   onChange={handleCheckBox}
                 />
                 <Checkbox
                   label="POD"
                   name="pod"
                   checked={selectedBox?.podInfo?.isPod}
-                  checkboxClassName="hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  inputElementClass="!h-3 !w-3 "
+                  checkboxClassName=" px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                   onChange={handleCheckBox}
                 />
                 <Checkbox
                   name="insurance"
                   label="Insurance"
-                  checkboxClassName="hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                   onChange={handleCheckBox}
+                  inputElementClass="!h-3 !w-3 "
                   checked={selectedBox?.insurance?.isInsured}
                 />
                 <Checkbox
                   name="fragile"
-                  checkboxClassName="hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
+                  checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                   label="Fragile?"
+                  inputElementClass="!h-3 !w-3 "
                   checked={selectedBox?.isFragile}
                   onChange={handleCheckBox}
                 />
