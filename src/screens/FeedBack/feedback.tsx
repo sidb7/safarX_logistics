@@ -71,7 +71,7 @@ function Feedback() {
 
           <div className="flex flex-col pt-7 ">
             <div className="mx-5">
-              <div className="flex font-medium overflow-x-scroll whitespace-nowrap mt-2 h-[34px] ">
+              <div className="flex font-medium customScroll whitespace-nowrap mt-2 h-[34px] ">
                 {feedbackTabs?.map(({ statusName }: any, index: number) => {
                   return (
                     <div

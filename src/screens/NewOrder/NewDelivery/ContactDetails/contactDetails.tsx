@@ -221,7 +221,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
         </p>
       </div>
 
-      <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+      <div className="flex flex-nowrap customScroll space-x-4 lg:col-span-3 mb-7 ">
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
             address.type === "shopkeeper"

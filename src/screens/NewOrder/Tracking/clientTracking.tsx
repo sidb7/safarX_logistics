@@ -439,7 +439,7 @@ const Tracking = () => {
                                         </div>
 
                                         <div
-                                          className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] overflow-y-scroll my-2 py-2 px-4 rounded-lg`}
+                                          className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] customScroll my-2 py-2 px-4 rounded-lg`}
                                         >
                                           {temp}
                                         </div>

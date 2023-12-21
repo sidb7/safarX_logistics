@@ -294,7 +294,7 @@ const RechargePayment = () => {
             Available offers
           </p>
         </div>
-        <div className="flex flex-nowrap w-full overflow-x-scroll gap-x-4	">
+        <div className="flex flex-nowrap w-full customScroll gap-x-4	">
           <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[33.33%] ">
             <p className="text-[14px] font-semibold lg:text-[16px] lg:text-[#202427] ">
               10% EXTRA up to ₹1000

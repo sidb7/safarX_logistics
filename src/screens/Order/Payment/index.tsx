@@ -602,7 +602,7 @@ const Payment = () => {
               <img src={discountIcon} alt="" />
               <p className="text-lg font-semibold">Available offers</p>
             </div>
-            <div className="flex flex-nowwrap overflow-x-scroll space-x-4 mb-7 lg:hidden">
+            <div className="flex flex-nowwrap customScroll space-x-4 mb-7 lg:hidden">
               <div className="bg-[#f0faf6] p-3 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg">
                 <p className="text-[1rem] font-semibold">
                   10% EXTRA up to ₹1000
@@ -640,7 +640,7 @@ const Payment = () => {
                 Available offers
               </p>
             </div>
-            <div className="lg:flex flex-nowrap w-full overflow-x-scroll gap-x-4 hidden lg:mb-5">
+            <div className="lg:flex flex-nowrap w-full customScroll gap-x-4 hidden lg:mb-5">
               <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[33.33%]">
                 <p className="text-[1rem] font-semibold">
                   10% EXTRA up to ₹1000

@@ -50,7 +50,7 @@ const ProductCatalogueAddCambo = () => {
           />
         </div>
       </div>
-      <div className="flex justify-center gap-x-2 overflow-x-scroll whitespace-nowrap mt-5 h-[34px]">
+      <div className="flex justify-center gap-x-2 customScroll whitespace-nowrap mt-5 h-[34px]">
         {statusData?.map(({ statusName }, index) => {
           return (
             <div

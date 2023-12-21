@@ -21,7 +21,7 @@ const FilterItems: React.FC<IProps> = (props: IProps) => {
     onClick([item]);
   };
   return (
-    <div className="flex overflow-x-scroll items-center gap-2 lg:gap-6">
+    <div className="flex customScroll items-center gap-2 lg:gap-6">
       {items?.map((each: string, index: number) => {
         const isSelected = selectedItem === each;
 

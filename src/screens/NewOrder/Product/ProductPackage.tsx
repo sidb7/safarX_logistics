@@ -541,7 +541,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
             </div>
           </div>
 
-          <div className="flex  gap-x-3 flex-nowrap overflow-x-scroll ">
+          <div className="flex  gap-x-3 flex-nowrap customScroll ">
             {products.length > 0 ? (
               products?.map((e: any, index: number) => {
                 return (

@@ -285,7 +285,7 @@ const ViewAllTickets = (props: ITypeProps) => {
             }}
           />
         </div>
-        <div className="h-[60%] overflow-y-scroll">
+        <div className="h-[60%] customScroll">
           <CustomAccordian dummyDatas={ticketFilterData} />
         </div>
 
