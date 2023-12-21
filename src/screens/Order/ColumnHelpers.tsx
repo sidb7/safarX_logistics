@@ -593,6 +593,7 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
         "Tracking Id": awb,
         Source: capitalizeFirstLetter(rowsData?.source),
         "Order Type": rowsData?.orderType,
+        Zone: capitalizeFirstLetter(rowsData?.zone),
       });
 
       const handleInformativeModal = () => {
@@ -960,6 +961,7 @@ export const columnHelperForNewOrder = (
           "Tracking Id": rowsData?.awb,
           Source: capitalizeFirstLetter(rowsData?.source),
           "Order Type": rowsData?.orderType,
+          Zone: capitalizeFirstLetter(rowsData?.zone),
         });
 
         const handleInformativeModal = () => {
