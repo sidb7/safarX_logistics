@@ -85,7 +85,7 @@ const PlanCard = (props: ITypeProps) => {
           </div>
         )}
 
-        <p className="font-Open text-sm font-normal h-[45px] lg:h-[35px] overflow-y-auto leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4">
+        <p className="font-Open text-sm font-normal h-[45px] lg:h-[35px] customScroll leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4">
           {description}
         </p>
 

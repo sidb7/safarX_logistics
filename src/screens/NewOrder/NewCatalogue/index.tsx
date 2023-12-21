@@ -384,7 +384,7 @@ const Catalogue = () => {
             {!isMobileView ? (
               <div className="lg:mb-24">
                 <div className="mt-4 px-5 ">
-                  <div className="flex flex-row  overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px]">
+                  <div className="flex flex-row  customScroll whitespace-nowrap mt-2 lg:h-[34px]">
                     {listTab?.map(({ statusName }, index) => {
                       return (
                         <div

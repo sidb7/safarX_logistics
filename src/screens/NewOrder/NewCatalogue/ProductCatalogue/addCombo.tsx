@@ -126,7 +126,7 @@ const Addcombo: React.FunctionComponent<IAddcomboProps> = (props: any) => {
           </div>
         }
       />
-      <div className="mx-5 overflow-y-auto h-[575px]">
+      <div className="mx-5 customScroll h-[575px]">
         <div className="relative">
           <div>
             <div className="flex flex-col mt-1">

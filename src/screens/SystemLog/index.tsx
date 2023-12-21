@@ -288,7 +288,7 @@ const SystemLog = () => {
                 </div>
               </div>
 
-              <div className="   overflow-y-auto    ">
+              <div className="   customScroll    ">
                 <pre className="font-Open text-lg ">{`${logData.eventRecordData}`}</pre>
               </div>
             </div>

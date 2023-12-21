@@ -11,7 +11,7 @@ const index = (props: IProps) => {
   const { items, onClick, icons, selectedDay } = props;
 
   return (
-    <div className="flex overflow-x-auto whitespace-nowrap space-x-4 py-2 ">
+    <div className="flex customScroll whitespace-nowrap space-x-4 py-2 ">
       {items?.map((item: any, index: number) => (
         <button
           key={index}

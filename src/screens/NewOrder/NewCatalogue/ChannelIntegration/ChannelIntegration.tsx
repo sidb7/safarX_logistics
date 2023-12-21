@@ -69,7 +69,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     <>
       <div className="my-6">
         <Header title="Available Channels" />
-        <div className="flex gap-x-4 overflow-x-auto flex-nowrap lg:flex-wrap ">
+        <div className="flex gap-x-4 customScroll flex-nowrap lg:flex-wrap ">
           {ChannelIntegrationCarts?.channels?.map(
             (eachChannel: any, index: any) => (
               <Card
@@ -85,7 +85,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         </div>
         <div className="mt-6">
           {channelData?.channels && <Header title="Integrated Channels" />}
-          <div className="flex gap-x-4 overflow-x-auto flex-wrap ">
+          <div className="flex gap-x-4 customScroll flex-wrap ">
             {channelData.channels?.map((eachChannel: any, index: any) => {
               return (
                 <Card
