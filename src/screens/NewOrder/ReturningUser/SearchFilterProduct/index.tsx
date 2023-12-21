@@ -1,7 +1,7 @@
 import * as React from "react";
-import BackArrow from "../../../../assets/backArrow.svg"
+import BackArrow from "../../../../assets/backArrow.svg";
 import CloseIcon from "../../../../assets/Product/close.svg";
-import DeliveryIcon from "../../../../assets/Product/Delivery (1).svg";        
+import DeliveryIcon from "../../../../assets/Product/Delivery (1).svg";
 import ProductIcon from "../../../../assets/Product/Product (3).svg";
 import ItemIcon from "../../../../assets/Product/Item.svg";
 import CategoryLogo from "../../../../assets/Product/Item.svg";
@@ -14,7 +14,7 @@ import ProductCategoryBox from "./ProductCategoryBox";
 import ProductBox from "../../Product/ProductBox";
 import "../../../../styles/searchFilter.css";
 import ProductCardQuantity from "../Product/productCardQuantity";
-import {productCardQuantity} from "../../../../utils/dummyData"
+import { productCardQuantity } from "../../../../utils/dummyData";
 
 interface IIndexProps {}
 const Index: React.FunctionComponent<IIndexProps> = (props) => {
@@ -36,7 +36,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <img src={DeliveryIcon} alt="Delivery icon" />
         <p className="text-lg font-medium leading-6">By Category</p>
       </div>
-      <div className="mt-[18px] hide-scrollbar overflow-x-scroll">
+      <div className="mt-[18px] hide-scrollbar customScroll">
         <div className="gap-x-3 flex">
           <ProductCategoryBox image={ProductIcon} productName="Fashion" />
           <ProductCategoryBox image={CategoryLogo} productName="Electronics" />
@@ -48,7 +48,6 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           />
         </div>
         <div className="gap-x-3 mt-3 flex">
-         
           <ProductCategoryBox image={Categorylogo2} productName="LifeStyle" />
           <ProductCategoryBox image={SportsLogo} productName="Sports" />
           <ProductCategoryBox image={GiftLogo} productName="Gift" />
@@ -59,7 +58,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <img src={DeliveryIcon} alt="Delivery icon" />
         <p className="text-lg font-medium leading-6">Most Used</p>
       </div>
-      <div className="grid-span-3 overflow-x-scroll hide-scrollbar mt-4 ">
+      <div className="grid-span-3 customScroll hide-scrollbar mt-4 ">
         <div className="grid grid-flow-col auto-cols-max gap-y-6 gap-x-3">
           <ProductBox
             image={ItemIcon}
@@ -111,7 +110,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <img src={DeliveryIcon} alt="Delivery icon" />
         <p className="text-lg font-medium leading-6">Top Added</p>
       </div>
-      <div className="grid-span-3 overflow-x-scroll hide-scrollbar mt-4 ">
+      <div className="grid-span-3 customScroll hide-scrollbar mt-4 ">
         <div className="grid grid-flow-col auto-cols-max gap-y-4 gap-x-3">
           <ProductBox
             image={ItemIcon}
@@ -133,10 +132,18 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
           />
         </div>
         <div className="grid grid-flow-col auto-cols-max gap-y-4 gap-x-3 mt-3">
-       
-           <ProductCardQuantity props={productCardQuantity} className="w-[229.78px]" />
-           <ProductCardQuantity props={productCardQuantity} className="w-[229.78px]"/>
-           <ProductCardQuantity props={productCardQuantity} className="w-[229.78px]"/>
+          <ProductCardQuantity
+            props={productCardQuantity}
+            className="w-[229.78px]"
+          />
+          <ProductCardQuantity
+            props={productCardQuantity}
+            className="w-[229.78px]"
+          />
+          <ProductCardQuantity
+            props={productCardQuantity}
+            className="w-[229.78px]"
+          />
         </div>
       </div>
     </div>

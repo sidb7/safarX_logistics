@@ -156,7 +156,7 @@ const PickUp = (props: ITypeProps) => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
+              <div className="flex flex-col items-center md:h-[390px] customScroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
                 {/* <div className="  space-y-3 mb-6 "> */}
                 {defaultAddress?.map((el: any, i: number) => {
                   return (

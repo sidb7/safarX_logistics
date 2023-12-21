@@ -20,7 +20,7 @@ export const ScrollNav: React.FunctionComponent<IScrollNavProps> = ({
   return (
     <div>
       <div
-        className={`flex  overflow-x-scroll lg:overflow-auto  whitespace-nowrap mt-2 h-[34px] cursor-pointer`}
+        className={`flex  customScroll whitespace-nowrap mt-2 h-[34px] cursor-pointer`}
       >
         {arrayData?.map((singleData, index) => (
           <div

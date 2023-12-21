@@ -30,7 +30,7 @@ const ProductCatalogue = () => {
 
   return (
     <div>
-      <div className="flex ml-5 overflow-x-scroll whitespace-nowrap cursor-pointer   mt-5 h-[48px]">
+      <div className="flex ml-5 customScroll whitespace-nowrap cursor-pointer   mt-5 h-[48px]">
         <div
           className={`flex items-center border-solid border-2 border-[#E8E8E8] rounded-l px-4 ${
             catalogueState?.productBtnName === "Single Product"
@@ -71,7 +71,7 @@ const ProductCatalogue = () => {
         </div>
       </div>
 
-      <div className="flex mt-1 px-1 pr-5 overflow-x-scroll whitespace-nowrap w-[360px] lg:w-screen ">
+      <div className="flex mt-1 px-1 pr-5 customScroll whitespace-nowrap w-[360px] lg:w-screen ">
         {extraProducts && (
           <DynamicBtnWithScroll
             items={[

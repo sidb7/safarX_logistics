@@ -108,7 +108,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
       {isDropdownOpen && arrayValue.length > 0 && (
         <div
           ref={dropdownRef}
-          className="custom-dropdown absolute mt-2 w-full overflow-y-scroll rounded-md bg-white h-60"
+          className="custom-dropdown absolute mt-2 w-full customScroll rounded-md bg-white h-60"
           onClick={(e) => e.stopPropagation()}
         >
           {arrayValue?.map((name: string, index: number) => (

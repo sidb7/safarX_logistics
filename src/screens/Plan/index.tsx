@@ -111,7 +111,7 @@ const Index = (props: ITypeProps) => {
             </div>
 
             {/* Plan Cards */}
-            <div className="flex items-center justify-center gap-x-6 overflow-x-scroll ml-5  mb-8 lg:mb-[60px] ">
+            <div className="flex items-center justify-center gap-x-6 customScroll ml-5  mb-8 lg:mb-[60px] ">
               {[allPlans[0]]?.map((eachPlan: any, index: any) => {
                 return (
                   <PlanCard

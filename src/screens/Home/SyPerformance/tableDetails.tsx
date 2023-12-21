@@ -58,7 +58,7 @@ const TableDetails = (props: ITable) => {
         <CustomTable columns={col} data={data} />
       ) : (
         isOpen && (
-          <div className="overflow-x-scroll">
+          <div className="customScroll">
             <CustomTable columns={col} data={data} />
           </div>
         )

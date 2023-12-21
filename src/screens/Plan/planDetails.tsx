@@ -789,7 +789,7 @@ const PlanDetails = (props: ITypeProps) => {
           </div> */}
           {/*Active Recommended */}
 
-          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
+          {/* <div className="customScroll mx-5 lg:ml-[30px] ">
             <CustomTable
               data={activeData}
               columns={activeColumns}
@@ -799,7 +799,7 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div> */}
           {/*Pricing Table */}
-          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px] ">
+          {/* <div className="customScroll mx-5 lg:ml-[30px] ">
             <CustomTable
               columns={pricingColumns}
               data={pricingData}
@@ -809,7 +809,7 @@ const PlanDetails = (props: ITypeProps) => {
           </div> */}
           {/* Change-Upgrade Plans */}
 
-          {/* <div className="overflow-x-scroll mx-5 lg:ml-[30px]">
+          {/* <div className="customScroll mx-5 lg:ml-[30px]">
             <CustomTable
               data={changePlansData}
               columns={changePlansColumns}
@@ -819,7 +819,7 @@ const PlanDetails = (props: ITypeProps) => {
             />
           </div> */}
           {/* Features Table */}
-          {/* <div className=" mb-[68px] overflow-x-scroll mx-5 lg:ml-[30px]">
+          {/* <div className=" mb-[68px] customScroll mx-5 lg:ml-[30px]">
             <CustomTable
               columns={featuresColumns}
               data={featuresData}

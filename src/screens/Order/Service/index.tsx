@@ -53,7 +53,7 @@ const Service: React.FC = () => {
         <FilterItems items={items} onClick={(e) => {}} />
       </div>
 
-      <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] overflow-y-scroll  lg:overflow-x-scroll flex-nowrap   lg:gap-x-6  ">
+      <div className="mx-5 flex flex-col lg:flex-row h-[500px] lg:h-full   gap-y-[13px] customScroll  lg:customScroll flex-nowrap   lg:gap-x-6  ">
         {FilterServiceData?.map((each, index: number) => {
           return (
             <ServiceCard
