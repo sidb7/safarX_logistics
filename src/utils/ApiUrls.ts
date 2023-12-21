@@ -266,6 +266,7 @@ const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 //Get all ParterList
 const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
+const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
 //Reports
@@ -323,6 +324,7 @@ export {
   POST_VERIFY_GST_OTP,
   GET_DEFAULT_ADDRESS,
   POST_UPDATE_DEFAULT_ADDRESS,
+  LEBEL_DOWNLOAD,
   MAGIC_ADDRESS,
   UPDATE_PASSWORD,
   DELETE_SELLER,

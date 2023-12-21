@@ -22,6 +22,7 @@ import {
   CANCEL_TEMP_SELLER_ORDER,
   GET_SELLER_ORDER,
   GET_SINGLE_FILE,
+  LEBEL_DOWNLOAD,
   GET_STATUS_COUNT,
   POST_SYNC_ORDER,
 } from "../../utils/ApiUrls";
@@ -41,6 +42,9 @@ import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAc
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
+import CopyTooltip from "../../components/CopyToClipboard";
+import { BottomNavBar } from "../../components/BottomNavBar";
+import { tokenKey } from "../../utils/utility";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -721,6 +725,43 @@ const Index = () => {
       return false;
     }
   };
+  const fetchLabels = async (arrLebels: string[]) => {
+    if (!arrLebels.length) {
+      toast.error("Please Select One Orders For lebel");
+      return;
+    }
+    // let header = {
+    //   Accept: "/",
+    //   Authorization: `Bearer ${localStorage.getItem(
+    //     `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+    //   )}`,
+    //   "Content-Type": "application/json",
+    // };
+    const payload: any = {
+      fileNameArr: arrLebels.filter((item: any) => item !== ""),
+    };
+    const { data } = await POST(
+      LEBEL_DOWNLOAD,
+      payload
+      // responseType: "blob",
+    );
+    // const data1 = await response.json();
+    if (!data?.status) {
+      toast.error(data.msg);
+      return;
+    }
+
+    data.data.forEach((url: string, index: number) => {
+      // Create a temporary anchor element
+      const a = document.createElement("a");
+      a.href = url;
+      //  a.download = `Lables_${index}.pdf`;
+      // Trigger a click on the anchor element to start the download
+      a.click();
+      // Remove the anchor element from the document
+    });
+    return true;
+  };
 
   if (isDeleted) {
     const newOrders = orders.filter(
@@ -772,6 +813,8 @@ const Index = () => {
               allOrders={allOrders}
               currentStatus={tabs[globalIndex].value}
               selectedRowdata={selectedRowdata}
+              setSelectedRowData={setSelectedRowData}
+              fetchLabels={fetchLabels}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
               tabStatusId={tabStatusId}
