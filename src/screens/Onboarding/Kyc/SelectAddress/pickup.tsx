@@ -137,7 +137,7 @@ const PickUp = (props: ITypeProps) => {
               Address="Address"
             />
 
-            <div className="!h-[calc(100%-300px)] overflow-y-auto">
+            <div className="!h-[calc(100%-300px)] customScroll">
               <div className="w-full pl-4">
                 <div className="flex items-center justify-between  md:px-12 md:px-0 md:w-[320px]">
                   {/*commented as instructed */}

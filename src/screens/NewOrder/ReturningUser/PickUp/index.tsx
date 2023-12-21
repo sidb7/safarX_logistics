@@ -56,7 +56,7 @@ const ReturningPickUp: React.FunctionComponent<IReturningUserPickupAddress> = ({
         </p>
       </div>
 
-      <div className="flex overflow-x-auto space-x-4 px-5 pt-5 pb-2 scrollbar-thin scrollbar-thumb-black-400 scrollbar-track-black-200 ml-1 mb-1">
+      <div className="flex customScroll space-x-4 px-5 pt-5 pb-2 scrollbar-thin scrollbar-thumb-black-400 scrollbar-track-black-200 ml-1 mb-1">
         {returningUserAddress?.map((data: any, index: any) => {
           return (
             <div key={index} onClick={() => handleCardSelect(data?.addressID)}>

@@ -751,7 +751,7 @@ const Index = () => {
       {isActive ? (
         <div>
           <Breadcrum label="Orders" component={Buttons()} />
-          <div className="flex md:hidden justify-between gap-4 overflow-x-scroll py-4 mx-5">
+          <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5">
             {ordersArr?.map((order: any, i: number) => (
               <div
                 className="shadow-md w-[30rem] lg:w-[24rem] h-[6.2rem] lg:h-[6.6rem] relative rounded-lg border"

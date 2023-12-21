@@ -113,8 +113,8 @@ const Locations = (props: IBarChart) => {
             className={`${isLgScreen ? "mt-10" : isOpen ? "block" : "hidden"}`}
           >
             <table
-              className="table-auto mt-5"
-              style={{ display: "flex", overflow: "scroll", height: "300px" }}
+              className="table-auto mt-5 customScroll"
+              style={{ display: "flex", height: "300px" }}
             >
               <tbody className="text-sm lg:text-[1.125rem] font-semibold font-Open leading-5 lg:leading-[22px]">
                 {addressCountOrder?.[arrName]?.map((item: any) => {

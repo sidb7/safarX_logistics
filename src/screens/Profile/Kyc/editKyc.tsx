@@ -56,7 +56,7 @@ export const EditProfileKyc = () => {
   return (
     <div className="h-full">
       <Breadcrum label="KYC Details" />
-      <div className="mx-4 mt-2 overflow-y-auto h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:h-auto">
+      <div className="mx-4 mt-2 customScroll h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:h-auto">
         <CustomInputBox
           containerStyle={"self-end mt-2"}
           label="Frist name"

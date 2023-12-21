@@ -84,7 +84,7 @@ const BusinessType = (props: ITypeProps) => {
                   alt="Company Logo"
                 />
               </div>
-              <div className="overflow-y-auto">
+              <div className="customScroll">
                 {/* <div className="flex justify-between items-center h-[60px] px-6 mb-6 lg:hidden ">
                 <img src={CompanyLogo} alt="" />
               </div> */}

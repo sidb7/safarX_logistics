@@ -386,7 +386,7 @@ const Tracking = () => {
                                             <p className="text-[14px] font-normal leading-[16px] ">
                                               From:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] overflow-y-auto">
+                                            <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] customScroll">
                                               {each?.pickupAddress?.fullAddress}
                                             </p>
                                           </div>
@@ -394,7 +394,7 @@ const Tracking = () => {
                                             <p className="text-[14px] font-normal leading-[16px]">
                                               To:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] overflow-y-auto">
+                                            <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] customScroll">
                                               {
                                                 each?.deliveryAddress
                                                   ?.fullAddress
