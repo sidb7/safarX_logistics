@@ -42,6 +42,8 @@ interface IOrderstatusProps {
   orders: any;
   allOrders: any;
   selectedRowdata?: any;
+  setSelectedRowData?: any;
+  fetchLabels?: any;
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
   tabStatusId?: any;
@@ -79,6 +81,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   orders,
   allOrders,
   selectedRowdata,
+  setSelectedRowData,
+  fetchLabels,
   setDeleteModalDraftOrder,
   setCancellationModal,
   tabStatusId,
@@ -135,6 +139,18 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         icon: DownloadIcon,
         hovertext: "Download Manifest Reports",
         identifier: "Download_menifest_report",
+      },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Labels",
+        identifier: "Download_Labels",
+      },
+    ],
+    "READY TO PICK": [
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Labels",
+        identifier: "Download_Labels",
       },
     ],
   };
@@ -283,8 +299,54 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           }
         } else if (identifier === "Download_menifest_report") {
           setManifestModal({ ...manifestModal, isOpen: true });
-        }
+        } else if (identifier === "Download_Labels") {
+          if (selectedRowdata.length > 0) {
+            const lebelsArr: string[] = selectedRowdata.map(
+              (data: any, index: any) => {
+                if (data?.original?.boxInfo?.[0]?.tracking?.label) {
+                  return `labels/${data?.original?.boxInfo?.[0]?.tracking?.label}`;
+                } else {
+                  return "";
+                }
+              }
+            );
 
+            console.log("lebel1", lebelsArr);
+            const data = await fetchLabels(lebelsArr);
+            console.log("lebel1", data);
+            if (data) {
+              setSelectedRowData([]);
+            }
+          } else {
+            toast.error(
+              "Please select atleast one for lebels your booked order"
+            );
+          }
+        }
+        break;
+      }
+      case "READY TO PICK": {
+        console.log("4");
+        if (identifier === "Download_Labels") {
+          if (selectedRowdata.length > 0) {
+            const lebelsArr: string[] = selectedRowdata.filter(
+              (data: any, index: any) => {
+                if (data?.original?.boxInfo?.[0]?.tracking?.label) {
+                  return `labels/${data?.original?.boxInfo?.[0]?.tracking?.label}`;
+                }
+              }
+            );
+            console.log(lebelsArr);
+            const data = await fetchLabels(lebelsArr);
+            if (data) {
+              setSelectedRowData([]);
+            }
+          } else {
+            toast.error(
+              "Please select atleast one for lebels your booked order"
+            );
+          }
+        }
         break;
       }
     }
@@ -398,6 +460,84 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const filterButton = () => {
     if (isLgScreen) {
       if (currentStatus === "BOOKED") {
+        return (
+          <div className="grid grid-cols-3 gap-x-2 lg:flex">
+            {getActionsIcon()?.length > 0 && (
+              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+                {getActionsIcon()?.map((data: any, index: any) => {
+                  return (
+                    <>
+                      <div
+                        key={index}
+                        className={`${
+                          index < getActionsIcon().length - 1 &&
+                          "border-r border-[#A4A4A4]"
+                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        onClick={() =>
+                          handleActions(
+                            currentStatus,
+                            selectedRowdata,
+                            data.identifier
+                          )
+                        }
+                        data-tooltip-id="my-tooltip-inline"
+                        data-tooltip-content={data.hovertext}
+                      >
+                        <img src={data.icon} alt="" className="w-[17px]" />
+                      </div>
+                      <Tooltip
+                        id="my-tooltip-inline"
+                        style={{
+                          backgroundColor: "bg-neutral-900",
+                          color: "#FFFFFF",
+                          width: "fit-content",
+                          fontSize: "14px",
+                          lineHeight: "16px",
+                        }}
+                      />
+                    </>
+                  );
+                })}
+              </div>
+            )}
+
+            {/* {currentStatus === "BOOKED" && (
+            <>
+              <CustomButton
+                className="px-1 py-1 font-semibold text-[14px]"
+                text="Manifest Report"
+                onClick={() =>
+                  setManifestModal({ ...manifestModal, isOpen: true })
+                }
+                showIcon={true}
+                icon={""}
+              />
+            </>
+          )} */}
+            <div>
+              <SearchBox
+                className="removePaddingPlaceHolder"
+                label="Search"
+                value={searchedText}
+                onChange={(e: any) => {
+                  handleSearchOrder(e);
+                }}
+                getFullContent={getAllOrders}
+                customPlaceholder="Search By Order Id, AWB"
+              />
+            </div>
+            <div
+              className="flex justify-between cursor-pointer items-center p-2 gap-x-2"
+              onClick={() => setFilterModal(true)}
+            >
+              <img src={FilterIcon} alt="" />
+              <span className="text-[#004EFF] text-[14px] font-semibold">
+                FILTER
+              </span>
+            </div>
+          </div>
+        );
+      } else if (currentStatus === "READY TO PICK") {
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
