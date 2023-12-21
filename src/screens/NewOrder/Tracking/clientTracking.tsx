@@ -354,7 +354,8 @@ const Tracking = () => {
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
                                                 {each?.otherDetails?.orderNumber
-                                                  ? `#${each?.otherDetails?.orderNumber}`
+                                                  ? each?.otherDetails
+                                                      ?.orderNumber
                                                   : each?.orderId}
                                               </span>
                                               <CopyTooltip
