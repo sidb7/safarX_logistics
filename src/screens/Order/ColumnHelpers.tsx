@@ -968,8 +968,8 @@ export const columnHelperForNewOrder = (
             data: rows,
             orderId:
               (source === "SHOPIFY" || source === "ZOHO") &&
-              otherDetails?.otherNumber
-                ? otherDetails?.otherNumber
+              otherDetails?.orderNumber
+                ? otherDetails?.orderNumber
                 : rowsData.orderId
                 ? rowsData.orderId
                 : `T${rowsData.tempOrderId}`,

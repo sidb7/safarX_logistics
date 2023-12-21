@@ -245,10 +245,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             setDeleteModalDraftOrder({ isOpen: true, payload });
         } else {
           const orderDetails = selectedRowdata?.map((order: any) => {
-            if (order?.original?.source === "SHOPIFY") {
+            if (
+              order?.original?.source === "SHOPIFY" ||
+              order?.original?.source === "WOOCOMMERCE"
+            ) {
               return {
                 orderId: order?.original?.orderId,
-                source: "SHOPIFY",
+                source: order?.original?.source,
               };
             }
           });
