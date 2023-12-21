@@ -59,7 +59,7 @@ const WalletMain = () => {
               alt="Company Logo"
             />
           </div>
-          <div className="overflow-y-auto">
+          <div className="customScroll">
             <div className="md:grid md:grid-cols-2 md:py-6  md:mt-6">
               <div className="md:grid">
                 <div className="mx-5  mt-[44px] md:mt-[0px] ">

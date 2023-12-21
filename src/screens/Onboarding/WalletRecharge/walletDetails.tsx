@@ -86,7 +86,7 @@ const WalletDetails = () => {
         <div className={`${isMdScreen ? "custom_shadow h-full" : ""}`}>
           {modalTitle()}
 
-          <div className="overflow-y-auto ">
+          <div className="customScroll ">
             <div className="text-center md:mt-24 mb-[44px]  mt-[108px]">
               <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
                 Welcome to Shipyaari

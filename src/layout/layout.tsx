@@ -788,7 +788,7 @@ export const CommonLayout = (props: Props) => {
     //   </header>
 
     //   <div className="relative top-20">
-    //     <main className="overflow-y-auto !h-[calc(100vh-165px)]">
+    //     <main className="customScroll !h-[calc(100vh-165px)]">
     //       <div className="relative top-0">
     //         <Outlet />
     //       </div>

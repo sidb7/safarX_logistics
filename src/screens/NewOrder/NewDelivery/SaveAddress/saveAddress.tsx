@@ -56,7 +56,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
         </p>
       </div>
 
-      <div className="flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+      <div className="flex flex-nowrap customScroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
         <div
           className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
             address.addressType === "office"

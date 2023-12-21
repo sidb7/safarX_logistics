@@ -362,7 +362,7 @@ export const Home = (props: IOverview) => {
 
               {/* scrollable nav temp commented  */}
 
-              {/* <div className="overflow-x-scroll">
+              {/* <div className="customScroll">
                 <ScrollNav
                   arrayData={arrayData}
                   showNumber={false}

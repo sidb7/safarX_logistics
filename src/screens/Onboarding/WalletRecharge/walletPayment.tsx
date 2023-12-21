@@ -198,7 +198,7 @@ const WalletPayment = () => {
           />
         </div>
 
-        <div className="overflow-y-auto">
+        <div className="customScroll">
           <div className="text-center mt-20 mb-1">
             <h1 className="text-[22px] font-Lato font-bold leading-7 text-center  md:mt-0">
               Welcome to Shipyaari

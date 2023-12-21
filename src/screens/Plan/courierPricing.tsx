@@ -233,7 +233,7 @@ const CourierPricing = () => {
         />
       </div>
 
-      <div className="mx-5 lg:ml-[30px] mb-[68px] overflow-x-scroll ">
+      <div className="mx-5 lg:ml-[30px] mb-[68px] customScroll ">
         {/* {data[0].accountType==="B2C"} */}
 
         {renderingComponents === 0 ? (

@@ -137,7 +137,7 @@ const PickUp = (props: ITypeProps) => {
               Address="Address"
             />
 
-            <div className="!h-[calc(100%-300px)] overflow-y-auto">
+            <div className="!h-[calc(100%-300px)] customScroll">
               <div className="w-full pl-4">
                 <div className="flex items-center justify-between  md:px-12 md:px-0 md:w-[320px]">
                   {/*commented as instructed */}
@@ -156,7 +156,7 @@ const PickUp = (props: ITypeProps) => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
+              <div className="flex flex-col items-center md:h-[390px] customScroll h-[540px] px-5 md:px-12 md:px-4 space-y-3 ">
                 {/* <div className="  space-y-3 mb-6 "> */}
                 {defaultAddress?.map((el: any, i: number) => {
                   return (

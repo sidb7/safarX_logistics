@@ -175,7 +175,7 @@ export const Overview = (props: IOverview) => {
               Important Today
             </span>
           </div>
-          <div className="flex justify-between mt-6 lg:mt-[26px] gap-4 mb-10 overflow-x-scroll">
+          <div className="flex justify-between mt-6 lg:mt-[26px] gap-4 mb-10 customScroll">
             {ordersArr?.map((order: any, i: number) => (
               <div
                 className="w-[17rem] rounded-lg border-2 lg:overflow-hidden"

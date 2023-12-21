@@ -138,8 +138,8 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
             </span>
           </div>
 
-          <div className="flex overflow-x-scroll">
-            <div className="flex  flex-wrap overflow-x-scroll gap-x-4">
+          <div className="flex customScroll">
+            <div className="flex  flex-wrap customScroll gap-x-4">
               {boxDetails?.map((data: any, index: any) => {
                 return (
                   // display package box

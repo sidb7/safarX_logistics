@@ -526,7 +526,7 @@ const Exception = (props: any) => {
 
   return (
     <div className="m-4">
-      <div className="flex justify-between gap-4 mt-6 mb-10 overflow-x-scroll">
+      <div className="flex justify-between gap-4 mt-6 mb-10 customScroll">
         {ordersArr?.map((order: any, i: number) => (
           <div
             className="w-[17rem] lg:h-[6.6rem] rounded-lg border-2 lg:overflow-hidden"

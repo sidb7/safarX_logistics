@@ -184,7 +184,7 @@ const AddAddress: React.FunctionComponent<IAddAddressProps> = () => {
   return (
     <div className="h-full">
       <Breadcrum label="Add Address" />
-      <div className="mx-5 mt-4 overflow-y-auto h-[575px]">
+      <div className="mx-5 mt-4 customScroll h-[575px]">
         <div className="mt-2 grid lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-[4rem]">
           <div>
             <CustomDropDown

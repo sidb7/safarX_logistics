@@ -264,9 +264,7 @@ export const Transaction = () => {
                     ))}
                 </div>
                 <div>
-                  {isLgScreen && (
-                    <div className="overflow-x-auto">{render()}</div>
-                  )}
+                  {isLgScreen && <div className="customScroll">{render()}</div>}
                 </div>
 
                 {/* {totalItemCount > 0 && ( */}

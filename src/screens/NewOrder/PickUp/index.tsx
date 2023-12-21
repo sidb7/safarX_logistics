@@ -1002,7 +1002,7 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+            <div className="flex flex-nowrap customScroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
               <div
                 className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4  lg:w-[172px] ${
                   saveAddress.office === true
@@ -1074,7 +1074,7 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="relative z-1  flex flex-nowrap overflow-x-scroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
+            <div className="relative z-1  flex flex-nowrap customScroll space-x-4  mb-[28px] lg:mb-[18px] lg:col-span-3">
               {Object.keys(timing)?.map((day) => (
                 <div
                   key={day}
@@ -1393,7 +1393,7 @@ const Index = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+                <div className="flex flex-nowrap customScroll space-x-4 lg:col-span-3 mb-7 ">
                   <div
                     className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
                       saveContact.shopkeeper === true
@@ -1552,7 +1552,7 @@ const Index = () => {
               </p>
             </div>
 
-            <div className="flex flex-nowrap overflow-x-scroll space-x-4 lg:col-span-3 mb-7 ">
+            <div className="flex flex-nowrap customScroll space-x-4 lg:col-span-3 mb-7 ">
               <div
                 className={`flex flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px]   rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4   ${
                   saveContact.shopkeeper === true

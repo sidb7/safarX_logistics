@@ -388,7 +388,7 @@ const SyPerfromance = (props: any) => {
 
   return (
     <div className="">
-      <div className="flex justify-between gap-4 mt-6 mb-10 overflow-x-scroll ">
+      <div className="flex justify-between gap-4 mt-6 mb-10 customScroll ">
         {ordersArr?.map((order: any, i: number) => (
           <div
             className="w-[17rem] rounded-lg border-2 lg:overflow-hidden"
@@ -423,7 +423,7 @@ const SyPerfromance = (props: any) => {
           />
         </div>
       </div>
-      <div className="flex justify-between gap-x-4 !mt-4 mb-10 overflow-x-scroll ">
+      <div className="flex justify-between gap-x-4 !mt-4 mb-10 customScroll ">
         {orderRevenue?.map((order: any, i: number) => (
           <div
             className="w-[17rem] rounded-lg border-2 px-0 pb-[10px] lg:overflow-hidden"

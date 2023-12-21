@@ -557,7 +557,7 @@ export const PassbookHistory: React.FunctionComponent<IPassbookProps> = ({
               <span className="ml-3 text-[10px] text-[#777777] font-normal">
                 Remark
               </span>
-              <span className="ml-3 mr-3 flex items-center max-w-full overflow-x-scroll text-xs text-[#1C1C1C] font-semibold">
+              <span className="ml-3 mr-3 flex items-center max-w-full customScroll text-xs text-[#1C1C1C] font-semibold">
                 {/* <img src={RupeeIcon} alt="Rupee" className="mr-1 h-[10px]" /> */}
                 <span>{data?.remark}</span>
               </span>

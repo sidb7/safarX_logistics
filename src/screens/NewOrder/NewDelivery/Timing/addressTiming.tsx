@@ -61,7 +61,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
         </p>
       </div>
 
-      <div className="relative z-1 flex flex-nowrap overflow-x-scroll space-x-4 mb-[28px] lg:mb-[18px] lg:col-span-3">
+      <div className="relative z-1 flex flex-nowrap customScroll space-x-4 mb-[28px] lg:mb-[18px] lg:col-span-3">
         {" "}
         {Object.keys(address.workingDays)?.map((day) => (
           <div

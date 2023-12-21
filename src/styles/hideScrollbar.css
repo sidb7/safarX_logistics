@@ -1,8 +1,21 @@
-html {
+/* html {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
+} */
+
+/* ::-webkit-scrollbar {
+  display: none;
+} */
+
+/* scrollable  */
+
+.customScroll{
+  overflow: auto;
 }
 
-::-webkit-scrollbar {
-  display: none !important;
+/* this is used to scrollable width 0 */
+.customScroll::-webkit-scrollbar {
+  width: 0; /* Hide scrollbar for WebKit browsers */
 }
+
+

@@ -45,7 +45,7 @@ export const EditProfileBank = () => {
     <div className="h-full">
       <Breadcrum label="Bank Details" />
 
-      <div className="mx-4 mt-4 overflow-y-auto h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:h-auto gap-4">
+      <div className="mx-4 mt-4 customScroll h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:h-auto gap-4">
         <CustomInputBox
           containerStyle={"self-end mt-1"}
           label="Account holder name"

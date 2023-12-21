@@ -219,7 +219,7 @@ const Serviceability = (props: ITypeProps) => {
 
   const tableComponent = () => {
     return (
-      <div className="overflow-x-scroll h-full m-5">
+      <div className="customScroll h-full m-5">
         <CustomTable data={serviceabilityTableData} columns={columns} />
       </div>
     );
