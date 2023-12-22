@@ -17,8 +17,8 @@ const BoxCatalogueNew = (props: Props) => {
           Brown Box
         </span>
       </div>
-      <div className="flex   px-5 whitespaces-nowrap overflow-x-scroll w-[360px]  lg:w-screen">
-        <div className="flex whitespaces-nowrap gap-x-6 overflow-x-scroll  lg:gap-x-60">
+      <div className="flex   px-5 whitespaces-nowrap customScroll w-[360px]  lg:w-screen">
+        <div className="flex whitespaces-nowrap gap-x-6 customScroll  lg:gap-x-60">
           <div className="w-[248px] lg:w-[272px]">
             <PackageBox
               packageType="Triple wall 7 ply"
@@ -92,8 +92,8 @@ const BoxCatalogueNew = (props: Props) => {
           White Box
         </span>
       </div>
-      <div className="flex  px-5  overflow-x-scroll w-[360px] lg:w-screen">
-        <div className="flex  whitespace-nowrap gap-x-6 overflow-x-scroll lg:gap-x-60">
+      <div className="flex  px-5  customScroll w-[360px] lg:w-screen">
+        <div className="flex  whitespace-nowrap gap-x-6 customScroll lg:gap-x-60">
           <div className="w-[248px] lg:w-[272px]">
             <PackageBox
               packageType="Triple wall 7 ply"

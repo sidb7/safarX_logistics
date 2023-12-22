@@ -266,7 +266,7 @@ const PublicTracking = () => {
                                   (each: any, index: number) => {
                                     return (
                                       <div
-                                        className="flex  gap-x-5 mt-1 h-16  overflow-y-scroll"
+                                        className="flex  gap-x-5 mt-1 h-16  customScroll"
                                         key={index}
                                       >
                                         <div className="pt-1 flex-initial w-20  ">

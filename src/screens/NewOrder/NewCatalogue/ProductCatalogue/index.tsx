@@ -266,7 +266,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
         {filterComponent()}
 
         {/* Display Address */}
-        <div className="mt-4 overflow-y-auto">
+        <div className="mt-4 customScroll">
           {/* commented as not required for now */}
           {/* <div className="flex flex-col mt-1">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">

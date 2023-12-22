@@ -93,7 +93,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         <>
           <div
             ref={dropdownRef}
-            className="custom-dropdown absolute mt-2 w-full overflow-y-scroll rounded-md bg-white max-h-60 min-h-[30px]"
+            className="custom-dropdown absolute mt-2 w-full customScroll rounded-md bg-white max-h-60 min-h-[30px]"
             onClick={(e) => e.stopPropagation()}
           >
             {isLoading && (

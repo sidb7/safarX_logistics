@@ -52,7 +52,7 @@ const TableDetails = (props: ITable) => {
           />
         </div>
       </div>
-      <div className="overflow-x-scroll">
+      <div className="customScroll">
         {isLgScreen ? (
           <CustomTable columns={col} data={data} />
         ) : (

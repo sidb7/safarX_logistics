@@ -384,7 +384,7 @@ export const ProfileNotificationTab = () => {
   return (
     <div className="h-full">
       <Breadcrum label="Notification" />
-      <div className="mx-4 overflow-y-auto h-[calc(100%-35px)] ">
+      <div className="mx-4 customScroll h-[calc(100%-35px)] ">
         <div className="flex flex-col">{render()}</div>
 
         <div className="lg:grid lg:grid-cols-3 lg:space-y-0 space-y-4 gap-4 mt-10">

@@ -118,100 +118,101 @@ const Billing = (props: ITypeProps) => {
 
   const addressComponent = () => {
     return (
-      <div 
-      className={`${
-        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
-      }flex flex-col relative md:px-0 md:gap-y-0`}>
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-      <div className="relative">
-        <div>
-          <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
-            <img src={CompanyLogo} alt="" />
-          </div>
-          <WelcomeHeader
-            className="!mt-[44px] md:!mt-6"
-            title="Welcome to Shipyaari"
-            content="Select your"
-            whichAddress="Billing"
-            Address="Address"
-          />
+          <div className="relative">
+            <div>
+              <div className=" md:flex justify-between items-center shadow-md h-[60px] px-6 py-4 mb-6 ">
+                <img src={CompanyLogo} alt="" />
+              </div>
+              <WelcomeHeader
+                className="!mt-[44px] md:!mt-6"
+                title="Welcome to Shipyaari"
+                content="Select your"
+                whichAddress="Billing"
+                Address="Address"
+              />
 
-          <div className="w-full pl-5 md:pl-8">
-            <div className="flex px-0 md:px-8 md:px-0   md:w-[320px]">
-              {/*commented as instructed */}
-              {/* <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
+              <div className="w-full pl-5 md:pl-8">
+                <div className="flex px-0 md:px-8 md:px-0   md:w-[320px]">
+                  {/*commented as instructed */}
+                  {/* <p className="font-Open  font-semibold text-sm text-[#1C1C1C] leading-5  ">
                 Default
               </p> */}
 
-              <AddButton
-                onClick={() => addAddress()}
-                text={"ADD ADDRESS"}
-                icon={PlusIcon}
-                showIcon={true}
-                className="!bg-transparent !border-0"
-                textClassName="!font-semibold !text-sm !leading-5 !font-Open"
-              />
-            </div>
-          </div>
+                  <AddButton
+                    onClick={() => addAddress()}
+                    text={"ADD ADDRESS"}
+                    icon={PlusIcon}
+                    showIcon={true}
+                    className="!bg-transparent !border-0"
+                    textClassName="!font-semibold !text-sm !leading-5 !font-Open"
+                  />
+                </div>
+              </div>
 
-          <div className="flex flex-col items-center md:h-[390px] overflow-y-scroll h-[540px] px-5 md:px-12 md:px-4 space-y-3">
-            {/* <div className="space-y-3 mb-6 ">
+              <div className="flex flex-col items-center md:h-[390px] customScroll h-[540px] px-5 md:px-12 md:px-4 space-y-3">
+                {/* <div className="space-y-3 mb-6 ">
               <div className="flex flex-col items-center px-4 md:px-12 lg:px-4"> */}
 
-            {defaultAddress?.map((el: any, i: number) => {
-              return (
-                <div key={i} ref={bottomRef}>
-                  {el?.fullAddress !== "" && (
-                    <Card
-                      onClick={setDefaultAddressSelect}
-                      name="address"
-                      cardClassName="!mt-1  !cursor-pointer"
-                      value={el}
-                      updatedAddress={updatedAddress}
-                      index={i}
-                      title={el?.fullAddress}
-                      checked={
-                        defaultAddressSelect?.addressId === el?.addressId
-                      }
-                      doctype={el?.doctype}
-                      titleClassName="!font-normal !text-[12px]"
-                    />
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          {/* </div>
+                {defaultAddress?.map((el: any, i: number) => {
+                  return (
+                    <div key={i} ref={bottomRef}>
+                      {el?.fullAddress !== "" && (
+                        <Card
+                          onClick={setDefaultAddressSelect}
+                          name="address"
+                          cardClassName="!mt-1  !cursor-pointer"
+                          value={el}
+                          updatedAddress={updatedAddress}
+                          index={i}
+                          title={el?.fullAddress}
+                          checked={
+                            defaultAddressSelect?.addressId === el?.addressId
+                          }
+                          doctype={el?.doctype}
+                          titleClassName="!font-normal !text-[12px]"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              {/* </div>
           </div> */}
-          {isMdScreen && (
-            <div className="flex mt-8  md:justify-center md:items-center  pb-12 ">
-              <ServiceButton
-                text="SUBMIT"
-                className="bg-[#1C1C1C] text-white w-full mb-5 md:!w-[320px]"
-                onClick={() => {
-                  onSubmit();
-                }}
-              />
-            </div>
-          )}
+              {isMdScreen && (
+                <div className="flex mt-8  md:justify-center md:items-center  pb-12 ">
+                  <ServiceButton
+                    text="SUBMIT"
+                    className="bg-[#1C1C1C] text-white w-full mb-5 md:!w-[320px]"
+                    onClick={() => {
+                      onSubmit();
+                    }}
+                  />
+                </div>
+              )}
 
-          {!isMdScreen && (
-            <div
-              className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
-              style={{ width: "-webkit-fill-available" }}
-            >
-              <ServiceButton
-                text="SUBMIT"
-                className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
-                onClick={() => {
-                  onSubmit();
-                }}
-              />
+              {!isMdScreen && (
+                <div
+                  className={`shadow-lg border-[1px] h-[84px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed  bottom-0`}
+                  style={{ width: "-webkit-fill-available" }}
+                >
+                  <ServiceButton
+                    text="SUBMIT"
+                    className="bg-[#1C1C1C] !h-[36px] text-white !py-2 !px-4 mb-3 w-full  font-Open "
+                    onClick={() => {
+                      onSubmit();
+                    }}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
-      </div>
-      </div>
       </div>
     );
   };
@@ -226,15 +227,15 @@ const Billing = (props: ITypeProps) => {
             className="!p-0 !w-[500px] !h-[700px]"
             overlayClassName="flex  items-center"
           > */}
-            {loading ? (
-              <div className="flex justify-center items-center h-full">
-                <Spinner />
-              </div>
-            ) : (
-              <div className="flex justify-center items-center h-[100vh]">
-                  {addressComponent()}
-              </div>
-            )}
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <Spinner />
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-[100vh]">
+              {addressComponent()}
+            </div>
+          )}
           {/* </CustomBottomModal> */}
         </div>
       );

@@ -130,9 +130,9 @@ export const GSTComponent = (props: ITypeProps) => {
             title="DECLARATION OF GST NON-ENROLMENT"
             subTitleOne="Sub: Declaration of"
           /> */}
-            <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8]  py-4">
+            <div className="flex flex-col  border-[1px] rounded border-[#E8E8E8] overflow-x-auto  py-4">
               <div className="px-8 flex flex-col gap-y-2">
-                <div className="h-[400px] overflow-y-scroll">
+                <div className="h-[400px]">
                   {/* <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe> */}
                   <div
                     style={{ textAlign: "center", marginBottom: "20px" }}

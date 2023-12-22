@@ -36,8 +36,8 @@ const Card = (props: ITypesProps) => {
         >
           {title}
         </p>
-        <div className="px-8 flex flex-col gap-y-2">
-          <div className="h-[370px] w-full overflow-y-scroll">
+        <div className="px-2 flex flex-col gap-y-2">
+          <div className="h-[370px] w-full overflow-x-auto ">
             {/* <iframe src={pdfUrl} className="h-full w-full" title="PDF"></iframe> */}
             <LogisticsServicesAgreement />
           </div>

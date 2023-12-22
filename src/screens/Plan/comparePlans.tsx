@@ -226,7 +226,7 @@ const ComparePlans = (props: ITypeProps) => {
       <div className="lg:hidden">
         <Breadcrum label="Compare" />
       </div>
-      <div className="ml-5  overflow-x-scroll">
+      <div className="ml-5 customScroll">
         <CustomTable
           columns={columns}
           data={data}

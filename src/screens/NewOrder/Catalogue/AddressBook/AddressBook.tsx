@@ -22,7 +22,7 @@ const AddressBook = () => {
 
   return (
     <div>
-      <div className="flex ml-5 overflow-x-scroll cursor-pointer  whitespace-nowrap mt-5 h-[48px]">
+      <div className="flex ml-5 customScroll cursor-pointer  whitespace-nowrap mt-5 h-[48px]">
         <div
           className={`flex items-center border-solid border-2 border-[#E8E8E8] rounded-l px-4 ${
             catalogueState?.addressBtnName === "Pickup Address"

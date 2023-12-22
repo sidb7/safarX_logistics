@@ -22,7 +22,7 @@ const Modal = (props: ModalProps) => {
     <>
       <>
         <div
-          className={`${wrapperClassName} flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none`}
+          className={`${wrapperClassName} flex justify-center items-center overflow-x-hidden customScroll fixed inset-0 z-50 outline-none focus:outline-none`}
         >
           <div className={`relative   mx-auto ${modalWidth} `}>
             <div

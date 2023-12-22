@@ -110,7 +110,7 @@ const Index = (props: IPropsTypes) => {
       {catalogueState.channelName === "Box Catalogue" ? (
         ""
       ) : (
-        <div className="flex flex-col lg:flex lg:flex-row gap-x-2 ml-5 overflow-x-scroll whitespace-nowrap mt-2 lg:h-[34px] lg:mt-9">
+        <div className="flex flex-col lg:flex lg:flex-row gap-x-2 ml-5 customScroll whitespace-nowrap mt-2 lg:h-[34px] lg:mt-9">
           {statusData?.map(({ statusName }, index) => {
             return (
               <div
@@ -140,7 +140,7 @@ const Index = (props: IPropsTypes) => {
       {catalogueState?.channelName === "Channel Integration" && (
         <div className="flex flex-col px-5 ">
           <div
-            className="overflow-scroll	"
+            className="customScroll	"
             style={{
               height: "calc(100vh - 200px)",
             }}

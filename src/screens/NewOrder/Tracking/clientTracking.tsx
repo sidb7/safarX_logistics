@@ -386,7 +386,7 @@ const Tracking = () => {
                                             <p className="text-[14px] font-normal leading-[16px] ">
                                               From:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] overflow-y-auto">
+                                            <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] customScroll">
                                               {each?.pickupAddress?.fullAddress}
                                             </p>
                                           </div>
@@ -394,7 +394,7 @@ const Tracking = () => {
                                             <p className="text-[14px] font-normal leading-[16px]">
                                               To:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] overflow-y-auto">
+                                            <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] customScroll">
                                               {
                                                 each?.deliveryAddress
                                                   ?.fullAddress
@@ -439,7 +439,7 @@ const Tracking = () => {
                                         </div>
 
                                         <div
-                                          className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] overflow-y-scroll my-2 py-2 px-4 rounded-lg`}
+                                          className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] customScroll my-2 py-2 px-4 rounded-lg`}
                                         >
                                           {temp}
                                         </div>
