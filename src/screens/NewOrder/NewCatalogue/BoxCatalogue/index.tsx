@@ -106,7 +106,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     } else {
       setSellerBoxDetailsModal(false);
     }
-    // getBoxsApi();
+    getBoxsApi();
   };
 
   const deleteSellerBox = async (boxDetailsData: any, index: number) => {
