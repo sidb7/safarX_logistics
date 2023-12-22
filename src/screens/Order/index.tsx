@@ -20,21 +20,16 @@ import { POST } from "../../utils/webService";
 import {
   CANCEL_MULTIPLE_WAYBILLS,
   CANCEL_TEMP_SELLER_ORDER,
-  CANCEL_WAY_BILL,
-  FETCH_ALL_PARTNER,
-  FETCH_MANIFEST_DATA,
-  GET_ALL_STORES,
   GET_SELLER_ORDER,
   GET_SINGLE_FILE,
+  LEBEL_DOWNLOAD,
   GET_STATUS_COUNT,
-  POST_SERVICEABILITY,
   POST_SYNC_ORDER,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import TickLogo from "../../assets/tick.gif";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import BulkUpload from "./BulkUpload/BulkUpload";
@@ -46,10 +41,11 @@ import { DeleteModal as DeleteModalDraftOrder } from "../../components/DeleteMod
 import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAccordian";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
-
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
+import { tokenKey } from "../../utils/utility";
+
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -254,13 +250,6 @@ const Index = () => {
   const [openSection, setOpenSection] = useState<any>(false);
   const [selectedRowdata, setSelectedRowData] = useState([]);
 
-  // const toggleSection = (section: string) => {
-  //   setOpenSection((prevOpenSection: any) =>
-  //     prevOpenSection === section ? null : section
-  //   );
-  // };
-
-  // const isActive = roles.roles?.[0]?.menu?.[1]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Orders");
   const Buttons = (className?: string) => {
     return (
@@ -736,6 +725,43 @@ const Index = () => {
       return false;
     }
   };
+  const fetchLabels = async (arrLebels: string[]) => {
+    if (!arrLebels.length) {
+      toast.error("Please Select One Orders For lebel");
+      return;
+    }
+    // let header = {
+    //   Accept: "/",
+    //   Authorization: `Bearer ${localStorage.getItem(
+    //     `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+    //   )}`,
+    //   "Content-Type": "application/json",
+    // };
+    const payload: any = {
+      fileNameArr: arrLebels.filter((item: any) => item !== ""),
+    };
+    const { data } = await POST(
+      LEBEL_DOWNLOAD,
+      payload
+      // responseType: "blob",
+    );
+    // const data1 = await response.json();
+    if (!data?.status) {
+      toast.error(data.msg);
+      return;
+    }
+
+    data.data.forEach((url: string, index: number) => {
+      // Create a temporary anchor element
+      const a = document.createElement("a");
+      a.href = url;
+      //  a.download = `Lables_${index}.pdf`;
+      // Trigger a click on the anchor element to start the download
+      a.click();
+      // Remove the anchor element from the document
+    });
+    return true;
+  };
 
   if (isDeleted) {
     const newOrders = orders.filter(
@@ -787,6 +813,8 @@ const Index = () => {
               allOrders={allOrders}
               currentStatus={tabs[globalIndex].value}
               selectedRowdata={selectedRowdata}
+              setSelectedRowData={setSelectedRowData}
+              fetchLabels={fetchLabels}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
               tabStatusId={tabStatusId}

@@ -11,6 +11,7 @@ import SampleProduct from "../../../../assets/SampleProduct.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { filterItems } from "../../../../utils/dummyData";
 import { useNavigate } from "react-router-dom";
+import plusIcon from "../../../../assets/plusIcon.svg";
 import {
   CREATE_COMBO_PRODUCT,
   GET_COMBO_PRODUCT,
@@ -46,10 +47,14 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
   const navigate = useNavigate();
   const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [products, setProducts] = useState<any>([]);
-  const [searchedProduct, setSearchedProduct] = useState<any>("");
+  const [selectedTempProducts, setSelectedTempProducts] = useState<any>([]);
+  const [productsFromAPI, setProductsFromAPI] = useState([]);
+  const [searchProduct, setSearchProduct] = useState("");
+  const [renderingComponents, setRenderingComponents] = useState(0);
   const [clearIconVisible, setClearIconVisible] = useState<any>(false);
   const [selectedProduct, setSelectedProduct] = useState<any>([]);
   const [comboNameDisabled, setComboNameDisabled] = useState(true);
+  const [isLoading, setIsLoading] = useState<any>(false);
   const [totalItemCount, setTotalItemCount] = useState(totalProduct);
   const [comboData, setComboData] = useState<any>({
     name: "",
@@ -62,18 +67,13 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
 
   const handleVolumCalc = () => {
     // Create a copy seleted data array
-    const updatedProductInputState = products.filter(
+    const updatedProductInputState = selectedTempProducts.filter(
       (isSelectedFilterData: any) => isSelectedFilterData?.selected
     );
     let volumetricWeightLocal: number = 0;
     let deadWeightLocal: number = 0;
     let appliedWeightLocal: number = 0;
 
-    // if (updatedProductInputState.length > 2 && ){
-
-    // }
-
-    // Loop through each product in the array
     if (updatedProductInputState.length > 0) {
       updatedProductInputState.forEach((product: any, i: any) => {
         const { volumetricWeight, deadWeight } = product;
@@ -93,27 +93,10 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
   useEffect(() => {
     if (productsData) {
       setProducts([]);
-      // let tempArr = JSON.parse(JSON.stringify(productsData));
       let tempArr = [...productsData];
-
-      // let tempSelectedArr = JSON.parse(JSON.stringify(selectedProducts));
-      // let tempSelectedArr = [...selectedProducts];
-
       tempArr?.forEach((product: any) => {
         product.selected = false;
       });
-
-      // if (tempSelectedArr.length > 0) {
-      //     tempSelectedArr?.forEach((selectedProduct: any) => {
-      //         tempArr?.forEach((products: any) => {
-      //             if (selectedProduct?.productId === products?.productId) {
-      //                 products.selected = true;
-      //                 products.qty = selectedProduct.qty;
-      //             }
-      //         });
-      //     });
-      // }
-
       setProducts([...sortOnSelected(tempArr)]);
     }
   }, [isSearchProductRightModalOpen, selectedProducts]);
@@ -124,24 +107,21 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
 
   const sortOnSelected = (products: any) => {
     return products.sort((a: any, b: any) => {
-      // Sorting in descending order (selected: true comes first)
       if (a.selected && !b.selected) {
         return -1;
       }
       if (!a.selected && b.selected) {
         return 1;
       }
-      // If selected values are the same, maintain the original order
+
       return 0;
     });
   };
 
   const createComboProduct = async () => {
     const { name, images, category } = comboData;
-    const updatedProductInputState = products.filter(
-      (isSelectedFilterData: any) => isSelectedFilterData?.selected
-    );
-    if (updatedProductInputState?.length < 2) {
+
+    if (selectedTempProducts?.length < 2) {
       toast.error("Atleast Two Product's is Required For Combo");
       return;
     } else {
@@ -149,7 +129,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
         name,
         images,
         category,
-        products: [...updatedProductInputState],
+        products: [...selectedTempProducts],
       };
       const { data: response } = await POST(CREATE_COMBO_PRODUCT, payLoad);
       if (response?.success) {
@@ -161,20 +141,40 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     }
   };
 
-  const selectProduct = (product: any, index: number) => {
-    const allreadySelected = isProductSelected(index);
+  // -------------------------------------------------------------------------------------------------------------------------------------------
+  const selectProduct = (
+    product: any,
+    index: number,
+    deselectProduct: boolean = false
+  ) => {
     let tempArr: any = products;
-    if (allreadySelected) {
-      tempArr[index].selected = false;
-      setProducts([...sortOnSelected(tempArr)]);
-    } else {
-      tempArr[index].selected = true;
-      setProducts([...sortOnSelected(tempArr)]);
-    }
-  };
+    let tempSelectedProductsArr: any = selectedTempProducts;
+    const tempOrderFromAPI: any = productsFromAPI;
 
-  const isProductSelected = (index: any) => {
-    return products[index]?.selected === true ? true : false;
+    if (deselectProduct) {
+      const isExist = tempOrderFromAPI.some(
+        (productAPI: any) =>
+          productAPI.productId === tempSelectedProductsArr[index].productId
+      );
+
+      if (isExist) {
+        tempArr.push(tempSelectedProductsArr[index]);
+        setProducts([...tempArr]);
+      }
+
+      tempSelectedProductsArr.splice(index, 1);
+      setSelectedProduct([...tempSelectedProductsArr]);
+
+      return;
+    }
+
+    tempArr[index].selected = true;
+
+    tempSelectedProductsArr.push(tempArr[index]);
+    setSelectedProduct([...tempSelectedProductsArr]);
+
+    tempArr.splice(index, 1);
+    setProducts([...tempArr]);
   };
 
   const onChangedHandler = (e: any) => {
@@ -192,36 +192,60 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     setComboData({ ...comboData, image: formData });
   };
 
-  const searchProductContent = () => {
-    const searchProduct = async (e: any) => {
-      setSearchedProduct(e.target.value);
-      setClearIconVisible(true);
+  useEffect(() => {
+    if (productsFromAPI) {
+      setProducts([]);
 
-      if (e.target.value) {
-        const searchedProduct = products.filter((product: any, i: any) => {
-          const productName = product?.name.toLowerCase();
-          return productName.includes(e.target.value.toLowerCase());
+      let tempArrProducts = JSON.parse(JSON.stringify(productsFromAPI));
+
+      let tempSelectedArr = JSON.parse(JSON.stringify(selectedTempProducts));
+
+      tempArrProducts?.forEach((product: any) => {
+        product.selected = false;
+      });
+
+      if (tempSelectedArr.length > 0) {
+        tempSelectedArr?.forEach((selectedProduct: any) => {
+          tempArrProducts?.forEach((products: any, index: number) => {
+            if (selectedProduct.productId === products.productId) {
+              tempArrProducts.splice(index, 1);
+              // products.selected = true;
+              // products.qty = selectedProduct.qty;
+            }
+          });
         });
-        setProducts(searchedProduct);
-      } else {
-        setProducts(products);
       }
 
-      // const { data } = await POST(GET_PRODUCTS, {
-      //   skip: 0,
-      //   limit: 10,
-      //   pageNo: 1,
-      //   searchValue: e.target.value,
-      // });
-      // if (data?.success) {
-      //   setProducts(data?.data);
-      //   setTotalItemCount(data?.totalProduct);
-      // } else {
-      //   setProducts([]);
-      //   toast.error(data?.message);
-      // }
-    };
+      setProducts([...tempArrProducts]);
+    }
+  }, [productsFromAPI]);
 
+  const getProducts = async (searchValue: any = "") => {
+    try {
+      setIsLoading(true);
+      const { data } = await POST(GET_PRODUCTS, {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+        searchValue,
+      });
+
+      setProductsFromAPI(data?.data);
+      setTotalItemCount(data?.totalProduct);
+      setIsLoading(false);
+    } catch (error) {
+      setProductsFromAPI([]);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isSearchProductRightModalOpen) {
+      getProducts(searchProduct);
+    }
+  }, [isSearchProductRightModalOpen, searchProduct]);
+
+  const searchProductContent = () => {
     const onPageIndexChange = async (pageIndex: any) => {
       const { data } = await POST(GET_PRODUCTS, {
         skip: (pageIndex?.currentPage - 1) * pageIndex?.itemsPerPage,
@@ -229,10 +253,10 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
         pageNo: pageIndex?.currentPage,
       });
       if (data?.success) {
-        setProducts(data?.data);
+        setProductsFromAPI(data?.data);
         setTotalItemCount(data?.totalProduct);
       } else {
-        setProducts([]);
+        setProductsFromAPI([]);
         toast.error(data?.message);
       }
     };
@@ -244,21 +268,21 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
         pageNo: pageperItem?.currentPage,
       });
       if (data?.success) {
-        setProducts(data?.data);
+        setProductsFromAPI(data?.data);
         setTotalItemCount(data?.totalProduct);
       } else {
-        setProducts([]);
+        setProductsFromAPI([]);
         toast.error(data?.message);
       }
     };
+
+    const arrayData = [{ label: "Select Products" }, { label: "Save Combo" }];
+
     return (
       <div className="overflow-auto h-full">
-        <div className="p-5  ">
+        <div className="h-full max-h-[92%] ">
           <div className="lg:mb-[20px] mb-2">
-            <div className="flex items-center justify-between mb-[8px] ">
-              <p className="text-[22px] font-Lato font-normal lg:text-2xl leading-8 text-[#323232]">
-                Search Product
-              </p>
+            <div className="flex items-center justify-end p-5 rounded-2xl mb-[12px] border-b shadow-md">
               <img
                 src={CrossIcon}
                 alt="Cross Icon"
@@ -266,30 +290,41 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
                 onClick={() => setIsSearchProductRightModalOpen(false)}
               />
             </div>
-            {/* Search Box */}
-            <div className="lg:w-1/2 w-[100%] ">
-              <CustomInputBox
-                isRightIcon={clearIconVisible}
-                rightIcon={ClearImage}
-                value={searchedProduct}
-                label="Search any product"
-                onChange={(e) => {
-                  searchProduct(e);
-                }}
-                onClick={() => {
-                  setSearchedProduct("");
-                  setClearIconVisible(false);
-                  setProducts(productsData);
-                }}
-                visibility={true}
-                setVisibility={() => {}}
-                imageClassName="!w-8 !h-8 !top-[20%]"
-              />
-            </div>
-          </div>
+            <div className="m-5">
+              {selectedTempProducts.length > 0 && (
+                <div className="pb-6 ">
+                  <p className="text-[22px] mb-4 font-Lato font-semibold lg:text-2xl leading-8 text-[#323232]">
+                    Selected Product ({selectedTempProducts.length})
+                  </p>
+                  <div className="h-auto flex flex-wrap  duration-300  w-full overflow-scroll transition-all ease-in-out  gap-y-4 gap-x-2">
+                    <>
+                      {selectedTempProducts?.map(
+                        (eachProduct: any, index: number) => {
+                          return (
+                            <ProductBox
+                              key={index}
+                              image={SampleProduct}
+                              weight={`${eachProduct?.appliedWeight} Kg`}
+                              productName={eachProduct?.name || 0}
+                              breadth={eachProduct?.breadth || 0}
+                              length={eachProduct?.length || 0}
+                              height={eachProduct?.height || 0}
+                              className="lg:!w-72 w-[100%] cursor-pointer lg:h-[80px] h-[60px]"
+                              onClick={() =>
+                                selectProduct(eachProduct, index, true)
+                              }
+                              isSelected={eachProduct?.selected}
+                            />
+                          );
+                        }
+                      )}
+                    </>
+                  </div>
+                </div>
+              )}
 
-          {/* Filter */}
-          <div className="lg:mb-8 mb-4">
+              {/* Filter */}
+              {/* <div className="lg:mb-8 mb-4">
             <div className="flex  items-center gap-x-2 mb-3">
               <img src={ProductIcon} alt="Product" />
               <div className="font-Lato font-normal text-[22px] lg:text-2xl leading-8">
@@ -298,102 +333,186 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
             </div>
 
             <SearchProductFilterItems filterItems={filterItems} />
-          </div>
+          </div> */}
 
-          <div className="flex  items-center gap-x-2 mb-2">
-            <img src={ProductIcon} alt="Product" />
-            <div className="font-Lato font-normal lg:text-2xl text-[22px] leading-8">
-              Top Added
+              <div className=" flex justify-between items-center gap-x-2 ">
+                <div className="flex items-center">
+                  <img src={ProductIcon} alt="Product" />
+                  <div className="font-Lato mx-2 font-normal lg:text-2xl text-[22px]  leading-8">
+                    {renderingComponents === 0
+                      ? "Select Products"
+                      : "Combo Details"}
+                  </div>
+                </div>
+                {renderingComponents === 0 && (
+                  <div className="lg:w-1/2 w-[100%] ">
+                    <CustomInputBox
+                      isRightIcon={clearIconVisible}
+                      rightIcon={ClearImage}
+                      value={searchProduct}
+                      label="Search any product"
+                      onChange={(e: any) => {
+                        setSearchProduct(e.target.value);
+                      }}
+                      onClick={() => {
+                        setSearchProduct("");
+                        setClearIconVisible(false);
+                        setProducts(productsData);
+                      }}
+                      visibility={true}
+                      setVisibility={() => {}}
+                      imageClassName="!w-8 !h-8 !top-[20%]"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4">
+                {renderingComponents === 0 ? (
+                  <div className="flex flex-col lg:max-h-[780px] max-h-[280px] gap-3 mb-0 lg:mb-6  overflow-scroll ">
+                    <div className="w-[100%] flex flex-wrap gap-4">
+                      <>
+                        {!(products.length > 0) && (
+                          <div
+                            className="flex items-center justify-center h-[60px] p-5 rounded-lg bg-[#F2F6FF]"
+                            onClick={() =>
+                              navigate(`/catalogues/catalogue/add-product`)
+                            }
+                          >
+                            <img src={plusIcon} alt="" />
+                            <div className="mx-2"> Please Add Product</div>
+                          </div>
+                        )}
+                        {products?.map((eachProduct: any, index: number) => {
+                          return (
+                            <ProductBox
+                              key={index}
+                              image={SampleProduct}
+                              weight={`${eachProduct?.deadWeight} Kg`}
+                              productName={eachProduct?.name || 0}
+                              breadth={eachProduct?.breadth || 0}
+                              length={eachProduct?.length || 0}
+                              height={eachProduct?.height || 0}
+                              className="lg:!w-72 w-[100%] cursor-pointer lg:h-[80px] h-[60px]"
+                              onClick={() => selectProduct(eachProduct, index)}
+                              // isSelected={isProductSelected(index)}
+                            />
+                          );
+                        })}
+                      </>
+                    </div>
+                    <div>
+                      {totalItemCount > 0 && (
+                        <PaginationComponent
+                          totalItems={totalItemCount}
+                          itemsPerPageOptions={[10, 20, 30, 50]}
+                          onPageChange={onPageIndexChange}
+                          onItemsPerPageChange={onPerPageItemChange}
+                        />
+                      )}
+                    </div>
+                    <div
+                      className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+                      style={{ width: "-webkit-fill-available" }}
+                    >
+                      <ServiceButton
+                        text={"CANCEL"}
+                        onClick={() => {
+                          setIsSearchProductRightModalOpen(false);
+                        }}
+                        className={`${
+                          isMobileView ? "w-[100%]" : ""
+                        } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4`}
+                      />
+                      <ServiceButton
+                        text={"NEXT"}
+                        onClick={() => {
+                          setRenderingComponents(1);
+                        }}
+                        className={`${
+                          isMobileView ? "w-[100%]" : ""
+                        } bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-2 w-[100%] bg-white  gap-5">
+                      <div className="flex-1">
+                        <CustomInputBox
+                          label="Combo Name"
+                          name="name"
+                          value={comboData?.name}
+                          onChange={onChangedHandler}
+                        />
+                      </div>
+
+                      {/* <div className="flex-1">
+                        <InputWithFileUpload
+                          type="file"
+                          onChange={(e: any) => uploadedInputFile(e)}
+                        />
+                      </div> */}
+                      <div className="flex-1">
+                        <CustomInputBox
+                          label="Combo Volumetric Weight (Kg)"
+                          value={comboData?.totalVolumetricWeight}
+                          isDisabled={true}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <CustomInputBox
+                          label="Combo Dead Weight"
+                          value={comboData?.deadWeight}
+                          isDisabled={true}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <CustomInputBox
+                          label="Combo Applied Weight"
+                          value={comboData?.appliedWeight}
+                          isDisabled={true}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
+                      style={{ width: "-webkit-fill-available" }}
+                    >
+                      <ServiceButton
+                        text={"BACK"}
+                        onClick={() => {
+                          setRenderingComponents(0);
+                        }}
+                        className={`${
+                          isMobileView ? "w-[100%]" : ""
+                        } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4`}
+                      />
+                      <ServiceButton
+                        text={"CANCEL"}
+                        onClick={() => {
+                          setIsSearchProductRightModalOpen(false);
+                        }}
+                        className={`${
+                          isMobileView ? "w-[100%]" : ""
+                        } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4`}
+                      />
+                      <ServiceButton
+                        text={"SAVE"}
+                        disabled={comboNameDisabled}
+                        onClick={() => createComboProduct()}
+                        className={`${
+                          isMobileView ? "w-[100%]" : ""
+                        } bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex lg:max-h-[350px] max-h-[280px] flex-wrap gap-5 mb-0 lg:mb-6  customScroll ">
-            {products?.map((eachProduct: any, index: number) => {
-              return (
-                <ProductBox
-                  key={index}
-                  image={SampleProduct}
-                  weight={`${eachProduct?.deadWeight} Kg`}
-                  productName={eachProduct?.name || 0}
-                  breadth={eachProduct?.breadth || 0}
-                  length={eachProduct?.length || 0}
-                  height={eachProduct?.height || 0}
-                  className="lg:!w-72 w-[100%] cursor-pointer lg:h-[80px] h-[60px]"
-                  onClick={() => selectProduct(eachProduct, index)}
-                  isSelected={isProductSelected(index)}
-                />
-              );
-            })}
-            {totalItemCount > 0 && (
-              <PaginationComponent
-                totalItems={totalItemCount}
-                itemsPerPageOptions={[10, 20, 30, 50]}
-                onPageChange={onPageIndexChange}
-                onItemsPerPageChange={onPerPageItemChange}
-              />
-            )}
-          </div>
         </div>
-        <hr />
-        <div className="grid grid-cols-2 mx-5 mt-6 gap-5">
-          <div className="flex-1">
-            <CustomInputBox
-              label="Combo Name"
-              name="name"
-              value={comboData?.name}
-              onChange={onChangedHandler}
-            />
-          </div>
-
-          <div className="flex-1">
-            <InputWithFileUpload
-              type="file"
-              onChange={(e: any) => uploadedInputFile(e)}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInputBox
-              label="Combo Volumetric Weight (Kg)"
-              value={comboData?.totalVolumetricWeight}
-              isDisabled={true}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInputBox
-              label="Combo Dead Weight"
-              value={comboData?.deadWeight}
-              isDisabled={true}
-            />
-          </div>
-          <div className="flex-1">
-            <CustomInputBox
-              label="Combo Applied Weight"
-              value={comboData?.appliedWeight}
-              isDisabled={true}
-            />
-          </div>
-        </div>
-        <div
-          className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
-          style={{ width: "-webkit-fill-available" }}
-        >
-          <ServiceButton
-            text={"CANCEL"}
-            onClick={() => {
-              setIsSearchProductRightModalOpen(false);
-            }}
-            className={`${
-              isMobileView ? "w-[100%]" : ""
-            } bg-white text-[#1C1C1C] h-[36px] lg:!py-2 lg:!px-4`}
-          />
-          <ServiceButton
-            text={"SAVE"}
-            disabled={comboNameDisabled}
-            onClick={() => createComboProduct()}
-            className={`${
-              isMobileView ? "w-[100%]" : ""
-            } bg-[#1C1C1C] text-[#FFFFFF] h-[36px] lg:!py-2 lg:!px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none`}
-          />
-        </div>
+        {/* <hr /> */}
       </div>
     );
   };
