@@ -113,6 +113,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     filterArrOne: [],
     filterArrTwo: [],
   });
+  const [manifestButton, setManifestButton] = useState<any>(true);
 
   useEffect(() => {
     setStatusId(tabStatusId || statusId);
@@ -138,23 +139,31 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       },
     ],
     BOOKED: [
-      { icon: CrossIcon, hovertext: "Cancel Orders", identifier: "Cancel" },
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
       {
         icon: DownloadIcon,
         hovertext: "Download Manifest Reports",
         identifier: "Download_menifest_report",
+        buttonName: "Download MANIFEST",
       },
       {
         icon: DownloadIcon,
-        hovertext: "Download Labels",
+        hovertext: "Download Lebels",
         identifier: "Download_Labels",
+        buttonName: "Download LABEL",
       },
     ],
     "READY TO PICK": [
       {
         icon: DownloadIcon,
-        hovertext: "Download Labels",
+        hovertext: "Download Lebels",
         identifier: "Download_Labels",
+        buttonName: "Download LABEL",
       },
     ],
   };
@@ -205,6 +214,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(errorData.message);
+        setManifestButton(true);
         return;
       }
       const data = await response.blob();
@@ -217,6 +227,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       a.href = url;
       a.download = `Manifest_Report.pdf`;
       a.click();
+      setManifestButton(true);
       // FileSaver.saveAs(data, "Manifest_Report.pdf");
     }
   };
@@ -306,6 +317,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           }
         } else if (identifier === "Download_menifest_report") {
           setManifestModal({ ...manifestModal, isOpen: true });
+          setManifestButton(false);
         } else if (identifier === "Download_Labels") {
           if (selectedRowdata.length > 0) {
             const lebelsArr: string[] = selectedRowdata.map(
@@ -467,9 +479,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       if (currentStatus === "BOOKED") {
         return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex">
-            {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md p-1  flex gap-x-6">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -478,7 +490,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         className={`${
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
-                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        }
+                          px-3 py-1  h-[30px] border border-[#A4A4A4] gap-x-6 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -487,9 +500,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           )
                         }
                         data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content={data.hovertext}
+                        //    data-tooltip-content={data.hovertext}
                       >
                         <img src={data.icon} alt="" className="w-[17px]" />
+                        <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 uppercase whitespace-no-wrap">
+                          {data?.buttonName}
+                        </span>
                       </div>
                       <Tooltip
                         id="my-tooltip-inline"
@@ -547,7 +563,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+              <div className="rounded-md p-1  flex gap-x-6">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -556,7 +572,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         className={`${
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
-                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        }
+                          px-3 py-1  h-[30px] border border-[#A4A4A4] gap-x-6 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -568,6 +585,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         data-tooltip-content={data.hovertext}
                       >
                         <img src={data.icon} alt="" className="w-[17px]" />
+                        <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 uppercase whitespace-no-wrap">
+                          {data?.buttonName}
+                        </span>
                       </div>
                       <Tooltip
                         id="my-tooltip-inline"
@@ -910,17 +930,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         <ServiceButton
                           text={"MANIFEST REPORT"}
                           className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg py-3 w-[150px]`}
-                          onClick={() => fetchManifest()}
+                          onClick={() => {
+                            fetchManifest();
+                          }}
                         />
                         <ServiceButton
                           text={"X"}
                           className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg p-3`}
-                          onClick={() =>
+                          onClick={() => {
                             setManifestModal({
                               ...manifestModal,
                               isOpen: false,
-                            })
-                          }
+                            });
+                            setManifestButton(true);
+                          }}
                         />
                       </div>
                     </div>

@@ -462,9 +462,11 @@ const Index = () => {
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
-
+      setRowSelection([]);
+      setSelectedRowData([]);
       if (data?.status) {
         setIsLoading(false);
+
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -668,6 +670,7 @@ const Index = () => {
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -695,6 +698,7 @@ const Index = () => {
 
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const getSellerOrder = async (
@@ -715,6 +719,8 @@ const Index = () => {
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
+      setRowSelection([]);
+      setSelectedRowData([]);
 
       if (data?.status) {
         return data?.data[0];
@@ -751,16 +757,16 @@ const Index = () => {
       toast.error(data.msg);
       return;
     }
-
-    data.data.forEach((url: string, index: number) => {
-      // Create a temporary anchor element
-      const a = document.createElement("a");
-      a.href = url;
-      //  a.download = `Lables_${index}.pdf`;
-      // Trigger a click on the anchor element to start the download
-      a.click();
-      // Remove the anchor element from the document
-    });
+    const urls: any = data?.data;
+    for (let i = 0; i < urls.length; i++) {
+      setTimeout(() => {
+        let a: any = "";
+        a = document.createElement("a");
+        a.href = urls[i];
+        a.click();
+        document.body.removeChild(a);
+      }, i * 1000); // 1 second delay between downloads
+    }
     return true;
   };
 
