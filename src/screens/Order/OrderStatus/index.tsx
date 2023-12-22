@@ -43,6 +43,8 @@ interface IOrderstatusProps {
   allOrders: any;
   selectedRowdata?: any;
   setSelectedRowData?: any;
+  setRowSelection?: any;
+  rowSelection?: any;
   fetchLabels?: any;
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
@@ -82,6 +84,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   selectedRowdata,
   setSelectedRowData,
+  setRowSelection,
+  rowSelection,
   fetchLabels,
   setDeleteModalDraftOrder,
   setCancellationModal,
@@ -310,12 +314,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 }
               }
             );
-
-            console.log("lebel1", lebelsArr);
             const data = await fetchLabels(lebelsArr);
-            console.log("lebel1", data);
             if (data) {
               setSelectedRowData([]);
+              setRowSelection([]);
             }
           } else {
             toast.error(
@@ -336,10 +338,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 }
               }
             );
-            console.log(lebelsArr);
+
             const data = await fetchLabels(lebelsArr);
             if (data) {
               setSelectedRowData([]);
+              setRowSelection([]);
             }
           } else {
             toast.error(
