@@ -462,9 +462,11 @@ const Index = () => {
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
-
+      setRowSelection([]);
+      setSelectedRowData([]);
       if (data?.status) {
         setIsLoading(false);
+
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -668,6 +670,7 @@ const Index = () => {
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -695,6 +698,7 @@ const Index = () => {
 
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const getSellerOrder = async (
@@ -715,6 +719,8 @@ const Index = () => {
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
+      setRowSelection([]);
+      setSelectedRowData([]);
 
       if (data?.status) {
         return data?.data[0];
