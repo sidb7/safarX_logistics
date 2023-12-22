@@ -214,7 +214,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       if (!response.ok) {
         const errorData = await response.json();
         toast.error(errorData.message);
-        setManifestButton(true);
+        // setManifestButton(true);
         return;
       }
       const data = await response.blob();
