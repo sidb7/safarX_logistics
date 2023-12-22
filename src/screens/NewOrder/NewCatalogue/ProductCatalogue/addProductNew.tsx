@@ -203,7 +203,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
   return (
     <>
       <CustomRightModal
-        wrapperClassName="rounded overflow-scroll"
+        wrapperClassName="rounded customScroll"
         isOpen={isProductModal}
         onClose={() => setProductModal(false)}
         className=" w-full md:w-[52%] h-screen rounded-l-xl"
@@ -220,7 +220,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
               onClick={() => setProductModal(false)}
             />
           </div>
-          <div className="px-5 mb-20 overflow-scroll">
+          <div className="px-5 mb-20 customScroll">
             {productInputState?.map((e: any, index: number) => {
               return (
                 <>

@@ -279,7 +279,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const ProductDetails = () => {
     return (
       <div className="h-full">
-        <div className="p-5 overflow-scroll relative h-full">
+        <div className="p-5 customScroll relative h-full">
           <img
             src={CrossIcon}
             alt="Cross Icon"
@@ -310,7 +310,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             // style={{ border: "2px solid red" }}
           >
             <div
-              className={`h-auto flex flex-wrap  duration-300  w-full overflow-scroll transition-all ease-in-out  gap-y-4 gap-x-2 `}
+              className={`h-auto flex flex-wrap  duration-300  w-full customScroll transition-all ease-in-out  gap-y-4 gap-x-2 `}
             >
               {selectedProductTemp?.map((eachProduct: any, index: number) => {
                 return (
@@ -364,7 +364,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               />
             </div>
           </div>
-          <div className="flex flex-wrap gap-2 lg:gap-3 transition-all max-h-96 mt-2 overflow-scroll">
+          <div className="flex flex-wrap gap-2 lg:gap-3 transition-all max-h-96 mt-2 customScroll">
             {isLoading ? (
               <div className="w-full h-full justify-center items-center flex ">
                 <div className="flex">
@@ -430,7 +430,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                   Combo Products
                 </div>
               </div>
-              <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 overflow-scroll ">
+              <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 customScroll ">
                 {comboProducts?.map((combo: any, index: number) => {
                   return (
                     <ComboProductBox

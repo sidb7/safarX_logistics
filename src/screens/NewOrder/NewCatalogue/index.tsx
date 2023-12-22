@@ -501,7 +501,7 @@ const Catalogue = () => {
                   onRequestClose={() =>
                     setModalData({ ...modalData, isOpen: false })
                   }
-                  className="outline-none !p-0 overflow-scroll h-[30rem]"
+                  className="outline-none !p-0 customScroll h-[30rem]"
                 >
                   <ChannelIntegrationModalContent
                     setIsLoading={setIsLoading}

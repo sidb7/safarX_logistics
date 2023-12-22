@@ -140,7 +140,7 @@ const Index = (props: IPropsTypes) => {
       {catalogueState?.channelName === "Channel Integration" && (
         <div className="flex flex-col px-5 ">
           <div
-            className="overflow-scroll	"
+            className="customScroll	"
             style={{
               height: "calc(100vh - 200px)",
             }}
