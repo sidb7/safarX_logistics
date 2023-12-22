@@ -256,7 +256,7 @@ const SystemLog = () => {
           <div>
             <Breadcrum label="System Log" />
           </div>
-          <div className="mx-4 overflow-auto">
+          <div className="mx-4 customScroll">
             <CustomTable data={systemLogData} columns={systemLogColumns} />
           </div>
           {totalItemCount > 0 && (
