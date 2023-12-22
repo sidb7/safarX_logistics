@@ -249,6 +249,7 @@ const Index = () => {
 
   const [openSection, setOpenSection] = useState<any>(false);
   const [selectedRowdata, setSelectedRowData] = useState([]);
+  const [rowSelection, setRowSelection]: any = useState([]);
 
   const isActive = checkPageAuthorized("View Orders");
   const Buttons = (className?: string) => {
@@ -814,6 +815,8 @@ const Index = () => {
               currentStatus={tabs[globalIndex].value}
               selectedRowdata={selectedRowdata}
               setSelectedRowData={setSelectedRowData}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
               fetchLabels={fetchLabels}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
@@ -873,6 +876,8 @@ const Index = () => {
                       data={orders || []}
                       columns={columnHelper || []}
                       setRowSelectedData={setSelectedRowData}
+                      rowSelection={rowSelection}
+                      setRowSelection={setRowSelection}
                     />
                     {totalCount > 0 && (
                       <Pagination
