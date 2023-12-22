@@ -764,7 +764,7 @@ const Index = () => {
         a = document.createElement("a");
         a.href = urls[i];
         a.click();
-        document.body.removeChild(a);
+        // document.body.removeChild(a);
       }, i * 1000); // 1 second delay between downloads
     }
     return true;
