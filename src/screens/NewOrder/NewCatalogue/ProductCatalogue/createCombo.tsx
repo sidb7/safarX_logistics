@@ -306,7 +306,7 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
               Top Added
             </div>
           </div>
-          <div className="flex lg:max-h-[350px] max-h-[280px] flex-wrap gap-5 mb-0 lg:mb-6  overflow-scroll ">
+          <div className="flex lg:max-h-[350px] max-h-[280px] flex-wrap gap-5 mb-0 lg:mb-6  customScroll ">
             {products?.map((eachProduct: any, index: number) => {
               return (
                 <ProductBox

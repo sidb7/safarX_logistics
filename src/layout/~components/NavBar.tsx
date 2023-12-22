@@ -261,7 +261,7 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
       {/* Mobile Nav Bar */}
       <>
         <nav
-          className={`lg:hidden absolute h-full font-Open bg-white z-20 overflow-scroll`}
+          className={`lg:hidden absolute h-full font-Open bg-white z-20 customScroll`}
           style={{
             boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
             transition: `all .2s `,
