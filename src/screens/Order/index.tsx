@@ -751,16 +751,16 @@ const Index = () => {
       toast.error(data.msg);
       return;
     }
-
-    data.data.forEach((url: string, index: number) => {
-      // Create a temporary anchor element
-      const a = document.createElement("a");
-      a.href = url;
-      //  a.download = `Lables_${index}.pdf`;
-      // Trigger a click on the anchor element to start the download
-      a.click();
-      // Remove the anchor element from the document
-    });
+    const urls: any = data?.data;
+    for (let i = 0; i < urls.length; i++) {
+      setTimeout(() => {
+        let a: any = "";
+        a = document.createElement("a");
+        a.href = urls[i];
+        a.click();
+        document.body.removeChild(a);
+      }, i * 1000); // 1 second delay between downloads
+    }
     return true;
   };
 
