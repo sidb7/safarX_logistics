@@ -838,7 +838,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
           isOpen={boxTypeModal}
           onClose={() => setBoxTypeModal(false)}
         >
-          <div className="p-4 w-full flex-col items-center justify-center h-full">
+          <div className="p-4 w-full flex-col items-center justify-center">
             <div className="">
               <div className="flex py-5 gap-2">
                 <img src={ProductIcon} alt="Package Icon" />
@@ -846,7 +846,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   Seller Box Types
                 </h1>
               </div>
-              <div className="flex w-full items-center flex-col gap-3 justify-center">
+              <div className="flex w-full items-center flex-col gap-3 h-[700px] customScroll">
                 {sellerBox.length > 0 ? (
                   sellerBox?.map((newpackage: any, index: number) => {
                     return (
@@ -918,7 +918,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
               </div>
             </div>
 
-            <div>
+            {/* <div>
               {companyBox.length > 0 && (
                 <div>
                   <div className="flex py-5 gap-2">
@@ -977,7 +977,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
                   className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </RightSideModal>
         <RightSideModal isOpen={combo} onClose={() => setCombo(false)}>
