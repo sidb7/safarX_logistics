@@ -31,7 +31,7 @@ const DeleteModal = (props: IDeleteProps) => {
     if (data?.success) {
       setIsDeleted(true);
       toast.success(data?.message);
-      reloadData(7);
+      reloadData(8);
     } else {
       toast.error(data?.message);
     }

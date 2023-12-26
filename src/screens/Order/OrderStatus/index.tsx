@@ -311,9 +311,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
           } else {
-            toast.error(
-              "Please select atleast one for cancel your booked order"
-            );
+            toast.error("Please select atleast one order");
           }
         } else if (identifier === "Download_menifest_report") {
           setManifestModal({ ...manifestModal, isOpen: true });
@@ -481,7 +479,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex ">
             {getActionsIcon()?.length > 0 && manifestButton && (
-              <div className="rounded-md p-1  flex gap-x-6">
+              <div className="rounded-md flex mx-3 gap-x-6">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -491,7 +489,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
                         }
-                          px-3 py-1  h-[30px] border border-[#A4A4A4] gap-x-6 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
+                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-3 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -499,24 +497,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             data.identifier
                           )
                         }
-                        data-tooltip-id="my-tooltip-inline"
-                        //    data-tooltip-content={data.hovertext}
                       >
-                        <img src={data.icon} alt="" className="w-[17px]" />
-                        <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 uppercase whitespace-no-wrap">
+                        <img src={data.icon} alt="" className="w-[16px]" />
+                        <span className="font-open-sans text-[13px] leading-20 uppercase whitespace-no-wrap">
                           {data?.buttonName}
                         </span>
                       </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "bg-neutral-900",
-                          color: "#FFFFFF",
-                          width: "fit-content",
-                          fontSize: "14px",
-                          lineHeight: "16px",
-                        }}
-                      />
                     </>
                   );
                 })}
@@ -936,7 +922,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         />
                         <ServiceButton
                           text={"X"}
-                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg p-3`}
+                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg px-4  `}
                           onClick={() => {
                             setManifestModal({
                               ...manifestModal,
