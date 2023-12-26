@@ -44,7 +44,7 @@ import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
-import { tokenKey } from "../../utils/utility";
+import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -278,7 +278,7 @@ const Index = () => {
         >
           <img src={SyncIcon} alt="" width="16px" />
           <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            SYNC CHANNEL
+            {capitalizeFirstLetter("SYNC CHANNEL")}
           </span>
         </div>
 

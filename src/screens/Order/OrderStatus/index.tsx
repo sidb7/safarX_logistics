@@ -465,7 +465,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
                         }
-                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-3 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
+                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -525,7 +525,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1  flex gap-x-6">
+              <div className="rounded-md p-1  flex gap-x-4">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -535,7 +535,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
                         }
-                          px-3 py-1  h-[30px] border border-[#A4A4A4] gap-x-6 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
+                          px-3 py-1 h-[30px] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -543,24 +543,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             data.identifier
                           )
                         }
-                        data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content={data.hovertext}
                       >
                         <img src={data.icon} alt="" className="w-[17px]" />
                         <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 whitespace-no-wrap">
                           {capitalizeFirstLetter(data?.buttonName)}
                         </span>
                       </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "bg-neutral-900",
-                          color: "#FFFFFF",
-                          width: "fit-content",
-                          fontSize: "14px",
-                          lineHeight: "16px",
-                        }}
-                      />
                     </>
                   );
                 })}
