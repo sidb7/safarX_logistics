@@ -182,7 +182,7 @@ export const Transaction = () => {
         />
       );
     } else if (renderingComponents === 1) {
-      return <div>cash Back Table</div>;
+      return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
     }
   };
 
