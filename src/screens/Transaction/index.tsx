@@ -47,6 +47,8 @@ export const Transaction = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
+  console.log("renderingComponents", renderingComponents);
+
   useEffect(() => {
     if (renderingComponents === 0) {
       // setLoading(true);
@@ -65,6 +67,7 @@ export const Transaction = () => {
         });
 
         if (data?.success) {
+          console.log("data", data);
           setData(data.data || []);
           setTotalItemCount(data.totalTransactions);
           // throw new Error("Some Issue");
@@ -171,7 +174,7 @@ export const Transaction = () => {
     if (renderingComponents === 0) {
       return (
         <CustomTable
-          data={data}
+          data={data || []}
           columns={PassbookColumns(setSortOrder)}
           setRowSelectedData={setRowSelectedData}
           thclassName={"!w-auto "}
@@ -179,7 +182,7 @@ export const Transaction = () => {
         />
       );
     } else if (renderingComponents === 1) {
-      return <CustomTable data={[]} columns={cashbackDetailsColumns()} />;
+      return <div>cash Back Table</div>;
     }
   };
 

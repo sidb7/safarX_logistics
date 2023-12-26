@@ -882,8 +882,8 @@ const Index = () => {
                       data={orders || []}
                       columns={columnHelper || []}
                       setRowSelectedData={setSelectedRowData}
-                      rowSelection={rowSelection}
-                      setRowSelection={setRowSelection}
+                      // rowSelection={rowSelection}
+                      // setRowSelection={setRowSelection}
                     />
                     {totalCount > 0 && (
                       <Pagination
