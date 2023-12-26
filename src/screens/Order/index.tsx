@@ -44,7 +44,7 @@ import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
-import { tokenKey } from "../../utils/utility";
+import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -249,6 +249,7 @@ const Index = () => {
 
   const [openSection, setOpenSection] = useState<any>(false);
   const [selectedRowdata, setSelectedRowData] = useState([]);
+  const [rowSelection, setRowSelection]: any = useState([]);
 
   const isActive = checkPageAuthorized("View Orders");
   const Buttons = (className?: string) => {
@@ -277,7 +278,7 @@ const Index = () => {
         >
           <img src={SyncIcon} alt="" width="16px" />
           <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            SYNC CHANNEL
+            {capitalizeFirstLetter("SYNC CHANNEL")}
           </span>
         </div>
 
@@ -461,9 +462,11 @@ const Index = () => {
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
-
+      setRowSelection([]);
+      setSelectedRowData([]);
       if (data?.status) {
         setIsLoading(false);
+
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -667,6 +670,7 @@ const Index = () => {
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -694,6 +698,7 @@ const Index = () => {
 
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setRowSelection([]);
   };
 
   const getSellerOrder = async (
@@ -714,6 +719,8 @@ const Index = () => {
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
+      setRowSelection([]);
+      setSelectedRowData([]);
 
       if (data?.status) {
         return data?.data[0];
@@ -750,16 +757,16 @@ const Index = () => {
       toast.error(data.msg);
       return;
     }
-
-    data.data.forEach((url: string, index: number) => {
-      // Create a temporary anchor element
-      const a = document.createElement("a");
-      a.href = url;
-      //  a.download = `Lables_${index}.pdf`;
-      // Trigger a click on the anchor element to start the download
-      a.click();
-      // Remove the anchor element from the document
-    });
+    const urls: any = data?.data;
+    for (let i = 0; i < urls.length; i++) {
+      setTimeout(() => {
+        let a: any = "";
+        a = document.createElement("a");
+        a.href = urls[i];
+        a.click();
+        // document.body.removeChild(a);
+      }, i * 1000); // 1 second delay between downloads
+    }
     return true;
   };
 
@@ -814,6 +821,8 @@ const Index = () => {
               currentStatus={tabs[globalIndex].value}
               selectedRowdata={selectedRowdata}
               setSelectedRowData={setSelectedRowData}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
               fetchLabels={fetchLabels}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
@@ -873,6 +882,8 @@ const Index = () => {
                       data={orders || []}
                       columns={columnHelper || []}
                       setRowSelectedData={setSelectedRowData}
+                      rowSelection={rowSelection}
+                      setRowSelection={setRowSelection}
                     />
                     {totalCount > 0 && (
                       <Pagination

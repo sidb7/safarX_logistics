@@ -141,7 +141,6 @@ const CreateCombo: React.FunctionComponent<ISearchProductProps> = (props) => {
     }
   };
 
-  // -------------------------------------------------------------------------------------------------------------------------------------------
   const selectProduct = (
     product: any,
     index: number,

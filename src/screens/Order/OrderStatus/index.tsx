@@ -43,6 +43,8 @@ interface IOrderstatusProps {
   allOrders: any;
   selectedRowdata?: any;
   setSelectedRowData?: any;
+  setRowSelection?: any;
+  rowSelection?: any;
   fetchLabels?: any;
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
@@ -82,6 +84,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   selectedRowdata,
   setSelectedRowData,
+  setRowSelection,
+  rowSelection,
   fetchLabels,
   setDeleteModalDraftOrder,
   setCancellationModal,
@@ -100,15 +104,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [startDate, endDate] = dateRange;
   const [partnerMenu, setPartnerMenu] = useState<any>([]);
   const [partnerValue, setPartnerValue] = useState<any>();
-  const [manifestModal, setManifestModal]: any = useState({
-    isOpen: false,
-  });
+
   const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
   const [filterState, setFilterState] = useState([]);
   const [filterPayLoad, setFilterPayLoad] = useState({
     filterArrOne: [],
     filterArrTwo: [],
   });
+  const [manifestButton, setManifestButton] = useState<any>(true);
 
   useEffect(() => {
     setStatusId(tabStatusId || statusId);
@@ -134,23 +137,31 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       },
     ],
     BOOKED: [
-      { icon: CrossIcon, hovertext: "Cancel Orders", identifier: "Cancel" },
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
       {
         icon: DownloadIcon,
         hovertext: "Download Manifest Reports",
         identifier: "Download_menifest_report",
+        buttonName: "Download MANIFEST",
       },
       {
         icon: DownloadIcon,
-        hovertext: "Download Labels",
+        hovertext: "Download Lebels",
         identifier: "Download_Labels",
+        buttonName: "Download LABEL",
       },
     ],
     "READY TO PICK": [
       {
         icon: DownloadIcon,
-        hovertext: "Download Labels",
+        hovertext: "Download Lebels",
         identifier: "Download_Labels",
+        buttonName: "Download LABEL",
       },
     ],
   };
@@ -159,62 +170,39 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     return actionsObject[currentStatus];
   };
 
-  const fetchManifest = async () => {
-    let varstartDate: any = startDate;
-    let varendDate: any = endDate;
+  const fetchManifest = async (awbArray?: any) => {
+    let payload = {
+      awb: awbArray,
+    };
 
-    if (partnerValue === undefined || partnerValue === null) {
-      toast.error("Please Select the Courier Partner");
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(FETCH_MANIFEST_DATA, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      toast.error(errorData.message);
+      // setManifestButton(true);
       return;
-    } else if (
-      (startDate === undefined || startDate === null) &&
-      (startDate === undefined || startDate === null)
-    ) {
-      toast.error("Select Start Date and End Date");
-      return;
-    } else {
-      let epochStartDate: any = new Date(varstartDate);
-      epochStartDate = epochStartDate.getTime() / 1000;
-      let epochEndDate: any = new Date(varendDate);
-      epochEndDate = epochEndDate.getTime() / 1000;
-
-      let payload = {
-        startDate: epochStartDate,
-        endDate: epochEndDate,
-        partnerName: partnerValue,
-      };
-      //  const data = await POST(FETCH_MANIFEST_DATA, payload);
-
-      let header = {
-        Accept: "/",
-        Authorization: `Bearer ${localStorage.getItem(
-          `${sessionStorage.getItem("sellerId")}_${tokenKey}`
-        )}`,
-        "Content-Type": "application/json",
-      };
-      const response = await fetch(FETCH_MANIFEST_DATA, {
-        method: "POST",
-        headers: header,
-        body: JSON.stringify(payload),
-        // responseType: "blob",
-      });
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(errorData.message);
-        return;
-      }
-      const data = await response.blob();
-
-      const blob = new Blob([data], { type: "application/pdf" });
-
-      var url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `Manifest_Report.pdf`;
-      a.click();
-      // FileSaver.saveAs(data, "Manifest_Report.pdf");
     }
+    const data = await response.blob();
+
+    const blob = new Blob([data], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Manifest_Report.pdf`;
+    a.click();
   };
 
   const fetchPartnerList = async () => {
@@ -296,12 +284,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
           } else {
-            toast.error(
-              "Please select atleast one for cancel your booked order"
-            );
+            toast.error("Please select atleast one order");
           }
         } else if (identifier === "Download_menifest_report") {
-          setManifestModal({ ...manifestModal, isOpen: true });
+          const awbsNo = selectedRowdata.map((data: any, index: any) => {
+            return data.original.awb;
+          });
+
+          fetchManifest(awbsNo);
         } else if (identifier === "Download_Labels") {
           if (selectedRowdata.length > 0) {
             const lebelsArr: string[] = selectedRowdata.map(
@@ -313,12 +303,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 }
               }
             );
-
-            console.log("lebel1", lebelsArr);
             const data = await fetchLabels(lebelsArr);
-            console.log("lebel1", data);
             if (data) {
               setSelectedRowData([]);
+              setRowSelection([]);
             }
           } else {
             toast.error(
@@ -339,10 +327,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 }
               }
             );
-            console.log(lebelsArr);
+
             const data = await fetchLabels(lebelsArr);
             if (data) {
               setSelectedRowData([]);
+              setRowSelection([]);
             }
           } else {
             toast.error(
@@ -464,9 +453,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       if (currentStatus === "BOOKED") {
         return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex">
-            {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+            {getActionsIcon()?.length > 0 && manifestButton && (
+              <div className="rounded-md flex mx-3 gap-x-6">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -475,7 +464,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         className={`${
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
-                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        }
+                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -483,21 +473,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             data.identifier
                           )
                         }
-                        data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content={data.hovertext}
                       >
-                        <img src={data.icon} alt="" className="w-[17px]" />
+                        <img src={data.icon} alt="" className="w-[16px]" />
+                        <span className="font-open-sans text-[14px] leading-20 whitespace-no-wrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
                       </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "bg-neutral-900",
-                          color: "#FFFFFF",
-                          width: "fit-content",
-                          fontSize: "14px",
-                          lineHeight: "16px",
-                        }}
-                      />
                     </>
                   );
                 })}
@@ -544,7 +525,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+              <div className="rounded-md p-1  flex gap-x-4">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -553,7 +534,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         className={`${
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
-                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        }
+                          px-3 py-1 h-[30px] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -561,21 +543,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             data.identifier
                           )
                         }
-                        data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content={data.hovertext}
                       >
                         <img src={data.icon} alt="" className="w-[17px]" />
+                        <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 whitespace-no-wrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
                       </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "bg-neutral-900",
-                          color: "#FFFFFF",
-                          width: "fit-content",
-                          fontSize: "14px",
-                          lineHeight: "16px",
-                        }}
-                      />
                     </>
                   );
                 })}
@@ -873,55 +846,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center ">
-                {currentStatus === "BOOKED" &&
-                  manifestModal.isOpen === true && (
-                    <div className="flex">
-                      <div className="flex gap-4">
-                        <div className="w-[250px] md:w-[250px]">
-                          <CustomDropDown
-                            heading="Select Courier Partner"
-                            value={partnerValue}
-                            options={partnerMenu}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLSelectElement>
-                            ) => {
-                              setPartnerValue(event.target.value);
-                            }}
-                          />
-                        </div>
-                        <div className="w-[350px] md:w-[250px]">
-                          <DatePicker
-                            selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
-                            onChange={(update: any) => {
-                              setDateRange(update);
-                            }}
-                            isClearable={true}
-                            placeholderText="Select From & To Date"
-                            className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
-                            dateFormat="dd/MM/yyyy"
-                          />
-                        </div>
-
-                        <ServiceButton
-                          text={"MANIFEST REPORT"}
-                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg py-3 w-[150px]`}
-                          onClick={() => fetchManifest()}
-                        />
-                        <ServiceButton
-                          text={"X"}
-                          className={`bg-[#1C1C1C] text-[#FFFFFF] rounded-lg p-3`}
-                          onClick={() =>
-                            setManifestModal({
-                              ...manifestModal,
-                              isOpen: false,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                  )}
                 {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
               </span> */}
