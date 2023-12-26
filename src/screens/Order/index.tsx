@@ -201,6 +201,7 @@ const Index = () => {
   const [filterId, setFilterId] = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
+  console.log("🚀 ~ file: index.tsx:204 ~ Index ~ orders:", orders);
   const [allOrders, setAllOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
@@ -570,6 +571,7 @@ const Index = () => {
   const handleTabChanges = async (index: any = 0) => {
     try {
       const data = await getSellerOrderByStatus(statusData[index].value);
+      console.log("🚀 ~ file: index.tsx:579 ~ handleTabChanges ~ data:", data);
       const { OrderData } = data;
       setOrders(OrderData);
       setAllOrders(OrderData);
