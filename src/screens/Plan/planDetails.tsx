@@ -835,10 +835,7 @@ const PlanDetails = (props: ITypeProps) => {
               className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
               text="TALK TO OUR SUPPORT"
               onClick={() => {
-                window.open(
-                  "https://care.shipyaari.com/support/home",
-                  "_blank"
-                );
+                window.open("https://support.shipyaari.com/tickets", "_blank");
               }}
             />
           </div>
