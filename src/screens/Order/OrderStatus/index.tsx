@@ -43,8 +43,6 @@ interface IOrderstatusProps {
   allOrders: any;
   selectedRowdata?: any;
   setSelectedRowData?: any;
-  setRowSelection?: any;
-  rowSelection?: any;
   fetchLabels?: any;
   setDeleteModalDraftOrder?: any;
   setCancellationModal?: any;
@@ -84,8 +82,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   allOrders,
   selectedRowdata,
   setSelectedRowData,
-  setRowSelection,
-  rowSelection,
   fetchLabels,
   setDeleteModalDraftOrder,
   setCancellationModal,
@@ -276,24 +272,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         break;
       }
       case "BOOKED": {
-        if (identifier === "Cancel") {
-          if (selectedRowdata.length > 0) {
+        if (selectedRowdata.length > 0) {
+          if (identifier === "Cancel") {
             const awbNo = selectedRowdata.map((data: any, index: any) => {
               return data.original.awb;
             });
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
-          } else {
-            toast.error("Please select atleast one order");
-          }
-        } else if (identifier === "Download_menifest_report") {
-          const awbsNo = selectedRowdata.map((data: any, index: any) => {
-            return data.original.awb;
-          });
+          } else if (identifier === "Download_menifest_report") {
+            const awbsNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
 
-          fetchManifest(awbsNo);
-        } else if (identifier === "Download_Labels") {
-          if (selectedRowdata.length > 0) {
+            fetchManifest(awbsNo);
+          } else if (identifier === "Download_Labels") {
             const lebelsArr: string[] = selectedRowdata.map(
               (data: any, index: any) => {
                 if (data?.original?.boxInfo?.[0]?.tracking?.label) {
@@ -306,13 +298,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             const data = await fetchLabels(lebelsArr);
             if (data) {
               setSelectedRowData([]);
-              setRowSelection([]);
             }
-          } else {
-            toast.error(
-              "Please select atleast one for lebels your booked order"
-            );
           }
+        } else {
+          toast.error("Please select atleast one order");
         }
         break;
       }
@@ -331,7 +320,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             const data = await fetchLabels(lebelsArr);
             if (data) {
               setSelectedRowData([]);
-              setRowSelection([]);
             }
           } else {
             toast.error(
@@ -453,9 +441,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (isLgScreen) {
       if (currentStatus === "BOOKED") {
         return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
+          <div className="grid grid-cols-4 lg:flex ">
             {getActionsIcon()?.length > 0 && manifestButton && (
-              <div className="rounded-md flex mx-3 gap-x-6">
+              <div className="rounded-md flex mx-3 gap-x-3">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -525,7 +513,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         return (
           <div className="grid grid-cols-3 gap-x-2 lg:flex">
             {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1  flex gap-x-4">
+              <div className="rounded-md p-1  flex gap-x-3">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>

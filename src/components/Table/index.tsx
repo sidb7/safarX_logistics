@@ -14,12 +14,10 @@ interface ITablePropTypes {
   thclassName?: any;
   trclassName?: any;
   setRowSelectedData?: any;
-  rowSelection?: any;
-  setRowSelection?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
-  //const [rowSelection, setRowSelection]: any = useState([]);
+  const [rowSelection, setRowSelection]: any = useState([]);
   const {
     data,
     columns,
@@ -27,8 +25,6 @@ export const CustomTable = (props: ITablePropTypes) => {
     thclassName,
     trclassName,
     setRowSelectedData,
-    rowSelection,
-    setRowSelection,
   } = props;
 
   const table = useReactTable({

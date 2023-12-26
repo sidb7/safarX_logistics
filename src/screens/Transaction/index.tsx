@@ -47,6 +47,8 @@ export const Transaction = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
+  console.log("renderingComponents", renderingComponents);
+
   useEffect(() => {
     if (renderingComponents === 0) {
       // setLoading(true);
@@ -171,7 +173,7 @@ export const Transaction = () => {
     if (renderingComponents === 0) {
       return (
         <CustomTable
-          data={data}
+          data={data || []}
           columns={PassbookColumns(setSortOrder)}
           setRowSelectedData={setRowSelectedData}
           thclassName={"!w-auto "}
