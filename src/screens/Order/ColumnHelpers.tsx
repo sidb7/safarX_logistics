@@ -456,7 +456,9 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
     cell: (info: any) => {
       const { status, awb, source, otherDetails } = info?.row?.original;
       const rowsData = info?.row?.original;
-      const timeStamp = status?.[0]?.timeStamp;
+      // const timeStamp = status?.[0]?.timeStamp;
+      const timeStamp =
+        rowsData?.status?.[rowsData?.status?.length - 1]?.timeStamp;
       const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
       // const renderStatus = status?.[0]?.currentStatus || "Draft";
       let renderStatus = rowsData?.currentStatus || "";
@@ -822,7 +824,9 @@ export const columnHelperForNewOrder = (
         const { status, tempOrderId, source, otherDetails } =
           info?.row?.original;
         const rowsData = info?.row?.original;
-        const timeStamp = status?.[0]?.timeStamp;
+        // const timeStamp = status?.[0]?.timeStamp;
+        const timeStamp =
+          rowData?.status?.[rowData?.status?.length - 1]?.timeStamp;
         const time = timeStamp && date_DD_MMM_YYYY_HH_MM_SS(timeStamp);
         const renderStatus = status?.[0]?.currentStatus || "Draft";
         const rows: any = [
