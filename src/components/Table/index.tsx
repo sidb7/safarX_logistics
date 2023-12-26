@@ -14,8 +14,6 @@ interface ITablePropTypes {
   thclassName?: any;
   trclassName?: any;
   setRowSelectedData?: any;
-  // rowSelection?: any;
-  // setRowSelection?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
@@ -27,8 +25,6 @@ export const CustomTable = (props: ITablePropTypes) => {
     thclassName,
     trclassName,
     setRowSelectedData,
-    // rowSelection,
-    // setRowSelection,
   } = props;
 
   const table = useReactTable({
@@ -42,8 +38,8 @@ export const CustomTable = (props: ITablePropTypes) => {
   });
 
   useEffect(() => {
-    table?.getSelectedRowModel()?.flatRows.length > 0 &&
-      setRowSelectedData &&
+    // table?.getSelectedRowModel()?.flatRows.length > 0 &&
+    setRowSelectedData &&
       setRowSelectedData(table?.getSelectedRowModel()?.flatRows);
   }, [table?.getSelectedRowModel()?.flatRows]);
 
