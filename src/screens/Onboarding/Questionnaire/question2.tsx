@@ -84,7 +84,7 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
+        <div className="flex flex-col mx-6 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
           <div>
             <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">
@@ -110,7 +110,8 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
-                      checkboxClassName="gap-2"
+                      checkboxClassName="gap-2 mt-1"
+                      labelClassName="mt-1"
                     />
                   );
                 })}

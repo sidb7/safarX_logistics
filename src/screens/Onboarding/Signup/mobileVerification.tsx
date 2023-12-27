@@ -6,7 +6,7 @@ import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
@@ -21,12 +21,21 @@ const Index = () => {
   const [mobileNumber, setMobileNumber] = useState({
     mobileNo: 0,
   });
+  const [firstName, setFirstName] = useState();
+  const [email, setEmail] = useState();
 
   const signUpUser = useSelector((state: any) => state.signup);
 
+  useEffect(() => {
+    let temp: any = sessionStorage.getItem("userInfo");
+    temp = JSON.parse(temp);
+    setFirstName(temp?.firstName);
+    setEmail(temp?.email);
+  }, []);
+
   let body = {
-    email: signUpUser?.email,
-    firstName: signUpUser?.firstName,
+    email,
+    firstName,
     mobileNo: mobileNumber?.mobileNo,
   };
 

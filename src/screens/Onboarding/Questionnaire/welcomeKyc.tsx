@@ -10,6 +10,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../utils/webService";
 import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import TickLogo from "../../../assets/tick.svg";
 
 export const WelcomeKyc: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -79,25 +80,60 @@ export const WelcomeKyc: React.FunctionComponent = () => {
                 </span>
               </div>
               <div className="flex flex-col items-start mt-4 capitalize font-Open text-xs font-normal leading-[22px]">
-                {questionsData?.[4]?.options?.map(
+                {/* {questionsData?.[4]?.options?.map(
                   (element: any, index: any) => {
                     return (
-                      <Checkbox
-                        key={index}
-                        // disabled={true}
-                        showCase={true}
-                        checked={true}
-                        onChange={(element) => {
-                          handleCheckBox(element, index);
-                        }}
-                        name={element.value}
-                        label={element.value}
-                        style={{ accentColor: "black" }}
-                        checkboxClassName="gap-2"
-                      />
+                      // <Checkbox
+                      //   key={index}
+                      //   // disabled={true}
+                      //   showCase={true}
+                      //   checked={true}
+                      //   onChange={(element) => {
+                      //     handleCheckBox(element, index);
+                      //   }}
+                      //   name={element.value}
+                      //   label={element.value}
+                      //   style={{ accentColor: "black" }}
+                      //   checkboxClassName="gap-2"
+                      // />
+                      <>
+
+                      </>
                     );
                   }
-                )}
+                )} */}
+                <div className="flex items-center gap-x-2">
+                  <span className="mt-1">
+                    <img src={TickLogo} alt="ticklogo" />
+                  </span>
+                  <p className="mt-1 capitalize font-Open text-[16px] font-normal leading-[22px]">
+                    Faster COD pay-outs{" "}
+                  </p>
+                </div>
+                <div className="flex items-center gap-x-2">
+                  <span className="mt-4 ">
+                    <img src={TickLogo} alt="ticklogo" />
+                  </span>
+                  <p className="mt-4 capitalize font-Open text-[16px] font-normal leading-[22px]">
+                    Faster hiccup free shipping{" "}
+                  </p>
+                </div>
+                <div className="flex items-center gap-x-2">
+                  <span className="mt-4 ">
+                    <img src={TickLogo} alt="ticklogo" />
+                  </span>
+                  <p className="mt-4  capitalize font-Open text-[16px] font-normal leading-[22px]">
+                    Protection against Identity Theft{" "}
+                  </p>
+                </div>
+                <div className="flex items-center gap-x-2">
+                  <span className="mt-4">
+                    <img src={TickLogo} alt="ticklogo" />
+                  </span>
+                  <p className="mt-4  capitalize font-Open text-[16px] font-normal leading-[22px]">
+                    Regulatory compliance{" "}
+                  </p>
+                </div>
               </div>
             </div>
             <div className="mt-6">
