@@ -123,7 +123,11 @@ const Index = () => {
   };
 
   const signUpOnClick = () => {
-    navigate("/onboarding/signup");
+    const navigationObject = constructNavigationObject(
+      "/onboarding/signup",
+      window.location.search
+    );
+    navigate(navigationObject);
   };
 
   const signInWithGoogle = async (googleData: any) => {
