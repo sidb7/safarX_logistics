@@ -42,7 +42,7 @@ const JusPay = (props: IProps) => {
       ) : loading ? (
         <Spinner />
       ) : (
-        <div className="flex flex-col items-center gap-y-2">
+        <div className="flex flex-col items-center gap-y-2 ">
           <div className="w-20 h-20 flex justify-center items-center">
             <img
               src={JusPayIcon}
@@ -55,11 +55,12 @@ const JusPay = (props: IProps) => {
           <button
             disabled={isDisabled}
             type="button"
-            className={`${
-              !isDisabled
-                ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
-                : "!bg-opacity-50"
-            } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
+            //as a part of ui figma fixes commneted
+            // className={`${
+            //   !isDisabled
+            //     ? "!bg-opacity-50  hover:!bg-black hover:-translate-y-[2px] hover:scale-100 duration-150"
+            //     : "!bg-opacity-50"
+            // } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
             onClick={() => startPayments()}
           >
             <p className="buttonClassName lg:text-[14px] whitespace-nowrap">

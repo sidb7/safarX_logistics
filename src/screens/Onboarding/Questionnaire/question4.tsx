@@ -123,14 +123,14 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                 alt="CompanyLogo"
               />
             </div>
-            <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[45px]">
+            <div className="flex flex-col mx-6  md:grid md:grid-cols-2 md:mt-[32px] md:mb-[45px]">
               <div>
                 <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
                 <div className="flex justify-center">
                   <img src={DroneDeliveryGif} alt="" width="180px" />
                 </div>
               </div>
-              <div className="md:w-[325px]">
+              <div>
                 <div className="flex flex-col px-4 py-4 border-[1px] border-[#E8E8E8] rounded-md shadow-lg mt-4">
                   <div>
                     <span className="text-xl font-semibold leading-[26px] font-Lato capitalize">
