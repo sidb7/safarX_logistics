@@ -5,7 +5,7 @@ import CustomInputBox from "../../../components/Input";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import InfoCircle from "../../../assets/info-circle.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
@@ -30,6 +30,7 @@ import { text } from "stream/consumers";
 import { sign } from "crypto";
 import {
   constructNavigationObject,
+  getQueryJson,
   setLocalStorage,
   tokenKey,
 } from "../../../utils/utility";
@@ -37,6 +38,7 @@ import { Tooltip } from "react-tooltip";
 
 const Index = () => {
   const navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
   const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [viewPassWord, setViewPassWord] = useState(false);
@@ -59,20 +61,28 @@ const Index = () => {
     referalCode: "",
   });
   const signUpOnClick = async (value: any) => {
-    if (
-      signUpError.email ||
-      signUpError.firstName ||
-      signUpError.lastName ||
-      signUpError.password ||
-      signUpError.referalCode
-    ) {
-      toast.error("Please complete all the fields.");
-      return;
-    }
+    // if (
+    //   signUpError.email ||
+    //   signUpError.firstName ||
+    //   signUpError.lastName ||
+    //   signUpError.password ||
+    //   signUpError.referalCode
+    // ) {
+    //   toast.error("Please complete all the fields.");
+    //   return;
+    // }
+
     try {
       let payload = {
-        sellerData: value,
+        sellerData: {
+          ...value,
+          otherDetails: searchParams?.toString() === "" ? {} : getQueryJson(),
+        },
       };
+      console.log(
+        "🚀 ~ file: index.tsx:82 ~ signUpOnClick ~ payload:",
+        payload
+      );
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
