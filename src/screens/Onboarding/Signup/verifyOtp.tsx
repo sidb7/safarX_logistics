@@ -11,7 +11,11 @@ import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
-import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import {
+  constructNavigationObject,
+  setLocalStorage,
+  tokenKey,
+} from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
 
 const Index = () => {
@@ -83,7 +87,13 @@ const Index = () => {
         sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
         sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
         // setLocalStorage(tokenKey, response?.data[0]?.token);
-        navigate("/onBoarding/get-started");
+
+        const navigationObject = constructNavigationObject(
+          "/onBoarding/get-started",
+          window.location.search
+        );
+
+        navigate(navigationObject);
       } else {
         toast.error(response?.message);
       }

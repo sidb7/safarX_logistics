@@ -5,13 +5,18 @@ import Card from "./offersCard";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { constructNavigationObject } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const skipForNowOnClick = () => {
-    navigate("/onBoarding/get-started");
+    const navigationObject = constructNavigationObject(
+      "/onBoarding/get-started",
+      window.location.search
+    );
+    navigate(navigationObject);
   };
 
   const modalTitle = () => {
