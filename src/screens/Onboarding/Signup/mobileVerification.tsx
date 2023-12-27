@@ -6,12 +6,13 @@ import MobileGif from "../../../assets/OrderCard/Gif.gif";
 import CustomInputBox from "../../../components/Input";
 import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { constructNavigationObject } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -21,12 +22,21 @@ const Index = () => {
   const [mobileNumber, setMobileNumber] = useState({
     mobileNo: 0,
   });
+  const [firstName, setFirstName] = useState();
+  const [email, setEmail] = useState();
 
   const signUpUser = useSelector((state: any) => state.signup);
 
+  useEffect(() => {
+    let temp: any = sessionStorage.getItem("userInfo");
+    temp = JSON.parse(temp);
+    setFirstName(temp?.firstName);
+    setEmail(temp?.email);
+  }, []);
+
   let body = {
-    email: signUpUser?.email,
-    firstName: signUpUser?.firstName,
+    email,
+    firstName,
     mobileNo: mobileNumber?.mobileNo,
   };
 
@@ -34,7 +44,12 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
-        navigate("/onboarding/verifyOtp", { state: { path: body } });
+        const navigationObject = constructNavigationObject(
+          "/onboarding/verifyOtp",
+          window.location.search
+        );
+        navigate(navigationObject, { state: { path: body } });
+        // navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
       }

@@ -23,6 +23,7 @@ import { signInUser } from "../../../redux/reducers/signInReducer";
 import InfoCircle from "../../../assets/info-circle.svg";
 import InformativeIcon from "../../../assets/I icon.svg";
 import {
+  constructNavigationObject,
   getLocalStorage,
   setLocalStorage,
   tokenKey,
@@ -95,11 +96,23 @@ const Index = () => {
 
         // redirect based on qna and kyc done or not
         if (response?.data?.[0]?.nextStep?.qna === false) {
-          navigate("/onboarding/questionnaire/question1");
+          const navigationObject = constructNavigationObject(
+            "/onboarding/questionnaire/question1",
+            window.location.search
+          );
+          navigate(navigationObject);
         } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-          navigate("/onboarding/kyc-type");
+          const navigationObject = constructNavigationObject(
+            "/onboarding/kyc-type",
+            window.location.search
+          );
+          navigate(navigationObject);
         } else {
-          navigate("/dashboard/overview");
+          const navigationObject = constructNavigationObject(
+            "/dashboard/overview",
+            window.location.search
+          );
+          navigate(navigationObject);
         }
       } else {
         toast.error(response?.message);
@@ -151,11 +164,23 @@ const Index = () => {
       setLoading(false);
       // redirect based on qna and kyc done or not
       if (response?.data?.[0]?.nextStep?.qna === false) {
-        navigate("/onboarding/questionnaire/question1");
+        const navigationObject = constructNavigationObject(
+          "/onboarding/questionnaire/question1",
+          window.location.search
+        );
+        navigate(navigationObject);
       } else if (response?.data?.[0]?.nextStep?.kyc === false) {
-        navigate("/onboarding/kyc-type");
+        const navigationObject = constructNavigationObject(
+          "/onboarding/kyc-type",
+          window.location.search
+        );
+        navigate(navigationObject);
       } else {
-        navigate("/dashboard/overview");
+        const navigationObject = constructNavigationObject(
+          "/dashboard/overview",
+          window.location.search
+        );
+        navigate(navigationObject);
       }
     } else {
       toast.error(response?.message);
@@ -282,7 +307,8 @@ const Index = () => {
                       containerStyle="mt-[17px]"
                       label="Email"
                       id="email"
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       inputType="email"
                       value={loginCredentials.email}
                       onChange={(e) => {
@@ -334,7 +360,8 @@ const Index = () => {
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       minLength={8}
                       maxLength={16}
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       isRightIcon={true}
                       isInfoIcon={true}
                       informativeIcon={InformativeIcon}
@@ -406,7 +433,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={signUpOnClick}
-                      className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                      className="text-[#004EFF] ml-1 font-bold text-xs leading-4 font-Open "
                     >
                       Sign Up
                     </button>
