@@ -12,6 +12,7 @@ import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-toastify";
 import { POST } from "../../../utils/webService";
 import { GET_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -60,7 +61,11 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   }
 
   const nextHandler = () => {
-    navigate("/onboarding/questionnaire/question2", {
+    const navigationObject = constructNavigationObject(
+      "/onboarding/questionnaire/question2",
+      window.location.search
+    );
+    navigate(navigationObject, {
       state: { questionsData },
     });
   };

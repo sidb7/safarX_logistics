@@ -12,6 +12,7 @@ import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { constructNavigationObject } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -43,7 +44,12 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
-        navigate("/onboarding/verifyOtp", { state: { path: body } });
+        const navigationObject = constructNavigationObject(
+          "/onboarding/verifyOtp",
+          window.location.search
+        );
+        navigate(navigationObject, { state: { path: body } });
+        // navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
       }

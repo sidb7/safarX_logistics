@@ -7,6 +7,7 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { constructNavigationObject } from "../../../utils/utility";
 
 const Index = () => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
@@ -69,7 +70,13 @@ const Index = () => {
 
               <CustomButton
                 className=" bg-black  "
-                onClick={() => navigate("/onboarding/questionnaire/question1")}
+                onClick={() => {
+                  const navigationObject = constructNavigationObject(
+                    "/onboarding/questionnaire/question1",
+                    window.location.search
+                  );
+                  navigate(navigationObject);
+                }}
                 text="SET UP MY ACCOUNT"
               />
             </div>
