@@ -240,9 +240,7 @@ const NewDiscrepancyTable = () => {
       },
     }),
   ];
-  return (
-    <CustomTable columns={NewDiscrepancyHeading} data={NewDiscrepancyData} />
-  );
+  return <CustomTable columns={NewDiscrepancyHeading} data={[]} />;
 };
 
 export default NewDiscrepancyTable;
