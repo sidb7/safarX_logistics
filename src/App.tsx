@@ -33,8 +33,6 @@ const App = () => {
     //Init G Tag Manager
     TagManager.initialize(tagManagerArgs);
 
-    console.log("window", window);
-
     //Socket Connectionu
     const connectSocket1 = async () => {
       if (roomName) {

@@ -9,6 +9,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-toastify";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -62,7 +63,11 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
-    navigate("/onboarding/questionnaire/question4", {
+    const navigationObject = constructNavigationObject(
+      "/onboarding/questionnaire/question4",
+      window.location.search
+    );
+    navigate(navigationObject, {
       state: { questionsData },
     });
   };

@@ -1,6 +1,15 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
-import { clearLocalStorage, getLocalStorage } from "../../utils/utility";
+import {
+  useNavigate,
+  redirect,
+  createSearchParams,
+  useSearchParams,
+} from "react-router-dom";
+import {
+  clearLocalStorage,
+  constructNavigationObject,
+  getLocalStorage,
+} from "../../utils/utility";
 import { POST } from "../../utils/webService";
 import { VALIDATE_USER_TOKEN } from "../../utils/ApiUrls";
 import { setWalletBalance } from "../../redux/reducers/userReducer";
@@ -12,7 +21,9 @@ interface Props {
 }
 
 const ProtectedRoute = ({ children }: Props) => {
+  let [searchParams, setSearchParams]: any = useSearchParams();
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
@@ -29,7 +40,17 @@ const ProtectedRoute = ({ children }: Props) => {
       if (!response?.data?.success) {
         setIsAuthenticated(false);
         clearLocalStorage();
-        navigate("/auth/login");
+        // {
+        //   pathname: "/search",
+        //   search: createSearchParams({ query: "someQuery" }).toString(),
+        // },
+        // { state: { someAttributeName: "someAttributeValue" } },
+
+        const navigationObject = constructNavigationObject(
+          "/auth/login",
+          window.location.search
+        );
+        navigate(navigationObject);
       } else {
         sessionStorage.setItem(
           "kycValue",

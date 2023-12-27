@@ -28,7 +28,11 @@ import {
 } from "../../../utils/regexCheck";
 import { text } from "stream/consumers";
 import { sign } from "crypto";
-import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import {
+  constructNavigationObject,
+  setLocalStorage,
+  tokenKey,
+} from "../../../utils/utility";
 import { Tooltip } from "react-tooltip";
 
 const Index = () => {
@@ -77,7 +81,12 @@ const Index = () => {
       if (response?.success === true) {
         sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
         setLoading(false);
-        navigate("/onboarding/sendotp");
+        const navigationObject = constructNavigationObject(
+          "/onboarding/sendotp",
+          window.location.search
+        );
+        navigate(navigationObject);
+        // navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
         setLoading(false);
@@ -102,7 +111,12 @@ const Index = () => {
         sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
         dispatch(signUpUser(response.data[0]));
         setLoading(false);
-        navigate("/onboarding/sendotp");
+        const navigationObject = constructNavigationObject(
+          "/onboarding/sendotp",
+          window.location.search
+        );
+        navigate(navigationObject);
+        // navigate("/onboarding/sendotp");
       } else {
         toast.error(response?.message);
         setLoading(false);
@@ -113,7 +127,12 @@ const Index = () => {
   };
 
   const logInOnClick = () => {
-    navigate("/auth/login");
+    const navigationObject = constructNavigationObject(
+      "/auth/login",
+      window.location.search
+    );
+    navigate(navigationObject);
+    // navigate("/auth/login");
   };
   // {
   //   loading ? (

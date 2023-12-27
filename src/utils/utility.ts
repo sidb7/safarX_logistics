@@ -36,6 +36,14 @@ export const capitalizeFirstLetter = (str: string) => {
     ?.replace(/\s{2,}/g, " ");
 };
 
+
+export const constructNavigationObject = (pathname: any, search: any) => {
+  return {
+    pathname,
+    ...(search && { search }),
+  };
+};
+
 export const GetCurrentPath = () => {
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
