@@ -190,7 +190,7 @@ const Index = () => {
                     Sign up to create your account
                   </p>
                 </div>
-                <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-7">
+                <div className=" flex flex-col mx-4 md:mx-[90px] gap-y-4">
                   <div className="flex justify-center">
                     <GoogleLogin
                       text="continue_with"
@@ -199,7 +199,7 @@ const Index = () => {
                     />
                   </div>
                   <hr className="mb-[-30px] mt-2" />
-                  <div className="flex justify-center my-[-7px]">
+                  <div className="flex justify-center my-[6px]">
                     <button className="bg-[#FEFEFE] px-2 font-normal text-[10px] font-Open leading-4">
                       OR
                     </button>
@@ -211,7 +211,8 @@ const Index = () => {
                         containerStyle=""
                         // placeholder=""
                         id="fName"
-                        tempLabel={true}
+                        //commented as by default placeholder text is getting top of the input box
+                        // tempLabel={true}
                         label="First Name"
                         maxLength={16}
                         onChange={(e) => {
@@ -257,7 +258,8 @@ const Index = () => {
                     <div>
                       <CustomInputBox
                         containerStyle=""
-                        tempLabel={true}
+                        //commented as by default placeholder text is getting top of the input box
+                        // tempLabel={true}
                         label="Last Name"
                         id="lName"
                         maxLength={16}
@@ -310,7 +312,8 @@ const Index = () => {
                       inputClassName={` ${
                         signUpError.email !== "" && "!border-[#F35838]"
                       } `}
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       onChange={(e) => {
                         setSignUpError({
                           ...signUpError,
@@ -353,7 +356,8 @@ const Index = () => {
                     <CustomInputBox
                       inputType={viewPassWord ? "text" : "password"}
                       id="password"
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       minLength={8}
                       maxLength={16}
                       label="Password"
@@ -430,7 +434,8 @@ const Index = () => {
                     <CustomInputBox
                       label="Referal Code"
                       maxLength={20}
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       // placeholder=""
                       id="referalCode"
                       onChange={(e) => {
@@ -485,7 +490,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={logInOnClick}
-                      className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                      className="text-[#004EFF] ml-1 font-bold text-xs leading-4 font-Open "
                     >
                       Log In
                     </button>

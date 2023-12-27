@@ -137,9 +137,9 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           <Tooltip
             id="my-tooltip-landing"
             style={{
-              backgroundColor: "bg-neutral-900",
+              backgroundColor: "#4D83FF",
               color: "#FFFFFF",
-              // width: "",
+              width: "320px",
               fontSize: "12px",
               lineHeight: "14px",
               textTransform: "capitalize",

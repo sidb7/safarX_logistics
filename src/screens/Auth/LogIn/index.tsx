@@ -282,7 +282,8 @@ const Index = () => {
                       containerStyle="mt-[17px]"
                       label="Email"
                       id="email"
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       inputType="email"
                       value={loginCredentials.email}
                       onChange={(e) => {
@@ -334,7 +335,8 @@ const Index = () => {
                       tooltipContent="Password should be 8 to 16 Character with combination of Alpha Numeric and Special Character, One Upper and Lowercase"
                       minLength={8}
                       maxLength={16}
-                      tempLabel={true}
+                      //commented as by default placeholder text is getting top of the input box
+                      // tempLabel={true}
                       isRightIcon={true}
                       isInfoIcon={true}
                       informativeIcon={InformativeIcon}
@@ -406,7 +408,7 @@ const Index = () => {
                     <button
                       type="button"
                       onClick={signUpOnClick}
-                      className="text-[#004EFF] ml-1 font-normal text-xs leading-4 font-Open "
+                      className="text-[#004EFF] ml-1 font-bold text-xs leading-4 font-Open "
                     >
                       Sign Up
                     </button>

@@ -227,7 +227,7 @@ const BusinessType = (props: ITypeProps) => {
               />
 
               <div>
-                <div className="md:mx-[65px]">
+                <div className="md:mx-[65px] flex justify-end">
                   <div className="flex gap-x-2" onClick={() => addAddress()}>
                     <img src={PlusIcon} alt="" />
                     <p className="font-Open font-semibold text-sm cursor-pointer text-[#004EFF]  ">

@@ -48,6 +48,7 @@ const WeightFreezeTable = () => {
       header: () => {
         return (
           <div className="flex ">
+            {/* commented as instructed */}
             {/* <CustomCheckbox
               checked={isCheckedAll}
               onChange={handleCheckboxChangeAll}
