@@ -388,7 +388,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               )}
               {isQuick && (
                 <div
-                  className="origin-top-right z-10 absolute -right-4 md:right-2 mt-8 w-[21rem] md:w-[27rem] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                  className="origin-top-right z-50 absolute -right-4 md:right-2 mt-8 w-[21rem] md:w-[27rem] rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"
