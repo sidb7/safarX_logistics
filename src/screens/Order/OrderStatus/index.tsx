@@ -247,7 +247,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           const orderDetails = selectedRowdata?.map((order: any) => {
             if (
               order?.original?.source === "SHOPIFY" ||
-              order?.original?.source === "WOOCOMMERCE"
+              order?.original?.source === "WOOCOMMERCE" ||
+              order?.original?.source === "ZOHO"
             ) {
               return {
                 orderId: order?.original?.orderId,
