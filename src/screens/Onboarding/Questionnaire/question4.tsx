@@ -12,6 +12,7 @@ import { POST } from "../../../utils/webService";
 import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../components/Spinner";
+import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent4: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -59,7 +60,11 @@ export const QuestionComponent4: React.FunctionComponent = () => {
       const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
       if (response?.success === true) {
         // toast.success(response?.message);
-        navigate("/onboarding/kyc-welcome", {
+        const navigationObject = constructNavigationObject(
+          "/onboarding/kyc-welcome",
+          window.location.search
+        );
+        navigate(navigationObject, {
           state: { questionsData },
         });
       } else {
@@ -145,7 +150,9 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                             name={element.value}
                             label={element.value}
                             style={{ accentColor: "black" }}
-                            checkboxClassName="gap-2"
+                            checkboxClassName="gap-2 !text-wrap"
+                            labelClassName="customWrap"
+                            // className="!flex !text-balance"
                           />
                         );
                       }

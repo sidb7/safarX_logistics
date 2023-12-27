@@ -9,6 +9,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-toastify";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent3: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -62,7 +63,11 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
-    navigate("/onboarding/questionnaire/question4", {
+    const navigationObject = constructNavigationObject(
+      "/onboarding/questionnaire/question4",
+      window.location.search
+    );
+    navigate(navigationObject, {
       state: { questionsData },
     });
   };
@@ -95,7 +100,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
+        <div className="flex flex-col mx-6 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-4 md:mb-[82px]">
           <div>
             <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">
@@ -121,7 +126,8 @@ export const QuestionComponent3: React.FunctionComponent = () => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
-                      checkboxClassName="gap-2"
+                      checkboxClassName="gap-2 mt-1"
+                      labelClassName="mt-1"
                     />
                   );
                 })}

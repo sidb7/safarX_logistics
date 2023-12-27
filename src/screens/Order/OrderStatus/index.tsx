@@ -100,6 +100,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [startDate, endDate] = dateRange;
   const [partnerMenu, setPartnerMenu] = useState<any>([]);
   const [partnerValue, setPartnerValue] = useState<any>();
+  const [isLoadingManifest, setIsLoadingManifest] = useState({
+    isLoading: false,
+    identifier: "",
+  });
 
   const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
   const [filterState, setFilterState] = useState([]);
@@ -125,11 +129,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         icon: DeleteIconForLg,
         hovertext: "Delete Orders",
         identifier: "Delete",
+        buttonName: "Delete Orders",
       },
       {
         icon: PlaceChannelOrder,
         hovertext: "Place Orders",
         identifier: "PlaceOrder",
+        buttonName: "Place Orders",
       },
     ],
     BOOKED: [
@@ -152,7 +158,59 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         buttonName: "Download LABEL",
       },
     ],
+    "IN TRANSIT": [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+    ],
+    "OUT OF DELIVERY": [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+    ],
+    DELIVERED: [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+    ],
+    RETURN: [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+    ],
+    EXCEPTION: [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+    ],
     "READY TO PICK": [
+      {
+        icon: CrossIcon,
+        hovertext: "Cancel Orders",
+        identifier: "Cancel",
+        buttonName: "CANCEL ORDERS",
+      },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Manifest Reports",
+        identifier: "Download_menifest_report",
+        buttonName: "Download MANIFEST",
+      },
       {
         icon: DownloadIcon,
         hovertext: "Download Lebels",
@@ -170,7 +228,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     let payload = {
       awb: awbArray,
     };
-
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Download_menifest_report",
+    });
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
@@ -186,6 +247,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     if (!response.ok) {
       const errorData = await response.json();
       toast.error(errorData.message);
+      setIsLoadingManifest({
+        isLoading: false,
+        identifier: "",
+      });
       // setManifestButton(true);
       return;
     }
@@ -194,6 +259,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     const blob = new Blob([data], { type: "application/pdf" });
 
     var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
 
     const a = document.createElement("a");
     a.href = url;
@@ -255,23 +324,44 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               };
             }
           });
+
           try {
+            setIsLoadingManifest({
+              isLoading: true,
+              identifier: "PlaceOrder",
+            });
+
             const { data } = await POST(
               POST_PLACE_CHANNEL_ORDERS,
               orderDetails
             );
             if (data?.success) {
+              setIsLoadingManifest({
+                isLoading: false,
+                identifier: "",
+              });
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
+            } else {
+              setIsLoadingManifest({
+                isLoading: false,
+                identifier: "",
+              });
             }
           } catch (error: any) {
             toast.error(error?.message || "Failed to Place Channel Orders");
+
+            setIsLoadingManifest({
+              isLoading: false,
+              identifier: "",
+            });
           }
         }
         break;
       }
-      case "BOOKED": {
+      case "BOOKED":
+      case "READY TO PICK": {
         if (selectedRowdata.length > 0) {
           if (identifier === "Cancel") {
             const awbNo = selectedRowdata.map((data: any, index: any) => {
@@ -295,7 +385,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 }
               }
             );
-            const data = await fetchLabels(lebelsArr);
+            const data = await fetchLabels(lebelsArr, setIsLoadingManifest);
             if (data) {
               setSelectedRowData([]);
             }
@@ -305,27 +395,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         }
         break;
       }
-      case "READY TO PICK": {
-        console.log("4");
-        if (identifier === "Download_Labels") {
-          if (selectedRowdata.length > 0) {
-            const lebelsArr: string[] = selectedRowdata.filter(
-              (data: any, index: any) => {
-                if (data?.original?.boxInfo?.[0]?.tracking?.label) {
-                  return `labels/${data?.original?.boxInfo?.[0]?.tracking?.label}`;
-                }
-              }
-            );
-
-            const data = await fetchLabels(lebelsArr);
-            if (data) {
-              setSelectedRowData([]);
-            }
-          } else {
-            toast.error(
-              "Please select atleast one for lebels your booked order"
-            );
+      case "IN TRANSIT":
+      case "OUT OF DELIVERY":
+      case "DELIVERED":
+      case "RETURN":
+      case "EXCEPTION": {
+        if (selectedRowdata.length > 0) {
+          if (identifier === "Cancel") {
+            const awbNo = selectedRowdata.map((data: any, index: any) => {
+              return data.original.awb;
+            });
+            setCancellationModal &&
+              setCancellationModal({ isOpen: true, payload: awbNo });
           }
+        } else {
+          toast.error("Please select atleast one order");
         }
         break;
       }
@@ -416,21 +500,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             throw new Error(data?.meesage);
           }
         }
-        //  else {
-        //   let payload = {
-        //     skip: 0,
-        //     limit: 10,
-        //     pageNo: 1,
-        //     sort: { _id: -1 },
-        //     currentStatus,
-        //   };
-        //   const { data } = await POST(GET_SELLER_ORDER, payload);
-
-        //   const { OrderData } = data?.data?.[0];
-        //   setOrders(OrderData);
-
-        //   clearTimeout(debounceTimer);
-        // }
       }, 800);
     } catch (error: any) {
       console.warn("Error in OrderStatus Debouncing: ", error.message);
@@ -439,7 +508,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const filterButton = () => {
     if (isLgScreen) {
-      if (currentStatus === "BOOKED") {
+      if (currentStatus === "BOOKED" || "READY TO PICK") {
         return (
           <div className="grid grid-cols-4 lg:flex ">
             {getActionsIcon()?.length > 0 && manifestButton && (
@@ -458,11 +527,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                           handleActions(
                             currentStatus,
                             selectedRowdata,
-                            data.identifier
+                            data?.identifier
                           )
                         }
                       >
-                        <img src={data.icon} alt="" className="w-[16px]" />
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+
                         <span className="font-open-sans text-[14px] leading-20 whitespace-no-wrap">
                           {capitalizeFirstLetter(data?.buttonName)}
                         </span>
@@ -472,90 +551,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-
-            {/* {currentStatus === "BOOKED" && (
-            <>
-              <CustomButton
-                className="px-1 py-1 font-semibold text-[14px]"
-                text="Manifest Report"
-                onClick={() =>
-                  setManifestModal({ ...manifestModal, isOpen: true })
-                }
-                showIcon={true}
-                icon={""}
-              />
-            </>
-          )} */}
-            <div>
-              <SearchBox
-                className="removePaddingPlaceHolder"
-                label="Search"
-                value={searchedText}
-                onChange={(e: any) => {
-                  handleSearchOrder(e);
-                }}
-                getFullContent={getAllOrders}
-                customPlaceholder="Search By Order Id, AWB"
-              />
-            </div>
-            <div
-              className="flex justify-between cursor-pointer items-center p-2 gap-x-2"
-              onClick={() => setFilterModal(true)}
-            >
-              <img src={FilterIcon} alt="" />
-              <span className="text-[#004EFF] text-[14px] font-semibold">
-                FILTER
-              </span>
-            </div>
-          </div>
-        );
-      } else if (currentStatus === "READY TO PICK") {
-        return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex">
-            {getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1  flex gap-x-3">
-                {getActionsIcon()?.map((data: any, index: any) => {
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className={`${
-                          index < getActionsIcon().length - 1 &&
-                          "border-r border-[#A4A4A4]"
-                        }
-                          px-3 py-1 h-[30px] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
-                        onClick={() =>
-                          handleActions(
-                            currentStatus,
-                            selectedRowdata,
-                            data.identifier
-                          )
-                        }
-                      >
-                        <img src={data.icon} alt="" className="w-[17px]" />
-                        <span className="font-open-sans text-primary-100 text-14 text-1C1C1C leading-20 whitespace-no-wrap">
-                          {capitalizeFirstLetter(data?.buttonName)}
-                        </span>
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* {currentStatus === "BOOKED" && (
-            <>
-              <CustomButton
-                className="px-1 py-1 font-semibold text-[14px]"
-                text="Manifest Report"
-                onClick={() =>
-                  setManifestModal({ ...manifestModal, isOpen: true })
-                }
-                showIcon={true}
-                icon={""}
-              />
-            </>
-          )} */}
             <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
@@ -581,9 +576,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         );
       } else {
         return (
-          <div className="grid grid-cols-3 gap-x-2 lg:flex ">
-            {selectedRowdata?.length > 0 && getActionsIcon()?.length > 0 && (
-              <div className="rounded-md p-1 flex border border-[#A4A4A4] ">
+          <div className="grid grid-cols-3 gap-x-3 lg:flex ">
+            {selectedRowdata?.length > 0 && (
+              <div className="rounded-md gap-x-3 flex border-[#A4A4A4] ">
                 {getActionsIcon()?.map((data: any, index: any) => {
                   return (
                     <>
@@ -592,7 +587,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                         className={`${
                           index < getActionsIcon().length - 1 &&
                           "border-r border-[#A4A4A4]"
-                        } px-3 py-1 w-[40px] flex items-center justify-center rounded-l-md cursor-pointer`}
+                        }
+                          px-3 py-1  h-[100%] border border-[#A4A4A4] gap-x-2 flex items-center justify-between rounded-l-md rounded-r-md cursor-pointer`}
                         onClick={() =>
                           handleActions(
                             currentStatus,
@@ -600,21 +596,22 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                             data?.identifier
                           )
                         }
-                        data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content={data.hovertext}
                       >
-                        <img src={data.icon} alt="" className="w-[17px]" />
+                        {isLoadingManifest.isLoading &&
+                        isLoadingManifest.identifier === data.identifier ? (
+                          <div className="flex justify-center items-center">
+                            <Spinner
+                              className={"!w-[15px] !h-[15px] !border-2"}
+                            />
+                          </div>
+                        ) : (
+                          <img src={data.icon} alt="" className="w-[16px]" />
+                        )}
+
+                        <span className="font-open-sans text-[14px] leading-20 whitespace-no-wrap">
+                          {capitalizeFirstLetter(data?.buttonName)}
+                        </span>
                       </div>
-                      <Tooltip
-                        id="my-tooltip-inline"
-                        style={{
-                          backgroundColor: "bg-neutral-900",
-                          color: "#FFFFFF",
-                          width: "fit-content",
-                          fontSize: "14px",
-                          lineHeight: "16px",
-                        }}
-                      />
                     </>
                   );
                 })}
@@ -647,29 +644,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         );
       }
     }
-    //  else {
-    //   return (
-    //     <div className="flex items-center justify-between w-[100%]">
-    //       <div className="text-[14px] text-[#272727]">34 Orders</div>
-    //       <div className="flex gap-4">
-    //         <div className="flex items-center justify-center py-2 w-[110px] border-[1px] rounded-md border-[#A4A4A4] col-span-2">
-    //           <img src={SelectIcon} alt="" />
-    //           <span className="ml-2 text-[#1C1C1C] text-[12px] font-medium">
-    //             SELECT
-    //           </span>
-    //         </div>
-    //         <div
-    //           className="flex justify-center items-center w-[40px] border-[1px] rounded-md border-[#A4A4A4]"
-    //           onClick={() => {
-    //             navigate("/neworder/filter");
-    //           }}
-    //         >
-    //           <img src={FilterIcon} alt="Filter Order" width="16px" />
-    //         </div>
-    //       </div>
-    //     </div>
-    //   );
-    // }
   };
 
   const handleStatusChanges = (index: any) => {
@@ -793,7 +767,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   useEffect(() => {
     const result: any = getObjectWithIsActiveTrue(filterState);
-
     setFilterPayLoad(result);
   }, [filterState]);
 

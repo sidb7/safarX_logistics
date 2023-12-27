@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
+import TickLogo from "../../../assets/tick.svg";
 
 const modalTitle = () => {
   return (
@@ -51,7 +52,7 @@ const WalletMain = () => {
           isMdScreen ? " m-auto   !w-[688px] h-[100%] " : "w-full !h-full"
         }flex flex-col  justify-center relative md:px-0 md:gap-y-0`}
       >
-        <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
+        <div className={`${isMdScreen ? "custom_shadow pb-2" : ""}`}>
           <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img
               className="my-auto h-[25px] object-contain"
@@ -80,60 +81,39 @@ const WalletMain = () => {
                   {isMdScreen && note("text-left")}
                 </div>
               </div>
-              <div className="md:grid  ">
-                <div className="mx-5 md:mt-0  rounded-md border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
+              <div className="md:grid ">
+                <div className="mr-6 md:mt-0  rounded-md border-[1.5px] border-[#E8E8E8] py-6 px-3 drop-shadow-sm">
                   <div className="md:space-y-4">
                     <h1 className="ml-2 font-Lato font-semibold text-[20px] text-[#1C1C1C] leading-[26px]">
                       Benefits of shipyaari wallet
                     </h1>
                     <div className="flex mt-[26px]">
-                      <Checkbox
-                        checked={true}
-                        checkboxClassName="text-black gap-2"
-                        style={{ accentColor: "black" }}
-                      />
-                      <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      <img src={TickLogo} alt="ticklogo" />
+                      <p className="ml-2 mt-[0.5px] text-[16px] font-Open font-normal leading-[22px] whitespace-nowrap">
                         Get Discounts/Offers on Recharge
                       </p>
                     </div>
                     <div className="flex">
-                      <Checkbox
-                        checked={true}
-                        checkboxClassName="text-black gap-2"
-                        style={{ accentColor: "black" }}
-                      />
-                      <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      <img src={TickLogo} alt="ticklogo" />
+                      <p className="ml-2 mt-[0.5px] text-[16px] font-Open font-normal leading-[22px]">
                         Faster order processing
                       </p>
                     </div>
                     <div className="flex">
-                      <Checkbox
-                        checked={true}
-                        checkboxClassName="text-black gap-2"
-                        style={{ accentColor: "black" }}
-                      />
-                      <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      <img src={TickLogo} alt="ticklogo" />
+                      <p className="ml-2 mt-[0.5px] text-[16px] font-Open font-normal leading-[22px]">
                         Instant Payment Processing
                       </p>
                     </div>
                     <div className="flex">
-                      <Checkbox
-                        checked={true}
-                        checkboxClassName="text-black gap-2"
-                        style={{ accentColor: "black" }}
-                      />
-                      <p className="ml-2 mt-[2px] text-[16px] font-Open font-normal leading-[22px]">
+                      <img src={TickLogo} alt="ticklogo" />
+                      <p className="ml-2 mt-[0.5px] text-[16px] font-Open font-normal leading-[22px]">
                         Simplified Accounting
                       </p>
                     </div>
                   </div>
                 </div>
-                <div className="mx-5 mt-[50px] md:mt-4">
-                  {/* <CustomButton
-                    text={"VERIFY BANK"}
-                    // onClick={() => }
-                    onClick={() => handleRechargeNow()}
-                  /> */}
+                <div className="mr-6 mt-[50px] md:mt-4">
                   <CustomButton
                     text={"RECHARGE NOW"}
                     onClick={() => navigate("/onboarding/wallet-payment")}

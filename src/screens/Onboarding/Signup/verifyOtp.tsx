@@ -11,7 +11,11 @@ import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { toast } from "react-toastify";
-import { setLocalStorage, tokenKey } from "../../../utils/utility";
+import {
+  constructNavigationObject,
+  setLocalStorage,
+  tokenKey,
+} from "../../../utils/utility";
 import { Spinner } from "../../../components/Spinner";
 
 const Index = () => {
@@ -30,6 +34,8 @@ const Index = () => {
     mobileOtp: "",
     // emailOtp: "",
   });
+  const [firstName, setFirstName] = useState();
+  const [email, setEmail] = useState();
 
   const signUpUser = useSelector((state: any) => state.signup);
   const [minutes, setMinutes] = useState(0);
@@ -55,7 +61,7 @@ const Index = () => {
       toast.success("OTP resent Successfully");
       setMinutes(0);
       setSeconds(30);
-      setOtp({ ...otp, mobileOtp: "",  });
+      setOtp({ ...otp, mobileOtp: "" });
     } else {
       toast.error(response?.message);
     }
@@ -63,7 +69,7 @@ const Index = () => {
   const onClickVerifyOtp = async () => {
     try {
       let payload = {
-        email: signUpUser.email,
+        email,
         mobileOtp: otp.mobileOtp,
         // emailOtp: otp.emailOtp,
       };
@@ -81,7 +87,13 @@ const Index = () => {
         sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
         sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
         // setLocalStorage(tokenKey, response?.data[0]?.token);
-        navigate("/onBoarding/get-started");
+
+        const navigationObject = constructNavigationObject(
+          "/onBoarding/get-started",
+          window.location.search
+        );
+
+        navigate(navigationObject);
       } else {
         toast.error(response?.message);
       }
@@ -117,6 +129,12 @@ const Index = () => {
       clearInterval(interval);
     };
   }, [seconds]);
+
+  useEffect(() => {
+    let temp: any = sessionStorage.getItem("userInfo");
+    temp = JSON.parse(temp);
+    setEmail(temp?.email);
+  }, []);
 
   const modalTitle = () => {
     return (
@@ -158,8 +176,8 @@ const Index = () => {
                 Mobile Verification
               </p>
 
-              <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] ">
-                Enter The OTP Sent To{" "}
+              <p className="text-center text-base text-[#494949] font-Open font-light leading-[22px] whitespace-nowrap">
+                Enter the OTP sent to{" "}
                 <span className="text-[#494949] font-Open text-base font-semibold leading-[22px]">
                   +91 {updatedNumber}{" "}
                 </span>
@@ -215,9 +233,9 @@ const Index = () => {
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
-                    className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                    className={`mx-1 font-bold text-[#004EFF] text-[12px] ${
                       seconds > 0 || (seconds > 0 && minutes === 0)
-                        ? "text-[#494949]"
+                        ? "cursor-not-allowed  text-[#494949]"
                         : "cursor-pointer"
                     }`}
                     onClick={() => {

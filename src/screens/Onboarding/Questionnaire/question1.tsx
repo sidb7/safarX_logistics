@@ -12,6 +12,7 @@ import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-toastify";
 import { POST } from "../../../utils/webService";
 import { GET_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -60,7 +61,11 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   }
 
   const nextHandler = () => {
-    navigate("/onboarding/questionnaire/question2", {
+    const navigationObject = constructNavigationObject(
+      "/onboarding/questionnaire/question2",
+      window.location.search
+    );
+    navigate(navigationObject, {
       state: { questionsData },
     });
   };
@@ -105,7 +110,7 @@ export const QuestionComponent1: React.FunctionComponent = () => {
             alt="CompanyLogo"
           />
         </div>
-        <div className="flex flex-col mx-4 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-6 md:mb-[82px]">
+        <div className="flex flex-col mx-6 md:grid md:grid-cols-2 md:mt-[32px] md:gap-x-6 md:mb-[82px]">
           <div>
             <WelcomeHeader welcomeClassName="md:!mt-4" className="hidden" />
             <div className="flex justify-center">
@@ -131,7 +136,8 @@ export const QuestionComponent1: React.FunctionComponent = () => {
                       name={element.value}
                       label={element.value}
                       style={{ accentColor: "black" }}
-                      checkboxClassName="gap-2"
+                      checkboxClassName="gap-2 mt-1"
+                      labelClassName="mt-1"
                     />
                   );
                 })}
