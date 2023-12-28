@@ -377,16 +377,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             fetchManifest(awbsNo);
           } else if (identifier === "Download_Labels") {
+            let awbs: any = [];
             const lebelsArr: string[] = selectedRowdata.map(
               (data: any, index: any) => {
-                if (data?.original?.boxInfo?.[0]?.tracking?.label) {
-                  return `labels/${data?.original?.boxInfo?.[0]?.tracking?.label}`;
+                if (data?.original?.awb) {
+                  awbs.push(data?.original?.awb);
                 } else {
                   return "";
                 }
               }
             );
-            const data = await fetchLabels(lebelsArr, setIsLoadingManifest);
+            const data = await fetchLabels(awbs, setIsLoadingManifest);
             if (data) {
               setSelectedRowData([]);
             }
