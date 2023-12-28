@@ -34,7 +34,7 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
       key={key}
     >
       <div className="flex justify-between bg-[#F6F6F6] p-[16px]">
-        <p className="text-[#004EFF] text-[16px] font-Open font-semibold leading-5 capitalize">
+        <p className="text-black text-[16px] font-Open font-semibold leading-5 capitalize">
           {addressLabel}
         </p>
 
