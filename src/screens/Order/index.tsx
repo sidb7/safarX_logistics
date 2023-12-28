@@ -735,7 +735,7 @@ const Index = () => {
     setIsLoadingManifest: any
   ) => {
     if (!arrLebels.length) {
-      toast.error("Please Select One Orders For lebel");
+      toast.error("Please Select One Orders For label");
       return;
     }
 

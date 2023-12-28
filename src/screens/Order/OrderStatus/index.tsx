@@ -309,10 +309,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           let payload = {
             tempOrderIdArray: tempOrderIds,
           };
-
+          if (payload?.tempOrderIdArray.length === 0) {
+            toast.error("Please Select Atleast One Order To Delete.");
+            return;
+          }
           setDeleteModalDraftOrder &&
             setDeleteModalDraftOrder({ isOpen: true, payload });
         } else {
+          if (selectedRowdata.length === 0) {
+            toast.error("Please Select Atleast One Order To Place.");
+            return;
+          }
           const orderDetails = selectedRowdata?.map((order: any) => {
             if (
               order?.original?.source === "SHOPIFY" ||
@@ -388,9 +395,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               }
             );
             const data = await fetchLabels(awbs, setIsLoadingManifest);
-            if (data) {
-              setSelectedRowData([]);
-            }
+            // if (data) {
+            //   setSelectedRowData([]);
+            // }
           }
         } else {
           toast.error("Please select atleast one order");
