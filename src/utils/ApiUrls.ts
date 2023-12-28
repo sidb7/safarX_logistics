@@ -267,6 +267,8 @@ const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
+const FETCH_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabels`;
+
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
 //Reports
@@ -429,4 +431,5 @@ export {
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
   GET_ADD_LABEL_DATA,
+  FETCH_LABELS_REPORT_DOWNLOAD,
 };
