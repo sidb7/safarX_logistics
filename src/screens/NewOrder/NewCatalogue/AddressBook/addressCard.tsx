@@ -30,10 +30,10 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
 
   return (
     <div
-      className="p-[16px] shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF] w-[372px]"
+      className=" shadow-lg rounded-lg border-[1px] border-[#E8E8E8] bg-[#FFFFFF] w-[372px]"
       key={key}
     >
-      <div className="flex justify-between">
+      <div className="flex justify-between bg-[#F6F6F6] p-[16px]">
         <p className="text-[#004EFF] text-[16px] font-Open font-semibold leading-5 capitalize">
           {addressLabel}
         </p>
@@ -61,21 +61,23 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
           />
         </div>
       </div>
-      <p className="text-[16px]  break-words font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
-        {address.replaceAll(",,", ",")}
-      </p>
+      <div className="p-[16px]">
+        <p className="text-[16px]  break-words font-Open font-semibold capitalize leading-[30px] mt-2 w-[250px]">
+          {address.replaceAll(",,", ",")}
+        </p>
 
-      <div className="flex items-center gap-x-2 mt-2">
-        <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
-        <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
-          {name}
-        </p>
-      </div>
-      <div className="flex items-center gap-x-2 mt-2">
-        <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
-        <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
-          {phoneNumber}
-        </p>
+        <div className="flex items-center gap-x-2 mt-2">
+          <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
+          <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
+            {name}
+          </p>
+        </div>
+        <div className="flex items-center gap-x-2 mt-2">
+          <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
+          <p className="text-[16px] font-Open font-semibold leading-5 capitalize">
+            {phoneNumber}
+          </p>
+        </div>
       </div>
     </div>
   );

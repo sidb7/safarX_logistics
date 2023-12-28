@@ -390,7 +390,7 @@ const WalletRecharge = () => {
             <div className="mx-5 ">
               <div className="grid lg:grid-cols-2 gap-x-[27px]">
                 <div className="w-full  my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm h-[200px]">
-                  <div className="flex items-center gap-2 text-[1.125rem] font-semibold">
+                  <div className="flex items-center gap-2 text-[1.125rem] font-semibold mt-2">
                     <img src={Accountlogo} alt="" />
                     <p className="text-[#1C1C1C] font-Lato text-lg font-semibold leading-6 capitalize">
                       Your wallet balance
@@ -399,7 +399,7 @@ const WalletRecharge = () => {
                       ₹ {currentBalance?.toLocaleString("en-IN")}
                     </p>
                   </div>
-                  <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal">
+                  <p className="text-[0.75rem] font-Open leading-4 text-[#BBBBBB] my-3 lg:font-normal mt-3">
                     Endless wallet balance with automatic add money
                   </p>
                   {/* <p
@@ -422,7 +422,7 @@ const WalletRecharge = () => {
                       setWalletValue(event.target.value);
                     }}
                     wrapperClass="w-[200px]"
-                    selectClassName="text-[18px]"
+                    selectClassName="text-[18px] mt-6"
                   />
                   {/* <div className="grid grid-cols-4 gap-8 max-sm:gap-3 text-center">
                     {moneyArr?.map((el: any, i: number) => {
@@ -581,7 +581,7 @@ const WalletRecharge = () => {
                 </p>
               </div>
               <div className="lg:flex flex-nowrap w-full customScroll gap-x-4 hidden lg:mb-5">
-                <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[33.33%]">
+                <div className="bg-[#f0faf6] p-3 lg:p-4 border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg lg:min-w-[30.33%] xl:min-w-[32.50%]">
                   <p className="text-[1rem] font-semibold">
                     10% EXTRA up to ₹1000
                   </p>
@@ -595,7 +595,7 @@ const WalletRecharge = () => {
                     <p className="text-[16px]">Apply</p>
                   </div>
                 </div>
-                <div className="bg-[#FDF6EA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
+                <div className="bg-[#FDF6EA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[30.33%] xl:min-w-[32.50%]">
                   <p className="text-[1rem] font-semibold">
                     10% EXTRA up to ₹1000
                   </p>
@@ -610,7 +610,7 @@ const WalletRecharge = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#FDEDEA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[33.33%]">
+                <div className="bg-[#FDEDEA] p-3 lg:p-4  border-2 border-solid border-[#E8E8E8]  my-3 rounded-lg  lg:min-w-[30.33%] xl:min-w-[32.50%]">
                   <p className="text-[1rem] font-semibold">
                     10% EXTRA up to ₹1000
                   </p>
@@ -691,18 +691,18 @@ const WalletRecharge = () => {
                 </div>
               </div>
               {/* Payment Gateway */}
-              <div className="lg:grid grid-cols-2 mb-[30px]">
-                <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-4">
-                  <div className="flex  gap-x-2 text-[14px]">
+              <div className="lg:grid grid-cols-2 mb-[30px] ">
+                <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-2">
+                  <div className="flex  gap-x-2 text-[14px] mt-1">
                     <img src={rechargeIcon} alt="" className="object-contain" />
-                    <p className=" font-Lato font-semibold text-sm lg:text-lg lg:text-[#1C1C1C] lg:leading-6">
+                    <p className=" font-Lato font-semibold text-sm lg:text-lg lg:text-[#1C1C1C] lg:leading-6 ">
                       {isItLgScreen
                         ? "Payment gateway"
                         : "Recharge with payment gateway"}
                     </p>
                   </div>
 
-                  <div className="flex mt-4 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
+                  <div className="flex mt-1 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
                     {/* <div className="flex flex-col items-center gap-y-2">
                       <img
                         src={
