@@ -79,16 +79,17 @@ const Index = () => {
           otherDetails: searchParams?.toString() === "" ? {} : getQueryJson(),
         },
       };
-      console.log(
-        "🚀 ~ file: index.tsx:82 ~ signUpOnClick ~ payload:",
-        payload
-      );
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
       sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        window?.dataLayer?.push({
+          event: "Signup",
+          ...response?.data[0],
+        });
+
         sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
         setLoading(false);
         const navigationObject = constructNavigationObject(

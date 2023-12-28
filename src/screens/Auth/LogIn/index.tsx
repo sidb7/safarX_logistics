@@ -57,10 +57,6 @@ const Index = () => {
   const { showBoundary } = useErrorBoundary() || {};
 
   const logInOnClick = async (value: any) => {
-    window?.dataLayer?.push({
-      event: "login",
-    });
-
     try {
       const { data: response } = await POST(POST_SIGN_IN_URL, value);
 
@@ -82,6 +78,21 @@ const Index = () => {
           `${response?.data[0]?.sellerId}_${tokenKey}`,
           response?.data[0]?.token
         );
+
+        console.log(
+          "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
+          response?.data[0]
+        );
+
+        window?.dataLayer?.push({
+          event: "Login",
+          seller_email: response?.data[0]?.email,
+          sellerId: response?.data[0]?.sellerId,
+          seller_name: response?.data[0]?.name,
+          seller_kyc: response?.data[0]?.nextStep.kyc,
+          seller_bank_verification_done: response?.data[0]?.nextStep.bank,
+          isReturningUser: response?.data[0]?.isReturningUser,
+        });
 
         const token = sessionStorage.getItem("sellerId")
           ? `${sessionStorage.getItem(
@@ -149,6 +160,17 @@ const Index = () => {
       sessionStorage.setItem("userInfo", JSON.stringify(response.data[0]));
       sessionStorage.setItem("sellerId", response?.data[0]?.sellerId);
       sessionStorage.setItem("userName", response?.data[0]?.name);
+
+      window?.dataLayer?.push({
+        event: "Login",
+        seller_email: response?.data[0]?.email,
+        sellerId: response?.data[0]?.sellerId,
+        name: response?.data[0]?.name,
+        seller_kyc: response?.data[0]?.nextStep.kyc,
+        seller_bank_verification_done: response?.data[0]?.nextStep.bank,
+        isReturningUser: response?.data[0]?.isReturningUser,
+      });
+
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
