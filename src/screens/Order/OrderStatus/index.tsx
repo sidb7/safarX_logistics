@@ -240,7 +240,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const fetchManifest = async (awbArray?: any) => {
     let payload = {
-      awb: awbArray,
+      awbs: awbArray,
     };
     setIsLoadingManifest({
       isLoading: true,
