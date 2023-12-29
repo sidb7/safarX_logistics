@@ -6,13 +6,16 @@ let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
 let LANDMARK_URL = "";
 let TRACKING_URL = "";
-
+let REACT_APP_GTM_ID = "";
+let REACT_APP_GA4_ID = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 
 switch (Environment) {
   case "development":
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
@@ -36,6 +39,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
@@ -292,6 +297,8 @@ const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 
 export {
+  REACT_APP_GTM_ID,
+  REACT_APP_GA4_ID,
   GET_STATUS_COUNT,
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
