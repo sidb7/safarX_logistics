@@ -500,23 +500,54 @@ const Index = () => {
     }
   };
 
-  const getSingleFile = async (url: any, actionType?: any) => {
-    let fileName = "";
+  const getSingleFile = async (payload: any, actionType?: any) => {
+    // let fileName = "";
+    let awbs = {
+      awbs: payload?.awbs,
+    };
+
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
 
     if (actionType === "download_label") {
-      fileName = `labels/${url}`;
-    } else {
-      fileName = `taxinvoices/${url}`;
-    }
+      const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(awbs),
+      });
 
-    const { data } = await POST(GET_SINGLE_FILE, {
-      fileName,
-    });
-    if (data?.status) {
-      window.location.href = data?.data;
-      toast.success(data?.meesage);
+      const resdata: any = await data?.blob();
+
+      const blob = new Blob([resdata], { type: "application/pdf" });
+
+      var url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Label_Report.pdf`;
+      a.click();
+      return true;
     } else {
-      toast.error(data?.meesage);
+      const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
+        method: "POST",
+        headers: header,
+        body: JSON.stringify(awbs),
+      });
+
+      const resdata: any = await data?.blob();
+
+      const blob = new Blob([resdata], { type: "application/pdf" });
+
+      var url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Tax_Report.pdf`;
+      a.click();
+      return true;
     }
   };
 
@@ -538,9 +569,9 @@ const Index = () => {
             payload: payLoad?.awb,
           });
         } else if (actionType === "download_label") {
-          getSingleFile(payLoad.fileUrl, actionType);
+          getSingleFile(payLoad, actionType);
         } else if (actionType === "download_invoice") {
-          getSingleFile(payLoad?.taxInvoiceUrl, actionType);
+          getSingleFile(payLoad, actionType);
         }
         break;
       default:

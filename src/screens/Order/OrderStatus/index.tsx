@@ -114,7 +114,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     filterArrTwo: [],
   });
   const [manifestButton, setManifestButton] = useState<any>(true);
-  const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
     setStatusId(tabStatusId || statusId);
@@ -806,23 +805,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setFilterPayLoad(result);
   }, [filterState]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-
-      // Check if the user has scrolled past the threshold
-      setIsSticky(scrollTop > 263);
-    };
-
-    // Attach the event listener
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener on component unmount
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   return (
     <div className="flex flex-col pt-7">
       <div className="flex font-medium overflow-auto whitespace-nowrap mt-2">
@@ -858,16 +840,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       {isLgScreen && (
         <>
           <div
-            className={`grid lg:flex lg:justify-between
-            ${
-              isSticky
-                ? "fixed top-0 w-full bg-white z-[10000] h-[60px]"
-                : "mt-6 static h-[46px]"
-            }
-            `}
-            style={{
-              padding: isSticky ? "10px 126px 10px 0px" : "0px",
-            }}
+            className={`grid lg:flex lg:justify-between mt-6 static h-[46px]`}
           >
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center ">
