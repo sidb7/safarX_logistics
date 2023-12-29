@@ -50,6 +50,7 @@ interface IOrderstatusProps {
   setTotalcount?: any;
   setStatusCount?: any;
   isOrderTableLoader: any;
+  fetchMultiTax?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -89,6 +90,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setTotalcount,
   setStatusCount,
   isOrderTableLoader,
+  fetchMultiTax,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -157,6 +159,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         identifier: "Download_Labels",
         buttonName: "Download LABEL",
       },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Invoice",
+        identifier: "Download_Multi_Tax",
+        buttonName: "Download Invoice",
+      },
     ],
     "IN TRANSIT": [
       {
@@ -216,6 +224,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         hovertext: "Download Lebels",
         identifier: "Download_Labels",
         buttonName: "Download LABEL",
+      },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Invoice",
+        identifier: "Download_Multi_Tax",
+        buttonName: "Download Invoice",
       },
     ],
   };
@@ -398,9 +412,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             // if (data) {
             //   setSelectedRowData([]);
             // }
+          } else if (identifier === "Download_Multi_Tax") {
+            let awbs: any = [];
+            const lebelsArr: string[] = selectedRowdata.map(
+              (data: any, index: any) => {
+                if (data?.original?.awb) {
+                  awbs.push(data?.original?.awb);
+                } else {
+                  return "";
+                }
+              }
+            );
+            const data = await fetchMultiTax(awbs, setIsLoadingManifest);
           }
         } else {
-          toast.error("Please select atleast one order");
+          toast.error("Please select atleast one order for tax Invoice");
         }
         break;
       }
