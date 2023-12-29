@@ -234,6 +234,7 @@ const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
+
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
 const GET_ALL_STORES = `${SELLER_BASE_URL}/channel/getStores`;
@@ -242,6 +243,7 @@ const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/updateStore`;
 const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createWCStore`;
 const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
 const CREATE_ZOHO_STORE = `${SELLER_BASE_URL}/channel/zoho/createZohoStore`;
+const CREATE_AMAZON_STORE = `${SELLER_BASE_URL}/channel/amazon/createAmazonStore`;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -295,6 +297,10 @@ const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
 
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
+
+// External URL's
+
+const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
   REACT_APP_GTM_ID,
@@ -439,6 +445,8 @@ export {
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
   GET_ADD_LABEL_DATA,
+  CREATE_AMAZON_STORE,
+  AMAZON_BASE_URL,
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
 };

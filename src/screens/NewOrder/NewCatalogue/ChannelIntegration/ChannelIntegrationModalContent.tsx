@@ -12,12 +12,14 @@ import {
   UPDATE_SINGLE_STORE,
   CREATE_ZOHO_STORE,
   SELLER_WEB_URL,
+  AMAZON_BASE_URL,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
 import CustomDropDown from "../../../../components/DropDown";
 import {
   capitalizeFirstLetter,
+  generateUniqueCode,
   setLocalStorage,
 } from "../../../../utils/utility";
 import axios from "axios";
@@ -92,6 +94,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             setModalData({ isOpen: false });
             toast.success(data?.message);
             window.location.reload();
+            return;
           } else {
             setIsLoading(false);
             toast.error(data?.message);
@@ -132,9 +135,15 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           if (data?.success) {
             toast.success(data?.message);
             window.location.reload();
+            return;
           } else {
             toast.error(data?.message);
           }
+        } else if (channel === "AMAZON") {
+          setIsLoading(true);
+          const state = generateUniqueCode(8, 8);
+          sessionStorage.setItem("amazon_store", storeData.storeName);
+          window.location.href = `${AMAZON_BASE_URL}/apps/authorize/consent?version=beta&application_id=${process.env.REACT_APP_AMAZON_APPLICATION_ID}&state=${state}`;
         }
         setIsLoading(false);
         setModalData({ isOpen: false });
@@ -210,8 +219,11 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       storeData.clientSecret !== "" &&
       storeData.code !== "" &&
       storeData.organizationId !== "" &&
-      storeData.domain !== ""
+      storeData.domain !== "" &&
+      storeData.storeName !== ""
     ) {
+      setIsDisabled(false);
+    } else if (channel === "AMAZON" && storeData.storeName !== "") {
       setIsDisabled(false);
     } else setIsDisabled(true);
   }, [storeData]);
@@ -351,6 +363,16 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
           <div className="grid gap-y-3">
             <CustomInputBox
               className="removePaddingPlaceHolder"
+              placeholder="Storename"
+              isRequired={true}
+              value={storeData.storeUrl}
+              onChange={(e) =>
+                setStoreData({ ...storeData, storeUrl: e.target.value })
+              }
+            />
+
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
               placeholder="Client ID"
               isRequired={true}
               value={storeData.clientId}
@@ -393,6 +415,18 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               }}
               options={channelArr}
               heading="Zoho Domain"
+            />
+          </div>
+        ) : channel === "AMAZON" ? (
+          <div className="grid gap-y-3">
+            <CustomInputBox
+              className="removePaddingPlaceHolder"
+              isRequired={true}
+              placeholder="Store Name"
+              value={storeData.storeName}
+              onChange={(e) =>
+                setStoreData({ ...storeData, storeName: e.target.value })
+              }
             />
           </div>
         ) : null}
