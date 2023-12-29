@@ -47,6 +47,7 @@ import orderCardImg from "../../assets/OrderCard/Gif.gif";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
+import "../../styles/hideScroll.css";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -253,6 +254,25 @@ const Index = () => {
   const [selectedRowdata, setSelectedRowData] = useState([]);
 
   const isActive = checkPageAuthorized("View Orders");
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+
+      // Check if the user has scrolled past the threshold
+      setIsSticky(scrollTop > 263);
+    };
+
+    // Attach the event listener
+    window.addEventListener("scroll", handleScroll);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const Buttons = (className?: string) => {
     return (
       <div
@@ -888,112 +908,121 @@ const Index = () => {
 
           {!isLgScreen && MobileButtons()}
 
-          <div className="px-4 md:pl-5 md:pr-6">
-            <OrderStatus
-              filterId={filterId}
-              orders={orders}
-              setFilterId={setFilterId}
-              handleTabChange={handleTabChanges}
-              statusData={statusData}
-              setOrders={setOrders}
-              allOrders={allOrders}
-              currentStatus={tabs[globalIndex].value}
-              selectedRowdata={selectedRowdata}
-              setSelectedRowData={setSelectedRowData}
-              fetchLabels={fetchLabels}
-              fetchMultiTax={fetchMultiTax}
-              setDeleteModalDraftOrder={setDeleteModalDraftOrder}
-              setCancellationModal={setCancellationModal}
-              tabStatusId={tabStatusId}
-              setTotalcount={setTotalcount}
-              setStatusCount={setStatusCount}
-              isOrderTableLoader={setIsLoading}
-            />
-            {isLoading ? (
-              <>
-                {isLgScreen ? (
-                  <div>
-                    <div className="flex items-stretch h-16 rounded-xl">
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                    </div>
-                    <div className="flex items-stretch h-44 rounded-xl">
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                    </div>
-                    <div className="flex items-stretch h-44 rounded-xl">
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                      <div className="flex-1 m-2 animated rounded-xl"></div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="mt-4">
-                    <div className="flex items-stretch h-44 rounded-xl">
-                      <div className="flex-1 my-2 animated rounded-xl"></div>
-                    </div>
-                    <div className="flex items-stretch h-44 rounded-xl">
-                      <div className="flex-1 my-2 animated rounded-xl"></div>
-                    </div>
-                    <div className="flex items-stretch h-44 rounded-xl">
-                      <div className="flex-1 my-2 animated rounded-xl"></div>
-                    </div>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div>
-                {isLgScreen ? (
-                  <>
-                    <CustomTable
-                      data={orders || []}
-                      columns={columnHelper || []}
-                      setRowSelectedData={setSelectedRowData}
-                    />
-                    {totalCount > 0 && (
-                      <Pagination
-                        totalItems={totalCount}
-                        itemsPerPageOptions={[10, 20, 30, 50]}
-                        onPageChange={onPageIndexChange}
-                        onItemsPerPageChange={onPerPageItemChange}
-                      />
-                    )}
-                  </>
-                ) : (
-                  <div className="border border-white my-5">
-                    {orders.length > 0 ? (
-                      <>
-                        {orders?.map((data: any, i: any) => (
-                          <OrderCard
-                            data={data}
-                            currentStatus={tabs[tabStatusId].value}
-                            orderActions={orderActions}
-                          />
-                        ))}
-                      </>
-                    ) : (
-                      <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
-                        No Data Found
+          <div className="px-4 md:pl-5 md:pr-6 h-[calc(100vh-80px)]">
+            <div className=" bg-white">
+              <OrderStatus
+                filterId={filterId}
+                orders={orders}
+                setFilterId={setFilterId}
+                handleTabChange={handleTabChanges}
+                statusData={statusData}
+                setOrders={setOrders}
+                allOrders={allOrders}
+                currentStatus={tabs[globalIndex].value}
+                selectedRowdata={selectedRowdata}
+                setSelectedRowData={setSelectedRowData}
+                fetchLabels={fetchLabels}
+                fetchMultiTax={fetchMultiTax}
+                setDeleteModalDraftOrder={setDeleteModalDraftOrder}
+                setCancellationModal={setCancellationModal}
+                tabStatusId={tabStatusId}
+                setTotalcount={setTotalcount}
+                setStatusCount={setStatusCount}
+                isOrderTableLoader={setIsLoading}
+              />
+            </div>
+            <div
+              // h-[calc(100%-150px)]
+              className="overflow-y-auto my-6 h-[calc(100%-180px)]"
+              // style={{ border: "2px solid yellow" }}
+            >
+              {isLoading ? (
+                <>
+                  {isLgScreen ? (
+                    <div>
+                      <div className="flex items-stretch h-16 rounded-xl">
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
                       </div>
-                    )}
-                  </div>
-                )}
-                {/* <div className="mt-24 lg:hidden">
+                      <div className="flex items-stretch h-44 rounded-xl">
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                      </div>
+                      <div className="flex items-stretch h-44 rounded-xl">
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                        <div className="flex-1 m-2 animated rounded-xl"></div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-4">
+                      <div className="flex items-stretch h-44 rounded-xl">
+                        <div className="flex-1 my-2 animated rounded-xl"></div>
+                      </div>
+                      <div className="flex items-stretch h-44 rounded-xl">
+                        <div className="flex-1 my-2 animated rounded-xl"></div>
+                      </div>
+                      <div className="flex items-stretch h-44 rounded-xl">
+                        <div className="flex-1 my-2 animated rounded-xl"></div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="">
+                  {isLgScreen ? (
+                    <>
+                      <CustomTable
+                        data={orders || []}
+                        columns={columnHelper || []}
+                        setRowSelectedData={setSelectedRowData}
+                        sticky={isSticky}
+                      />
+                      {totalCount > 0 && (
+                        <Pagination
+                          totalItems={totalCount}
+                          itemsPerPageOptions={[10, 20, 30, 50]}
+                          onPageChange={onPageIndexChange}
+                          onItemsPerPageChange={onPerPageItemChange}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <div className="border border-white my-5">
+                      {orders.length > 0 ? (
+                        <>
+                          {orders?.map((data: any, i: any) => (
+                            <OrderCard
+                              data={data}
+                              currentStatus={tabs[tabStatusId].value}
+                              orderActions={orderActions}
+                            />
+                          ))}
+                        </>
+                      ) : (
+                        <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
+                          No Data Found
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {/* <div className="mt-24 lg:hidden">
                   <BottomNavBar />
                 </div> */}
-              </div>
-            )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       ) : (

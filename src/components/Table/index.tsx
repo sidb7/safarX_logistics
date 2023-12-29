@@ -14,6 +14,7 @@ interface ITablePropTypes {
   thclassName?: any;
   trclassName?: any;
   setRowSelectedData?: any;
+  sticky?: any;
 }
 
 export const CustomTable = (props: ITablePropTypes) => {
@@ -25,6 +26,7 @@ export const CustomTable = (props: ITablePropTypes) => {
     thclassName,
     trclassName,
     setRowSelectedData,
+    sticky,
   } = props;
 
   const table = useReactTable({
@@ -46,13 +48,13 @@ export const CustomTable = (props: ITablePropTypes) => {
   return (
     <div className="py-2">
       <table className="w-full  bg-white tableContainerStyle	">
-        <thead className="border-b border-[#E8E8E8]">
+        <thead className={`border-b border-[#E8E8E8] `}>
           {table.getHeaderGroups()?.map((headerGroup: any) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers?.map((header: any) => (
                 <th
                   key={header.id}
-                  className={`px-4 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8] ${thclassName} `}
+                  className={`px-4 sticky top-0 bg-white z-10 font-semibold text-[14px] text-[#1C1C1C] border-b-[1px] border-b-[#E8E8E8] ${thclassName}`}
                 >
                   {header.isPlaceholder
                     ? null
@@ -65,7 +67,7 @@ export const CustomTable = (props: ITablePropTypes) => {
             </tr>
           ))}
         </thead>
-        <tbody className="section ">
+        <tbody className="section overflow-auto">
           {table.getRowModel().rows?.length > 0
             ? table.getRowModel().rows?.map((row: any) => (
                 <tr
