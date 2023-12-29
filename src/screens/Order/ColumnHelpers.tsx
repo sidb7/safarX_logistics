@@ -66,7 +66,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
     fileUrl = labelUrl || "";
     payLoad = {
-      awb: [data?.awb],
+      awbs: [data?.awb],
       fileUrl: labelUrl,
       taxInvoiceUrl: taxInvoiceUrl,
     };

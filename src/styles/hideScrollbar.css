@@ -9,13 +9,13 @@
 
 /* scrollable  */
 
-.customScroll{
+/* .customScroll{
   overflow: auto;
-}
+} 
 
-/* this is used to scrollable width 0 */
 .customScroll::-webkit-scrollbar {
-  width: 0; /* Hide scrollbar for WebKit browsers */
-}
+  width: 0;
+} */
+
 
 

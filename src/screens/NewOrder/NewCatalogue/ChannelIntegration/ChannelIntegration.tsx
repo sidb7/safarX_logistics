@@ -7,9 +7,10 @@ import WooLg from "../../../../assets/Catalogue/WooCommerceLg.svg";
 import ZohoIcon from "../../../../assets/Catalogue/ZOHO.svg.png";
 import Card from "./Card";
 import Header from "./Header";
-import { GET_ALL_STORES } from "../../../../utils/ApiUrls";
+import { CREATE_AMAZON_STORE, GET_ALL_STORES } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { ChannelIntegrationCarts } from "../../../../utils/dummyData";
+import AmazonPngIcon from "../../../../assets/amazonIcon.svg";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -32,6 +33,28 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   useEffect(() => {
     (async () => {
       try {
+        const searchParams: any = new URLSearchParams(window.location.search);
+
+        const state: any = searchParams.get("state");
+
+        const spapi_oauth_code: any = searchParams.get("spapi_oauth_code");
+
+        const selling_partner_id: any = searchParams.get("selling_partner_id");
+
+        const storeName = sessionStorage.getItem("amazon_store");
+
+        if (state && selling_partner_id) {
+          console.log("AMAZON API");
+          const payload = {
+            amazonState: state,
+            sellingPartnerId: selling_partner_id,
+            oauthCode: spapi_oauth_code,
+            storeName,
+          };
+          const createAmazonStore = await POST(CREATE_AMAZON_STORE, payload);
+          sessionStorage.removeItem("amazon_store");
+        }
+
         const { data: response } = await POST(GET_ALL_STORES, {});
         setLoading(false);
         if (response && response.data.length > 0) {
@@ -44,13 +67,17 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? ShopifyIcon
                   : item.channel === "WOOCOMMERCE"
                   ? WooIcon
-                  : ZohoIcon,
+                  : item.channel === "ZOHO"
+                  ? ZohoIcon
+                  : AmazonPngIcon,
               iconLg:
                 item.channel === "SHOPIFY"
                   ? ShopifyLg
                   : item.channel === "WOOCOMMERCE"
                   ? WooLg
-                  : ZohoIcon,
+                  : item.channel === "ZOHO"
+                  ? ZohoIcon
+                  : AmazonPngIcon,
               integrated: true,
               storeId: item.storeId,
             });
