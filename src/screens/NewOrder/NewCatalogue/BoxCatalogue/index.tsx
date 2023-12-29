@@ -19,6 +19,10 @@ import SellerBoxDetails from "./SellerBoxDetails";
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from "react-router-dom";
 import BottomModal from "../../../../components/CustomModal/customBottomModal";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
+import DeleteGifIcon from "../../../../assets/deleteGif.svg";
+import ServiceButton from "../../../../components/Button/ServiceButton";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
 
 const BoxCatalogue = forwardRef((props: any, ref: any) => {
   const { filterId, setFilterId } = props;
@@ -29,6 +33,9 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     { label: "Seller Box", isActive: false },
     // { label: "Company Box", isActive: false },
   ]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteBoxIndex, setDeleteBoxIndex] = useState(null);
+  const [deleteData, setDeleteData] = useState({});
   const [isSellerBoxDetailsModal, setSellerBoxDetailsModal] =
     useState<any>(false);
 
@@ -41,6 +48,7 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
 
   const [loading, setLoading] = useState(false);
   const [boxDetails, setBoxDetails] = useState<any>();
+
   const filterComponent = (className?: string) => {
     return (
       <div className="flex  mt-6">
@@ -122,6 +130,42 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
     }
   };
 
+  const deleteModalContent = (data: any, deleteBoxIndex: any) => {
+    return (
+      <div className="flex flex-col  h-full w-full   p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setIsDeleteModalOpen(false)}
+          />
+        </div>
+        <div className="flex flex-col justify-center  items-center h-full w-full  ">
+          <img src={DeleteGifIcon} alt="" />
+          <p className="font-Open text-sm md:text-base font-semibold text-center">
+            Are you sure you want to delete this box?
+          </p>
+          <div className="flex  items-center gap-x-4 mt-10">
+            <ServiceButton
+              text="Yes"
+              className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
+              onClick={() => {
+                deleteSellerBox(data, deleteBoxIndex);
+                setIsDeleteModalOpen(false);
+              }}
+            />
+            <ServiceButton
+              text="No"
+              className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+              onClick={() => setIsDeleteModalOpen(false)}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {loading ? (
@@ -152,8 +196,15 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
                     length={data?.length || 0}
                     height={data?.height || 0}
                     showAction={filterId === 0 && true}
-                    deleteSellerBox={() => deleteSellerBox(data, index)}
-                    handleAction={() => handlUpdateSellerBox(data)}
+                    // deleteSellerBox={() => deleteSellerBox(data, index)}
+                    handleAction={() => {
+                      handlUpdateSellerBox(data);
+                    }}
+                    setIsDeleteModalOpen={setIsDeleteModalOpen}
+                    setDeleteBoxIndex={setDeleteBoxIndex}
+                    index={index}
+                    data={data}
+                    setDeleteData={setDeleteData}
                   />
                 );
               })}
@@ -171,6 +222,16 @@ const BoxCatalogue = forwardRef((props: any, ref: any) => {
           tempSellerBoxDetails={tempSellerBoxDetails}
         />
       </CustomRightModal>
+
+      {isDeleteModalOpen && (
+        <CenterModal
+          isOpen={isDeleteModalOpen}
+          className="!w-[30%] !h-[40%] !absolute !z-20 "
+          onRequestClose={() => setIsDeleteModalOpen(false)}
+        >
+          {deleteModalContent(deleteData, deleteBoxIndex)}
+        </CenterModal>
+      )}
 
       <BottomModal
         isOpen={isOpenBottomModal}

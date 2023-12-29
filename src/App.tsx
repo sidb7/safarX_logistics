@@ -10,6 +10,9 @@ import { useDispatch } from "react-redux";
 import { setWalletBalance } from "./redux/reducers/userReducer";
 import { socketCallbacks } from "./Socket";
 import TagManager from "react-gtm-module";
+import ReactGA from "react-ga4";
+import { REACT_APP_GA4_ID, REACT_APP_GTM_ID } from "./utils/ApiUrls";
+import { BrowserRouter, useLocation } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -19,8 +22,19 @@ declare global {
 
 const App = () => {
   const tagManagerArgs: any = {
-    gtmId: process.env.REACT_APP_GTM_ID,
+    gtmId: REACT_APP_GTM_ID,
   };
+
+  const location: any = useLocation();
+
+  useEffect(() => {
+    ReactGA.send({
+      hitType: "pageview",
+      page: location.pathname + location.search,
+    });
+  }, [location]);
+
+  ReactGA.initialize(REACT_APP_GA4_ID);
 
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
@@ -47,7 +61,7 @@ const App = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <MyRoutes />
       <CheckIsOnline />
       <ToastContainer
@@ -62,7 +76,7 @@ const App = () => {
         draggable
         theme="colored"
       />
-    </div>
+    </>
   );
 };
 

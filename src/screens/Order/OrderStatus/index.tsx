@@ -50,6 +50,7 @@ interface IOrderstatusProps {
   setTotalcount?: any;
   setStatusCount?: any;
   isOrderTableLoader: any;
+  fetchMultiTax?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -89,6 +90,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setTotalcount,
   setStatusCount,
   isOrderTableLoader,
+  fetchMultiTax,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -157,6 +159,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         identifier: "Download_Labels",
         buttonName: "Download LABEL",
       },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Invoice",
+        identifier: "Download_Multi_Tax",
+        buttonName: "Download Invoice",
+      },
     ],
     "IN TRANSIT": [
       {
@@ -217,6 +225,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         identifier: "Download_Labels",
         buttonName: "Download LABEL",
       },
+      {
+        icon: DownloadIcon,
+        hovertext: "Download Invoice",
+        identifier: "Download_Multi_Tax",
+        buttonName: "Download Invoice",
+      },
     ],
   };
 
@@ -226,7 +240,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const fetchManifest = async (awbArray?: any) => {
     let payload = {
-      awb: awbArray,
+      awbs: awbArray,
     };
     setIsLoadingManifest({
       isLoading: true,
@@ -309,10 +323,17 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           let payload = {
             tempOrderIdArray: tempOrderIds,
           };
-
+          if (payload?.tempOrderIdArray.length === 0) {
+            toast.error("Please Select Atleast One Order To Delete.");
+            return;
+          }
           setDeleteModalDraftOrder &&
             setDeleteModalDraftOrder({ isOpen: true, payload });
         } else {
+          if (selectedRowdata.length === 0) {
+            toast.error("Please Select Atleast One Order To Place.");
+            return;
+          }
           const orderDetails = selectedRowdata?.map((order: any) => {
             if (
               order?.original?.source === "SHOPIFY" ||
@@ -377,22 +398,35 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             fetchManifest(awbsNo);
           } else if (identifier === "Download_Labels") {
+            let awbs: any = [];
             const lebelsArr: string[] = selectedRowdata.map(
               (data: any, index: any) => {
-                if (data?.original?.boxInfo?.[0]?.tracking?.label) {
-                  return `labels/${data?.original?.boxInfo?.[0]?.tracking?.label}`;
+                if (data?.original?.awb) {
+                  awbs.push(data?.original?.awb);
                 } else {
                   return "";
                 }
               }
             );
-            const data = await fetchLabels(lebelsArr, setIsLoadingManifest);
-            if (data) {
-              setSelectedRowData([]);
-            }
+            const data = await fetchLabels(awbs, setIsLoadingManifest);
+            // if (data) {
+            //   setSelectedRowData([]);
+            // }
+          } else if (identifier === "Download_Multi_Tax") {
+            let awbs: any = [];
+            const lebelsArr: string[] = selectedRowdata.map(
+              (data: any, index: any) => {
+                if (data?.original?.awb) {
+                  awbs.push(data?.original?.awb);
+                } else {
+                  return "";
+                }
+              }
+            );
+            const data = await fetchMultiTax(awbs, setIsLoadingManifest);
           }
         } else {
-          toast.error("Please select atleast one order");
+          toast.error("Please select atleast one order for tax Invoice");
         }
         break;
       }

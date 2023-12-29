@@ -14,6 +14,12 @@ interface IPackageBoxProps {
   showAction?: boolean;
   handleAction?: any;
   deleteSellerBox?: any;
+  setIsDeleteModalOpen?: any;
+  setDeleteBoxData?: any;
+  index?: any;
+  setDeleteBoxIndex?: any;
+  data?: any;
+  setDeleteData?: any;
 }
 
 const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
@@ -28,6 +34,11 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
   showAction = false,
   handleAction,
   deleteSellerBox,
+  setIsDeleteModalOpen,
+  index,
+  setDeleteBoxIndex,
+  data,
+  setDeleteData,
 }) => {
   return (
     <div className={recommended ? "relative py-2" : "py-2"}>
@@ -61,7 +72,12 @@ const PackageBox: React.FunctionComponent<IPackageBoxProps> = ({
               <img
                 src={DeleteIcon}
                 alt=""
-                onClick={deleteSellerBox}
+                // onClick={deleteSellerBox}
+                onClick={() => {
+                  setIsDeleteModalOpen(true);
+                  setDeleteBoxIndex(index);
+                  setDeleteData(data);
+                }}
                 className="w-4 mx-2"
               />
             </div>

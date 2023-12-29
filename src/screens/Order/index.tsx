@@ -25,6 +25,8 @@ import {
   LEBEL_DOWNLOAD,
   GET_STATUS_COUNT,
   POST_SYNC_ORDER,
+  FETCH_LABELS_REPORT_DOWNLOAD,
+  FETCH_MULTI_TAX_REPORT_DOWNLOAD,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -734,7 +736,7 @@ const Index = () => {
     setIsLoadingManifest: any
   ) => {
     if (!arrLebels.length) {
-      toast.error("Please Select One Orders For lebel");
+      toast.error("Please Select One Orders For label");
       return;
     }
 
@@ -744,36 +746,106 @@ const Index = () => {
     });
 
     const payload: any = {
-      fileNameArr: arrLebels.filter((item: any) => item !== ""),
+      awbs: arrLebels.filter((item: any) => item !== ""),
     };
-    const { data } = await POST(
-      LEBEL_DOWNLOAD,
-      payload
-      // responseType: "blob",
-    );
+    // const { data } = await POST(
+    //   FETCH_LABELS_REPORT_DOWNLOAD,
+    //   payload
+    //   // responseType: "blob",
+    // );
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const data = await fetch(FETCH_LABELS_REPORT_DOWNLOAD, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
     // const data1 = await response.json();
-    if (!data?.status) {
-      toast.error(data.msg);
-      setIsLoadingManifest({
-        isLoading: false,
-        identifier: "",
-      });
-      return;
-    }
+    // if (!data?.status) {
+    //   toast.error(data.msg);
+    //   setIsLoadingManifest({
+    //     isLoading: false,
+    //     identifier: "",
+    //   });
+    //   return;
+    // }
     setIsLoadingManifest({
       isLoading: false,
       identifier: "",
     });
-    const urls: any = data?.data;
-    for (let i = 0; i < urls.length; i++) {
-      setTimeout(() => {
-        let a: any = "";
-        a = document.createElement("a");
-        a.href = urls[i];
-        a.click();
-        // document.body.removeChild(a);
-      }, i * 1000); // 1 second delay between downloads
+
+    const resdata: any = await data.blob();
+
+    const blob = new Blob([resdata], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Label_Report.pdf`;
+    a.click();
+    return true;
+  };
+
+  const fetchMultiTax = async (
+    arrLebels: string[],
+    setIsLoadingManifest: any
+  ) => {
+    if (!arrLebels.length) {
+      toast.error("Please Select One Orders For Tax Invoice");
+      return;
     }
+
+    setIsLoadingManifest({
+      isLoading: true,
+      identifier: "Download_Multi_Tax",
+    });
+
+    const payload: any = {
+      awbs: arrLebels.filter((item: any) => item !== ""),
+    };
+
+    let header = {
+      Accept: "/",
+      Authorization: `Bearer ${localStorage.getItem(
+        `${sessionStorage.getItem("sellerId")}_${tokenKey}`
+      )}`,
+      "Content-Type": "application/json",
+    };
+    const data = await fetch(FETCH_MULTI_TAX_REPORT_DOWNLOAD, {
+      method: "POST",
+      headers: header,
+      body: JSON.stringify(payload),
+    });
+
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const resdata: any = await data.blob();
+
+    const blob = new Blob([resdata], { type: "application/pdf" });
+
+    var url = URL.createObjectURL(blob);
+    setIsLoadingManifest({
+      isLoading: false,
+      identifier: "",
+    });
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `Multi_Tax_Invoices.pdf`;
+    a.click();
     return true;
   };
 
@@ -829,6 +901,7 @@ const Index = () => {
               selectedRowdata={selectedRowdata}
               setSelectedRowData={setSelectedRowData}
               fetchLabels={fetchLabels}
+              fetchMultiTax={fetchMultiTax}
               setDeleteModalDraftOrder={setDeleteModalDraftOrder}
               setCancellationModal={setCancellationModal}
               tabStatusId={tabStatusId}

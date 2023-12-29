@@ -6,13 +6,16 @@ let FILE_SERVER_URL = "";
 let PAYMENT_URL = "";
 let LANDMARK_URL = "";
 let TRACKING_URL = "";
-
+let REACT_APP_GTM_ID = "";
+let REACT_APP_GA4_ID = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 
 switch (Environment) {
   case "development":
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_DEV}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_DEV}`;
@@ -36,6 +39,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_PROD}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
@@ -269,6 +274,9 @@ const GET_ALL_INVOICES = `${SELLER_BASE_URL}/order/getAllInvoiceData`;
 const FETCH_ALL_PARTNER = `${SELLER_BASE_URL}/partners/getPartner`;
 const FETCH_MANIFEST_DATA = `${SELLER_BASE_URL}/order/fetchManifest`;
 const LEBEL_DOWNLOAD = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
+const FETCH_LABELS_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchLabels`;
+const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoices`;
+
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
 //Reports
@@ -295,6 +303,8 @@ const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
+  REACT_APP_GTM_ID,
+  REACT_APP_GA4_ID,
   GET_STATUS_COUNT,
   DOWNLOAD_SAMPLE_PRODUCT,
   UPDATE_SELLER_BOX,
@@ -437,4 +447,6 @@ export {
   GET_ADD_LABEL_DATA,
   CREATE_AMAZON_STORE,
   AMAZON_BASE_URL,
+  FETCH_LABELS_REPORT_DOWNLOAD,
+  FETCH_MULTI_TAX_REPORT_DOWNLOAD,
 };
