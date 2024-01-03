@@ -43,8 +43,8 @@ const DeleteModal = (props: IDeleteProps) => {
       <CustomeBottomModal
         isOpen={isOpen}
         onRequestClose={() => setModalClose()}
-        overlayClassName="flex p-5 items-center outline-none"
-        className="!w-[600px] !px-4 !py-6"
+        overlayClassName="flex p-5 items-center outline-none z-10"
+        className="!w-[600px] !px-4 !py-6 "
       >
         <div className="flex justify-end cursor-pointer">
           <img src={CloseIcon} alt="" onClick={() => setModalClose()} />
