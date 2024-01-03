@@ -41,7 +41,7 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
   return (
     <div>
       <CustomBottomModal
-        overlayClassName="flex p-5 items-center outline-none z-10"
+        overlayClassName="flex p-5 items-center outline-none"
         className="!w-[600px] !px-4 !py-6"
         isOpen={isOpen}
         onRequestClose={closeModal}

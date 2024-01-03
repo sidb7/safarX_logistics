@@ -852,7 +852,7 @@ const Index = () => {
     setIsLoadingManifest: any
   ) => {
     if (!arrLebels.length) {
-      toast.error("Please Select One Order");
+      toast.error("Please Select One Orders For Tax Invoice");
       return;
     }
 

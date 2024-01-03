@@ -426,7 +426,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             const data = await fetchMultiTax(awbs, setIsLoadingManifest);
           }
         } else {
-          toast.error("Please select atleast one order");
+          toast.error("Please select atleast one order for tax Invoice");
         }
         break;
       }
