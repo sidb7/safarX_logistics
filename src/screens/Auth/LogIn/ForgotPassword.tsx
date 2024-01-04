@@ -217,19 +217,6 @@ const ForgotPassword = (props: ITypeProps) => {
           onClick={onClick}
         />
       </div>
-      // <div className="product-box z-10 bg-white h-[60px]  flex justify-between w-full top-0">
-      //   <img
-      //     className="my-auto lg:ml-6  h-[25px] object-contain"
-      //     src={CompanyLogo}
-      //     alt="Company Logo"
-      //   />
-      //   <img
-      //     className="my-auto lg:mr-6 cursor-pointer"
-      //     src={CloseIcon}
-      //     alt="Close"
-      //     onClick={onClick}
-      //   />
-      // </div>
     );
   };
 
