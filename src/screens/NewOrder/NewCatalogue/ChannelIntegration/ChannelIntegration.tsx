@@ -10,7 +10,7 @@ import Header from "./Header";
 import { CREATE_AMAZON_STORE, GET_ALL_STORES } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { ChannelIntegrationCarts } from "../../../../utils/dummyData";
-import AmazonPngIcon from "../../../../assets/amazonIcon.svg";
+import AmazonPngIcon from "../../../../assets/AmazonIcon.png";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
