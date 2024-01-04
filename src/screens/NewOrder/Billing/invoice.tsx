@@ -22,6 +22,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
   const [totalItemCount, setTotalItemCount] = useState<number>(10);
   const [renderingComponents, setRenderingComponents] = useState<number>(0);
   const [isActive, setIsActive] = useState<any>(false);
+
   const [invoiceArray, setInvoiceArray] = useState<any>([]);
   const [creditArray, setCreditArray] = useState<any>([]);
 
@@ -38,6 +39,32 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     ],
     []
   );
+
+  const getCurrentPath = () => {
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const location = url;
+    const path = location.pathname;
+    const pathArray = path.split("/");
+    const removedFirstPath = pathArray.slice(1);
+    return removedFirstPath;
+  };
+
+  const data = getCurrentPath() as string[];
+
+  useEffect(() => {
+    if (data[1] === "invoices") {
+      setIsActive(checkPageAuthorized("Invoices"));
+      setRenderingComponents(0);
+      setScrollIndex(0);
+    }
+
+    if (data[1] === "credit-notes") {
+      setIsActive(checkPageAuthorized("Credit Notes"));
+      setRenderingComponents(1);
+      setScrollIndex(1);
+    }
+  }, [data]);
 
   const setScrollIndex = (id: number) => {
     const filterName = listTab.find((array) => array.index === id);
@@ -59,30 +86,6 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
     }
     return null;
   };
-
-  const getCurrentPath = () => {
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const location = url;
-    const path = location.pathname;
-    const pathArray = path.split("/");
-    const removedFirstPath = pathArray.slice(1);
-    return removedFirstPath;
-  };
-
-  const data = getCurrentPath() as string[];
-
-  useEffect(() => {
-    if (data[1] === "invoices") {
-      setIsActive(checkPageAuthorized("Invoices"));
-      setRenderingComponents(0);
-      setScrollIndex(0);
-    } else {
-      setIsActive(checkPageAuthorized("Credit Notes"));
-      setRenderingComponents(1);
-      setScrollIndex(1);
-    }
-  }, [data]);
 
   const renderTabs = () => {
     const tabs: React.ReactNode[] = [];
@@ -127,7 +130,7 @@ const Invoice: React.FunctionComponent<IInvoiceProps> = (props) => {
 
   return (
     <>
-      {isActive ? (
+      {isActive || isActive === undefined ? (
         <div>
           <Breadcrum label="Billing" />
           <div className="lg:flex justify-between mx-4 lg:mt-2 lg:mb-4">
