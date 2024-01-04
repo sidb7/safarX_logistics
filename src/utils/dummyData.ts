@@ -28,7 +28,7 @@ import FitnessIcon from "../assets/Product/fitness.svg";
 import GiftIcon from "../assets/Product/gift.svg";
 import ForkIcon from "../assets/Product/ForkKnife.svg";
 import ZohoIcon from "../assets/Catalogue/ZOHO.svg.png";
-import AmazonPngIcon from "../assets/amazonIcon.svg";
+import AmazonPngIcon from "../assets/AmazonIcon.png";
 
 export const insufficientBalance = [
   {

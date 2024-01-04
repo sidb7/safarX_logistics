@@ -151,19 +151,19 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
     setLoading(false);
   };
 
-  useEffect(() => {
-    if (!isModalOpen) {
-      (async () => {
-        await getProducts();
-      })();
-    }
-  }, [isModalOpen]);
+  // useEffect(() => {
+  //   if (!isModalOpen) {
+  //     (async () => {
+  //       await getProducts();
+  //     })();
+  //   }
+  // }, [isModalOpen]);
 
   useEffect(() => {
     (async () => {
       await getProducts();
     })();
-  }, [filterId, editAddressModal]);
+  }, [filterId, editAddressModal, isModalOpen]);
 
   const filterComponent = (className?: string) => {
     return (

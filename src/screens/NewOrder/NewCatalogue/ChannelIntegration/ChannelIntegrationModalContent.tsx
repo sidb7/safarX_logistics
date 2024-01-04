@@ -424,7 +424,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               isRequired={true}
               placeholder="Store Name"
               value={storeData.storeName}
-              onChange={(e) =>
+              onChange={(e: any) =>
                 setStoreData({ ...storeData, storeName: e.target.value })
               }
             />
