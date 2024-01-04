@@ -29,6 +29,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
@@ -52,6 +54,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;

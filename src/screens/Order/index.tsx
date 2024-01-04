@@ -331,7 +331,7 @@ const Index = () => {
 
   const handleSyncOrder = async () => {
     try {
-      syncRef.current.childNodes[1].textContent = "SYNC IN PROGRESS...";
+      syncRef.current.childNodes[1].textContent = "Sync In Progress...";
       syncRef.current.style.backgroundColor = "#F8F8F8";
       syncRef.current.style.pointerEvents = "none";
       syncRef.current.childNodes[0].classList.add("infinite-rotate");
@@ -353,7 +353,7 @@ const Index = () => {
       toast.error(error?.message || "Failed To Sync Channel");
     }
     if (syncRef.current) {
-      syncRef.current.childNodes[1].textContent = "SYNC CHANNEL";
+      syncRef.current.childNodes[1].textContent = "Sync Channel";
       syncRef.current.style.backgroundColor = "white";
       syncRef.current.style.pointerEvents = "auto";
       syncRef.current.childNodes[0].classList.remove("infinite-rotate");
@@ -421,7 +421,7 @@ const Index = () => {
         >
           <img src={SyncIcon} alt="" width="16px" />
           <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            SYNC CHANNEL
+            Sync Channel
           </span>
         </div>
 
