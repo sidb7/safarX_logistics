@@ -25,7 +25,12 @@ const Card = (props: any) => {
               channel.icon.includes("ZOHO") ? "w-[100px]" : ""
             }`}
           />
-          <img src={channel.iconLg} alt="" className="hidden h-max lg:block" />
+          <img
+            style={{ height: "45px" }}
+            src={channel.iconLg}
+            alt=""
+            className="hidden h-max  lg:block"
+          />
 
           {channel.integrated && (
             <p className="font-semibold text-[16px] ml-1 text-[#323232] line-clamp-1 ">
@@ -36,8 +41,8 @@ const Card = (props: any) => {
         <div
           onClick={handleIntegration}
           className={` ${
-            channel.integrated ? " bg-black " : "hover:bg-black"
-          } group border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px] cursor-pointer  `}
+            channel.integrated ? " bg-black  " : "hover:bg-black cursor-pointer"
+          } group border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]   `}
         >
           <p
             className={` ${
