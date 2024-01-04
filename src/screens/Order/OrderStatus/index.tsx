@@ -839,7 +839,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
       {isLgScreen && (
         <>
-          <div className="grid my-6 h-[46px] lg:flex lg:justify-between">
+          <div
+            className={`grid lg:flex lg:justify-between mt-6 static h-[46px]`}
+          >
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center ">
                 {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
