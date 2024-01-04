@@ -204,7 +204,7 @@ const ForgotPassword = (props: ITypeProps) => {
   };
   const modalTitle = () => {
     return (
-      <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
+      <div className="product-box  z-10 bg-white flex justify-between w-full h-[60px] top-0">
         <img
           className="my-auto lg:ml-6  h-[25px] object-contain"
           src={CompanyLogo}
@@ -217,6 +217,19 @@ const ForgotPassword = (props: ITypeProps) => {
           onClick={onClick}
         />
       </div>
+      // <div className="product-box z-10 bg-white h-[60px]  flex justify-between w-full top-0">
+      //   <img
+      //     className="my-auto lg:ml-6  h-[25px] object-contain"
+      //     src={CompanyLogo}
+      //     alt="Company Logo"
+      //   />
+      //   <img
+      //     className="my-auto lg:mr-6 cursor-pointer"
+      //     src={CloseIcon}
+      //     alt="Close"
+      //     onClick={onClick}
+      //   />
+      // </div>
     );
   };
 
@@ -415,7 +428,7 @@ const ForgotPassword = (props: ITypeProps) => {
               label="Re-enter Password"
               inputType={viewPassword.confirmNewPassword ? "text" : "password"}
               isRightIcon={true}
-              maxLength={12}
+              maxLength={16}
               visibility={viewPassword.confirmNewPassword}
               rightIcon={
                 viewPassword.confirmNewPassword ? CrossEyeIcon : EyeIcon
