@@ -566,7 +566,7 @@ const Index = () => {
         if (actionType === "cancel_order") {
           setCancellationModal({
             isOpen: true,
-            payload: payLoad?.awb,
+            payload: payLoad?.awbs,
           });
         } else if (actionType === "download_label") {
           getSingleFile(payLoad, actionType);
