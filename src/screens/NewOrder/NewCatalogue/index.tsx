@@ -168,11 +168,11 @@ const Catalogue = () => {
     }
   }, [tabName, isActive, data]);
 
-  useEffect(() => {
-    (async () => {
-      await getProductDetails();
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     await getProductDetails();
+  //   })();
+  // }, []);
 
   const changeUrl = (statusName: any) => {
     let replaceUrl = statusName.toLowerCase().replace(/ /g, "-");
@@ -219,7 +219,11 @@ const Catalogue = () => {
                 showIcon={true}
                 text={"CREATE COMBO"}
                 className="!p-3"
-                onClick={() => setShowCombo(true)}
+                onClick={async () => {
+                  setShowCombo(true);
+
+                  await getProductDetails();
+                }}
               />
 
               <CustomButton
@@ -458,7 +462,7 @@ const Catalogue = () => {
                   <div className={`flex justify-between items-center h-[44px]`}>
                     <div className="flex  items-center ml-2">
                       <span>
-                        <img width={"20px"} src={item.icon} />
+                        <img width={"20px"} src={item.icon} alt="" />
                       </span>
                       <span className="font-Open text-base font-semibold leading-[22px] text-[#1C1C1C] ml-2">
                         {item.statusName}
