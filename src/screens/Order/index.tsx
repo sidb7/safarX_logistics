@@ -205,6 +205,7 @@ const Index = () => {
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
   const [allOrders, setAllOrders]: any = useState([]);
+  const [totalOrders, setTotalOrders]: any = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
   const [columnHelper, setColumnhelper]: any = useState([]);
   const [totalCount, setTotalcount]: any = useState(0);
@@ -625,6 +626,7 @@ const Index = () => {
       const { OrderData } = data;
       setOrders(OrderData);
       setAllOrders(OrderData);
+      setTotalOrders(OrderData);
       setGlobalIndex(index);
 
       setTabStatusId(index);
@@ -722,6 +724,7 @@ const Index = () => {
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setTotalOrders(OrderData);
   };
 
   const onPerPageItemChange = async (data: any) => {
@@ -749,6 +752,7 @@ const Index = () => {
 
     setOrders(OrderData);
     setAllOrders(OrderData);
+    setTotalOrders(OrderData);
   };
 
   const getSellerOrder = async (
@@ -906,6 +910,7 @@ const Index = () => {
     );
     setOrders(newOrders);
     setAllOrders(newOrders);
+    setTotalOrders(newOrders);
     setIsDeleted(false);
   }
 
@@ -960,6 +965,7 @@ const Index = () => {
                 setTotalcount={setTotalcount}
                 setStatusCount={setStatusCount}
                 isOrderTableLoader={setIsLoading}
+                totalOrders={totalOrders}
               />
             </div>
             <div
