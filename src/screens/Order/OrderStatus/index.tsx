@@ -628,7 +628,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             >
               <img src={FilterIcon} alt="" />
               <span className="text-[#004EFF] text-[14px] font-semibold">
-                FILTER
+                Filter
               </span>
             </div>
           </div>
@@ -831,7 +831,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   return (
     <div className="flex flex-col pt-7">
-      <div className="flex font-medium customScroll whitespace-nowrap mt-2">
+      <div className="flex font-medium customScroll whitespace-nowrap mt-2 ">
         {statusData?.map(({ statusName, orderNumber }: any, index: number) => {
           return (
             <div
@@ -864,7 +864,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       {isLgScreen && (
         <>
           <div
-            className={`grid lg:flex lg:justify-between mt-6 static h-[46px]`}
+            className={`grid lg:flex lg:justify-between mt-6 static h-[46px] `}
           >
             <div className="lg:flex lg:gap-x-4">
               <div className="flex items-center ">

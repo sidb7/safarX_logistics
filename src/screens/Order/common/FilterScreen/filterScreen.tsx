@@ -4,6 +4,7 @@ import CustomAccordian from "./filterAccordian";
 import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 import { keyNameMapping } from "../../../../utils/dummyData";
+import { capitalizeFirstLetter } from "../../../../utils/utility";
 
 function FilterScreen({ filterState, setFilterState }: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
@@ -19,11 +20,34 @@ function FilterScreen({ filterState, setFilterState }: any) {
         const values: any = data?.data?.[0][key]?.map(
           (obj: any) => Object.values(obj)[0]
         );
-        const menu = values?.map((value: any) => ({
-          name: value,
-          value: value,
-          isActive: false,
-        }));
+
+        const menu = values?.map((value: any, index: number) => {
+          if (key === "orderType") {
+            return {
+              name: value,
+              value: value,
+              isActive: false,
+            };
+          } else if (key === "paymentType") {
+            return {
+              name: value === "Cod" ? "COD" : capitalizeFirstLetter(value),
+              value: value,
+              isActive: false,
+            };
+          } else {
+            return {
+              name: capitalizeFirstLetter(value),
+              value: value,
+              isActive: false,
+            };
+          }
+        });
+
+        // const menu = values?.map((value: any, index: number) => ({
+        //   name: value,
+        //   value: value,
+        //   isActive: false,
+        // }));
 
         const currentObject = {
           name: name,
