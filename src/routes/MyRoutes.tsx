@@ -1080,6 +1080,14 @@ const MyRoutes: React.FC = () => {
             }
           />
           <Route
+            path="/catalogues/channel-inventory"
+            element={
+              <ProtectedRoute>
+                <Catalogue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/catalogues/catalogue/add-combo"
             element={
               <ProtectedRoute>

@@ -5,6 +5,7 @@ import ChannelIntegration from "./ChannelIntegration/ChannelIntegration";
 import AddressBook from "./AddressBook";
 import ProductCatalogue from "./ProductCatalogue/index";
 import BoxCatalogue from "./BoxCatalogue";
+import ChannelInventory from "./ChannelInventory";
 import CustomButton from "../../../components/Button";
 import RightSideModal from "../../../components/CustomModal/customRightModal";
 import CreateCombo from "./ProductCatalogue/createCombo";
@@ -76,6 +77,11 @@ const Catalogue = () => {
       active: false,
       icon: LayersIcon,
     },
+    {
+      statusName: "Channel Inventory",
+      active: false,
+      icon: LayersIcon,
+    },
   ];
   const [addressTab, setAddressTab] = useState("pickup");
   const [productCatalogueTab, setProductCatalogueTab] =
@@ -113,6 +119,8 @@ const Catalogue = () => {
           setFilterId={setFilterId}
         />
       );
+    } else if (tabName === "Channel Inventory") {
+      return <ChannelInventory />;
     }
   };
 
@@ -165,6 +173,10 @@ const Catalogue = () => {
       setTabName("Box Catalogue");
       // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
       setIsActive(checkPageAuthorized("Box Catalogue"));
+    } else if (data[1] === "channel-inventory") {
+      setTabName("Channel Inventory");
+      // setIsActive(roles.roles?.[0]?.menu?.[5]?.menu?.[3]?.pages?.[0]?.isActive);
+      setIsActive(checkPageAuthorized("Channel Inventory"));
     }
   }, [tabName, isActive, data]);
 
