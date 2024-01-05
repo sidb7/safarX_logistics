@@ -380,6 +380,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
           }
         }
+        handleTabChange(1);
         break;
       }
       case "BOOKED":

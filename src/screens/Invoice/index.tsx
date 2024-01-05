@@ -31,19 +31,28 @@ const InvoicePdf = () => {
   };
 
   const downloadExcelReport = async () => {
-    const data = await GET(
-      `${FETCH_MANIFEST_REPORT_DATA}?invoiceNo=${invoicData?.invoiceNo}`
+    let newTab = window.open(
+      `${FETCH_MANIFEST_REPORT_DATA}?invoiceNo=${invoicData?.invoiceNo}`,
+      "_blank"
     );
+    if (newTab) {
+      newTab.focus();
+    } else {
+      alert("Please allow popups for this site"); // Alert if popups are blocked
+    }
+    // const data = await GET(
+    //   `${FETCH_MANIFEST_REPORT_DATA}?invoiceNo=${invoicData?.invoiceNo}`
+    // );
 
-    var blob = new Blob([data], {
-      type: "application/vnd.ms-excel",
-    });
-    var url = URL.createObjectURL(blob);
+    // var blob = new Blob([data], {
+    //   type: "application/vnd.ms-excel",
+    // });
+    // var url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Invoice_${invoicData?.invoiceNo}.xlsx`;
-    a.click();
+    // const a = document.createElement("a");
+    // a.href = url;
+    // a.download = `Invoice_${invoicData?.invoiceNo}.xlsx`;
+    // a.click();
   };
 
   const fetchSinglInvoice = async (id: any) => {
