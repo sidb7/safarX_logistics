@@ -914,7 +914,7 @@ const Index = () => {
       {isActive ? (
         <div>
           <Breadcrum label="Orders" component={Buttons()} />
-          <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5">
+          <div className="flex md:hidden justify-between gap-4 customScroll py-4 mx-5 ">
             {ordersArr?.map((order: any, i: number) => (
               <div
                 className="shadow-md w-[30rem] lg:w-[24rem] h-[6.2rem] lg:h-[6.6rem] relative rounded-lg border"
@@ -929,7 +929,7 @@ const Index = () => {
                       {order?.text}
                     </p>
                   </div>
-                  <div className="self-center absolute top-[-35px] right-[10px] w-[120px] h-[120px]">
+                  <div className="self-center  absolute top-[-35px] right-[10px] w-[120px] h-[120px]">
                     <img src={orderCardImg} alt="Box" />
                   </div>
                 </div>
@@ -1011,7 +1011,7 @@ const Index = () => {
                   )}
                 </>
               ) : (
-                <div className="">
+                <div>
                   {isLgScreen ? (
                     <>
                       <CustomTable
