@@ -8,6 +8,7 @@ import { DropDownWeightData } from "../../utils/dummyData";
 
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
+import { Spinner } from "../../components/Spinner";
 
 interface ITypeProps {
   onClick: () => void;
@@ -18,6 +19,8 @@ interface ITypeProps {
   clearServiceabilityState: any;
   showTable?: boolean;
   serviceabilityTableData?: any;
+  loader?: boolean;
+  setServiceabilityTableData?: any;
 
   setShowTable: any;
 }
@@ -31,9 +34,10 @@ const Serviceability = (props: ITypeProps) => {
     onSubmitServiceability,
     clearServiceabilityState,
     serviceabilityTableData,
-
+    setServiceabilityTableData,
     showTable,
     setShowTable,
+    loader,
   } = props;
   const columnsHelper = createColumnHelper<any>();
 
@@ -80,7 +84,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("companyServiceName", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"Service Name"}
           </p>
         );
@@ -96,7 +100,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("appliedWeight", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"Weight"}
           </p>
         );
@@ -112,7 +116,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("one", {
       header: () => {
         return (
-          <p className="font-Open flex items-center justify-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex items-center justify-start text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"Zone"}
           </p>
         );
@@ -128,7 +132,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("cod", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"COD"}
           </p>
         );
@@ -145,7 +149,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("insurance", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"Insurance"}
           </p>
         );
@@ -161,7 +165,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("gst", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"GST"}
           </p>
         );
@@ -169,7 +173,7 @@ const Serviceability = (props: ITypeProps) => {
       cell: (info: any) => {
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.gst}
+            {info.row?.original?.gst || "---"}
           </div>
         );
       },
@@ -177,7 +181,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("total", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"Total"}
           </p>
         );
@@ -193,7 +197,7 @@ const Serviceability = (props: ITypeProps) => {
     columnsHelper.accessor("edt_epoch", {
       header: () => {
         return (
-          <p className="font-Open flex justify-center items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
+          <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
             {"EDT"}
           </p>
         );
@@ -220,219 +224,245 @@ const Serviceability = (props: ITypeProps) => {
   const tableComponent = () => {
     return (
       <div className="customScroll h-full m-5">
-        <CustomTable data={serviceabilityTableData} columns={columns} />
+        <CustomTable
+          data={serviceabilityTableData}
+          columns={columns}
+          thclassName={"bg-white"}
+          tdclassName={"bg-white"}
+        />
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col h-full w-full relative ">
-      <div className="flex justify-between p-5">
-        <p className="font-Open text-base text-[#004eff] font-semibold">
-          {`${showTable ? "Availability & Pricing" : "Check Availability"}`}
-        </p>
-        <img
-          src={CrossIcon}
-          alt=""
-          onClick={() => {
-            onClick();
-            if (showTable) {
-              setShowTable(false);
-            }
-          }}
-          className="cursor-pointer"
-        />
-      </div>
-      <hr />
-
-      {showTable ? (
-        tableComponent()
+    <>
+      {loader ? (
+        <div className="flex justify-center items-center h-full">
+          <Spinner />
+        </div>
       ) : (
-        <div className="h-full">
-          <div className="flex items-center justify-start  p-5">
-            <GroupRadioButtons
-              options={[
-                { text: "B2B", value: "B2B" },
-                { text: "B2C", value: "B2C" },
-              ]}
-              value={serviceValue}
-              selectedValue={setServiceValue}
+        <div className="flex flex-col h-full w-full relative ">
+          <div className="flex justify-between p-5">
+            <p className="font-Open text-base text-[#004eff] font-semibold">
+              {`${showTable ? "Availability & Pricing" : "Check Availability"}`}
+            </p>
+            <img
+              src={CrossIcon}
+              alt=""
+              onClick={() => {
+                onClick();
+                if (showTable) {
+                  setShowTable(false);
+                }
+              }}
+              className="cursor-pointer"
             />
           </div>
-          <div className="grid grid-cols-2 gap-5 px-5">
-            <CustomInputBox
-              label="Pickup Pincode"
-              value={serviceabilityData?.pickupPincode}
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  setServiceabilityData({
-                    ...serviceabilityData,
-                    pickupPincode: +e.target.value
-                      ? Number(e.target.value)
-                      : "",
-                  });
-                }
-              }}
-            />
-            <CustomInputBox
-              label="Delivery Pincode"
-              value={serviceabilityData?.deliveryPincode}
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  setServiceabilityData({
-                    ...serviceabilityData,
-                    deliveryPincode: +e.target.value
-                      ? Number(e.target.value)
-                      : "",
-                  });
-                }
-              }}
-            />
-            <CustomDropDown
-              onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  paymentMode: e.target.value,
-                });
-              }}
-              value={serviceabilityData?.paymentMode}
-              options={[
-                {
-                  label: "COD",
-                  value: "COD",
-                },
-                {
-                  label: "Prepaid",
-                  value: "PREPAID",
-                },
-              ]}
-              heading="Payment Mode"
-            />
-            <CustomDropDown
-              onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  weight: e.target.value ? Number(e.target.value) : "",
-                });
-              }}
-              value={serviceabilityData?.weight}
-              options={weightData}
-              heading="Select Weight(KG)"
-            />
-            <CustomDropDown
-              onChange={(e: any) => {
-                setServiceabilityData({
-                  ...serviceabilityData,
-                  serviceId: e.target.value,
-                });
-              }}
-              value={serviceabilityData?.serviceId}
-              options={servicesDataArray}
-              heading="Select Service"
-            />
-            <CustomInputBox
-              label="Invoice Value"
-              value={serviceabilityData?.invoiceValue}
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  setServiceabilityData({
-                    ...serviceabilityData,
-                    invoiceValue: +e.target.value ? Number(e.target.value) : "",
-                  });
-                }
-              }}
-            />
-          </div>
-          <div className="grid grid-cols-3 p-5 gap-5">
-            <CustomInputBox
-              label="Length (CM)"
-              value={serviceabilityData?.dimension?.length}
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  let temp = serviceabilityData;
-                  if (temp && temp.dimension)
-                    temp.dimension.length = +e.target.value
-                      ? Number(e.target.value)
-                      : "";
+          <hr />
 
-                  setServiceabilityData({
-                    ...temp,
-                  });
-                }
-              }}
-            />
-            <CustomInputBox
-              label="Height (CM)"
-              value={serviceabilityData?.dimension?.height}
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  let temp = serviceabilityData;
-                  if (temp && temp.dimension)
-                    temp.dimension.height = +e.target.value
-                      ? Number(e.target.value)
-                      : "";
+          {showTable ? (
+            tableComponent()
+          ) : (
+            <div className="h-full">
+              <div className="flex items-center justify-start  p-5">
+                <GroupRadioButtons
+                  options={[
+                    { text: "B2B", value: "B2B" },
+                    { text: "B2C", value: "B2C" },
+                  ]}
+                  value={serviceValue}
+                  selectedValue={setServiceValue}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-5 px-5">
+                <CustomInputBox
+                  label="Pickup Pincode"
+                  value={serviceabilityData?.pickupPincode}
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setServiceabilityData({
+                        ...serviceabilityData,
+                        pickupPincode: +e.target.value
+                          ? Number(e.target.value)
+                          : "",
+                      });
+                    }
+                  }}
+                />
+                <CustomInputBox
+                  label="Delivery Pincode"
+                  value={serviceabilityData?.deliveryPincode}
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setServiceabilityData({
+                        ...serviceabilityData,
+                        deliveryPincode: +e.target.value
+                          ? Number(e.target.value)
+                          : "",
+                      });
+                    }
+                  }}
+                />
+                <CustomDropDown
+                  onChange={(e: any) => {
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      paymentMode: e.target.value,
+                    });
+                  }}
+                  value={serviceabilityData?.paymentMode}
+                  options={[
+                    {
+                      label: "COD",
+                      value: "COD",
+                    },
+                    {
+                      label: "Prepaid",
+                      value: "PREPAID",
+                    },
+                  ]}
+                  heading="Payment Mode"
+                />
+                <CustomDropDown
+                  onChange={(e: any) => {
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      weight: e.target.value ? Number(e.target.value) : "",
+                    });
+                  }}
+                  value={serviceabilityData?.weight}
+                  options={weightData}
+                  heading="Select Weight(KG)"
+                />
+                <CustomDropDown
+                  onChange={(e: any) => {
+                    setServiceabilityData({
+                      ...serviceabilityData,
+                      serviceId: e.target.value,
+                    });
+                  }}
+                  value={serviceabilityData?.serviceId}
+                  options={servicesDataArray}
+                  heading="Select Service"
+                />
+                <CustomInputBox
+                  label="Invoice Value"
+                  value={serviceabilityData?.invoiceValue}
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      setServiceabilityData({
+                        ...serviceabilityData,
+                        invoiceValue: +e.target.value
+                          ? Number(e.target.value)
+                          : "",
+                      });
+                    }
+                  }}
+                />
+              </div>
+              <div className="grid grid-cols-3 p-5 gap-5">
+                <CustomInputBox
+                  label="Length (CM)"
+                  value={serviceabilityData?.dimension?.length}
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      let temp = serviceabilityData;
+                      if (temp && temp.dimension)
+                        temp.dimension.length = +e.target.value
+                          ? Number(e.target.value)
+                          : "";
 
-                  setServiceabilityData({
-                    ...temp,
-                  });
-                }
-              }}
-            />
-            <CustomInputBox
-              label="Width (CM)"
-              value={serviceabilityData?.dimension?.width || ""}
-              inputMode="numeric"
-              onChange={(e: any) => {
-                if (isNaN(e.target.value)) {
-                } else {
-                  let temp = serviceabilityData;
-                  if (temp && temp.dimension)
-                    temp.dimension.width = +e.target.value
-                      ? Number(e.target.value)
-                      : "";
+                      setServiceabilityData({
+                        ...temp,
+                      });
+                    }
+                  }}
+                />
+                <CustomInputBox
+                  label="Height (CM)"
+                  value={serviceabilityData?.dimension?.height}
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      let temp = serviceabilityData;
+                      if (temp && temp.dimension)
+                        temp.dimension.height = +e.target.value
+                          ? Number(e.target.value)
+                          : "";
 
-                  setServiceabilityData({
-                    ...temp,
-                  });
-                }
-              }}
-            />
+                      setServiceabilityData({
+                        ...temp,
+                      });
+                    }
+                  }}
+                />
+                <CustomInputBox
+                  label="Width (CM)"
+                  value={serviceabilityData?.dimension?.width || ""}
+                  inputMode="numeric"
+                  onChange={(e: any) => {
+                    if (isNaN(e.target.value)) {
+                    } else {
+                      let temp = serviceabilityData;
+                      if (temp && temp.dimension)
+                        temp.dimension.width = +e.target.value
+                          ? Number(e.target.value)
+                          : "";
+
+                      setServiceabilityData({
+                        ...temp,
+                      });
+                    }
+                  }}
+                />
+              </div>
+            </div>
+          )}
+          <div>
+            <hr />
+            <div className="flex items-center justify-end p-5">
+              {showTable ? (
+                <div className="flex items-center space-x-2">
+                  <ServiceButton
+                    text={"Back"}
+                    className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
+                    onClick={() => {
+                      setShowTable(false);
+                      clearServiceabilityState();
+                      setServiceabilityTableData([]);
+                    }}
+                  />
+                  <ServiceButton
+                    text={"Close"}
+                    className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
+                    onClick={() => {
+                      onClick();
+                      setShowTable(false);
+                    }}
+                  />
+                </div>
+              ) : (
+                <ServiceButton
+                  text={"Submit"}
+                  onClick={() => {
+                    onSubmitServiceability({
+                      ...serviceabilityData,
+                      orderType: serviceValue,
+                    });
+                    clearServiceabilityState();
+                  }}
+                  className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
+                />
+              )}
+            </div>
           </div>
         </div>
       )}
-      <div className="">
-        <hr />
-        <div className="flex items-center justify-end p-5">
-          {showTable ? (
-            <ServiceButton
-              text={"CLOSE"}
-              className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
-              onClick={() => {
-                onClick();
-                setShowTable(false);
-              }}
-            />
-          ) : (
-            <ServiceButton
-              text={"SUBMIT"}
-              onClick={() => {
-                onSubmitServiceability({
-                  ...serviceabilityData,
-                  orderType: serviceValue,
-                });
-                clearServiceabilityState();
-              }}
-              className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
-            />
-          )}
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
