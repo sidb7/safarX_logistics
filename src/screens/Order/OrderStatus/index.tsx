@@ -51,6 +51,7 @@ interface IOrderstatusProps {
   setStatusCount?: any;
   isOrderTableLoader: any;
   fetchMultiTax?: any;
+  totalOrders?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -78,6 +79,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   statusData,
   handleTabChange,
   setOrders,
+  totalOrders,
   currentStatus,
   orders,
   allOrders,
@@ -507,18 +509,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setFilterId(index);
     switch (index) {
       case 0: {
-        setOrders(allOrders);
+        setOrders(totalOrders);
         break;
       }
       case 1: {
-        const filteredOrder = allOrders.filter(
-          (elem: any) => elem?.status?.length === 0
+        const filteredOrder = totalOrders.filter(
+          (elem: any) =>
+            elem?.status?.length === 0 ||
+            elem?.status?.[elem.status.length - 1]?.currentStatus === "DRAFT"
         );
         setOrders(filteredOrder);
         break;
       }
       case 2: {
-        const filteredOrder = allOrders.filter(
+        const filteredOrder = totalOrders.filter(
           (elem: any) =>
             elem?.status?.[elem.status.length - 1]?.currentStatus ===
             filterData?.[index]?.label?.toUpperCase()
