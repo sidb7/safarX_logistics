@@ -51,6 +51,7 @@ interface IOrderstatusProps {
   setStatusCount?: any;
   isOrderTableLoader: any;
   fetchMultiTax?: any;
+  totalOrders?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -78,6 +79,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   statusData,
   handleTabChange,
   setOrders,
+  totalOrders,
   currentStatus,
   orders,
   allOrders,
@@ -385,20 +387,33 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       }
       case "BOOKED":
       case "READY TO PICK": {
-        if (selectedRowdata.length > 0) {
-          if (identifier === "Cancel") {
+        // if (selectedRowdata.length > 0) {
+        if (identifier === "Cancel") {
+          if (selectedRowdata.length > 0) {
             const awbNo = selectedRowdata.map((data: any, index: any) => {
               return data.original.awb;
             });
             setCancellationModal &&
               setCancellationModal({ isOpen: true, payload: awbNo });
-          } else if (identifier === "Download_menifest_report") {
+          } else {
+            toast.error("Please select atleast one order for Cancellation");
+            return;
+          }
+        } else if (identifier === "Download_menifest_report") {
+          if (selectedRowdata.length > 0) {
             const awbsNo = selectedRowdata.map((data: any, index: any) => {
               return data.original.awb;
             });
 
             fetchManifest(awbsNo);
-          } else if (identifier === "Download_Labels") {
+          } else {
+            toast.error(
+              "Please select atleast one order for Download Manifest"
+            );
+            return;
+          }
+        } else if (identifier === "Download_Labels") {
+          if (selectedRowdata.length > 0) {
             let awbs: any = [];
             const lebelsArr: string[] = selectedRowdata.map(
               (data: any, index: any) => {
@@ -410,10 +425,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               }
             );
             const data = await fetchLabels(awbs, setIsLoadingManifest);
-            // if (data) {
-            //   setSelectedRowData([]);
-            // }
-          } else if (identifier === "Download_Multi_Tax") {
+          } else {
+            toast.error("Please select atleast one order for Download Labels");
+            return;
+          }
+        } else if (identifier === "Download_Multi_Tax") {
+          if (selectedRowdata.length > 0) {
             let awbs: any = [];
             const lebelsArr: string[] = selectedRowdata.map(
               (data: any, index: any) => {
@@ -425,10 +442,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               }
             );
             const data = await fetchMultiTax(awbs, setIsLoadingManifest);
+          } else {
+            toast.error("Please select atleast one order for Download Invoice");
+            return;
           }
-        } else {
-          toast.error("Please select atleast one order for tax Invoice");
         }
+        // } else {
+        //   toast.error("Please select atleast one order for tax Invoice");
+        // }
         break;
       }
       case "IN TRANSIT":
@@ -488,18 +509,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setFilterId(index);
     switch (index) {
       case 0: {
-        setOrders(allOrders);
+        setOrders(totalOrders);
         break;
       }
       case 1: {
-        const filteredOrder = allOrders.filter(
-          (elem: any) => elem?.status?.length === 0
+        const filteredOrder = totalOrders.filter(
+          (elem: any) =>
+            elem?.status?.length === 0 ||
+            elem?.status?.[elem.status.length - 1]?.currentStatus === "DRAFT"
         );
         setOrders(filteredOrder);
         break;
       }
       case 2: {
-        const filteredOrder = allOrders.filter(
+        const filteredOrder = totalOrders.filter(
           (elem: any) =>
             elem?.status?.[elem.status.length - 1]?.currentStatus ===
             filterData?.[index]?.label?.toUpperCase()
