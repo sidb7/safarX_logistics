@@ -106,7 +106,7 @@ export const ServiceComponent = (props: ITypeProps) => {
         }flex flex-col relative md:px-0 md:gap-y-0`}
       >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-          <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
+          <div className="product-box  bg-white flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img src={CompanyLogo} alt="" className="h-[25px]" />
           </div>
           <WelcomeHeader
