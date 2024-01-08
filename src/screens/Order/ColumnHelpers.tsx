@@ -333,7 +333,11 @@ const commonColumnHelper = [
   }),
 ];
 
-const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
+const idHelper = (
+  navigate: any = "",
+  setInfoModalContent?: any,
+  setInfoModalContentFunction: any = () => {}
+) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
       return (
@@ -400,11 +404,12 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               <span className=" text-sm font-light">Tracking :</span>
               <div className="flex text-base items-center font-medium">
                 <span
-                  onClick={() =>
-                    navigate({
-                      pathname: "/tracking",
-                      search: `?trackingNo=${awb}`,
-                    })
+                  onClick={
+                    () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                    // navigate({
+                    //   pathname: "/tracking",
+                    //   search: `?trackingNo=${awb}`,
+                    // })
                   }
                   className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                   data-tooltip-id="my-tooltip-inline"
@@ -599,9 +604,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       });
 
       const handleInformativeModal = () => {
-        setInfoModalContent({
-          isOpen: true,
-          data: rows,
+        setInfoModalContentFunction({
+          awb,
           orderId:
             (source === "SHOPIFY" || source === "ZOHO") &&
             otherDetails?.orderNumber
@@ -610,6 +614,17 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               ? rowsData.orderId
               : `T${rowsData.tempOrderId}`,
         });
+        // setInfoModalContent({
+        //   isOpen: true,
+        //   data: rows,
+        //   orderId:
+        //     (source === "SHOPIFY" || source === "ZOHO") &&
+        //     otherDetails?.orderNumber
+        //       ? otherDetails?.orderNumber
+        //       : rowsData.orderId
+        //       ? rowsData.orderId
+        //       : `T${rowsData.tempOrderId}`,
+        // });
       };
       return (
         <div className="py-3">
@@ -752,11 +767,13 @@ export const columnHelperForNewOrder = (
                   <span className=" text-sm font-light">Tracking :</span>
                   <div className="flex text-base items-center font-medium">
                     <span
-                      onClick={() =>
-                        navigate({
-                          pathname: "/tracking",
-                          search: `?trackingNo=${awb}`,
-                        })
+                      onClick={
+                        () =>
+                          window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                        // navigate({
+                        //   pathname: "/tracking",
+                        //   search: `?trackingNo=${awb}`,
+                        // })
                       }
                       className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                       data-tooltip-id="my-tooltip-inline"
@@ -1302,6 +1319,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
   setCancellationModal?: any,
   setInfoModalContent?: any,
+  setInfoModalContentFunction?: any,
   currentStatus?: any,
   orderActions?: any
 ) => {
@@ -1354,7 +1372,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent),
+    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
       header: () => {
@@ -1491,7 +1509,8 @@ export const columnHelpersForRest = (
   navigate: any,
   setInfoModalContent: any,
   currentStatus?: any,
-  orderActions?: any
+  orderActions?: any,
+  setInfoModalContentFunction?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -1530,7 +1549,7 @@ export const columnHelpersForRest = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent),
+    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
     //     return (

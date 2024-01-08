@@ -27,6 +27,7 @@ import {
   POST_SYNC_ORDER,
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
+  GET_SELLER_ORDER_COMPLETE_DATA,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -241,7 +242,7 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
     isOpen: false,
-    data: [],
+    data: {},
     orderId: "",
   });
 
@@ -273,6 +274,15 @@ const Index = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+
+  const setInfoModalContentFunction = async (data: any) => {
+    setInfoModalContent({
+      isOpen: true,
+      data: data,
+      orderId: "",
+    });
+  };
 
   const Buttons = (className?: string) => {
     return (
@@ -651,6 +661,7 @@ const Index = () => {
               navigate,
               setCancellationModal,
               setInfoModalContent,
+              setInfoModalContentFunction,
               currentStatus,
               orderActions
             )
@@ -661,6 +672,7 @@ const Index = () => {
             ColumnHelperForBookedAndReadyToPicked(
               navigate,
               setInfoModalContent,
+              setInfoModalContentFunction,
               currentStatus,
               orderActions
             )
@@ -672,7 +684,8 @@ const Index = () => {
               navigate,
               setInfoModalContent,
               currentStatus,
-              orderActions
+              orderActions,
+              setInfoModalContentFunction
             )
           );
           break;
@@ -1092,16 +1105,16 @@ const Index = () => {
       />
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
-        onClose={() => setInfoModalContent({ isOpen: false })}
+        onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
         className="!justify-start"
       >
         <div className="flex mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[1.2rem]">
           <p className="">
-            {infoModalContent?.orderId?.includes?.("T")
+            {infoModalContent?.data?.orderId?.includes?.("T")
               ? `${
-                  infoModalContent?.orderId?.split("T")?.[1]
+                  infoModalContent?.data?.orderId?.split("T")?.[1]
                 } - Temp Order Details`
-              : `${infoModalContent?.orderId} - Order Details`}
+              : `${infoModalContent?.data?.orderId} - Order Details`}
           </p>
         </div>
         <CustomTableAccordian data={infoModalContent.data} />
