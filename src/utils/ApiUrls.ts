@@ -301,6 +301,7 @@ const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
 
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
+const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
 
 // External URL's
 
@@ -453,4 +454,5 @@ export {
   AMAZON_BASE_URL,
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
+  GET_CHANNEL_INVENTORIES,
 };
