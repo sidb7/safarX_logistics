@@ -850,7 +850,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 {statusName}
               </span>
               <span
-                className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] w-5 h-5 ${
+                className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
                   statusId === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
