@@ -742,6 +742,8 @@ const Index = () => {
       pageNo = data?.currentPage || 0;
     }
 
+    setIsLoading(true);
+
     const { OrderData } = await getSellerOrder(
       tabs[globalIndex].value,
       pageNo,
@@ -750,9 +752,10 @@ const Index = () => {
       limit
     );
 
-    setOrders(OrderData);
-    setAllOrders(OrderData);
-    setTotalOrders(OrderData);
+    setOrders([...OrderData]);
+    setAllOrders([...OrderData]);
+    setTotalOrders([...OrderData]);
+    setIsLoading(false);
   };
 
   const getSellerOrder = async (
@@ -1029,7 +1032,7 @@ const Index = () => {
                       {totalCount > 0 && (
                         <Pagination
                           totalItems={totalCount}
-                          itemsPerPageOptions={[10, 20, 30, 50]}
+                          itemsPerPageOptions={[10, 50, 100, 500, 1000]}
                           onPageChange={onPageIndexChange}
                           onItemsPerPageChange={onPerPageItemChange}
                         />
