@@ -990,27 +990,9 @@ export const columnHelperForNewOrder = (
           console.log("awb", awb);
 
           setInfoModalContentFunction({
-            // rowsData.awb,
-            awb,
-            orderId:
-              (source === "SHOPIFY" || source === "ZOHO") &&
-              otherDetails?.orderNumber
-                ? otherDetails?.orderNumber
-                : rowsData.orderId
-                ? rowsData.orderId
-                : `T${rowsData.tempOrderId}`,
+            awb: "0",
+            orderId: `T${rowsData.tempOrderId}`,
           });
-          // setInfoModalContent({
-          //   isOpen: true,
-          //   data: rows,
-          //   orderId:
-          //     (source === "SHOPIFY" || source === "ZOHO") &&
-          //     otherDetails?.orderNumber
-          //       ? otherDetails?.orderNumber
-          //       : rowsData.orderId
-          //       ? rowsData.orderId
-          //       : `T${rowsData.tempOrderId}`,
-          // });
         };
         return (
           <div className="py-3">
