@@ -52,6 +52,9 @@ interface IOrderstatusProps {
   isOrderTableLoader: any;
   fetchMultiTax?: any;
   totalOrders?: any;
+  draftOrderCount?: any;
+  setDraftOrderCount?: any;
+  setIsErrorPage?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -93,6 +96,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setStatusCount,
   isOrderTableLoader,
   fetchMultiTax,
+  draftOrderCount,
+  setDraftOrderCount,
+  setIsErrorPage,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -122,9 +128,26 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   }, [tabStatusId]);
 
   const [filterData, setFilterData] = useState([
-    { label: "All", isActive: false, value: "all" },
-    { label: "Draft", isActive: false, value: "" },
-    { label: "Failed", isActive: false, value: "failed" },
+    {
+      label: `All`,
+      isActive: false,
+      value: "all",
+    },
+    {
+      label: `Draft`,
+      isActive: false,
+      value: "draft",
+    },
+    {
+      label: `Failed`,
+      isActive: false,
+      value: "failed",
+    },
+    {
+      label: `Error`,
+      isActive: false,
+      value: "error",
+    },
   ]);
 
   const actionsObject: any = {
@@ -483,10 +506,19 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         className={`w-[100%] flex text-[14px] text-[#777777] font-medium mt-1 md:mt-4 h-[44px] sm:w-[204px] lg:hidden ${className}`}
       >
         {filterData?.map((singleData, index) => {
+          let data = singleData?.label;
+          data =
+            data +
+            " (" +
+            draftOrderCount?.[singleData?.value]?.toLocaleString("en-US", {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            }) +
+            ")";
           return (
             <span
               key={index}
-              className={`flex flex-1 items-center py-[8px] px-[16px] border-[1px] ${
+              className={`flex flex-1 min-w-fit items-center py-[8px] px-[16px] border-[1px] ${
                 index === 0 && "rounded-l-md"
               } ${
                 index === filterData.length - 1 && "rounded-r-md"
@@ -497,7 +529,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               }`}
               onClick={() => handleFilterOrders(index)}
             >
-              {singleData.label}
+              {data}
             </span>
           );
         })}
@@ -507,6 +539,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const handleFilterOrders = (index: any) => {
     setFilterId(index);
+    setIsErrorPage(index === 3 ? true : false);
     switch (index) {
       case 0: {
         setOrders(totalOrders);
@@ -867,7 +900,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             className={`grid lg:flex lg:justify-between mt-6 static h-[46px] `}
           >
             <div className="lg:flex lg:gap-x-4">
-              <div className="flex items-center ">
+              <div className="flex items-center text-[22px] ">
+                {currentStatus === "DRAFT" && `${draftOrderCount.all} Orders`}
                 {/* <span className="text-[#494949] text-[14px] font-semibold lg:text-[22px] lg:font-semibold">
               00 Order
               </span> */}

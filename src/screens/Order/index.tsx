@@ -49,6 +49,7 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 import "../../styles/hideScroll.css";
+import Errors from "./Errors";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -202,7 +203,7 @@ const tabs = [
 ];
 
 const Index = () => {
-  const [filterId, setFilterId] = useState(0);
+  const [filterId, setFilterId]: any = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
   const [allOrders, setAllOrders]: any = useState([]);
@@ -259,6 +260,14 @@ const Index = () => {
   const [isSticky, setIsSticky] = useState(false);
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [draftOrderCount, setDraftOrderCount] = useState({
+    all: 0,
+    draft: 0,
+    failed: 0,
+    error: 0,
+  });
+
+  const [isErrorPage, setIsErrorPage] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -496,6 +505,8 @@ const Index = () => {
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
 
+      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
+
       setSelectedRowData([]);
       if (data?.status) {
         setIsLoading(false);
@@ -643,6 +654,9 @@ const Index = () => {
       setTabStatusId(index);
 
       let currentStatus = tabs[index].value;
+
+      setIsErrorPage(index > 0 && false);
+      setFilterId(index > 0 && 0);
 
       switch (tabs[index].value) {
         case "DRAFT":
@@ -793,6 +807,8 @@ const Index = () => {
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
+
+      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
 
       setSelectedRowData([]);
 
@@ -983,9 +999,12 @@ const Index = () => {
                 setCancellationModal={setCancellationModal}
                 tabStatusId={tabStatusId}
                 setTotalcount={setTotalcount}
+                draftOrderCount={draftOrderCount}
                 setStatusCount={setStatusCount}
                 isOrderTableLoader={setIsLoading}
                 totalOrders={totalOrders}
+                setDraftOrderCount={setDraftOrderCount}
+                setIsErrorPage={setIsErrorPage}
               />
             </div>
             <div
@@ -1039,23 +1058,27 @@ const Index = () => {
               ) : (
                 <div>
                   {isLgScreen ? (
-                    <>
-                      <CustomTable
-                        data={orders || []}
-                        columns={columnHelper || []}
-                        setRowSelectedData={setSelectedRowData}
-                        sticky={isSticky}
-                      />
-                      {totalCount > 0 && (
-                        <Pagination
-                          totalItems={totalCount}
-                          itemsPerPageOptions={[10, 50, 100, 500, 1000]}
-                          onPageChange={onPageIndexChange}
-                          onItemsPerPageChange={onPerPageItemChange}
-                          initialItemsPerPage={itemsPerPage}
+                    isErrorPage ? (
+                      <Errors />
+                    ) : (
+                      <>
+                        <CustomTable
+                          data={orders || []}
+                          columns={columnHelper || []}
+                          setRowSelectedData={setSelectedRowData}
+                          sticky={isSticky}
                         />
-                      )}
-                    </>
+                        {totalCount > 0 && (
+                          <Pagination
+                            totalItems={totalCount}
+                            itemsPerPageOptions={[10, 50, 100, 500, 1000]}
+                            onPageChange={onPageIndexChange}
+                            onItemsPerPageChange={onPerPageItemChange}
+                            initialItemsPerPage={itemsPerPage}
+                          />
+                        )}
+                      </>
+                    )
                   ) : (
                     <div className="border border-white my-5">
                       {orders.length > 0 ? (
