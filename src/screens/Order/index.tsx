@@ -258,6 +258,8 @@ const Index = () => {
   const isActive = checkPageAuthorized("View Orders");
   const [isSticky, setIsSticky] = useState(false);
 
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -276,7 +278,6 @@ const Index = () => {
   }, []);
 
   const setInfoModalContentFunction = async (data: any) => {
-
     setInfoModalContent({
       isOpen: true,
       data: data,
@@ -746,6 +747,8 @@ const Index = () => {
     let limit: any = 0;
     let pageNo: any = 0;
 
+    setItemsPerPage(data?.itemsPerPage);
+
     if (data?.currentPage === 1) {
       skip = 0;
       limit = data?.itemsPerPage;
@@ -1049,6 +1052,7 @@ const Index = () => {
                           itemsPerPageOptions={[10, 50, 100, 500, 1000]}
                           onPageChange={onPageIndexChange}
                           onItemsPerPageChange={onPerPageItemChange}
+                          initialItemsPerPage={itemsPerPage}
                         />
                       )}
                     </>
