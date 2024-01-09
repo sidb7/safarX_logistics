@@ -28,6 +28,7 @@ import FitnessIcon from "../assets/Product/fitness.svg";
 import GiftIcon from "../assets/Product/gift.svg";
 import ForkIcon from "../assets/Product/ForkKnife.svg";
 import ZohoIcon from "../assets/Catalogue/ZOHO.svg.png";
+import AmazonPngIcon from "../assets/AmazonIcon.png";
 
 export const insufficientBalance = [
   {
@@ -676,6 +677,14 @@ export const ChannelIntegrationCarts = {
       storesIntegrated: 5,
       channel: "ZOHO",
     },
+    // {
+    //   name: "STORE_NAME",
+    //   icon: AmazonPngIcon,
+    //   iconLg: AmazonPngIcon,
+    //   integrated: false,
+    //   storesIntegrated: 5,
+    //   channel: "AMAZON",
+    // },
     // {
     //   name: "Woo",
     //   icon: WooIcon,

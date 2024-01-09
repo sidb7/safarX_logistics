@@ -1019,9 +1019,9 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/tracking"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <ClientTracking />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
 
@@ -1073,6 +1073,14 @@ const MyRoutes: React.FC = () => {
           />
           <Route
             path="/catalogues/box-catalogue"
+            element={
+              <ProtectedRoute>
+                <Catalogue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/catalogues/channel-inventory"
             element={
               <ProtectedRoute>
                 <Catalogue />
@@ -1152,9 +1160,9 @@ const MyRoutes: React.FC = () => {
           <Route
             path="/tracking"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <Tracking />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
 

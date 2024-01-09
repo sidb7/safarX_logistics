@@ -66,7 +66,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
     fileUrl = labelUrl || "";
     payLoad = {
-      awb: [data?.awb],
+      awbs: [data?.awb],
       fileUrl: labelUrl,
       taxInvoiceUrl: taxInvoiceUrl,
     };
@@ -333,7 +333,11 @@ const commonColumnHelper = [
   }),
 ];
 
-const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
+const idHelper = (
+  navigate: any = "",
+  setInfoModalContent?: any,
+  setInfoModalContentFunction: any = () => {}
+) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
       return (
@@ -400,11 +404,12 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               <span className=" text-sm font-light">Tracking :</span>
               <div className="flex text-base items-center font-medium">
                 <span
-                  onClick={() =>
-                    navigate({
-                      pathname: "/tracking",
-                      search: `?trackingNo=${awb}`,
-                    })
+                  onClick={
+                    () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                    // navigate({
+                    //   pathname: "/tracking",
+                    //   search: `?trackingNo=${awb}`,
+                    // })
                   }
                   className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                   data-tooltip-id="my-tooltip-inline"
@@ -599,9 +604,8 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
       });
 
       const handleInformativeModal = () => {
-        setInfoModalContent({
-          isOpen: true,
-          data: rows,
+        setInfoModalContentFunction({
+          awb,
           orderId:
             (source === "SHOPIFY" || source === "ZOHO") &&
             otherDetails?.orderNumber
@@ -610,6 +614,17 @@ const idHelper = (navigate: any = "", setInfoModalContent?: any) => [
               ? rowsData.orderId
               : `T${rowsData.tempOrderId}`,
         });
+        // setInfoModalContent({
+        //   isOpen: true,
+        //   data: rows,
+        //   orderId:
+        //     (source === "SHOPIFY" || source === "ZOHO") &&
+        //     otherDetails?.orderNumber
+        //       ? otherDetails?.orderNumber
+        //       : rowsData.orderId
+        //       ? rowsData.orderId
+        //       : `T${rowsData.tempOrderId}`,
+        // });
       };
       return (
         <div className="py-3">
@@ -652,7 +667,8 @@ export const columnHelperForNewOrder = (
   setDeleteModalDraftOrder: any,
   setInfoModalContent?: any,
   currentStatus?: any,
-  orderActions?: any
+  orderActions?: any,
+  setInfoModalContentFunction?: any
 ) => {
   // const handleDeleteModalDraftOrder = (payload: any) => {
   //   setDeleteModalDraftOrder({ isOpen: true, payload });
@@ -752,11 +768,13 @@ export const columnHelperForNewOrder = (
                   <span className=" text-sm font-light">Tracking :</span>
                   <div className="flex text-base items-center font-medium">
                     <span
-                      onClick={() =>
-                        navigate({
-                          pathname: "/tracking",
-                          search: `?trackingNo=${awb}`,
-                        })
+                      onClick={
+                        () =>
+                          window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                        // navigate({
+                        //   pathname: "/tracking",
+                        //   search: `?trackingNo=${awb}`,
+                        // })
                       }
                       className="hover:text-[#004EFF] underline-offset-4 underline  decoration-2 cursor-pointer"
                       data-tooltip-id="my-tooltip-inline"
@@ -821,7 +839,7 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status, tempOrderId, source, otherDetails } =
+        const { status, tempOrderId, source, otherDetails, awb } =
           info?.row?.original;
         const rowsData = info?.row?.original;
         // const timeStamp = status?.[0]?.timeStamp;
@@ -969,16 +987,11 @@ export const columnHelperForNewOrder = (
         });
 
         const handleInformativeModal = () => {
-          setInfoModalContent({
-            isOpen: true,
-            data: rows,
-            orderId:
-              (source === "SHOPIFY" || source === "ZOHO") &&
-              otherDetails?.orderNumber
-                ? otherDetails?.orderNumber
-                : rowsData.orderId
-                ? rowsData.orderId
-                : `T${rowsData.tempOrderId}`,
+          console.log("awb", awb);
+
+          setInfoModalContentFunction({
+            awb: "0",
+            orderId: `T${rowsData.tempOrderId}`,
           });
         };
         return (
@@ -1302,6 +1315,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   navigate: any,
   setCancellationModal?: any,
   setInfoModalContent?: any,
+  setInfoModalContentFunction?: any,
   currentStatus?: any,
   orderActions?: any
 ) => {
@@ -1354,7 +1368,7 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent),
+    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
       header: () => {
@@ -1491,7 +1505,8 @@ export const columnHelpersForRest = (
   navigate: any,
   setInfoModalContent: any,
   currentStatus?: any,
-  orderActions?: any
+  orderActions?: any,
+  setInfoModalContentFunction?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -1530,7 +1545,7 @@ export const columnHelpersForRest = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent),
+    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
     //     return (

@@ -29,6 +29,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_TEST}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
@@ -52,6 +54,8 @@ switch (Environment) {
     SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
+    REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
+    REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
@@ -234,6 +238,7 @@ const LOGOUT = `${SELLER_BASE_URL}/seller/logout`;
 const GET_SYSTEM_LOG = `${SELLER_BASE_URL}/seller/getSystemLog`;
 
 const GET_SINGLE_FILE = `${SELLER_BASE_URL}/fileManagement/getSingleFile`;
+
 //Channel Store
 const POST_CREATE_STORE = `${SELLER_BASE_URL}/channel/shopify/createShopifyStore`;
 const GET_ALL_STORES = `${SELLER_BASE_URL}/channel/getStores`;
@@ -242,6 +247,7 @@ const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/updateStore`;
 const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createWCStore`;
 const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
 const CREATE_ZOHO_STORE = `${SELLER_BASE_URL}/channel/zoho/createZohoStore`;
+const CREATE_AMAZON_STORE = `${SELLER_BASE_URL}/channel/amazon/createAmazonStore`;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -277,6 +283,8 @@ const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoi
 
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
+const GET_SELLER_ORDER_COMPLETE_DATA = `${SELLER_BASE_URL}/order/getSellerOrderCompleteData`;
+
 //Reports
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
 const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`;
@@ -295,8 +303,15 @@ const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
 
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
+const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
+const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChannelInventory`;
+
+// External URL's
+
+const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
+  GET_SELLER_ORDER_COMPLETE_DATA,
   REACT_APP_GTM_ID,
   REACT_APP_GA4_ID,
   GET_STATUS_COUNT,
@@ -439,6 +454,10 @@ export {
   DELETE_PRODUCT,
   DELETE_COMBO_PRODUCT,
   GET_ADD_LABEL_DATA,
+  CREATE_AMAZON_STORE,
+  AMAZON_BASE_URL,
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
+  GET_CHANNEL_INVENTORIES,
+  UPDATE_ONE_CHANNEL_INVENTORY,
 };

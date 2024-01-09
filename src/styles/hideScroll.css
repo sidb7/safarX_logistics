@@ -1,0 +1,11 @@
+.customScroll{
+  overflow: auto;
+} 
+
+.customScroll::-webkit-scrollbar {
+  width: 0;
+}
+
+.sticky{
+    width: 8% !important;
+}

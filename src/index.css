@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("./styles/hideScrollbar.css");
+/* @import url("./styles/hideScrollbar.css"); */
 
 .datepickerCss::placeholder {
   color: #1c1c1c;
