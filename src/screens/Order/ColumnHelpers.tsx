@@ -667,7 +667,8 @@ export const columnHelperForNewOrder = (
   setDeleteModalDraftOrder: any,
   setInfoModalContent?: any,
   currentStatus?: any,
-  orderActions?: any
+  orderActions?: any,
+  setInfoModalContentFunction?: any
 ) => {
   // const handleDeleteModalDraftOrder = (payload: any) => {
   //   setDeleteModalDraftOrder({ isOpen: true, payload });
@@ -838,7 +839,7 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status, tempOrderId, source, otherDetails } =
+        const { status, tempOrderId, source, otherDetails, awb } =
           info?.row?.original;
         const rowsData = info?.row?.original;
         // const timeStamp = status?.[0]?.timeStamp;
@@ -986,9 +987,11 @@ export const columnHelperForNewOrder = (
         });
 
         const handleInformativeModal = () => {
-          setInfoModalContent({
-            isOpen: true,
-            data: rows,
+          console.log("awb", awb);
+
+          setInfoModalContentFunction({
+            // rowsData.awb,
+            awb,
             orderId:
               (source === "SHOPIFY" || source === "ZOHO") &&
               otherDetails?.orderNumber
@@ -997,6 +1000,17 @@ export const columnHelperForNewOrder = (
                 ? rowsData.orderId
                 : `T${rowsData.tempOrderId}`,
           });
+          // setInfoModalContent({
+          //   isOpen: true,
+          //   data: rows,
+          //   orderId:
+          //     (source === "SHOPIFY" || source === "ZOHO") &&
+          //     otherDetails?.orderNumber
+          //       ? otherDetails?.orderNumber
+          //       : rowsData.orderId
+          //       ? rowsData.orderId
+          //       : `T${rowsData.tempOrderId}`,
+          // });
         };
         return (
           <div className="py-3">
