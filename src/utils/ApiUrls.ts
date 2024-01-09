@@ -283,6 +283,8 @@ const FETCH_MULTI_TAX_REPORT_DOWNLOAD = `${SELLER_BASE_URL}/labels/fetchTaxInvoi
 
 const FETCH_MANIFEST_REPORT_DATA = `${SELLER_BASE_URL}/order/downLoadInvoiceOrderDetails`;
 
+const GET_SELLER_ORDER_COMPLETE_DATA = `${SELLER_BASE_URL}/order/getSellerOrderCompleteData`;
+
 //Reports
 const GET_REPORTS = `${SELLER_BASE_URL}/order/downloadShipMentReport`;
 const CANCEL_MULTIPLE_WAYBILLS = `${SELLER_BASE_URL}/order/cancelMultipleWayBills`;
@@ -308,6 +310,7 @@ const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
 const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
+  GET_SELLER_ORDER_COMPLETE_DATA,
   REACT_APP_GTM_ID,
   REACT_APP_GA4_ID,
   GET_STATUS_COUNT,
