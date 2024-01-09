@@ -23,6 +23,10 @@ const Reports = () => {
       value: "SHIPMENTSTATUS",
     },
     {
+      label: "Shipment Error Report",
+      value: "ERRORSHIPMENTSTATUS",
+    },
+    {
       label: "NPR Report",
       value: "NPRSTATUS",
     },
@@ -61,6 +65,7 @@ const Reports = () => {
           endDate: lastendEpoch,
           apiStatus: reportValue,
         };
+
         const response = await POST(GET_REPORTS, payload);
         // const apiData = response.data;
         if (!response?.data?.success) {
