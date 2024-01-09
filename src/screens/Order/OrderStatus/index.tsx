@@ -706,7 +706,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     const filterArrOne: any = [
       { orderType: { $in: [] } },
       { sellerId: { $in: [] } },
-      // { courierPartnerName: { $in: [] } },
     ];
     const filterArrTwo: any = [
       { "codInfo.isCod": { $in: [] } },
