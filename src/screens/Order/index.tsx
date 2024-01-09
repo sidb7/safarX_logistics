@@ -275,8 +275,8 @@ const Index = () => {
     };
   }, []);
 
-
   const setInfoModalContentFunction = async (data: any) => {
+
     setInfoModalContent({
       isOpen: true,
       data: data,
@@ -651,7 +651,8 @@ const Index = () => {
               setDeleteModalDraftOrder,
               setInfoModalContent,
               currentStatus,
-              orderActions
+              orderActions,
+              setInfoModalContentFunction
             )
           );
           break;
@@ -1117,7 +1118,7 @@ const Index = () => {
               : `${infoModalContent?.data?.orderId} - Order Details`}
           </p>
         </div>
-        <CustomTableAccordian data={infoModalContent.data} />
+        <CustomTableAccordian data={infoModalContent} />
       </CustomRightModal>
     </>
   );

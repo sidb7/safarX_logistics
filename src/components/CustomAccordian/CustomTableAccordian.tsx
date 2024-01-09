@@ -16,9 +16,12 @@ const Accordion = (props: ICustomTableAccordion) => {
   const entries: any = document?.getElementsByClassName("entries");
 
   useEffect(() => {
-    if (data?.awb !== undefined) {
+
+    const { data: dataFromState, isOpen } = data;
+
+    if (data !== undefined && isOpen === true) {
       setOrderDetails([]);
-      getSellerOrderCompleteData(data?.awb);
+      getSellerOrderCompleteData(dataFromState);
     }
   }, [data]);
 
@@ -28,11 +31,14 @@ const Accordion = (props: ICustomTableAccordion) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const getSellerOrderCompleteData = async (awb: any) => {
+  const getSellerOrderCompleteData = async (orderData: any) => {
     // GET_SELLER_ORDER_COMPLETE_DATA
     try {
       setIsLoading(true);
-      const { data } = await POST(GET_SELLER_ORDER_COMPLETE_DATA, { awb });
+      const { data } = await POST(GET_SELLER_ORDER_COMPLETE_DATA, {
+        tempOrderId: orderData?.orderId?.split("T")[1],
+        awb: orderData?.awb ? orderData?.awb : "0",
+      });
 
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
@@ -155,7 +161,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           // console.log("descriptionBookedOrder", elem?.description);
           statusObj = {
             ...statusObj,
-            [`AWB No ${index + 1}`]: awb,
+            [`AWB No ${index + 1}`]: orderData?.awb,
             [`Current Status ${index + 1}`]: capitalizeFirstLetter(
               elem?.currentStatus
             ),
@@ -175,7 +181,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           title: "Other Details",
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
-          "Tracking Id": awb,
+          "Tracking Id": orderData?.awb,
           Source: capitalizeFirstLetter(rowsData?.source),
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
