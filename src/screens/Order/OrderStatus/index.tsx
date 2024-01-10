@@ -542,27 +542,24 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setIsErrorPage(index === 3 ? true : false);
     switch (index) {
       case 0: {
-        setOrders(totalOrders);
+        getAllOrders();
         break;
       }
       case 1: {
-        const filteredOrder = totalOrders.filter(
-          (elem: any) =>
-            elem?.status?.length === 0 ||
-            elem?.status?.[elem.status.length - 1]?.currentStatus === "DRAFT"
-        );
-        setOrders(filteredOrder);
+        const subStatus = "DRAFT";
+        getAllOrders(subStatus);
         break;
       }
       case 2: {
-        const filteredOrder = totalOrders.filter(
-          (elem: any) =>
-            elem?.status?.[elem.status.length - 1]?.currentStatus ===
-            filterData?.[index]?.label?.toUpperCase()
-        );
-        setOrders(filteredOrder);
+        const subStatus = "FAILED";
+        getAllOrders(subStatus);
+
         break;
       }
+      // case 3: {
+      //   const subStatus = "ERROR";
+      //   getAllOrders(subStatus);
+      // }
     }
   };
 
@@ -743,13 +740,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setStatusId(index);
   };
 
-  const getAllOrders = async () => {
+  const getAllOrders = async (subStatus?: any) => {
     let payload = {
       skip: 0,
       limit: 10,
       pageNo: 1,
       sort: { _id: -1 },
       currentStatus,
+      subStatus,
     };
     const { data } = await POST(GET_SELLER_ORDER, payload);
 

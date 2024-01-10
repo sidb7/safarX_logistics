@@ -268,7 +268,7 @@ const Index = () => {
   });
 
   const [isErrorPage, setIsErrorPage] = useState(false);
-
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -499,13 +499,19 @@ const Index = () => {
         currentStatus,
       });
 
-      const { orderCount } = data?.data[0];
+      const { orderCount, draftCount, failedCount } = data?.data[0];
 
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
 
-      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+        failed: failedCount || 0,
+        error: failedCount || 0,
+      });
 
       setSelectedRowData([]);
       if (data?.status) {
@@ -1059,7 +1065,7 @@ const Index = () => {
                 <div>
                   {isLgScreen ? (
                     isErrorPage ? (
-                      <Errors />
+                      <Errors setIsErrorModalOpen={setIsErrorModalOpen} />
                     ) : (
                       <>
                         <CustomTable
@@ -1147,6 +1153,11 @@ const Index = () => {
         </div>
         <CustomTableAccordian data={infoModalContent} />
       </CustomRightModal>
+      <CustomRightModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        className="!justify-start"
+      ></CustomRightModal>
     </>
   );
 };

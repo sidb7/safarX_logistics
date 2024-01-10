@@ -100,9 +100,19 @@ let dummyDataError = [
   },
 ];
 
-const Errors = () => {
+interface ErrorProps {
+  setIsErrorModalOpen: any;
+}
+
+const Errors = (props: ErrorProps) => {
+  const { setIsErrorModalOpen } = props;
   const [openIndex, setOpenIndex] = useState(null);
   const [isLoading, setIsLoading]: any = useState(false);
+
+  const handleError = (elem: any) => {
+    console.log("elem: ", elem);
+    setIsErrorModalOpen(true);
+  };
 
   const handleItemClick = (index: any) => {
     setOpenIndex(index === openIndex ? null : index);
@@ -117,7 +127,10 @@ const Errors = () => {
         <div>
           {dummyDataError.map((item: any, index: any) => (
             <div
-              className="flex flex-col mb-5 cursor-pointer shadow-md"
+              className="flex flex-col mb-5 cursor-pointer"
+              style={{
+                boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
+              }}
               key={index}
             >
               <div
@@ -151,7 +164,10 @@ const Errors = () => {
                   >
                     <div className=" flex justify-between mx-[1rem] my-[0.5rem]">
                       <div>{elem.orderId}</div>
-                      <div className="border-[blue] border-b-[1px] text-[blue]">
+                      <div
+                        onClick={() => handleError(elem)}
+                        className="border-[blue] border-b-[1px] text-[blue]"
+                      >
                         {elem.solution}
                       </div>
                     </div>
