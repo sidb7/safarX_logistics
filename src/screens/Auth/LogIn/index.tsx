@@ -34,11 +34,14 @@ import RightSideModal from "../../../components/CustomModal/customRightModal";
 import { Spinner } from "../../../components/Spinner";
 import { socketCallbacks } from "../../../Socket";
 import { useErrorBoundary } from "react-error-boundary";
+import { getQueryJson } from "../../../utils/utility";
 
 const Index = () => {
   const navigate = useNavigate();
   const { isLgScreen, isMdScreen } = ResponsiveState();
   const dispatch = useDispatch();
+  const { resetPassword, source } = getQueryJson();
+
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [forgotPasswordModal, setForgotPasswordModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -224,6 +227,12 @@ const Index = () => {
         navigate("/dashboard/overview");
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    if (resetPassword !== undefined && source !== undefined) {
+      setForgotPasswordModal(true);
+    }
   }, []);
 
   const modalTitle = () => {
@@ -508,7 +517,11 @@ const Index = () => {
           isOpen={forgotPasswordModal}
           onRequestClose={() => setForgotPasswordModal(false)}
         >
-          <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
+          <ForgotPassword
+            onClick={() => setForgotPasswordModal(false)}
+            resetPassword={resetPassword}
+            source={source}
+          />
         </CenterModal>
       )}
       {!isLgScreen && (
@@ -518,7 +531,11 @@ const Index = () => {
           className={`w-full "md:!w-[389px]"
           }`}
         >
-          <ForgotPassword onClick={() => setForgotPasswordModal(false)} />
+          <ForgotPassword
+            onClick={() => setForgotPasswordModal(false)}
+            resetPassword={resetPassword}
+            source={source}
+          />
         </RightSideModal>
       )}
     </>
