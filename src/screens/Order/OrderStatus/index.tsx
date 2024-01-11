@@ -760,13 +760,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   function getObjectWithIsActiveTrue(data: any) {
     const filterArrOne: any = [
       { orderType: { $in: [] } },
-      { courierPartnerName: { $in: [] } },
       { sellerId: { $in: [] } },
     ];
     const filterArrTwo: any = [
       { "codInfo.isCod": { $in: [] } },
       { "pickupAddress.pincode": { $in: [] } },
       { "deliveryAddress.pincode": { $in: [] } },
+      { "service.partnerName": { $in: [] } },
     ];
 
     for (const category of data) {
@@ -789,13 +789,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               }
               break;
             case "Partners":
-              filterArrOne[1].courierPartnerName.$in?.push(item?.value);
+              filterArrTwo[3]["service.partnerName"].$in?.push(item?.value);
               break;
             case "Order Type":
               filterArrOne[0].orderType.$in?.push(item?.value);
               break;
             case "Seller Id":
-              filterArrOne[2].sellerId.$in?.push(+item?.value);
+              filterArrOne[1].sellerId.$in?.push(+item?.value);
               break;
             default:
               break;
