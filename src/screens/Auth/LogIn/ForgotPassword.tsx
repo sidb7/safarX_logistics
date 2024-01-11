@@ -29,6 +29,8 @@ import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import { strongpasswordRegex } from "../../../utils/regexCheck";
 interface ITypeProps {
   onClick?: any;
+  resetPassword?: any;
+  source?: any;
 }
 interface PasswordVisibility {
   newPassword: boolean;
@@ -36,13 +38,15 @@ interface PasswordVisibility {
 }
 
 const ForgotPassword = (props: ITypeProps) => {
-  const { onClick } = props;
+  const { onClick, resetPassword, source } = props;
+
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
 
   const [response, setResponse] = useState<any>(null);
   const signUpUser = useSelector((state: any) => state);
   const [otpVerified, setOtpVerified] = useState<any>(false);
+
   const [otp, setOtp] = useState({
     forgotPasswordOtp: "",
   });
@@ -50,6 +54,7 @@ const ForgotPassword = (props: ITypeProps) => {
     email: "",
     companyName: "SHIPYAARI",
   });
+
   const [password, setPassword] = useState({
     oldPassword: "",
     newPassword: "",
@@ -86,6 +91,7 @@ const ForgotPassword = (props: ITypeProps) => {
   const postForgotPasswordData = async () => {
     try {
       setLoading(true);
+
       const { data: response } = await POST(FORGOT_PASSWORD, formData);
 
       if (response?.success) {
@@ -202,6 +208,13 @@ const ForgotPassword = (props: ITypeProps) => {
       return error;
     }
   };
+
+  useEffect(() => {
+    if (resetPassword !== undefined && source !== undefined) {
+      setFormData({ email: resetPassword, companyName: source });
+    }
+  }, []);
+
   const modalTitle = () => {
     return (
       <div className="product-box  z-10 bg-white flex justify-between w-full h-[60px] top-0">
