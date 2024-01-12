@@ -698,9 +698,12 @@ export const columnHelperForNewOrder = (
           orderType,
           otherDetails,
           awb,
+          createdAt,
         } = info?.row?.original;
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
+
+        console.log("Get Created AT: ", date_DD_MMM_YYYY_HH_MM_SS(createdAt));
 
         if (status?.length > 0) {
           updatedAtStatus = status[status.length - 1]?.timeStamp;
@@ -802,7 +805,13 @@ export const columnHelperForNewOrder = (
                 </span>
                 <div className=" ">
                   <p className="text-sm font-medium">
-                    {date_DD_MMM_YYYY_HH_MM_SS(updatedAtStatus || updatedAt)}
+                    {date_DD_MMM_YYYY_HH_MM_SS(
+                      source === "SHOPIFY" ||
+                        source === "WOOCOMMERCE" ||
+                        source === "ZOHO"
+                        ? createdAt
+                        : updatedAtStatus || updatedAt
+                    )}
                   </p>
                 </div>
               </div>
@@ -839,7 +848,7 @@ export const columnHelperForNewOrder = (
         let rowData = info?.row?.original;
         const latestStatus =
           rowData?.status?.[rowData?.status?.length - 1]?.currentStatus;
-        const { status, tempOrderId, source, otherDetails, awb } =
+        const { status, tempOrderId, source, otherDetails, awb, createdAt } =
           info?.row?.original;
         const rowsData = info?.row?.original;
         // const timeStamp = status?.[0]?.timeStamp;
@@ -1045,7 +1054,13 @@ export const columnHelperForNewOrder = (
                       </div>
                     ))}
                 </div>
-                <div>{time}</div>
+                <div>
+                  {source === "SHOPIFY" ||
+                  source === "WOOCOMMERCE" ||
+                  source === "ZOHO"
+                    ? date_DD_MMM_YYYY_HH_MM_SS(createdAt)
+                    : time}
+                </div>
               </div>
             }
           </div>
