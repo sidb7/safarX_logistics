@@ -316,6 +316,7 @@ const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChanne
 const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
+  ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
   REACT_APP_GTM_ID,
   REACT_APP_GA4_ID,
