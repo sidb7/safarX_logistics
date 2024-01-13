@@ -11,7 +11,7 @@ import { setWalletBalance } from "./redux/reducers/userReducer";
 import { socketCallbacks } from "./Socket";
 import TagManager from "react-gtm-module";
 import ReactGA from "react-ga4";
-import { REACT_APP_GA4_ID, REACT_APP_GTM_ID } from "./utils/ApiUrls";
+import { ADMIN_URL, REACT_APP_GA4_ID, REACT_APP_GTM_ID } from "./utils/ApiUrls";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import { signInUser } from "./redux/reducers/signInReducer";
 import {
@@ -72,7 +72,7 @@ const App = () => {
     const receiveMessage = (event: any) => {
       const currentOrigin = window.location.origin;
 
-      const expectedOrigin = "http://localhost:3000";
+      const expectedOrigin = ADMIN_URL;
       if (event.origin.includes(expectedOrigin)) {
         const sellerData = event.data.sellerData;
         console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
