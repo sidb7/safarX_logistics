@@ -1,11 +1,11 @@
 {
   "script": "serve",
-  "watch": true,
+  "watch": false,
   "ignore_watch": ["node_modules"],
   "watch_options": {
     "followSymlinks": false
   },
-  "instances": "max",
+  "instances": "1",
   "exec_mode": "cluster",
   "env": {
     "PM2_SERVE_PATH": "build",
