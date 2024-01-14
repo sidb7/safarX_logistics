@@ -1,0 +1,18 @@
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-button {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+.radio-label input[type="radio"]:checked + .radio-button {
+  background-color: #000;
+}

@@ -1,0 +1,18 @@
+.switch{
+    background-color: azure;
+    border-color: white;
+    color: white;
+}
+
+.magicAddressInput::placeholder {
+    position: absolute;
+    top: 5px;
+    /* left: 10px; */
+   
+    text-align: left;
+    /* padding: 10px; */
+   
+    box-sizing: border-box;
+    color: #999;
+   
+}

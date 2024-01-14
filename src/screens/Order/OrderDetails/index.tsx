@@ -154,7 +154,7 @@ export const OrderDetails = () => {
 
         <div className="flex justify-between my-2">
           <div className="flex">
-            <span className="">Tracking ID : </span>
+            <span>Tracking ID : </span>
             <span
               className="ml-1 font-medium"
               onClick={() => navigator.clipboard.writeText("EK401324Y3453")}

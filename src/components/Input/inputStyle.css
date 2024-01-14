@@ -1,4 +1,4 @@
-.custom-label {
+/* .custom-label {
   transform: translateY(-50%);
   background-color: white;
 
@@ -10,14 +10,36 @@
 .custom-input {
   transition: 0.1s ease-out;
   width: 100%;
+   
 }
+
+.custom-input:focus {
+  border-color: #004EFF !important;
+}
+
+.custom-input:focus~.custom-label {
+  color: #004EFF;
+}
+
 
 .custom-input:focus + label {
   top: 0;
-
   transform: translateY(-50%) scale(0.9);
+
 }
-.custom-input:not(:placeholder-shown) + label {
+.custom-input:focus + label {
+  
   top: 0;
   transform: translateY(-50%) scale(0.9);
+} */
+
+
+/* input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+
+input[type=number] {
+  -moz-appearance: textfield;
+} */

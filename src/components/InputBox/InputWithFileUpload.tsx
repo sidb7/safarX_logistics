@@ -3,7 +3,8 @@ import UploadFileIcon from "../../assets/common/Upload.svg";
 
 interface propTypes {
   label?: string;
-  value?: string | number;
+  // value?: string | number;
+  value?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   className?: string;
@@ -16,6 +17,7 @@ interface propTypes {
   isRequired?: boolean;
   type?: string;
   imgSrc?: string;
+  uploadText?: string;
 }
 
 const InputWithFileUpload = (props: propTypes) => {
@@ -34,17 +36,20 @@ const InputWithFileUpload = (props: propTypes) => {
     isRequired = false,
     imgSrc,
     type,
+    uploadText = "",
   } = props;
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="relative w-[100%] ">
+      <div className={`relative w-[100%] ${inputClassName}`}>
         <input
-          placeholder=" "
+          placeholder="Choose Images "
           type={type ? type : "text"}
-          className="rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input  "
+          className={`${className}  rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input`}
           required={isRequired}
           title="inputBox"
+          onChange={onChange}
+          id="fileName"
         />
         <label
           className={`text-[12px] text-[#777777] absolute left-0 top-[50%] leading-4  custom-label ${labelClassName}`}
@@ -52,12 +57,16 @@ const InputWithFileUpload = (props: propTypes) => {
           {label}
         </label>
 
-        <div className="flex justify-center items-center  gap-2 ">
+        <div
+          className="flex justify-center items-center  gap-2 z-[1] cursor-pointer"
+          onChange={onChange}
+        >
           <img
             src={imgSrc ? imgSrc : UploadFileIcon}
             alt=""
-            className="absolute z-20  right-[8%] top-[30%]  "
+            className="absolute z-1  right-[8%] top-[30%]  "
           />
+          {uploadText}
         </div>
       </div>
     </div>

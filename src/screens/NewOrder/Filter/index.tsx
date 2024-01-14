@@ -5,11 +5,12 @@ import dummyDatas from "../../NewOrder/Filter/dummyFile.json";
 type Props = {};
 
 const index = (props: Props) => {
-  console.log("data", dummyDatas);
-
   return (
     <div>
-      <CustomAccordian dummyDatas={dummyDatas} />
+      <CustomAccordian
+        cardClassName="lg:!px-0 lg:!mt-4"
+        dummyDatas={dummyDatas}
+      />
     </div>
   );
 };

@@ -8,20 +8,17 @@ const items = ["Fastest", "Low Price", "Economy", "Standard", "Premium"];
 
 const FilterBy = (props: Props) => {
   return (
-    <div className="grid grid-cols-1 gap-y-6    ">
+    <div>
       <div>
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-x-2 mb-5">
           <img src={FilterIcon} alt="Filter" />
-          <div className="text-[18px] font-bold">Filter by</div>
+          <div className="text-[18px] font-bold lg:font-normal lg:text-2xl">
+            Filter by
+          </div>
         </div>
       </div>
-      <div>
-        <FilterItems
-          items={items}
-          onClick={() => {
-            alert("pranay");
-          }}
-        />
+      <div className="grid lg:grid-cols-1">
+        <FilterItems items={items} onClick={() => {}} />
       </div>
     </div>
   );

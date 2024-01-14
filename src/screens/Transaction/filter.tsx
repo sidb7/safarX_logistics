@@ -16,8 +16,7 @@ const Filter = (props: IPropTypes) => {
       <FilterPopUpModal
         isOpen={showModal}
         onRequestClose={() => setShowModal(false)}
-        className=""
-        overlayClassName=" "
+        overlayClassName=""
       >
         <div className="p-5 ">
           <div className="flex items-center justify-between mb-5 ">

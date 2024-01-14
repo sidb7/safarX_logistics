@@ -75,7 +75,11 @@ const Index = () => {
         </div>
         <div>
           <div>
-            <CheckBox label="ADD COD TO ORDER" checked={true} />
+            <CheckBox
+              label="ADD COD TO ORDER"
+              checked={true}
+              checkboxClassName="gap-2"
+            />
 
             <Input label="Collectable amount" />
             <Input label="Total amount" />

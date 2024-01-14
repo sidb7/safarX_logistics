@@ -1,0 +1,123 @@
+import CustomInputBox from "../../../components/Input";
+import { useEffect, useState } from "react";
+import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
+import { POST } from "../../../utils/webService";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
+
+export const EditProfile = () => {
+  const navigate = useNavigate();
+  const [profileData, setProfileData] = useState<any>({});
+  const [name, setName] = useState("");
+
+  const changeHandler = (key: string, event: any) => {
+    setProfileData({ ...profileData, [key]: event.target.value });
+  };
+
+  const updateProfile = async () => {
+    const splitName = name.split(" ");
+    const lastName = splitName.pop();
+    const firstName = splitName.join(" ");
+
+    const { data } = await POST(UPDATE_SELLER, {
+      data: { ...profileData, firstName: firstName, lastName: lastName },
+    });
+    if (data?.success) {
+      setProfileData(data?.data);
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_PROFILE_URL, {});
+      if (data?.success) {
+        setProfileData(data?.data?.[0]);
+        setName(`${data?.data?.[0]?.firstName} ${data?.data?.[0]?.lastName}`);
+      } else {
+        toast.error(data?.message);
+      }
+    })();
+  }, []);
+
+  return (
+    <div className="h-full">
+      <Breadcrum label="Edit Profile" />
+      <div className=" grid grid-cols-1 mx-4 mt-4 gap-y-4">
+        <div className="flex flex-col justify-center items-center mb-4">
+          <div
+            style={{
+              width: "82px",
+              height: "82px",
+              overflow: "hidden",
+              borderRadius: "50%",
+            }}
+          >
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                mask: "radial-gradient(circle, transparent 50%, black 50%)",
+              }}
+              src={`${
+                profileData?.profileImageUrl &&
+                profileData?.profileImageUrl !== "N/A"
+                  ? profileData?.profileImageUrl
+                  : ProfileIcon
+              }`}
+              alt="Profile"
+              className="w-[82px]"
+            />
+          </div>
+          <span className="text-[10px] font-normal text-[#494949]">
+            Dimention: 68x68 Pixels | Image Size: 230 KB
+          </span>
+        </div>
+        <CustomInputBox
+          label="Seller ID"
+          // placeholder="seller ID"
+          value={profileData?.sellerId}
+          isDisabled={true}
+        />
+
+        <CustomInputBox
+          label="Name"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <CustomInputBox label="Email ID" value={profileData?.email} />
+        <CustomInputBox
+          inputType="text"
+          inputMode="numeric"
+          maxLength={10}
+          label="Contact Number"
+          placeholder="Contact Number"
+          value={profileData?.contactNumber}
+          onChange={(e) => changeHandler("contactNumber", e)}
+        />
+        <CustomInputBox
+          label="Brand Name"
+          // placeholder="Brand Website"
+          value={profileData?.privateCompany?.name}
+          onChange={(e) =>
+            setProfileData({
+              ...profileData,
+              privateCompany: {
+                ...profileData.privateCompany,
+                name: e.target.value,
+              },
+            })
+          }
+        />
+      </div>
+      <BottomLayout callApi={updateProfile} />
+    </div>
+  );
+};

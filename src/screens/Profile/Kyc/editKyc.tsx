@@ -1,18 +1,192 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 import { CustomUploadInput } from "../../../components/UploadInput/customUploadInput";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
+import BottomLayout from "../../../components/Layout/bottomLayout";
+import { POST } from "../../../utils/webService";
+import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
+import { toast } from "react-toastify";
+import VerifyDocument from "./verifyDocument";
 
 export const EditProfileKyc = () => {
+  const [kycDetails, setKycDetails] = useState<any>({});
+
+  const [openModal, setOpenModal] = useState(false);
+  const [verifyDocument, setVerifyDocument] = useState({
+    documentName: "",
+    label: "",
+  });
+  const changeHandler = (key: string, event: any) => {
+    setKycDetails({ ...kycDetails, [key]: event.target.value });
+  };
+
+  const changeAddressHandler = (key: string, event: any) => {
+    setKycDetails({
+      ...kycDetails,
+      address: {
+        ...kycDetails.address,
+        [key]: event.target.value,
+      },
+    });
+  };
+
+  const updateKycDetails = async () => {
+    const { data } = await POST(UPDATE_SELLER, {
+      data: { kycDetails },
+    });
+    if (data?.success) {
+      setKycDetails(data?.data?.kycDetails);
+      toast.success(data?.message);
+    } else {
+      toast.error(data?.message);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_PROFILE_URL, {});
+      if (data?.success) {
+        setKycDetails(data.data[0]?.kycDetails);
+      } else {
+        toast.error(data?.message);
+      }
+    })();
+  }, []);
+
   return (
-    <div className="mx-4 mt-8 space-y-4">
-      <CustomInputBox label="Frist name" />
-      <CustomInputBox label="Last name" />
-      <CustomInputBox label="GST Number" />
-      <CustomUploadInput label="Upload GST file" id="gstFile" />
-      <CustomInputBox label="PAN Number" />
-      <CustomUploadInput label="Upload PAN file" id="panFile" />
-      <CustomInputBox label="Aadhar Number" />
-      <CustomUploadInput label="Upload Aadhar file" id="aadharFile" />
+    <div className="h-full">
+      <Breadcrum label="KYC Details" />
+      <div className="mx-4 mt-2 customScroll h-[calc(100%-35px)] space-y-4 lg:grid lg:grid-cols-3 lg:gap-4 lg:h-auto">
+        <CustomInputBox
+          containerStyle={"self-end mt-2"}
+          label="Frist name"
+          className="!font-normal"
+          value={kycDetails?.firstName}
+          onChange={(e) => changeHandler("firstName", e)}
+        />
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="Middle name"
+          className="!font-normal"
+          value={kycDetails?.middleName}
+          onChange={(e) => changeHandler("middleName", e)}
+        />
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="Last name"
+          className="!font-normal"
+          value={kycDetails?.lastName}
+          onChange={(e) => changeHandler("lastName", e)}
+        />
+
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "gst",
+              label: "GST Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            containerStyle={"self-end"}
+            label="GST Number"
+            className="!font-normal"
+            value={kycDetails?.gstNumber}
+          />
+        </div>
+        <CustomUploadInput label="Upload GST file" id="gstFile" />
+
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "pan",
+              label: "PAN Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            label="PAN Number"
+            className="!font-normal"
+            value={kycDetails?.panNumber}
+            onChange={(e) => changeHandler("panNumber", e)}
+          />
+        </div>
+        <CustomUploadInput label="Upload PAN file" id="panFile" />
+
+        <div
+          onClick={() => {
+            setOpenModal(true);
+            setVerifyDocument({
+              documentName: "aadhar",
+              label: "Aadhar Number",
+            });
+          }}
+        >
+          <CustomInputBox
+            containerStyle={"self-end"}
+            label="Aadhar Number"
+            className="!font-normal"
+            value={kycDetails?.aadharNumber}
+            onChange={(e) => changeHandler("aadharNumber", e)}
+          />
+        </div>
+        <CustomUploadInput label="Upload Aadhar file" id="aadharFile" />
+
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="Plot no"
+          className="!font-normal"
+          value={kycDetails?.address?.plotNumber}
+          onChange={(e) => changeAddressHandler("plotNumber", e)}
+        />
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="Locality"
+          className="!font-normal"
+          value={kycDetails?.address?.locality}
+          onChange={(e) => changeAddressHandler("locality", e)}
+        />
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="City"
+          className="!font-normal"
+          value={kycDetails?.address?.city}
+          onChange={(e) => changeAddressHandler("city", e)}
+        />
+        <CustomInputBox
+          containerStyle={"self-end"}
+          label="District"
+          className="!font-normal"
+          value={kycDetails?.address?.district}
+          onChange={(e) => changeAddressHandler("district", e)}
+        />
+        <CustomInputBox
+          label="Pincode"
+          className="!font-normal"
+          value={kycDetails?.address?.pincode}
+          onChange={(e) => changeAddressHandler("pincode", e)}
+        />
+        <CustomInputBox
+          label="State"
+          className="!font-normal"
+          value={kycDetails?.address?.state}
+          onChange={(e) => changeAddressHandler("state", e)}
+        />
+        <CustomInputBox
+          label="Country"
+          className="!font-normal"
+          value={kycDetails?.address?.country}
+          onChange={(e) => changeAddressHandler("country", e)}
+        />
+      </div>
+      <VerifyDocument
+        props={verifyDocument}
+        openModal={openModal}
+        closeModal={() => setOpenModal(false)}
+      />
+      <BottomLayout callApi={updateKycDetails} />
     </div>
   );
 };

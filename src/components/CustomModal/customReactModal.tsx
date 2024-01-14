@@ -62,7 +62,7 @@ export default function CustomReactModal({
             transform: "translate(-50%, 0%)",
           },
         }}
-        className={` p-0 absolute rounded-xl outline-none shadow-xl w-4/12  bg-slate-100 ${modalClass} overflow-y-auto overflow-x-auto `}
+        className={` p-0 absolute rounded-xl outline-none shadow-xl w-4/12  bg-slate-100 ${modalClass} customScroll`}
         overlayClassName="bg-darkBlue fixed top-0 right-0 left-0 bottom-0 bg-opacity-50 z-20"
       >
         <div

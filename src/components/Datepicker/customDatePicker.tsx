@@ -24,39 +24,40 @@ const DatePicker: React.FC = () => {
   );
 
   return (
-    <div className="relative">
-      <div className="relative w-full">
-        <input
-          readOnly
-          type="text"
-          value={selectedDate.toLocaleDateString()}
-          onClick={() => setIsOpen(!isOpen)}
-          className="pl-8 pr-2 py-1 w-full cursor-pointer"
-        />
+    <></>
+    // <div className="relative">
+    //   <div className="relative w-full">
+    //     <input
+    //       readOnly
+    //       type="text"
+    //       value={selectedDate.toLocaleDateString()}
+    //       onClick={() => setIsOpen(!isOpen)}
+    //       className="pl-8 pr-2 py-1 w-full cursor-pointer"
+    //     />
 
-        <img
-          src={CalendarIcon}
-          alt=""
-          className="absolute left-2 top-1/2 transform -translate-y-1/2"
-        />
-      </div>
-      {/* 
-      {isOpen && (
-        <div className="absolute mt-1 w-64 p-2 bg-white rounded shadow">
-          {daysArray.map((day) => (
-            <button
-              key={day}
-              className={`block w-full text-left ${
-                day === selectedDate.getDate() ? "bg-blue-200" : ""
-              }`}
-              onClick={() => handleDayClick(day)}
-            >
-              {day}
-            </button>
-          ))}
-        </div>
-      )} */}
-    </div>
+    //     <img
+    //       src={CalendarIcon}
+    //       alt=""
+    //       className="absolute left-2 top-1/2 transform -translate-y-1/2"
+    //     />
+    //   </div>
+    //   {/*
+    //   {isOpen && (
+    //     <div className="absolute mt-1 w-64 p-2 bg-white rounded shadow">
+    //       {daysArray?.map((day) => (
+    //         <button
+    //           key={day}
+    //           className={`block w-full text-left ${
+    //             day === selectedDate.getDate() ? "bg-blue-200" : ""
+    //           }`}
+    //           onClick={() => handleDayClick(day)}
+    //         >
+    //           {day}
+    //         </button>
+    //       ))}
+    //     </div>
+    //   )} */}
+    // </div>
   );
 };
 

@@ -9,7 +9,7 @@ import InputBox from "../../../../components/InputBox/index";
 import CustomDropDown from "../../../../components/DropDown";
 import CustomButton from "../../../../components/Button";
 import Upload from "../../../../components/Upload";
-import PackageType from "../Product/PackageType/index";  
+import PackageType from "../Product/PackageType/index";
 import ProductBox from "../Product/productBox";
 import "../../../styles/productStyle.css";
 import AddButton from "../../../../components/Button/addButton";
@@ -30,7 +30,6 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
 
   const [addedProductTotal, setAddedProductTotal] = useState<number>(0);
   const [addedProductData, setAddedProductData] = useState<any>([]);
-  console.log(addedProductData);
 
   const handleProductInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -42,15 +41,15 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
   return (
     <div className="mx-4">
       <div className="flex gap-2">
-        <img src={ProductIcon} alt="Product Icon" className="" />
+        <img src={ProductIcon} alt="Product Icon" />
         <h1 className="font-bold leading-6 text-lg ">Product</h1>
       </div>
 
-      {/* {[...Array(addedProductTotal)].map((_, i) => {
+      {/* {[...Array(addedProductTotal)]?.map((_, i) => {
         return (
           <div key={i}>
             <div className="flex justify-between mt-3">
-              <div className="">
+              <div >
                 <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
                   Product {i + 1}
                 </h2>
@@ -61,7 +60,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
                   alt="Edit Product"
                   className="mr-2"
                   onClick={() => {
-                    console.log(i);
+                    
                   }}
                 />
                 <img
@@ -82,11 +81,11 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           </div>
         );
       })} */}
-      {addedProductData.map((product: any, i: number) => {
+      {addedProductData?.map((product: any, i: number) => {
         return (
           <div key={i}>
             <div className="flex justify-between mt-3">
-              <div className="">
+              <div>
                 <h2 className="text-[#004EFF] text-sm font-bold leading-18px">
                   Product {i + 1}
                 </h2>
@@ -96,9 +95,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
                   src={EditIcon}
                   alt="Edit Product"
                   className="mr-2"
-                  onClick={() => {
-                    console.log(i);
-                  }}
+                  onClick={() => {}}
                 />
                 <img
                   src={BookmarkIcon}
@@ -121,13 +118,13 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // console.log(productState);
+          //
           setAddedProductData((prevState: any) => [...prevState, productState]);
           setAddedProductTotal(addedProductTotal + 1);
         }}
       >
         <div className="flex justify-between mt-3">
-          <div className="">
+          <div>
             <h2 className="text-[#004EFF] text-sm font-bold leading-18px ">
               Product {addedProductTotal + 1}
             </h2>
@@ -168,9 +165,7 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           <div className="grid grid-cols-2 gap-x-2">
             <CustomDropDown
               value={productState.productUnits}
-              onChange={() => {
-                console.log("hello");
-              }}
+              onChange={() => {}}
               options={[
                 {
                   label: "CM",
@@ -182,7 +177,6 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
             />
 
             <InputBox
-              className=""
               label="Length"
               name="productLength"
               value={productState.productLength}
@@ -191,7 +185,6 @@ const ProductFilled: React.FunctionComponent<IProductFilledProps> = (props) => {
           </div>
           <div className="grid grid-cols-2 gap-x-2">
             <InputBox
-              className=""
               label="Breadth"
               name="productBreadth"
               value={productState.productBreadth}

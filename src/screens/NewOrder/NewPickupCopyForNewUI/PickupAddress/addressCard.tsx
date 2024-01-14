@@ -1,0 +1,391 @@
+import React, { useEffect, useRef, useState } from "react";
+import CustomDropDown from "../../../../components/DropDown";
+import CustomInputBox from "../../../../components/Input";
+import AudioInputBox from "../../../../components/AudioInput/AudioInputBox";
+import { Spinner } from "../../../../components/Spinner";
+import CustomInputWithImage from "../../../../components/InputWithImage/InputWithImage";
+import CustomInputWithDropDown from "../../../../components/LandmarkDropdown/LandmarkDropdown";
+import Map from "../../../NewOrder/Map";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router";
+import { GET_PINCODE_DATA, VERIFY_ADDRESS } from "../../../../utils/ApiUrls";
+import { POST } from "../../../../utils/webService";
+import { dummyStateDropdownData } from "../../../../utils/dummyData";
+import { CommonBottomModal } from "../../../../components/CustomModal/commonBottomModal";
+
+//Icons
+import ChooseLocationIcon from "../../../../assets/PickUp/chooseLocation.svg";
+import LocationIcon from "../../../../assets/PickUp/Location.svg";
+import WebLocationIcon from "../../../../assets/PickUp/WebLocation.svg";
+import MagicLocationIcon from "../../../../assets/PickUp/magicLocation.svg";
+import AiIcon from "../../../../assets/Buttons.svg";
+import MapIcon from "../../../../assets/PickUp/MapIcon.svg";
+import RightSideModal from "../../../../components/CustomModal/customRightModal";
+import { capitalizeFirstLetter, titleCase } from "../../../../utils/utility";
+
+import "../../../../styles/magicAddressInput.css";
+
+interface IAddressCardProps {
+  data: {
+    pickupAddress: any;
+    setPickupAddress: any;
+    addressLabel: string;
+  };
+}
+
+const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
+  data: { pickupAddress, setPickupAddress, addressLabel },
+}) => {
+  const address =
+    addressLabel === "Return Address"
+      ? pickupAddress.returnAddress
+      : pickupAddress.pickupAddress;
+
+  const navigate = useNavigate();
+  const isItLgScreen = useMediaQuery({
+    query: "(min-width: 1024px)",
+  });
+
+  const [locateAddress, setLocateAddress] = useState("");
+  const [customLandmark, setCustomLandmark] = useState("");
+  const [isLandmarkModal, setIsLandmarkModal] = useState(false);
+
+  const [isAudioModal, setIsAudioModal] = useState(false);
+  const [directionAudio, setDirectionAudio] = useState("");
+  const [isLocationRightModal, setIsLocationRightModal] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [prevPastedData, setPrevPastedData] = useState("");
+  const [pastedData, setPastedData] = useState("");
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const handlePickupAddressChange = (
+    fieldName: keyof typeof address,
+    value: string
+  ) => {
+    const addressName: string =
+      addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+
+    setPickupAddress((prevData: any) => {
+      const updatedData = {
+        ...prevData,
+        [addressName]: { ...prevData[addressName], [fieldName]: value },
+      };
+
+      if (
+        fieldName === "flatNo" ||
+        fieldName === "locality" ||
+        fieldName === "landmark" ||
+        fieldName === "city" ||
+        fieldName === "state" ||
+        fieldName === "country"
+      ) {
+        const { flatNo, locality, landmark, city, state, country } =
+          updatedData[addressName];
+        updatedData[addressName].fullAddress = [
+          flatNo,
+          locality,
+          landmark,
+          city,
+          state,
+          country,
+        ]
+          .filter(Boolean)
+          .join(", ");
+      }
+
+      return updatedData;
+    });
+
+    if (fieldName === "pincode" && value.length === 6) {
+      const payload = {
+        pincode: value,
+      };
+
+      postServicablePincode(payload);
+    }
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPastedData(e.target.value);
+  };
+
+  const handleLandmarkSelected = (landmark: string) => {
+    setCustomLandmark(landmark);
+  };
+
+  const verifyAddressPayload = {
+    data: pastedData,
+  };
+
+  const getVerifyAddress = async (verifyAddressPayload: any) => {
+    try {
+      setLoading(true);
+
+      const { data: verifyAddressResponse } = await POST(
+        VERIFY_ADDRESS,
+        verifyAddressPayload
+      );
+
+      const parsedData = verifyAddressResponse?.data?.message;
+
+      const addressName: any =
+        addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+      setPickupAddress((prevData: any) => ({
+        ...prevData,
+        [addressName]: {
+          ...prevData[addressName],
+          flatNo:
+            `${parsedData.house_number} ${parsedData.floor} ${parsedData.building_name}` ||
+            "",
+          fullAddress: parsedData.full_address || "",
+          locality: parsedData.locality_name || "",
+          sector: parsedData.locality_name || "",
+          landmark: address.landmark,
+          pincode: parsedData.pincode || "",
+          city: parsedData.city_name || "",
+          state: capitalizeFirstLetter(parsedData.state_name) || "",
+          country: parsedData.country_name || "India",
+          addressType: address.addressType || "warehouse",
+        },
+      }));
+
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      return error;
+    }
+  };
+
+  const handleButtonClick = () => {
+    const trimmedData = pastedData.trim();
+
+    if (!loading && trimmedData !== "" && trimmedData !== prevPastedData) {
+      getVerifyAddress(verifyAddressPayload);
+      setPrevPastedData(trimmedData);
+    }
+  };
+
+  const payload = {
+    pincode: address.pincode,
+  };
+
+  const toPascalCase = (str: string) => {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
+
+  const postServicablePincode = async (payload: any) => {
+    try {
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.success) {
+        const pincodeData = response.data[0];
+
+        const addressName: any =
+          addressLabel === "Return Address" ? "returnAddress" : "pickupAddress";
+        setPickupAddress((prevData: any) => ({
+          ...prevData,
+          [addressName]: {
+            ...prevData[addressName],
+            city: toPascalCase(pincodeData.city) || "",
+            state: toPascalCase(pincodeData.state) || "",
+            country: "India",
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error in ServicablePincode API", error);
+      return error;
+    }
+  };
+
+  return (
+    <div>
+      <div className="inline-flex space-x-2 items-center justify-start mb-5 lg:mb-[10px]">
+        <img src={LocationIcon} alt="" className="lg:hidden" />
+
+        <img src={WebLocationIcon} alt="" className="hidden lg:block" />
+
+        <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
+          {addressLabel}
+        </p>
+      </div>
+      <div className="grid grid-cols-12 gap-x-4  ">
+        <div className=" col-span-12 mb-4 lg:col-span-8 xl:col-span-6 sm:mb-6 sm:mr-6 xl:mr-0 ">
+          <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+            <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+              <img src={MagicLocationIcon} alt="Magic Location Icon" />
+              <div className="text-white text-[12px] font-Open">
+                Magic Address for new UI
+              </div>
+            </div>
+
+            <div className="relative h-[75px]  ">
+              <input
+                ref={inputRef}
+                type="text"
+                value={pastedData}
+                onChange={handleChange}
+                className="magicAddressInput"
+                style={{
+                  position: "absolute",
+                  border: "none",
+                }}
+                placeholder="Paste Address for the Magic"
+                title=""
+              />
+              <div>
+                <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <img src={AiIcon} alt="Arrow" onClick={handleButtonClick} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="hidden xl:block col-span-1 "></div>
+
+        <div className="col-span-12 mb-4 lg:col-span-8 xl:col-span-6 sm:mb-6 sm:mr-6 xl:mr-0">
+          <CustomInputWithImage
+            placeholder="Choose location (optional)"
+            imgSrc={ChooseLocationIcon}
+            value={locateAddress}
+            onChange={(e) => {
+              setLocateAddress(e.target.value);
+              handlePickupAddressChange("fullAddress", e.target.value);
+            }}
+            onClick={() => {
+              isItLgScreen
+                ? setIsLocationRightModal(true)
+                : navigate("/neworder/map");
+            }}
+          />
+        </div>
+
+        <div className="hidden lg:block col-span-4 2xl:col-span-6 "></div>
+
+        <div className=" col-span-12 lg:col-span-4 xl:col-span-3 2xl:col-span-2 mb-4 sm:mb-6 sm:mr-6 xl:mr-0">
+          <CustomInputBox
+            label="Plot No., Floor, Building Name"
+            value={address.flatNo}
+            onChange={(e) => {
+              handlePickupAddressChange("flatNo", e.target.value);
+            }}
+          />
+        </div>
+
+        <div className=" col-span-12 sm:col-span-5 lg:col-span-4 xl:col-span-3 2xl:col-span-2 mb-4 sm:mb-6 sm:mr-6 xl:mr-0">
+          <CustomInputBox
+            label="Locality"
+            value={address.locality}
+            onChange={(e) =>
+              handlePickupAddressChange("locality", e.target.value)
+            }
+          />
+        </div>
+
+        <div className=" col-span-12 sm:col-span-7 lg:col-span-4 xl:col-span-3 xl:mr-0 2xl:col-span-2 mb-4 sm:mb-6 sm:mr-6 ">
+          <CustomInputWithDropDown
+            pastedData={
+              address?.fullAddress ? address?.fullAddress : pastedData
+            }
+            value={address.landmark}
+            handlePickupAddressChange={handlePickupAddressChange}
+            handleLandmarkSelected={handleLandmarkSelected}
+          />
+        </div>
+
+        <div className="hidden lg:hidden xl:col-span-3 xl:block 2xl:col-span-6 "></div>
+
+        <div className=" col-span-4 sm:col-span-2 lg:col-span-2  xl:col-span-1 mb-4 sm:mb-6 ">
+          <CustomInputBox
+            label="Pincode"
+            value={address.pincode}
+            onChange={(e) =>
+              handlePickupAddressChange("pincode", e.target.value)
+            }
+            maxLength={6}
+          />
+        </div>
+
+        <div className=" col-span-8 sm:col-span-3 lg:col-span-2 xl:col-span-2 2xl:col-span-1 mb-4 sm-4 sm:mb-6 sm:mr-6 xl:mr-0 ">
+          <CustomInputBox
+            label="City"
+            value={address.city}
+            onChange={(e) => handlePickupAddressChange("city", e.target.value)}
+          />
+        </div>
+
+        <div className=" col-span-8 mb-4 sm:col-span-4 lg:col-span-2 2xl:col-span-1 sm:mb-6 ">
+          <CustomDropDown
+            value={titleCase(address.state)}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              setSelectedOption(event.target.value);
+              handlePickupAddressChange("state", event.target.value);
+            }}
+            options={dummyStateDropdownData}
+            placeHolder="Select State"
+          />
+        </div>
+
+        <div className=" col-span-4 mb-4 sm:col-span-3 lg:col-span-2 xl:col-span-1 sm:mb-6 sm:mr-6 xl:mr-0">
+          <CustomInputBox
+            label="Country"
+            value={address.country}
+            onChange={(e) =>
+              handlePickupAddressChange("country", e.target.value)
+            }
+          />
+        </div>
+
+        <div className="col-span-12 mb-4 lg:col-span-4 xl:col-span-3 xl:mr-0 2xl:col-span-2 sm:mb-6 sm:mr-6 ">
+          <AudioInputBox
+            label="Add directions(optional)"
+            audio={directionAudio}
+            setAudio={setDirectionAudio}
+            onClick={() => !directionAudio && setIsAudioModal(true)}
+          />
+        </div>
+      </div>
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Enter Landmark as"
+        buttonLabel="CONFIRM"
+        inputLabel="Type landmark"
+        imgAlt="Landmark Icon"
+        isModalOpen={isLandmarkModal}
+        setIsModalOpen={setIsLandmarkModal}
+        onClick={() => {}}
+      />
+
+      <CommonBottomModal
+        icon={MapIcon}
+        label="Directions to reach"
+        inputLabel="Tap to add directions"
+        imgAlt="mic"
+        showBtn={false}
+        audioInput={true}
+        isModalOpen={isAudioModal}
+        setIsModalOpen={setIsAudioModal}
+        onClick={() => {}}
+        setAudio={setDirectionAudio}
+        audio={directionAudio}
+      />
+
+      <RightSideModal
+        isOpen={isLocationRightModal}
+        onClose={() => setIsLocationRightModal(false)}
+        className="!w-[389px]"
+      >
+        <Map onClick={() => setIsLocationRightModal(false)} />
+      </RightSideModal>
+    </div>
+  );
+};
+
+export default AddressCard;

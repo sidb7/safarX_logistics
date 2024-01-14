@@ -1,72 +1,444 @@
-import React from "react";
-import ServiceButton from "../../../components/Button/ServiceButton";
-
-import serviceIcon from "../../../assets/serv/service.svg";
+import React, { useState, useEffect } from "react";
+import SummaryAddressBox from "./summaryAddressBox";
+import { useNavigate } from "react-router-dom";
+import { POST } from "../../../utils/webService";
+import {
+  GET_LATEST_ORDER,
+  POST_SET_ORDER_ID,
+  POST_PLACE_ORDER,
+} from "../../../utils/ApiUrls";
+import { HighRiskPincodeModal } from "./whatsappModal";
+import { Breadcrum } from "../../../components/Layout/breadcrum";
+import Stepper from "../../../components/Stepper";
+import BottomLayout from "../../../components/Layout/bottomLayout";
+import AddButton from "../../../components/Button/addButton";
+import {
+  capitalizeFirstLetter,
+  generateUniqueCode,
+  getQueryJson,
+} from "../../../utils/utility";
+import PricingDetails from "./pricingDetails";
+import { toast } from "react-toastify";
+import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
+import CustomInputBox from "../../../components/Input";
+import BoxDetails from "./boxDetails";
+import SummaryService from "./summaryService";
 import contactIcon from "../../../assets/serv/contact.svg";
-import deliveryIcon from "../../../assets/serv/delivery.svg";
 import locationIcon from "../../../assets/serv/location.svg";
-import summaryIcon from "../../../assets/serv/summary.svg";
 import phoneIcon from "../../../assets/serv/phone.svg";
 import editIcon from "../../../assets/serv/edit.svg";
-import copySuccess from "../../../assets/serv/copy-success.svg";
-import SummaryAddressBox from "./summaryAddressBox";
-import Product from './product';
-import Service from "./service";
+import TickLogo from "../../../assets/common/Tick.svg";
+import SummaryIcon from "../../../assets/serv/Summary.svg";
+import { Spinner } from "flowbite-react";
+import ServiceButton from "../../../components/Button/ServiceButton";
+import { socketCallbacks } from "../../../Socket";
+import { useDispatch } from "react-redux";
 
 type Props = {};
 
 const Summary = (props: Props) => {
+  const [loading, setLoading] = useState(true);
+  const [ishighRisk, setIsHighRisk] = useState(false);
+  const [latestOrder, setLatestOrder] = useState<any>([]);
+  const [ewaybillNumber, setEwaybillNumber] = useState("");
+  const dispatch = useDispatch();
+
+  const [pickupLocation, setPickupLocation] = useState({
+    flatNo: "",
+    address: "",
+    sector: "",
+    landmark: "",
+    pincode: "",
+    city: "",
+    state: "",
+    country: "",
+    addressType: "",
+  });
+  const [completeAddress, setCompleteAddress] = useState("");
+  const steps = [
+    {
+      label: "Pickup",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Delivery",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Product",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Service",
+      isCompleted: true,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Summary",
+      isCompleted: false,
+      isActive: true,
+      imgSrc: TickLogo,
+    },
+    {
+      label: "Payment",
+      isCompleted: false,
+      isActive: false,
+      imgSrc: TickLogo,
+    },
+  ];
+
+  const [orderId, setOrderId] = useState("");
+  const navigate = useNavigate();
+  const params = getQueryJson();
+  const shipyaari_id = params?.shipyaari_id || "";
+  let orderSource = params?.source || "";
+
+  const getLatestOrderDetails = async () => {
+    try {
+      setLoading(true);
+      const payload = { tempOrderId: shipyaari_id, source: orderSource };
+      const { data: response } = await POST(GET_LATEST_ORDER, payload);
+
+      if (response?.success) {
+        setLatestOrder(response);
+        setOrderId(response?.data?.[0]?.orderId);
+      } else {
+        setLatestOrder([]);
+      }
+    } catch (error) {
+      console.error("Error in API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const invoiceValue = latestOrder?.data?.[0]?.codInfo?.invoiceValue;
+  const setOrderIdApi = async () => {
+    try {
+      if (invoiceValue >= 50000 && ewaybillNumber === "") {
+        toast.error("Please enter Eway-Bill No.");
+        return;
+      }
+
+      // payload for the first API call
+      let payload = {
+        orderId: orderId,
+        eWayBillNo: ewaybillNumber,
+        tempOrderId: +shipyaari_id,
+        source: orderSource,
+      };
+
+      // Make the first API call
+      const setOrderIdPromise = await POST(POST_SET_ORDER_ID, payload);
+
+      if (setOrderIdPromise?.data?.success) {
+        // If successful, proceed with the second API call
+        const placeOrderPromise = await POST(POST_PLACE_ORDER, {
+          tempOrderId: +shipyaari_id,
+          source: orderSource,
+        });
+
+        // Check the result of the second API call
+        if (placeOrderPromise?.data?.success) {
+          // If both API calls are successful, navigate to the desired page
+          toast.success(placeOrderPromise?.data?.message);
+          // navigate("/orders/view-orders");
+          // // Wait for asynchronous actions to complete, if any
+          await new Promise((resolve) => setTimeout(resolve, 800));
+
+          // Add a cache-busting parameter and then replace the URL
+          // const newUrl =
+          //   "/orders/view-orders?timestamp=" + new Date().getTime();
+          window.location.replace("/orders/view-orders");
+        } else {
+          // Handle errors from the second API call
+          let errorText = placeOrderPromise?.data?.message;
+          if (errorText.startsWith("Wallet")) {
+            toast.warning(placeOrderPromise?.data?.message);
+            const requiredBalance =
+              placeOrderPromise?.data?.data[0]?.requiredBalance;
+
+            navigate(
+              `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+              {
+                state: { requiredBalance: requiredBalance },
+              }
+            );
+          } else {
+            toast.error(placeOrderPromise?.data?.message);
+          }
+        }
+      } else {
+        // If the first API call fails, handle the error and do not proceed to the second API call
+        const errorMessage = setOrderIdPromise?.data?.message;
+        toast.error(errorMessage);
+      }
+    } catch (error) {
+      // Handle any other errors that may occur during API calls
+      toast.error("Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    getLatestOrderDetails();
+    // socketCallbacks.connectSocket(dispatch);
+  }, []);
+
+  const pickupLocationDetails = latestOrder?.data?.[0]?.pickupAddress;
+  const pickupLocationReturnAddress = latestOrder?.data?.[0]?.returnAddress;
+
+  const deliveryLocationDetails = latestOrder?.data?.[0]?.deliveryAddress;
+  const deliveryLocationBillingDetails = latestOrder?.data?.[0]?.billingAddress;
+  const serviceDetails = latestOrder?.data?.[0]?.service;
+  const products = latestOrder?.data?.[0]?.products || [];
+  const boxInfo = latestOrder?.data?.[0]?.boxInfo;
+  const codInfo = latestOrder?.data?.[0]?.codInfo;
+  console.log("codInfo", codInfo);
   return (
     <div>
-      <div className="grid grid-cols-1 gap-y-5 p-5   ">
-        <div className="flex flex-row gap-2">
-          <img src={copySuccess} alt="Summary Icon" />
-          <p className="text-[18px] text-[#202427] font-semibold ">Summary</p>
-        </div>
-        <div className="flex flex-row justify-between items-center h-[48px] rounded  p-[10px] border-[1px] border-[#A4A4A4] ">
-          <p className="text-[12px] text-[#1C1C1C]">Generate order ID</p>
-          <p className="text-[#004EFF] text-[14px] font-bold">AUTO GENERATE</p>
-        </div>
-        
-       
-        <SummaryAddressBox 
-       
-          locationImage={locationIcon}
-          summaryTitle="Pickup Location"
-          
-          editImage={editIcon}
-          locationImage2={locationIcon}
-          summaryAddres="Door 12, sector 8, Shankar Nagar"
-          city=" Andheri East, Mumbai 422011"
-          profileImage={contactIcon}
-          contactNumber= "+91 12345 12345"
-          contactImage={phoneIcon}
-          contactName="Amith Sharma"
-        />
-        
-        {/* Delivery */}
-        <SummaryAddressBox 
-       
-          locationImage={locationIcon}
-          summaryTitle="Delivery Location"
-          
-          editImage={editIcon}
-          locationImage2={locationIcon}
-          summaryAddres="Door 12, sector 8, Shankar Nagar"
-          city=" Andheri East, Mumbai 422011"
-          profileImage={contactIcon}
-          contactNumber= "+91 12345 12345"
-          contactImage={phoneIcon}
-          contactName="Amith Sharma"
-        />
-       
-        <Product />
-        
-        {/*Service */}
-
-        <Service />
+      <Breadcrum label="Add New Order" />
+      <div className="lg:mb-8">
+        <Stepper steps={steps} />
       </div>
+      <div className="grid grid-cols-1 gap-y-5 p-5 ">
+        <div className="flex flex-row gap-2">
+          <img src={SummaryIcon} alt="Summary Icon" />
+          <p className="text-[18px] text-[#202427] font-semibold lg:font-normal font:lato lg:text-2xl ">
+            Summary
+          </p>
+        </div>
 
+        <div className="flex flex-col lg:flex-row gap-5">
+          <div className="md:!w-[372px]">
+            <div className="md:!w-[372px]">
+              <CustomInputBox
+                inputType="number"
+                label="Enter Eway Bill No."
+                value={ewaybillNumber}
+                onChange={(e) => {
+                  if (e.target.value.length <= 12)
+                    setEwaybillNumber(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="md:!w-[372px]">
+            <CustomInputBox
+              isRightIcon={true}
+              containerStyle=""
+              rightIcon={AutoGenerateIcon}
+              className="w-full !text-base !font-semibold"
+              imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+              value={orderId}
+              maxLength={12}
+              label="Order ID"
+              onChange={(e) => {
+                setOrderId(e.target.value);
+              }}
+              onClick={() => {
+                const orderId = generateUniqueCode(8, 12);
+                setOrderId(orderId);
+              }}
+              visibility={true}
+              setVisibility={() => {}}
+            />
+          </div>
+        </div>
+      </div>
+      {loading ? (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <Spinner />
+        </div>
+      ) : (
+        <div className="flex flex-col md:flex-row">
+          <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
+            {/* Pickup Details */}
+            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Pickup Details"
+                isEditIcon={true}
+                warehouse={
+                  pickupLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  pickupLocationDetails?.addressType.slice(1)
+                }
+                editImage={editIcon}
+                locationImage2={locationIcon}
+                summaryAddres={capitalizeFirstLetter(
+                  pickupLocationDetails?.fullAddress
+                )}
+                city={pickupLocationDetails?.city}
+                profileImage={contactIcon}
+                contactNumber={pickupLocationDetails?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={pickupLocationDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="RTO Address"
+                editImage={editIcon}
+                warehouse={
+                  pickupLocationReturnAddress?.addressType
+                    .charAt(0)
+                    .toUpperCase() +
+                  pickupLocationReturnAddress?.addressType.slice(1)
+                }
+                locationImage2={locationIcon}
+                summaryAddres={capitalizeFirstLetter(
+                  pickupLocationReturnAddress?.fullAddress
+                )}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={pickupLocationReturnAddress?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={pickupLocationReturnAddress?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <div
+                className="hidden lg:block cursor-pointer"
+                onClick={() => {
+                  navigate(
+                    `/orders/add-order/pickup?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
+                }}
+              >
+                <div style={{ width: "20px", height: "20px" }}>
+                  {" "}
+                  <img
+                    src={editIcon}
+                    alt="editIcon"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Delivery Details */}
+            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Delivery Details"
+                isEditIcon={true}
+                warehouse={
+                  deliveryLocationDetails?.addressType.charAt(0).toUpperCase() +
+                  deliveryLocationDetails?.addressType.slice(1)
+                }
+                editImage={editIcon}
+                locationImage2={locationIcon}
+                summaryAddres={capitalizeFirstLetter(
+                  deliveryLocationDetails?.fullAddress
+                )}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={deliveryLocationDetails?.contact?.mobileNo}
+                contactImage={phoneIcon}
+                contactName={deliveryLocationDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <SummaryAddressBox
+                locationImage={locationIcon}
+                summaryTitle="Billing Address"
+                editImage={editIcon}
+                warehouse={
+                  deliveryLocationBillingDetails?.addressType
+                    .charAt(0)
+                    .toUpperCase() +
+                  deliveryLocationBillingDetails?.addressType.slice(1)
+                }
+                locationImage2={locationIcon}
+                summaryAddres={capitalizeFirstLetter(
+                  deliveryLocationBillingDetails?.fullAddress
+                )}
+                city=""
+                profileImage={contactIcon}
+                contactNumber={
+                  deliveryLocationBillingDetails?.contact?.mobileNo
+                }
+                contactImage={phoneIcon}
+                contactName={deliveryLocationBillingDetails?.contact?.name}
+                isContactName={true}
+                isContactNumber={true}
+              />
+              <div
+                className="hidden lg:block cursor-pointer"
+                onClick={() => {
+                  navigate(
+                    `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                  );
+                }}
+              >
+                <div style={{ width: "20px", height: "20px" }}>
+                  {" "}
+                  <img
+                    src={editIcon}
+                    alt="editIcon"
+                    className="w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Product Details */}
+            <div className="flex flex-col lg:flex-row gap-y-5 lg:gap-x-5 mb-4 md:pb-20 max-w-screen-md	">
+              <BoxDetails
+                boxInfo={boxInfo}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
+              />
+
+              {/* Service Details */}
+              <SummaryService
+                companyServiceName={serviceDetails?.companyServiceName}
+                price={serviceDetails?.total}
+                add={serviceDetails?.add}
+                base={serviceDetails?.base}
+                cod={serviceDetails?.cod}
+                gst={serviceDetails?.gst}
+                invoiceValue={serviceDetails?.invoiceValue}
+                partnerServiceName={serviceDetails?.partnerServiceName}
+                partnerName={serviceDetails?.partnerName}
+                baseWeight={serviceDetails?.appliedWeight}
+                mode={serviceDetails?.serviceMode}
+                shipyaari_id={shipyaari_id}
+                orderSource={orderSource}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row mr-5 gap-y-5 px-5  pb-20 max-w-screen-md">
+            {/* Pricing Details */}
+            <PricingDetails
+              appliedWeight={serviceDetails?.appliedWeight}
+              price={serviceDetails?.total}
+              add={serviceDetails?.add}
+              base={serviceDetails?.base}
+              variables={serviceDetails?.variables}
+              cod={codInfo?.collectableAmount}
+              tax={serviceDetails?.tax}
+              invoiceValue={codInfo?.invoiceValue}
+              insurance={serviceDetails?.insurance}
+            />
+          </div>
+        </div>
+      )}
+
+      <BottomLayout
+        finalButtonText="PLACE ORDER"
+        callApi={() => setOrderIdApi()}
+        className="lg:w-[120px]"
+      />
     </div>
   );
 };

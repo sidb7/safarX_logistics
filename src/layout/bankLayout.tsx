@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "./Old_NavBar";
 import BackArrowIcon from "../assets/backArrow.svg";
 import ServiceButton from "../components/Button/ServiceButton";
 
@@ -16,9 +16,9 @@ export const BankLayout = () => {
         <div className="relative top-20">
           <div>
             <div className="inline-flex space-x-2 items-center justify-start px-5">
-              <img src={BackArrowIcon} alt="" />
+              <img src={BackArrowIcon} alt="" className="lg:w-[16px]" />
 
-              <p className="text-lg font-bold text-center text-[#1C1C1C] ">
+              <p className="text-lg font-bold text-center text-[#1C1C1C] lg:text-[28px] ">
                 Bank Details
               </p>
             </div>
@@ -31,12 +31,12 @@ export const BankLayout = () => {
           </main>
 
           <footer className="w-full fixed  bottom-0 	">
-            <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0">
-              <ServiceButton text="BACK" onClick={() => navigate("/profile")} />
+            <div className="grid grid-cols-2  shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end">
+              <ServiceButton text="BACK" className="lg:w-[100px]" onClick={() => navigate("/profile")} />
 
               <ServiceButton
                 text="SAVE"
-                className="bg-[#1C1C1C] text-[#FFFFFF]"
+                className="bg-[#1C1C1C] text-[#FFFFFF] lg:w-[100px]"
                 onClick={() => {}}
               />
             </div>

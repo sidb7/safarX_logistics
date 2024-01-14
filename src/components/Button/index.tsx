@@ -1,8 +1,9 @@
+import { capitalizeFirstLetterWithExclude } from "../../utils/utility";
 import { Spinner } from "../Spinner";
 
 interface CustomButtonProps {
   text: any;
-  onClick: () => void;
+  onClick: (e: any) => void;
   className?: string;
   disabled?: boolean;
   type?: any;
@@ -10,7 +11,9 @@ interface CustomButtonProps {
   icon?: any;
   showIcon?: boolean;
   loading?: boolean;
+  onlyIcon?: boolean;
 }
+
 const CustomButton = (props: CustomButtonProps) => {
   const {
     text,
@@ -22,7 +25,11 @@ const CustomButton = (props: CustomButtonProps) => {
     icon,
     iconClass,
     loading = false,
+    onlyIcon = false,
   } = props;
+
+  const excludeWords = ["B2B", "B2C"];
+
   return (
     <>
       {loading ? (
@@ -34,14 +41,20 @@ const CustomButton = (props: CustomButtonProps) => {
       ) : (
         <button
           type={type}
-          className={`flex justify-center items-center text-white bg-black rounded-md h-9 w-full ${className}`}
+          className={`flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full ${className}`}
           onClick={onClick}
           disabled={disabled}
         >
           {showIcon && (
-            <img className={`${iconClass} mr-2`} src={icon} alt="" />
+            <img
+              className={`${iconClass} ${onlyIcon ? "" : "mr-2"}`}
+              src={icon}
+              alt=""
+            />
           )}
-          {text}
+          <p className="buttonClassName md:text-[14px] whitespace-nowrap capitalize">
+            {capitalizeFirstLetterWithExclude(text, excludeWords)}
+          </p>
         </button>
       )}
     </>

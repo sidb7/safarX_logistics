@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "./NavBar";
+import NavBar from "./Old_NavBar";
 import BackArrowIcon from "../assets/backArrow.svg";
 import { Transaction } from "../screens/Transaction";
 const TransactionLayout = () => {
@@ -20,7 +20,9 @@ const TransactionLayout = () => {
           </div>
         </div>
 
-        <Transaction />
+        <div>
+          <Transaction />
+        </div>
 
         <main className="pb-24">
           <div className="relative top-0">

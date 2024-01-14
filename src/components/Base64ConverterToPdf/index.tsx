@@ -9,11 +9,9 @@ interface propTypes {
 function Base64ToPdfPreview(props: propTypes) {
   const { base64String, width, height } = props;
   const [pdfUrl, setPdfUrl] = useState("");
-  console.log(pdfUrl);
 
   useEffect(() => {
     if (base64String) {
-      console.log(base64String);
       const binaryString = window.atob(base64String);
       const bytes = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
