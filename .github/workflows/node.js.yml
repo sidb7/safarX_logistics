@@ -6,11 +6,6 @@ on:
       - main
       - develop
       - master
-  pull_request:
-    branches:
-      - main
-      - develop
-      - master
 
 jobs:
   production:
@@ -21,6 +16,19 @@ jobs:
       matrix:
         node-version: [20.x]
 
+    env:
+      REACT_APP_ENV: "${{ secrets.REACT_APP_ENV }}"
+      REACT_APP_COMPANY: "${{ secrets.REACT_APP_COMPANY }}"
+      REACT_APP_SELLER_PROD: "${{ secrets.REACT_APP_SELLER_PROD }}"
+      REACT_APP_PARTNER_PROD: "${{ secrets.REACT_APP_PARTNER_PROD }}"
+      REACT_APP_FILE_SERVER_PROD: "${{ secrets.REACT_APP_FILE_SERVER_PROD }}"
+      REACT_APP_LANDMARK_PROD: "${{ secrets.REACT_APP_LANDMARK_PROD }}"
+      REACT_APP_TRACKING_URL_PROD: "${{ secrets.REACT_APP_TRACKING_URL_PROD }}"
+      REACT_APP_SELLER_WEB_URL_PROD: "${{ secrets.REACT_APP_SELLER_WEB_URL_PROD }}"
+      REACT_APP_GTM_ID: "${{ secrets.REACT_APP_GTM_ID }}"
+      REACT_APP_GA4_ID: "${{ secrets.REACT_APP_GA4_ID }}"
+      REACT_APP_AMAZON_APPLICATION_ID: "${{ secrets.REACT_APP_AMAZON_APPLICATION_ID }}"
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -29,20 +37,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Use Secrets for Production
-        run: |
-          echo "REACT_APP_ENV: ${{ secrets.REACT_APP_ENV }}"
-          echo "REACT_APP_COMPANY: ${{ secrets.REACT_APP_COMPANY }}"
-          echo "REACT_APP_SELLER_PROD: ${{ secrets.REACT_APP_SELLER_PROD }}"
-          echo "REACT_APP_PARTNER_PROD: ${{ secrets.REACT_APP_PARTNER_PROD }}"
-          echo "REACT_APP_FILE_SERVER_PROD: ${{ secrets.REACT_APP_FILE_SERVER_PROD }}"
-          echo "REACT_APP_LANDMARK_PROD: ${{ secrets.REACT_APP_LANDMARK_PROD }}"
-          echo "REACT_APP_TRACKING_URL_PROD: ${{ secrets.REACT_APP_TRACKING_URL_PROD }}"
-          echo "REACT_APP_SELLER_WEB_URL_PROD: ${{ secrets.REACT_APP_SELLER_WEB_URL_PROD }}"
-          echo "REACT_APP_GTM_ID: ${{ secrets.REACT_APP_GTM_ID }}"
-          echo "REACT_APP_GA4_ID: ${{ secrets.REACT_APP_GA4_ID }}"
-          echo "REACT_APP_AMAZON_APPLICATION_ID: ${{ secrets.REACT_APP_AMAZON_APPLICATION_ID }}"
 
       - name: Install and Build for Production
         run: |
@@ -62,6 +56,16 @@ jobs:
       matrix:
         node-version: [20.x]
 
+    env:
+      REACT_APP_ENV: "${{ secrets.REACT_APP_ENV }}"
+      REACT_APP_COMPANY: "${{ secrets.REACT_APP_COMPANY }}"
+      REACT_APP_SELLER_DEV: "${{ secrets.REACT_APP_SELLER_DEV }}"
+      REACT_APP_PARTNER_DEV: "${{ secrets.REACT_APP_PARTNER_DEV }}"
+      REACT_APP_FILE_SERVER_DEV: "${{ secrets.REACT_APP_FILE_SERVER_DEV }}"
+      REACT_APP_LANDMARK_DEV: "${{ secrets.REACT_APP_LANDMARK_DEV }}"
+      REACT_APP_TRACKING_URL_DEV: "${{ secrets.REACT_APP_TRACKING_URL_DEV }}"
+      REACT_APP_SELLER_WEB_URL_DEV: "${{ secrets.REACT_APP_SELLER_WEB_URL_DEV }}"
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -70,17 +74,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Use Secrets for Development
-        run: |
-          echo "REACT_APP_ENV: ${{ secrets.REACT_APP_ENV }}"
-          echo "REACT_APP_COMPANY: ${{ secrets.REACT_APP_COMPANY }}"
-          echo "REACT_APP_SELLER_DEV: ${{ secrets.REACT_APP_SELLER_DEV }}"
-          echo "REACT_APP_PARTNER_DEV: ${{ secrets.REACT_APP_PARTNER_DEV }}"
-          echo "REACT_APP_FILE_SERVER_DEV: ${{ secrets.REACT_APP_FILE_SERVER_DEV }}"
-          echo "REACT_APP_LANDMARK_DEV: ${{ secrets.REACT_APP_LANDMARK_DEV }}"
-          echo "REACT_APP_TRACKING_URL_DEV: ${{ secrets.REACT_APP_TRACKING_URL_DEV }}"
-          echo "REACT_APP_SELLER_WEB_URL_DEV: ${{ secrets.REACT_APP_SELLER_WEB_URL_DEV }}"
 
       - name: Install and Build for Development
         run: |
