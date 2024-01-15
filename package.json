@@ -59,6 +59,7 @@
     "test-build": "REACT_APP_ENV=test GENERATE_SOURCEMAP=false react-scripts build",
     "dev-build": "REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-scripts build",
     "prod-build": "REACT_APP_ENV=production GENERATE_SOURCEMAP=false react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "local": "REACT_APP_ENV=local react-scripts start",
     "dev": "REACT_APP_ENV=development react-scripts start",
     "test": "REACT_APP_ENV=test react-scripts start",
