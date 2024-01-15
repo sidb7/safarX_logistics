@@ -8,6 +8,7 @@ let LANDMARK_URL = "";
 let TRACKING_URL = "";
 let REACT_APP_GTM_ID = "";
 let REACT_APP_GA4_ID = "";
+let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 
@@ -22,7 +23,7 @@ switch (Environment) {
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
-
+    ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
     break;
 
   case "test":
@@ -35,6 +36,8 @@ switch (Environment) {
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_TEST}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_TEST}`;
+    ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+
     break;
 
   case "production":
@@ -47,6 +50,7 @@ switch (Environment) {
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_PROD}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_PROD}`;
+    ADMIN_URL = `${process.env.REACT_APP_ADMIN_PROD}`;
 
     break;
 
@@ -59,6 +63,7 @@ switch (Environment) {
     PAYMENT_URL = `${process.env.REACT_APP_PAYMENT_LOCAL}`;
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_LOCAL}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
+    ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
     SELLER_WEB_URL = `http://localhost:3000`;
 
     break;
@@ -311,6 +316,7 @@ const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChanne
 const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 export {
+  ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
   REACT_APP_GTM_ID,
   REACT_APP_GA4_ID,
