@@ -466,7 +466,7 @@ const MyRoutes: React.FC = () => {
           />
 
           <Route
-            path="/test"
+            path="/coupon"
             element={
               <ProtectedRoute>
                 <CouponScreen />
