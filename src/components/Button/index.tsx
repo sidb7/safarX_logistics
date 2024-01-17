@@ -52,7 +52,7 @@ const CustomButton = (props: CustomButtonProps) => {
               alt=""
             />
           )}
-          <p className="buttonClassName md:text-[14px] whitespace-nowrap capitalize">
+          <p className="buttonClassName md:text-[14px] font-Open font-semibold leading-5 whitespace-nowrap capitalize">
             {capitalizeFirstLetterWithExclude(text, excludeWords)}
           </p>
         </button>

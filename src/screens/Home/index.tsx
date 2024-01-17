@@ -30,6 +30,7 @@ import {
 } from "../../utils/ApiUrls";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { tokenKey } from "../../utils/utility";
+import CouponScreen from "../../components/Coupons/index";
 
 interface IOverview {}
 const BarchartData = [
@@ -86,6 +87,10 @@ export const Home = (props: IOverview) => {
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
   const roles = useSelector((state: any) => state?.roles);
+
+  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  kycCheck = JSON.parse(kycCheck);
+  console.log("🚀 ~ Home ~ kycCheck:", kycCheck);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   // const isActive =
@@ -352,6 +357,8 @@ export const Home = (props: IOverview) => {
   return (
     <>
       {isActive ? (
+        // php user check and render the component
+
         <div>
           <div>
             <Breadcrum label="Home" />
@@ -410,6 +417,9 @@ export const Home = (props: IOverview) => {
           <AccessDenied />
         </div>
       )}
+      {/* <div className="hidden">
+        <CouponScreen />
+      </div> */}
     </>
   );
 };

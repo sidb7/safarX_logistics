@@ -51,14 +51,14 @@ export const Breadcrum = ({
     <>
       <div>
         {!kycCheck && (
-          <div className="flex justify-between bg-[#F5BE6D] p-2">
+          <div className="flex justify-between bg-[#F5BE6D] p-2 rounded-sm">
             <div className="flex gap-x-2">
               <img src={infoIcon} alt="" />
-              <p className="text-base font-normal">KYC Pending</p>
+              <p className="font-Lato text-base font-normal">KYC Pending</p>
             </div>
 
             <p
-              className="text-base text-[#004EFF] font-normal cursor-pointer"
+              className="text-base font-Lato text-[#004EFF] font-normal underline cursor-pointer"
               onClick={() => navigate("/onboarding/kyc-type")}
             >
               Click Here
