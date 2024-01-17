@@ -56,6 +56,11 @@ const App = () => {
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
+  let userInfo = sessionStorage.getItem("userInfo") as any;
+  userInfo = JSON.parse(userInfo);
+
+  const emailId: any = JSON.stringify(userInfo?.email);
+
   useEffect(() => {
     //Init G Tag Manager
     TagManager.initialize(tagManagerArgs);
@@ -101,8 +106,11 @@ const App = () => {
           ],
         });
            Sentry.configureScope(function(scope) {
-           scope.setExtra("sellerId", ${roomName})
-          })
+             // Set user.id and user.email if available
+        if (${roomName} && ${emailId}) {
+          scope.setUser({ id: ${roomName}, email: ${emailId} });
+        }
+       })
       };
         `;
       document.body.appendChild(scriptElement);
