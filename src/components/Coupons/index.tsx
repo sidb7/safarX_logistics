@@ -4,19 +4,64 @@ import failureIcon from "../../assets/failure.svg";
 import NavigationIcon from "../../assets/navigatorIcon.svg";
 import CustomButton from "../Button";
 import "../../styles/progressBar.css";
+import { useNavigate } from "react-router-dom";
+// import SucessCenterModal from "./sucessCenterModal";
+// import CenterModal from "../CustomModal/customCenterModal";
+// import KycVerify from "./kycVerify";
+// import BankVerify from "./bankVerify";
+// import { POST } from "../../utils/webService";
+// import { GET_PROFILE_URL } from "../../utils/ApiUrls";
+// import { Spinner } from "../../components/Spinner";
+// import { toast } from "react-toastify";
 
-interface IIndexProps {
-  // statusImage?:any
-}
+interface IIndexProps {}
 
 const Index: React.FunctionComponent<IIndexProps> = () => {
-  const dataset = {
-    registration: true,
-    kyc: false,
-    bank: false,
+  const navigate = useNavigate();
+
+  let kycCheck = sessionStorage.getItem("kycValue") as any;
+  kycCheck = JSON.parse(kycCheck);
+  const onboardingStatus = kycCheck?.nextStep;
+
+  let dataset: any = {
+    onboardingStatus,
   };
+  dataset = { ...dataset.onboardingStatus, registration: true };
 
   const [progress, setProgress] = useState(0);
+  console.log("🚀 ~ progress:", progress);
+  const [dataValue, setDataValue]: any = useState(dataset);
+  const [showCenterSuccessModal, setShowCenterSucessModal] = useState(false);
+  console.log("🚀 ~ showCenterSuccessModal:", showCenterSuccessModal);
+
+  const [isModalOpen, setIsModalOpen] = useState<any>(false);
+
+  const handleButtonClick = () => {
+    // Toggle the boolean value for showComponent
+    setShowCenterSucessModal(!showCenterSuccessModal);
+  };
+
+  // const [rightSideModal, setRightSideModal] = useState<any>({
+  //   kyc: false,
+  //   bank: false,
+  // });
+
+  // const [sellerData, setSellerData]: any = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
+
+  // const openModalForKyc = () => {
+  //   setRightSideModal((rightSideModal: any) => ({
+  //     ...rightSideModal,
+  //     kyc: !rightSideModal.kyc,
+  //   }));
+  // };
+
+  // const openModalForBank = () => {
+  //   setRightSideModal((rightSideModal: any) => ({
+  //     ...rightSideModal,
+  //     bank: !rightSideModal.bank,
+  //   }));
+  // };
 
   const calculateProgress = () => {
     const totalSteps = Object.keys(dataset).length;
@@ -31,8 +76,21 @@ const Index: React.FunctionComponent<IIndexProps> = () => {
   useEffect(() => {
     setTimeout(() => {
       calculateProgress();
-    }, 1000);
+      setDataValue(dataset);
+    }, 400);
   }, []);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     const { data } = await POST(GET_PROFILE_URL, {});
+  //     if (data?.success) {
+  //       setSellerData(data?.data?.[0]);
+  //     } else {
+  //       toast.error(data?.message);
+  //     }
+  //     setIsLoading(false);
+  //   })();
+  // }, []);
 
   return (
     <div className="h-full w-full flex justify-center items-center">
@@ -69,24 +127,41 @@ const Index: React.FunctionComponent<IIndexProps> = () => {
             </div>
             <div className="flex justify-between mb-8">
               <div className="flex gap-x-[10px]">
-                <img src={failureIcon} alt="" />
+                <img
+                  src={!dataValue?.kyc ? failureIcon : successStatus}
+                  alt=""
+                />
                 <span className="font-Open text-sm leading-6 font-semibold tracking-[0.28px] uppercase">
                   KYC
                 </span>
               </div>
-              <div>
-                <img src={NavigationIcon} alt="" />
+              <div className={`${dataValue?.kyc ? "hidden" : "block"}`}>
+                <img
+                  src={NavigationIcon}
+                  alt=""
+                  className="cursor-pointer"
+                  onClick={() => navigate("/onboarding/kyc-type")}
+                />
               </div>
             </div>
             <div className="flex justify-between mb-8">
               <div className="flex gap-x-[10px]">
-                <img src={failureIcon} alt="" />
+                <img
+                  src={!dataValue?.bank ? failureIcon : successStatus}
+                  alt=""
+                />
                 <span className="font-Open text-sm leading-6 font-semibold tracking-[0.28px] whitespace-nowrap uppercase">
                   Bank Verification
                 </span>
               </div>
-              <div>
-                <img src={NavigationIcon} alt="" />
+              <div className={`${dataValue?.bank ? "hidden" : "block"}`}>
+                <img
+                  src={NavigationIcon}
+                  alt=""
+                  className="cursor-pointer delay-500"
+                  // onClick={openModalForBank}
+                  onClick={() => navigate("/onboarding/wallet-details")}
+                />
               </div>
             </div>
           </div>
@@ -94,10 +169,24 @@ const Index: React.FunctionComponent<IIndexProps> = () => {
           <div className="mt-6 flex justify-center items-center">
             <CustomButton
               text="Redeem"
-              onClick={() => {}}
-              className="!w-[88px]"
+              onClick={handleButtonClick}
+              className={`!w-[88px] !rounded-[4px] delay-300 ${
+                progress === 100 ? "" : "!bg-[#E8E8E8] !text-[#BBBBBB]"
+              }`}
+              disabled={progress !== 100 ? true : false}
             />
           </div>
+          {/* {showCenterSuccessModal && <CenterModal isOpen={isModalOpen}   />} */}
+
+          {/* <KycVerify
+            modalStatus={rightSideModal?.kyc}
+            setModalStatus={setRightSideModal}
+          />
+
+          <BankVerify
+            modalStatus={rightSideModal?.bank}
+            setModalStatus={setRightSideModal}
+          /> */}
         </div>
       </div>
     </div>

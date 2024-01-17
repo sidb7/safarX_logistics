@@ -13,6 +13,7 @@ import { Spinner } from "../../components/Spinner";
 
 export const Profile = () => {
   const [profileData, setProfileData]: any = useState([]);
+  console.log("🚀 ~ Profile ~ profileData:", profileData);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
