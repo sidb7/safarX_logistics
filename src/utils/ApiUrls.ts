@@ -23,7 +23,7 @@ switch (Environment) {
     LANDMARK_URL = `${process.env.REACT_APP_LANDMARK_DEV}`;
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
-    ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    ADMIN_URL = `http://localhost:3000`;
     break;
 
   case "test":

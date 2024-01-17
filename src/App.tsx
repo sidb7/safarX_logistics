@@ -109,12 +109,13 @@ const App = () => {
     }
 
     const receiveMessage = (event: any) => {
+      console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
       const expectedOrigin = ADMIN_URL;
       if (event.origin.includes(expectedOrigin)) {
         const sellerData = event.data.sellerData;
         console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
         if (sellerData) {
-          loginFromSeller(JSON.parse(decrypt("#*%ll12", sellerData)));
+          loginFromSeller(JSON.parse(sellerData));
         }
       } else {
         console.error("Unexpected origin:", event.origin);
