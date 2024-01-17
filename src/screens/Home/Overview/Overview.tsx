@@ -17,6 +17,7 @@ import Locations from "../Common/Locations";
 import Invoices from "../Common/Invoices";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../../../components/Button";
+import CouponScreen from "../../../components/Coupons/index";
 
 interface IOverview {
   ordersArr?: any;
@@ -306,18 +307,23 @@ export const Overview = (props: IOverview) => {
           </div> */}
         </div>
       ) : (
-        <div className="flex flex-col justify-center items-center mt-[255px]">
-          <CustomButton
-            className="px-2 py-4 font-semibold text-[14px] !w-[150px]"
-            text="ADD ORDER"
-            onClick={() => navigate("/orders/add-order/pickup")}
-            showIcon={true}
-            icon={AddOrderIcon}
-          />
-          <p className="text-[12px] mt-1 text-[#2f3e46] text-opacity-30 font-Open">
-            Let's place your first Order!
-          </p>
-        </div>
+        <>
+          <div className="mt-[100px]">
+            <CouponScreen />
+          </div>
+          {/* <div className="flex flex-col justify-center items-center mt-[255px]">
+            <CustomButton
+              className="px-2 py-4 font-semibold text-[14px] !w-[150px]"
+              text="ADD ORDER"
+              onClick={() => navigate("/orders/add-order/pickup")}
+              showIcon={true}
+              icon={AddOrderIcon}
+            />
+            <p className="text-[12px] mt-1 text-[#2f3e46] text-opacity-30 font-Open">
+              Let's place your first Order!
+            </p>
+          </div> */}
+        </>
       )}
     </>
   );
