@@ -29,6 +29,7 @@ jobs:
       REACT_APP_GTM_ID: ${{ secrets.REACT_APP_GTM_ID }}
       REACT_APP_GA4_ID: ${{ secrets.REACT_APP_GA4_ID }}
       REACT_APP_AMAZON_APPLICATION_ID: ${{ secrets.REACT_APP_AMAZON_APPLICATION_ID }}
+      REACT_APP_ADMIN_PROD: ${{ secrets.REACT_APP_ADMIN_PROD }}
 
     steps:
       - name: Checkout Repository
@@ -52,6 +53,7 @@ jobs:
           echo "REACT_APP_GTM_ID: $REACT_APP_GTM_ID"
           echo "REACT_APP_GA4_ID: $REACT_APP_GA4_ID"
           echo "REACT_APP_AMAZON_APPLICATION_ID: $REACT_APP_AMAZON_APPLICATION_ID"
+          echo "REACT_APP_ADMIN_PROD: $REACT_APP_ADMIN_PROD"
 
       - name: Install and Build for Production
         run: |
@@ -83,6 +85,7 @@ jobs:
       REACT_APP_LANDMARK_DEV: ${{ secrets.REACT_APP_LANDMARK_DEV }}
       REACT_APP_TRACKING_URL_DEV: ${{ secrets.REACT_APP_TRACKING_URL_DEV }}
       REACT_APP_SELLER_WEB_URL_DEV: ${{ secrets.REACT_APP_SELLER_WEB_URL_DEV }}
+      REACT_APP_ADMIN_DEV: ${{ secrets.REACT_APP_ADMIN_DEV }}
 
     steps:
       - name: Checkout Repository
@@ -103,6 +106,7 @@ jobs:
           echo "REACT_APP_LANDMARK_DEV: $REACT_APP_LANDMARK_DEV"
           echo "REACT_APP_TRACKING_URL_DEV: $REACT_APP_TRACKING_URL_DEV"
           echo "REACT_APP_SELLER_WEB_URL_DEV: $REACT_APP_SELLER_WEB_URL_DEV"
+          echo "REACT_APP_ADMIN_DEV: $REACT_APP_ADMIN_DEV"
 
       - name: Install and Build for Development
         run: |
