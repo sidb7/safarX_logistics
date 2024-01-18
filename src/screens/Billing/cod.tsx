@@ -14,12 +14,15 @@ import PaginationComponent from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
 import InvoiceData from "./BillingData/invoiceData";
 import CodData from "./BillingData/codData";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import ShipmentDetailModal from "./Modal/shipmentDetailModal";
 
 interface IInvoiceProps {}
 
 const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(10);
+  const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
   const [renderingComponents, setRenderingComponents] = useState(0);
   const arrayData = [
     { label: "Orders" },
@@ -50,6 +53,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     setRenderingComponents(id);
     render(id);
   };
+
   return (
     <>
       <div>
@@ -70,7 +74,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
         </div>
         <div className="mx-4">
-          <CodData />
+          <CodData setCodModal={setCodModal} />
         </div>
 
         {totalItemCount > 0 && (
@@ -81,6 +85,18 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
             onItemsPerPageChange={onPerPageItemChange}
           />
         )}
+
+        <RightSideModal
+          isOpen={codModal?.isOpen}
+          onClose={() => {
+            setCodModal({ isOpen: false, data: {} });
+          }}
+          className="md:!w-[50%]"
+        >
+          <ShipmentDetailModal
+            onClick={() => setCodModal({ isOpen: false, data: {} })}
+          />
+        </RightSideModal>
       </div>
     </>
   );

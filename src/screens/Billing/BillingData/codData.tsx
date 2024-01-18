@@ -7,10 +7,15 @@ import sortIcon from "../../../assets/sort.svg";
 import downloadIcon from "../../../assets/download.svg";
 import exportIcon from "../../../assets/export.svg";
 import infoIcon from "../../../assets/info.svg";
+import CustomTableWithScroll from "../../../components/CustomTableWithScroll";
 
-interface IInvoiceDataProps {}
+interface IInvoiceDataProps {
+  setCodModal?: any;
+}
 
-const CodData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
+const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
+  setCodModal,
+}) => {
   const columnsHelper = createColumnHelper<any>();
   const [data, setData] = useState([
     {
@@ -59,7 +64,6 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
           </div>
         );
       },
-
       cell: (info: any) => {
         return (
           <div className="py-4">
@@ -234,6 +238,57 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
         );
       },
     }),
+    columnsHelper.accessor("netPaid", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              Net Paid
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        //   info.row.original?.netPaid;
+
+        return (
+          <div className="">
+            {true ? (
+              <p
+                className="text-[#5958FF] cursor-pointer"
+                onClick={() =>
+                  setCodModal({ isOpen: true, data: info.row.original })
+                }
+              >
+                ₹ 790
+              </p>
+            ) : (
+              <p>₹ 0.00</p>
+            )}
+          </div>
+        );
+      },
+    }),
+    columnsHelper.accessor("paymentRefNo", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              Payment Ref No
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        //   info.row.original?.netPaid;
+
+        return <div className="">UTIBR234567890000987654</div>;
+      },
+    }),
     columnsHelper.accessor("actions", {
       header: () => {
         return (
@@ -254,12 +309,14 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = (props) => {
       },
     }),
   ];
+
+  const fixedCol = ["reportDate", "actions"];
   return (
     <div>
-      <CustomTable
+      <CustomTableWithScroll
         columns={billingOrdersHeading}
         data={data}
-        thclassName={" bg-white"}
+        fixedData={fixedCol}
       />
     </div>
   );
