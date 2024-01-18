@@ -168,7 +168,7 @@ const Index = () => {
         event: "Login",
         seller_email: response?.data[0]?.email,
         sellerId: response?.data[0]?.sellerId,
-        name: response?.data[0]?.name,
+        seller_name: response?.data[0]?.name,
         seller_kyc: response?.data[0]?.nextStep.kyc,
         seller_bank_verification_done: response?.data[0]?.nextStep.bank,
         isReturningUser: response?.data[0]?.isReturningUser,
