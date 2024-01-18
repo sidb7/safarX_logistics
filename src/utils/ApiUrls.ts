@@ -124,6 +124,7 @@ const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
 const GET_COURIER_PARTNER_SERVICE = `${SELLER_BASE_URL}/order/getAvailableService`;
 const SET_PARTNER_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
+const SET_WEIGHT_INFO_ORDER = `${SELLER_BASE_URL}/order/setWeightInfoForOrder`;
 
 const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 // const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
@@ -466,4 +467,5 @@ export {
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_CHANNEL_INVENTORIES,
   UPDATE_ONE_CHANNEL_INVENTORY,
+  SET_WEIGHT_INFO_ORDER,
 };
