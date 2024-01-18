@@ -52,13 +52,14 @@ const App = () => {
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
   );
+
   const dispatch = useDispatch();
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
   let userInfo = sessionStorage.getItem("userInfo") as any;
   userInfo = JSON.parse(userInfo);
-
+  const sellerId: any = userInfo?.sellerId;
   const emailId: any = JSON.stringify(userInfo?.email);
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const App = () => {
     let scriptElement: any = "";
 
     // sentry code
-    if (Environment === "production") {
+    if (Environment === "production" && roomName !== null) {
       script = document.createElement("script");
       script.src =
         "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
@@ -107,8 +108,8 @@ const App = () => {
         });
            Sentry.configureScope(function(scope) {
              // Set user.id and user.email if available
-        if (${roomName} && ${emailId}) {
-          scope.setUser({ id: ${roomName}, email: ${emailId} });
+        if (${sellerId} && ${emailId}) {
+          scope.setUser({ id: ${sellerId}, email: ${emailId} });
         }
        })
       };
@@ -137,7 +138,7 @@ const App = () => {
       document.body.removeChild(script);
       document.body.removeChild(scriptElement);
     };
-  }, []);
+  }, [sessionStorage]);
 
   const loginFromSeller = (sellerData: any) => {
     sessionStorage.setItem("setKycValue", sellerData?.nextStep?.kyc);
