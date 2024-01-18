@@ -90,7 +90,6 @@ export const Home = (props: IOverview) => {
 
   let kycCheck = sessionStorage.getItem("kycValue") as any;
   kycCheck = JSON.parse(kycCheck);
-  console.log("🚀 ~ Home ~ kycCheck:", kycCheck);
 
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   // const isActive =
