@@ -14,6 +14,7 @@ import {
   FETCH_ALL_PARTNER,
   FETCH_MANIFEST_DATA,
   GET_ORDER_BY_ID,
+  GET_ORDER_ERRORS,
   GET_SELLER_ORDER,
   POST_PLACE_CHANNEL_ORDERS,
 } from "../../../utils/ApiUrls";
@@ -55,6 +56,7 @@ interface IOrderstatusProps {
   draftOrderCount?: any;
   setDraftOrderCount?: any;
   setIsErrorPage?: any;
+  setErrorData?: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -99,6 +101,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   draftOrderCount,
   setDraftOrderCount,
   setIsErrorPage,
+  setErrorData,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -556,10 +559,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
         break;
       }
-      // case 3: {
-      //   const subStatus = "ERROR";
-      //   getAllOrders(subStatus);
-      // }
+      case 3: {
+        getErrors();
+      }
     }
   };
 
@@ -755,6 +757,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
     setOrders(OrderData);
     setTotalcount(orderCount || 0);
+  };
+
+  const getErrors = async () => {
+    const { data } = await POST(GET_ORDER_ERRORS);
+    setErrorData(data?.data);
   };
 
   function getObjectWithIsActiveTrue(data: any) {

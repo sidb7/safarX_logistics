@@ -50,6 +50,7 @@ import { BottomNavBar } from "../../components/BottomNavBar";
 import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 import "../../styles/hideScroll.css";
 import Errors from "./Errors";
+import ErrorModal from "./ErrorModal";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -269,6 +270,9 @@ const Index = () => {
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorData, setErrorData]: any = useState();
+  const [errorModalData, setErrorModalData]: any = useState();
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -1011,6 +1015,7 @@ const Index = () => {
                 totalOrders={totalOrders}
                 setDraftOrderCount={setDraftOrderCount}
                 setIsErrorPage={setIsErrorPage}
+                setErrorData={setErrorData}
               />
             </div>
             <div
@@ -1065,7 +1070,11 @@ const Index = () => {
                 <div>
                   {isLgScreen ? (
                     isErrorPage ? (
-                      <Errors setIsErrorModalOpen={setIsErrorModalOpen} />
+                      <Errors
+                        errorData={errorData}
+                        setIsErrorModalOpen={setIsErrorModalOpen}
+                        setErrorModalData={setErrorModalData}
+                      />
                     ) : (
                       <>
                         <CustomTable
@@ -1157,7 +1166,9 @@ const Index = () => {
         isOpen={isErrorModalOpen}
         onClose={() => setIsErrorModalOpen(false)}
         className="!justify-start"
-      ></CustomRightModal>
+      >
+        <ErrorModal errorModalData={errorModalData} />
+      </CustomRightModal>
     </>
   );
 };

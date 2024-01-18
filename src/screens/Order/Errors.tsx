@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import UpArrow from "../../assets/AccordionUp.svg";
+import {
+  capitalizeFirstLetter,
+  convertNumberToMultipleOfhundred,
+  orderErrorsEnum,
+} from "../../utils/utility";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { PaymentSlice } from "../../redux/reducers/paymentReducer";
 
 let dummyErrors = [
   "Insufficient Balance",
@@ -102,16 +110,32 @@ let dummyDataError = [
 
 interface ErrorProps {
   setIsErrorModalOpen: any;
+  errorData: any;
+  setErrorModalData: any;
 }
 
 const Errors = (props: ErrorProps) => {
-  const { setIsErrorModalOpen } = props;
+  const { setIsErrorModalOpen, errorData, setErrorModalData } = props;
+  console.log("🚀 ~ Errors ~ errorData:", errorData?.[0]?.matchingErrors);
+  let errors = errorData?.[0]?.matchingErrors;
+  let finalError = [];
+  // for (let i = 0; i < errors.length; i++) {}
   const [openIndex, setOpenIndex] = useState(null);
   const [isLoading, setIsLoading]: any = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleError = (elem: any) => {
-    console.log("elem: ", elem);
-    setIsErrorModalOpen(true);
+  const handleError = (elem: any, errorName: any) => {
+    console.log("🚀 ~ handleError ~ elem:", elem);
+    setErrorModalData({ entityDetails: elem, error: errorName });
+    // console.log(convertNumberToMultipleOfhundred("2920"));
+    // const amountArray = elem?.status?.[0]?.notes?.split(" ");
+    // let amount = amountArray?.[amountArray?.length - 2];
+
+    // const walletAmount = amount ? amount : 1000;
+    // dispatch(PaymentSlice.actions.paymentAmount(walletAmount));
+    if (errorName === "Recharge") navigate(`/wallet/view-wallet`);
+    else setIsErrorModalOpen(true);
   };
 
   const handleItemClick = (index: any) => {
@@ -125,9 +149,9 @@ const Errors = (props: ErrorProps) => {
         </div>
       ) : (
         <div>
-          {dummyDataError.map((item: any, index: any) => (
+          {errorData?.map((item: any, index: any) => (
             <div
-              className="flex flex-col mb-5 cursor-pointer"
+              className="flex flex-col mb-5 cursor-pointer mr-3"
               style={{
                 boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
               }}
@@ -142,12 +166,14 @@ const Errors = (props: ErrorProps) => {
                 onClick={() => handleItemClick(index)}
               >
                 <div>
-                  <div>{item.error}</div>
-                  <div className="text-[14px]">{item.noOfOrders} Orders</div>
+                  <div>{item.errorName}</div>
+                  <div className="text-[14px]">
+                    {item.ErrorOrderCount} Orders
+                  </div>
                 </div>
                 <div className="flex items-center">
                   <span className="mr-[1rem] border-[blue] border-b-[1px] text-[blue]">
-                    Fix
+                    {/* Fix */}
                   </span>
                   <span>
                     <img
@@ -158,18 +184,54 @@ const Errors = (props: ErrorProps) => {
                 </div>
               </div>
               {openIndex === index &&
-                item.orders.map((elem: any, nestedIndex: any) => (
+                item.matchingErrors.map((elem: any, nestedIndex: any) => (
                   <div
                     className={`flex flex-col overflow-auto border p-[0.5rem]`}
                   >
-                    <div className=" flex justify-between mx-[1rem] my-[0.5rem]">
-                      <div>{elem.orderId}</div>
-                      <div
-                        onClick={() => handleError(elem)}
-                        className="border-[blue] border-b-[1px] text-[blue]"
-                      >
-                        {elem.solution}
-                      </div>
+                    <div className="">
+                      {orderErrorsEnum[item.errorName] ===
+                      "Update Product Details" ? (
+                        <div>
+                          <div className="flex items-center justify-between mr-2">
+                            <div className="flex gap-x-2 mx-[1rem] my-[0.5rem] max-w-[80%] line-clamp-1">
+                              {elem?.boxInfo?.[0]?.products?.map(
+                                (product: any) => (
+                                  <div>
+                                    <div className="max-w-[120px] line-clamp-1">
+                                      {capitalizeFirstLetter(product?.name)},
+                                    </div>
+                                  </div>
+                                )
+                              )}
+                            </div>
+                            <div
+                              onClick={() =>
+                                handleError(
+                                  elem?.boxInfo?.[0]?.products,
+                                  orderErrorsEnum[item.errorName]
+                                )
+                              }
+                              className="border-[blue] border-b-[1px] text-[blue]"
+                            >
+                              UPDATE
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex justify-between mx-[1rem] my-[0.5rem]">
+                          <div>
+                            {elem.orderId ? elem.orderId : elem.tempOrderId}
+                          </div>
+                          <div
+                            onClick={() =>
+                              handleError(elem, orderErrorsEnum[item.errorName])
+                            }
+                            className="border-[blue] border-b-[1px] text-[blue]"
+                          >
+                            {orderErrorsEnum[item.errorName]}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))}
