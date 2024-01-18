@@ -73,7 +73,10 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
   }
 
   const actionsObject: any = {
-    DRAFT: [{ title: "Delete Order", actionType: "delete" }],
+    DRAFT: [
+      { title: "Edit Order", actionType: "edit" },
+      { title: "Delete Order", actionType: "delete" },
+    ],
     BOOKED: [
       { title: "Track Order", actionType: "track_order" },
       { title: "Download Label", actionType: "download_label" },
@@ -146,7 +149,7 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
                 )
               }
             >
-              {fileUrl !== "" ? action?.title : "No Label Found"}
+              {fileUrl !== "" ? action?.title : "Download Label"}
             </div>
           ) : (
             <div

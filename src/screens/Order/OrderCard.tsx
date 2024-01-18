@@ -220,7 +220,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
                   )
                 }
               >
-                {fileUrl !== "" ? action?.title : "No Label Found"}
+                {fileUrl !== "" ? action?.title : "Download Label"}
               </div>
             ) : (
               <div

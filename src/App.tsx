@@ -39,6 +39,7 @@ const App = () => {
 
   const navigate = useNavigate();
   const location: any = useLocation();
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     ReactGA.send({
@@ -52,6 +53,7 @@ const App = () => {
   const [roomName, setRoomName] = useState<any>(
     `${sessionStorage.getItem("sellerId")}`
   );
+
   const dispatch = useDispatch();
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
@@ -73,41 +75,63 @@ const App = () => {
     // };
   }, []);
 
+  //sentry code
+  const userInfoString = sessionStorage.getItem("userInfo");
   useEffect(() => {
+    const userInfo = userInfoString ? JSON.parse(userInfoString) : null;
+    setUserInfo(userInfo);
+
+    const sellerId = userInfo?.sellerId;
+    const emailId = userInfo?.email;
+
     let script: any = "";
     let scriptElement: any = "";
 
-    // sentry code
-    if (Environment === "production") {
+    if (
+      Environment === "production" &&
+      userInfo !== undefined &&
+      userInfo !== null
+    ) {
       script = document.createElement("script");
       script.src =
         "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
       script.crossOrigin = "anonymous";
-
       document.body.appendChild(script);
 
-      // source code
       scriptElement = document.createElement("script");
+      console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
       scriptElement.innerHTML = `
-         window.sentryOnLoad = function () {
-        Sentry.init({
-          // add custom config here
-          integrations: [
-            new Sentry.Replay({
-              // Additional SDK configuration goes in here, for example:
-              maskAllText: false,
-              blockAllMedia: false,
-            }),
-          ],
-        });
-           Sentry.configureScope(function(scope) {
-           scope.setExtra("sellerId", ${roomName})
-          })
-      };
+          window.sentryOnLoad = function () {
+            Sentry.init({
+              integrations: [
+                new Sentry.Replay({
+                  maskAllText: false,
+                  blockAllMedia: false,
+                }),
+              ],
+            });
+            Sentry.configureScope(function(scope) {
+              // Set user.id and user.email if available
+              if ('${sellerId}' && '${emailId}') {
+                scope.setUser({ id: '${sellerId}', email: '${emailId}' });
+              }
+            });
+          };
         `;
       document.body.appendChild(scriptElement);
     }
 
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script);
+      }
+      if (scriptElement && scriptElement.parentNode) {
+        scriptElement.parentNode.removeChild(scriptElement);
+      }
+    };
+  }, [userInfoString]);
+
+  useEffect(() => {
     const receiveMessage = (event: any) => {
       console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
       const expectedOrigin = ADMIN_URL;
@@ -126,8 +150,6 @@ const App = () => {
 
     return () => {
       window.removeEventListener("message", receiveMessage);
-      document.body.removeChild(script);
-      document.body.removeChild(scriptElement);
     };
   }, []);
 

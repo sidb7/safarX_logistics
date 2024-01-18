@@ -49,6 +49,7 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 import "../../styles/hideScroll.css";
+import PartnerJumperModal from "./PartnerJumberModal";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -221,6 +222,10 @@ const Index = () => {
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
+  });
+  const [partnerModalData, setPartnerModalData]: any = useState({
+    isOpen: false,
+    data: [],
   });
 
   const [sellerOverview, setSellerOverview]: any = useState([
@@ -566,7 +571,18 @@ const Index = () => {
   const orderActions = (payLoad: any, actionType: any, currentStatus?: any) => {
     switch (currentStatus) {
       case "DRAFT":
-        setDeleteModalDraftOrder({ isOpen: true, payload: payLoad });
+        if (actionType === "edit") {
+          setPartnerModalData({
+            isOpen: true,
+            data: {
+              tempOrderId: payLoad?.tempOrderIdArray?.[0],
+              awb: "0",
+            },
+          });
+          // setIsPartnerModal(true);
+        } else {
+          setDeleteModalDraftOrder({ isOpen: true, payload: payLoad });
+        }
         break;
       case "BOOKED":
       case "CANCELLED":
@@ -1123,6 +1139,17 @@ const Index = () => {
           </p>
         </div>
         <CustomTableAccordian data={infoModalContent} />
+      </CustomRightModal>
+
+      <CustomRightModal
+        isOpen={partnerModalData.isOpen}
+        onClose={() => setPartnerModalData({ isOpen: false })}
+        className="!justify-start"
+      >
+        <PartnerJumperModal
+          partnerModalData={partnerModalData}
+          closeModal={() => setPartnerModalData({ isOpen: false })}
+        />
       </CustomRightModal>
     </>
   );
