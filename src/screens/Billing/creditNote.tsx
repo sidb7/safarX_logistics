@@ -16,15 +16,18 @@ const CreditNote: React.FunctionComponent<ICreditNoteProps> = (props) => {
     { label: "Orders" },
     { label: "Invoice" },
     { label: "Credit Note" },
+    { label: "Cod" },
   ];
 
   const render = (id: any) => {
     if (id === 0) {
       navigate("/billing/orders");
     } else if (id === 1) {
-      navigate("/billing/invoice");
+      navigate("/billing/invoices");
     } else if (id === 2) {
-      navigate("/billing/credit-note");
+      navigate("/billing/credit-notes");
+    } else if (id === 3) {
+      navigate("/billing/cod");
     }
   };
 

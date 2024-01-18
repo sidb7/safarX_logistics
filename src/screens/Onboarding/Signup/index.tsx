@@ -85,9 +85,16 @@ const Index = () => {
       sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
+        const { sellerId, email, isReturningUser, name, nextStep } =
+          response?.data[0];
         window?.dataLayer?.push({
           event: "Signup",
-          ...response?.data[0],
+          seller_email: email,
+          sellerId: sellerId,
+          seller_name: name,
+          seller_kyc: nextStep.kyc,
+          seller_bank_verification_done: nextStep.bank,
+          isReturningUser: isReturningUser,
         });
 
         sessionStorage.setItem("userInfo", JSON.stringify(sellerData));
