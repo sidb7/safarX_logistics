@@ -11,7 +11,12 @@ import { setWalletBalance } from "./redux/reducers/userReducer";
 import { socketCallbacks } from "./Socket";
 import TagManager from "react-gtm-module";
 import ReactGA from "react-ga4";
-import { ADMIN_URL, REACT_APP_GA4_ID, REACT_APP_GTM_ID } from "./utils/ApiUrls";
+import {
+  ADMIN_URL,
+  Environment,
+  REACT_APP_GA4_ID,
+  REACT_APP_GTM_ID,
+} from "./utils/ApiUrls";
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import { signInUser } from "./redux/reducers/signInReducer";
 import {
@@ -51,6 +56,11 @@ const App = () => {
   const [isSocketInitialized, setIsSocketInitialized] = useState(false);
   console.log("isSocketconnectedApp.tsx", isSocketInitialized);
 
+  let userInfo = sessionStorage.getItem("userInfo") as any;
+  userInfo = JSON.parse(userInfo);
+
+  const emailId: any = JSON.stringify(userInfo?.email);
+
   useEffect(() => {
     //Init G Tag Manager
     TagManager.initialize(tagManagerArgs);
@@ -69,15 +79,51 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    const receiveMessage = (event: any) => {
-      const currentOrigin = window.location.origin;
+    let script: any = "";
+    let scriptElement: any = "";
 
+    // sentry code
+    if (Environment === "production") {
+      script = document.createElement("script");
+      script.src =
+        "https://js.sentry-cdn.com/23c8372ecd2f2f7fdd613c6b664ae402.min.js";
+      script.crossOrigin = "anonymous";
+
+      document.body.appendChild(script);
+
+      // source code
+      scriptElement = document.createElement("script");
+      scriptElement.innerHTML = `
+         window.sentryOnLoad = function () {
+        Sentry.init({
+          // add custom config here
+          integrations: [
+            new Sentry.Replay({
+              // Additional SDK configuration goes in here, for example:
+              maskAllText: false,
+              blockAllMedia: false,
+            }),
+          ],
+        });
+           Sentry.configureScope(function(scope) {
+             // Set user.id and user.email if available
+        if (${roomName} && ${emailId}) {
+          scope.setUser({ id: ${roomName}, email: ${emailId} });
+        }
+       })
+      };
+        `;
+      document.body.appendChild(scriptElement);
+    }
+
+    const receiveMessage = (event: any) => {
+      console.log("🚀 ~ receiveMessage ~ ADMIN_URL:", ADMIN_URL);
       const expectedOrigin = ADMIN_URL;
       if (event.origin.includes(expectedOrigin)) {
         const sellerData = event.data.sellerData;
         console.log("🚀 ~ receiveMessage ~ sellerData:", sellerData);
         if (sellerData) {
-          loginFromSeller(JSON.parse(decrypt("#*%ll12", sellerData)));
+          loginFromSeller(JSON.parse(sellerData));
         }
       } else {
         console.error("Unexpected origin:", event.origin);
@@ -88,6 +134,8 @@ const App = () => {
 
     return () => {
       window.removeEventListener("message", receiveMessage);
+      document.body.removeChild(script);
+      document.body.removeChild(scriptElement);
     };
   }, []);
 

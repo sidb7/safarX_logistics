@@ -160,6 +160,7 @@ import AiListen from "../screens/QuickPages/AiListen";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
+import CouponScreen from "../components/Coupons/index";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -460,6 +461,15 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/coupon"
+            element={
+              <ProtectedRoute>
+                <CouponScreen />
               </ProtectedRoute>
             }
           />
@@ -1020,7 +1030,7 @@ const MyRoutes: React.FC = () => {
             path="/tracking"
             element={
               // <ProtectedRoute>
-                <ClientTracking />
+              <ClientTracking />
               // </ProtectedRoute>
             }
           />
@@ -1161,7 +1171,7 @@ const MyRoutes: React.FC = () => {
             path="/tracking"
             element={
               // <ProtectedRoute>
-                <Tracking />
+              <Tracking />
               // </ProtectedRoute>
             }
           />
