@@ -116,7 +116,6 @@ interface ErrorProps {
 
 const Errors = (props: ErrorProps) => {
   const { setIsErrorModalOpen, errorData, setErrorModalData } = props;
-  console.log("🚀 ~ Errors ~ errorData:", errorData?.[0]?.matchingErrors);
   let errors = errorData?.[0]?.matchingErrors;
   let finalError = [];
   // for (let i = 0; i < errors.length; i++) {}
@@ -126,7 +125,6 @@ const Errors = (props: ErrorProps) => {
   const dispatch = useDispatch();
 
   const handleError = (elem: any, errorName: any) => {
-    console.log("🚀 ~ handleError ~ elem:", elem);
     setErrorModalData({ entityDetails: elem, error: errorName });
     // console.log(convertNumberToMultipleOfhundred("2920"));
     // const amountArray = elem?.status?.[0]?.notes?.split(" ");
@@ -141,6 +139,7 @@ const Errors = (props: ErrorProps) => {
   const handleItemClick = (index: any) => {
     setOpenIndex(index === openIndex ? null : index);
   };
+
   return (
     <div className="h-[70vh]">
       {isLoading ? (

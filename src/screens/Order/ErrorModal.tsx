@@ -4,9 +4,13 @@ import InputBox from "../../components/Input/index";
 import ItemIcon from "../../assets/Product/Item.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../assets/layer.svg";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import { capitalizeFirstLetter, orderErrorsEnum } from "../../utils/utility";
 import { useEffect, useState } from "react";
 import CustomDropDown from "../../components/DropDown";
+import { Spinner } from "../../components/Spinner";
+import MagicLocationIcon from "../../assets/PickUp/magicLocation.svg";
+import AiIcon from "../../assets/Buttons.svg";
+import LocationIcon from "../../assets/Location.svg";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -28,12 +32,21 @@ const ErrorModal = (props: ErrorModalProps) => {
     height: 0,
     volumetricWeight: 0,
   });
+  const [pickupAddress, setPickupAddress]: any = useState([]);
+  const [deliveryAddress, setdeliveryAddress]: any = useState([]);
 
   const measureUnits = [
     {
       label: "Cm",
       value: "Cm",
     },
+  ];
+
+  const addressType = [
+    {
+      label: "Pickup Address",
+    },
+    { label: "Delivery Address" },
   ];
 
   const dimesionBoxJsx = (index?: any) => {
@@ -225,26 +238,236 @@ const ErrorModal = (props: ErrorModalProps) => {
     console.log("ProductDetails, BoxDetails: ", { productDetails, boxDetails });
   };
 
+  const switchConditions = () => {
+    switch (errorModalData.error) {
+      case orderErrorsEnum["Update Product And Box Details"]: {
+        return (
+          <div>
+            <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[55vh]">
+              {errorModalData?.entityDetails?.map((data: any, index: any) => (
+                <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
+                  <div className="flex min-w-[90%]">
+                    <div
+                      className="items-center flex border-2 rounded-md w-[100%] justify-between"
+                      style={{
+                        boxShadow:
+                          "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                      }}
+                      onClick={() => handleProductsDetails(index)}
+                    >
+                      <div className="flex items-center w-[90%]">
+                        <div className="p-3.5 flex justify-center items-center">
+                          <img src={ItemIcon} className="" alt="" />
+                        </div>
+                        <div className="max-w-[80%] line-clamp-1">
+                          {" "}
+                          <b>{capitalizeFirstLetter(data?.name)} </b>
+                        </div>
+                      </div>
+                      <div className="mr-[1rem]">
+                        <img
+                          className={`${index === globalIndex && "rotate-180"}`}
+                          src={DownArrowIcon}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {index === globalIndex && dimesionBoxJsx(index)}
+                </div>
+              ))}
+            </div>
+
+            <div className="m-[1rem] mt-[1rem]">
+              <div className="flex min-w-[90%]">
+                <div
+                  className="items-center flex border-2 rounded-md w-[100%] justify-between"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                  }}
+                  onClick={handleBoxAccordion}
+                >
+                  <div className="flex items-center ml-[0.5rem]">
+                    <div className="p-3.5 flex justify-center items-center">
+                      <img src={BoxIcon} className="w-[40px]" />
+                    </div>
+                    <div>
+                      {" "}
+                      <b>Box</b>{" "}
+                    </div>
+                  </div>
+                  <div className="mr-6">
+                    <img src={DownArrowIcon} />
+                  </div>
+                </div>
+              </div>
+              {globalIndex === -1 && dimesionBoxJsx()}
+            </div>
+          </div>
+        );
+      }
+      case orderErrorsEnum["Update Pickup And Delivery Address"]: {
+        return (
+          <div className="mx-4 ">
+            {addressType.map((address: any, index: any) => {
+              return (
+                <div className="border-2 mb-[1rem] bg-slate-50 overflow-auto max-h-[70vh]">
+                  <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
+                    <div className="flex min-w-[90%] ">
+                      <div
+                        className="items-center flex border-2 rounded-md w-[100%] justify-between p-2 "
+                        style={{
+                          boxShadow:
+                            "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                        }}
+                        onClick={() => handleProductsDetails(index)}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <img src={LocationIcon} width="40px" />
+                          <p>
+                            <b>{address.label}</b>
+                          </p>
+                        </div>
+                        <div className="mr-2">
+                          <img
+                            src={DownArrowIcon}
+                            className={`${
+                              globalIndex === index ? "rotate-180" : ""
+                            }`}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      className={` ${
+                        globalIndex === index && "border-2 border-t-0"
+                      }`}
+                    >
+                      {globalIndex === index && (
+                        <div className="p-[1rem] ">
+                          <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+                            <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                              <img
+                                src={MagicLocationIcon}
+                                alt="Magic Location Icon"
+                              />
+                              <div className="text-white text-[12px] font-Open">
+                                Magic Address
+                              </div>
+                            </div>
+
+                            <div className="relative h-[75px]  ">
+                              <input
+                                // ref={inputRef}
+                                type="text"
+                                // value={pastedData}
+                                // onKeyDown={handleKeyDown}
+                                // onChange={handleChange}
+                                className="magicAddressInput w-full removePaddingPlaceHolder"
+                                style={{
+                                  position: "absolute",
+                                  border: "none",
+                                }}
+                                placeholder="Paste Address for the Magic"
+                                title=""
+                              />
+                              <div>
+                                <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                                  {/* {loading ? (
+                      <Spinner />
+                    ) : ( */}
+                                  <img
+                                    src={AiIcon}
+                                    alt="Arrow"
+                                    // onClick={handleButtonClick}
+                                  />
+                                  {/* )} */}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-5">
+                            <InputBox
+                              label="Plot No., Floor, Building Name"
+                              // value={}
+                              // onChange={}
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="flex mt-[1rem] gap-[1rem]">
+                              <InputBox
+                                label="Country"
+                                // value={}
+                                // onChange={}
+                              />
+                              <InputBox
+                                label="State"
+                                // value={}
+                                // onChange={}
+                              />
+                            </div>
+                            <div className="flex mt-[1rem] gap-[1rem]">
+                              <InputBox
+                                label="City"
+                                // value={}
+                                // onChange={}
+                              />
+                              <InputBox
+                                label="Locality"
+                                // value={}
+                                // onChange={}
+                              />
+                            </div>
+                            <div className="flex mt-[1rem] gap-[1rem] ">
+                              <InputBox
+                                label="Pincode"
+                                // value={}
+                                // onChange={}
+                              />
+                              <InputBox
+                                label="Select Landmark"
+                                // value={}
+                                // onChange={}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        );
+      }
+    }
+  };
+
   useEffect(() => {
-    errorModalData.entityDetails.map((item: any) => {
-      productDimesions = {
-        ...productDimesions,
-        [item.productId]: {
-          deadWeight: item?.deadWeight || 0,
-          length: item?.length || 0,
-          breadth: item?.breadth || 0,
-          height: item?.height || 0,
-          volumetricWeight:
-            (
-              (Number(item?.length) *
-                Number(item?.breadth) *
-                Number(item?.height)) /
-              5000
-            ).toFixed(2) || 0,
-        },
-      };
-    });
-    setProductDetails(productDimesions);
+    if (
+      errorModalData.error === orderErrorsEnum["Update Product And Box Details"]
+    ) {
+      errorModalData?.entityDetails?.map((item: any) => {
+        productDimesions = {
+          ...productDimesions,
+          [item.productId]: {
+            deadWeight: item?.deadWeight || 0,
+            length: item?.length || 0,
+            breadth: item?.breadth || 0,
+            height: item?.height || 0,
+            volumetricWeight:
+              (
+                (Number(item?.length) *
+                  Number(item?.breadth) *
+                  Number(item?.height)) /
+                5000
+              ).toFixed(2) || 0,
+          },
+        };
+      });
+      setProductDetails(productDimesions);
+    }
   }, []);
 
   useEffect(() => {
@@ -262,7 +485,7 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   return (
     <div className="overflow-h-auto max-h-[90vh]">
-      <div className="flex mt-[1rem] mb-[2rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
+      <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
         <div className="flex w-[100%] justify-between">
           <div className="flex gap-x-2">
             <img src={SampleProduct} width="38px" />
@@ -273,66 +496,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         </div>
       </div>
-      <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[55vh]">
-        {errorModalData?.entityDetails?.map((data: any, index: any) => (
-          <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
-            <div className="flex min-w-[90%]">
-              <div
-                className="items-center flex border-2 rounded-md w-[100%] justify-between"
-                style={{
-                  boxShadow:
-                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                }}
-                onClick={() => handleProductsDetails(index)}
-              >
-                <div className="flex items-center w-[90%]">
-                  <div className="p-3.5 flex justify-center items-center">
-                    <img src={ItemIcon} className="" alt="" />
-                  </div>
-                  <div className="max-w-[80%] line-clamp-1">
-                    {" "}
-                    <b>{capitalizeFirstLetter(data?.name)} </b>
-                  </div>
-                </div>
-                <div className=" w-[10%]">
-                  <img
-                    className={`${index === globalIndex && "rotate-180"}`}
-                    src={DownArrowIcon}
-                  />
-                </div>
-              </div>
-            </div>
-            {index === globalIndex && dimesionBoxJsx(index)}
-          </div>
-        ))}
-      </div>
-
-      <div className="m-[1rem] mt-[1rem]">
-        <div className="flex min-w-[90%]">
-          <div
-            className="items-center flex border-2 rounded-md w-[100%] justify-between"
-            style={{
-              boxShadow:
-                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-            }}
-            onClick={handleBoxAccordion}
-          >
-            <div className="flex items-center ml-[0.5rem]">
-              <div className="p-3.5 flex justify-center items-center">
-                <img src={BoxIcon} className="w-[40px]" />
-              </div>
-              <div>
-                {" "}
-                <b>Box</b>{" "}
-              </div>
-            </div>
-            <div className="mr-6">
-              <img src={DownArrowIcon} />
-            </div>
-          </div>
-        </div>
-        {globalIndex === -1 && dimesionBoxJsx()}
-      </div>
+      {switchConditions()}
       <div
         style={{
           boxShadow:
@@ -344,7 +508,10 @@ const ErrorModal = (props: ErrorModalProps) => {
           className="cursor-pointer flex items-center justify-center border-2 rounded-md  text-white bg-black py-2"
           onClick={updateProducts}
         >
-          Save
+          {errorModalData.error ===
+          orderErrorsEnum["Update Product And Box Details"]
+            ? "Update Product Details"
+            : "Update Address"}
         </div>
       </div>
     </div>
