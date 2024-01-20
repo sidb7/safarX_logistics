@@ -49,6 +49,8 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
 import "../../styles/hideScroll.css";
+import Errors from "./Errors";
+import ErrorModal from "./ErrorModal";
 import PartnerJumperModal from "./PartnerJumberModal";
 
 const Buttons = (className?: string) => {
@@ -203,7 +205,7 @@ const tabs = [
 ];
 
 const Index = () => {
-  const [filterId, setFilterId] = useState(0);
+  const [filterId, setFilterId]: any = useState(0);
   const [statusData, setStatusData]: any = useState(tabs);
   const [orders, setOrders]: any = useState([]);
   const [allOrders, setAllOrders]: any = useState([]);
@@ -264,6 +266,17 @@ const Index = () => {
   const [isSticky, setIsSticky] = useState(false);
 
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [draftOrderCount, setDraftOrderCount] = useState({
+    all: 0,
+    draft: 0,
+    failed: 0,
+    error: 0,
+  });
+
+  const [isErrorPage, setIsErrorPage] = useState(false);
+  const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
+  const [errorData, setErrorData]: any = useState();
+  const [errorModalData, setErrorModalData]: any = useState();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -495,11 +508,19 @@ const Index = () => {
         currentStatus,
       });
 
-      const { orderCount } = data?.data[0];
+      const { orderCount, draftCount, failedCount } = data?.data[0];
 
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
+
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+        failed: failedCount || 0,
+        error: failedCount || 0,
+      });
 
       setSelectedRowData([]);
       if (data?.status) {
@@ -660,6 +681,9 @@ const Index = () => {
 
       let currentStatus = tabs[index].value;
 
+      setIsErrorPage(index > 0 && false);
+      setFilterId(index > 0 && 0);
+
       switch (tabs[index].value) {
         case "DRAFT":
           setColumnhelper(
@@ -809,6 +833,8 @@ const Index = () => {
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
+
+      setDraftOrderCount({ ...draftOrderCount, all: orderCount });
 
       setSelectedRowData([]);
 
@@ -999,9 +1025,13 @@ const Index = () => {
                 setCancellationModal={setCancellationModal}
                 tabStatusId={tabStatusId}
                 setTotalcount={setTotalcount}
+                draftOrderCount={draftOrderCount}
                 setStatusCount={setStatusCount}
                 isOrderTableLoader={setIsLoading}
                 totalOrders={totalOrders}
+                setDraftOrderCount={setDraftOrderCount}
+                setIsErrorPage={setIsErrorPage}
+                setErrorData={setErrorData}
               />
             </div>
             <div
@@ -1055,23 +1085,32 @@ const Index = () => {
               ) : (
                 <div>
                   {isLgScreen ? (
-                    <>
-                      <CustomTable
-                        data={orders || []}
-                        columns={columnHelper || []}
-                        setRowSelectedData={setSelectedRowData}
-                        sticky={isSticky}
+                    isErrorPage ? (
+                      <Errors
+                        errorData={errorData}
+                        setIsErrorModalOpen={setIsErrorModalOpen}
+                        setErrorModalData={setErrorModalData}
                       />
-                      {totalCount > 0 && (
-                        <Pagination
-                          totalItems={totalCount}
-                          itemsPerPageOptions={[10, 50, 100, 200, 500, 1000]}
-                          onPageChange={onPageIndexChange}
-                          onItemsPerPageChange={onPerPageItemChange}
-                          initialItemsPerPage={itemsPerPage}
+                    ) : (
+                      <>
+                        <CustomTable
+                          data={orders || []}
+                          columns={columnHelper || []}
+                          setRowSelectedData={setSelectedRowData}
+                          sticky={isSticky}
                         />
-                      )}
-                    </>
+
+                        {totalCount > 0 && (
+                          <Pagination
+                            totalItems={totalCount}
+                            itemsPerPageOptions={[10, 50, 100, 500, 1000]}
+                            onPageChange={onPageIndexChange}
+                            onItemsPerPageChange={onPerPageItemChange}
+                            initialItemsPerPage={itemsPerPage}
+                          />
+                        )}
+                      </>
+                    )
                   ) : (
                     <div className="border border-white my-5">
                       {orders.length > 0 ? (
@@ -1139,6 +1178,14 @@ const Index = () => {
           </p>
         </div>
         <CustomTableAccordian data={infoModalContent} />
+      </CustomRightModal>
+
+      <CustomRightModal
+        isOpen={isErrorModalOpen}
+        onClose={() => setIsErrorModalOpen(false)}
+        className="!justify-start"
+      >
+        <ErrorModal errorModalData={errorModalData} />
       </CustomRightModal>
 
       <CustomRightModal
