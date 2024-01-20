@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import NavBar from "./~components/NavBar";
 import TopBar from "./~components/TopBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../utils/responsiveState";
 import { getRoles } from "../redux/reducers/role";
 import { useDispatch } from "react-redux";
@@ -18,8 +18,21 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
     dispatch(getRoles());
   }, []);
 
+  useEffect(() => {
+    const userInfo: any = sessionStorage?.getItem("userInfo");
+    const { sellerId, email, isReturningUser, name, nextStep } =
+      JSON.parse(userInfo);
 
-  
+    window?.dataLayer?.push({
+      event: "page_view",
+      seller_email: email,
+      sellerId: sellerId,
+      seller_name: name,
+      seller_kyc: nextStep.kyc,
+      seller_bank_verification_done: nextStep.bank,
+      isReturningUser: isReturningUser,
+    });
+  }, [useNavigate()]);
 
   return (
     <>

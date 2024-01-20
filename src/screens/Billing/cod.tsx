@@ -1,16 +1,28 @@
+// import React from "react";
+
+// function cod() {
+//   return <div>cod</div>;
+// }
+
+// export default cod;
+
 import React, { useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { ScrollNav } from "../../components/ScrollNav";
 import { SearchBox } from "../../components/SearchBox";
 import PaginationComponent from "../../components/Pagination";
 import { useNavigate } from "react-router-dom";
-import OrdersData from "./BillingData/ordersData";
+import InvoiceData from "./BillingData/invoiceData";
+import CodData from "./BillingData/codData";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import ShipmentDetailModal from "./Modal/shipmentDetailModal";
 
-interface IOrdersProps {}
+interface IInvoiceProps {}
 
-const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
+const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(10);
+  const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
   const [renderingComponents, setRenderingComponents] = useState(0);
   const arrayData = [
     { label: "Orders" },
@@ -41,6 +53,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
     setRenderingComponents(id);
     render(id);
   };
+
   return (
     <>
       <div>
@@ -51,7 +64,7 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
               arrayData={arrayData}
               showNumber={false}
               setScrollIndex={setScrollIndex}
-              defaultIndexValue={0}
+              defaultIndexValue={3}
             />
           </div>
           <div>
@@ -60,9 +73,8 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
             </div>
           </div>
         </div>
-        {/* <p>table for orders </p> */}
         <div className="mx-4">
-          <OrdersData />
+          <CodData setCodModal={setCodModal} />
         </div>
 
         {totalItemCount > 0 && (
@@ -73,9 +85,21 @@ const Orders: React.FunctionComponent<IOrdersProps> = (props) => {
             onItemsPerPageChange={onPerPageItemChange}
           />
         )}
+
+        <RightSideModal
+          isOpen={codModal?.isOpen}
+          onClose={() => {
+            setCodModal({ isOpen: false, data: {} });
+          }}
+          className="md:!w-[50%]"
+        >
+          <ShipmentDetailModal
+            onClick={() => setCodModal({ isOpen: false, data: {} })}
+          />
+        </RightSideModal>
       </div>
     </>
   );
 };
 
-export default Orders;
+export default Cod;

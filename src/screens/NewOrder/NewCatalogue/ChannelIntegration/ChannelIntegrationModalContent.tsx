@@ -343,7 +343,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 <div className="flex items-center gap-x-1 mt-1">
                   <img src={ErrorIcon} alt="" width={10} height={10} />
                   <span className="font-normal text-[#F35838] text-xs leading-3">
-                    Url Format is https://example.com
+                    Url Format is https://example.domainName.com
                   </span>
                 </div>
               )}

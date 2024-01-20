@@ -133,7 +133,9 @@ import PickupLocationNew from "../screens/NewOrder/NewPickup/index";
 import Notifications from "../screens/Notification/notifications";
 import HelpScreen from "../screens/Help";
 import OrdersScreen from "../screens/Billing/orders";
-import Invoice from "../screens/NewOrder/Billing/invoice";
+import Cod from "../screens/Billing/cod";
+import Invoice from "../screens/Billing/invoice";
+import CreditNote from "../screens/Billing/creditNote";
 import WeightFreeze from "../screens/WeightManagement";
 import SystemLog from "../screens/SystemLog";
 import DeliveryLocation from "../screens/NewOrder/NewDelivery";
@@ -160,6 +162,7 @@ import AiListen from "../screens/QuickPages/AiListen";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
+import CouponScreen from "../components/Coupons/index";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -464,6 +467,15 @@ const MyRoutes: React.FC = () => {
             }
           />
 
+          <Route
+            path="/coupon"
+            element={
+              <ProtectedRoute>
+                <CouponScreen />
+              </ProtectedRoute>
+            }
+          />
+
           {/* End here */}
 
           <Route
@@ -554,14 +566,23 @@ const MyRoutes: React.FC = () => {
 
         {/* billing details Routes */}
         <Route>
-          {/* <Route
-                path="/billing/orders"
-                element={
-                  <ProtectedRoute>
-                    <OrdersScreen />
-                  </ProtectedRoute>
-                }
-              /> */}
+          <Route
+            path="/billing/orders"
+            element={
+              <ProtectedRoute>
+                <OrdersScreen />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/billing/cod"
+            element={
+              <ProtectedRoute>
+                <Cod />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/billing/invoices"
@@ -584,7 +605,7 @@ const MyRoutes: React.FC = () => {
             path="/billing/credit-notes"
             element={
               <ProtectedRoute>
-                <Invoice />
+                <CreditNote />
               </ProtectedRoute>
             }
           />
@@ -1020,7 +1041,7 @@ const MyRoutes: React.FC = () => {
             path="/tracking"
             element={
               // <ProtectedRoute>
-                <ClientTracking />
+              <ClientTracking />
               // </ProtectedRoute>
             }
           />
@@ -1161,7 +1182,7 @@ const MyRoutes: React.FC = () => {
             path="/tracking"
             element={
               // <ProtectedRoute>
-                <Tracking />
+              <Tracking />
               // </ProtectedRoute>
             }
           />
