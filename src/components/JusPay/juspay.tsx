@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import JusPayIcon from "../../assets/juspay.png";
-import { INITIAL_RECHARGE } from "../../utils/ApiUrls";
+import { INITIAL_RECHARGE, SELLER_WEB_URL } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PaymentLoader from "../paymentLoader/paymentLoader";
 import { Spinner } from "../../components/Spinner";
+import { useDispatch, useSelector } from "react-redux";
+import { PaymentSlice } from "../../redux/reducers/paymentReducer";
 
 interface IProps {
   isDisabled?: boolean;
@@ -15,12 +17,20 @@ const JusPay = (props: IProps) => {
   const { isDisabled, amount, callbackUrl } = props;
   const [paymentLoader, setpaymentLoader] = useState<any>(false);
   const [loading, setLoading] = useState<any>(false);
+  const dispatch = useDispatch();
 
-  const startPayments = async () => {
+  const rechargeAmountFromRedux = useSelector(
+    (state: any) => state?.payment?.amount
+  );
+
+  const startPayments = async (
+    amountFromRedux?: any,
+    callbackUrlRedux?: any
+  ) => {
     setLoading(true);
     let initialObject = {
-      amount: amount,
-      callbackUrl: callbackUrl,
+      amount: amountFromRedux ? amountFromRedux.toString() : amount,
+      callbackUrl: callbackUrlRedux ? callbackUrlRedux : callbackUrl,
     };
 
     const { data: response } = await POST(INITIAL_RECHARGE, {
@@ -34,7 +44,15 @@ const JusPay = (props: IProps) => {
         setLoading(false);
       }
     }
+    dispatch(PaymentSlice.actions.paymentAmount(0));
   };
+
+  // Added This UseEffect and following code for direct payment from View-Orders Draft Page Errors Section
+  useEffect(() => {
+    let callbackUrl = `${SELLER_WEB_URL}/orders/view-orders`;
+    if (rechargeAmountFromRedux)
+      startPayments(rechargeAmountFromRedux, callbackUrl);
+  }, []);
   return (
     <>
       {paymentLoader ? (

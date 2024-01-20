@@ -117,6 +117,7 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
+const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/getErrors`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 
@@ -467,5 +468,6 @@ export {
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_CHANNEL_INVENTORIES,
   UPDATE_ONE_CHANNEL_INVENTORY,
+  GET_ORDER_ERRORS,
   SET_WEIGHT_INFO_ORDER,
 };
