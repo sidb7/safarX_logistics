@@ -10,6 +10,7 @@ import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 import { toast } from "react-toastify";
 import { convertXMLToXLSX } from "../../../utils/helper";
+import { capitalizeFirstLetter } from "../../../utils/utility";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
@@ -35,7 +36,7 @@ const Reports = () => {
       value: "NDRSTATUS",
     },
     {
-      label: "PRODUCT WISE STATUS",
+      label: "Product Wise Status",
       value: "PRODUCTWISESTATUS",
     },
   ];
@@ -79,7 +80,7 @@ const Reports = () => {
         const date: any = JSON.stringify(new Date());
         const result = await convertXMLToXLSX(
           response?.data?.data,
-          `${reportValue}${date
+          `${capitalizeFirstLetter(reportValue)}${date
             .substr(1, 10)
             .split("-")
             .reverse()
