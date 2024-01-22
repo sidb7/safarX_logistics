@@ -34,6 +34,10 @@ const Reports = () => {
       label: "NDR Report",
       value: "NDRSTATUS",
     },
+    {
+      label: "PRODUCT WISE STATUS",
+      value: "PRODUCTWISESTATUS",
+    },
   ];
 
   const convertEpoch = (epochDate: any) => {
