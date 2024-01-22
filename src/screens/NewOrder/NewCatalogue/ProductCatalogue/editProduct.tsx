@@ -32,7 +32,6 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
   const isMobileView = useMediaQuery({ maxWidth: 768 });
   const [productData, setproductData]: any = useState(tempProductData);
   const [validationErrors, setValidationErrors]: any = useState<any>(null);
-  console.log("validationErrors", validationErrors);
   const divisor = 5000;
 
   const validate = (value: any, validationRule: any) => {
@@ -51,7 +50,7 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
     name: [isRequired],
     category: [isRequired],
     unitPrice: [isRequired, greaterThenZero],
-    unitTax: [isRequired, greaterThenZero],
+    // unitTax: [isRequired, greaterThenZero],
     length: [isRequired, greaterThenZero],
     breadth: [isRequired, greaterThenZero],
     height: [isRequired, greaterThenZero],
@@ -223,11 +222,13 @@ const EditProduct: React.FunctionComponent<IProductFilledProps> = ({
               label="Product tax"
               name="unitTax"
               inputType="text"
-              errorMessage={validationErrors?.unitTax}
-              value={productData?.unitTax || ""}
+              // errorMessage={validationErrors?.unitTax}
+              value={
+                productData?.unitTax === 0 ? "0" : productData?.unitTax || ""
+              }
               onChange={(e: any) => {
                 if (!isNaN(e.target.value)) {
-                  handleValidation(e);
+                  // handleValidation(e);
                   handleProductInputChange({
                     name: e.target.name,
                     value: e.target.value.replace(/[^0-9]+\\.?[0-9]*/g, ""),
