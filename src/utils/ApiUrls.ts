@@ -302,7 +302,7 @@ const GET_FILTERS_INFO_MENTIONFORORDER = `${SELLER_BASE_URL}/order/getFilltersIn
 const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 
 //Place Channel Orders
-const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
+const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
