@@ -6,27 +6,83 @@ import { ProfileCard } from "./ProfileCard/profileCard";
 import { ProfileReferEarn } from "./ReferEarn/referEarn";
 import { ProfileSetting } from "./Settings/setting";
 import { POST } from "../../utils/webService";
-import { GET_PROFILE_URL } from "../../utils/ApiUrls";
+import { GET_PROFILE_URL, LOGO_AND_BRAND } from "../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
+import ProfileBrandingDetails from "./BrandingDetails";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import { ResponsiveState } from "../../utils/responsiveState";
+import BrandingModalContent from "./BrandingDetails/brandingModalContent";
 
 export const Profile = () => {
+  const { isLgScreen } = ResponsiveState();
   const [profileData, setProfileData]: any = useState([]);
-  console.log("🚀 ~ Profile ~ profileData:", profileData);
+
   const [isLoading, setIsLoading] = useState(true);
+  const [brandingModal, setBrandingModal] = useState(false);
+
+  const [brandingModalDetails, setBrandingModalDetails] = useState<any>({
+    image: "",
+    imageUrl: "",
+    brandName: "",
+    file: null,
+  });
+
+  const getProfileData = async () => {
+    const { data } = await POST(GET_PROFILE_URL, {});
+    if (data?.success) {
+      setProfileData(data?.data?.[0]);
+      setBrandingModalDetails({
+        ...brandingModalDetails,
+        imageUrl: data?.data?.[0]?.privateCompany?.logoUrl,
+        brandName: data?.data?.[0]?.privateCompany?.brandName,
+      });
+    } else {
+      toast.error(data?.message);
+    }
+    setIsLoading(false);
+  };
+
+  const updateBrandingDetails = async () => {
+    let formData = new FormData();
+    formData.append("brandName", brandingModalDetails.brandName);
+    formData.append("file", brandingModalDetails?.file);
+
+    let img: any = new Image();
+    img.src = brandingModalDetails?.imageUrl;
+
+    img.onload = async function () {
+      // Access the natural height and width of the image
+      var height = img.naturalHeight;
+      var width = img.naturalWidth;
+
+      if (height > 200 || width > 700) {
+        return toast.error("Image size should be maximum 200x700");
+      } else {
+        const { data } = await POST(LOGO_AND_BRAND, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        if (data?.success) {
+          toast.success(data?.message);
+          setBrandingModal(false);
+          getProfileData();
+        } else {
+          toast.error(data?.message);
+        }
+      }
+    };
+  };
 
   useEffect(() => {
     (async () => {
-      const { data } = await POST(GET_PROFILE_URL, {});
-      if (data?.success) {
-        setProfileData(data?.data?.[0]);
-      } else {
-        toast.error(data?.message);
-      }
-      setIsLoading(false);
+      getProfileData();
     })();
   }, []);
+
   return (
     <div className="mx-4">
       <div className="">
@@ -38,10 +94,15 @@ export const Profile = () => {
         </div>
       ) : (
         <>
-          {" "}
           <ProfileCard ProfileDetails={profileData} />
           <ProfileKycCard KycDetails={profileData?.kycDetails} />
           <ProfileBankCard BankDetails={profileData?.bankDetails} />
+          <ProfileBrandingDetails
+            setBrandingModal={() => {
+              setBrandingModal(true);
+            }}
+            BrandingDetails={profileData?.privateCompany}
+          />
           <div className="lg:grid lg:grid-cols-2 gap-4">
             <ProfileNotification />
             <ProfileReferEarn
@@ -54,6 +115,23 @@ export const Profile = () => {
           </div>
         </>
       )}
+
+      <RightSideModal
+        isOpen={brandingModal}
+        onClose={() => setBrandingModal(false)}
+        className={`w-full ${
+          isLgScreen ? "md:!w-[30%]" : "mobile-modal-styles"
+        }`}
+      >
+        <BrandingModalContent
+          setBrandingModal={() => {
+            setBrandingModal(false);
+          }}
+          brandingModalDetails={brandingModalDetails}
+          setBrandingModalDetails={setBrandingModalDetails}
+          updateBrandingDetails={updateBrandingDetails}
+        />
+      </RightSideModal>
     </div>
   );
 };
