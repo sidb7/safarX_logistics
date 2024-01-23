@@ -27,6 +27,8 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
+  const [rtoOrder, setRtoOrder] = useState<any>(false);
+  console.log("🚀 ~ Tracking ~ rtoOrder:", rtoOrder);
 
   console.log("processedLog", trackingDetails);
   const [cancelled, setCancelled] = useState<any>(false);
@@ -90,14 +92,17 @@ const Tracking = () => {
 
     if (status === "BOOKED" || status === "NOT PICKED") {
       statuses.BOOKED = true;
-    } else if (status === "IN TRANSIT") {
+    } else if (status === "IN TRANSIT" || status === "RTO IN TRANSIT") {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
-    } else if (status === "OUT FOR DELIVERY") {
+    } else if (
+      status === "OUT FOR DELIVERY" ||
+      status === "RTO OUT FOR DELIVERY"
+    ) {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
       statuses["OUT FOR DELIVERY"] = true;
-    } else if (status === "DELIVERED") {
+    } else if (status === "DELIVERED" || status === "RTO DELIVERED") {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
       statuses["OUT FOR DELIVERY"] = true;
@@ -186,13 +191,21 @@ const Tracking = () => {
           "🚀 ~ file: clientTracking.tsx:183 ~ handleTrackOrderClick ~ res:",
           res
         );
-
+        console.log("rto", response?.data[0]?.trackingInfo[0]?.currentStatus);
+        if (
+          response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
+        ) {
+          setRtoOrder(true);
+        }
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
+          console.log("status", status);
           mysteps.forEach((step: any, index: number) => {
+            console.log("step", step.value);
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
+              console.log("stepcurrent", stepCurrentStatus);
               mysteps[index].isCompleted = stepCurrentStatus || false;
             }
           });
@@ -378,6 +391,16 @@ const Tracking = () => {
                                                   }
                                                 </span>
                                               </p>
+                                            )}
+                                            {rtoOrder && (
+                                              <div>
+                                                <p className="text-xs font-Open font-normal md:pt-2">
+                                                  Order Type:
+                                                  <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                                    RTO
+                                                  </span>
+                                                </p>
+                                              </div>
                                             )}
                                           </div>
                                         </div>
