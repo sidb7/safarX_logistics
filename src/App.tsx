@@ -170,12 +170,12 @@ const App = () => {
 
     window?.dataLayer?.push({
       event: "Login",
-      seller_email: sellerData.email,
-      sellerId: sellerData.sellerId,
-      seller_name: sellerData.name,
-      seller_kyc: sellerData.nextStep.kyc,
-      seller_bank_verification_done: sellerData.nextStep.bank,
-      isReturningUser: sellerData.isReturningUser,
+      seller_email: sellerData?.email,
+      sellerId: sellerData?.sellerId,
+      seller_name: sellerData?.name,
+      seller_kyc: sellerData?.nextStep?.kyc,
+      seller_bank_verification_done: sellerData?.nextStep?.bank,
+      isReturningUser: sellerData?.isReturningUser,
     });
 
     const token = sessionStorage.getItem("sellerId")
