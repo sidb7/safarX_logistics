@@ -109,6 +109,7 @@ const UPDATE_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/updateNotif
 const UPDATE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
 const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
+const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
@@ -301,7 +302,7 @@ const GET_FILTERS_INFO_MENTIONFORORDER = `${SELLER_BASE_URL}/order/getFilltersIn
 const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 
 //Place Channel Orders
-const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
+const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
@@ -468,4 +469,5 @@ export {
   GET_CHANNEL_INVENTORIES,
   UPDATE_ONE_CHANNEL_INVENTORY,
   SET_WEIGHT_INFO_ORDER,
+  LOGO_AND_BRAND,
 };

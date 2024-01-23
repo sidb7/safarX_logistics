@@ -337,17 +337,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return;
           }
           const orderDetails = selectedRowdata?.map((order: any) => {
-            if (
-              order?.original?.source === "SHOPIFY" ||
-              order?.original?.source === "WOOCOMMERCE" ||
-              order?.original?.source === "ZOHO"
-            ) {
-              return {
-                orderId: order?.original?.orderId,
-                source: order?.original?.source,
-              };
-            }
+            return {
+              tempOrderId: order?.original?.tempOrderId,
+              source: order?.original?.source,
+            };
           });
+          const placeOrderPayload = {
+            orders: orderDetails,
+          };
 
           try {
             setIsLoadingManifest({
@@ -357,7 +354,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
             const { data } = await POST(
               POST_PLACE_CHANNEL_ORDERS,
-              orderDetails
+              placeOrderPayload
             );
             if (data?.success) {
               setIsLoadingManifest({
