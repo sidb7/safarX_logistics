@@ -28,7 +28,6 @@ const Tracking = () => {
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
   const [rtoOrder, setRtoOrder] = useState<any>(false);
-  console.log("🚀 ~ Tracking ~ rtoOrder:", rtoOrder);
 
   console.log("processedLog", trackingDetails);
   const [cancelled, setCancelled] = useState<any>(false);
@@ -191,7 +190,7 @@ const Tracking = () => {
           "🚀 ~ file: clientTracking.tsx:183 ~ handleTrackOrderClick ~ res:",
           res
         );
-        console.log("rto", response?.data[0]?.trackingInfo[0]?.currentStatus);
+
         if (
           response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
         ) {
@@ -200,12 +199,10 @@ const Tracking = () => {
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
-          console.log("status", status);
           mysteps.forEach((step: any, index: number) => {
-            console.log("step", step.value);
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
-              console.log("stepcurrent", stepCurrentStatus);
+
               mysteps[index].isCompleted = stepCurrentStatus || false;
             }
           });
