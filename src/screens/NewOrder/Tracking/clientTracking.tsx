@@ -28,6 +28,8 @@ const Tracking = () => {
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
   const [rtoOrder, setRtoOrder] = useState<any>(false);
+  const [rtoAwb, setRtoAwb] = useState<any>();
+  console.log("rtoAwb", rtoAwb);
 
   console.log("processedLog", trackingDetails);
   const [cancelled, setCancelled] = useState<any>(false);
@@ -181,6 +183,9 @@ const Tracking = () => {
           "",
           `/tracking?trackingNo=${trackingNo}`
         );
+
+        const { trackingInfo } = response?.data[0];
+
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
@@ -191,11 +196,25 @@ const Tracking = () => {
           res
         );
 
-        if (
-          response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
-        ) {
-          setRtoOrder(true);
-        }
+        setRtoOrder(
+          trackingInfo[0].hasOwnProperty("isRTO") &&
+            trackingInfo[0]?.isRTO === true
+            ? true
+            : false
+        );
+
+        setRtoAwb(
+          trackingInfo[0].hasOwnProperty("isRTO") &&
+            trackingInfo[0]?.isRTO === true
+            ? trackingInfo[0].rtoInfo.rtoAwb
+            : ""
+        );
+
+        // if (
+        //   response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
+        // ) {
+        //   setRtoOrder(true);
+        // }
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
@@ -359,6 +378,17 @@ const Tracking = () => {
                                                 stringToBeCopied={each?.awb}
                                               />
                                             </p>
+
+                                            {rtoAwb && (
+                                              <div>
+                                                <p className="text-xs font-Open font-normal md:pt-2">
+                                                  RTO AWB:
+                                                  <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                                    {rtoAwb}
+                                                  </span>
+                                                </p>
+                                              </div>
+                                            )}
 
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
