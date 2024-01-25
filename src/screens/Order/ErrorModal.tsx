@@ -1,6 +1,6 @@
 import SampleProduct from "../../assets/SampleProduct.svg";
 import CloseIcon from "../../assets/CloseIcon.svg";
-import InputBox from "../../components/Input/index";
+import InputBox from "../../components/Input";
 import ItemIcon from "../../assets/Product/Item.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../assets/layer.svg";
@@ -122,8 +122,12 @@ const ErrorModal = (props: ErrorModalProps) => {
               label="Dead Weight (Kg)"
               value={data?.deadWeight}
               name="deadWeight"
-              inputType="number"
-              onChange={onChaneDimensionHandler}
+              inputType="text"
+              onChange={(e: any) => {
+                if (!isNaN(e.target.value)) {
+                  onChaneDimensionHandler(e);
+                }
+              }}
             />
             <InputBox
               label="Volumetric Weight"
@@ -142,22 +146,34 @@ const ErrorModal = (props: ErrorModalProps) => {
                 label="L"
                 value={data?.length}
                 name="length"
-                inputType="number"
-                onChange={onChaneDimensionHandler}
+                inputType="text"
+                onChange={(e: any) => {
+                  if (!isNaN(e.target.value)) {
+                    onChaneDimensionHandler(e);
+                  }
+                }}
               />
               <InputBox
                 label="B"
                 value={data?.breadth}
                 name="breadth"
-                inputType="number"
-                onChange={onChaneDimensionHandler}
+                inputType="text"
+                onChange={(e: any) => {
+                  if (!isNaN(e.target.value)) {
+                    onChaneDimensionHandler(e);
+                  }
+                }}
               />
               <InputBox
                 label="H"
                 value={data?.height}
                 name="height"
-                inputType="number"
-                onChange={onChaneDimensionHandler}
+                inputType="text"
+                onChange={(e: any) => {
+                  if (!isNaN(e.target.value)) {
+                    onChaneDimensionHandler(e);
+                  }
+                }}
               />
             </div>
           </div>
@@ -343,10 +359,10 @@ const ErrorModal = (props: ErrorModalProps) => {
               {productAndBoxDetails &&
                 productAndBoxDetails?.products?.map((data: any, index: any) => {
                   return (
-                    <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
+                    <div key={index} className="m-[0.5rem] my-[1rem]  bg-white">
                       <div className="flex min-w-[90%]">
                         <div
-                          className="items-center flex border-2 rounded-md w-[100%] justify-between"
+                          className="items-center cursor-pointer flex border-2 rounded-md w-[100%] justify-between"
                           style={{
                             boxShadow:
                               "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -387,7 +403,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                   <div>
                     <div className="flex min-w-[90%]">
                       <div
-                        className="items-center flex border-2 rounded-md w-[100%] justify-between"
+                        className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                         style={{
                           boxShadow:
                             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
