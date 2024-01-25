@@ -157,9 +157,6 @@ const Errors = (props: ErrorProps) => {
   const allValuesEmpty =
     errorData && errorData?.some((error: any) => error.value.length === 0);
 
-  console.log("🚀 ~ Errors ~ allValuesEmpty:", allValuesEmpty);
-  console.log("errorData", errorData);
-
   return (
     <div className="h-[70vh]">
       {isLoading ? (
@@ -168,7 +165,7 @@ const Errors = (props: ErrorProps) => {
         </div>
       ) : (
         <div>
-          {allValuesEmpty ? (
+          {errorData.length > 0 ? (
             errorData?.map((item: any, index: any) => {
               const totalOrdersCount = item?.value.reduce(
                 (acc: any, obj: any) => acc + obj.ordersCount,
