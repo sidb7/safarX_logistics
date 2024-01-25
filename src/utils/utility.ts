@@ -281,3 +281,42 @@ export const capitalizeFirstLetterWithExclude = (
     })
     .join(" ");
 };
+
+export const orderErrorsEnum: any = {
+  "Insufficient Balance": "Recharge",
+  "Update Product And Box Details": "Update Product Details",
+  "Non-Serviceable Pincodes": "Update Pincode",
+  "Account Level Errors": "Update Account Details",
+  "Update Pickup And Delivery Address": "Update Address",
+  "Update Customer Details": "Update Customer Details",
+  "No Product Assigned": "Add Product",
+  "Administration Errors": "Contact Administration",
+  "Serviceable Error": "Update Serviceable Pincode",
+};
+
+export const orderErrorCategoryENUMs = {
+  Address: "Address",
+  "Box And Product": "Box And Product", // stop point
+  Service: "Service",
+  Payment: "Payment", // stop point
+  Others: "Others", // stop point { cod error, kyc, orderId }
+};
+
+export const convertNumberToMultipleOfhundred = (number: any) => {
+  if (number.length < 3) number = 100;
+  else if (number.length === 3) {
+    let lastDigits = number.slice(1, 3);
+    if (lastDigits !== "00") {
+      let firstDigit = number[0];
+      number = (Number(firstDigit) + 1) * 100;
+    }
+  } else {
+    let hundredDigit = number[number.length - 3];
+    let lastDigits = number.slice(number.length - 2, number.length);
+    if (lastDigits !== "00") {
+      let threeDigit = (Number(hundredDigit) + 1) * 100;
+      number = number.slice(0, number.length - 3) + threeDigit;
+    }
+  }
+  return number;
+};

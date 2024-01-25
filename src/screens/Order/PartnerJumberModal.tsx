@@ -12,7 +12,7 @@ import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import {
   GET_SELLER_ORDER_COMPLETE_DATA,
-  POST_PLACE_CHANNEL_ORDERS,
+  POST_PLACE_ALL_ORDERS,
   SET_PARTNER_SERVICE_INFO,
   SET_WEIGHT_INFO_ORDER,
 } from "../../utils/ApiUrls";
@@ -295,13 +295,16 @@ const ErrorModal = (props: ErrorModalProps) => {
   const processOrder = async () => {
     try {
       updateOrderDetails();
-      const orderDetails = [
-        {
-          orderId: orderDetail?.orderId,
-          source: orderDetail?.source,
-        },
-      ];
-      const { data } = await POST(POST_PLACE_CHANNEL_ORDERS, orderDetails);
+      const orderDetails = {
+        orders: [
+          {
+            tempOrderId: orderDetail?.tempOrderId,
+            source: orderDetail?.source,
+          },
+        ],
+      };
+
+      const { data } = await POST(POST_PLACE_ALL_ORDERS, orderDetails);
       if (data?.success) {
         toast.success(data?.message);
       } else {
