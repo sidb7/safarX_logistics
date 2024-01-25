@@ -118,6 +118,7 @@ const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrderIN`;
 const GET_ORDER_BY_ID = `${SELLER_BASE_URL}/order/getOrderById`;
 const CANCEL_WAY_BILL = `${SELLER_BASE_URL}/order/cancelWayBill`;
 const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
+const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
 
@@ -302,11 +303,17 @@ const GET_FILTERS_INFO_MENTIONFORORDER = `${SELLER_BASE_URL}/order/getFilltersIn
 const POST_SYNC_ORDER = `${SELLER_BASE_URL}/channel/shopify/fetchOrders`;
 
 //Place Channel Orders
-const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
+// const POST_PLACE_CHANNEL_ORDERS = `${SELLER_BASE_URL}/channel/placeChannelOrder`;
+const POST_PLACE_ALL_ORDERS = `${SELLER_BASE_URL}/order/placeAllOrders`;
 
 //label Setting
 const POST_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/setLabelSetting`;
 const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
+
+//
+const UPDATE_PRODUCT_AND_BOX_DETAILS = `${SELLER_BASE_URL}/channel/updateProductAndBoxDetails`;
+const GET_SERVICE_LIST_ORDER = `${SELLER_BASE_URL}/order/getServiceListOrder`;
+const SET_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
@@ -454,7 +461,7 @@ export {
   DELETE_PICKUP_ADDRESS,
   DELETE_DELIVERY_ADDRESS,
   POST_SYNC_ORDER,
-  POST_PLACE_CHANNEL_ORDERS,
+  POST_PLACE_ALL_ORDERS,
   GET_DASHBOARD_INFO_REVENUE,
   POST_ADD_LABEL_DATA,
   GET_CHANNEL_INVENTORY,
@@ -468,6 +475,10 @@ export {
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_CHANNEL_INVENTORIES,
   UPDATE_ONE_CHANNEL_INVENTORY,
+  GET_ORDER_ERRORS,
   SET_WEIGHT_INFO_ORDER,
   LOGO_AND_BRAND,
+  UPDATE_PRODUCT_AND_BOX_DETAILS,
+  GET_SERVICE_LIST_ORDER,
+  SET_SERVICE_INFO,
 };
