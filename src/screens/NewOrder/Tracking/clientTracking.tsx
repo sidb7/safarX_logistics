@@ -17,23 +17,21 @@ import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import CustomInputBox from "../../../components/Input/index";
 import "./style.css";
+
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
 
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [openOrderDetails, setOpenOrderDetails] = useState<string | null>(null);
 
   const { trackingNo: trackingNoParams = "" } = getQueryJson();
 
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
-  const [trackingDetails, setTrackingDetails] = useState<any>([]);
-  const [rtoOrder, setRtoOrder] = useState<any>(false);
-  const [rtoAwb, setRtoAwb] = useState<any>();
-  console.log("rtoAwb", rtoAwb);
-
-  console.log("processedLog", trackingDetails);
-  const [cancelled, setCancelled] = useState<any>(false);
-  const [timeDetails, setTimeDetails] = useState<any>({
+  const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
+  const [orderType, setOrderType] = useState<any>(false);
+  const [rtoAwbNo, setRtoAwbNo] = useState<any>();
+  const [cancelledOrder, setCancelledOrder] = useState<any>(false);
+  const [lastUpdate, setLastUpdate] = useState<any>({
     time: "",
     day: "",
     date: "",
@@ -75,15 +73,15 @@ const Tracking = () => {
       timeStatus: "",
     },
   ];
-  const [tempSteps, setTempSteps] = useState<any>(steps);
+  const [orderSteps, setOrderSteps] = useState<any>(steps);
 
-  const toggleSection = (section: string) => {
-    setOpenSection((prevOpenSection) =>
-      prevOpenSection === section ? null : section
+  const toggleSectionOrderDetails = (section: string) => {
+    setOpenOrderDetails((prevopenOrderDetails) =>
+      prevopenOrderDetails === section ? null : section
     );
   };
 
-  function myStatus(status: any) {
+  function orderStatus(status: any) {
     const statuses = {
       BOOKED: false,
       "IN TRANSIT": false,
@@ -112,55 +110,61 @@ const Tracking = () => {
     return statuses;
   }
 
-  const getTimeDetails = (trackingInfo: any) => {
+  const getlastUpdateTime = (trackingInfo: any) => {
     const { processedLog } = trackingInfo[0];
+    if (processedLog.length > 0) {
+      const processedLogFromAPI = processedLog?.[0];
 
-    const processedLogFromAPI = processedLog[0];
+      //setting to the state
+      setTrackingCycleDetails(processedLogFromAPI);
 
-    //setting to the state
-    setTrackingDetails(processedLogFromAPI);
+      let checkDate = convertEpochToDateTime(
+        processedLogFromAPI?.LastUpdatedAt
+      );
 
-    let checkDate = convertEpochToDateTime(processedLogFromAPI?.LastUpdatedAt);
+      let date: any = new Date(checkDate);
+      let [day, dateAndTime] = date.toUTCString().split(",");
 
-    let date: any = new Date(checkDate);
-    let [day, dateAndTime] = date.toUTCString().split(",");
+      /**this is day */
+      day = day;
 
-    /**this is day */
-    day = day;
+      /**this is the date */
+      const latestDate = dateAndTime.slice(1, 12);
 
-    /**this is the date */
-    const latestDate = dateAndTime.slice(1, 12);
+      /**this is time */
+      const time = dateAndTime.slice(12).trim().slice(0, -4);
 
-    /**this is time */
-    const time = dateAndTime.slice(12).trim().slice(0, -4);
+      const timeAgo = (inputDate: any) => {
+        const date =
+          inputDate instanceof Date ? inputDate : new Date(inputDate);
 
-    const timeAgo = (inputDate: any) => {
-      const date = inputDate instanceof Date ? inputDate : new Date(inputDate);
+        const FORMATTER: any = new Intl.RelativeTimeFormat("en");
+        const RANGES: any = {
+          years: 3600 * 24 * 365,
+          months: 3600 * 24 * 30,
+          weeks: 3600 * 24 * 7,
+          days: 3600 * 24,
+          hours: 3600,
+          minutes: 60,
+          seconds: 1,
+        };
 
-      const FORMATTER: any = new Intl.RelativeTimeFormat("en");
-      const RANGES: any = {
-        years: 3600 * 24 * 365,
-        months: 3600 * 24 * 30,
-        weeks: 3600 * 24 * 7,
-        days: 3600 * 24,
-        hours: 3600,
-        minutes: 60,
-        seconds: 1,
-      };
+        const secondsElapsed = (date.getTime() - Date.now()) / 1000;
 
-      const secondsElapsed = (date.getTime() - Date.now()) / 1000;
-
-      for (let key in RANGES) {
-        if (RANGES[key] < Math.abs(secondsElapsed)) {
-          const delta = secondsElapsed / RANGES[key];
-          return FORMATTER.format(Math.round(delta), key);
+        for (let key in RANGES) {
+          if (RANGES[key] < Math.abs(secondsElapsed)) {
+            const delta = secondsElapsed / RANGES[key];
+            return FORMATTER.format(Math.round(delta), key);
+          }
         }
-      }
-    };
-    /**this is difference of time */
-    const hours = timeAgo(date);
+      };
+      /**this is difference of time */
+      const hours = timeAgo(date);
 
-    setTimeDetails({ time: time, date: latestDate, day: day, hours: hours });
+      setLastUpdate({ time: time, date: latestDate, day: day, hours: hours });
+    } else {
+      setLastUpdate({ time: "", date: "", day: "", hours: "" });
+    }
   };
 
   const handleTrackOrderClick = async () => {
@@ -171,8 +175,8 @@ const Tracking = () => {
       }
       setTrackingState([]);
       setLoading(true);
-      setTempSteps(steps);
-      setCancelled(false);
+      setOrderSteps(steps);
+      setCancelledOrder(false);
       const { data: response } = await GET(
         `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
       );
@@ -187,46 +191,35 @@ const Tracking = () => {
         const { trackingInfo } = response?.data[0];
 
         setTrackingState(response?.data[0]?.trackingInfo);
-        getTimeDetails(response?.data[0]?.trackingInfo);
-        const res: any = myStatus(
+        getlastUpdateTime(response?.data[0]?.trackingInfo);
+        const res: any = orderStatus(
           response?.data[0]?.trackingInfo[0]?.currentStatus
         );
-        console.log(
-          "🚀 ~ file: clientTracking.tsx:183 ~ handleTrackOrderClick ~ res:",
-          res
-        );
 
-        setRtoOrder(
+        if (
           trackingInfo[0].hasOwnProperty("isRTO") &&
-            trackingInfo[0]?.isRTO === true
-            ? true
-            : false
-        );
+          trackingInfo[0]?.isRTO === true
+        ) {
+          setOrderType(true);
+          setRtoAwbNo(trackingInfo[0]?.rtoInfo?.rtoAwb);
+        } else {
+          setOrderType(false);
+          setRtoAwbNo("");
+        }
 
-        setRtoAwb(
-          trackingInfo[0].hasOwnProperty("isRTO") &&
-            trackingInfo[0]?.isRTO === true
-            ? trackingInfo[0].rtoInfo.rtoAwb
-            : ""
-        );
-
-        // if (
-        //   response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
-        // ) {
-        //   setRtoOrder(true);
-        // }
-        let mysteps = tempSteps;
+        let trackingOrderSteps = orderSteps;
 
         Object.keys(res).forEach((status: any) => {
-          mysteps.forEach((step: any, index: number) => {
+          trackingOrderSteps.forEach((step: any, index: number) => {
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
 
-              mysteps[index].isCompleted = stepCurrentStatus || false;
+              trackingOrderSteps[index].isCompleted =
+                stepCurrentStatus || false;
             }
           });
         });
-        setTempSteps([...mysteps]);
+        setOrderSteps([...trackingOrderSteps]);
       } else {
         toast.error(response?.message);
         setTrackingState([]);
@@ -238,18 +231,18 @@ const Tracking = () => {
     }
   };
 
-  const callFunction = async () => {
+  const callTrackOrderFunction = async () => {
     await handleTrackOrderClick();
   };
 
   useEffect(() => {
     if (trackingNo) {
-      callFunction();
+      callTrackOrderFunction();
     }
   }, []);
 
-  const temp = useMemo(() => {
-    return trackingDetails?.Scans?.map((each: any, index: number) => {
+  const trackingCycleInformation = useMemo(() => {
+    return trackingCycleDetails?.Scans?.map((each: any, index: number) => {
       return (
         <div className="flex gap-x-4  w-full " key={index}>
           <div className="font-bold pr-2 py-2 ">
@@ -280,7 +273,7 @@ const Tracking = () => {
         </div>
       );
     });
-  }, [trackingDetails]);
+  }, [trackingCycleDetails]);
 
   return (
     <>
@@ -339,10 +332,10 @@ const Tracking = () => {
                                             alt=""
                                             className="w-20"
                                           />
-                                          {timeDetails?.time === "" &&
-                                          timeDetails?.day === "" &&
-                                          timeDetails?.date === "" &&
-                                          timeDetails?.hours === "" ? (
+                                          {lastUpdate?.time === "" &&
+                                          lastUpdate?.day === "" &&
+                                          lastUpdate?.date === "" &&
+                                          lastUpdate?.hours === "" ? (
                                             ""
                                           ) : (
                                             <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
@@ -350,17 +343,9 @@ const Tracking = () => {
                                                 Last Update:
                                                 <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
                                                   <span>
-                                                    {timeDetails.hours + " |"}
+                                                    {lastUpdate.hours + " |"}
                                                   </span>
-                                                  <span>
-                                                    {timeDetails.date}
-                                                  </span>
-                                                  {/* <span>
-                                                    {timeDetails.day + " |"}
-                                                  </span>
-                                                  <span>
-                                                    {timeDetails.time}
-                                                  </span> */}
+                                                  <span>{lastUpdate.date}</span>
                                                 </div>
                                               </p>
                                             </div>
@@ -379,12 +364,12 @@ const Tracking = () => {
                                               />
                                             </p>
 
-                                            {rtoAwb && (
+                                            {orderType && (
                                               <div>
                                                 <p className="text-xs font-Open font-normal md:pt-2">
                                                   RTO AWB:
                                                   <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
-                                                    {rtoAwb}
+                                                    {rtoAwbNo}
                                                   </span>
                                                 </p>
                                               </div>
@@ -419,7 +404,7 @@ const Tracking = () => {
                                                 </span>
                                               </p>
                                             )}
-                                            {rtoOrder && (
+                                            {orderType && (
                                               <div>
                                                 <p className="text-xs font-Open font-normal md:pt-2">
                                                   Order Type:
@@ -452,21 +437,23 @@ const Tracking = () => {
                                             </p>
                                           </div>
                                         </div>
-                                        {each?.currentStatus === "CANCELLED" ? (
+                                        {each?.currentStatus ===
+                                        "cancelledOrder" ? (
                                           <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
-                                            <p>Cancelled Order</p>
+                                            <p>cancelledOrder Order</p>
                                           </div>
                                         ) : (
                                           <></>
                                         )}
                                         <div
                                           className={`mt-6 ${
-                                            each?.currentStatus === "CANCELLED"
+                                            each?.currentStatus ===
+                                            "cancelledOrder"
                                               ? "blur-sm"
                                               : ""
                                           }`}
                                         >
-                                          <Stepper steps={tempSteps} />
+                                          <Stepper steps={orderSteps} />
                                         </div>
 
                                         {/*tracking details */}
@@ -477,7 +464,9 @@ const Tracking = () => {
                                         <div
                                           className="w-[280px] md:w-full flex justify-between cursor-pointer"
                                           onClick={() =>
-                                            toggleSection("tracking")
+                                            toggleSectionOrderDetails(
+                                              "tracking"
+                                            )
                                           }
                                         >
                                           <div className="flex gap-x-1 ">
@@ -491,7 +480,7 @@ const Tracking = () => {
                                         <div
                                           className={`hover:bg-[#d2d2d225] transition-all shadow-none hover:shadow-inner max-h-[200px] customScroll my-2 py-2 px-4 rounded-lg`}
                                         >
-                                          {temp}
+                                          {trackingCycleInformation}
                                         </div>
                                         <div className="py-3">
                                           <hr />
@@ -499,7 +488,7 @@ const Tracking = () => {
                                         <div
                                           className="flex justify-between cursor-pointer w-[280px] md:w-full"
                                           onClick={() =>
-                                            toggleSection("product")
+                                            toggleSectionOrderDetails("product")
                                           }
                                         >
                                           <div className="flex gap-x-1 ">
@@ -508,11 +497,11 @@ const Tracking = () => {
                                               Order Details
                                             </p>
                                           </div>
-                                          {openSection === "product" ? (
+                                          {openOrderDetails === "product" ? (
                                             <div className="flex gap-x-1  items-center">
                                               <img
                                                 src={
-                                                  openSection === "product"
+                                                  openOrderDetails === "product"
                                                     ? UpwardArrow
                                                     : DownwardArrow
                                                 }
@@ -523,7 +512,7 @@ const Tracking = () => {
                                             <div className="flex gap-x-1  items-center">
                                               <img
                                                 src={
-                                                  openSection === "product"
+                                                  openOrderDetails === "product"
                                                     ? UpwardArrow
                                                     : DownwardArrow
                                                 }
@@ -533,7 +522,7 @@ const Tracking = () => {
                                           )}
                                         </div>
                                         <div>
-                                          {openSection === "product" && (
+                                          {openOrderDetails === "product" && (
                                             <>
                                               <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
                                                 <div className="border-r-2 border-[#D9DBDD] pr-6">
@@ -605,14 +594,14 @@ const Tracking = () => {
                                         </div>
                                         <div
                                           className={
-                                            openSection === "product"
+                                            openOrderDetails === "product"
                                               ? "grid grid-cols-2 mt-4 gap-y-5 gap-x-4"
                                               : "grid grid-cols-2 "
                                           }
                                         >
                                           {/*mapping product details */}
 
-                                          {openSection === "product" &&
+                                          {openOrderDetails === "product" &&
                                             each?.boxInfo?.[0]?.products?.map(
                                               (each: any, index: number) => {
                                                 return (
@@ -629,10 +618,12 @@ const Tracking = () => {
                                                         <p className="text-sm font-Open font-semibold">
                                                           {each?.name}
                                                         </p>
+
                                                         <p className="text-sm font-Open font-normal">
                                                           ₹{" "}
-                                                          {(+each?.unitPrice ||
-                                                            0) *
+                                                          {(+each?.unitPrice.toFixed(
+                                                            2
+                                                          ) || 0) *
                                                             (+each?.qty || 0)}
                                                         </p>
                                                       </div>
