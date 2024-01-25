@@ -60,9 +60,30 @@ jobs:
           npm install
           CI=false npm run build --if-present
 
+      - name: Setting Up The Working Dir
+        run: |
+          echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+          cd ..
+          echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+          echo "CHILD_DIR=$PWD/seller-react-build" >> $GITHUB_ENV
+          cd $CURRENT_DIR
+          echo "CURRENT_DIR=$CURRENT_DIR"
+
+      - name: Create Serving Folder If Not Exists
+        run: |
+          # Check if the folder exists
+          if [ ! -d $CHILD_DIR ]; then
+            # Create the folder
+            mkdir -p $CHILD_DIR
+          else
+            echo "Folder already exists"
+          fi
+
       - name: Start PM2 Process for Production
         run: |
           npm install -g pm2 typescript serve ts-node
+          cp -r $CURRENT_DIR/* $CHILD_DIR/
+          cd $CHILD_DIR/
           pm2 stop seller-react || true
           pm2 delete seller-react || true
           pm2 start process.json
@@ -113,9 +134,30 @@ jobs:
           npm install
           CI=false npm run build --if-present
 
+      - name: Setting Up The Working Dir
+        run: |
+          echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+          cd ..
+          echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+          echo "CHILD_DIR=$PWD/seller-react-build" >> $GITHUB_ENV
+          cd $CURRENT_DIR
+          echo "CURRENT_DIR=$CURRENT_DIR"
+
+      - name: Create Serving Folder If Not Exists
+        run: |
+          # Check if the folder exists
+          if [ ! -d $CHILD_DIR ]; then
+            # Create the folder
+            mkdir -p $CHILD_DIR
+          else
+            echo "Folder already exists"
+          fi
+
       - name: Start PM2 Process for Development
         run: |
           npm install -g pm2 typescript serve ts-node
+          cp -r $CURRENT_DIR/* $CHILD_DIR/
+          cd $CHILD_DIR/
           pm2 stop seller-react || true
           pm2 delete seller-react || true
           pm2 start process.json

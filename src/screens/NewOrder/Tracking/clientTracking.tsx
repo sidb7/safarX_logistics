@@ -27,6 +27,9 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingDetails, setTrackingDetails] = useState<any>([]);
+  const [rtoOrder, setRtoOrder] = useState<any>(false);
+  const [rtoAwb, setRtoAwb] = useState<any>();
+  console.log("rtoAwb", rtoAwb);
 
   console.log("processedLog", trackingDetails);
   const [cancelled, setCancelled] = useState<any>(false);
@@ -90,14 +93,17 @@ const Tracking = () => {
 
     if (status === "BOOKED" || status === "NOT PICKED") {
       statuses.BOOKED = true;
-    } else if (status === "IN TRANSIT") {
+    } else if (status === "IN TRANSIT" || status === "RTO IN TRANSIT") {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
-    } else if (status === "OUT FOR DELIVERY") {
+    } else if (
+      status === "OUT FOR DELIVERY" ||
+      status === "RTO OUT FOR DELIVERY"
+    ) {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
       statuses["OUT FOR DELIVERY"] = true;
-    } else if (status === "DELIVERED") {
+    } else if (status === "DELIVERED" || status === "RTO DELIVERED") {
       statuses.BOOKED = true;
       statuses["IN TRANSIT"] = true;
       statuses["OUT FOR DELIVERY"] = true;
@@ -177,6 +183,9 @@ const Tracking = () => {
           "",
           `/tracking?trackingNo=${trackingNo}`
         );
+
+        const { trackingInfo } = response?.data[0];
+
         setTrackingState(response?.data[0]?.trackingInfo);
         getTimeDetails(response?.data[0]?.trackingInfo);
         const res: any = myStatus(
@@ -187,12 +196,32 @@ const Tracking = () => {
           res
         );
 
+        setRtoOrder(
+          trackingInfo[0].hasOwnProperty("isRTO") &&
+            trackingInfo[0]?.isRTO === true
+            ? true
+            : false
+        );
+
+        setRtoAwb(
+          trackingInfo[0].hasOwnProperty("isRTO") &&
+            trackingInfo[0]?.isRTO === true
+            ? trackingInfo[0].rtoInfo.rtoAwb
+            : ""
+        );
+
+        // if (
+        //   response?.data[0]?.trackingInfo[0]?.currentStatus === "RTO DELIVERED"
+        // ) {
+        //   setRtoOrder(true);
+        // }
         let mysteps = tempSteps;
 
         Object.keys(res).forEach((status: any) => {
           mysteps.forEach((step: any, index: number) => {
             if (status === step?.value) {
               const stepCurrentStatus = res[status];
+
               mysteps[index].isCompleted = stepCurrentStatus || false;
             }
           });
@@ -350,6 +379,17 @@ const Tracking = () => {
                                               />
                                             </p>
 
+                                            {rtoAwb && (
+                                              <div>
+                                                <p className="text-xs font-Open font-normal md:pt-2">
+                                                  RTO AWB:
+                                                  <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                                    {rtoAwb}
+                                                  </span>
+                                                </p>
+                                              </div>
+                                            )}
+
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
                                               <span className="font-bold text-[#004EFF]">
@@ -378,6 +418,16 @@ const Tracking = () => {
                                                   }
                                                 </span>
                                               </p>
+                                            )}
+                                            {rtoOrder && (
+                                              <div>
+                                                <p className="text-xs font-Open font-normal md:pt-2">
+                                                  Order Type:
+                                                  <span className="text-[#004EFF] text-xs font-Open font-bold ml-1">
+                                                    RTO
+                                                  </span>
+                                                </p>
+                                              </div>
                                             )}
                                           </div>
                                         </div>

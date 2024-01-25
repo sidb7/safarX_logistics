@@ -1069,36 +1069,36 @@ export const columnHelperForNewOrder = (
         );
       },
     }),
-    ColumnsHelper.accessor(".", {
-      header: () => {
-        return (
-          <div className="flex justify-between">
-            <h1>Package Details</h1>
-          </div>
-        );
-      },
-      cell: (info: any) => {
-        const { boxInfo = [] } = info?.row?.original;
-        return (
-          <div className="my-4 space-y-2 ">
-            {boxInfo?.length > 0 ? (
-              <div>
-                <span>
-                  {boxInfo[0].name} {boxInfo[1]?.boxInfo ?? ""}
-                </span>
-              </div>
-            ) : (
-              <div
-                // onClick={() => navigate("/orders/add-order/product-package")}
-                className="  decoration-2 "
-              >
-                No Package Details Found
-              </div>
-            )}
-          </div>
-        );
-      },
-    }),
+    // ColumnsHelper.accessor(".", {
+    //   header: () => {
+    //     return (
+    //       <div className="flex justify-between">
+    //         <h1>Package Details</h1>
+    //       </div>
+    //     );
+    //   },
+    //   cell: (info: any) => {
+    //     const { boxInfo = [] } = info?.row?.original;
+    //     return (
+    //       <div className="my-4 space-y-2 ">
+    //         {boxInfo?.length > 0 ? (
+    //           <div>
+    //             <span>
+    //               {boxInfo[0].name} {boxInfo[1]?.boxInfo ?? ""}
+    //             </span>
+    //           </div>
+    //         ) : (
+    //           <div
+    //             // onClick={() => navigate("/orders/add-order/product-package")}
+    //             className="  decoration-2 "
+    //           >
+    //             No Package Details Found
+    //           </div>
+    //         )}
+    //       </div>
+    //     );
+    //   },
+    // }),
     ColumnsHelper.accessor("Pickup Adreess", {
       header: () => {
         return (

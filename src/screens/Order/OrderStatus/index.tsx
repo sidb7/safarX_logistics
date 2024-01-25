@@ -365,17 +365,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return;
           }
           const orderDetails = selectedRowdata?.map((order: any) => {
-            // if (
-            //   order?.original?.source === "SHOPIFY" ||
-            //   order?.original?.source === "WOOCOMMERCE" ||
-            //   order?.original?.source === "ZOHO"
-            // ) {
             return {
-              orderId: order?.original?.orderId,
+              tempOrderId: order?.original?.tempOrderId,
               source: order?.original?.source,
             };
-            // }
           });
+          const placeOrderPayload = {
+            orders: orderDetails,
+          };
 
           try {
             setIsLoadingManifest({

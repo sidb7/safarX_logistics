@@ -109,6 +109,7 @@ const UPDATE_PROFILE_NOTIFICATION = `${SELLER_BASE_URL}/notification/updateNotif
 const UPDATE_SELLER = `${SELLER_BASE_URL}/seller/updateSingleSeller`;
 const UPDATE_PASSWORD = `${SELLER_BASE_URL}/seller/changePassword`;
 const DELETE_SELLER = `${SELLER_BASE_URL}/seller/deleteSingleSeller`;
+const LOGO_AND_BRAND = `${SELLER_BASE_URL}/seller/updateLogoAndBrand`;
 
 // Order URLs
 // const GET_SELLER_ORDER = `${SELLER_BASE_URL}/order/getSellerOrder`;
@@ -476,6 +477,7 @@ export {
   UPDATE_ONE_CHANNEL_INVENTORY,
   GET_ORDER_ERRORS,
   SET_WEIGHT_INFO_ORDER,
+  LOGO_AND_BRAND,
   UPDATE_PRODUCT_AND_BOX_DETAILS,
   GET_SERVICE_LIST_ORDER,
   SET_SERVICE_INFO,
