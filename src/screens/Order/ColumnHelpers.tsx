@@ -61,7 +61,6 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
     "RETURN"
   ) {
     const labelUrl = data?.boxInfo?.[0]?.tracking?.label;
-
     const taxInvoiceUrl = data?.boxInfo?.[0]?.tracking?.taxInvoice;
 
     fileUrl = labelUrl || "";

@@ -291,6 +291,15 @@ export const orderErrorsEnum: any = {
   "Update Customer Details": "Update Customer Details",
   "No Product Assigned": "Add Product",
   "Administration Errors": "Contact Administration",
+  "Serviceable Error": "Update Serviceable Pincode",
+};
+
+export const orderErrorCategoryENUMs = {
+  Address: "Address",
+  "Box And Product": "Box And Product", // stop point
+  Service: "Service",
+  Payment: "Payment", // stop point
+  Others: "Others", // stop point { cod error, kyc, orderId }
 };
 
 export const convertNumberToMultipleOfhundred = (number: any) => {

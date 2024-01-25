@@ -16,7 +16,7 @@ import {
   GET_ORDER_BY_ID,
   GET_ORDER_ERRORS,
   GET_SELLER_ORDER,
-  POST_PLACE_CHANNEL_ORDERS,
+  POST_PLACE_ALL_ORDERS,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-toastify";
@@ -57,6 +57,7 @@ interface IOrderstatusProps {
   setDraftOrderCount?: any;
   setIsErrorPage?: any;
   setErrorData?: any;
+  setIsErrorListLoading: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -102,6 +103,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setDraftOrderCount,
   setIsErrorPage,
   setErrorData,
+  setIsErrorListLoading,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -363,16 +365,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return;
           }
           const orderDetails = selectedRowdata?.map((order: any) => {
-            if (
-              order?.original?.source === "SHOPIFY" ||
-              order?.original?.source === "WOOCOMMERCE" ||
-              order?.original?.source === "ZOHO"
-            ) {
-              return {
-                orderId: order?.original?.orderId,
-                source: order?.original?.source,
-              };
-            }
+            // if (
+            //   order?.original?.source === "SHOPIFY" ||
+            //   order?.original?.source === "WOOCOMMERCE" ||
+            //   order?.original?.source === "ZOHO"
+            // ) {
+            return {
+              orderId: order?.original?.orderId,
+              source: order?.original?.source,
+            };
+            // }
           });
 
           try {
@@ -381,10 +383,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               identifier: "PlaceOrder",
             });
 
-            const { data } = await POST(
-              POST_PLACE_CHANNEL_ORDERS,
-              orderDetails
-            );
+            const { data } = await POST(POST_PLACE_ALL_ORDERS, {
+              orders: orderDetails,
+            });
             if (data?.success) {
               setIsLoadingManifest({
                 isLoading: false,
@@ -760,8 +761,23 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   const getErrors = async () => {
+    setIsErrorListLoading(true);
     const { data } = await POST(GET_ORDER_ERRORS);
-    setErrorData(data?.data);
+    if (data?.status) {
+      const result = [];
+
+      for (const [key, value] of Object.entries(data?.data?.[0])) {
+        const currentObject = {
+          errorName: key,
+          value: value,
+        };
+        result.push(currentObject);
+      }
+      setErrorData(result);
+      setIsErrorListLoading(false);
+    } else {
+      setIsErrorListLoading(false);
+    }
   };
 
   function getObjectWithIsActiveTrue(data: any) {

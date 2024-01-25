@@ -276,6 +276,7 @@ const Index = () => {
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorData, setErrorData]: any = useState();
+  const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
 
   useEffect(() => {
@@ -1032,6 +1033,7 @@ const Index = () => {
                 setDraftOrderCount={setDraftOrderCount}
                 setIsErrorPage={setIsErrorPage}
                 setErrorData={setErrorData}
+                setIsErrorListLoading={setIsErrorListLoading}
               />
             </div>
             <div
@@ -1090,6 +1092,7 @@ const Index = () => {
                         errorData={errorData}
                         setIsErrorModalOpen={setIsErrorModalOpen}
                         setErrorModalData={setErrorModalData}
+                        isLoading={isErrorListLoading}
                       />
                     ) : (
                       <>
@@ -1183,9 +1186,12 @@ const Index = () => {
       <CustomRightModal
         isOpen={isErrorModalOpen}
         onClose={() => setIsErrorModalOpen(false)}
-        className="!justify-start"
+        className="!justify-start "
       >
-        <ErrorModal errorModalData={errorModalData} />
+        <ErrorModal
+          errorModalData={errorModalData}
+          setIsErrorModalOpen={setIsErrorModalOpen}
+        />
       </CustomRightModal>
 
       <CustomRightModal
