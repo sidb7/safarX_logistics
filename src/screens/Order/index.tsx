@@ -28,6 +28,7 @@ import {
   FETCH_LABELS_REPORT_DOWNLOAD,
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_SELLER_ORDER_COMPLETE_DATA,
+  GET_ORDER_ERRORS,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -978,6 +979,26 @@ const Index = () => {
     setIsDeleted(false);
   }
 
+  const getErrors = async () => {
+    setIsErrorListLoading(true);
+    const { data } = await POST(GET_ORDER_ERRORS);
+    if (data?.status) {
+      const result = [];
+
+      for (const [key, value] of Object.entries(data?.data?.[0])) {
+        const currentObject = {
+          errorName: key,
+          value: value,
+        };
+        result.push(currentObject);
+      }
+      setErrorData(result);
+      setIsErrorListLoading(false);
+    } else {
+      setIsErrorListLoading(false);
+    }
+  };
+
   return (
     <>
       {isActive ? (
@@ -1035,6 +1056,7 @@ const Index = () => {
                 setIsErrorPage={setIsErrorPage}
                 setErrorData={setErrorData}
                 setIsErrorListLoading={setIsErrorListLoading}
+                getErrors={getErrors}
               />
             </div>
             <div
@@ -1092,8 +1114,10 @@ const Index = () => {
                       <Errors
                         errorData={errorData}
                         setIsErrorModalOpen={setIsErrorModalOpen}
+                        isErrorModalOpen={isErrorModalOpen}
                         setErrorModalData={setErrorModalData}
                         isLoading={isErrorListLoading}
+                        getErrors={getErrors}
                       />
                     ) : (
                       <>

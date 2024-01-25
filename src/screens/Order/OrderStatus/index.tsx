@@ -58,6 +58,7 @@ interface IOrderstatusProps {
   setIsErrorPage?: any;
   setErrorData?: any;
   setIsErrorListLoading: any;
+  getErrors: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -104,6 +105,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setIsErrorPage,
   setErrorData,
   setIsErrorListLoading,
+  getErrors,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -757,25 +759,25 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     setTotalcount(orderCount || 0);
   };
 
-  const getErrors = async () => {
-    setIsErrorListLoading(true);
-    const { data } = await POST(GET_ORDER_ERRORS);
-    if (data?.status) {
-      const result = [];
+  // const getErrors = async () => {
+  //   setIsErrorListLoading(true);
+  //   const { data } = await POST(GET_ORDER_ERRORS);
+  //   if (data?.status) {
+  //     const result = [];
 
-      for (const [key, value] of Object.entries(data?.data?.[0])) {
-        const currentObject = {
-          errorName: key,
-          value: value,
-        };
-        result.push(currentObject);
-      }
-      setErrorData(result);
-      setIsErrorListLoading(false);
-    } else {
-      setIsErrorListLoading(false);
-    }
-  };
+  //     for (const [key, value] of Object.entries(data?.data?.[0])) {
+  //       const currentObject = {
+  //         errorName: key,
+  //         value: value,
+  //       };
+  //       result.push(currentObject);
+  //     }
+  //     setErrorData(result);
+  //     setIsErrorListLoading(false);
+  //   } else {
+  //     setIsErrorListLoading(false);
+  //   }
+  // };
 
   function getObjectWithIsActiveTrue(data: any) {
     const filterArrOne: any = [
