@@ -376,6 +376,7 @@ const Index = () => {
       const { data } = await POST(POST_SYNC_ORDER);
       if (data?.success) {
         toast.success(data?.message || "Sync Successful");
+        window.location.reload();
       } else {
         toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");

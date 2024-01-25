@@ -154,8 +154,8 @@ const Errors = (props: ErrorProps) => {
     setOpenIndex(index === openIndex ? null : index);
   };
 
-  // const allValuesEmpty =
-  //   errorData && errorData?.every((error: any) => error.value.length > 0);
+  const allValuesEmpty =
+    errorData && errorData?.some((error: any) => error.value.length === 0);
 
   return (
     <div className="h-[70vh]">
