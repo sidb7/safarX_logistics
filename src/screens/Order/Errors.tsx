@@ -154,8 +154,8 @@ const Errors = (props: ErrorProps) => {
     setOpenIndex(index === openIndex ? null : index);
   };
 
-  const allValuesEmpty =
-    errorData && errorData?.every((error: any) => error.value.length > 0);
+  // const allValuesEmpty =
+  //   errorData && errorData?.every((error: any) => error.value.length > 0);
 
   return (
     <div className="h-[70vh]">
@@ -165,7 +165,7 @@ const Errors = (props: ErrorProps) => {
         </div>
       ) : (
         <div>
-          {allValuesEmpty ? (
+          {errorData.length > 0 ? (
             errorData?.map((item: any, index: any) => {
               const totalOrdersCount = item?.value.reduce(
                 (acc: any, obj: any) => acc + obj.ordersCount,

@@ -1279,7 +1279,7 @@ export const columnHelperForNewOrder = (
 
         return (
           <div className="flex items-center">
-            <CopyTooltip stringToBeCopied={copyString} />
+            {/* <CopyTooltip stringToBeCopied={copyString} /> */}
 
             {/* <img
               src={DeleteIconForLg}
