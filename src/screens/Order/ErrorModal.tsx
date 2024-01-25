@@ -257,8 +257,8 @@ const ErrorModal = (props: ErrorModalProps) => {
     });
   };
 
-  const updateProducts = async () => {
-    setProcessOrderLoader(true);
+  const updateProducts = async (isProcessOrder?: any) => {
+    isProcessOrder && setUpdateButtonLoader(true);
     let payLoad = {
       boxDetails: [productAndBoxDetails],
       orderDetails: errorModalData?.orderDetails,
@@ -267,11 +267,15 @@ const ErrorModal = (props: ErrorModalProps) => {
     const { data } = await POST(UPDATE_PRODUCT_AND_BOX_DETAILS, payLoad);
     if (data?.success) {
       toast.success(data?.message);
-      setIsErrorModalOpen(false);
-      setProcessOrderLoader(false);
+      if (isProcessOrder) {
+        setIsErrorModalOpen(false);
+        setUpdateButtonLoader(false);
+      }
       return true;
     } else {
-      setProcessOrderLoader(false);
+      if (isProcessOrder) {
+        setUpdateButtonLoader(false);
+      }
       return true;
     }
   };
@@ -280,9 +284,9 @@ const ErrorModal = (props: ErrorModalProps) => {
     setServiceIndex(index);
   };
 
-  const updateOrderDetails = async () => {
+  const updateOrderDetails = async (isProcessOrder?: any) => {
     try {
-      setProcessOrderLoader(true);
+      setUpdateButtonLoader(true);
       const payload: any = {
         partnerServiceId: services[serviceIndex].partnerServiceId,
         partnerServiceName: services[serviceIndex].partnerServiceName,
@@ -294,16 +298,22 @@ const ErrorModal = (props: ErrorModalProps) => {
       const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
       if (responseData?.success) {
         toast.success(responseData?.message);
-        setProcessOrderLoader(false);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+        }
         return true;
       } else {
         toast.error(responseData?.message);
-        setProcessOrderLoader(false);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+        }
         return false;
       }
     } catch (error: any) {
       toast.error(error?.message);
-      setProcessOrderLoader(false);
+      if (!isProcessOrder) {
+        setUpdateButtonLoader(false);
+      }
       return false;
     }
   };
@@ -313,8 +323,8 @@ const ErrorModal = (props: ErrorModalProps) => {
       setProcessOrderLoader(true);
       const isReadyForprocess: any =
         errorModalData?.error === "Box And Product"
-          ? await updateProducts()
-          : await updateOrderDetails();
+          ? await updateProducts(false)
+          : await updateOrderDetails(false);
 
       const orderDetails: any = {
         orders: [],
@@ -339,7 +349,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         if (data?.success) {
           toast.success(data?.message);
           setProcessOrderLoader(false);
-          window.location.reload();
+          setIsErrorModalOpen(false);
         } else {
           toast.error(data?.success);
           setProcessOrderLoader(false);
@@ -573,93 +583,87 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return (
           <>
-            {processOrderLoader ? (
-              <div className="flex justify-center w-[100%] h-[35vh] items-center">
-                <Spinner />
-              </div>
-            ) : (
-              <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[80vh]">
-                <div className="m-[0.5rem] my-[1rem] bg-white">
-                  <div className="flex min-w-[90%]">
-                    <div
-                      className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
-                      style={{
-                        boxShadow:
-                          "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                      }}
-                      onClick={() => handleProductsDetails(-2)}
-                    >
-                      <div className="flex items-center w-[90%]">
-                        <div className="p-3.5 flex justify-center items-center">
-                          <img src={VanIcon} className="w-[40px]" alt="" />
-                        </div>
-                        <div className="max-w-[80%] line-clamp-1">
-                          <b>Courier Partners</b>
-                          {/* <b>{capitalizeFirstLetter(data?.name)} </b> */}
-                        </div>
+            <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[80vh]">
+              <div className="m-[0.5rem] my-[1rem] bg-white">
+                <div className="flex min-w-[90%]">
+                  <div
+                    className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
+                    style={{
+                      boxShadow:
+                        "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                    }}
+                    onClick={() => handleProductsDetails(-2)}
+                  >
+                    <div className="flex items-center w-[90%]">
+                      <div className="p-3.5 flex justify-center items-center">
+                        <img src={VanIcon} className="w-[40px]" alt="" />
                       </div>
-                      <div className=" w-[10%]">
-                        {serviceDropDownLoader ? (
-                          <div className="flex justify-center w-[50%] items-center">
-                            <Spinner />
-                          </div>
-                        ) : (
-                          <img
-                            src={DownArrowIcon}
-                            className={`${
-                              globalIndex === -2 ? "rotate-180" : "rotate"
-                            }`}
-                          />
-                        )}
+                      <div className="max-w-[80%] line-clamp-1">
+                        <b>Courier Partners</b>
+                        {/* <b>{capitalizeFirstLetter(data?.name)} </b> */}
                       </div>
+                    </div>
+                    <div className=" w-[10%]">
+                      {serviceDropDownLoader ? (
+                        <div className="flex justify-center w-[50%] items-center">
+                          <Spinner />
+                        </div>
+                      ) : (
+                        <img
+                          src={DownArrowIcon}
+                          className={`${
+                            globalIndex === -2 ? "rotate-180" : "rotate"
+                          }`}
+                        />
+                      )}
                     </div>
                   </div>
-                  {globalIndex === -2 && (
-                    <div>
-                      {services.map((service: any, index: any) => {
-                        return (
+                </div>
+                {globalIndex === -2 && (
+                  <div>
+                    {services.map((service: any, index: any) => {
+                      return (
+                        <div
+                          className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0 `}
+                          onClick={() => handleService(index)}
+                        >
                           <div
-                            className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0 `}
-                            onClick={() => handleService(index)}
+                            className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
+                            style={{
+                              boxShadow:
+                                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                            }}
+                            // onClick={() => handleProductsDetails(index)}
                           >
                             <div
-                              className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
+                              className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
                               style={{
-                                boxShadow:
-                                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                                justifyContent: "space-between",
+                                marginRight: "1rem",
                               }}
-                              // onClick={() => handleProductsDetails(index)}
                             >
                               <div
-                                className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
-                                style={{
-                                  justifyContent: "space-between",
-                                  marginRight: "1rem",
-                                }}
+                                className={`flex gap-x-4 ${
+                                  index === serviceIndex && "font-semibold"
+                                }`}
                               >
-                                <div
-                                  className={`flex gap-x-4 ${
-                                    index === serviceIndex && "font-semibold"
-                                  }`}
-                                >
-                                  {index === serviceIndex && (
-                                    <img src={VanIcon} />
-                                  )}
-                                  {capitalizeFirstLetter(service.partnerName) +
-                                    " " +
-                                    capitalizeFirstLetter(service.serviceMode)}
-                                </div>
-                                <div>{service.total}</div>
+                                {index === serviceIndex && (
+                                  <img src={VanIcon} />
+                                )}
+                                {capitalizeFirstLetter(service.partnerName) +
+                                  " " +
+                                  capitalizeFirstLetter(service.serviceMode)}
                               </div>
+                              <div>{service.total}</div>
                             </div>
                           </div>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )}
+            </div>
           </>
         );
       }
@@ -684,11 +688,6 @@ const ErrorModal = (props: ErrorModalProps) => {
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Box And Product"]) {
       setProductAndBoxDetails(errorModalData?.entityDetails?.[0]);
-      console.log(
-        "errorModalData?.entityDetails?.[0]: ",
-        errorModalData?.entityDetails?.[0]
-      );
-      console.log("product&boxDetails: ", productAndBoxDetails);
     }
   }, [errorModalData, globalIndex]);
 
@@ -735,37 +734,38 @@ const ErrorModal = (props: ErrorModalProps) => {
         }}
         className="absolute bottom-0 w-full flex shadow-lg border-[1px] bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] "
       >
-        {/* {updateButtonLoader ? (
+        {updateButtonLoader ? (
           <div className="flex justify-center w-[50%] items-center">
             <Spinner />
           </div>
-        ) : ( */}
-        <div
-          className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-          onClick={
-            errorModalData.error === orderErrorCategoryENUMs["Box And Product"]
-              ? updateProducts
-              : updateOrderDetails
-          }
-        >
-          {errorModalData.error === orderErrorCategoryENUMs["Box And Product"]
-            ? "Update Details"
-            : "Update Service"}
-        </div>
-        {/* )} */}
+        ) : (
+          <div
+            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
+            onClick={() => {
+              errorModalData.error ===
+              orderErrorCategoryENUMs["Box And Product"]
+                ? updateProducts(true)
+                : updateOrderDetails(true);
+            }}
+          >
+            {errorModalData.error === orderErrorCategoryENUMs["Box And Product"]
+              ? "Update Details"
+              : "Update Service"}
+          </div>
+        )}
 
-        {/* {processOrderLoader ? (
+        {processOrderLoader ? (
           <div className="flex justify-center w-[50%] items-center">
             <Spinner />
           </div>
-        ) : ( */}
-        <div
-          className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-          onClick={processOrder}
-        >
-          Process Order
-        </div>
-        {/* )} */}
+        ) : (
+          <div
+            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
+            onClick={processOrder}
+          >
+            Process Order
+          </div>
+        )}
       </div>
     </div>
   );

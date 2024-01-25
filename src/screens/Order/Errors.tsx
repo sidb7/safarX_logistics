@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import UpArrow from "../../assets/AccordionUp.svg";
 import {
@@ -111,14 +111,22 @@ let dummyDataError = [
 
 interface ErrorProps {
   setIsErrorModalOpen: any;
+  isErrorModalOpen: any;
   errorData: any;
   setErrorModalData: any;
   isLoading: any;
+  getErrors: any;
 }
 
 const Errors = (props: ErrorProps) => {
-  const { setIsErrorModalOpen, errorData, setErrorModalData, isLoading } =
-    props;
+  const {
+    setIsErrorModalOpen,
+    isErrorModalOpen,
+    errorData,
+    setErrorModalData,
+    isLoading,
+    getErrors,
+  } = props;
   let errors = errorData?.[0]?.matchingErrors;
   let finalError = [];
   // for (let i = 0; i < errors.length; i++) {}
@@ -155,8 +163,15 @@ const Errors = (props: ErrorProps) => {
   };
 
   const allValuesEmpty =
-    errorData && errorData?.some((error: any) => error.value.length === 0);
+    errorData && errorData?.some((error: any) => error.value.length !== 0);
 
+  console.log("errorData", errorData);
+
+  useEffect(() => {
+    if (!isErrorModalOpen) {
+      getErrors();
+    }
+  }, [isErrorModalOpen]);
   return (
     <div className="h-[70vh]">
       {isLoading ? (
@@ -165,7 +180,7 @@ const Errors = (props: ErrorProps) => {
         </div>
       ) : (
         <div>
-          {errorData.length > 0 ? (
+          {allValuesEmpty ? (
             errorData?.map((item: any, index: any) => {
               const totalOrdersCount = item?.value.reduce(
                 (acc: any, obj: any) => acc + obj.ordersCount,
