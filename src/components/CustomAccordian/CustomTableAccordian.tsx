@@ -4,7 +4,6 @@ import { POST } from "../../utils/webService";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
 import { Spinner } from "../../components/Spinner/index";
-import editIcon from "../../assets/editIconWhite.svg";
 interface ICustomTableAccordion {
   data?: any;
 }
@@ -14,7 +13,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [openIndex, setOpenIndex] = useState(null);
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [isLoading, setIsLoading]: any = useState(false);
-  const [isEdit, setIsEdit]: any = useState(false);
   const entries: any = document?.getElementsByClassName("entries");
 
   useEffect(() => {
@@ -201,10 +199,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
   };
 
-  const editToggleButton = () => {
-    setIsEdit(!isEdit);
-  };
-
   return (
     <div className="overflow-auto h-[100%] pb-[2rem]">
       {isLoading ? (
@@ -223,22 +217,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                       key={index}
                     >
                       <div
-                        className={`flex  select-none gap-y-[1rem] justify-between p-3 h-[52px] border-[1px] border-[#E8E8E8] ${
+                        className={`flex flex-col select-none gap-y-[1rem] justify-between p-3 h-[52px] border-[1px] border-[#E8E8E8] ${
                           openIndex === index
                             ? "bg-[black] text-[white] rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : "bg-[white] text-[black] rounded-lg "
                         }`}
                         onClick={() => handleItemClick(index)}
                       >
-                        <div> {item?.title}</div>
-                        {openIndex === index && (
-                          <div
-                            className="w-[21px] flex justify-center items-center"
-                            onClick={editToggleButton}
-                          >
-                            <img src={editIcon} alt="" />
-                          </div>
-                        )}
+                        {item?.title}
                       </div>
                       {openIndex === index && (
                         <div>
@@ -357,11 +343,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                           </strong>
                                         </div>
                                         <div className="col-span-8 px-[1rem]">
-                                          {isEdit ? (
-                                            value
-                                          ) : (
-                                            <input value={value} />
-                                          )}
+                                          {value}
                                         </div>
                                       </div>
                                     </div>
