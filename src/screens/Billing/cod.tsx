@@ -6,7 +6,7 @@
 
 // export default cod;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { ScrollNav } from "../../components/ScrollNav";
 import { SearchBox } from "../../components/SearchBox";
@@ -16,6 +16,9 @@ import InvoiceData from "./BillingData/invoiceData";
 import CodData from "./BillingData/codData";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import ShipmentDetailModal from "./Modal/shipmentDetailModal";
+import { POST } from "../../utils/webService";
+import { GET_COD_REMITTED } from "../../utils/ApiUrls";
+import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 
 interface IInvoiceProps {}
 
@@ -23,7 +26,12 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(10);
   const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
+  const [awbModal, setAwbModal] = useState({ isOpen: false, data: [] });
+
   const [renderingComponents, setRenderingComponents] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [codRemittedData, setCodRemittedData] = useState<any>([]);
+
   const arrayData = [
     { label: "Orders" },
     { label: "Invoice" },
@@ -43,6 +51,32 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
     }
   };
 
+  const getCodRemittedDetails = async () => {
+    try {
+      setLoading(true);
+      // const payload = { sellerId: +`${sessionStorage.getItem("sellerId")}` };
+      const payload = {
+        sellerId: 2483,
+      };
+
+      const { data: response } = await POST(GET_COD_REMITTED, payload);
+
+      if (response?.success) {
+        setCodRemittedData(response?.data);
+      } else {
+        setCodRemittedData([]);
+      }
+    } catch (error) {
+      console.error("Error in API call:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getCodRemittedDetails();
+  }, []);
+
+  console.log("getcodRmeittedData", codRemittedData);
   //on page change index
   const onPageIndexChange = () => {};
 
@@ -74,7 +108,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
         </div>
         <div className="mx-4">
-          <CodData setCodModal={setCodModal} />
+          <CodData
+            setCodModal={setCodModal}
+            setAwbModal={setAwbModal}
+            tableData={codRemittedData}
+          />
         </div>
 
         {totalItemCount > 0 && (
@@ -95,6 +133,19 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
         >
           <ShipmentDetailModal
             onClick={() => setCodModal({ isOpen: false, data: {} })}
+          />
+        </RightSideModal>
+
+        <RightSideModal
+          isOpen={awbModal?.isOpen}
+          onClose={() => {
+            setAwbModal({ isOpen: false, data: [] });
+          }}
+          className="md:!w-[50%]"
+        >
+          <CodRemittedAwbModal
+            onClick={() => setAwbModal({ isOpen: false, data: [] })}
+            awbs={awbModal.data}
           />
         </RightSideModal>
       </div>
