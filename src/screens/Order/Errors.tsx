@@ -162,10 +162,102 @@ const Errors = (props: ErrorProps) => {
     setOpenIndex(index === openIndex ? null : index);
   };
 
+  const switchConditionsForError = (errorName?: any, elem?: any) => {
+    switch (errorName) {
+      case orderErrorCategoryENUMs["Box And Product"]: {
+        return (
+          <div>
+            <div className="flex items-center justify-between my-1 mr-2">
+              <div className="flex items-center justify-between gap-x-2 mx-2 max-w-[80%] line-clamp-1">
+                <div className="text-[12px] border border-[#cecece] flex justify-center rounded-md bg-[#D2D2D2] items-center w-[22px] h-[22px]">
+                  {elem.ordersCount}
+                </div>
+                {elem?.boxInfo?.map((sinleBox: any) => (
+                  <div className="flex">
+                    {sinleBox?.products?.map((singleProduct: any) => (
+                      <div className="max-w-[120px] mr-1 line-clamp-1">
+                        {capitalizeFirstLetter(singleProduct?.name)}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div
+                onClick={() =>
+                  handleError(elem?.boxInfo, errorName, elem?.orders)
+                }
+                className="border-[blue] border-b-[1px] text-[blue]"
+              >
+                UPDATE
+              </div>
+            </div>
+          </div>
+        );
+      }
+      case orderErrorCategoryENUMs["Address"]: {
+        return (
+          <div className="flex items-center justify-between my-1 mr-2">
+            <div className="flex flex-col items-center w-[100%] justify-between mx-2">
+              {elem?.orders?.map((order: any, index: any) => {
+                return (
+                  <div
+                    className="my-1 flex justify-between w-[100%] items-center "
+                    key={index}
+                  >
+                    <div className="flex items-center">
+                      <div className="rounded-md py-1">
+                        {order?.orderId ? order?.orderId : order?.tempOrderId}
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => handleError(order, errorName)}
+                      className="border-[blue] border-b-[1px] text-[blue]"
+                    >
+                      UPDATE
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      }
+      case orderErrorCategoryENUMs["Service"]: {
+        return (
+          <>
+            <div className="flex items-center justify-between my-1 mr-2">
+              <div className="flex items-center w-[100%] justify-between mx-2">
+                {elem?.orders?.map((order: any, index: any) => {
+                  return (
+                    <div
+                      className="my-1 flex justify-between w-[100%] items-center "
+                      key={index}
+                    >
+                      <div className="flex items-center">
+                        <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
+                          {order?.orderId ? order?.orderId : order?.tempOrderId}
+                        </div>
+                        <div>{order?.source}</div>
+                      </div>
+                      <div
+                        onClick={() => handleError(order, errorName)}
+                        className="border-[blue] border-b-[1px] text-[blue]"
+                      >
+                        UPDATE
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        );
+      }
+    }
+  };
+
   const allValuesEmpty =
     errorData && errorData?.some((error: any) => error.value.length !== 0);
-
-  console.log("errorData", errorData);
 
   useEffect(() => {
     if (!isErrorModalOpen) {
@@ -228,73 +320,8 @@ const Errors = (props: ErrorProps) => {
                             className={`flex flex-col overflow-auto border p-[0.5rem]`}
                             key={nestedIndex}
                           >
-                            <div className="">
-                              {item.errorName === "Box And Product" ? (
-                                <div>
-                                  <div className="flex items-center justify-between my-1 mr-2">
-                                    <div className="flex items-center justify-between gap-x-2 mx-2 max-w-[80%] line-clamp-1">
-                                      <div className="text-[12px] border border-[#cecece] flex justify-center rounded-md bg-[#D2D2D2] items-center w-[22px] h-[22px]">
-                                        {elem.ordersCount}
-                                      </div>
-                                      {elem?.boxInfo?.map((sinleBox: any) => (
-                                        <div className="flex">
-                                          {sinleBox?.products?.map(
-                                            (singleProduct: any) => (
-                                              <div className="max-w-[120px] mr-1 line-clamp-1">
-                                                {capitalizeFirstLetter(
-                                                  singleProduct?.name
-                                                )}
-                                              </div>
-                                            )
-                                          )}
-                                        </div>
-                                      ))}
-                                    </div>
-                                    <div
-                                      onClick={() =>
-                                        handleError(
-                                          elem?.boxInfo,
-                                          item.errorName,
-                                          elem?.orders
-                                        )
-                                      }
-                                      className="border-[blue] border-b-[1px] text-[blue]"
-                                    >
-                                      UPDATE
-                                    </div>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="justify-between mx-2 my-[0.5rem]  flex flex-col">
-                                  {elem?.orders?.map(
-                                    (order: any, index: any) => {
-                                      return (
-                                        <div
-                                          className="my-1 flex justify-between items-center "
-                                          key={index}
-                                        >
-                                          <div className="flex items-center">
-                                            <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
-                                              {order?.orderId
-                                                ? order?.orderId
-                                                : order?.tempOrderId}
-                                            </div>
-                                            <div>{order?.source}</div>
-                                          </div>
-                                          <div
-                                            onClick={() =>
-                                              handleError(order, item.errorName)
-                                            }
-                                            className="border-[blue] border-b-[1px] text-[blue]"
-                                          >
-                                            UPDATE
-                                          </div>
-                                        </div>
-                                      );
-                                    }
-                                  )}
-                                </div>
-                              )}
+                            <div>
+                              {switchConditionsForError(item.errorName, elem)}
                             </div>
                           </div>
                         ))}
@@ -304,7 +331,7 @@ const Errors = (props: ErrorProps) => {
               );
             })
           ) : (
-            <div className="border rounded-md flex justify-center items-center bg-[#D2D2D2] h-[35vh]">
+            <div className="w-[100%] h-52 bg-[#f7f7f7] hover:bg-[#e9e9e9] flex rounded-lg justify-center items-center">
               No Error List Found
             </div>
           )}
