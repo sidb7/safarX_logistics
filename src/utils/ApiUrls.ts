@@ -325,6 +325,9 @@ const UPDATE_TEMP_ORDER_ADDRESS = `${SELLER_BASE_URL}/channel/updateTempOrderAdd
 
 const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
+/* Billing */
+const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -482,5 +485,6 @@ export {
   UPDATE_PRODUCT_AND_BOX_DETAILS,
   GET_SERVICE_LIST_ORDER,
   SET_SERVICE_INFO,
+  GET_COD_REMITTED,
   UPDATE_TEMP_ORDER_ADDRESS,
 };
