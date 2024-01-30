@@ -117,7 +117,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-sm font-normal leading-5">
-              {/* {info.row.original?.CodAmount} */}
+              {info.row.original?.codAmount}
             </p>
           </div>
         );
@@ -138,7 +138,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            {/* <p>₹{info.row?.original?.addonCharges}</p> */}
+            <p>₹{info.row?.original?.addonCharges || 0}</p>
           </div>
         );
       },
@@ -158,7 +158,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            {/* <p>₹{info.row.original?.settlementAmount}</p> */}
+            <p>₹{info.row.original?.settlementAmount || 0}</p>
           </div>
         );
       },
@@ -178,7 +178,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            {/* <p>₹{info.row.original?.outStandingAmount}</p> */}
+            <p>₹{info.row.original?.outStandingAmount || 0}</p>
           </div>
         );
       },
@@ -198,7 +198,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            {/* <p>₹{info.row.original?.holdAmount}</p> */}
+            <p>₹{info.row.original?.holdAmount || 0}</p>
           </div>
         );
       },
@@ -223,7 +223,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
               setCodModal({ isOpen: true, data: info?.row?.original })
             }
           >
-            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+            <p>₹{info.row.original?.recoveryAmount || 0}</p>
           </div>
         );
       },
@@ -243,7 +243,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            {/* <p>₹{info.row.original?.codRecharge}</p> */}
+            <p>₹{info.row.original?.codRecharge || 0}</p>
           </div>
         );
       },
