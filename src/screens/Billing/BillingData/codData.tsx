@@ -11,11 +11,13 @@ import CustomTableWithScroll from "../../../components/CustomTableWithScroll";
 
 interface IInvoiceDataProps {
   setCodModal?: any;
+  setAwbModal?: any;
   tableData?: any[];
 }
 
 const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   setCodModal,
+  setAwbModal,
   tableData,
 }) => {
   console.log("tableDatacodData", tableData);
@@ -264,7 +266,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="text-[#5958FF] cursor-pointer">
-              ₹ {info.original?.details?.codAmountRemitted}
+              ₹ {info?.row?.original?.details?.codAmountRemitted}
             </p>
           </div>
         );
@@ -283,9 +285,38 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       },
 
       cell: (info: any) => {
-        //   info.row.original?.netPaid;
+        //   ₹ info.row.original?.netPaid;
 
-        return <div className=""> ₹ {info.original?.details?.utrNo}</div>;
+        return <div className=""> {info?.row?.original?.details?.utrNo}</div>;
+      },
+    }),
+    columnsHelper.accessor("awb", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              AWB
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div
+            className=""
+            onClick={() =>
+              setAwbModal({
+                isOpen: true,
+                data: info?.row?.original?.details?.awbNos,
+              })
+            }
+          >
+            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+            <p className="text-[#5958FF] cursor-pointer">AWBs</p>
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("actions", {

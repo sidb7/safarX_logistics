@@ -18,6 +18,7 @@ import RightSideModal from "../../components/CustomModal/customRightModal";
 import ShipmentDetailModal from "./Modal/shipmentDetailModal";
 import { POST } from "../../utils/webService";
 import { GET_COD_REMITTED } from "../../utils/ApiUrls";
+import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 
 interface IInvoiceProps {}
 
@@ -25,6 +26,8 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const navigate = useNavigate();
   const [totalItemCount, setTotalItemCount] = useState(10);
   const [codModal, setCodModal] = useState({ isOpen: false, data: {} });
+  const [awbModal, setAwbModal] = useState({ isOpen: false, data: [] });
+
   const [renderingComponents, setRenderingComponents] = useState(0);
   const [loading, setLoading] = useState(true);
   const [codRemittedData, setCodRemittedData] = useState<any>([]);
@@ -105,7 +108,11 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           </div>
         </div>
         <div className="mx-4">
-          <CodData setCodModal={setCodModal} tableData={codRemittedData} />
+          <CodData
+            setCodModal={setCodModal}
+            setAwbModal={setAwbModal}
+            tableData={codRemittedData}
+          />
         </div>
 
         {totalItemCount > 0 && (
@@ -126,6 +133,19 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
         >
           <ShipmentDetailModal
             onClick={() => setCodModal({ isOpen: false, data: {} })}
+          />
+        </RightSideModal>
+
+        <RightSideModal
+          isOpen={awbModal?.isOpen}
+          onClose={() => {
+            setAwbModal({ isOpen: false, data: [] });
+          }}
+          className="md:!w-[50%]"
+        >
+          <CodRemittedAwbModal
+            onClick={() => setAwbModal({ isOpen: false, data: [] })}
+            awbs={awbModal.data}
           />
         </RightSideModal>
       </div>
