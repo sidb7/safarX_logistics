@@ -16,7 +16,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   const entries: any = document?.getElementsByClassName("entries");
 
   useEffect(() => {
-
     const { data: dataFromState, isOpen } = data;
 
     if (data !== undefined && isOpen === true) {
@@ -343,7 +342,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             :
                                           </strong>
                                         </div>
-                                        <div className="col-span-8 px-[1rem] ">
+                                        <div className="col-span-8 px-[1rem]">
                                           {value}
                                         </div>
                                       </div>

@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import CustomDropDown from "../../components/DropDown";
 import { Spinner } from "../../components/Spinner";
 import MagicLocationIcon from "../../assets/PickUp/magicLocation.svg";
+import CustomInputWithDropDown from "../../components/LandmarkDropdown/LandmarkDropdown";
 import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
 import {
@@ -26,6 +27,7 @@ import {
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
+import { dummyStateDropdownData } from "../../utils/dummyData";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -64,6 +66,7 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const [pickupMagicAddress, setPickupMagicAddress]: any = useState("");
   const [deliveryMagicAddress, setDeliveryMagicAddress]: any = useState("");
+  const [customLandmark, setCustomLandmark] = useState("");
 
   const measureUnits = [
     {
@@ -192,6 +195,27 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const handleBoxAccordion = () => {
     setGlobalIndex(globalIndex === -1 ? null : -1);
+  };
+
+  const handleLandmarkSelected = (landmark: string) => {
+    setCustomLandmark(landmark);
+  };
+
+  const handleInputChange = (label: any, e: any) => {
+    setAddressData((prevAddresses: any) => {
+      return prevAddresses.map((address: any) => {
+        if (address.label === label) {
+          return {
+            ...address,
+            address: {
+              ...address.address,
+              [e.target.name]: e.target.value,
+            },
+          };
+        }
+        return address;
+      });
+    });
   };
 
   // const handleProductDimesions = (productId?: any, data?: any) => {
@@ -466,7 +490,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               {productAndBoxDetails &&
                 productAndBoxDetails?.products?.map((data: any, index: any) => {
                   return (
-                    <div key={index} className="m-[0.5rem] my-[1rem]  bg-white">
+                    <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%]">
                         <div
                           className="items-center cursor-pointer flex border-2 rounded-md w-[100%] justify-between"
@@ -643,7 +667,10 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 value={capitalizeFirstLetter(
                                   address?.address?.flatNo
                                 )}
-                                // onChange={}
+                                name="flatNo"
+                                onChange={(e: any) =>
+                                  handleInputChange(address.label, e)
+                                }
                               />
                             </div>
                             <div className="flex flex-col">
@@ -653,14 +680,23 @@ const ErrorModal = (props: ErrorModalProps) => {
                                   value={capitalizeFirstLetter(
                                     address?.address?.country
                                   )}
-                                  // onChange={}
+                                  name="country"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
-                                <InputBox
-                                  label="State"
+
+                                <CustomDropDown
                                   value={capitalizeFirstLetter(
                                     address?.address?.state
                                   )}
-                                  // onChange={}
+                                  name="state"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
+                                  options={dummyStateDropdownData}
+                                  placeHolder="Select State"
+                                  wrapperClass="w-[100%]"
                                 />
                               </div>
                               <div className="flex mt-[1rem] gap-[1rem]">
@@ -669,34 +705,54 @@ const ErrorModal = (props: ErrorModalProps) => {
                                   value={capitalizeFirstLetter(
                                     address?.address?.city
                                   )}
-
-                                  // onChange={}
+                                  name="city"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                                 <InputBox
                                   label="Locality"
                                   value={capitalizeFirstLetter(
                                     address?.address?.locality
                                   )}
-
-                                  // onChange={}
+                                  name="locality"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                               </div>
                               <div className="flex mt-[1rem] gap-[1rem] ">
                                 <InputBox
                                   label="Pincode"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.pincode
-                                  )}
-
-                                  // onChange={}
+                                  value={address?.address?.pincode}
+                                  name="pincode"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
+                                {/* <div className="mb-4 lg:mb-6 lg:mr-6 ">
+                                  <CustomInputWithDropDown
+                                    pastedData={address?.address?.landmark}
+                                    value={address?.address?.landmark}
+                                    handlePickupAddressChange={(e: any) =>
+                                      handleInputChange(address.label, e)
+                                    }
+                                    handleLandmarkSelected={
+                                      handleLandmarkSelected
+                                    }
+                                    // inputError={inputError}
+                                  />
+                                </div> */}
+
                                 <InputBox
                                   label="Select Landmark"
                                   value={capitalizeFirstLetter(
                                     address?.address?.landmark
                                   )}
-
-                                  // onChange={}
+                                  name="landmark"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                               </div>
                             </div>
