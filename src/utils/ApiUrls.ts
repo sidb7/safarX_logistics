@@ -319,6 +319,7 @@ const SET_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
 const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChannelInventory`;
+const UPDATE_TEMP_ORDER_ADDRESS = `${SELLER_BASE_URL}/channel/updateTempOrderAddress`;
 
 // External URL's
 
@@ -481,4 +482,5 @@ export {
   UPDATE_PRODUCT_AND_BOX_DETAILS,
   GET_SERVICE_LIST_ORDER,
   SET_SERVICE_INFO,
+  UPDATE_TEMP_ORDER_ADDRESS,
 };
