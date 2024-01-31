@@ -902,12 +902,14 @@ const ErrorModal = (props: ErrorModalProps) => {
           orderDetails?.orders?.push({
             tempOrderId: data?.tempOrderId,
             source: data?.source,
+            orderId: data?.orderId,
           })
         );
       } else {
         orderDetails?.orders.push({
           tempOrderId: errorModalData?.entityDetails?.tempOrderId,
           source: errorModalData?.entityDetails?.source,
+          orderId: errorModalData?.entityDetails?.orderId,
         });
       }
 
