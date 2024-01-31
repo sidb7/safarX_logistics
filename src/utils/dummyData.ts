@@ -1562,10 +1562,13 @@ export const serviceabilityTableData = [
 ];
 
 export const keyNameMapping = {
-  deliveryPincode: "Delivery Pincode",
-  pickupPincode: "Pickup Pincode",
-  partners: "Partners",
-  paymentType: "Payment Type",
-  orderType: "Order Type",
-  sellerId: "Seller Id",
+  deliveryPincode: {
+    name: "Delivery Pincode",
+    label: "deliveryAddress.pincode",
+  },
+  pickupPincode: { name: "Pickup Pincode", label: "pickupAddress.pincode" },
+  partners: { name: "Partners", label: "service.partnerName" },
+  paymentType: { name: "PaymentType", label: "codInfo.isCod" },
+  orderType: { name: "Order Type", label: "orderType" },
+  sellerId: { name: "Seller Id", label: "sellerId" },
 };
