@@ -375,6 +375,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return {
               tempOrderId: order?.original?.tempOrderId,
               source: order?.original?.source,
+              orderId: order?.original?.orderId,
             };
           });
           const placeOrderPayload = {
