@@ -5,10 +5,29 @@ import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 import { keyNameMapping } from "../../../../utils/dummyData";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
+import DatePicker from "react-datepicker";
 
-function FilterScreen({ filterState, setFilterState }: any) {
+function FilterScreen({
+  filterState,
+  setFilterState,
+  setFilterPayLoad,
+  filterPayLoad,
+  filterModal,
+}: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
+  const [dateRange, setDateRange]: any = useState([new Date(), new Date()]);
+  const [startDate, endDate] = dateRange;
+
+  const reportEndDate = new Date();
+
+  const isDateDisabled = (date: any) => {
+    return date <= reportEndDate;
+  };
+
+  const convertEpoch = (epochDate: any) => {
+    return epochDate?.getTime() || "";
+  };
 
   const getFilterDropDownData = async () => {
     setIsLoading(true);
@@ -17,40 +36,23 @@ function FilterScreen({ filterState, setFilterState }: any) {
       const result: any = [];
 
       for (const [key, name] of Object.entries(keyNameMapping)) {
-        const values: any = data?.data?.[0][key]?.map(
+        let values: any = data?.data?.[0][key]?.map(
           (obj: any) => Object.values(obj)[0]
         );
 
-        const menu = values?.map((value: any, index: number) => {
-          if (key === "orderType") {
-            return {
-              name: value,
-              value: value,
-              isActive: false,
-            };
-          } else if (key === "paymentType") {
-            return {
-              name: value === "Cod" ? "COD" : capitalizeFirstLetter(value),
-              value: value,
-              isActive: false,
-            };
-          } else {
-            return {
-              name: capitalizeFirstLetter(value),
-              value: value,
-              isActive: false,
-            };
-          }
+        values = values.map((item: any) => {
+          return item;
         });
 
-        // const menu = values?.map((value: any, index: number) => ({
-        //   name: value,
-        //   value: value,
-        //   isActive: false,
-        // }));
+        const menu = values?.map((value: any) => ({
+          name: capitalizeFirstLetter(value),
+          value: value,
+          isActive: false,
+        }));
 
         const currentObject = {
-          name: name,
+          name: name?.name,
+          label: name?.label,
           isCollapse: false,
           menu: menu,
         };
@@ -65,6 +67,71 @@ function FilterScreen({ filterState, setFilterState }: any) {
   };
 
   useEffect(() => {
+    let tempArr: any = filterPayLoad?.filterArrOne || [];
+
+    if (startDate === null && endDate === null) {
+      tempArr = tempArr.filter(
+        (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
+      );
+
+      setFilterPayLoad((prevData: any) => {
+        return {
+          ...prevData,
+          filterArrOne: tempArr,
+        };
+      });
+
+      return;
+    } else if (endDate === null) {
+      return;
+    }
+
+    const isAlreadyTimeRangeSet = tempArr.filter(
+      (selectedtimeRangedata: any) => selectedtimeRangedata?.createdAt
+    );
+
+    if (isAlreadyTimeRangeSet?.length > 0) {
+      tempArr = tempArr.filter(
+        (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
+      );
+
+      setFilterPayLoad((prevData: any) => {
+        return {
+          ...prevData,
+          filterArrOne: tempArr,
+        };
+      });
+    }
+
+    const endEpoch: any = endDate;
+    endEpoch && endEpoch.setHours(23, 59, 59, 59);
+    const lastendEpoch = endEpoch?.getTime();
+    const payload = [
+      { createdAt: { $gte: convertEpoch(startDate) } },
+      { createdAt: { $lte: lastendEpoch } },
+    ];
+    tempArr.push(...payload);
+
+    if (tempArr?.length > 1) {
+      setFilterPayLoad((prevData: any) => {
+        return {
+          ...prevData,
+          filterArrOne: [...tempArr],
+        };
+      });
+    }
+  }, [startDate, endDate, dateRange]);
+
+  useEffect(() => {
+    if (filterModal === false) {
+      setFilterPayLoad({
+        filterArrOne: [],
+        filterArrTwo: [],
+      });
+    }
+  }, [filterModal]);
+
+  useEffect(() => {
     getFilterDropDownData();
   }, []);
 
@@ -76,15 +143,31 @@ function FilterScreen({ filterState, setFilterState }: any) {
         </div>
       ) : (
         <>
-          {filterOptionList && (
-            <CustomAccordian
-              cardClassName="lg:!px-0 lg:!mt-4"
-              filterListDatas={filterOptionList}
-              isLoading={isLoading}
-              filterState={filterState}
-              setFilterState={setFilterState}
-            />
-          )}
+          <DatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update: any) => {
+              setDateRange(update);
+            }}
+            filterDate={isDateDisabled}
+            isClearable={true}
+            placeholderText="Select From & To Date"
+            className="cursor-pointer border-solid border-2 datepickerCss border-sky-500 pl-6"
+            dateFormat="dd/MM/yyyy"
+          />
+
+          {filterOptionList &&
+            filterOptionList.map((singleAccordianDataList: any, i: any) => (
+              <CustomAccordian
+                key={`${i}_${singleAccordianDataList?.name}`}
+                cardClassName="lg:!px-0 lg:!mt-4"
+                filterListDatas={singleAccordianDataList}
+                isLoading={isLoading}
+                setFilterState={setFilterState}
+                filterState={filterState}
+              />
+            ))}
         </>
       )}
     </div>
@@ -92,50 +175,3 @@ function FilterScreen({ filterState, setFilterState }: any) {
 }
 
 export default FilterScreen;
-
-//  <div>
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="Partner"
-//        inputBoxName="partners"
-//        //   onselect={}
-//        DropDownData={allDropDownData?.partners}
-//      />
-//    </div>
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="SellerId"
-//        inputBoxName="sellerId"
-//        DropDownData={allDropDownData?.sellerId}
-//      />
-//    </div>
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="PickupPincode"
-//        inputBoxName="pickupPincode"
-//        DropDownData={allDropDownData?.pickupPincode}
-//      />
-//    </div>
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="Deliverypincode"
-//        inputBoxName="deliverypincode"
-//        DropDownData={allDropDownData?.deliverypincode}
-//      />
-//    </div>
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="PaymentType"
-//        inputBoxName="paymentType"
-//        DropDownData={allDropDownData?.paymentType}
-//      />
-//    </div>
-
-//    <div className="my-4">
-//      <CustomInputwithDropDownForOrders
-//        label="OrderType"
-//        inputBoxName="orderType"
-//        DropDownData={allDropDownData?.orderType}
-//      />
-//    </div>
-//  </div>;
