@@ -1568,7 +1568,8 @@ export const keyNameMapping = {
   },
   pickupPincode: { name: "Pickup Pincode", label: "pickupAddress.pincode" },
   partners: { name: "Partners", label: "service.partnerName" },
-  paymentType: { name: "PaymentType", label: "codInfo.isCod" },
+  paymentType: { name: "Payment Type", label: "codInfo.isCod" },
+  sources: { name: "Sources", label: "source" },
   orderType: { name: "Order Type", label: "orderType" },
   sellerId: { name: "Seller Id", label: "sellerId" },
 };

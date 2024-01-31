@@ -817,6 +817,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       case "Order Type":
         updateFilterArr(tempArrOne, "orderType", "$in", data);
         break;
+      case "Sources":
+        updateFilterArr(tempArrOne, "source", "$in", data);
+        break;
       case "Seller Id":
         updateFilterArr(tempArrOne, "sellerId", "$in", data);
         break;
