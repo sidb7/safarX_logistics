@@ -1227,6 +1227,10 @@ export const dummyStateDropdownData = [
     label: "West Bengal",
     value: "West Bengal",
   },
+  {
+    label: "Jammu and Kashmir",
+    value: "Jammu and Kashmir",
+  },
 ];
 
 export const searchProductData = [
@@ -1558,10 +1562,14 @@ export const serviceabilityTableData = [
 ];
 
 export const keyNameMapping = {
-  deliveryPincode: "Delivery Pincode",
-  pickupPincode: "Pickup Pincode",
-  partners: "Partners",
-  paymentType: "Payment Type",
-  orderType: "Order Type",
-  sellerId: "Seller Id",
+  deliveryPincode: {
+    name: "Delivery Pincode",
+    label: "deliveryAddress.pincode",
+  },
+  pickupPincode: { name: "Pickup Pincode", label: "pickupAddress.pincode" },
+  partners: { name: "Partners", label: "service.partnerName" },
+  paymentType: { name: "Payment Type", label: "codInfo.isCod" },
+  sources: { name: "Sources", label: "source" },
+  orderType: { name: "Order Type", label: "orderType" },
+  sellerId: { name: "Seller Id", label: "sellerId" },
 };

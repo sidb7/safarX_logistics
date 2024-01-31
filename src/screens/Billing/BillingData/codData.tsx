@@ -11,47 +11,52 @@ import CustomTableWithScroll from "../../../components/CustomTableWithScroll";
 
 interface IInvoiceDataProps {
   setCodModal?: any;
+  setAwbModal?: any;
+  tableData?: any[];
 }
 
 const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   setCodModal,
+  setAwbModal,
+  tableData,
 }) => {
+  console.log("tableDatacodData", tableData);
   const columnsHelper = createColumnHelper<any>();
-  const [data, setData] = useState([
-    {
-      reportDate: "24 Jul 2023",
-      reportRefNo: "COD456787Shipyaari",
-      CodAmount: "373,757.0",
-      addonCharges: "0.00",
-      settlementAmount: "0.00",
-      outStandingAmount: "0.00",
-      holdAmount: "0.00",
-      recoveryAmount: "0.00",
-      codRecharge: "0.00",
-    },
-    {
-      reportDate: "24 Jul 2023",
-      reportRefNo: "COD456787Shipyaari",
-      CodAmount: "373,757.0",
-      addonCharges: "0.00",
-      settlementAmount: "0.00",
-      outStandingAmount: "0.00",
-      holdAmount: "0.00",
-      recoveryAmount: "0.00",
-      codRecharge: "0.00",
-    },
-    {
-      reportDate: "24 Jul 2023",
-      reportRefNo: "COD456787Shipyaari",
-      CodAmount: "373,757.0",
-      addonCharges: "0.00",
-      settlementAmount: "0.00",
-      outStandingAmount: "0.00",
-      holdAmount: "0.00",
-      recoveryAmount: "0.00",
-      codRecharge: "0.00",
-    },
-  ]);
+  // const [data, setData] = useState([
+  //   {
+  //     reportDate: "24 Jul 2023",
+  //     reportRefNo: "COD456787Shipyaari",
+  //     CodAmount: "373,757.0",
+  //     addonCharges: "0.00",
+  //     settlementAmount: "0.00",
+  //     outStandingAmount: "0.00",
+  //     holdAmount: "0.00",
+  //     recoveryAmount: "0.00",
+  //     codRecharge: "0.00",
+  //   },
+  //   {
+  //     reportDate: "24 Jul 2023",
+  //     reportRefNo: "COD456787Shipyaari",
+  //     CodAmount: "373,757.0",
+  //     addonCharges: "0.00",
+  //     settlementAmount: "0.00",
+  //     outStandingAmount: "0.00",
+  //     holdAmount: "0.00",
+  //     recoveryAmount: "0.00",
+  //     codRecharge: "0.00",
+  //   },
+  //   {
+  //     reportDate: "24 Jul 2023",
+  //     reportRefNo: "COD456787Shipyaari",
+  //     CodAmount: "373,757.0",
+  //     addonCharges: "0.00",
+  //     settlementAmount: "0.00",
+  //     outStandingAmount: "0.00",
+  //     holdAmount: "0.00",
+  //     recoveryAmount: "0.00",
+  //     codRecharge: "0.00",
+  //   },
+  // ]);
   const billingOrdersHeading = [
     columnsHelper.accessor("reportDate", {
       header: () => {
@@ -68,7 +73,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="py-4">
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original.reportDate}
+              {info.row.original.reportNumber}
             </p>
           </div>
         );
@@ -90,7 +95,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div>
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original.reportRefNo}
+              {info.row.original.reportNumber}
             </p>
           </div>
         );
@@ -112,7 +117,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original?.CodAmount}
+              {info.row.original?.codAmount}
             </p>
           </div>
         );
@@ -133,7 +138,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p>₹{info.row?.original?.addonCharges}</p>
+            <p>₹{info.row?.original?.addonCharges || 0}</p>
           </div>
         );
       },
@@ -153,7 +158,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p>₹{info.row.original?.settlementAmount}</p>
+            <p>₹{info.row.original?.settlementAmount || 0}</p>
           </div>
         );
       },
@@ -173,7 +178,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p>₹{info.row.original?.outStandingAmount}</p>
+            <p>₹{info.row.original?.outStandingAmount || 0}</p>
           </div>
         );
       },
@@ -193,7 +198,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p>₹{info.row.original?.holdAmount}</p>
+            <p>₹{info.row.original?.holdAmount || 0}</p>
           </div>
         );
       },
@@ -212,8 +217,13 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="">
-            <p>₹{info.row.original?.recoveryAmount}</p>
+          <div
+            className=""
+            onClick={() =>
+              setCodModal({ isOpen: true, data: info?.row?.original })
+            }
+          >
+            <p>₹{info.row.original?.recoveryAmount || 0}</p>
           </div>
         );
       },
@@ -233,7 +243,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       cell: (info: any) => {
         return (
           <div className="">
-            <p>₹{info.row.original?.codRecharge}</p>
+            <p>₹{info.row.original?.codRecharge || 0}</p>
           </div>
         );
       },
@@ -255,18 +265,9 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
         return (
           <div className="">
-            {true ? (
-              <p
-                className="text-[#5958FF] cursor-pointer"
-                onClick={() =>
-                  setCodModal({ isOpen: true, data: info.row.original })
-                }
-              >
-                ₹ 790
-              </p>
-            ) : (
-              <p>₹ 0.00</p>
-            )}
+            <p className="text-[#5958FF] cursor-pointer">
+              ₹ {info?.row?.original?.details?.codAmountRemitted}
+            </p>
           </div>
         );
       },
@@ -284,9 +285,38 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       },
 
       cell: (info: any) => {
-        //   info.row.original?.netPaid;
+        //   ₹ info.row.original?.netPaid;
 
-        return <div className="">UTIBR234567890000987654</div>;
+        return <div className=""> {info?.row?.original?.details?.utrNo}</div>;
+      },
+    }),
+    columnsHelper.accessor("awb", {
+      header: () => {
+        return (
+          <div className="flex justify-between ">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center ">
+              AWB
+            </p>
+            <img className="cursor-pointer" src={sortIcon} alt="" />
+          </div>
+        );
+      },
+
+      cell: (info: any) => {
+        return (
+          <div
+            className=""
+            onClick={() =>
+              setAwbModal({
+                isOpen: true,
+                data: info?.row?.original?.details?.awbNos,
+              })
+            }
+          >
+            {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
+            <p className="text-[#5958FF] cursor-pointer">AWBs</p>
+          </div>
+        );
       },
     }),
     columnsHelper.accessor("actions", {
@@ -315,7 +345,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
     <div>
       <CustomTableWithScroll
         columns={billingOrdersHeading}
-        data={data}
+        data={tableData}
         fixedData={fixedCol}
       />
     </div>

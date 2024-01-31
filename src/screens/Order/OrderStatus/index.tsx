@@ -123,7 +123,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   });
 
   const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
-  const [filterState, setFilterState] = useState([]);
+  const [filterState, setFilterState] = useState({
+    name: "",
+    menu: [],
+    label: "",
+    isCollapse: false,
+  });
   const [filterPayLoad, setFilterPayLoad] = useState({
     filterArrOne: [],
     filterArrTwo: [],
@@ -779,69 +784,54 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   //   }
   // };
 
-  function getObjectWithIsActiveTrue(data: any) {
-    const filterArrOne: any = [
-      { orderType: { $in: [] } },
-      { sellerId: { $in: [] } },
-    ];
-    const filterArrTwo: any = [
-      { "codInfo.isCod": { $in: [] } },
-      { "pickupAddress.pincode": { $in: [] } },
-      { "deliveryAddress.pincode": { $in: [] } },
-      { "service.partnerName": { $in: [] } },
-    ];
+  function getObjectWithIsActiveTrue(data: any, name: any) {
+    const tempArrTwo = filterPayLoad?.filterArrTwo;
+    const tempArrOne = filterPayLoad?.filterArrOne;
 
-    for (const category of data) {
-      for (const item of category.menu) {
-        if (item.isActive) {
-          switch (category?.name) {
-            case "Delivery Pincode":
-              filterArrTwo[2]["deliveryAddress.pincode"].$in?.push(
-                +item?.value
-              );
-              break;
-            case "Pickup Pincode":
-              filterArrTwo[1]["pickupAddress.pincode"].$in?.push(+item?.value);
-              break;
-            case "Payment Type":
-              if (item?.value === "Cod") {
-                filterArrTwo[0]["codInfo.isCod"].$in?.push(true);
-              } else {
-                filterArrTwo[0]["codInfo.isCod"].$in?.push(false);
-              }
-              break;
-            case "Partners":
-              filterArrTwo[3]["service.partnerName"].$in?.push(item?.value);
-              break;
-            case "Order Type":
-              filterArrOne[0].orderType.$in?.push(item?.value);
-              break;
-            case "Seller Id":
-              filterArrOne[1].sellerId.$in?.push(+item?.value);
-              break;
-            default:
-              break;
-          }
-        }
+    const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
+      const index = arr.findIndex(
+        (findArr: any) => Object.keys(findArr)[0] === key
+      );
+
+      if (index > -1) {
+        arr[index][key][subKey] = data;
+      } else {
+        const newObj = { [key]: { [subKey]: [...data] } };
+        arr.push(newObj);
       }
+    };
+
+    switch (name) {
+      case "Delivery Pincode":
+        updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
+        break;
+      case "Pickup Pincode":
+        updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
+        break;
+      case "PaymentType":
+        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        break;
+      case "Partners":
+        updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+        break;
+      case "Order Type":
+        updateFilterArr(tempArrOne, "orderType", "$in", data);
+        break;
+      case "Sources":
+        updateFilterArr(tempArrOne, "source", "$in", data);
+        break;
+      case "Seller Id":
+        updateFilterArr(tempArrOne, "sellerId", "$in", data);
+        break;
+      default:
+        break;
     }
 
-    const removeEmptyInArrays = (arr: any[]) => {
-      return arr.filter((obj) => {
-        return (
-          obj[Object.keys(obj)[0]].$in &&
-          obj[Object.keys(obj)[0]].$in.length > 0
-        );
-      });
-    };
-
-    const filteredFilterArrOne = removeEmptyInArrays(filterArrOne);
-    const filteredFilterArrTwo = removeEmptyInArrays(filterArrTwo);
-
-    return {
-      filterArrOne: filteredFilterArrOne,
-      filterArrTwo: filteredFilterArrTwo,
-    };
+    setFilterPayLoad({
+      ...filterPayLoad,
+      filterArrTwo: [...tempArrTwo],
+      filterArrOne: [...tempArrOne],
+    });
   }
 
   const applyFilterforOrders = async () => {
@@ -878,8 +868,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   useEffect(() => {
-    const result: any = getObjectWithIsActiveTrue(filterState);
-    setFilterPayLoad(result);
+    if (filterState?.menu?.length > 0) {
+      getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+    }
   }, [filterState]);
 
   return (
@@ -966,6 +957,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <FilterScreen
                 filterState={filterState}
                 setFilterState={setFilterState}
+                setFilterPayLoad={setFilterPayLoad}
+                filterPayLoad={filterPayLoad}
+                filterModal={filterModal}
               />
             </div>
 
