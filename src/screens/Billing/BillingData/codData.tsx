@@ -117,7 +117,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original?.codAmount}
+              ₹ {info?.row?.original?.details?.codAmountRemittable}
             </p>
           </div>
         );

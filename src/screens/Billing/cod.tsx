@@ -141,7 +141,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
           onClose={() => {
             setAwbModal({ isOpen: false, data: [] });
           }}
-          className="md:!w-[50%]"
+          className="md:!w-[25%]"
         >
           <CodRemittedAwbModal
             onClick={() => setAwbModal({ isOpen: false, data: [] })}
