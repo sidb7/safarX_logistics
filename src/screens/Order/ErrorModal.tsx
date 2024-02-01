@@ -5,9 +5,12 @@ import ItemIcon from "../../assets/Product/Item.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../assets/layer.svg";
 import VanIcon from "../../assets/vanWithoutBG.svg";
+import InfoCircle from "../../assets/info-circle.svg";
+import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import {
   capitalizeFirstLetter,
   orderErrorsEnum,
+  generateUniqueCode,
   orderErrorCategoryENUMs,
 } from "../../utils/utility";
 import { useEffect, useRef, useState } from "react";
@@ -19,6 +22,7 @@ import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
 import {
   GET_SERVICE_LIST_ORDER,
+  ORDERID_AND_EWAYBILLINFO,
   POST_PLACE_ALL_ORDERS,
   SET_SERVICE_INFO,
   UPDATE_PRODUCT_AND_BOX_DETAILS,
@@ -44,29 +48,63 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [trigger, setTrigger] = useState(false);
   const [serviceIndex, setServiceIndex]: any = useState(0);
   const [isAddressLoading, setIsAddressLoading] = useState(false);
-
   const [updateButtonLoader, setUpdateButtonLoader] = useState(false);
   const [processOrderLoader, setProcessOrderLoader] = useState(false);
   const [serviceDropDownLoader, setServiceDropDownLoader] = useState(false);
+  const [inputError, setInputError] = useState(false);
+  const [otherErrorDetails, setOtherErrorDetails]: any = useState({
+    tempOrderId: 0,
+    orderId: 0,
+    source: "",
+    orderType: "",
+    eWayBillNo: "",
+  });
   const [prevPastedData, setPrevPastedData] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const handleProductsDetails = (index?: any) => {
     setGlobalIndex(index === globalIndex ? null : index);
   };
-  const [boxDetails, setBoxDetails] = useState({
-    deadWeight: 0,
-    length: 0,
-    breadth: 0,
-    height: 0,
-    volumetricWeight: 0,
-  });
-
+  // const [boxDetails, setBoxDetails] = useState({
+  //   deadWeight: 0,
+  //   length: 0,
+  //   breadth: 0,
+  //   height: 0,
+  //   volumetricWeight: 0,
+  // });
   const [addressData, setAddressData]: any = useState([]);
-
   const [pickupMagicAddress, setPickupMagicAddress]: any = useState("");
   const [deliveryMagicAddress, setDeliveryMagicAddress]: any = useState("");
   const [customLandmark, setCustomLandmark] = useState("");
+  const [validationErrors, setValidationErrors] = useState<any>({
+    name: null,
+    mobileNo: null,
+    emailId: null,
+    alternateMobileNo: null,
+  });
+
+  const setValidationError = (fieldName: any, error: string | null) => {
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
+
+  const validateMobileNo = (mobileNo: string) => {
+    const numericValue = mobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
+
+  const validateEmailId = (emailId: string) => {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId) || emailId === "") {
+      return null;
+    } else {
+      return "Invalid email address";
+    }
+  };
 
   const measureUnits = [
     {
@@ -201,21 +239,41 @@ const ErrorModal = (props: ErrorModalProps) => {
     setCustomLandmark(landmark);
   };
 
-  const handleInputChange = (label: any, e: any) => {
-    setAddressData((prevAddresses: any) => {
-      return prevAddresses.map((address: any) => {
-        if (address.label === label) {
-          return {
-            ...address,
-            address: {
-              ...address.address,
-              [e.target.name]: e.target.value,
-            },
-          };
-        }
-        return address;
+  const handleInputChange = (label: any, e: any, nestedObject?: any) => {
+    if (nestedObject) {
+      setAddressData((prevAddresses: any) => {
+        return prevAddresses.map((address: any) => {
+          if (address.label === label) {
+            return {
+              ...address,
+              address: {
+                ...address.address,
+                [nestedObject]: {
+                  ...address.address[nestedObject],
+                  [e.target.name]: e.target.value,
+                },
+              },
+            };
+          }
+          return address;
+        });
       });
-    });
+    } else {
+      setAddressData((prevAddresses: any) => {
+        return prevAddresses.map((address: any) => {
+          if (address.label === label) {
+            return {
+              ...address,
+              address: {
+                ...address.address,
+                [e.target.name]: e.target.value,
+              },
+            };
+          }
+          return address;
+        });
+      });
+    }
   };
 
   // const handleProductDimesions = (productId?: any, data?: any) => {
@@ -481,6 +539,43 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
+  const UpdateOrderIdAndEWayBillInfo = async (isProcessOrder?: any) => {
+    try {
+      !isProcessOrder && setUpdateButtonLoader(true);
+
+      const payLoad = {
+        ...otherErrorDetails,
+        eWayBillNo: otherErrorDetails?.eWayBillNo || 0,
+      };
+
+      const { data: responseData } = await POST(
+        ORDERID_AND_EWAYBILLINFO,
+        payLoad
+      );
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+          setIsErrorModalOpen(false);
+        }
+        return true;
+      } else {
+        toast.error(responseData?.message);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+          setIsErrorModalOpen(false);
+        }
+        return false;
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+      if (!isProcessOrder) {
+        setUpdateButtonLoader(false);
+      }
+      return false;
+    }
+  };
+
   const switchConditions = () => {
     switch (errorModalData.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
@@ -572,7 +667,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             {addressData.length > 0 &&
               addressData?.map((address: any, index: any) => {
                 return (
-                  <div className="border-2 mb-[1rem] bg-slate-50 overflow-auto max-h-[70vh]">
+                  <div>
                     <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%] ">
                         <div
@@ -721,6 +816,147 @@ const ErrorModal = (props: ErrorModalProps) => {
                                   }
                                 />
                               </div>
+
+                              <div className="flex mt-[1rem] gap-[1rem]">
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    inputType="email"
+                                    label="Email ID (optional)"
+                                    name="emailId"
+                                    value={
+                                      address?.address?.contact?.emailId || ""
+                                    }
+                                    onChange={(e) => {
+                                      const emailValue = e.target.value;
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                      setValidationError(
+                                        "emailId",
+                                        validateEmailId(emailValue)
+                                      );
+                                      setInputError(false);
+                                    }}
+                                  />
+                                  {inputError && validationErrors.emailId && (
+                                    <div className="flex items-center gap-x-1 mt-1">
+                                      <img
+                                        src={InfoCircle}
+                                        alt=""
+                                        width={10}
+                                        height={10}
+                                      />
+                                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                                        {validationErrors.emailId}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    label="Mobile Number"
+                                    name="mobileNo"
+                                    value={
+                                      address?.address?.contact?.mobileNo || ""
+                                    }
+                                    maxLength={10}
+                                    inputType="number"
+                                    onChange={(e) => {
+                                      const numericValue =
+                                        e.target.value.replace(/[^0-9]/g, "");
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                      setValidationError(
+                                        "mobileNo",
+                                        validateMobileNo(numericValue)
+                                      );
+                                      if (setInputError) {
+                                        setInputError(false);
+                                      }
+                                    }}
+                                    inputError={inputError}
+                                    className="w-[100%]"
+                                  />
+                                  {inputError && validationErrors.mobileNo && (
+                                    <div className="flex items-center gap-x-1 mt-1">
+                                      <img
+                                        src={InfoCircle}
+                                        alt=""
+                                        width={10}
+                                        height={10}
+                                      />
+                                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                                        {validationErrors.mobileNo}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex mt-[1rem] gap-[1rem]">
+                                <CustomDropDown
+                                  value={capitalizeFirstLetter(
+                                    address?.address?.contact?.type
+                                  )}
+                                  name="type"
+                                  onChange={(e: any) =>
+                                    handleInputChange(
+                                      address.label,
+                                      e,
+                                      "contact"
+                                    )
+                                  }
+                                  options={[
+                                    {
+                                      label: "",
+                                      value: "",
+                                    },
+                                    {
+                                      label: "Individual",
+                                      value: "Individual",
+                                    },
+                                    {
+                                      label: "Business",
+                                      value: "Business",
+                                    },
+                                    {
+                                      label: "Company",
+                                      value: "Company",
+                                    },
+                                    {
+                                      label: "Shopkeeper",
+                                      value: "Shopkeeper",
+                                    },
+                                  ]}
+                                  placeHolder="Select Business Type"
+                                  wrapperClass="w-[100%]"
+                                />
+
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    label="Name of the Contact Person"
+                                    name="name"
+                                    value={
+                                      address?.address?.contact?.name || ""
+                                    }
+                                    onChange={(e) => {
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                    }}
+                                    className="w-[100%]"
+                                  />
+                                </div>
+                              </div>
+
                               <div className="flex mt-[1rem] gap-[1rem] ">
                                 <InputBox
                                   label="Pincode"
@@ -730,19 +966,6 @@ const ErrorModal = (props: ErrorModalProps) => {
                                     handleInputChange(address.label, e)
                                   }
                                 />
-                                {/* <div className="mb-4 lg:mb-6 lg:mr-6 ">
-                                  <CustomInputWithDropDown
-                                    pastedData={address?.address?.landmark}
-                                    value={address?.address?.landmark}
-                                    handlePickupAddressChange={(e: any) =>
-                                      handleInputChange(address.label, e)
-                                    }
-                                    handleLandmarkSelected={
-                                      handleLandmarkSelected
-                                    }
-                                    // inputError={inputError}
-                                  />
-                                </div> */}
 
                                 <InputBox
                                   label="Select Landmark"
@@ -853,6 +1076,61 @@ const ErrorModal = (props: ErrorModalProps) => {
           </>
         );
       }
+      case orderErrorCategoryENUMs["Others"]: {
+        return (
+          <div className="mx-4 my-2 ">
+            <div className="my-4">
+              <div>
+                <InputBox
+                  isRightIcon={true}
+                  containerStyle=""
+                  rightIcon={AutoGenerateIcon}
+                  className="w-full !text-base !font-semibold"
+                  imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+                  value={otherErrorDetails?.orderId}
+                  maxLength={12}
+                  label="Order ID"
+                  onChange={(e: any) => {
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        orderId: e.target.value,
+                      };
+                    });
+                  }}
+                  onClick={() => {
+                    const orderId = generateUniqueCode(8, 12);
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        orderId: orderId,
+                      };
+                    });
+                  }}
+                  visibility={true}
+                  setVisibility={() => {}}
+                />
+              </div>
+            </div>
+            <div className="my-4">
+              <InputBox
+                label="Enter Eway Bill No"
+                name="eWayBillNo"
+                value={otherErrorDetails?.eWayBillNo}
+                inputType="number"
+                onChange={(e: any) => {
+                  setOtherErrorDetails((prevState: any) => {
+                    return {
+                      ...prevState,
+                      eWayBillNo: +e.target.value,
+                    };
+                  });
+                }}
+              />
+            </div>
+          </div>
+        );
+      }
     }
   };
 
@@ -862,7 +1140,6 @@ const ErrorModal = (props: ErrorModalProps) => {
       tempOrderId: errorModalData?.entityDetails?.tempOrderId,
       source: errorModalData?.entityDetails?.source,
     });
-
     if (data?.success) {
       setServiceDropDownLoader(false);
       setService(data?.data);
@@ -881,6 +1158,9 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
       case orderErrorCategoryENUMs["Address"]: {
         return updateAddress(isProcessOrder);
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        return UpdateOrderIdAndEWayBillInfo(isProcessOrder);
       }
     }
   };
@@ -902,12 +1182,14 @@ const ErrorModal = (props: ErrorModalProps) => {
           orderDetails?.orders?.push({
             tempOrderId: data?.tempOrderId,
             source: data?.source,
+            orderId: data?.orderId,
           })
         );
       } else {
         orderDetails?.orders.push({
           tempOrderId: errorModalData?.entityDetails?.tempOrderId,
           source: errorModalData?.entityDetails?.source,
+          orderId: errorModalData?.entityDetails?.orderId,
         });
       }
 
@@ -937,6 +1219,9 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
       case orderErrorCategoryENUMs["Address"]: {
         return "Update Address";
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        return "Update Others";
       }
     }
   };
@@ -1034,6 +1319,18 @@ const ErrorModal = (props: ErrorModalProps) => {
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Service"]) {
       getService();
+    }
+  }, [errorModalData]);
+
+  useEffect(() => {
+    if (errorModalData.error === orderErrorCategoryENUMs["Others"]) {
+      setOtherErrorDetails({
+        orderId: errorModalData?.entityDetails?.orderId,
+        tempOrderId: errorModalData?.entityDetails?.tempOrderId,
+        source: errorModalData?.entityDetails?.source,
+        orderType: errorModalData?.entityDetails?.orderType,
+        eWayBillNo: errorModalData?.entityDetails?.eWayBillNo || "",
+      });
     }
   }, [errorModalData]);
 

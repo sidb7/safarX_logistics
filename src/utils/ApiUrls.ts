@@ -320,6 +320,7 @@ const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
 const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChannelInventory`;
 const UPDATE_TEMP_ORDER_ADDRESS = `${SELLER_BASE_URL}/channel/updateTempOrderAddress`;
+const ORDERID_AND_EWAYBILLINFO = `${SELLER_BASE_URL}/order/setOrderIdAndEWayBillInfo`;
 
 // External URL's
 
@@ -487,4 +488,5 @@ export {
   SET_SERVICE_INFO,
   GET_COD_REMITTED,
   UPDATE_TEMP_ORDER_ADDRESS,
+  ORDERID_AND_EWAYBILLINFO,
 };

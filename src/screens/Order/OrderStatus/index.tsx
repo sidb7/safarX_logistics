@@ -375,6 +375,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return {
               tempOrderId: order?.original?.tempOrderId,
               source: order?.original?.source,
+              orderId: order?.original?.orderId,
             };
           });
           const placeOrderPayload = {
@@ -413,7 +414,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
           }
         }
-        handleTabChange(1);
+        // handleTabChange(1);
         break;
       }
       case "BOOKED":
@@ -990,63 +991,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           </div>
         </RightSideModal>
       )}
-
-      {/* <CenterModal
-        isOpen={manifestModal.isOpen}
-        onRequestClose={() =>
-          setManifestModal({ ...manifestModal, isOpen: false })
-        }
-        className="w-[90%] lg:w-[50%] h-[50%]"
-      >
-        <div className="h-full w-full">
-          <div
-            onClick={() =>
-              setManifestModal({ ...manifestModal, isOpen: false })
-            }
-            className="flex justify-end p-5 cursor-pointer"
-          >
-            <img
-              src="/static/media/CloseIcon.9de23f841ff625663fc738c4125c4fda.svg"
-              alt=""
-            />
-          </div>
-          <div className="px-4 flex flex-col flex-wrap content-center">
-            <div className="flex gap-4">
-              <div className="w-[250px] md:w-[250px]">
-                <CustomDropDown
-                  heading="Select Courier Partner"
-                  value={partnerValue}
-                  options={partnerMenu}
-                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                    setPartnerValue(event.target.value);
-                  }}
-                />
-              </div>
-              <div className="w-[350px] md:w-[250px]">
-                <DatePicker
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update: any) => {
-                    setDateRange(update);
-                  }}
-                  isClearable={true}
-                  placeholderText="Select From & To Date"
-                  className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
-                  dateFormat="dd/MM/yyyy"
-                />
-              </div>
-            </div>
-            <div className="mt-10">
-              <ServiceButton
-                text={"MANIFEST REPORT"}
-                className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
-                onClick={() => fetchManifest()}
-              />
-            </div>
-          </div>
-        </div>
-      </CenterModal> */}
     </div>
   );
 };

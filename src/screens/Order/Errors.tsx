@@ -253,6 +253,36 @@ const Errors = (props: ErrorProps) => {
           </>
         );
       }
+      case orderErrorCategoryENUMs["Others"]: {
+        return (
+          <>
+            <div className="flex items-center justify-between my-1 mr-2">
+              <div className="flex flex-col items-center w-[100%] justify-between mx-2">
+                {elem?.orders?.map((order: any, index: any) => {
+                  return (
+                    <div
+                      className="my-1 flex justify-between w-[100%] items-center "
+                      key={index}
+                    >
+                      <div className="flex items-center">
+                        <div className="rounded-md py-1">
+                          {order?.orderId ? order?.orderId : order?.tempOrderId}
+                        </div>
+                      </div>
+                      <div
+                        onClick={() => handleError(order, errorName)}
+                        className="border-[blue] border-b-[1px] text-[blue]"
+                      >
+                        UPDATE
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        );
+      }
     }
   };
 
