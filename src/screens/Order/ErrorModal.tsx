@@ -125,7 +125,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       const updatedProductDimensions = { ...productAndBoxDetails };
       if (identifier === "productDimensions") {
         updatedProductDimensions.products[index][e.target.name] =
-          +e.target.value;
+          e.target.value;
         if (["length", "breadth", "height"].includes(e.target.name)) {
           updatedProductDimensions.products[index].volumetricWeight = +(
             (updatedProductDimensions.products[index]?.length *
@@ -139,7 +139,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           updatedProductDimensions?.products[index].volumetricWeight
         );
       } else if (identifier === "boxDimensions") {
-        updatedProductDimensions[e.target.name] = +e.target.value;
+        updatedProductDimensions[e.target.name] = e.target.value;
         if (["length", "breadth", "height"].includes(e.target.name)) {
           updatedProductDimensions.volumetricWeight = +(
             (+updatedProductDimensions.length *
@@ -172,6 +172,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               value={data?.deadWeight}
               name="deadWeight"
               inputType="text"
+              inputMode="numeric"
               onChange={(e: any) => {
                 if (!isNaN(e.target.value)) {
                   onChaneDimensionHandler(e);
@@ -193,9 +194,10 @@ const ErrorModal = (props: ErrorModalProps) => {
             <div className="flex w-[50%] gap-x-4">
               <InputBox
                 label="L"
-                value={data?.length}
-                name="length"
                 inputType="text"
+                inputMode="numeric"
+                name="length"
+                value={data?.length}
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -207,6 +209,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 value={data?.breadth}
                 name="breadth"
                 inputType="text"
+                inputMode="numeric"
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -218,6 +221,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 value={data?.height}
                 name="height"
                 inputType="text"
+                inputMode="numeric"
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -933,6 +937,10 @@ const ErrorModal = (props: ErrorModalProps) => {
                                       label: "Shopkeeper",
                                       value: "Shopkeeper",
                                     },
+                                    {
+                                      label: "Others",
+                                      value: "Others",
+                                    },
                                   ]}
                                   placeHolder="Select Business Type"
                                   wrapperClass="w-[100%]"
@@ -992,7 +1000,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return (
           <>
-            <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[80vh]">
+            <div className=" mx-[1rem]">
               <div className="m-[0.5rem] my-[1rem] bg-white">
                 <div className="flex min-w-[90%]">
                   <div
@@ -1012,64 +1020,78 @@ const ErrorModal = (props: ErrorModalProps) => {
                         {/* <b>{capitalizeFirstLetter(data?.name)} </b> */}
                       </div>
                     </div>
-                    <div className=" w-[10%]">
+                    <div className={"w-[10%]"}>
                       {serviceDropDownLoader ? (
                         <div className="flex justify-center w-[50%] items-center">
                           <Spinner />
                         </div>
                       ) : (
-                        <img
-                          src={DownArrowIcon}
-                          className={`${
-                            globalIndex === -2 ? "rotate-180" : "rotate"
-                          }`}
-                        />
+                        <>
+                          {services.length > 0 && (
+                            <img
+                              src={DownArrowIcon}
+                              className={`${
+                                globalIndex === -2 ? "rotate-180" : "rotate"
+                              }`}
+                            />
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
                 </div>
-                {globalIndex === -2 && (
-                  <div>
-                    {services.map((service: any, index: any) => {
-                      return (
-                        <div
-                          className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0 `}
-                          onClick={() => handleService(index)}
-                        >
+                {services.length > 0 ? (
+                  globalIndex === -2 && (
+                    <div className=" overflow-auto max-h-[80vh]">
+                      {services.map((service: any, index: any) => {
+                        return (
                           <div
-                            className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
-                            style={{
-                              boxShadow:
-                                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                            }}
-                            // onClick={() => handleProductsDetails(index)}
+                            className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
+                            onClick={() => handleService(index)}
                           >
                             <div
-                              className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
+                              className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
                               style={{
-                                justifyContent: "space-between",
-                                marginRight: "1rem",
+                                boxShadow:
+                                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
                               }}
+                              // onClick={() => handleProductsDetails(index)}
                             >
                               <div
-                                className={`flex gap-x-4 ${
-                                  index === serviceIndex && "font-semibold"
-                                }`}
+                                className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
+                                style={{
+                                  justifyContent: "space-between",
+                                  marginRight: "1rem",
+                                }}
                               >
-                                {index === serviceIndex && (
-                                  <img src={VanIcon} />
-                                )}
-                                {capitalizeFirstLetter(service.partnerName) +
-                                  " " +
-                                  capitalizeFirstLetter(service.serviceMode)}
+                                <div
+                                  className={`flex gap-x-4 ${
+                                    index === serviceIndex && "font-semibold"
+                                  }`}
+                                >
+                                  {index === serviceIndex && (
+                                    <img src={VanIcon} />
+                                  )}
+                                  {capitalizeFirstLetter(service.partnerName) +
+                                    " " +
+                                    capitalizeFirstLetter(service.serviceMode)}
+                                </div>
+                                <div>{service.total}</div>
                               </div>
-                              <div>{service.total}</div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )
+                ) : (
+                  <>
+                    {!serviceDropDownLoader && (
+                      <p className="flex justify-center items-center text-[18px] font-semibold h-[30vh] mx-1">
+                        NO SERVICE FOUND
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -1145,6 +1167,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       setService(data?.data);
     } else {
       setServiceDropDownLoader(false);
+      toast.error(data?.message);
     }
   };
 
