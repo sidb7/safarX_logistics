@@ -164,7 +164,10 @@ const NavBar: React.FunctionComponent<INavBarProps> = (props) => {
           width: conditinalClass.width,
         }}
       >
-        <div className="flex w-full !h-10 mb-6">
+        <div
+          className="flex w-full !h-10 mb-6"
+          onClick={() => navigate(`/dashboard/overview`)}
+        >
           {isHover ? (
             <img src={ShipyaariLogo} alt="" className="!w-32 !h-8" />
           ) : (
