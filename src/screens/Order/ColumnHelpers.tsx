@@ -90,27 +90,27 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
     ],
     "IN TRANSIT": [
       { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
+      // { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
     EXCEPTION: [
       { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
+      // { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
     "OUT OF DELIVERY": [
       { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
+      // { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
     DELIVERED: [
       { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
+      // { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
     RETURN: [
       { title: "Track Order", actionType: "track_order" },
-      { title: "Download Label", actionType: "download_label" },
+      // { title: "Download Label", actionType: "download_label" },
       { title: "Download Invoice", actionType: "download_invoice" },
     ],
   };
