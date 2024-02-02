@@ -7,6 +7,7 @@ import {
   GET_DELIVERY_ADDRESS,
   DELETE_PICKUP_ADDRESS,
   DELETE_DELIVERY_ADDRESS,
+  ACTIVATE_PICKUP_ADDRESS,
 } from "../../../../utils/ApiUrls";
 import { toast } from "react-toastify";
 import { Spinner } from "../../../../components/Spinner";
@@ -14,6 +15,8 @@ import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import DeleteGifIcon from "../../../../assets/deleteGif.svg";
+import FailureIcon from "../../../../assets/failure.svg";
+import SuccessIcon from "../../../../assets/success.svg";
 
 interface IAddressBookProps {
   setAddressTab: React.Dispatch<SetStateAction<string>>;
@@ -60,13 +63,37 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
       filterId === 0 ? GET_PICKUP_ADDRESS : GET_DELIVERY_ADDRESS
     );
     if (allAddressData?.success) {
-      setAddress(allAddressData.data);
+      let tempAddress = allAddressData.data;
+      tempAddress.map((item: any) => {
+        item.icon = item.isActive ? SuccessIcon : FailureIcon;
+      });
+      setAddress(tempAddress);
       setLoading(false);
     } else {
       toast.error(allAddressData?.message);
       setAddress([]);
       setLoading(false);
     }
+  };
+
+  const handleActiveAddress = async (index?: any) => {
+    setLoading(true);
+    const { data: activatePickupAddress } = await POST(
+      ACTIVATE_PICKUP_ADDRESS,
+      {
+        pickupAddressId: address[index].pickupAddressId,
+      }
+    );
+    if (activatePickupAddress?.success) {
+      let tempAddress = address;
+      tempAddress.map((item: any) => {
+        item.icon = FailureIcon;
+      });
+      tempAddress[index].icon = SuccessIcon;
+      tempAddress[index].isActive = true;
+      setAddress(tempAddress);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -209,8 +236,10 @@ const AddressBook: React.FunctionComponent<IAddressBookProps> = ({
                 <AddressCard
                   cardData={cardData(data)}
                   key={index}
+                  index={index}
                   addressData={data}
                   activeTab={activeTab}
+                  handleActiveAddress={handleActiveAddress}
                   setIsModalOpen={() => setIsModalOpen(true)}
                   setAddressToBeDeleted={() =>
                     setAddressToBeDeleted(
