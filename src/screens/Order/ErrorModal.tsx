@@ -549,7 +549,7 @@ const ErrorModal = (props: ErrorModalProps) => {
 
       const payLoad = {
         ...otherErrorDetails,
-        eWayBillNo: otherErrorDetails?.eWayBillNo || 0,
+        eWayBillNo: +otherErrorDetails?.eWayBillNo || 0,
       };
 
       const { data: responseData } = await POST(
@@ -1139,14 +1139,17 @@ const ErrorModal = (props: ErrorModalProps) => {
                 label="Enter Eway Bill No"
                 name="eWayBillNo"
                 value={otherErrorDetails?.eWayBillNo}
-                inputType="number"
+                inputType="text"
+                inputMode="numeric"
                 onChange={(e: any) => {
-                  setOtherErrorDetails((prevState: any) => {
-                    return {
-                      ...prevState,
-                      eWayBillNo: +e.target.value,
-                    };
-                  });
+                  if (!isNaN(e.target.value)) {
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        eWayBillNo: e.target.value,
+                      };
+                    });
+                  }
                 }}
               />
             </div>
@@ -1168,6 +1171,66 @@ const ErrorModal = (props: ErrorModalProps) => {
     } else {
       setServiceDropDownLoader(false);
       toast.error(data?.message);
+    }
+  };
+
+  const switchForValidation = () => {
+    switch (errorModalData?.error) {
+      case orderErrorCategoryENUMs["Box And Product"]: {
+        const dimensions = ["length", "breadth", "height", "deadWeight"];
+
+        for (const dimension of dimensions) {
+          if (
+            !productAndBoxDetails?.[dimension] ||
+            productAndBoxDetails?.[dimension] == 0
+          ) {
+            for (let i = 0; i < productAndBoxDetails?.products?.length; i++) {
+              if (
+                productAndBoxDetails?.products[i]?.dimension ||
+                productAndBoxDetails?.products[i]?.dimension == 0
+              ) {
+                return false;
+              }
+            }
+            return false;
+          }
+        }
+        return true;
+      }
+      case orderErrorCategoryENUMs["Address"]: {
+        const dimensions = [
+          "flatNo",
+          "country",
+          "state",
+          "city",
+          "locality",
+          "name",
+          "landmark",
+        ];
+        for (let i = 0; i < addressData?.length; i++) {
+          for (const dimension of dimensions) {
+            if (["emailId", "type", "name"].includes(dimension)) {
+              console.log("contactData", dimension);
+              if (!addressData[i]?.address?.contact?.[dimension]) {
+                return false;
+              }
+            } else {
+              if (!addressData[i]?.address?.[dimension]) {
+                return false;
+              }
+            }
+          }
+        }
+        return true;
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        if (!otherErrorDetails?.eWayBillNo || !otherErrorDetails?.orderId) {
+          return false;
+        }
+        return true;
+      }
+      default:
+        return true;
     }
   };
 
@@ -1253,7 +1316,7 @@ const ErrorModal = (props: ErrorModalProps) => {
     if (errorModalData.error === orderErrorCategoryENUMs["Box And Product"]) {
       setProductAndBoxDetails(errorModalData?.entityDetails?.[0]);
     }
-  }, [errorModalData, globalIndex]);
+  }, [errorModalData]);
 
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Address"]) {
@@ -1357,6 +1420,12 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   }, [errorModalData]);
 
+  useEffect(() => {
+    console.log(addressData);
+    switchForValidation();
+    console.log("switchForValidation", switchForValidation());
+  }, [addressData]);
+
   return (
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
@@ -1387,14 +1456,12 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-            onClick={() => switchForUpdateActions(false)}
-            //   () => {
-            //   errorModalData.error ===
-            //   orderErrorCategoryENUMs["Box And Product"]
-            //     ? updateProducts(true)
-            //     : updateOrderDetails(true);
-            // }
+            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
+              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
+            } py-2`}
+            onClick={() => {
+              if (switchForValidation()) switchForUpdateActions(false);
+            }}
           >
             {switchForUpdateActionsName()}
           </div>
@@ -1406,8 +1473,12 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-            onClick={processOrder}
+            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
+              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
+            } py-2`}
+            onClick={() => {
+              if (switchForValidation()) processOrder();
+            }}
           >
             Process Order
           </div>
