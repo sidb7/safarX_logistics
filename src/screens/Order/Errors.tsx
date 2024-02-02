@@ -167,7 +167,7 @@ const Errors = (props: ErrorProps) => {
       case orderErrorCategoryENUMs["Box And Product"]: {
         return (
           <div>
-            <div className="flex items-center justify-between my-1 mr-2">
+            <div className="flex items-center justify-between my-1 ml-2 mr-4">
               <div className="flex items-center justify-between gap-x-2 mx-2 max-w-[80%] line-clamp-1">
                 <div className="text-[12px] border border-[#cecece] flex justify-center rounded-md bg-[#D2D2D2] items-center w-[22px] h-[22px]">
                   {elem.ordersCount}
@@ -196,12 +196,16 @@ const Errors = (props: ErrorProps) => {
       }
       case orderErrorCategoryENUMs["Address"]: {
         return (
-          <div className="flex items-center justify-between my-1 mr-2">
-            <div className="flex flex-col items-center w-[100%] justify-between mx-2">
+          <div className="flex items-center justify-between my-1">
+            <div className="flex flex-col items-center w-[100%] justify-between">
               {elem?.orders?.map((order: any, index: any) => {
                 return (
                   <div
-                    className="my-1 flex justify-between w-[100%] items-center "
+                    className={`py-2 flex justify-between w-[100%] items-center ${
+                      elem?.orders.length - 1 !== index
+                        ? "border-b-[2px] mb-2"
+                        : ""
+                    }  px-4`}
                     key={index}
                   >
                     <div className="flex items-center">
@@ -225,12 +229,16 @@ const Errors = (props: ErrorProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return (
           <>
-            <div className="flex items-center justify-between my-1 mr-2">
-              <div className="flex items-center w-[100%] justify-between mx-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-col w-[100%] justify-between">
                 {elem?.orders?.map((order: any, index: any) => {
                   return (
                     <div
-                      className="my-1 flex justify-between w-[100%] items-center "
+                      className={`py-2 flex justify-between w-[100%] items-center ${
+                        elem?.orders.length - 1 !== index
+                          ? "border-b-[2px] mb-2"
+                          : ""
+                      }  px-4`}
                       key={index}
                     >
                       <div className="flex items-center">
@@ -238,6 +246,40 @@ const Errors = (props: ErrorProps) => {
                           {order?.orderId ? order?.orderId : order?.tempOrderId}
                         </div>
                         <div>{order?.source}</div>
+                      </div>
+                      <div
+                        onClick={() => handleError(order, errorName)}
+                        className="border-[blue] border-b-[1px] text-[blue]"
+                      >
+                        UPDATE
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        );
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        return (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col items-center w-[100%] justify-between">
+                {elem?.orders?.map((order: any, index: any) => {
+                  return (
+                    <div
+                      className={`py-2 flex justify-between w-[100%] items-center ${
+                        elem?.orders.length - 1 !== index
+                          ? "border-b-[2px] mb-2"
+                          : ""
+                      } px-4`}
+                      key={index}
+                    >
+                      <div className="flex items-center">
+                        <div className="rounded-md py-1">
+                          {order?.orderId ? order?.orderId : order?.tempOrderId}
+                        </div>
                       </div>
                       <div
                         onClick={() => handleError(order, errorName)}
@@ -317,7 +359,7 @@ const Errors = (props: ErrorProps) => {
                       {openIndex === index &&
                         item?.value.map((elem: any, nestedIndex: any) => (
                           <div
-                            className={`flex flex-col overflow-auto border p-[0.5rem]`}
+                            className={`flex flex-col overflow-auto border py-[0.5rem]`}
                             key={nestedIndex}
                           >
                             <div>

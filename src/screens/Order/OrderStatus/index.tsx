@@ -123,7 +123,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   });
 
   const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
-  const [filterState, setFilterState] = useState([]);
+  const [filterState, setFilterState] = useState({
+    name: "",
+    menu: [],
+    label: "",
+    isCollapse: false,
+  });
   const [filterPayLoad, setFilterPayLoad] = useState({
     filterArrOne: [],
     filterArrTwo: [],
@@ -370,6 +375,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             return {
               tempOrderId: order?.original?.tempOrderId,
               source: order?.original?.source,
+              orderId: order?.original?.orderId,
             };
           });
           const placeOrderPayload = {
@@ -408,7 +414,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             });
           }
         }
-        handleTabChange(1);
+        // handleTabChange(1);
         break;
       }
       case "BOOKED":
@@ -779,69 +785,54 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   //   }
   // };
 
-  function getObjectWithIsActiveTrue(data: any) {
-    const filterArrOne: any = [
-      { orderType: { $in: [] } },
-      { sellerId: { $in: [] } },
-    ];
-    const filterArrTwo: any = [
-      { "codInfo.isCod": { $in: [] } },
-      { "pickupAddress.pincode": { $in: [] } },
-      { "deliveryAddress.pincode": { $in: [] } },
-      { "service.partnerName": { $in: [] } },
-    ];
+  function getObjectWithIsActiveTrue(data: any, name: any) {
+    const tempArrTwo = filterPayLoad?.filterArrTwo;
+    const tempArrOne = filterPayLoad?.filterArrOne;
 
-    for (const category of data) {
-      for (const item of category.menu) {
-        if (item.isActive) {
-          switch (category?.name) {
-            case "Delivery Pincode":
-              filterArrTwo[2]["deliveryAddress.pincode"].$in?.push(
-                +item?.value
-              );
-              break;
-            case "Pickup Pincode":
-              filterArrTwo[1]["pickupAddress.pincode"].$in?.push(+item?.value);
-              break;
-            case "Payment Type":
-              if (item?.value === "Cod") {
-                filterArrTwo[0]["codInfo.isCod"].$in?.push(true);
-              } else {
-                filterArrTwo[0]["codInfo.isCod"].$in?.push(false);
-              }
-              break;
-            case "Partners":
-              filterArrTwo[3]["service.partnerName"].$in?.push(item?.value);
-              break;
-            case "Order Type":
-              filterArrOne[0].orderType.$in?.push(item?.value);
-              break;
-            case "Seller Id":
-              filterArrOne[1].sellerId.$in?.push(+item?.value);
-              break;
-            default:
-              break;
-          }
-        }
+    const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
+      const index = arr.findIndex(
+        (findArr: any) => Object.keys(findArr)[0] === key
+      );
+
+      if (index > -1) {
+        arr[index][key][subKey] = data;
+      } else {
+        const newObj = { [key]: { [subKey]: [...data] } };
+        arr.push(newObj);
       }
+    };
+
+    switch (name) {
+      case "Delivery Pincode":
+        updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
+        break;
+      case "Pickup Pincode":
+        updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
+        break;
+      case "PaymentType":
+        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        break;
+      case "Partners":
+        updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+        break;
+      case "Order Type":
+        updateFilterArr(tempArrOne, "orderType", "$in", data);
+        break;
+      case "Sources":
+        updateFilterArr(tempArrOne, "source", "$in", data);
+        break;
+      case "Seller Id":
+        updateFilterArr(tempArrOne, "sellerId", "$in", data);
+        break;
+      default:
+        break;
     }
 
-    const removeEmptyInArrays = (arr: any[]) => {
-      return arr.filter((obj) => {
-        return (
-          obj[Object.keys(obj)[0]].$in &&
-          obj[Object.keys(obj)[0]].$in.length > 0
-        );
-      });
-    };
-
-    const filteredFilterArrOne = removeEmptyInArrays(filterArrOne);
-    const filteredFilterArrTwo = removeEmptyInArrays(filterArrTwo);
-
-    return {
-      filterArrOne: filteredFilterArrOne,
-      filterArrTwo: filteredFilterArrTwo,
-    };
+    setFilterPayLoad({
+      ...filterPayLoad,
+      filterArrTwo: [...tempArrTwo],
+      filterArrOne: [...tempArrOne],
+    });
   }
 
   const applyFilterforOrders = async () => {
@@ -878,8 +869,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   };
 
   useEffect(() => {
-    const result: any = getObjectWithIsActiveTrue(filterState);
-    setFilterPayLoad(result);
+    if (filterState?.menu?.length > 0) {
+      getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+    }
   }, [filterState]);
 
   return (
@@ -966,6 +958,9 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <FilterScreen
                 filterState={filterState}
                 setFilterState={setFilterState}
+                setFilterPayLoad={setFilterPayLoad}
+                filterPayLoad={filterPayLoad}
+                filterModal={filterModal}
               />
             </div>
 
@@ -996,63 +991,6 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
           </div>
         </RightSideModal>
       )}
-
-      {/* <CenterModal
-        isOpen={manifestModal.isOpen}
-        onRequestClose={() =>
-          setManifestModal({ ...manifestModal, isOpen: false })
-        }
-        className="w-[90%] lg:w-[50%] h-[50%]"
-      >
-        <div className="h-full w-full">
-          <div
-            onClick={() =>
-              setManifestModal({ ...manifestModal, isOpen: false })
-            }
-            className="flex justify-end p-5 cursor-pointer"
-          >
-            <img
-              src="/static/media/CloseIcon.9de23f841ff625663fc738c4125c4fda.svg"
-              alt=""
-            />
-          </div>
-          <div className="px-4 flex flex-col flex-wrap content-center">
-            <div className="flex gap-4">
-              <div className="w-[250px] md:w-[250px]">
-                <CustomDropDown
-                  heading="Select Courier Partner"
-                  value={partnerValue}
-                  options={partnerMenu}
-                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                    setPartnerValue(event.target.value);
-                  }}
-                />
-              </div>
-              <div className="w-[350px] md:w-[250px]">
-                <DatePicker
-                  selectsRange={true}
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update: any) => {
-                    setDateRange(update);
-                  }}
-                  isClearable={true}
-                  placeholderText="Select From & To Date"
-                  className="cursor-pointer border-solid border-2 datepickerCss border-sky-500"
-                  dateFormat="dd/MM/yyyy"
-                />
-              </div>
-            </div>
-            <div className="mt-10">
-              <ServiceButton
-                text={"MANIFEST REPORT"}
-                className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
-                onClick={() => fetchManifest()}
-              />
-            </div>
-          </div>
-        </div>
-      </CenterModal> */}
     </div>
   );
 };

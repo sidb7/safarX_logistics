@@ -11,11 +11,13 @@ interface IPickUpData {
     name: any;
     phoneNumber: string;
   };
-  addressData: object;
-  key: string;
+  addressData: any;
+  index: any;
+  key: any;
   activeTab: string;
   setIsModalOpen: () => void;
   setAddressToBeDeleted: () => void;
+  handleActiveAddress: any;
 }
 
 const AddressCard: React.FunctionComponent<IPickUpData> = ({
@@ -25,6 +27,8 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
   activeTab,
   setIsModalOpen,
   setAddressToBeDeleted,
+  handleActiveAddress,
+  index,
 }) => {
   const navigate = useNavigate();
 
@@ -39,6 +43,13 @@ const AddressCard: React.FunctionComponent<IPickUpData> = ({
         </p>
 
         <div className="flex items-center gap-x-2">
+          {activeTab === "pickup" && (
+            <img
+              onClick={() => handleActiveAddress(index)}
+              className="cursor-pointer"
+              src={addressData?.icon}
+            />
+          )}
           <img
             src={EditImageWithBlack}
             alt=""

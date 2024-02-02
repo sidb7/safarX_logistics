@@ -300,6 +300,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           {
             tempOrderId: orderDetail?.tempOrderId,
             source: orderDetail?.source,
+            orderId: orderDetail?.orderId,
           },
         ],
       };

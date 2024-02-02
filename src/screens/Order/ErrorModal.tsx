@@ -5,19 +5,24 @@ import ItemIcon from "../../assets/Product/Item.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../assets/layer.svg";
 import VanIcon from "../../assets/vanWithoutBG.svg";
+import InfoCircle from "../../assets/info-circle.svg";
+import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import {
   capitalizeFirstLetter,
   orderErrorsEnum,
+  generateUniqueCode,
   orderErrorCategoryENUMs,
 } from "../../utils/utility";
 import { useEffect, useRef, useState } from "react";
 import CustomDropDown from "../../components/DropDown";
 import { Spinner } from "../../components/Spinner";
 import MagicLocationIcon from "../../assets/PickUp/magicLocation.svg";
+import CustomInputWithDropDown from "../../components/LandmarkDropdown/LandmarkDropdown";
 import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
 import {
   GET_SERVICE_LIST_ORDER,
+  ORDERID_AND_EWAYBILLINFO,
   POST_PLACE_ALL_ORDERS,
   SET_SERVICE_INFO,
   UPDATE_PRODUCT_AND_BOX_DETAILS,
@@ -26,6 +31,7 @@ import {
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
+import { dummyStateDropdownData } from "../../utils/dummyData";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -42,28 +48,63 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [trigger, setTrigger] = useState(false);
   const [serviceIndex, setServiceIndex]: any = useState(0);
   const [isAddressLoading, setIsAddressLoading] = useState(false);
-
   const [updateButtonLoader, setUpdateButtonLoader] = useState(false);
   const [processOrderLoader, setProcessOrderLoader] = useState(false);
   const [serviceDropDownLoader, setServiceDropDownLoader] = useState(false);
+  const [inputError, setInputError] = useState(false);
+  const [otherErrorDetails, setOtherErrorDetails]: any = useState({
+    tempOrderId: 0,
+    orderId: 0,
+    source: "",
+    orderType: "",
+    eWayBillNo: "",
+  });
   const [prevPastedData, setPrevPastedData] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const handleProductsDetails = (index?: any) => {
     setGlobalIndex(index === globalIndex ? null : index);
   };
-  const [boxDetails, setBoxDetails] = useState({
-    deadWeight: 0,
-    length: 0,
-    breadth: 0,
-    height: 0,
-    volumetricWeight: 0,
-  });
-
+  // const [boxDetails, setBoxDetails] = useState({
+  //   deadWeight: 0,
+  //   length: 0,
+  //   breadth: 0,
+  //   height: 0,
+  //   volumetricWeight: 0,
+  // });
   const [addressData, setAddressData]: any = useState([]);
-
   const [pickupMagicAddress, setPickupMagicAddress]: any = useState("");
   const [deliveryMagicAddress, setDeliveryMagicAddress]: any = useState("");
+  const [customLandmark, setCustomLandmark] = useState("");
+  const [validationErrors, setValidationErrors] = useState<any>({
+    name: null,
+    mobileNo: null,
+    emailId: null,
+    alternateMobileNo: null,
+  });
+
+  const setValidationError = (fieldName: any, error: string | null) => {
+    setValidationErrors((prevErrors: any) => ({
+      ...prevErrors,
+      [fieldName]: error,
+    }));
+  };
+
+  const validateMobileNo = (mobileNo: string) => {
+    const numericValue = mobileNo.replace(/[^0-9]/g, "");
+    if (numericValue.length === 10 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Mobile number must be a 10-digit number";
+    }
+  };
+
+  const validateEmailId = (emailId: string) => {
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId) || emailId === "") {
+      return null;
+    } else {
+      return "Invalid email address";
+    }
+  };
 
   const measureUnits = [
     {
@@ -84,7 +125,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       const updatedProductDimensions = { ...productAndBoxDetails };
       if (identifier === "productDimensions") {
         updatedProductDimensions.products[index][e.target.name] =
-          +e.target.value;
+          e.target.value;
         if (["length", "breadth", "height"].includes(e.target.name)) {
           updatedProductDimensions.products[index].volumetricWeight = +(
             (updatedProductDimensions.products[index]?.length *
@@ -98,7 +139,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           updatedProductDimensions?.products[index].volumetricWeight
         );
       } else if (identifier === "boxDimensions") {
-        updatedProductDimensions[e.target.name] = +e.target.value;
+        updatedProductDimensions[e.target.name] = e.target.value;
         if (["length", "breadth", "height"].includes(e.target.name)) {
           updatedProductDimensions.volumetricWeight = +(
             (+updatedProductDimensions.length *
@@ -131,6 +172,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               value={data?.deadWeight}
               name="deadWeight"
               inputType="text"
+              inputMode="numeric"
               onChange={(e: any) => {
                 if (!isNaN(e.target.value)) {
                   onChaneDimensionHandler(e);
@@ -152,9 +194,10 @@ const ErrorModal = (props: ErrorModalProps) => {
             <div className="flex w-[50%] gap-x-4">
               <InputBox
                 label="L"
-                value={data?.length}
-                name="length"
                 inputType="text"
+                inputMode="numeric"
+                name="length"
+                value={data?.length}
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -166,6 +209,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 value={data?.breadth}
                 name="breadth"
                 inputType="text"
+                inputMode="numeric"
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -177,6 +221,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 value={data?.height}
                 name="height"
                 inputType="text"
+                inputMode="numeric"
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -192,6 +237,47 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const handleBoxAccordion = () => {
     setGlobalIndex(globalIndex === -1 ? null : -1);
+  };
+
+  const handleLandmarkSelected = (landmark: string) => {
+    setCustomLandmark(landmark);
+  };
+
+  const handleInputChange = (label: any, e: any, nestedObject?: any) => {
+    if (nestedObject) {
+      setAddressData((prevAddresses: any) => {
+        return prevAddresses.map((address: any) => {
+          if (address.label === label) {
+            return {
+              ...address,
+              address: {
+                ...address.address,
+                [nestedObject]: {
+                  ...address.address[nestedObject],
+                  [e.target.name]: e.target.value,
+                },
+              },
+            };
+          }
+          return address;
+        });
+      });
+    } else {
+      setAddressData((prevAddresses: any) => {
+        return prevAddresses.map((address: any) => {
+          if (address.label === label) {
+            return {
+              ...address,
+              address: {
+                ...address.address,
+                [e.target.name]: e.target.value,
+              },
+            };
+          }
+          return address;
+        });
+      });
+    }
   };
 
   // const handleProductDimesions = (productId?: any, data?: any) => {
@@ -303,6 +389,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         companyServiceName: services[serviceIndex].companyServiceName,
         tempOrderId: errorModalData?.entityDetails?.tempOrderId,
         source: errorModalData?.entityDetails?.source,
+        category: "Service",
       };
       const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
       if (responseData?.success) {
@@ -457,6 +544,43 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
+  const UpdateOrderIdAndEWayBillInfo = async (isProcessOrder?: any) => {
+    try {
+      !isProcessOrder && setUpdateButtonLoader(true);
+
+      const payLoad = {
+        ...otherErrorDetails,
+        eWayBillNo: +otherErrorDetails?.eWayBillNo || 0,
+      };
+
+      const { data: responseData } = await POST(
+        ORDERID_AND_EWAYBILLINFO,
+        payLoad
+      );
+      if (responseData?.success) {
+        toast.success(responseData?.message);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+          setIsErrorModalOpen(false);
+        }
+        return true;
+      } else {
+        toast.error(responseData?.message);
+        if (!isProcessOrder) {
+          setUpdateButtonLoader(false);
+          setIsErrorModalOpen(false);
+        }
+        return false;
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+      if (!isProcessOrder) {
+        setUpdateButtonLoader(false);
+      }
+      return false;
+    }
+  };
+
   const switchConditions = () => {
     switch (errorModalData.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
@@ -466,7 +590,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               {productAndBoxDetails &&
                 productAndBoxDetails?.products?.map((data: any, index: any) => {
                   return (
-                    <div key={index} className="m-[0.5rem] my-[1rem]  bg-white">
+                    <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%]">
                         <div
                           className="items-center cursor-pointer flex border-2 rounded-md w-[100%] justify-between"
@@ -548,7 +672,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             {addressData.length > 0 &&
               addressData?.map((address: any, index: any) => {
                 return (
-                  <div className="border-2 mb-[1rem] bg-slate-50 overflow-auto max-h-[70vh]">
+                  <div>
                     <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
                       <div className="flex min-w-[90%] ">
                         <div
@@ -643,7 +767,10 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 value={capitalizeFirstLetter(
                                   address?.address?.flatNo
                                 )}
-                                // onChange={}
+                                name="flatNo"
+                                onChange={(e: any) =>
+                                  handleInputChange(address.label, e)
+                                }
                               />
                             </div>
                             <div className="flex flex-col">
@@ -653,14 +780,23 @@ const ErrorModal = (props: ErrorModalProps) => {
                                   value={capitalizeFirstLetter(
                                     address?.address?.country
                                   )}
-                                  // onChange={}
+                                  name="country"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
-                                <InputBox
-                                  label="State"
+
+                                <CustomDropDown
                                   value={capitalizeFirstLetter(
                                     address?.address?.state
                                   )}
-                                  // onChange={}
+                                  name="state"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
+                                  options={dummyStateDropdownData}
+                                  placeHolder="Select State"
+                                  wrapperClass="w-[100%]"
                                 />
                               </div>
                               <div className="flex mt-[1rem] gap-[1rem]">
@@ -669,34 +805,186 @@ const ErrorModal = (props: ErrorModalProps) => {
                                   value={capitalizeFirstLetter(
                                     address?.address?.city
                                   )}
-
-                                  // onChange={}
+                                  name="city"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                                 <InputBox
                                   label="Locality"
                                   value={capitalizeFirstLetter(
                                     address?.address?.locality
                                   )}
-
-                                  // onChange={}
+                                  name="locality"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                               </div>
+
+                              <div className="flex mt-[1rem] gap-[1rem]">
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    inputType="email"
+                                    label="Email ID (optional)"
+                                    name="emailId"
+                                    value={
+                                      address?.address?.contact?.emailId || ""
+                                    }
+                                    onChange={(e) => {
+                                      const emailValue = e.target.value;
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                      setValidationError(
+                                        "emailId",
+                                        validateEmailId(emailValue)
+                                      );
+                                      setInputError(false);
+                                    }}
+                                  />
+                                  {inputError && validationErrors.emailId && (
+                                    <div className="flex items-center gap-x-1 mt-1">
+                                      <img
+                                        src={InfoCircle}
+                                        alt=""
+                                        width={10}
+                                        height={10}
+                                      />
+                                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                                        {validationErrors.emailId}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    label="Mobile Number"
+                                    name="mobileNo"
+                                    value={
+                                      address?.address?.contact?.mobileNo || ""
+                                    }
+                                    maxLength={10}
+                                    inputType="number"
+                                    onChange={(e) => {
+                                      const numericValue =
+                                        e.target.value.replace(/[^0-9]/g, "");
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                      setValidationError(
+                                        "mobileNo",
+                                        validateMobileNo(numericValue)
+                                      );
+                                      if (setInputError) {
+                                        setInputError(false);
+                                      }
+                                    }}
+                                    inputError={inputError}
+                                    className="w-[100%]"
+                                  />
+                                  {inputError && validationErrors.mobileNo && (
+                                    <div className="flex items-center gap-x-1 mt-1">
+                                      <img
+                                        src={InfoCircle}
+                                        alt=""
+                                        width={10}
+                                        height={10}
+                                      />
+                                      <span className="font-normal text-[#F35838] text-xs leading-3">
+                                        {validationErrors.mobileNo}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex mt-[1rem] gap-[1rem]">
+                                <CustomDropDown
+                                  value={capitalizeFirstLetter(
+                                    address?.address?.contact?.type
+                                  )}
+                                  name="type"
+                                  onChange={(e: any) =>
+                                    handleInputChange(
+                                      address.label,
+                                      e,
+                                      "contact"
+                                    )
+                                  }
+                                  options={[
+                                    {
+                                      label: "",
+                                      value: "",
+                                    },
+                                    {
+                                      label: "Individual",
+                                      value: "Individual",
+                                    },
+                                    {
+                                      label: "Business",
+                                      value: "Business",
+                                    },
+                                    {
+                                      label: "Company",
+                                      value: "Company",
+                                    },
+                                    {
+                                      label: "Shopkeeper",
+                                      value: "Shopkeeper",
+                                    },
+                                    {
+                                      label: "Others",
+                                      value: "Others",
+                                    },
+                                  ]}
+                                  placeHolder="Select Business Type"
+                                  wrapperClass="w-[100%]"
+                                />
+
+                                <div className="w-[100%]">
+                                  <InputBox
+                                    label="Name of the Contact Person"
+                                    name="name"
+                                    value={
+                                      address?.address?.contact?.name || ""
+                                    }
+                                    onChange={(e) => {
+                                      handleInputChange(
+                                        address?.label,
+                                        e,
+                                        "contact"
+                                      );
+                                    }}
+                                    className="w-[100%]"
+                                  />
+                                </div>
+                              </div>
+
                               <div className="flex mt-[1rem] gap-[1rem] ">
                                 <InputBox
                                   label="Pincode"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.pincode
-                                  )}
-
-                                  // onChange={}
+                                  value={address?.address?.pincode}
+                                  name="pincode"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
+
                                 <InputBox
                                   label="Select Landmark"
                                   value={capitalizeFirstLetter(
                                     address?.address?.landmark
                                   )}
-
-                                  // onChange={}
+                                  name="landmark"
+                                  onChange={(e: any) =>
+                                    handleInputChange(address.label, e)
+                                  }
                                 />
                               </div>
                             </div>
@@ -713,7 +1001,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return (
           <>
-            <div className="border-2 m-[1rem] bg-slate-50 overflow-auto max-h-[80vh]">
+            <div className=" mx-[1rem]">
               <div className="m-[0.5rem] my-[1rem] bg-white">
                 <div className="flex min-w-[90%]">
                   <div
@@ -733,68 +1021,140 @@ const ErrorModal = (props: ErrorModalProps) => {
                         {/* <b>{capitalizeFirstLetter(data?.name)} </b> */}
                       </div>
                     </div>
-                    <div className=" w-[10%]">
+                    <div className={"w-[10%]"}>
                       {serviceDropDownLoader ? (
                         <div className="flex justify-center w-[50%] items-center">
                           <Spinner />
                         </div>
                       ) : (
-                        <img
-                          src={DownArrowIcon}
-                          className={`${
-                            globalIndex === -2 ? "rotate-180" : "rotate"
-                          }`}
-                        />
+                        <>
+                          {services.length > 0 && (
+                            <img
+                              src={DownArrowIcon}
+                              className={`${
+                                globalIndex === -2 ? "rotate-180" : "rotate"
+                              }`}
+                            />
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
                 </div>
-                {globalIndex === -2 && (
-                  <div>
-                    {services.map((service: any, index: any) => {
-                      return (
-                        <div
-                          className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0 `}
-                          onClick={() => handleService(index)}
-                        >
+                {services.length > 0 ? (
+                  globalIndex === -2 && (
+                    <div className=" overflow-auto max-h-[80vh]">
+                      {services.map((service: any, index: any) => {
+                        return (
                           <div
-                            className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
-                            style={{
-                              boxShadow:
-                                "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                            }}
-                            // onClick={() => handleProductsDetails(index)}
+                            className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
+                            onClick={() => handleService(index)}
                           >
                             <div
-                              className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
+                              className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
                               style={{
-                                justifyContent: "space-between",
-                                marginRight: "1rem",
+                                boxShadow:
+                                  "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
                               }}
+                              // onClick={() => handleProductsDetails(index)}
                             >
                               <div
-                                className={`flex gap-x-4 ${
-                                  index === serviceIndex && "font-semibold"
-                                }`}
+                                className="flex items-center mx-[2rem] max-w-[90%] min-w-[90%]  "
+                                style={{
+                                  justifyContent: "space-between",
+                                  marginRight: "1rem",
+                                }}
                               >
-                                {index === serviceIndex && (
-                                  <img src={VanIcon} />
-                                )}
-                                {capitalizeFirstLetter(service.partnerName) +
-                                  " " +
-                                  capitalizeFirstLetter(service.serviceMode)}
+                                <div
+                                  className={`flex gap-x-4 ${
+                                    index === serviceIndex && "font-semibold"
+                                  }`}
+                                >
+                                  {index === serviceIndex && (
+                                    <img src={VanIcon} />
+                                  )}
+                                  {capitalizeFirstLetter(service.partnerName) +
+                                    " " +
+                                    capitalizeFirstLetter(service.serviceMode)}
+                                </div>
+                                <div>{service.total}</div>
                               </div>
-                              <div>{service.total}</div>
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                        );
+                      })}
+                    </div>
+                  )
+                ) : (
+                  <>
+                    {!serviceDropDownLoader && (
+                      <p className="flex justify-center items-center text-[18px] font-semibold h-[30vh] mx-1">
+                        NO SERVICE FOUND
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </div>
           </>
+        );
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        return (
+          <div className="mx-4 my-2 ">
+            <div className="my-4">
+              <div>
+                <InputBox
+                  isRightIcon={true}
+                  containerStyle=""
+                  rightIcon={AutoGenerateIcon}
+                  className="w-full !text-base !font-semibold"
+                  imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+                  value={otherErrorDetails?.orderId}
+                  maxLength={12}
+                  label="Order ID"
+                  onChange={(e: any) => {
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        orderId: e.target.value,
+                      };
+                    });
+                  }}
+                  onClick={() => {
+                    const orderId = generateUniqueCode(8, 12);
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        orderId: orderId,
+                      };
+                    });
+                  }}
+                  visibility={true}
+                  setVisibility={() => {}}
+                />
+              </div>
+            </div>
+            <div className="my-4">
+              <InputBox
+                label="Enter Eway Bill No"
+                name="eWayBillNo"
+                value={otherErrorDetails?.eWayBillNo}
+                inputType="text"
+                inputMode="numeric"
+                onChange={(e: any) => {
+                  if (!isNaN(e.target.value)) {
+                    setOtherErrorDetails((prevState: any) => {
+                      return {
+                        ...prevState,
+                        eWayBillNo: e.target.value,
+                      };
+                    });
+                  }
+                }}
+              />
+            </div>
+          </div>
         );
       }
     }
@@ -806,12 +1166,72 @@ const ErrorModal = (props: ErrorModalProps) => {
       tempOrderId: errorModalData?.entityDetails?.tempOrderId,
       source: errorModalData?.entityDetails?.source,
     });
-
     if (data?.success) {
       setServiceDropDownLoader(false);
       setService(data?.data);
     } else {
       setServiceDropDownLoader(false);
+      toast.error(data?.message);
+    }
+  };
+
+  const switchForValidation = () => {
+    switch (errorModalData?.error) {
+      case orderErrorCategoryENUMs["Box And Product"]: {
+        const dimensions = ["length", "breadth", "height", "deadWeight"];
+
+        for (const dimension of dimensions) {
+          if (
+            !productAndBoxDetails?.[dimension] ||
+            productAndBoxDetails?.[dimension] == 0
+          ) {
+            for (let i = 0; i < productAndBoxDetails?.products?.length; i++) {
+              if (
+                productAndBoxDetails?.products[i]?.dimension ||
+                productAndBoxDetails?.products[i]?.dimension == 0
+              ) {
+                return false;
+              }
+            }
+            return false;
+          }
+        }
+        return true;
+      }
+      case orderErrorCategoryENUMs["Address"]: {
+        const dimensions = [
+          "flatNo",
+          "country",
+          "state",
+          "city",
+          "locality",
+          "name",
+          "landmark",
+        ];
+        for (let i = 0; i < addressData?.length; i++) {
+          for (const dimension of dimensions) {
+            if (["emailId", "type", "name"].includes(dimension)) {
+              console.log("contactData", dimension);
+              if (!addressData[i]?.address?.contact?.[dimension]) {
+                return false;
+              }
+            } else {
+              if (!addressData[i]?.address?.[dimension]) {
+                return false;
+              }
+            }
+          }
+        }
+        return true;
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        if (!otherErrorDetails?.eWayBillNo || !otherErrorDetails?.orderId) {
+          return false;
+        }
+        return true;
+      }
+      default:
+        return true;
     }
   };
 
@@ -825,6 +1245,9 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
       case orderErrorCategoryENUMs["Address"]: {
         return updateAddress(isProcessOrder);
+      }
+      case orderErrorCategoryENUMs["Others"]: {
+        return UpdateOrderIdAndEWayBillInfo(isProcessOrder);
       }
     }
   };
@@ -846,12 +1269,14 @@ const ErrorModal = (props: ErrorModalProps) => {
           orderDetails?.orders?.push({
             tempOrderId: data?.tempOrderId,
             source: data?.source,
+            orderId: data?.orderId,
           })
         );
       } else {
         orderDetails?.orders.push({
           tempOrderId: errorModalData?.entityDetails?.tempOrderId,
           source: errorModalData?.entityDetails?.source,
+          orderId: errorModalData?.entityDetails?.orderId,
         });
       }
 
@@ -882,6 +1307,9 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Address"]: {
         return "Update Address";
       }
+      case orderErrorCategoryENUMs["Others"]: {
+        return "Update Others";
+      }
     }
   };
 
@@ -889,7 +1317,7 @@ const ErrorModal = (props: ErrorModalProps) => {
     if (errorModalData.error === orderErrorCategoryENUMs["Box And Product"]) {
       setProductAndBoxDetails(errorModalData?.entityDetails?.[0]);
     }
-  }, [errorModalData, globalIndex]);
+  }, [errorModalData]);
 
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Address"]) {
@@ -981,6 +1409,24 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   }, [errorModalData]);
 
+  useEffect(() => {
+    if (errorModalData.error === orderErrorCategoryENUMs["Others"]) {
+      setOtherErrorDetails({
+        orderId: errorModalData?.entityDetails?.orderId,
+        tempOrderId: errorModalData?.entityDetails?.tempOrderId,
+        source: errorModalData?.entityDetails?.source,
+        orderType: errorModalData?.entityDetails?.orderType,
+        eWayBillNo: errorModalData?.entityDetails?.eWayBillNo || "",
+      });
+    }
+  }, [errorModalData]);
+
+  useEffect(() => {
+    console.log(addressData);
+    switchForValidation();
+    console.log("switchForValidation", switchForValidation());
+  }, [addressData]);
+
   return (
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
@@ -1011,14 +1457,12 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-            onClick={() => switchForUpdateActions(false)}
-            //   () => {
-            //   errorModalData.error ===
-            //   orderErrorCategoryENUMs["Box And Product"]
-            //     ? updateProducts(true)
-            //     : updateOrderDetails(true);
-            // }
+            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
+              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
+            } py-2`}
+            onClick={() => {
+              if (switchForValidation()) switchForUpdateActions(false);
+            }}
           >
             {switchForUpdateActionsName()}
           </div>
@@ -1030,8 +1474,12 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className="cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white bg-black py-2"
-            onClick={processOrder}
+            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
+              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
+            } py-2`}
+            onClick={() => {
+              if (switchForValidation()) processOrder();
+            }}
           >
             Process Order
           </div>

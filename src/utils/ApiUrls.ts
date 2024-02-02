@@ -155,6 +155,7 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
 
@@ -320,6 +321,7 @@ const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
 const GET_CHANNEL_INVENTORIES = `${SELLER_BASE_URL}/channel/getInventory`;
 const UPDATE_ONE_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/updateOneChannelInventory`;
 const UPDATE_TEMP_ORDER_ADDRESS = `${SELLER_BASE_URL}/channel/updateTempOrderAddress`;
+const ORDERID_AND_EWAYBILLINFO = `${SELLER_BASE_URL}/order/setOrderIdAndEWayBillInfo`;
 
 // External URL's
 
@@ -489,4 +491,6 @@ export {
   GET_COD_REMITTED,
   UPDATE_TEMP_ORDER_ADDRESS,
   DOWNLOAD_COD_REMITTED,
+  ORDERID_AND_EWAYBILLINFO,
+  ACTIVATE_PICKUP_ADDRESS,
 };
