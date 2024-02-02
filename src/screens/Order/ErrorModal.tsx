@@ -389,6 +389,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         companyServiceName: services[serviceIndex].companyServiceName,
         tempOrderId: errorModalData?.entityDetails?.tempOrderId,
         source: errorModalData?.entityDetails?.source,
+        category: "Service",
       };
       const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
       if (responseData?.success) {
