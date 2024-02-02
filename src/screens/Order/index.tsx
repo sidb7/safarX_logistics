@@ -522,7 +522,7 @@ const Index = () => {
         all: orderCount,
         draft: draftCount || 0,
         failed: failedCount || 0,
-        error: failedCount || 0,
+        error: 0,
       });
 
       setSelectedRowData([]);
@@ -983,7 +983,8 @@ const Index = () => {
     setIsErrorListLoading(true);
     const { data } = await POST(GET_ORDER_ERRORS);
     if (data?.status) {
-      const result = [];
+      const result: any = [];
+      let errorListCount = 0;
 
       for (const [key, value] of Object.entries(data?.data?.[0])) {
         const currentObject = {
@@ -992,6 +993,20 @@ const Index = () => {
         };
         result.push(currentObject);
       }
+
+      result.forEach((item: any) => {
+        if (item.value) {
+          item.value.forEach((order: any) => {
+            errorListCount += order.ordersCount || 0;
+          });
+        }
+      });
+
+      setDraftOrderCount((prev: any) => {
+        return { ...prev, error: errorListCount };
+      });
+
+      console.log("result", result);
       setErrorData(result);
       setIsErrorListLoading(false);
     } else {
