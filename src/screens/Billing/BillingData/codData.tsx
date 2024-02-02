@@ -13,12 +13,14 @@ interface IInvoiceDataProps {
   setCodModal?: any;
   setAwbModal?: any;
   tableData?: any[];
+  downloadReport?: () => Promise<void>;
 }
 
 const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
   setCodModal,
   setAwbModal,
   tableData,
+  downloadReport,
 }) => {
   console.log("tableDatacodData", tableData);
   const columnsHelper = createColumnHelper<any>();
@@ -117,7 +119,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div className="">
             <p className="font-Open text-sm font-normal leading-5">
-              {info.row.original?.codAmount}
+              ₹ {info?.row?.original?.details?.codAmountRemittable}
             </p>
           </div>
         );
@@ -303,6 +305,10 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
       },
 
       cell: (info: any) => {
+        const awbNumbers = info?.row?.original?.details?.awbNos;
+        // Calculate the count of AWBs
+        const awbCount = Array.isArray(awbNumbers) ? awbNumbers.length : 0;
+
         return (
           <div
             className=""
@@ -314,7 +320,7 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
             }
           >
             {/* <p>₹{info.row.original?.recoveryAmount}</p> */}
-            <p className="text-[#5958FF] cursor-pointer">AWBs</p>
+            <p className="text-[#5958FF] cursor-pointer">{awbCount}Awbs</p>
           </div>
         );
       },
@@ -332,7 +338,10 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
 
       cell: (info: any) => {
         return (
-          <div className="flex justify-center gap-x-5 max-w-[50px] ">
+          <div
+            className="flex justify-center gap-x-5 max-w-[50px]"
+            onClick={() => downloadReport && downloadReport()}
+          >
             <img className="cursor-pointer" src={downloadIcon} alt="" />
           </div>
         );
