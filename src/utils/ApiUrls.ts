@@ -327,6 +327,7 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 /* Billing */
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
+const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
 
 export {
   ADMIN_URL,
@@ -487,4 +488,5 @@ export {
   SET_SERVICE_INFO,
   GET_COD_REMITTED,
   UPDATE_TEMP_ORDER_ADDRESS,
+  DOWNLOAD_COD_REMITTED,
 };
