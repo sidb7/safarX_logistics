@@ -155,6 +155,7 @@ const GET_PACKAGE_INSURANCE = `${SELLER_URL}/api/v1/order/addInsuranceInfo`;
 
 //catalogue URLs
 const GET_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
+const ACTIVATE_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/activatePickupAddress`;
 const GET_DELIVERY_ADDRESS = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 const POST_UPDATE_PRODUCT = `${SELLER_BASE_URL}/product/updateProduct`;
 
@@ -328,6 +329,7 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 
 /* Billing */
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
+const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
 
 export {
   ADMIN_URL,
@@ -488,5 +490,7 @@ export {
   SET_SERVICE_INFO,
   GET_COD_REMITTED,
   UPDATE_TEMP_ORDER_ADDRESS,
+  DOWNLOAD_COD_REMITTED,
   ORDERID_AND_EWAYBILLINFO,
+  ACTIVATE_PICKUP_ADDRESS,
 };
