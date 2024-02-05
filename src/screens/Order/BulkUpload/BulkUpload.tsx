@@ -82,7 +82,7 @@ const BulkUpload = (props: ITypeProps) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // navigate("/orders/view-orders");
-      window.location.replace("/orders/view-orders");
+      window.location.replace("/orders/view-orders?activeTab=booked");
     }
   };
 

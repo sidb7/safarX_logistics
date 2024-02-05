@@ -179,7 +179,7 @@ const tabs = [
   //   orderNumber: 0,
   // },
   {
-    statusName: "Out of Delivery",
+    statusName: "Out For Delivery",
     value: "OUT OF DELIVERY",
     orderNumber: 0,
   },
