@@ -195,6 +195,7 @@ const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
 const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
+const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV3`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -493,4 +494,5 @@ export {
   DOWNLOAD_COD_REMITTED,
   ORDERID_AND_EWAYBILLINFO,
   ACTIVATE_PICKUP_ADDRESS,
+  POST_ASSIGN_PLANV3,
 };

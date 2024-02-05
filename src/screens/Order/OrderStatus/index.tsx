@@ -134,9 +134,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     filterArrTwo: [],
   });
   const [manifestButton, setManifestButton] = useState<any>(true);
-
   let { activeTab } = getQueryJson();
-  activeTab = activeTab.toUpperCase();
+  activeTab = activeTab?.toUpperCase();
 
   const getIndexFromActiveTab = (arr: any, tabName: any) => {
     let tabIndex = arr.findIndex((e: any) => e.value === tabName);
@@ -146,12 +145,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       return 0;
     }
   };
-  const tabIndex = getIndexFromActiveTab(statusData, activeTab);
+  const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
 
   const setScrollIndex = (id: number) => {
     handleTabChange(id);
     const tabName = statusData[id].value;
-    navigate(`/orders/view-orders?activeTab=${tabName.toLowerCase()}`);
+    navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
   useEffect(() => {
