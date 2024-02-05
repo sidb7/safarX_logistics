@@ -172,7 +172,7 @@ const Index = () => {
       .then((orderPlaceResponse: any) => {
         if (orderPlaceResponse?.success) {
           toast.success(orderPlaceResponse?.data?.message);
-          navigate("/orders/view-orders");
+          navigate("/orders/view-orders?activeTab=booked");
         } else {
           toast.error(orderPlaceResponse?.data?.message);
         }
