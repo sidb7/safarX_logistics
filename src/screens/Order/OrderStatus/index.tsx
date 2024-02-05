@@ -27,7 +27,7 @@ import DeleteIconForLg from "../../../assets/DeleteIconRedColor.svg";
 import editIcon from "../../../assets/serv/edit.svg";
 import DownloadIcon from "../../../assets/download.svg";
 import { Tooltip } from "react-tooltip";
-import { capitalizeFirstLetter } from "../../../utils/utility";
+import { capitalizeFirstLetter, getQueryJson } from "../../../utils/utility";
 //import * as FileSaver from "file-saver";
 import { tokenKey } from "../../../utils/utility";
 import FilterScreen from "../common/FilterScreen/filterScreen";
@@ -135,9 +135,29 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   });
   const [manifestButton, setManifestButton] = useState<any>(true);
 
+  let { activeTab } = getQueryJson();
+  activeTab = activeTab.toUpperCase();
+
+  const getIndexFromActiveTab = (arr: any, tabName: any) => {
+    let tabIndex = arr.findIndex((e: any) => e.value === tabName);
+    if (tabIndex > -1) {
+      return +tabIndex;
+    } else {
+      return 0;
+    }
+  };
+  const tabIndex = getIndexFromActiveTab(statusData, activeTab);
+
+  const setScrollIndex = (id: number) => {
+    handleTabChange(id);
+    const tabName = statusData[id].value;
+    navigate(`/orders/view-orders?activeTab=${tabName.toLowerCase()}`);
+  };
+
   useEffect(() => {
-    setStatusId(tabStatusId || statusId);
-  }, [tabStatusId]);
+    handleTabChange(tabIndex);
+    // setStatusId(tabStatusId || statusId);
+  }, []);
 
   const [filterData, setFilterData] = useState([
     {
@@ -150,11 +170,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       isActive: false,
       value: "draft",
     },
-    {
-      label: `Failed`,
-      isActive: false,
-      value: "failed",
-    },
+    // {
+    //   label: `Failed`,
+    //   isActive: false,
+    //   value: "failed",
+    // },
     {
       label: `Error`,
       isActive: false,
@@ -548,7 +568,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
   const handleFilterOrders = (index: any) => {
     setFilterId(index);
-    setIsErrorPage(index === 3 ? true : false);
+    setIsErrorPage(index === 2 ? true : false);
     switch (index) {
       case 0: {
         getAllOrders();
@@ -559,13 +579,13 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         getAllOrders(subStatus);
         break;
       }
-      case 2: {
-        const subStatus = "FAILED";
-        getAllOrders(subStatus);
+      // case 2: {
+      //   const subStatus = "FAILED";
+      //   getAllOrders(subStatus);
 
-        break;
-      }
-      case 3: {
+      //   break;
+      // }
+      case 2: {
         getErrors();
       }
     }
@@ -743,10 +763,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleStatusChanges = (index: any) => {
-    handleTabChange(index);
-    setStatusId(index);
-  };
+  // const handleStatusChanges = (index: any) => {
+  //   handleTabChange(index);
+  //    setStatusId(index);
+  // };
 
   const getAllOrders = async (subStatus?: any) => {
     let payload = {
@@ -883,20 +903,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               key={index}
               style={{ borderBottomWidth: "3px" }}
               className={`flex justify-center items-center border-[#777777] px-6  cursor-pointer ${
-                statusId === index ? "!border-[#004EFF]" : ""
+                tabIndex === index ? "!border-[#004EFF]" : ""
               }`}
-              onClick={() => handleStatusChanges(index)}
+              onClick={() => setScrollIndex(index)}
             >
               <span
                 className={`text-[#777777] text-[15px] lg:text-[18px] ${
-                  statusId === index ? "!text-[#004EFF] lg:text-[18px]" : ""
+                  tabIndex === index ? "!text-[#004EFF] lg:text-[18px]" : ""
                 }`}
               >
                 {statusName}
               </span>
               <span
                 className={`flex justify-center items-center ml-2 rounded-sm text-[12px]  text-white bg-[#777777] px-1 h-5 ${
-                  statusId === index ? "!bg-[#004EFF]" : ""
+                  tabIndex === index ? "!bg-[#004EFF]" : ""
                 }`}
               >
                 {orderNumber}

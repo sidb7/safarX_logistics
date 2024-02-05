@@ -3,6 +3,7 @@ import CloseIcon from "../../assets/CloseIcon.svg";
 import CustomeBottomModal from "./customBottomModal";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface IDeleteProps {
   isOpen: boolean;
@@ -26,12 +27,14 @@ const DeleteModal = (props: IDeleteProps) => {
     reloadData,
   } = props;
 
+  const navigate = useNavigate();
+
   const deleteApi = async () => {
     const { data } = await POST(deleteURL, { awbs: payloadBody });
     if (data?.success) {
       setIsDeleted(true);
       toast.success(data?.message);
-      reloadData(8);
+      navigate(`/orders/view-orders?activeTab=cancelled`);
     } else {
       toast.error(data?.message);
     }

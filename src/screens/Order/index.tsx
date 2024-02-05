@@ -521,7 +521,7 @@ const Index = () => {
         ...draftOrderCount,
         all: orderCount,
         draft: draftCount || 0,
-        failed: failedCount || 0,
+        // failed: failedCount || 0,// as discuss with akshay(2 feb 2024)
         error: 0,
       });
 
@@ -671,7 +671,7 @@ const Index = () => {
     }
   };
 
-  const handleTabChanges = async (index: any = 0) => {
+  const handleTabChanges = async (index?: any) => {
     try {
       const data = await getSellerOrderByStatus(statusData[index].value);
       const { OrderData } = data;
