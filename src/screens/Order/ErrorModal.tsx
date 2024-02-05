@@ -1422,18 +1422,23 @@ const ErrorModal = (props: ErrorModalProps) => {
   }, [errorModalData]);
 
   useEffect(() => {
-    console.log(addressData);
     switchForValidation();
-    console.log("switchForValidation", switchForValidation());
   }, [addressData]);
 
   return (
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
         <div className="flex w-[100%] justify-between">
-          <div className="flex gap-x-2">
+          <div className="flex gap-x-2 justify-center items-center ">
             <img src={SampleProduct} width="38px" />
-            <p className="text-[25px]">{errorModalData?.error}</p>
+            <p className="text-[25px]">{errorModalData?.error} </p>
+            {errorModalData?.error !== "Box And Product" && (
+              <p className="flex justify-center items-center text-[14px] font-medium">
+                Shipyaari Id : {"("}
+                {errorModalData?.entityDetails?.tempOrderId}
+                {")"}
+              </p>
+            )}
           </div>
           <div
             className="flex justify-self-end cursor-pointer"
