@@ -139,7 +139,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
             style={{
               backgroundColor: "#4D83FF",
               color: "#FFFFFF",
-              width: "320px",
+              width: "270px",
               fontSize: "12px",
               lineHeight: "14px",
               textTransform: "capitalize",
