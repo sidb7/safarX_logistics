@@ -28,7 +28,7 @@ const CustomButton = (props: CustomButtonProps) => {
     onlyIcon = false,
   } = props;
 
-  const excludeWords = ["B2B", "B2C"];
+  const excludeWords = ["B2B", "B2C", "KYC"];
 
   return (
     <>

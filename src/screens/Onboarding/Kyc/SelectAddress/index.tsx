@@ -16,6 +16,8 @@ import {
   FILE_UPLOAD,
   POST_UPDATE_DEFAULT_ADDRESS,
   MAGIC_ADDRESS,
+  GET_PROFILE_URL,
+  LOGO_AND_BRAND,
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
 import { toast } from "react-toastify";
@@ -34,11 +36,31 @@ const BusinessType = (props: ITypeProps) => {
   const [brandName, setBrandName] = useState<string>();
   const [defaultAddress, setDefaultAddress] = useState<any>([]);
   const [loading, setLoading] = useState(false);
+  const [brandingDetails, setBrandingDetails] = useState<any>({
+    image: "",
+    imageUrl: "",
+    brandName: "",
+    file: null,
+  });
   const { isMdScreen } = ResponsiveState();
 
   const [defaultAddressSelect, setDefaultAddressSelect] = useState<any>({});
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  const handleImageChange = (event: any) => {
+    const file = event.target.files[0];
+    console.log("Fillee", file);
+    if (file) {
+      const url: any = URL.createObjectURL(file) || null;
+      setBrandingDetails({
+        ...brandingDetails,
+        image: event.target.files[0].name,
+        imageUrl: url,
+        file: file,
+      });
+    }
+  };
 
   const initialAddressCall = async () => {
     const { data: response } = await POST(GET_DEFAULT_ADDRESS, {});
@@ -58,7 +80,10 @@ const BusinessType = (props: ITypeProps) => {
 
   const onSubmitForm = async () => {
     try {
-      if (brandName === "" || brandName === undefined) {
+      if (
+        brandingDetails?.brandName === "" ||
+        brandingDetails?.brandName === undefined
+      ) {
         toast.error("Enter Brand Name");
         return;
       } else if (defaultAddressSelect.hasOwnProperty("addressId") !== true) {
@@ -79,7 +104,7 @@ const BusinessType = (props: ITypeProps) => {
             pincode: +responses?.data?.message?.pincode,
             city: responses?.data?.message?.city_name,
             state: responses?.data?.message?.state_name,
-            name: brandName || "",
+            name: brandingDetails?.brandName || "",
             logoUrl: "brandLogo",
           },
           addressId: defaultAddressSelect?.addressId,
@@ -96,14 +121,35 @@ const BusinessType = (props: ITypeProps) => {
           sessionStorage.setItem("setKycValue", "true");
           setLoading(false);
           // toast.success(responses?.message);
-
-          navigate("/onboarding/wallet-main");
         } else {
           setLoading(false);
           toast.error(response.message);
         }
       } else {
         toast.error("Something Went Wrong!");
+      }
+
+      let formData = new FormData();
+      formData.append("brandName", brandingDetails.brandName);
+      formData.append("file", brandingDetails?.file);
+
+      let img: any = new Image();
+      img.src = brandingDetails?.imageUrl;
+
+      setLoading(true);
+      const { data } = await POST(LOGO_AND_BRAND, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (data?.success) {
+        setLoading(false);
+        toast.success(data?.message);
+        navigate("/onboarding/wallet-main");
+      } else {
+        setLoading(false);
+        toast.error(data?.message);
       }
     } catch (error) {
       return error;
@@ -316,20 +362,26 @@ const BusinessType = (props: ITypeProps) => {
                           label="Brand Name"
                           className="font-Open   !w-[320px] md:!w-[370px]"
                           labelClassName="font-Open"
-                          onChange={(e) => setBrandName(e.target.value)}
+                          onChange={(e: any) =>
+                            setBrandingDetails({
+                              ...brandingDetails,
+                              brandName: e.target.value,
+                            })
+                          }
+                          value={brandingDetails.brandName}
                         />
                       </div>
 
-                      {/* <div className={` ${!isLgScreen && "w-full"}  mb-6 w-full`}>
-                    <CustomInputWithFileUpload
-                      label="Upload logo"
-                      className="font-Open  "
-                      inputClassName="  lg:!w-[320px]"
-                      type="file"
-                      // onChange={(e) => uploadFile(e)}
-                      isRequired={false}
-                    />
-                  </div> */}
+                      <div className="mb-6">
+                        <CustomInputWithFileUpload
+                          label="Upload logo"
+                          className="font-Open "
+                          inputClassName="  lg:!w-[370px]"
+                          type="file"
+                          onChange={handleImageChange}
+                          isRequired={false}
+                        />
+                      </div>
                       <div className={`${!isMdScreen && ""}`}>
                         <ServiceButton
                           text="SUBMIT"
