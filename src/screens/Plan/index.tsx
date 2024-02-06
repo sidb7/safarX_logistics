@@ -18,6 +18,7 @@ import WebCrossIcon from "../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import { Spinner } from "../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -32,6 +33,7 @@ const Index = (props: ITypeProps) => {
   const [activePlanId, setActivePlanId] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
+  const [loading, setLoading] = useState(false);
 
   const ModalContent = () => {
     return (
@@ -93,12 +95,17 @@ const Index = (props: ITypeProps) => {
     (async () => {
       try {
         //Get all plans API
-        const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
+        setLoading(true);
+        const { data: response }: any = await POST(GET_ALL_PLANS, {
+          limit: 1000000,
+        });
 
         if (response?.success) {
+          setLoading(false);
           setAllPlans(response?.data?.reverse());
         }
       } catch (error) {
+        setLoading(false);
         console.error("GET PLAN API ERROR", error);
         return error;
       }
@@ -114,40 +121,52 @@ const Index = (props: ITypeProps) => {
               <Breadcrum label="Plans" />
             </div>
 
-            {/* Plan Cards */}
-            <div className="flex items-center justify-center gap-x-6 customScroll ml-5  mb-8 lg:mb-[60px] ">
-              {[allPlans[0]]?.map((eachPlan: any, index: any) => {
-                return (
-                  <PlanCard
-                    planId={eachPlan?.planId}
-                    planName={eachPlan?.planName}
-                    price={eachPlan?.price}
-                    validity={eachPlan?.validity}
-                    description={eachPlan?.description}
+            {loading ? (
+              <div className="flex items-center justify-center w-full h-[40vh]">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                {/* Plan Cards */}
+                <div className="px-4 flex items-center justify-between w-full gap-x-6   overflow-x-auto   ml-6  mb-8 lg:mb-[60px] ">
+                  {allPlans?.map((eachPlan: any, index: any) => {
+                    return (
+                      <>
+                        {eachPlan?.isPublic && (
+                          <PlanCard
+                            planId={eachPlan?.planId}
+                            planName={eachPlan?.planName}
+                            price={eachPlan?.price}
+                            validity={eachPlan?.validity}
+                            description={eachPlan?.description}
+                            onClick={() => {
+                              setIsModalOpen(true);
+                              setOnSelectPlan(eachPlan);
+                            }}
+                            activePlanId={activePlanId}
+                            isSelected={eachPlan?.isSelected}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+                {/*Compare Button */}
+                <div className="flex justify-center ml-5  lg:hidden">
+                  <ServiceButton
+                    text="COMPARE"
+                    className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
                     onClick={() => {
-                      setIsModalOpen(true);
-                      setOnSelectPlan(eachPlan);
+                      navigate("/plans/compare-plans");
                     }}
-                    activePlanId={activePlanId}
-                    isSelected={eachPlan?.isSelected}
                   />
-                );
-              })}
-            </div>
-            {/*Compare Button */}
-            <div className="flex justify-center ml-5  lg:hidden">
-              <ServiceButton
-                text="COMPARE"
-                className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
-                onClick={() => {
-                  navigate("/plans/compare-plans");
-                }}
-              />
-            </div>
-            {/* Table */}
-            <div className="hidden lg:block">
-              <ComparePlans />
-            </div>
+                </div>
+                {/* Table */}
+                <div className="hidden lg:block">
+                  <ComparePlans />
+                </div>
+              </>
+            )}
           </div>
           {/* Bottom NavBar */}
           {/* <div className="lg:hidden">
