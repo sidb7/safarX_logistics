@@ -179,7 +179,7 @@ const tabs = [
   //   orderNumber: 0,
   // },
   {
-    statusName: "Out of Delivery",
+    statusName: "Out For Delivery",
     value: "OUT OF DELIVERY",
     orderNumber: 0,
   },
@@ -511,7 +511,7 @@ const Index = () => {
         currentStatus,
       });
 
-      const { orderCount, draftCount, failedCount } = data?.data[0];
+      const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
 
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
@@ -521,8 +521,8 @@ const Index = () => {
         ...draftOrderCount,
         all: orderCount,
         draft: draftCount || 0,
-        failed: failedCount || 0,
-        error: 0,
+        // failed: failedCount || 0,
+        error: errorCount || 0,
       });
 
       setSelectedRowData([]);
@@ -671,7 +671,7 @@ const Index = () => {
     }
   };
 
-  const handleTabChanges = async (index: any = 0) => {
+  const handleTabChanges = async (index?: any) => {
     try {
       const data = await getSellerOrderByStatus(statusData[index].value);
       const { OrderData } = data;

@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import PlanCard from "./planCard";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import "../../styles/plan.css";
-import { GET_ALL_PLANS, POST_CREATE_PLAN } from "../../utils/ApiUrls";
+import {
+  GET_ALL_PLANS,
+  POST_ASSIGN_PLANV3,
+  POST_CREATE_PLAN,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -52,7 +56,7 @@ const Index = (props: ITypeProps) => {
                 text="Yes"
                 className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
                 onClick={() => {
-                  createPlan(onSelectPlan);
+                  assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
               />
@@ -68,14 +72,14 @@ const Index = (props: ITypeProps) => {
     );
   };
 
-  const createPlan = async (payload: any) => {
+  const assignPlan = async (payload: any) => {
     try {
-      //Create Plan API
-      const { data: response }: any = await POST(POST_CREATE_PLAN, payload);
-
+      // Assign Plan API
+      const { data: response }: any = await POST(POST_ASSIGN_PLANV3, {
+        planId: payload?.planId,
+      });
       if (response?.success) {
         setActivePlanId(payload?.planId);
-
         toast.success(response?.message);
       } else {
         toast.error(response?.message);

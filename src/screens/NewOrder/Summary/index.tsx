@@ -155,7 +155,7 @@ const Summary = (props: Props) => {
           // Add a cache-busting parameter and then replace the URL
           // const newUrl =
           //   "/orders/view-orders?timestamp=" + new Date().getTime();
-          window.location.replace("/orders/view-orders");
+          window.location.replace("/orders/view-orders?activeTab=booked");
         } else {
           // Handle errors from the second API call
           let errorText = placeOrderPromise?.data?.message;
