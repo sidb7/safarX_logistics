@@ -511,7 +511,7 @@ const Index = () => {
         currentStatus,
       });
 
-      const { orderCount, draftCount, failedCount } = data?.data[0];
+      const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
 
       // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
       setStatusCount("", currentStatus, orderCount);
@@ -521,8 +521,8 @@ const Index = () => {
         ...draftOrderCount,
         all: orderCount,
         draft: draftCount || 0,
-        // failed: failedCount || 0,// as discuss with akshay(2 feb 2024)
-        error: 0,
+        // failed: failedCount || 0,
+        error: errorCount || 0,
       });
 
       setSelectedRowData([]);
