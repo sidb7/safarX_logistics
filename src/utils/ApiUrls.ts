@@ -258,6 +258,7 @@ const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createW
 const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
 const CREATE_ZOHO_STORE = `${SELLER_BASE_URL}/channel/zoho/createZohoStore`;
 const CREATE_AMAZON_STORE = `${SELLER_BASE_URL}/channel/amazon/createAmazonStore`;
+const DELETE_INTEGRATED_STORE = `${SELLER_BASE_URL}/channel/deleteStore `;
 
 //Returing User
 const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress`;
@@ -495,4 +496,5 @@ export {
   ORDERID_AND_EWAYBILLINFO,
   ACTIVATE_PICKUP_ADDRESS,
   POST_ASSIGN_PLANV3,
+  DELETE_INTEGRATED_STORE,
 };
