@@ -72,7 +72,7 @@ const ErrorModal = (props: ErrorModalProps) => {
   //   volumetricWeight: 0,
   // });
   const [addressData, setAddressData]: any = useState([]);
-  const [pickupMagicAddress, setPickupMagicAddress]: any = useState("");
+  const [magicAddress, setMagicAddress]: any = useState("");
   const [deliveryMagicAddress, setDeliveryMagicAddress]: any = useState("");
   const [customLandmark, setCustomLandmark] = useState("");
   const [validationErrors, setValidationErrors] = useState<any>({
@@ -81,6 +81,33 @@ const ErrorModal = (props: ErrorModalProps) => {
     emailId: null,
     alternateMobileNo: null,
   });
+
+  const businessTypeDropDown: any = [
+    {
+      label: "",
+      value: "",
+    },
+    {
+      label: "Individual",
+      value: "Individual",
+    },
+    {
+      label: "Business",
+      value: "Business",
+    },
+    {
+      label: "Company",
+      value: "Company",
+    },
+    {
+      label: "Shopkeeper",
+      value: "Shopkeeper",
+    },
+    {
+      label: "Others",
+      value: "Others",
+    },
+  ];
 
   const setValidationError = (fieldName: any, error: string | null) => {
     setValidationErrors((prevErrors: any) => ({
@@ -243,39 +270,33 @@ const ErrorModal = (props: ErrorModalProps) => {
     setCustomLandmark(landmark);
   };
 
-  const handleInputChange = (label: any, e: any, nestedObject?: any) => {
+  const handleInputChange = (
+    targetAddress: any,
+    e: any,
+    nestedObject?: any
+  ) => {
     if (nestedObject) {
-      setAddressData((prevAddresses: any) => {
-        return prevAddresses.map((address: any) => {
-          if (address.label === label) {
-            return {
-              ...address,
-              address: {
-                ...address.address,
-                [nestedObject]: {
-                  ...address.address[nestedObject],
-                  [e.target.name]: e.target.value,
-                },
-              },
-            };
-          }
-          return address;
-        });
+      setAddressData((prevData: any) => {
+        return {
+          ...prevData,
+          [targetAddress]: {
+            ...prevData[targetAddress],
+            [nestedObject]: {
+              ...prevData[targetAddress][nestedObject],
+              [e.target.name]: e.target.value,
+            },
+          },
+        };
       });
     } else {
-      setAddressData((prevAddresses: any) => {
-        return prevAddresses.map((address: any) => {
-          if (address.label === label) {
-            return {
-              ...address,
-              address: {
-                ...address.address,
-                [e.target.name]: e.target.value,
-              },
-            };
-          }
-          return address;
-        });
+      setAddressData((prevData: any) => {
+        return {
+          ...prevData,
+          [targetAddress]: {
+            ...prevData[targetAddress],
+            [e.target.name]: e.target.value,
+          },
+        };
       });
     }
   };
@@ -420,10 +441,28 @@ const ErrorModal = (props: ErrorModalProps) => {
     try {
       !isProcessOrder && setUpdateButtonLoader(true);
 
+      let targetAddress = "";
+      if (errorModalData.error === "Delivery Address") {
+        targetAddress = "deliveryAddress";
+      } else if (errorModalData.error === "Pickup Address") {
+        targetAddress = "pickupAddress";
+      }
+
       let payload: any = {
-        ...errorModalData?.entityDetails,
-        pickupAddress: addressData?.[0]?.address,
-        deliveryAddress: addressData?.[1]?.address,
+        ...addressData,
+        [targetAddress]: {
+          ...addressData[targetAddress],
+          pincode: +addressData[targetAddress]?.pincode,
+
+          fullAddress: `${addressData[targetAddress]?.contact?.name} ${addressData[targetAddress]?.landmark} ${addressData[targetAddress]?.locality} ${addressData[targetAddress]?.city} ${addressData[targetAddress]?.state} ${addressData[targetAddress]?.country} ${addressData[targetAddress]?.pincode}`,
+        },
+        tempOrderDetails: [
+          {
+            orderId: addressData?.orderId,
+            tempOrderId: addressData?.tempOrderId,
+            source: addressData?.source,
+          },
+        ],
       };
 
       const { data: responseData } = await POST(
@@ -457,7 +496,7 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const getVerifyAddress = async (
     verifyAddressPayload: any,
-    addressLabel: any
+    targetAddress: any
   ) => {
     try {
       setIsAddressLoading(true);
@@ -471,11 +510,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         const parsedData = verifyAddressResponse?.data?.message;
 
         let tempData = {};
-        if (addressLabel === "Pickup Address") {
-          tempData = { ...addressData[0]?.address };
-        } else {
-          tempData = { ...addressData[1]?.address };
-        }
+        tempData = { ...addressData[targetAddress] };
 
         tempData = {
           ...tempData,
@@ -493,22 +528,23 @@ const ErrorModal = (props: ErrorModalProps) => {
         };
 
         setAddressData((prevData: any) => {
-          const newData = [...prevData];
+          const newData = { ...prevData };
 
-          const addressIndex = newData.findIndex(
-            (item) => item.label === addressLabel
-          );
-          newData[addressIndex].address = tempData;
+          // const addressIndex = newData.findIndex(
+          //   (item) => item.label === addressLabel
+          // );
+          newData[targetAddress] = tempData;
 
           return newData;
         });
       }
 
-      if (addressLabel === "Pickup Address") {
-        setPickupMagicAddress("");
-      } else {
-        setDeliveryMagicAddress("");
-      }
+      // if (addressLabel === "Pickup Address") {
+      //   setPickupMagicAddress("");
+      // } else {
+      //   setDeliveryMagicAddress("");
+      // }
+      setMagicAddress("");
 
       setIsAddressLoading(false);
     } catch (error) {
@@ -517,21 +553,14 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
-  const handleButtonClick = (addressLabel: any) => {
-    const trimmedData =
-      addressLabel === "Pickup Address"
-        ? pickupMagicAddress.trim()
-        : deliveryMagicAddress.trim();
+  const handleButtonClick = (targetAddress: any) => {
+    const trimmedData = magicAddress;
 
     let verifyAddressPayload = {
       data: "",
     };
 
-    if (addressLabel === "Pickup Address") {
-      verifyAddressPayload.data = pickupMagicAddress;
-    } else {
-      verifyAddressPayload.data = deliveryMagicAddress;
-    }
+    verifyAddressPayload.data = magicAddress;
 
     if (
       !isAddressLoading &&
@@ -539,7 +568,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       //  &&
       // trimmedData !== prevPastedData
     ) {
-      getVerifyAddress(verifyAddressPayload, addressLabel);
+      getVerifyAddress(verifyAddressPayload, targetAddress);
       setPrevPastedData(trimmedData);
     }
   };
@@ -666,335 +695,303 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         );
       }
-      case orderErrorCategoryENUMs["Address"]: {
+      case orderErrorCategoryENUMs["Delivery Address"]:
+      case orderErrorCategoryENUMs["Pickup Address"]: {
+        let targetAddress = "";
+        if (errorModalData.error === "Delivery Address") {
+          targetAddress = "deliveryAddress";
+        } else if (errorModalData.error === "Pickup Address") {
+          targetAddress = "pickupAddress";
+        }
+
         return (
-          <div className="mx-4">
-            {addressData.length > 0 &&
-              addressData?.map((address: any, index: any) => {
-                return (
-                  <div>
-                    <div key={index} className="m-[0.5rem] my-[1rem] bg-white">
-                      <div className="flex min-w-[90%] ">
-                        <div
-                          className="items-center flex border-2 rounded-md w-[100%] justify-between p-2 cursor-pointer"
-                          style={{
-                            boxShadow:
-                              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+          <div className="mx-4 my-10">
+            {/* {pickupAddress.length > 0 && */}
+            {/* addressData?.map((address: any, index: any) => {
+                return ( */}
+            <div>
+              <div className="m-[0.5rem] my-[1rem] bg-white">
+                <div className="flex min-w-[90%] ">
+                  <div
+                    className="items-center flex border-2 rounded-md w-[100%] justify-between p-2 cursor-pointer"
+                    style={{
+                      boxShadow:
+                        "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                    }}
+                    onClick={() => handleProductsDetails()}
+                  >
+                    <div className="flex items-center gap-x-2 ">
+                      <img src={LocationIcon} width="40px" />
+                      <p>
+                        <b>{errorModalData.error}</b>
+                      </p>
+                    </div>
+                    {/* <div className="mr-2">
+                      <img
+                        src={DownArrowIcon}
+                        className={`${
+                          globalIndex === index ? "rotate-180" : ""
+                        }`}
+                      />
+                    </div> */}
+                  </div>
+                </div>
+                <div className="border-2 border-t-0">
+                  {/* {globalIndex === index && ( */}
+                  <div className="p-[1rem]">
+                    <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
+                      <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
+                        <img
+                          src={MagicLocationIcon}
+                          alt="Magic Location Icon"
+                        />
+                        <div className="text-white text-[12px] font-Open">
+                          Magic Address
+                        </div>
+                      </div>
+
+                      <div className="relative h-[75px]  ">
+                        <input
+                          ref={inputRef}
+                          type="text"
+                          value={magicAddress}
+                          // onKeyDown={}
+                          onChange={(e: any) => {
+                            setMagicAddress(e.target.value);
                           }}
-                          onClick={() => handleProductsDetails(index)}
-                        >
-                          <div className="flex items-center gap-x-2 ">
-                            <img src={LocationIcon} width="40px" />
-                            <p>
-                              <b>{address.label}</b>
-                            </p>
-                          </div>
-                          <div className="mr-2">
-                            <img
-                              src={DownArrowIcon}
-                              className={`${
-                                globalIndex === index ? "rotate-180" : ""
-                              }`}
-                            />
+                          className="magicAddressInput w-full removePaddingPlaceHolder"
+                          style={{
+                            position: "absolute",
+                            border: "none",
+                          }}
+                          placeholder="Paste Address for the Magic"
+                          title=""
+                        />
+                        <div>
+                          <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
+                            {isAddressLoading ? (
+                              <div className="flex justify-center items-center mr-3">
+                                <Spinner />
+                              </div>
+                            ) : (
+                              <img
+                                src={AiIcon}
+                                alt="Arrow"
+                                onClick={() => handleButtonClick(targetAddress)}
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
-                      <div
-                        className={` ${
-                          globalIndex === index && "border-2 border-t-0"
-                        }`}
-                      >
-                        {globalIndex === index && (
-                          <div className="p-[1rem] ">
-                            <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
-                              <div className="bg-black text-white p-4 h-1/3 flex items-center gap-x-2">
-                                <img
-                                  src={MagicLocationIcon}
-                                  alt="Magic Location Icon"
-                                />
-                                <div className="text-white text-[12px] font-Open">
-                                  Magic Address
-                                </div>
-                              </div>
-
-                              <div className="relative h-[75px]  ">
-                                <input
-                                  ref={inputRef}
-                                  type="text"
-                                  value={
-                                    address.label === "Pickup Address"
-                                      ? pickupMagicAddress
-                                      : deliveryMagicAddress
-                                  }
-                                  // onKeyDown={}
-                                  onChange={(e: any) => {
-                                    if (address.label === "Pickup Address") {
-                                      setPickupMagicAddress(e.target.value);
-                                    } else {
-                                      setDeliveryMagicAddress(e.target.value);
-                                    }
-                                  }}
-                                  className="magicAddressInput w-full removePaddingPlaceHolder"
-                                  style={{
-                                    position: "absolute",
-                                    border: "none",
-                                  }}
-                                  placeholder="Paste Address for the Magic"
-                                  title=""
-                                />
-                                <div>
-                                  <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
-                                    {isAddressLoading ? (
-                                      <div className="flex justify-center items-center mr-3">
-                                        <Spinner />
-                                      </div>
-                                    ) : (
-                                      <img
-                                        src={AiIcon}
-                                        alt="Arrow"
-                                        onClick={() =>
-                                          handleButtonClick(address.label)
-                                        }
-                                      />
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="mt-5">
-                              <InputBox
-                                label="Plot No., Floor, Building Name"
-                                value={capitalizeFirstLetter(
-                                  address?.address?.flatNo
-                                )}
-                                name="flatNo"
-                                onChange={(e: any) =>
-                                  handleInputChange(address.label, e)
-                                }
-                              />
-                            </div>
-                            <div className="flex flex-col">
-                              <div className="flex mt-[1rem] gap-[1rem]">
-                                <InputBox
-                                  label="Country"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.country
-                                  )}
-                                  name="country"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                />
-
-                                <CustomDropDown
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.state
-                                  )}
-                                  name="state"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                  options={dummyStateDropdownData}
-                                  placeHolder="Select State"
-                                  wrapperClass="w-[100%]"
-                                />
-                              </div>
-                              <div className="flex mt-[1rem] gap-[1rem]">
-                                <InputBox
-                                  label="City"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.city
-                                  )}
-                                  name="city"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                />
-                                <InputBox
-                                  label="Locality"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.locality
-                                  )}
-                                  name="locality"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                />
-                              </div>
-
-                              <div className="flex mt-[1rem] gap-[1rem]">
-                                <div className="w-[100%]">
-                                  <InputBox
-                                    inputType="email"
-                                    label="Email ID (optional)"
-                                    name="emailId"
-                                    value={
-                                      address?.address?.contact?.emailId || ""
-                                    }
-                                    onChange={(e) => {
-                                      const emailValue = e.target.value;
-                                      handleInputChange(
-                                        address?.label,
-                                        e,
-                                        "contact"
-                                      );
-                                      setValidationError(
-                                        "emailId",
-                                        validateEmailId(emailValue)
-                                      );
-                                      setInputError(false);
-                                    }}
-                                  />
-                                  {inputError && validationErrors.emailId && (
-                                    <div className="flex items-center gap-x-1 mt-1">
-                                      <img
-                                        src={InfoCircle}
-                                        alt=""
-                                        width={10}
-                                        height={10}
-                                      />
-                                      <span className="font-normal text-[#F35838] text-xs leading-3">
-                                        {validationErrors.emailId}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-
-                                <div className="w-[100%]">
-                                  <InputBox
-                                    label="Mobile Number"
-                                    name="mobileNo"
-                                    value={
-                                      address?.address?.contact?.mobileNo || ""
-                                    }
-                                    maxLength={10}
-                                    inputType="number"
-                                    onChange={(e) => {
-                                      const numericValue =
-                                        e.target.value.replace(/[^0-9]/g, "");
-                                      handleInputChange(
-                                        address?.label,
-                                        e,
-                                        "contact"
-                                      );
-                                      setValidationError(
-                                        "mobileNo",
-                                        validateMobileNo(numericValue)
-                                      );
-                                      if (setInputError) {
-                                        setInputError(false);
-                                      }
-                                    }}
-                                    inputError={inputError}
-                                    className="w-[100%]"
-                                  />
-                                  {inputError && validationErrors.mobileNo && (
-                                    <div className="flex items-center gap-x-1 mt-1">
-                                      <img
-                                        src={InfoCircle}
-                                        alt=""
-                                        width={10}
-                                        height={10}
-                                      />
-                                      <span className="font-normal text-[#F35838] text-xs leading-3">
-                                        {validationErrors.mobileNo}
-                                      </span>
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="flex mt-[1rem] gap-[1rem]">
-                                <CustomDropDown
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.contact?.type
-                                  )}
-                                  name="type"
-                                  onChange={(e: any) =>
-                                    handleInputChange(
-                                      address.label,
-                                      e,
-                                      "contact"
-                                    )
-                                  }
-                                  options={[
-                                    {
-                                      label: "",
-                                      value: "",
-                                    },
-                                    {
-                                      label: "Individual",
-                                      value: "Individual",
-                                    },
-                                    {
-                                      label: "Business",
-                                      value: "Business",
-                                    },
-                                    {
-                                      label: "Company",
-                                      value: "Company",
-                                    },
-                                    {
-                                      label: "Shopkeeper",
-                                      value: "Shopkeeper",
-                                    },
-                                    {
-                                      label: "Others",
-                                      value: "Others",
-                                    },
-                                  ]}
-                                  placeHolder="Select Business Type"
-                                  wrapperClass="w-[100%]"
-                                />
-
-                                <div className="w-[100%]">
-                                  <InputBox
-                                    label="Name of the Contact Person"
-                                    name="name"
-                                    value={
-                                      address?.address?.contact?.name || ""
-                                    }
-                                    onChange={(e) => {
-                                      handleInputChange(
-                                        address?.label,
-                                        e,
-                                        "contact"
-                                      );
-                                    }}
-                                    className="w-[100%]"
-                                  />
-                                </div>
-                              </div>
-
-                              <div className="flex mt-[1rem] gap-[1rem] ">
-                                <InputBox
-                                  label="Pincode"
-                                  value={address?.address?.pincode}
-                                  name="pincode"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                />
-
-                                <InputBox
-                                  label="Select Landmark"
-                                  value={capitalizeFirstLetter(
-                                    address?.address?.landmark
-                                  )}
-                                  name="landmark"
-                                  onChange={(e: any) =>
-                                    handleInputChange(address.label, e)
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
+                    </div>
+                    <div className="mt-5">
+                      <InputBox
+                        label="Plot No., Floor, Building Name"
+                        value={capitalizeFirstLetter(
+                          addressData?.[targetAddress]?.flatNo
                         )}
+                        name="flatNo"
+                        onChange={(e: any) =>
+                          handleInputChange(targetAddress, e)
+                        }
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <div className="flex mt-[1rem] gap-[1rem]">
+                        <InputBox
+                          label="Country"
+                          value={capitalizeFirstLetter(
+                            addressData?.[targetAddress]?.country
+                          )}
+                          name="country"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                        />
+
+                        <CustomDropDown
+                          value={capitalizeFirstLetter(
+                            addressData?.[targetAddress]?.state
+                          )}
+                          name="state"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                          options={dummyStateDropdownData}
+                          placeHolder="Select State"
+                          wrapperClass="w-[100%]"
+                        />
+                      </div>
+                      <div className="flex mt-[1rem] gap-[1rem]">
+                        <InputBox
+                          label="City"
+                          value={capitalizeFirstLetter(
+                            addressData?.[targetAddress]?.city
+                          )}
+                          name="city"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                        />
+                        <InputBox
+                          label="Locality"
+                          value={capitalizeFirstLetter(
+                            addressData?.[targetAddress]?.locality
+                          )}
+                          name="locality"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                        />
+                      </div>
+
+                      <div className="flex mt-[1rem] gap-[1rem]">
+                        <div className="w-[100%]">
+                          <InputBox
+                            inputType="email"
+                            label="Email ID (optional)"
+                            name="emailId"
+                            value={
+                              addressData?.[targetAddress]?.contact?.emailId ||
+                              ""
+                            }
+                            onChange={(e: any) => {
+                              const emailValue = e.target.value;
+                              handleInputChange(targetAddress, e, "contact");
+                              setValidationError(
+                                "emailId",
+                                validateEmailId(emailValue)
+                              );
+                              setInputError(false);
+                            }}
+                          />
+                          {inputError && validationErrors.emailId && (
+                            <div className="flex items-center gap-x-1 mt-1">
+                              <img
+                                src={InfoCircle}
+                                alt=""
+                                width={10}
+                                height={10}
+                              />
+                              <span className="font-normal text-[#F35838] text-xs leading-3">
+                                {validationErrors.emailId}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="w-[100%]">
+                          <InputBox
+                            label="Mobile Number"
+                            name="mobileNo"
+                            value={
+                              addressData?.[targetAddress]?.contact?.mobileNo ||
+                              ""
+                            }
+                            maxLength={10}
+                            inputType="number"
+                            onChange={(e) => {
+                              const numericValue = e.target.value.replace(
+                                /[^0-9]/g,
+                                ""
+                              );
+                              handleInputChange(targetAddress, e, "contact");
+                              setValidationError(
+                                "mobileNo",
+                                validateMobileNo(numericValue)
+                              );
+                              if (setInputError) {
+                                setInputError(false);
+                              }
+                            }}
+                            inputError={inputError}
+                            className="w-[100%]"
+                          />
+                          {inputError && validationErrors.mobileNo && (
+                            <div className="flex items-center gap-x-1 mt-1">
+                              <img
+                                src={InfoCircle}
+                                alt=""
+                                width={10}
+                                height={10}
+                              />
+                              <span className="font-normal text-[#F35838] text-xs leading-3">
+                                {validationErrors.mobileNo}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex mt-[1rem] gap-[1rem]">
+                        <CustomDropDown
+                          value={
+                            businessTypeDropDown
+                              .map((valueObj: any) => valueObj?.value)
+                              .includes(
+                                capitalizeFirstLetter(
+                                  addressData?.[targetAddress]?.contact?.type
+                                )
+                              )
+                              ? capitalizeFirstLetter(
+                                  addressData?.[targetAddress]?.contact?.type
+                                )
+                              : "Others"
+                          }
+                          name="type"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e, "contact")
+                          }
+                          options={businessTypeDropDown}
+                          placeHolder="Select Business Type"
+                          wrapperClass="w-[100%]"
+                        />
+
+                        <div className="w-[100%]">
+                          <InputBox
+                            label="Name of the Contact Person"
+                            name="name"
+                            value={
+                              addressData?.[targetAddress]?.contact?.name || ""
+                            }
+                            onChange={(e) => {
+                              handleInputChange(targetAddress, e, "contact");
+                            }}
+                            className="w-[100%]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex mt-[1rem] gap-[1rem] ">
+                        <InputBox
+                          label="Pincode"
+                          value={addressData?.[targetAddress]?.pincode}
+                          name="pincode"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                        />
+
+                        <InputBox
+                          label="Select Landmark"
+                          value={capitalizeFirstLetter(
+                            addressData?.[targetAddress]?.landmark
+                          )}
+                          name="landmark"
+                          onChange={(e: any) =>
+                            handleInputChange(targetAddress, e)
+                          }
+                        />
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                  {/* )} */}
+                </div>
+              </div>
+            </div>
+            {/* );
+              }) */}
+            {/* } */}
           </div>
         );
       }
@@ -1198,7 +1195,15 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         return true;
       }
-      case orderErrorCategoryENUMs["Address"]: {
+      case orderErrorCategoryENUMs["Delivery Address"]:
+      case orderErrorCategoryENUMs["Pickup Address"]: {
+        let targetAddress = "";
+        if (errorModalData.error === "Delivery Address") {
+          targetAddress = "deliveryAddress";
+        } else if (errorModalData.error === "Pickup Address") {
+          targetAddress = "pickupAddress";
+        }
+
         const dimensions = [
           "flatNo",
           "country",
@@ -1207,21 +1212,21 @@ const ErrorModal = (props: ErrorModalProps) => {
           "locality",
           "name",
           "landmark",
+          "pincode",
         ];
-        for (let i = 0; i < addressData?.length; i++) {
-          for (const dimension of dimensions) {
-            if (["emailId", "type", "name"].includes(dimension)) {
-              console.log("contactData", dimension);
-              if (!addressData[i]?.address?.contact?.[dimension]) {
-                return false;
-              }
-            } else {
-              if (!addressData[i]?.address?.[dimension]) {
-                return false;
-              }
+
+        for (const dimension of dimensions) {
+          if (["emailId", "type", "name"].includes(dimension)) {
+            if (!addressData[targetAddress]?.contact?.[dimension]) {
+              return false;
+            }
+          } else {
+            if (!addressData[targetAddress]?.[dimension]) {
+              return false;
             }
           }
         }
+
         return true;
       }
       case orderErrorCategoryENUMs["Others"]: {
@@ -1243,7 +1248,8 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return updateOrderDetails(isProcessOrder);
       }
-      case orderErrorCategoryENUMs["Address"]: {
+      case orderErrorCategoryENUMs["Delivery Address"]:
+      case orderErrorCategoryENUMs["Pickup Address"]: {
         return updateAddress(isProcessOrder);
       }
       case orderErrorCategoryENUMs["Others"]: {
@@ -1304,7 +1310,8 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return "Update Service";
       }
-      case orderErrorCategoryENUMs["Address"]: {
+      case orderErrorCategoryENUMs["Delivery Address"]:
+      case orderErrorCategoryENUMs["Pickup Address"]: {
         return "Update Address";
       }
       case orderErrorCategoryENUMs["Others"]: {
@@ -1320,92 +1327,19 @@ const ErrorModal = (props: ErrorModalProps) => {
   }, [errorModalData]);
 
   useEffect(() => {
-    if (errorModalData.error === orderErrorCategoryENUMs["Address"]) {
-      const { pickupAddress, deliveryAddress } = errorModalData?.entityDetails;
-      setAddressData([
-        {
-          label: "Pickup Address",
-          address: {
-            sellerId: pickupAddress?.sellerId,
-            companyId: pickupAddress?.companyId,
-            privateCompanyId: pickupAddress?.privateCompanyId,
-            pickupAddressId: pickupAddress?.pickupAddressId,
-            flatNo: pickupAddress?.flatNo,
-            locality: pickupAddress?.locality,
-            sector: pickupAddress?.sector,
-            landmark: pickupAddress?.landmark,
-            pincode: pickupAddress?.pincode,
-            city: pickupAddress?.city,
-            state: pickupAddress?.state,
-            country: pickupAddress?.country,
-            fullAddress: pickupAddress?.fullAddress,
-            addressType: pickupAddress?.addressType,
-            workingDays: {
-              monday: pickupAddress?.workingDays?.monday,
-              tuesday: pickupAddress?.workingDays?.tuesday,
-              wednesday: pickupAddress?.workingDays?.wednesday,
-              thursday: pickupAddress?.workingDays?.thursday,
-              friday: pickupAddress?.workingDays?.friday,
-              saturday: pickupAddress?.workingDays?.saturday,
-              sunday: pickupAddress?.workingDays?.sunday,
-            },
-            workingHours: pickupAddress?.workingHours,
-            contact: {
-              name: pickupAddress?.contact?.name,
-              mobileNo: pickupAddress?.contact?.mobileNo,
-              alternateMobileNo: pickupAddress?.contact?.alternateMobileNo,
-              emailId: pickupAddress?.contact?.emailId,
-              type: pickupAddress?.contact?.type,
-            },
-            pickupDate: pickupAddress?.pickupDate,
-            gstNumber: pickupAddress?.gstNumber,
-          },
-        },
-        {
-          label: "Delivery Address",
-          address: {
-            sellerId: deliveryAddress?.sellerId,
-            companyId: deliveryAddress?.companyId,
-            privateCompanyId: deliveryAddress?.privateCompanyId,
-            pickupAddressId: deliveryAddress?.pickupAddressId,
-            flatNo: deliveryAddress?.flatNo,
-            locality: deliveryAddress?.locality,
-            sector: deliveryAddress?.sector,
-            landmark: deliveryAddress?.landmark,
-            pincode: deliveryAddress?.pincode,
-            city: deliveryAddress?.city,
-            state: deliveryAddress?.state,
-            country: deliveryAddress?.country,
-            fullAddress: deliveryAddress?.fullAddress,
-            addressType: deliveryAddress?.addressType,
-            workingDays: {
-              monday: deliveryAddress?.workingDays?.monday,
-              tuesday: deliveryAddress?.workingDays?.tuesday,
-              wednesday: deliveryAddress?.workingDays?.wednesday,
-              thursday: deliveryAddress?.workingDays?.thursday,
-              friday: deliveryAddress?.workingDays?.friday,
-              saturday: deliveryAddress?.workingDays?.saturday,
-              sunday: deliveryAddress?.workingDays?.sunday,
-            },
-            workingHours: deliveryAddress?.workingHours,
-            contact: {
-              name: deliveryAddress?.contact?.name,
-              mobileNo: deliveryAddress?.contact?.mobileNo,
-              alternateMobileNo: deliveryAddress?.contact?.alternateMobileNo,
-              emailId: deliveryAddress?.contact?.emailId,
-              type: deliveryAddress?.contact?.type,
-            },
-            pickupDate: deliveryAddress?.pickupDate,
-            gstNumber: deliveryAddress?.gstNumber,
-          },
-        },
-      ]);
+    if (
+      errorModalData.error === orderErrorCategoryENUMs["Delivery Address"] ||
+      errorModalData.error === orderErrorCategoryENUMs["Pickup Address"]
+    ) {
+      const data: any = errorModalData?.entityDetails;
+      setAddressData(data);
     }
   }, [errorModalData]);
 
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Service"]) {
       getService();
+      handleProductsDetails(-2);
     }
   }, [errorModalData]);
 
@@ -1429,16 +1363,25 @@ const ErrorModal = (props: ErrorModalProps) => {
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
         <div className="flex w-[100%] justify-between">
-          <div className="flex gap-x-2 justify-center items-center ">
-            <img src={SampleProduct} width="38px" />
-            <p className="text-[25px]">{errorModalData?.error} </p>
-            {errorModalData?.error !== "Box And Product" && (
-              <p className="flex justify-center items-center text-[14px] font-medium">
-                Shipyaari Id : {"("}
-                {errorModalData?.entityDetails?.tempOrderId}
-                {")"}
-              </p>
-            )}
+          <div className="flex  gap-x-2 justify-center items-center ">
+            <img src={SampleProduct} className="w-[50px] mr-1" />
+            <div className="flex flex-col">
+              <p className="text-[25px]">{errorModalData?.error} </p>
+              {errorModalData?.error !== "Box And Product" && (
+                <div className="flex">
+                  <p className="flex justify-center items-center text-[14px] font-medium">
+                    Shipyaari Id : {"("}
+                    {errorModalData?.entityDetails?.tempOrderId}
+                    {")"}
+                  </p>
+                  <p className="flex justify-center items-center mx-2 text-[14px] font-medium">
+                    Order Id : {"("}
+                    {errorModalData?.entityDetails?.orderId}
+                    {")"}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
           <div
             className="flex justify-self-end cursor-pointer"
