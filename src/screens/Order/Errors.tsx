@@ -237,9 +237,20 @@ const Errors = (props: ErrorProps) => {
     setPickupAddressDropDownData(pickupDropDownData);
   };
 
-  const fixAllHandler = async (errorName: any) => {
+  const fixAllHandler = async (errorName: any, data: any) => {
+    console.log("data", data[0]);
     try {
-      let payLoad = {};
+      let payLoad: any = {
+        tempOrderDetails: [],
+      };
+
+      data[0]?.orders.map((tempOrderData: any) => {
+        payLoad.tempOrderDetails.push({
+          orderId: tempOrderData?.orderId,
+          tempOrderId: tempOrderData?.tempOrderId,
+          source: tempOrderData?.source,
+        });
+      });
 
       if (errorName === "Delivery Address") {
         payLoad = { ...payLoad, deliveryAddressId: selectedDeliveryAddress };
@@ -250,7 +261,7 @@ const Errors = (props: ErrorProps) => {
       let payload: any = {};
       const { data: responseData } = await POST(
         UPDATE_TEMP_ORDER_ADDRESS,
-        payload
+        payLoad
       );
       if (responseData?.success) {
         toast.success(responseData?.message);
@@ -464,6 +475,9 @@ const Errors = (props: ErrorProps) => {
                 (acc: any, obj: any) => acc + obj.ordersCount,
                 0
               );
+
+              console.log("item", item);
+
               return (
                 <>
                   {item?.value.length > 0 && (
@@ -490,13 +504,16 @@ const Errors = (props: ErrorProps) => {
                             {totalOrdersCount} Orders
                           </div>
                         </div>
+
                         <div className="flex items-center">
                           {(item?.errorName === "Delivery Address" ||
                             item?.errorName === "Pickup Address") && (
                             <div className="flex w-[600px] mx-4">
                               <button
                                 className="border py-2 px-4 rounded drop-shadow-sm"
-                                onClick={() => fixAllHandler(item?.errorName)}
+                                onClick={() =>
+                                  fixAllHandler(item?.errorName, item?.value)
+                                }
                               >
                                 FIX ALL
                               </button>
@@ -516,7 +533,7 @@ const Errors = (props: ErrorProps) => {
                                       ? pickupAddressDropDownData
                                       : deliveryAddressDropDownData
                                   }
-                                  placeHolder="Select State"
+                                  placeHolder="Selete Address"
                                   wrapperClass="w-[100%]"
                                 />
                               </div>
