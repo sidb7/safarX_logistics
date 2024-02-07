@@ -149,7 +149,9 @@ const Errors = (props: ErrorProps) => {
   const [selectedDeliveryAddress, setSelectedDeliveryAddress]: any =
     useState("");
 
-  // const [addressDropDownLoader, setAddressDropDownLoad] = useState(false);
+  const [indexFixedAllLoader, setIndexFixedAllLoader]: any = useState(null);
+
+  const [addressLoader, setAddressLoader] = useState(false);
   const [pickupAddressDropDownData, setPickupAddressDropDownData] = useState(
     []
   );
@@ -237,9 +239,11 @@ const Errors = (props: ErrorProps) => {
     setPickupAddressDropDownData(pickupDropDownData);
   };
 
-  const fixAllHandler = async (errorName: any, data: any) => {
-    console.log("data", data[0]);
+  const fixAllHandler = async (errorName: any, data: any, index: any) => {
     try {
+      setAddressLoader(true);
+      setIndexFixedAllLoader(index);
+
       let payLoad: any = {
         tempOrderDetails: [],
       };
@@ -264,15 +268,20 @@ const Errors = (props: ErrorProps) => {
         payLoad
       );
       if (responseData?.success) {
+        setAddressLoader(false);
+        getErrors();
         toast.success(responseData?.message);
         return true;
       } else {
+        setAddressLoader(false);
+        getErrors();
         toast.error(responseData?.message);
 
         return false;
       }
     } catch (error: any) {
       toast.error(error?.message);
+      setAddressLoader(false);
       return false;
     }
   };
@@ -459,8 +468,6 @@ const Errors = (props: ErrorProps) => {
     returnUserAddress();
   }, []);
 
-  console.log("seletedPickupAddress", seletedPickupAddress);
-
   return (
     <div className="h-[70vh]">
       {isLoading ? (
@@ -475,9 +482,6 @@ const Errors = (props: ErrorProps) => {
                 (acc: any, obj: any) => acc + obj.ordersCount,
                 0
               );
-
-              console.log("item", item);
-
               return (
                 <>
                   {item?.value.length > 0 && (
@@ -512,10 +516,21 @@ const Errors = (props: ErrorProps) => {
                               <button
                                 className="border py-2 px-4 rounded drop-shadow-sm"
                                 onClick={() =>
-                                  fixAllHandler(item?.errorName, item?.value)
+                                  fixAllHandler(
+                                    item?.errorName,
+                                    item?.value,
+                                    index
+                                  )
                                 }
                               >
-                                FIX ALL
+                                {addressLoader &&
+                                indexFixedAllLoader === index ? (
+                                  <div className="flex justify-center items-center">
+                                    <Spinner />
+                                  </div>
+                                ) : (
+                                  "FIX ALL"
+                                )}
                               </button>
                               <div className="flex-1 mx-4">
                                 <CustomDropDown
