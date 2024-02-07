@@ -297,6 +297,8 @@ export const orderErrorsEnum: any = {
 export const orderErrorCategoryENUMs = {
   Address: "Address",
   "Box And Product": "Box And Product", // stop point
+  "Delivery Address": "Delivery Address",
+  "Pickup Address": "Pickup Address",
   Service: "Service",
   Payment: "Payment", // stop point
   Others: "Others", // stop point { cod error, kyc, orderId }
