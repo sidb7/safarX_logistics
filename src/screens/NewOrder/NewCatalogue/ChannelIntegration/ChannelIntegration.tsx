@@ -11,6 +11,12 @@ import { CREATE_AMAZON_STORE, GET_ALL_STORES } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { ChannelIntegrationCarts } from "../../../../utils/dummyData";
 import AmazonPngIcon from "../../../../assets/AmazonIcon.png";
+import CenterModal from "../../../../components/CustomModal/customCenterModal";
+import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
+import DeleteGifIcon from "../../../../assets/deleteGif.svg";
+import ServiceButton from "../../../../components/Button/ServiceButton";
+import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
+import { toast } from "react-toastify";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -29,6 +35,76 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     setIntegrate,
   } = props;
   const [loading, setLoading] = useState(true);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteChannel, setDeleteChannel] = useState<any>("");
+
+  const deleteIntegratedChannel = async () => {
+    try {
+      let payload = { storeId: deleteChannel?.storeId };
+
+      const { data: response }: any = await POST(
+        DELETE_INTEGRATED_STORE,
+        payload
+      );
+
+      if (response?.status) {
+        toast.success("Channel Deactivated Successfully!!");
+        const filteredChannels = channelData.channels.filter(
+          (eachChannel: any, index: number) =>
+            eachChannel.storeId !== deleteChannel.storeId
+        );
+
+        setChannelData(filteredChannels);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+      console.log("Error", error);
+      return error;
+    }
+  };
+
+  const deleteModalContent = () => {
+    return (
+      <div className="flex flex-col  h-full w-full   p-5">
+        <div className="flex justify-end">
+          <img
+            src={WebCrossIcon}
+            alt=""
+            className="cursor-pointer"
+            onClick={() => setDeleteModal(false)}
+          />
+        </div>
+        <div className="flex flex-col justify-center  items-center h-full w-full  ">
+          <img src={DeleteGifIcon} alt="" />
+          <p className="font-Open text-sm md:text-base font-semibold text-center">
+            {`Are you sure you want to remove ${deleteChannel?.channelName} (${deleteChannel?.name}) channel?`}
+          </p>
+          <div className="flex  items-center gap-x-4 mt-10">
+            <ServiceButton
+              text="Go Back"
+              className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
+              onClick={() => {
+                // createPlan(onSelectPlan);
+
+                setDeleteModal(false);
+              }}
+            />
+            <ServiceButton
+              text="DEACTIVATE"
+              className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
+              onClick={() => {
+                setDeleteModal(false);
+
+                deleteIntegratedChannel();
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -80,6 +156,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   : AmazonPngIcon,
               integrated: true,
               storeId: item.storeId,
+              channelName: item.channel,
             });
           });
           setChannelData({ channels: tempArr });
@@ -122,11 +199,22 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   setIndexNum={setIndexNum}
                   index={index}
                   setIntegrate={setIntegrate}
+                  setDeleteModal={setDeleteModal}
+                  deleteChannel={deleteChannel}
+                  setDeleteChannel={setDeleteChannel}
                 />
               );
             })}
           </div>
         </div>
+
+        <CenterModal
+          isOpen={deleteModal}
+          className="!w-[30%] !h-[40%] "
+          onRequestClose={() => setDeleteModal(false)}
+        >
+          {deleteModalContent()}
+        </CenterModal>
       </div>
     </>
   );

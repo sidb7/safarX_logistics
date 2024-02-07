@@ -1,6 +1,18 @@
+import DeleteIcon from "../../../../assets/DeleteIconRedColor.svg";
+
 const Card = (props: any) => {
-  const { channel, key, setModalData, setIndexNum, index, setIntegrate } =
-    props;
+  const {
+    channel,
+    key,
+    setModalData,
+    setIndexNum,
+    index,
+    setIntegrate,
+
+    setDeleteModal,
+
+    setDeleteChannel,
+  } = props;
 
   const handleIntegration = (e: any) => {
     if (setModalData) {
@@ -17,7 +29,21 @@ const Card = (props: any) => {
       key={key}
     >
       <div className={`py-[14px] px-[16px] w-[200px] `}>
-        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-[1rem] lg:w-[118px] min-h-[45px]  ">
+        {channel.integrated && (
+          <div className="flex justify-end">
+            <img
+              alt=""
+              src={DeleteIcon}
+              className="cursor-pointer w-5"
+              onClick={() => {
+                setDeleteModal(true);
+                setDeleteChannel(channel);
+              }}
+            />
+          </div>
+        )}
+
+        <div className="flex w-[100%]  items-center lg:flex-col lg:items-start lg:gap-y-5 gap-x-6 mb-[1rem] lg:w-[118px] min-h-[45px]  ">
           <img
             src={channel.icon}
             alt=""
