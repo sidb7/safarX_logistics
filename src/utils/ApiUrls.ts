@@ -317,6 +317,7 @@ const GET_ADD_LABEL_DATA = `${SELLER_BASE_URL}/labels/getLabelSetting`;
 const UPDATE_PRODUCT_AND_BOX_DETAILS = `${SELLER_BASE_URL}/channel/updateProductAndBoxDetails`;
 const GET_SERVICE_LIST_ORDER = `${SELLER_BASE_URL}/order/getServiceListOrder`;
 const SET_SERVICE_INFO = `${SELLER_BASE_URL}/order/setServiceInfo`;
+const UPDATE_OTHER_ORDER_DETAILS = `${SELLER_BASE_URL}/channel/updateOtherDetails`;
 
 //Fetch Channel Inventory
 const GET_CHANNEL_INVENTORY = `${SELLER_BASE_URL}/channel/getProducts`;
@@ -497,4 +498,5 @@ export {
   ACTIVATE_PICKUP_ADDRESS,
   POST_ASSIGN_PLANV3,
   DELETE_INTEGRATED_STORE,
+  UPDATE_OTHER_ORDER_DETAILS,
 };
