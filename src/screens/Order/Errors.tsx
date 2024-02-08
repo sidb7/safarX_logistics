@@ -165,10 +165,21 @@ const Errors = (props: ErrorProps) => {
     setGlobalIndex(index === globalIndex ? null : index);
   };
 
-  const handleError = (elem: any, errorName: any, orderDetails?: any) => {
+  const handleError = (
+    elem: any,
+    errorName: any,
+    orderDetails?: any,
+    orderData?: any
+  ) => {
     if (errorName === "Box And Product") {
       setErrorModalData({
         entityDetails: elem,
+        error: errorName,
+        orderDetails,
+      });
+    } else if (errorName === "Others") {
+      setErrorModalData({
+        entityDetails: orderData,
         error: errorName,
         orderDetails,
       });
@@ -194,26 +205,38 @@ const Errors = (props: ErrorProps) => {
 
   const DropDownjsx = (order: any, errorName: any) => {
     return (
-      <div className="flex flex-col mb-2 min-w-[100%] bg-[#fdfdfd] border-1 p-[20px] shadow-inner rounded-br rounded-bl border-t-0 ">
-        <div className="flex justify-between border-1 my-1 shadow-md w-[100%] py-[15px] px-[10px] rounded ">
-          <div className="">Mahaveer Cheater</div>
-          <div
-            onClick={() => handleError(order, errorName)}
-            className="border-[blue] border-b-[1px] mr-2 text-[blue]"
-          >
-            UPDATE
-          </div>
-        </div>
-        <div className="flex justify-between border-1 my-1 w-[100%] py-[15px] px-[10px] rounded-md shadow-md">
-          <div className="">Mahaveer Cheater</div>
-          <div
-            onClick={() => handleError(order, errorName)}
-            className="border-[blue] border-b-[1px] mr-2 text-[blue]"
-          >
-            UPDATE
-          </div>
-        </div>
-      </div>
+      <>
+        {order.orders.map((eachOrder: any) => {
+          return (
+            <div className="flex flex-col mb-1 min-w-[100%] bg-[#fdfdfd] border-1 p-[5px] px-[10px] shadow-inner rounded-br rounded-bl border-t-0 ">
+              <div className="flex justify-between border-1 my-1 shadow-md w-[100%] py-[10px] px-[10px] rounded ">
+                <div className="">
+                  <div>OrderId - {eachOrder.orderId}</div>
+                  <div></div>
+                </div>
+                <div
+                  onClick={() =>
+                    order?.errorType !== "Administrative Errors" &&
+                    order?.errorType !== "GST Number Errors"
+                      ? handleError(
+                          order,
+                          errorName,
+                          order?.errorType,
+                          eachOrder
+                        )
+                      : null
+                  }
+                  className="border-[blue] border-b-[1px] mr-2 text-[blue]"
+                >
+                  {order?.errorType === "Administrative Errors"
+                    ? "CONTACT ADMINISTRATION"
+                    : "UPDATE"}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </>
     );
   };
 
@@ -353,7 +376,9 @@ const Errors = (props: ErrorProps) => {
                   >
                     <div className="flex items-center">
                       <div className="rounded-md py-1">
-                        {order?.orderId ? order?.orderId : order?.tempOrderId}
+                        {order?.orderId
+                          ? "OrderId - " + order?.orderId
+                          : "TempOrderId - " + order?.tempOrderId}
                       </div>
                     </div>
                     <div
@@ -408,45 +433,34 @@ const Errors = (props: ErrorProps) => {
       case orderErrorCategoryENUMs["Others"]: {
         return (
           <>
-            <div className="flex items-center justify-between p-[10px] bg-[#F5F5F4]">
+            <div className="flex items-center justify-between p-[5px] bg-[#F5F5F4]">
               <div className="flex flex-col items-center w-[100%] justify-between">
-                {elem?.orders?.map((order: any, index: any) => {
-                  return (
-                    <>
-                      <div
-                        className={`py-4 flex justify-between w-[100%] bg-white mt-2 rounded shadow-md items-center px-4 ${
-                          index === globalIndex && "border"
-                        }`}
-                        key={index}
-                        // onClick={() => handleError(order, errorName)}
-                        onClick={() => handleProductsDetails(index)}
-                      >
-                        <div className="flex items-center">
-                          <div className="rounded-md py-1">
-                            {order?.orderId
-                              ? order?.orderId
-                              : order?.tempOrderId}
-                          </div>
-                        </div>
-                        {/* <div
+                <>
+                  <div
+                    className={`py-2 flex justify-between w-[100%] bg-white mt-0 rounded shadow-md items-center px-4`}
+                    key={Index}
+                    // onClick={() => handleError(order, errorName)}
+                    onClick={() => handleProductsDetails(Index)}
+                  >
+                    <div className="flex items-start  flex-col">
+                      <div className="rounded-md py-1">{elem.errorType}</div>
+                      <div>{elem?.orders?.length} Orders</div>
+                    </div>
+                    {/* <div
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
                         UPDATE
                       </div> */}
-                        <div className="mr-[1rem]">
-                          <img
-                            className={`${
-                              index === globalIndex && "rotate-180"
-                            }`}
-                            src={DownArrowIcon}
-                          />
-                        </div>
-                      </div>
-                      {index === globalIndex && DropDownjsx(order, errorName)}
-                    </>
-                  );
-                })}
+                    <div className="mr-[1rem]">
+                      <img
+                        className={`${Index === globalIndex && "rotate-180"}`}
+                        src={DownArrowIcon}
+                      />
+                    </div>
+                  </div>
+                  {Index === globalIndex && DropDownjsx(elem, errorName)}
+                </>
               </div>
             </div>
           </>
@@ -568,20 +582,22 @@ const Errors = (props: ErrorProps) => {
                         </div>
                       </div>
                       {openIndex === index &&
-                        item?.value.map((elem: any, nestedIndex: any) => (
-                          <div
-                            className={`flex flex-col overflow-auto border`}
-                            key={nestedIndex}
-                          >
-                            <div>
-                              {switchConditionsForError(
-                                item.errorName,
-                                elem,
-                                nestedIndex
-                              )}
+                        item?.value.map((elem: any, nestedIndex: any) => {
+                          return (
+                            <div
+                              className={`flex flex-col overflow-auto border`}
+                              key={nestedIndex}
+                            >
+                              <div>
+                                {switchConditionsForError(
+                                  item.errorName,
+                                  elem,
+                                  nestedIndex
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                     </div>
                   )}
                 </>

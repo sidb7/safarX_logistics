@@ -25,6 +25,7 @@ import {
   ORDERID_AND_EWAYBILLINFO,
   POST_PLACE_ALL_ORDERS,
   SET_SERVICE_INFO,
+  UPDATE_OTHER_ORDER_DETAILS,
   UPDATE_PRODUCT_AND_BOX_DETAILS,
   UPDATE_TEMP_ORDER_ADDRESS,
   VERIFY_ADDRESS,
@@ -55,9 +56,11 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [otherErrorDetails, setOtherErrorDetails]: any = useState({
     tempOrderId: 0,
     orderId: 0,
+    newOrderId: 0,
     source: "",
     orderType: "",
     eWayBillNo: "",
+    gstNumber: "",
   });
   const [prevPastedData, setPrevPastedData] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -577,15 +580,41 @@ const ErrorModal = (props: ErrorModalProps) => {
     try {
       !isProcessOrder && setUpdateButtonLoader(true);
 
-      const payLoad = {
-        ...otherErrorDetails,
-        eWayBillNo: +otherErrorDetails?.eWayBillNo || 0,
+      if (errorModalData.orderDetails === "GST Number Errors") return;
+
+      let payload: any = {
+        eWayBillError: {
+          eWayBillNo: otherErrorDetails?.eWayBillNo,
+          orderId: otherErrorDetails?.orderId,
+          tempOrderId: otherErrorDetails?.tempOrderId,
+        },
       };
 
+      if (errorModalData.orderDetails === "Duplicate Order Id Errors") {
+        payload = {
+          orderIdError: {
+            newOrderId: otherErrorDetails?.newOrderId,
+            orderId: otherErrorDetails?.orderId,
+            tempOrderId: otherErrorDetails?.tempOrderId,
+          },
+        };
+      }
+
+      // if (errorModalData.orderDetails === "Duplicate Order Id Errors ") {
+      //   payload = {
+      //     orderIdError: {
+      //       newOrderId: "",
+      //       orderId: otherErrorDetails?.orderId,
+      //       tempOrderId: otherErrorDetails?.tempOrderId,
+      //     },
+      //   };
+      // }
+
       const { data: responseData } = await POST(
-        ORDERID_AND_EWAYBILLINFO,
-        payLoad
+        UPDATE_OTHER_ORDER_DETAILS,
+        payload
       );
+
       if (responseData?.success) {
         toast.success(responseData?.message);
         if (!isProcessOrder) {
@@ -1099,58 +1128,83 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Others"]: {
         return (
           <div className="mx-4 my-2 ">
-            <div className="my-4">
-              <div>
+            <div className="my-[2rem]">
+              {errorModalData.orderDetails === "Duplicate Order Id Errors" && (
+                <div>
+                  <InputBox
+                    isRightIcon={true}
+                    containerStyle=""
+                    rightIcon={AutoGenerateIcon}
+                    className="w-full !text-base !font-semibold"
+                    imageClassName="!h-[12px] !w-[113px] !top-[40%] "
+                    value={otherErrorDetails?.newOrderId}
+                    maxLength={12}
+                    label="Order ID"
+                    onChange={(e: any) => {
+                      setOtherErrorDetails((prevState: any) => {
+                        return {
+                          ...prevState,
+                          newOrderId: e.target.value,
+                        };
+                      });
+                    }}
+                    onClick={() => {
+                      const newOrderId = generateUniqueCode(8, 12);
+                      setOtherErrorDetails((prevState: any) => {
+                        return {
+                          ...prevState,
+                          newOrderId: newOrderId,
+                        };
+                      });
+                    }}
+                    visibility={true}
+                    setVisibility={() => {}}
+                  />
+                </div>
+              )}
+            </div>
+            {errorModalData.orderDetails === "EWayBill Errors" && (
+              <div className="my-[2rem]">
                 <InputBox
-                  isRightIcon={true}
-                  containerStyle=""
-                  rightIcon={AutoGenerateIcon}
-                  className="w-full !text-base !font-semibold"
-                  imageClassName="!h-[12px] !w-[113px] !top-[40%] "
-                  value={otherErrorDetails?.orderId}
-                  maxLength={12}
-                  label="Order ID"
+                  label="Enter Eway Bill No"
+                  name="eWayBillNo"
+                  value={otherErrorDetails?.eWayBillNo}
+                  inputType="text"
+                  inputMode="numeric"
                   onChange={(e: any) => {
-                    setOtherErrorDetails((prevState: any) => {
-                      return {
-                        ...prevState,
-                        orderId: e.target.value,
-                      };
-                    });
+                    if (!isNaN(e.target.value)) {
+                      setOtherErrorDetails((prevState: any) => {
+                        return {
+                          ...prevState,
+                          eWayBillNo: e.target.value,
+                        };
+                      });
+                    }
                   }}
-                  onClick={() => {
-                    const orderId = generateUniqueCode(8, 12);
-                    setOtherErrorDetails((prevState: any) => {
-                      return {
-                        ...prevState,
-                        orderId: orderId,
-                      };
-                    });
-                  }}
-                  visibility={true}
-                  setVisibility={() => {}}
                 />
               </div>
-            </div>
-            <div className="my-4">
-              <InputBox
-                label="Enter Eway Bill No"
-                name="eWayBillNo"
-                value={otherErrorDetails?.eWayBillNo}
-                inputType="text"
-                inputMode="numeric"
-                onChange={(e: any) => {
-                  if (!isNaN(e.target.value)) {
-                    setOtherErrorDetails((prevState: any) => {
-                      return {
-                        ...prevState,
-                        eWayBillNo: e.target.value,
-                      };
-                    });
-                  }
-                }}
-              />
-            </div>
+            )}
+            {errorModalData.orderDetails === "GST Number Errors" && (
+              <div className="my-[2rem]">
+                <InputBox
+                  label="GST Number"
+                  name="gstNumber"
+                  value={otherErrorDetails?.gstNumber}
+                  inputType="text"
+                  inputMode="numeric"
+                  onChange={(e: any) => {
+                    if (!isNaN(e.target.value)) {
+                      setOtherErrorDetails((prevState: any) => {
+                        return {
+                          ...prevState,
+                          gstNumber: e.target.value,
+                        };
+                      });
+                    }
+                  }}
+                />
+              </div>
+            )}
           </div>
         );
       }
@@ -1230,7 +1284,22 @@ const ErrorModal = (props: ErrorModalProps) => {
         return true;
       }
       case orderErrorCategoryENUMs["Others"]: {
-        if (!otherErrorDetails?.eWayBillNo || !otherErrorDetails?.orderId) {
+        if (
+          !otherErrorDetails?.orderId &&
+          errorModalData?.orderDetails === "Duplicate Order Id Errors"
+        ) {
+          return false;
+        }
+        if (
+          !otherErrorDetails?.eWayBillNo &&
+          errorModalData?.orderDetails === "EWayBill Errors"
+        ) {
+          return false;
+        }
+        if (
+          !otherErrorDetails?.gstNumber &&
+          errorModalData?.orderDetails === "GST Number Errors"
+        ) {
           return false;
         }
         return true;
