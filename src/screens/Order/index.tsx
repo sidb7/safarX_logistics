@@ -685,7 +685,7 @@ const Index = () => {
       let currentStatus = tabs[index].value;
 
       setIsErrorPage(index > 0 && false);
-      setFilterId(index > 0 && 0);
+      index > 0 && setFilterId(0);
 
       switch (tabs[index].value) {
         case "DRAFT":
