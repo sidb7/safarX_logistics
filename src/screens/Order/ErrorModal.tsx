@@ -6,6 +6,8 @@ import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import BoxIcon from "../../assets/layer.svg";
 import VanIcon from "../../assets/vanWithoutBG.svg";
 import InfoCircle from "../../assets/info-circle.svg";
+import DeleteGif from "../../assets/common/DeleteGif.gif";
+
 import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import {
   capitalizeFirstLetter,
@@ -20,6 +22,7 @@ import MagicLocationIcon from "../../assets/PickUp/magicLocation.svg";
 import CustomInputWithDropDown from "../../components/LandmarkDropdown/LandmarkDropdown";
 import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
+import CustomeBottomModal from "../../components/CustomModal/customBottomModal";
 import {
   GET_SERVICE_LIST_ORDER,
   ORDERID_AND_EWAYBILLINFO,
@@ -33,6 +36,7 @@ import {
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { dummyStateDropdownData } from "../../utils/dummyData";
+import DeleteModal from "../../components/CustomModal/DeleteModal";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -53,6 +57,13 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [processOrderLoader, setProcessOrderLoader] = useState(false);
   const [serviceDropDownLoader, setServiceDropDownLoader] = useState(false);
   const [inputError, setInputError] = useState(false);
+  // -------------------------------------------------
+  const [isProcess, setIsProcess] = useState(false);
+  const [showAlertMessage, setAlertMessage] = useState(false);
+  const [isProcessOrderCall, setIsProcessOrderCall] = useState();
+
+  // -------------------------------------------------
+
   const [otherErrorDetails, setOtherErrorDetails]: any = useState({
     tempOrderId: 0,
     orderId: 0,
@@ -62,6 +73,7 @@ const ErrorModal = (props: ErrorModalProps) => {
     eWayBillNo: "",
     gstNumber: "",
   });
+
   const [prevPastedData, setPrevPastedData] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleProductsDetails = (index?: any) => {
@@ -376,12 +388,14 @@ const ErrorModal = (props: ErrorModalProps) => {
   // };
 
   const updateProducts = async (isProcessOrder?: any) => {
+    // if (isProcess) {
     !isProcessOrder && setUpdateButtonLoader(true);
     let payLoad = {
       boxDetails: [productAndBoxDetails],
       orderDetails: errorModalData?.orderDetails,
       category: errorModalData?.error,
     };
+
     const { data } = await POST(UPDATE_PRODUCT_AND_BOX_DETAILS, payLoad);
     if (data?.success) {
       toast.success(data?.message);
@@ -389,6 +403,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         setIsErrorModalOpen(false);
         setUpdateButtonLoader(false);
       }
+
       return true;
     } else {
       if (!isProcessOrder) {
@@ -397,6 +412,7 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
       return true;
     }
+    // }
   };
 
   const handleService = (index: any) => {
@@ -1309,10 +1325,38 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
-  const switchForUpdateActions = (isProcessOrder?: any) => {
+  // const UpdateProductHandler = () =>{
+
+  // }
+
+  const switchForUpdateActions = async (isProcessOrder?: any) => {
+    let result: any = false;
+
+    setIsProcessOrderCall(isProcessOrder);
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
-        return updateProducts(isProcessOrder);
+        if (!isProcess) {
+          const totalProductAppliedWeight =
+            productAndBoxDetails?.products.reduce(
+              (acc: any, obj: any) => acc + obj.appliedWeight,
+              0
+            );
+
+          if (
+            totalProductAppliedWeight >
+              productAndBoxDetails?.volumetricWeight &&
+            !isProcess
+          ) {
+            setAlertMessage(true);
+            return false;
+          }
+        }
+
+        // console.log("updateProducts", await updateProducts(isProcessOrder));
+        result = await updateProducts(isProcessOrder);
+
+        return result;
+        break;
       }
       case orderErrorCategoryENUMs["Service"]: {
         return updateOrderDetails(isProcessOrder);
@@ -1325,12 +1369,14 @@ const ErrorModal = (props: ErrorModalProps) => {
         return UpdateOrderIdAndEWayBillInfo(isProcessOrder);
       }
     }
+    return result;
   };
 
   const processOrder = async () => {
     try {
       setProcessOrderLoader(true);
       const isReadyForprocess: any = await switchForUpdateActions(true);
+
       if (!isReadyForprocess) {
         setProcessOrderLoader(false);
       }
@@ -1428,6 +1474,16 @@ const ErrorModal = (props: ErrorModalProps) => {
     switchForValidation();
   }, [addressData]);
 
+  useEffect(() => {
+    if (isProcess) {
+      if (isProcessOrderCall) {
+        processOrder();
+      } else {
+        switchForUpdateActions(false);
+      }
+    }
+  }, [isProcess]);
+
   return (
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
@@ -1495,13 +1551,59 @@ const ErrorModal = (props: ErrorModalProps) => {
               switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
             } py-2`}
             onClick={() => {
-              if (switchForValidation()) processOrder();
+              if (switchForValidation()) {
+                processOrder();
+              }
             }}
           >
             Process Order
           </div>
         )}
       </div>
+      <CustomeBottomModal
+        isOpen={showAlertMessage}
+        onRequestClose={() => setAlertMessage(false)}
+        overlayClassName="flex p-5 items-center outline-none z-[99]"
+        className="!w-[600px] !px-4 !py-6"
+      >
+        <div className="flex justify-end cursor-pointer">
+          <img src={CloseIcon} alt="" onClick={() => setAlertMessage(false)} />
+        </div>
+        <div className="flex justify-center">
+          <img src={DeleteGif} alt="" />
+        </div>
+        <div className="px-16 ">
+          <p className=" text-base   lg:text-lg font-semibold  text-center">
+            Weight Of Products Should be always Greater then Box Volumetric
+            weight
+          </p>
+          <p className=" text-base   lg:text-lg font-semibold  text-center">
+            Are You Sure You Want To Proceed ?
+          </p>
+          <div className="flex justify-center gap-x-6 my-6">
+            <button
+              onClick={() => {
+                setIsProcess(false);
+                setAlertMessage(false);
+              }}
+              type="submit"
+              className="bg-white border-2 border-[#A4A4A4] text-[#1C1C1C] px-4 py-2 text-sm font-semibold rounded shadow-md"
+            >
+              No
+            </button>
+            <button
+              type="submit"
+              className=" bg-[#1C1C1C] text-white px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg"
+              onClick={() => {
+                setIsProcess(true);
+                setAlertMessage(false);
+              }}
+            >
+              Yes
+            </button>
+          </div>
+        </div>
+      </CustomeBottomModal>
     </div>
   );
 };
