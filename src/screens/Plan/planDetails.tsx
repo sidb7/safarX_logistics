@@ -12,7 +12,11 @@ import TermsAndConditionsIcon from "../../assets/Plan/document.svg";
 import "../../styles/plan.css";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { GET_PLAN_URL, GET_PENDING_PLANS } from "../../utils/ApiUrls";
+import {
+  GET_PLAN_URL,
+  GET_PENDING_PLANS,
+  POST_ASSIGN_PLANV3,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 import { GET_ALL_PLANS } from "../../utils/ApiUrls";
@@ -28,6 +32,7 @@ import CustomButton from "../../components/Button";
 import CrossIcon from "../../assets/CloseIcon.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import { capitalizeFirstLetter } from "../../utils/utility";
+import { toast } from "react-toastify";
 
 interface ITypeProps {}
 
@@ -41,7 +46,6 @@ const PlanDetails = (props: ITypeProps) => {
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
-  console.log("🚀 ~ PlanDetails ~ pendingPlan:", pendingPlan);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [renderingComponents, setRenderingComponents] = React.useState(0);
   const { isLgScreen } = ResponsiveState();
@@ -691,6 +695,21 @@ const PlanDetails = (props: ITypeProps) => {
     setRenderingComponents(id);
   };
 
+  const assignPlan = async () => {
+    let payload = { planId: pendingPlan?.planId };
+    try {
+      const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
+      if (responseV4?.success) {
+        setIsModalOpen(false);
+        toast.success(responseV4?.message);
+      } else {
+        toast.error(responseV4?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -719,7 +738,6 @@ const PlanDetails = (props: ITypeProps) => {
     (async () => {
       try {
         const { data: response }: any = await POST(GET_PENDING_PLANS);
-        console.log("🚀 ~ response:", response);
         if (response?.success) {
           setPendingPlan(response?.data[0]);
         }
@@ -847,7 +865,7 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
@@ -931,10 +949,10 @@ const PlanDetails = (props: ITypeProps) => {
                       </span>
                     </p>
                   </div>
-                  <div className="flex absolute bottom-3 gap-x-2 md:ml-16 lg:ml-24 xl:ml-44  ">
+                  <div className="flex absolute bottom-3 gap-x-2 md:ml-16 lg:ml-28 xl:ml-44  ">
                     <CustomButton
                       text="confirm"
-                      onClick={() => {}}
+                      onClick={assignPlan}
                       className="!w-[88px] !rounded-[4px]"
                     />
                     <CustomButton

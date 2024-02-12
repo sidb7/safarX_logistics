@@ -196,7 +196,7 @@ const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
 const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 const GET_PENDING_PLANS = `${SELLER_BASE_URL}/seller/pendingPlans`;
-const POST_ASSIGN_PLANV4 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
+const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -497,7 +497,7 @@ export {
   DOWNLOAD_COD_REMITTED,
   ORDERID_AND_EWAYBILLINFO,
   ACTIVATE_PICKUP_ADDRESS,
-  POST_ASSIGN_PLANV4,
+  POST_ASSIGN_PLANV3,
   DELETE_INTEGRATED_STORE,
   UPDATE_OTHER_ORDER_DETAILS,
   GET_PENDING_PLANS,
