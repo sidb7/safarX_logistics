@@ -12,6 +12,12 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convertEpochToDateTimeV2 } from "../../utils/utility";
 import DatePicker from "react-datepicker";
+import InputBox from "../../components/Input";
+import CustomDropDown from "../../components/DropDown";
+import ItemIcon from "../../assets/Product/Item.svg";
+import BoxIcon from "../../assets/layer.svg";
+import DownwardArrow from "../../assets/downwardArrow.svg";
+import Index from "../InputBox";
 
 interface ICustomTableAccordion {
   data?: any;
@@ -20,10 +26,129 @@ interface ICustomTableAccordion {
 const Accordion = (props: ICustomTableAccordion) => {
   const { data } = props;
   const [openIndex, setOpenIndex] = useState(null);
+  console.log("openIndex", openIndex);
   const [orderDetails, setOrderDetails]: any = useState([]);
+  console.log("orderDetails", orderDetails);
   const [isLoading, setIsLoading]: any = useState(false);
   const [pincode, setPincode] = useState<any>();
   const [pincodeData, setPincodeData] = useState<any>({});
+  const [boxProductDetails, setBoxProductDetails] = useState<any>();
+  const [productAccordian, setproductAccordian] = useState<any>([]);
+
+  useEffect(() => {
+    setproductAccordian(boxProductDetails?.boxInfo?.[0]?.products);
+  }, [boxProductDetails]);
+
+  //this was written for the products
+  // const [productDetails, setProductDetails] = useState<any>({
+  //   products: {
+  //     deadWeight: "",
+  //     volumetricWeight: "",
+  //     measureUnit: "",
+  //     length: "",
+  //     breadth: "",
+  //     height: "",
+  //   },
+  // });
+
+  const [productDetails, setProductDetails] = useState<any>([
+    {
+      companyId: "",
+      sellerId: 0,
+      boxId: "",
+      name: "",
+      weightUnit: "",
+      volumetricWeight: 0,
+      deadWeight: 0,
+      appliedWeight: 0,
+      divisor: 0,
+      measureUnit: "",
+      length: 0,
+      breadth: 0,
+      height: 10,
+      color: "",
+      price: 0,
+      currency: "",
+      isFragile: "",
+      eWayBillNo: 0,
+      tracking: {
+        awb: "",
+        label: "",
+        taxInvoice: "",
+        manifest: "",
+        status: [],
+      },
+      codInfo: {
+        isCod: "",
+        collectableAmount: 0,
+        invoiceValue: 0,
+      },
+      podInfo: {
+        isPod: "",
+      },
+      insurance: {
+        isInsured: "",
+        amount: 0,
+      },
+      service: {
+        partnerServiceId: "",
+        partnerServiceName: "",
+        companyServiceId: "",
+        companyServiceName: "",
+        partnerName: "",
+        serviceMode: "",
+        appliedWeight: 0,
+        invoiceValue: 0,
+        collectableAmount: 0,
+        insurance: 0,
+        base: 0,
+        add: 0,
+        variables: 0,
+        cod: 0,
+        tax: 0,
+        total: 0,
+      },
+      images: [],
+      Products: [
+        {
+          companyId: "",
+          privateCompanyId: 0,
+          sellerId: 0,
+          productId: "",
+          name: "",
+          category: "",
+          qty: 0,
+          sku: "",
+          hsnCode: "",
+          currency: "",
+          unitPrice: 0,
+          unitTax: 0,
+          measureUnit: "",
+          length: 0,
+          breadth: 0,
+          height: 0,
+          deadWeight: 0,
+          weightUnit: "",
+          volumetricWeight: 0,
+          appliedWeight: 0,
+          divisor: 0,
+          images: [],
+          selected: "",
+        },
+      ],
+
+      payloads: [],
+
+      // Products: [],
+    },
+  ]);
+
+  // console.log("productDetails%%%%%%%", productDetails);
+  const [boxDetails, setBoxDetails] = useState<any>();
+  const [accordian, setAccordian] = useState<any>(false);
+  const [boxAccordian, setBoxAccordian] = useState<any>(false);
+
+  // console.log("lengthofproduct", productDetails[0]?.Products[0]);
 
   const navigate = useNavigate();
 
@@ -87,9 +212,56 @@ const Accordion = (props: ICustomTableAccordion) => {
   });
 
   const [addressOpenModal, setAddressOpenModal] = useState(false);
-  const [convertedDate, setConvertedDate] = useState("");
+  const measureUnits = [
+    {
+      label: "Cm",
+      value: "Cm",
+    },
+  ];
 
   const entries: any = document?.getElementsByClassName("entries");
+
+  const hanldeProducts = async (eachProduct: any, index: any) => {
+    let temp = boxProductDetails?.boxInfo?.[0]?.products;
+    for (let i = 0; i < temp?.length; i++) {
+      if (index === i) {
+        setAccordian(!accordian);
+      }
+    }
+  };
+
+  //for product updation
+  const handleInputUpdation = (
+    product_index: any,
+    value: any,
+    fieldName: any
+  ) => {
+    let temp = boxProductDetails?.boxInfo?.[0]?.products;
+    for (let i = 0; i < temp?.length; i++) {
+      if (product_index === i) {
+        temp[i][fieldName] = Number(value);
+      }
+    }
+    boxProductDetails.boxInfo[0].products = temp;
+
+    console.log("🚀 ~ Accordion ~ temp:", boxProductDetails);
+  };
+
+  //for box updation
+  const handleBoxInputUpdation = (
+    box_index: any,
+    value: any,
+    fieldName: any
+  ) => {
+    let boxTemp = boxProductDetails?.boxInfo;
+    for (let i = 0; i < boxTemp?.length; i++) {
+      if (box_index === i) {
+        boxTemp[i][fieldName] = Number(value);
+      }
+      boxProductDetails.boxInfo = boxTemp;
+      console.log("🚀 ~ Accordion ~ temp:", boxProductDetails);
+    }
+  };
 
   useEffect(() => {
     const { data: dataFromState, isOpen } = data;
@@ -252,6 +424,10 @@ const Accordion = (props: ICustomTableAccordion) => {
         awb: orderData?.awb ? orderData?.awb : "0",
       });
 
+      // console.log(
+      //   "dataproduct",
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.appliedWeight
+      // );
       let temp;
       temp = getPickAddressData;
       temp.pickUpAddress.contact.contactName =
@@ -311,8 +487,143 @@ const Accordion = (props: ICustomTableAccordion) => {
         data?.data[0]?.data[0]?.deliveryAddress.gstNumber;
       setGetDeliveryAddressData({ ...deliveryTemp });
 
+      //this was written for the products
+      // let productTemp;
+      // productTemp = productDetails;
+      // productTemp.products.deadWeight =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.deadWeight;
+      // productTemp.products.volumetricWeight =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.volumetricWeight;
+      // productTemp.products.measureUnit =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.measureUnit;
+      // productTemp.products.length =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.length;
+      // productTemp.products.breadth =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.breadth;
+      // productTemp.products.height =
+      //   data?.data[0]?.data[0]?.boxInfo[0]?.products[0]?.height;
+
+      // images: [],
+      // products: [
+      //   {
+      //     companyId: "",
+      //     privateCompanyId: 0,
+      //     sellerId: 0,
+      //     productId: "",
+      //     name: "",
+      //     category: "",
+      //     qty: 0,
+      //     sku: "",
+      //     hsnCode: "",
+      //     currency: "",
+      //     unitPrice: 0,
+      //     unitTax: 0,
+      //     measureUnit: "",
+      //     length: 0,
+      //     breadth: 0,
+      //     height: 0,
+      //     deadWeight: 0,
+      //     weightUnit: "",
+      //     volumetricWeight: 0,
+      //     appliedWeight: 0,
+      //     divisor: 0,
+      //     images: [],
+      //     selected: "",
+      //   },
+      // ],
+      // payloads: [],
+
+      let productTemp;
+      productTemp = productDetails;
+
+      productTemp[0].companyId = data?.data[0]?.data[0]?.boxInfo[0]?.companyId;
+      productTemp[0].sellerId = data?.data[0]?.data[0]?.boxInfo[0]?.sellerId;
+      productTemp[0].boxId = data?.data[0]?.data[0]?.boxInfo[0]?.boxId;
+      productTemp[0].name = data?.data[0]?.data[0]?.boxInfo[0]?.name;
+      productTemp[0].weightUnit =
+        data?.data[0]?.data[0]?.boxInfo[0]?.weightUnit;
+      productTemp[0].volumetricWeight =
+        data?.data[0]?.data[0]?.boxInfo[0]?.volumetricWeight;
+      productTemp[0].deadWeight =
+        data?.data[0]?.data[0]?.boxInfo[0]?.deadWeight;
+      productTemp[0].appliedWeight =
+        data?.data[0]?.data[0]?.boxInfo[0]?.appliedWeight;
+      productTemp[0].divisor = data?.data[0]?.data[0]?.boxInfo[0]?.divisor;
+      productTemp[0].measureUnit =
+        data?.data[0]?.data[0]?.boxInfo[0]?.measureUnit;
+      productTemp[0].length = data?.data[0]?.data[0]?.boxInfo[0]?.length;
+      productTemp[0].breadth = data?.data[0]?.data[0]?.boxInfo[0]?.breadth;
+      productTemp[0].height = data?.data[0]?.data[0]?.boxInfo[0]?.height;
+      productTemp[0].color = data?.data[0]?.data[0]?.boxInfo[0]?.color;
+      productTemp[0].price = data?.data[0]?.data[0]?.boxInfo[0]?.price;
+      productTemp[0].currency = data?.data[0]?.data[0]?.boxInfo[0]?.currency;
+      productTemp[0].isFragile = data?.data[0]?.data[0]?.boxInfo[0]?.isFragile;
+      productTemp[0].eWayBillNo =
+        data?.data[0]?.data[0]?.boxInfo[0]?.eWayBillNo;
+      productTemp[0].tracking.awb =
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.awb;
+      productTemp[0].tracking.label =
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.label;
+      productTemp[0].tracking.taxInvoice =
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.taxInvoice;
+      productTemp[0].tracking.manifest =
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.manifest;
+      productTemp[0].tracking.status =
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.status;
+      productTemp[0].codInfo.isCod =
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.isCod;
+      productTemp[0].codInfo.collectableAmount =
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.collectableAmount;
+      productTemp[0].codInfo.invoiceValue =
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.invoiceValue;
+      productTemp[0].podInfo.isPod =
+        data?.data[0]?.data[0]?.boxInfo[0]?.podInfo.isPod;
+      productTemp[0].insurance.isInsured =
+        data?.data[0]?.data[0]?.boxInfo[0]?.insurance.isInsured;
+      productTemp[0].insurance.amount =
+        data?.data[0]?.data[0]?.boxInfo[0]?.insurance.amount;
+      productTemp[0].service.partnerServiceId =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerServiceId;
+      productTemp[0].service.partnerServiceName =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerServiceName;
+      productTemp[0].service.companyServiceId =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.companyServiceId;
+      productTemp[0].service.companyServiceName =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.companyServiceName;
+      productTemp[0].service.partnerName =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerName;
+      productTemp[0].service.serviceMode =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.serviceMode;
+      productTemp[0].service.appliedWeight =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.appliedWeight;
+      productTemp[0].service.invoiceValue =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.invoiceValue;
+      productTemp[0].service.collectableAmount =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.collectableAmount;
+      productTemp[0].service.insurance =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.insurance;
+      productTemp[0].service.base =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.base;
+      productTemp[0].service.add =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.add;
+      productTemp[0].service.variables =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.variables;
+      productTemp[0].service.cod =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.cod;
+      productTemp[0].service.tax =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.tax;
+      productTemp[0].service.total =
+        data?.data[0]?.data[0]?.boxInfo[0]?.service.total;
+
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
+        // console.log(
+        //   "rowsData****",
+        //   rowsData?.boxInfo?.[0]?.products?.[0]?.name
+        // );
+        setBoxProductDetails(rowsData);
+        // console.log("rowDataaaaaaaa", rowsData?.boxInfo?.[0]?.products);
+        setBoxDetails(rowsData);
 
         let updateData;
         updateData = updatePayload;
@@ -322,35 +633,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         setUpdatePayload({ ...updateData });
 
         let rows: any = [
-          // {
-          //   MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
-          //   // title: "Pickup Address",
-          //   FlatNo: rowsData?.pickupAddress?.flatNo,
-          //   Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
-          //   "Email Id": capitalizeFirstLetter(
-          //     rowsData?.pickupAddress?.contact?.emailId
-          //   ),
-
-          //   LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
-          //   Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
-          //   State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
-          //   City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
-          //   Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
-          //   // Pincode: rowsData?.pickupAddress?.pincode,
-          //   Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
-          //   // Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
-          //   Pincode: rowsData?.pickupAddress?.pincode,
-          //   "Address Type": capitalizeFirstLetter(
-          //     rowsData?.pickupAddress?.addressType
-          //   ),
-          //   // MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
-          //   title: "Pickup Address",
-
-          //   // "Email Id": capitalizeFirstLetter(
-          //   //   rowsData?.pickupAddress?.contact?.emailId
-          //   // ),
-          //   // Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
-          // },
           {
             "contact Name": capitalizeFirstLetter(
               rowsData?.pickupAddress?.contact?.name
@@ -377,43 +659,7 @@ const Accordion = (props: ICustomTableAccordion) => {
             ),
             title: "Pickup Address",
           },
-          // {
-          //   MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
-          //   // title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
-          //   FlatNo: rowsData?.deliveryAddress?.flatNo,
-          //   Type: capitalizeFirstLetter(
-          //     rowsData?.deliveryAddress?.contact?.type
-          //   ),
-          //   "Email Id": capitalizeFirstLetter(
-          //     rowsData?.deliveryAddress?.contact?.emailId
-          //   ),
-          //   Landmark: capitalizeFirstLetter(
-          //     rowsData?.deliveryAddress?.landmark
-          //   ),
-          //   Locality: capitalizeFirstLetter(
-          //     rowsData?.deliveryAddress?.locality
-          //   ),
-          //   State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
-          //   City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
-          //   Name: capitalizeFirstLetter(
-          //     rowsData?.deliveryAddress?.contact?.name
-          //   ),
-          //   Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
-          //   Pincode: rowsData?.deliveryAddress?.pincode,
-          //   "Address Type": rowsData?.deliveryAddress?.addressType,
-          //   // Name: capitalizeFirstLetter(
-          //   //   rowsData?.deliveryAddress?.contact?.name
-          //   // ),
-          //   // MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
 
-          //   // "Email Id": capitalizeFirstLetter(
-          //   //   rowsData?.deliveryAddress?.contact?.emailId
-          //   // ),
-          //   // Type: capitalizeFirstLetter(
-          //   //   rowsData?.deliveryAddress?.contact?.type
-          //   // ),
-          //   title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
-          // },
           {
             "contact Name": capitalizeFirstLetter(
               rowsData?.deliveryAddress?.contact?.name
@@ -542,11 +788,32 @@ const Accordion = (props: ICustomTableAccordion) => {
         setOrderDetails(rows);
         setIsLoading(false);
       }
+      // for (let key in productDetails[0].Products[0]) {
+      //   // console.log("key", key);
+      //   if (productDetails[0].Products[0].hasOwnProperty(key)) {
+      //     for (
+      //       let i = 0;
+      //       i < data?.data[0]?.data[0]?.boxInfo[0]?.products?.length;
+      //       i++
+      //     ) {
+      //       productDetails[0].Products[0][key] =
+      //         data?.data[0]?.data[0]?.boxInfo[0]?.products[i][key];
+
+      //       console.log(
+      //         "data?.data[0]?.data[0]?.boxInfo[0]?.products?.length",
+      //         data?.data[0]?.data[0]?.boxInfo[0]?.products?.length,
+      //         i
+      //       );
+      //     }
+      //   }
+      // }
     } catch (error) {
       setIsLoading(false);
       return [];
     }
   };
+
+  // console.log("ProA", productAccordian);
 
   return (
     <div className="overflow-auto h-[100%] pb-[2rem]">
@@ -559,8 +826,11 @@ const Accordion = (props: ICustomTableAccordion) => {
           <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
-                if (item?.title === "Delivery Address") {
-                }
+                console.log("item", item);
+                // if (item?.title === "Services") {
+                //   console.log("servicessss");
+                // }
+
                 return (
                   item?.title && (
                     <div
@@ -592,62 +862,454 @@ const Accordion = (props: ICustomTableAccordion) => {
                               {Object.entries(item)?.map(
                                 ([key, value]: any, index: any) => {
                                   // Need To Implement this dynamically, It is applied for time being
+
                                   return index === 0 ? (
                                     ""
-                                  ) : item?.title?.includes("Box") ? (
+                                  ) : item?.title?.includes("Box") &&
+                                    index === 4 ? (
                                     <div
-                                      className="grid grid-cols-12"
-                                      key={key}
+                                      className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
+                                      style={{
+                                        boxShadow:
+                                          "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                                      }}
+                                      // onClick={() => handleProductsDetails(index)}
                                     >
-                                      {/* <div
-                                        id="boxInfo"
-                                        className={`col-span-3 mt-1  ${
-                                          index === 1 ||
-                                          index === 9 ||
-                                          index === 17 ||
-                                          index === 25
-                                            ? "border-2 border-b-0"
-                                            : (index > 1 && index < 9) ||
-                                              (index > 9 && index < 17) ||
-                                              (index > 17 && index < 25) ||
-                                              (index > 25 && index < 33)
-                                            ? "border-x-2"
-                                            : index === 9 ||
-                                              index === 17 ||
-                                              index === 25 ||
-                                              index === 33
-                                            ? "border-b-2"
-                                            : ""
-                                        }  py-[0.5rem]`}
-                                      > */}
-                                      {/* {(index === 5 ||
-                                          index === 13 ||
-                                          index === 21 ||
-                                          index === 28) && (
-                                          <div className="col-span-3 px-[1rem]">
-                                            {`Product ${key[key.length - 1]} `}
-                                          </div>
-                                        )} */}
-                                      {/* </div> */}
-                                      {/* <div className="col-span-9"> */}
-                                      {/* <div
-                                          className={`grid grid-cols-12 mt-1 border-2 py-[0.5rem] ${
-                                            index % 2 === 0
-                                              ? "bg-[#F9FBFC]"
-                                              : "bg-white"
-                                          }`}
-                                          key={key}
-                                        > */}
-                                      {/* <div className="col-span-5 px-[1rem] border-r-2">
-                                            <strong>
-                                              {key.slice(0, key.length - 1)}:
-                                            </strong>
-                                          </div> */}
-                                      {/* <div className="col-span-7 px-[1rem] ">
-                                            {value}
-                                          </div> */}
-                                      {/* </div> */}
-                                      {/* </div> */}
+                                      {/* {productAccordian} */}
+                                      {/* {boxProductDetails?.boxInfo?.[0]?.products.map( */}
+                                      {productAccordian !== "" &&
+                                        productAccordian !== undefined &&
+                                        productAccordian?.map(
+                                          (eachProduct: any, index: number) => {
+                                            return (
+                                              <div className="w-full">
+                                                <div className="w-full">
+                                                  <div
+                                                    className="border-2  border-black-600 p-2 rounded-md w-full"
+                                                    onClick={(e: any) => {
+                                                      // setAccordian(true)
+                                                      let temp = [
+                                                        ...productAccordian,
+                                                      ];
+
+                                                      if (
+                                                        eachProduct.isCollapse ===
+                                                        true
+                                                      ) {
+                                                        eachProduct.isCollapse =
+                                                          false;
+                                                        setproductAccordian(
+                                                          temp
+                                                        );
+                                                      } else {
+                                                        eachProduct.isCollapse =
+                                                          false;
+                                                        setproductAccordian(
+                                                          temp
+                                                        );
+                                                      }
+                                                      hanldeProducts(
+                                                        index,
+                                                        eachProduct
+                                                      );
+                                                    }}
+                                                  >
+                                                    <div className="flex justify-between">
+                                                      <div className="flex gap-x-3">
+                                                        <img
+                                                          src={ItemIcon}
+                                                          className=""
+                                                          alt=""
+                                                        />
+                                                        <p className="flex items-center text-[18px] font-Open">
+                                                          {eachProduct?.name}
+                                                        </p>
+                                                        <span className="flex items-center mt-1 text-[16px] font-Open">
+                                                          (Product Info)
+                                                        </span>
+                                                      </div>
+                                                      <div className="flex items-center">
+                                                        <img
+                                                          src={DownwardArrow}
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  {true && (
+                                                    <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-2 rounded-md">
+                                                      <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                                                        <InputBox
+                                                          label="Dead Weight (Kg)"
+                                                          // value={
+                                                          //   eachProduct?.deadWeight
+                                                          // }
+                                                          defaultValue={
+                                                            eachProduct?.deadWeight
+                                                          }
+                                                          name="deadWeight"
+                                                          inputType="text"
+                                                          inputMode="numeric"
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            handleInputUpdation(
+                                                              index,
+                                                              e.target.value,
+                                                              "deadWeight"
+                                                            );
+                                                          }}
+                                                        />
+
+                                                        <InputBox
+                                                          label="Volumetric Weight"
+                                                          // value={
+                                                          //   productDetails[0]
+                                                          //     ?.Products[0]
+                                                          //     ?.volumetricWeight
+                                                          // }
+                                                          defaultValue={
+                                                            eachProduct?.volumetricWeight
+                                                          }
+                                                          name="volumetricWeight"
+                                                          inputType="number"
+                                                          // onChange={(e: any) => {
+                                                          //   let temp =
+                                                          //     productDetails;
+                                                          //   temp.products.volumetricWeight =
+                                                          //     e.target.value;
+                                                          //   setProductDetails({
+                                                          //     ...temp,
+                                                          //   });
+                                                          // }}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            handleInputUpdation(
+                                                              index,
+                                                              e.target.value,
+                                                              "volumetricWeight"
+                                                            );
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div className="flex justify-between  w-[100%] gap-x-[2rem] px-[1rem]  mt-2">
+                                                        <div className="w-[50%]">
+                                                          <CustomDropDown
+                                                            onChange={() => {}}
+                                                            options={
+                                                              measureUnits
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <div className="flex w-[50%] gap-x-4">
+                                                          <InputBox
+                                                            label="L"
+                                                            inputType="text"
+                                                            inputMode="numeric"
+                                                            name="length"
+                                                            // value={
+                                                            //   productDetails[0]
+                                                            //     ?.Products[0]
+                                                            //     ?.length
+                                                            // }
+                                                            defaultValue={
+                                                              eachProduct?.length
+                                                            }
+                                                            // onChange={(
+                                                            //   e: any
+                                                            // ) => {
+                                                            //   let temp =
+                                                            //     productDetails;
+                                                            //   temp.products.length =
+                                                            //     e.target.value;
+                                                            //   setProductDetails({
+                                                            //     ...temp,
+                                                            //   });
+                                                            // }}
+                                                            onChange={(
+                                                              e: any
+                                                            ) => {
+                                                              handleInputUpdation(
+                                                                index,
+                                                                e.target.value,
+                                                                "length"
+                                                              );
+                                                            }}
+                                                          />
+                                                          <InputBox
+                                                            label="B"
+                                                            // value={
+                                                            //   productDetails[0]
+                                                            //     ?.Products[0]
+                                                            //     ?.breadth
+                                                            // }
+                                                            defaultValue={
+                                                              eachProduct?.breadth
+                                                            }
+                                                            name="breadth"
+                                                            inputType="text"
+                                                            inputMode="numeric"
+                                                            // onChange={(
+                                                            //   e: any
+                                                            // ) => {
+                                                            //   let temp =
+                                                            //     productDetails;
+                                                            //   temp.products.breadth =
+                                                            //     e.target.value;
+                                                            //   setProductDetails({
+                                                            //     ...temp,
+                                                            //   });
+                                                            // }}
+                                                            onChange={(
+                                                              e: any
+                                                            ) => {
+                                                              handleInputUpdation(
+                                                                index,
+                                                                e.target.value,
+                                                                "breadth"
+                                                              );
+                                                            }}
+                                                          />
+                                                          <InputBox
+                                                            label="H"
+                                                            // value={
+                                                            //   // eachProduct?.height
+                                                            //   productDetails[0]
+                                                            //     ?.Products[0]
+                                                            //     ?.height
+                                                            // }
+                                                            defaultValue={
+                                                              eachProduct?.breadth
+                                                            }
+                                                            name="height"
+                                                            inputType="text"
+                                                            inputMode="numeric"
+                                                            // onChange={(
+                                                            //   e: any
+                                                            // ) => {
+                                                            //   let temp =
+                                                            //     productDetails;
+                                                            //   temp.products.height =
+                                                            //     e.target.value;
+                                                            //   setProductDetails({
+                                                            //     ...temp,
+                                                            //   });
+                                                            // }}
+                                                            onChange={(
+                                                              e: any
+                                                            ) => {
+                                                              handleInputUpdation(
+                                                                index,
+                                                                e.target.value,
+                                                                "height"
+                                                              );
+                                                            }}
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            );
+                                          }
+                                        )}
+                                      {boxProductDetails?.boxInfo.map(
+                                        (eachBox: any, index: number) => {
+                                          console.log("log", eachBox);
+                                          return (
+                                            <div className="w-full">
+                                              <div className="w-full">
+                                                <div
+                                                  className="border-2  border-black-600 p-2 flex justify-between w-full rounded-md"
+                                                  onClick={() =>
+                                                    setBoxAccordian(
+                                                      !boxAccordian
+                                                    )
+                                                  }
+                                                >
+                                                  <div className="flex gap-x-3">
+                                                    <img
+                                                      src={BoxIcon}
+                                                      className="w-10 h-10"
+                                                      alt=""
+                                                    />
+                                                    <p className="flex items-center text-[18px] font-Open">
+                                                      {eachBox?.name}
+                                                    </p>
+                                                    <span className="flex items-center mt-1 text-[16px] font-Open">
+                                                      (Box Info)
+                                                    </span>
+                                                  </div>
+
+                                                  <div className="flex items-center">
+                                                    <img src={DownwardArrow} />
+                                                  </div>
+                                                </div>
+                                                {boxAccordian && (
+                                                  <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-2 rounded-md">
+                                                    <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                                                      <InputBox
+                                                        label="Dead Weight (Kg)"
+                                                        // value={
+                                                        //   eachBox?.deadWeight
+                                                        // }
+                                                        defaultValue={
+                                                          eachBox?.breadth
+                                                        }
+                                                        name="deadWeight"
+                                                        inputType="text"
+                                                        inputMode="numeric"
+                                                        // onChange={(e: any) => {
+                                                        //   if (
+                                                        //     !isNaN(
+                                                        //       e.target.value
+                                                        //     )
+                                                        //   ) {
+                                                        //     // onChaneDimensionHandler(e);
+                                                        //   }
+                                                        // }}
+                                                        onChange={(e: any) =>
+                                                          handleBoxInputUpdation(
+                                                            index,
+                                                            e.target.value,
+                                                            "deadWeight"
+                                                          )
+                                                        }
+                                                      />
+                                                      <InputBox
+                                                        label="Volumetric Weight"
+                                                        // value={
+                                                        //   eachBox?.volumetricWeight
+                                                        // }
+                                                        defaultValue={
+                                                          eachBox?.volumetricWeight
+                                                        }
+                                                        name="volumetricWeight"
+                                                        inputType="number"
+                                                        // isDisabled={true}
+                                                        onChange={(e: any) => {
+                                                          handleBoxInputUpdation(
+                                                            index,
+                                                            e.target.value,
+                                                            "volumetricWeight"
+                                                          );
+                                                        }}
+                                                      />
+                                                    </div>
+                                                    <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem] mt-2">
+                                                      <div className="w-[50%]">
+                                                        <CustomDropDown
+                                                          onChange={() => {}}
+                                                          options={measureUnits}
+                                                        />
+                                                      </div>
+                                                      <div className="flex w-[50%] gap-x-4">
+                                                        <InputBox
+                                                          label="L"
+                                                          inputType="text"
+                                                          inputMode="numeric"
+                                                          name="length"
+                                                          // value={
+                                                          //   eachBox?.length
+                                                          // }
+                                                          defaultValue={
+                                                            eachBox?.length
+                                                          }
+                                                          // onChange={(
+                                                          //   e: any
+                                                          // ) => {
+                                                          //   if (
+                                                          //     !isNaN(
+                                                          //       e.target.value
+                                                          //     )
+                                                          //   ) {
+                                                          //     // onChaneDimensionHandler(e);
+                                                          //   }
+                                                          // }}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            handleBoxInputUpdation(
+                                                              index,
+                                                              e.target.value,
+                                                              "length"
+                                                            );
+                                                          }}
+                                                        />
+                                                        <InputBox
+                                                          label="B"
+                                                          // value={
+                                                          //   eachBox?.breadth
+                                                          // }
+                                                          defaultValue={
+                                                            eachBox?.breadth
+                                                          }
+                                                          name="breadth"
+                                                          inputType="text"
+                                                          inputMode="numeric"
+                                                          // onChange={(
+                                                          //   e: any
+                                                          // ) => {
+                                                          //   if (
+                                                          //     !isNaN(
+                                                          //       e.target.value
+                                                          //     )
+                                                          //   ) {
+                                                          //     // onChaneDimensionHandler(e);
+                                                          //   }
+                                                          // }}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            handleBoxInputUpdation(
+                                                              index,
+                                                              e.target.value,
+                                                              "breadth"
+                                                            );
+                                                          }}
+                                                        />
+                                                        <InputBox
+                                                          label="H"
+                                                          // value={
+                                                          //   eachBox?.height
+                                                          // }
+                                                          defaultValue={
+                                                            eachBox.height
+                                                          }
+                                                          name="height"
+                                                          inputType="text"
+                                                          inputMode="numeric"
+                                                          // onChange={(
+                                                          //   e: any
+                                                          // ) => {
+                                                          //   if (
+                                                          //     !isNaN(
+                                                          //       e.target.value
+                                                          //     )
+                                                          //   ) {
+                                                          //     // onChaneDimensionHandler(e);
+                                                          //   }
+                                                          // }}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            handleBoxInputUpdation(
+                                                              index,
+                                                              e.target.value,
+                                                              "height"
+                                                            );
+                                                          }}
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                )}
+                                              </div>
+                                            </div>
+                                          );
+                                        }
+                                      )}
                                     </div>
                                   ) : (
                                     // <div className="flex">
@@ -674,7 +1336,152 @@ const Accordion = (props: ICustomTableAccordion) => {
                                     //     <div className="px-[1rem] ">{value}</div>
                                     //   </div>
                                     // </div>
+
                                     <>
+                                      <div>
+                                        {item.title === "Other Details" &&
+                                          index === 5 && (
+                                            <>
+                                              {
+                                                <div>
+                                                  {Object.entries(
+                                                    orderDetails[5]
+                                                  ).map(
+                                                    (
+                                                      eachService: any,
+                                                      index: any
+                                                    ) => {
+                                                      console.log(
+                                                        "eachService",
+                                                        eachService
+                                                      );
+                                                      return (
+                                                        index === 4 && (
+                                                          <div>
+                                                            <p className="open-sans">
+                                                              {eachService[1]}
+                                                            </p>
+                                                          </div>
+                                                        )
+                                                      );
+                                                    }
+                                                  )}
+                                                </div>
+                                              }
+                                            </>
+                                          )}
+                                      </div>
+                                      <div>
+                                        {item.title === "Services" &&
+                                          index === 3 && (
+                                            <>
+                                              <div className="flex justify-between">
+                                                <div className="flex gap-x-2">
+                                                  <div>
+                                                    {Object.entries(
+                                                      boxProductDetails
+                                                        ?.boxInfo[0].service
+                                                    ).map(
+                                                      (
+                                                        eachService: any,
+                                                        index: any
+                                                      ) => {
+                                                        console.log(
+                                                          "eachService",
+                                                          eachService
+                                                        );
+                                                        return (
+                                                          index === 4 && (
+                                                            <div>
+                                                              <p className="open-sans">
+                                                                {eachService[1]}
+                                                              </p>
+                                                            </div>
+                                                          )
+                                                        );
+                                                      }
+                                                    )}
+                                                  </div>
+                                                  <div>
+                                                    {Object.entries(
+                                                      boxProductDetails
+                                                        ?.boxInfo[0].service
+                                                    ).map(
+                                                      (
+                                                        eachService: any,
+                                                        index: any
+                                                      ) => {
+                                                        console.log(
+                                                          "eachService",
+                                                          eachService
+                                                        );
+                                                        return (
+                                                          index === 3 && (
+                                                            <div>
+                                                              <p className="text-[#3B3535] open-sans">
+                                                                {eachService[1]}
+                                                              </p>
+                                                            </div>
+                                                          )
+                                                        );
+                                                      }
+                                                    )}
+                                                  </div>
+                                                  <div>
+                                                    {Object.entries(
+                                                      boxProductDetails
+                                                        ?.boxInfo[0].service
+                                                    ).map(
+                                                      (
+                                                        eachService: any,
+                                                        index: any
+                                                      ) => {
+                                                        console.log(
+                                                          "eachService",
+                                                          eachService
+                                                        );
+                                                        return (
+                                                          index === 5 && (
+                                                            <div>
+                                                              <p className="text-[#AFA8A8] open-sans">
+                                                                {eachService[1]}
+                                                              </p>
+                                                            </div>
+                                                          )
+                                                        );
+                                                      }
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <div>
+                                                  {Object.entries(
+                                                    boxProductDetails
+                                                      ?.boxInfo[0].service
+                                                  ).map(
+                                                    (
+                                                      eachService: any,
+                                                      index: any
+                                                    ) => {
+                                                      console.log(
+                                                        "eachService",
+                                                        eachService
+                                                      );
+                                                      return (
+                                                        index === 15 && (
+                                                          <div>
+                                                            <p className="text-[#AFA8A8] open-sans">
+                                                              {eachService[1]}
+                                                            </p>
+                                                          </div>
+                                                        )
+                                                      );
+                                                    }
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </>
+                                          )}
+                                      </div>
                                       <div>
                                         {item.title === "Pickup Address" &&
                                           // <p>{key + "-- " + value}</p>
