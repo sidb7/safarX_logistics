@@ -12,7 +12,11 @@ import TermsAndConditionsIcon from "../../assets/Plan/document.svg";
 import "../../styles/plan.css";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { GET_PLAN_URL } from "../../utils/ApiUrls";
+import {
+  GET_PLAN_URL,
+  GET_PENDING_PLANS,
+  POST_ASSIGN_PLANV3,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 import { GET_ALL_PLANS } from "../../utils/ApiUrls";
@@ -24,6 +28,11 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../../components/Button";
+import CrossIcon from "../../assets/CloseIcon.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import { toast } from "react-toastify";
 
 interface ITypeProps {}
 
@@ -36,7 +45,8 @@ const PlanDetails = (props: ITypeProps) => {
 
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
-
+  const [pendingPlan, setPendingPlan] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [renderingComponents, setRenderingComponents] = React.useState(0);
   const { isLgScreen } = ResponsiveState();
 
@@ -685,6 +695,21 @@ const PlanDetails = (props: ITypeProps) => {
     setRenderingComponents(id);
   };
 
+  const assignPlan = async () => {
+    let payload = { planId: pendingPlan?.planId };
+    try {
+      const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
+      if (responseV4?.success) {
+        setIsModalOpen(false);
+        toast.success(responseV4?.message);
+      } else {
+        toast.error(responseV4?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -705,6 +730,19 @@ const PlanDetails = (props: ITypeProps) => {
         console.error(" PLANS API ERROR", error);
 
         return error;
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
       }
     })();
   }, []);
@@ -827,18 +865,108 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
-            <ServiceButton
-              className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
-              text="TALK TO OUR SUPPORT"
-              onClick={() => {
-                window.open("https://support.shipyaari.com/tickets", "_blank");
-              }}
-            />
+            <div className="flex gap-x-2">
+              {Object.keys(pendingPlan).length !== 0 ? (
+                <>
+                  <div>
+                    <CustomButton
+                      className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] !py-2 !px-4 !font-Open !border-2 !rounded-[4px] hover:-translate-y-1 hover:scale-100 duration-300"
+                      text={"Pending Plan!"}
+                      onClick={() => {
+                        setIsModalOpen(true);
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+
+              <div>
+                <ServiceButton
+                  className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
+                  text="TALK TO OUR SUPPORT"
+                  onClick={() => {
+                    window.open(
+                      "https://support.shipyaari.com/tickets",
+                      "_blank"
+                    );
+                  }}
+                />
+              </div>
+            </div>
           </div>
+
+          {isModalOpen && (
+            <CenterModal
+              isOpen={isModalOpen}
+              onRequestClose={() => setIsModalOpen(false)}
+              className="md:h-[35%] md:w-[50%] lg:h-[35%] lg:w-[45%] xl:h-[30%] xl:w-[30%]"
+            >
+              <>
+                <div className=" w-full h-full gap-y-6 p-4 flex flex-col">
+                  <div className="flex items-center justify-between">
+                    <p className="font-open text-lg font-semibold leading-5">
+                      Plan Info
+                    </p>
+                    <div
+                      onClick={() => {
+                        setIsModalOpen(false);
+                      }}
+                      className="flex justify-end"
+                    >
+                      <img alt="" className="cursor-pointer" src={CrossIcon} />
+                    </div>
+                  </div>
+
+                  <div className="customScroll flex flex-col gap-y-4">
+                    <p className="font-Open text-lg font-semibold leading-5 text-[#023047]">
+                      Plan Name:-
+                      <span className="font-Open text-base font-normal leading-5 ml-2">
+                        {capitalizeFirstLetter(pendingPlan?.planName)}
+                      </span>
+                    </p>
+                    <p className="font-Open text-lg font-semibold leading-5 text-[#023047]">
+                      Description:-
+                      <span className="font-Open text-base font-normal leading-5 ml-2 overflow-hidden text-ellipsis whitespace-nowrap">
+                        {capitalizeFirstLetter(pendingPlan?.shortDescription)}
+                      </span>
+                    </p>
+                    <p className="font-Open text-lg font-semibold leading-5 text-[#023047]">
+                      Price:-
+                      <span className="font-Open text-base font-normal leading-5 ml-2">
+                        {pendingPlan?.price}
+                      </span>
+                    </p>
+                    <p className="font-Open text-lg font-semibold leading-5 text-[#023047]">
+                      Tenure:-
+                      <span className="font-Open text-base font-normal leading-5 ml-2 ">
+                        {capitalizeFirstLetter(pendingPlan?.validity)}
+                      </span>
+                    </p>
+                  </div>
+                  <div className="flex absolute bottom-3 gap-x-2 md:ml-16 lg:ml-28 xl:ml-44  ">
+                    <CustomButton
+                      text="confirm"
+                      onClick={assignPlan}
+                      className="!w-[88px] !rounded-[4px]"
+                    />
+                    <CustomButton
+                      text="cancel"
+                      onClick={() => {
+                        setIsModalOpen(false);
+                      }}
+                      className="!w-[88px] !bg-[#FFFFFF] !border-2 !border-[#FABCAF] !text-[#F35838] !rounded-[4px]"
+                    />
+                  </div>
+                </div>
+              </>
+            </CenterModal>
+          )}
 
           {/* Terms & Conditions */}
 
