@@ -285,7 +285,10 @@ const Errors = (props: ErrorProps) => {
       });
 
       if (errorName === "Delivery Address") {
-        payLoad = { ...payLoad, deliveryAddressId: selectedDeliveryAddress };
+        payLoad = {
+          ...payLoad,
+          deliveryAddressId: selectedDeliveryAddress,
+        };
       } else if (errorName === "Pickup Address") {
         payLoad = { ...payLoad, pickupAddressId: seletedPickupAddress };
       }
@@ -505,14 +508,14 @@ const Errors = (props: ErrorProps) => {
                 <>
                   {item?.value.length > 0 && (
                     <div
-                      className="flex flex-col mb-5 cursor-pointer mr-3"
+                      className="flex flex-col mb-5  cursor-pointer mr-3 rounded-lg"
                       style={{
                         boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
                       }}
                       key={index}
                     >
                       <div
-                        className={`flex select-none gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
+                        className={`flex select-none items-center gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
                           openIndex === index
                             ? "  rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : " rounded-lg "
@@ -564,8 +567,30 @@ const Errors = (props: ErrorProps) => {
                                   }
                                   options={
                                     item?.errorName === "Pickup Address"
-                                      ? pickupAddressDropDownData
-                                      : deliveryAddressDropDownData
+                                      ? pickupAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
+                                      : deliveryAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
                                   }
                                   placeHolder="Selete Address"
                                   wrapperClass="w-[100%]"

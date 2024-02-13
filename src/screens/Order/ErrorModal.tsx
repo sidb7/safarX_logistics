@@ -1060,7 +1060,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           <>
             <div className=" mx-[1rem] mt-6">
               <div className="m-[0.5rem] my-[1rem] bg-white">
-                <div className="flex min-w-[90%] border ">
+                <div className="flex min-w-[90%]">
                   <div
                     className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                     style={{
