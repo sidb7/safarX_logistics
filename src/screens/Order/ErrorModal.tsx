@@ -458,14 +458,31 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const updateAddress = async (isProcessOrder?: any) => {
     try {
-      !isProcessOrder && setUpdateButtonLoader(true);
-
       let targetAddress = "";
       if (errorModalData.error === "Delivery Address") {
         targetAddress = "deliveryAddress";
       } else if (errorModalData.error === "Pickup Address") {
         targetAddress = "pickupAddress";
       }
+
+      if (
+        addressData[targetAddress]?.flatNo === "" ||
+        addressData[targetAddress]?.country === "" ||
+        addressData[targetAddress]?.state === "" ||
+        addressData[targetAddress]?.city === "" ||
+        addressData[targetAddress]?.locality === "" ||
+        addressData[targetAddress]?.contact?.emailId === "" ||
+        addressData[targetAddress]?.contact?.mobileNo === "" ||
+        addressData[targetAddress]?.contact?.type === "" ||
+        addressData[targetAddress]?.contact?.name === "" ||
+        addressData[targetAddress]?.pincode === "" ||
+        addressData[targetAddress]?.pincode === 0 ||
+        addressData[targetAddress]?.landmark === ""
+      ) {
+        setInputError(true);
+        return;
+      }
+      !isProcessOrder && setUpdateButtonLoader(true);
 
       let payload: any = {
         ...addressData,
@@ -839,6 +856,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                         onChange={(e: any) =>
                           handleInputChange(targetAddress, e)
                         }
+                        inputError={inputError}
                       />
                     </div>
                     <div className="flex flex-col">
@@ -852,6 +870,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChange={(e: any) =>
                             handleInputChange(targetAddress, e)
                           }
+                          inputError={inputError}
                         />
 
                         <CustomDropDown
@@ -865,6 +884,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           options={dummyStateDropdownData}
                           placeHolder="Select State"
                           wrapperClass="w-[100%]"
+                          inputError={inputError}
                         />
                       </div>
                       <div className="flex mt-[1rem] gap-[1rem]">
@@ -877,6 +897,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChange={(e: any) =>
                             handleInputChange(targetAddress, e)
                           }
+                          inputError={inputError}
                         />
                         <InputBox
                           label="Locality"
@@ -887,6 +908,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChange={(e: any) =>
                             handleInputChange(targetAddress, e)
                           }
+                          inputError={inputError}
                         />
                       </div>
 
@@ -909,8 +931,9 @@ const ErrorModal = (props: ErrorModalProps) => {
                               );
                               setInputError(false);
                             }}
+                            inputError={inputError}
                           />
-                          {inputError && validationErrors.emailId && (
+                          {/* {inputError && validationErrors.emailId && (
                             <div className="flex items-center gap-x-1 mt-1">
                               <img
                                 src={InfoCircle}
@@ -922,19 +945,21 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 {validationErrors.emailId}
                               </span>
                             </div>
-                          )}
+                          )} */}
                         </div>
 
                         <div className="w-[100%]">
                           <InputBox
-                            label="Mobile Number"
+                            label="Contact Number"
                             name="mobileNo"
+                            inputType="text"
+                            inputMode="numeric"
+                            maxLength={10}
+                            inputError={inputError}
                             value={
                               addressData?.[targetAddress]?.contact?.mobileNo ||
                               ""
                             }
-                            maxLength={10}
-                            inputType="number"
                             onChange={(e) => {
                               const numericValue = e.target.value.replace(
                                 /[^0-9]/g,
@@ -949,22 +974,8 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 setInputError(false);
                               }
                             }}
-                            inputError={inputError}
                             className="w-[100%]"
                           />
-                          {inputError && validationErrors.mobileNo && (
-                            <div className="flex items-center gap-x-1 mt-1">
-                              <img
-                                src={InfoCircle}
-                                alt=""
-                                width={10}
-                                height={10}
-                              />
-                              <span className="font-normal text-[#F35838] text-xs leading-3">
-                                {validationErrors.mobileNo}
-                              </span>
-                            </div>
-                          )}
                         </div>
                       </div>
 
@@ -990,6 +1001,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           options={businessTypeDropDown}
                           placeHolder="Select Business Type"
                           wrapperClass="w-[100%]"
+                          inputError={inputError}
                         />
 
                         <div className="w-[100%]">
@@ -1003,6 +1015,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                               handleInputChange(targetAddress, e, "contact");
                             }}
                             className="w-[100%]"
+                            inputError={inputError}
                           />
                         </div>
                       </div>
@@ -1015,6 +1028,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChange={(e: any) =>
                             handleInputChange(targetAddress, e)
                           }
+                          inputError={inputError}
                         />
 
                         <InputBox
@@ -1026,6 +1040,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                           onChange={(e: any) =>
                             handleInputChange(targetAddress, e)
                           }
+                          inputError={inputError}
                         />
                       </div>
                     </div>
@@ -1043,9 +1058,9 @@ const ErrorModal = (props: ErrorModalProps) => {
       case orderErrorCategoryENUMs["Service"]: {
         return (
           <>
-            <div className=" mx-[1rem]">
+            <div className=" mx-[1rem] mt-6">
               <div className="m-[0.5rem] my-[1rem] bg-white">
-                <div className="flex min-w-[90%]">
+                <div className="flex min-w-[90%] border ">
                   <div
                     className="items-center flex border-2 rounded-md w-[100%] cursor-pointer justify-between"
                     style={{
@@ -1265,38 +1280,10 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         return true;
       }
-      case orderErrorCategoryENUMs["Delivery Address"]:
-      case orderErrorCategoryENUMs["Pickup Address"]: {
-        let targetAddress = "";
-        if (errorModalData.error === "Delivery Address") {
-          targetAddress = "deliveryAddress";
-        } else if (errorModalData.error === "Pickup Address") {
-          targetAddress = "pickupAddress";
+      case orderErrorCategoryENUMs["Service"]: {
+        if (services.length === 0) {
+          return false;
         }
-
-        const dimensions = [
-          "flatNo",
-          "country",
-          "state",
-          "city",
-          "locality",
-          "name",
-          "landmark",
-          "pincode",
-        ];
-
-        for (const dimension of dimensions) {
-          if (["emailId", "type", "name"].includes(dimension)) {
-            if (!addressData[targetAddress]?.contact?.[dimension]) {
-              return false;
-            }
-          } else {
-            if (!addressData[targetAddress]?.[dimension]) {
-              return false;
-            }
-          }
-        }
-
         return true;
       }
       case orderErrorCategoryENUMs["Others"]: {
@@ -1487,10 +1474,10 @@ const ErrorModal = (props: ErrorModalProps) => {
   return (
     <div className="overflow-h-auto max-h-[90vh]">
       <div className="flex mt-[1rem] mb-[1rem] rounded-lg mx-[0.5rem] h-[3rem] items-center px-[1rem] text-[1.2rem]">
-        <div className="flex w-[100%] justify-between">
-          <div className="flex  gap-x-2 justify-center items-center ">
+        <div className="flex w-[100%] justify-between ">
+          <div className="flex gap-x-2 justify-center items-center ">
             <img src={SampleProduct} className="w-[50px] mr-1" />
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <p className="text-[25px]">{errorModalData?.error} </p>
               {errorModalData?.error !== "Box And Product" && (
                 <div className="flex">
@@ -1530,12 +1517,13 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
-              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
-            } py-2`}
+            className={`flex w-[50%] items-center justify-center border-2 rounded-md bg-black text-white
+          ${switchForValidation() ? "bg-black cursor-pointer" : "bg-[#D2D2D2]"}
+            py-2`}
             onClick={() => {
               if (switchForValidation()) switchForUpdateActions(false);
             }}
+            //
           >
             {switchForUpdateActionsName()}
           </div>
@@ -1547,13 +1535,13 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className={`cursor-pointer flex w-[50%] items-center justify-center border-2 rounded-md  text-white ${
-              switchForValidation() ? "bg-black" : "bg-[#D2D2D2]"
-            } py-2`}
+            className={`flex w-[50%] items-center justify-center border-2 rounded-md bg-black  text-white 
+            ${
+              switchForValidation() ? "bg-black cursor-pointer" : "bg-[#D2D2D2]"
+            }
+            py-2`}
             onClick={() => {
-              if (switchForValidation()) {
-                processOrder();
-              }
+              if (switchForValidation()) processOrder();
             }}
           >
             Process Order

@@ -7,7 +7,7 @@ interface propTypes {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  className?: string;
+  className?: any;
   containerStyle?: string;
   inputClassName?: string;
   labelClassName?: string;
