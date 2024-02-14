@@ -609,14 +609,17 @@ const Errors = (props: ErrorProps) => {
                               </button>
                             </div>
                           )}
-                          <span>
+                          <button
+                            className="p-4"
+                            onClick={() => handleItemClick(index)}
+                          >
                             <img
                               className={`${
                                 index !== openIndex && "rotate-180"
                               }`}
                               src={UpArrow}
                             />
-                          </span>
+                          </button>
                         </div>
                       </div>
                       {openIndex === index &&
