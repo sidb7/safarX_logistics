@@ -728,19 +728,34 @@ export const columnHelperForNewOrder = (
                     Shipyaari ID :
                   </span>
                   <div className="flex text-base items-center font-medium">
-                    <Link
-                      to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
-                      className="underline text-blue-500 cursor-pointer"
-                    >
-                      <span
-                        className=""
-                        data-tooltip-id="my-tooltip-inline"
-                        data-tooltip-content="Complete Order"
+                    {source == "SHOPIFY" ||
+                    source == "WOOCOMMERCE" ||
+                    source == "AMAZON" ||
+                    source == "ZOHO" ? (
+                      <div>
+                        {" "}
+                        <span
+                          className=""
+                          data-tooltip-id="my-tooltip-inline"
+                          data-tooltip-content="Complete Order"
+                        >
+                          {tempOrderId}
+                        </span>
+                      </div>
+                    ) : (
+                      <Link
+                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                        className="underline text-blue-500 cursor-pointer"
                       >
-                        {tempOrderId}
-                      </span>
-                    </Link>
-
+                        <span
+                          className=""
+                          data-tooltip-id="my-tooltip-inline"
+                          data-tooltip-content="Complete Order"
+                        >
+                          {tempOrderId}
+                        </span>
+                      </Link>
+                    )}
                     <CopyTooltip stringToBeCopied={tempOrderId} />
                   </div>
                 </div>
