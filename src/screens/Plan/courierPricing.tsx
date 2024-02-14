@@ -11,7 +11,6 @@ import RateCardTable from "./rateCardTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-toastify";
 import { Spinner } from "../../components/Spinner";
-import TableFormat from "./tableFormat";
 interface ICourierPricingPropTypes {
   planId?: any;
 }
