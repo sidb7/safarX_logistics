@@ -702,6 +702,7 @@ const PlanDetails = (props: ITypeProps) => {
       if (responseV4?.success) {
         setIsModalOpen(false);
         toast.success(responseV4?.message);
+        window.location.reload();
       } else {
         toast.error(responseV4?.message);
       }
@@ -738,7 +739,7 @@ const PlanDetails = (props: ITypeProps) => {
     (async () => {
       try {
         const { data: response }: any = await POST(GET_PENDING_PLANS);
-        if (response?.success) {
+        if (response?.success && response?.data?.length > 0) {
           setPendingPlan(response?.data[0]);
         }
       } catch (error) {
@@ -800,7 +801,9 @@ const PlanDetails = (props: ITypeProps) => {
               setScrollIndex={setScrollIndex}
             />
           </div>
-          {renderingComponents === 0 && <CourierPricing />}
+          {renderingComponents === 0 && (
+            <CourierPricing planId={planData?.[0]?.planId} />
+          )}
 
           {/* Info Cards */}
           {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
