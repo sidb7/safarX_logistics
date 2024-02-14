@@ -3,7 +3,7 @@ import { Spinner } from "../../components/Spinner";
 import UpArrow from "../../assets/AccordionUp.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import { pickupAddress, deliveryAddress } from "../../utils/dummyData";
-
+import CustomRightModal from "../../components/CustomModal/customRightModal";
 import {
   capitalizeFirstLetter,
   convertNumberToMultipleOfhundred,
@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { PaymentSlice } from "../../redux/reducers/paymentReducer";
 import CustomDropDown from "../../components/DropDown";
 import addCircleIcon from "../../assets/add-circle.svg";
+import AddAddress from "./AddAddress";
 import {
   RETURNING_USER_DELIVERY,
   RETURNING_USER_PICKUP,
@@ -146,6 +147,10 @@ const Errors = (props: ErrorProps) => {
   const [globalIndex, setGlobalIndex]: any = useState(null);
   // const [selectedAddress, setSelectedAddress]: any = useState("");
   const [seletedPickupAddress, setSelectedPickupAddress]: any = useState("");
+  const [addAddressModal, setAddAddressModal] = useState({
+    isOpen: false,
+    addressType: "",
+  });
   const [selectedDeliveryAddress, setSelectedDeliveryAddress]: any =
     useState("");
 
@@ -280,7 +285,10 @@ const Errors = (props: ErrorProps) => {
       });
 
       if (errorName === "Delivery Address") {
-        payLoad = { ...payLoad, deliveryAddressId: selectedDeliveryAddress };
+        payLoad = {
+          ...payLoad,
+          deliveryAddressId: selectedDeliveryAddress,
+        };
       } else if (errorName === "Pickup Address") {
         payLoad = { ...payLoad, pickupAddressId: seletedPickupAddress };
       }
@@ -500,14 +508,14 @@ const Errors = (props: ErrorProps) => {
                 <>
                   {item?.value.length > 0 && (
                     <div
-                      className="flex flex-col mb-5 cursor-pointer mr-3"
+                      className="flex flex-col mb-5  cursor-pointer mr-3 rounded-lg"
                       style={{
                         boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
                       }}
                       key={index}
                     >
                       <div
-                        className={`flex select-none gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
+                        className={`flex select-none items-center gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
                           openIndex === index
                             ? "  rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : " rounded-lg "
@@ -559,26 +567,59 @@ const Errors = (props: ErrorProps) => {
                                   }
                                   options={
                                     item?.errorName === "Pickup Address"
-                                      ? pickupAddressDropDownData
-                                      : deliveryAddressDropDownData
+                                      ? pickupAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
+                                      : deliveryAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
                                   }
                                   placeHolder="Selete Address"
                                   wrapperClass="w-[100%]"
                                 />
                               </div>
-                              <div className="flex justify-center items-center">
+                              <button
+                                className="flex justify-center items-center"
+                                onClick={() =>
+                                  setAddAddressModal({
+                                    isOpen: true,
+                                    addressType: item?.errorName,
+                                  })
+                                }
+                              >
                                 <img src={addCircleIcon} alt="" />
-                              </div>
+                              </button>
                             </div>
                           )}
-                          <span>
+                          <button
+                            className="p-4"
+                            onClick={() => handleItemClick(index)}
+                          >
                             <img
                               className={`${
                                 index !== openIndex && "rotate-180"
                               }`}
                               src={UpArrow}
                             />
-                          </span>
+                          </button>
                         </div>
                       </div>
                       {openIndex === index &&
@@ -610,6 +651,18 @@ const Errors = (props: ErrorProps) => {
           )}
         </div>
       )}
+
+      <CustomRightModal
+        isOpen={addAddressModal?.isOpen}
+        onClose={() => setAddAddressModal({ isOpen: false, addressType: "" })}
+        className="!justify-start "
+      >
+        <AddAddress
+          addressType={addAddressModal?.addressType}
+          setAddAddressModal={setAddAddressModal}
+          returnAddress={returnUserAddress}
+        />
+      </CustomRightModal>
     </div>
   );
 };
