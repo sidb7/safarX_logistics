@@ -195,6 +195,7 @@ const GET_PINCODE_DATA = `${SELLER_BASE_URL}/pincodes/getPincodeDetails`;
 const GET_PLAN_URL = `${SELLER_BASE_URL}/sellerPlans/getSellerPlan`;
 const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`;
 const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
+const GET_PENDING_PLANS = `${SELLER_BASE_URL}/seller/pendingPlans`;
 const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
 
 //Gst Agreement
@@ -499,4 +500,5 @@ export {
   POST_ASSIGN_PLANV3,
   DELETE_INTEGRATED_STORE,
   UPDATE_OTHER_ORDER_DETAILS,
+  GET_PENDING_PLANS,
 };
