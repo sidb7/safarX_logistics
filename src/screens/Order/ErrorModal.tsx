@@ -220,6 +220,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                   onChaneDimensionHandler(e);
                 }
               }}
+              inputError={inputError}
             />
             <InputBox
               label="Volumetric Weight"
@@ -227,6 +228,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               name="volumetricWeight"
               inputType="number"
               isDisabled={true}
+              inputError={inputError}
             />
           </div>
           <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
@@ -245,6 +247,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     onChaneDimensionHandler(e);
                   }
                 }}
+                inputError={inputError}
               />
               <InputBox
                 label="B"
@@ -257,6 +260,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     onChaneDimensionHandler(e);
                   }
                 }}
+                inputError={inputError}
               />
               <InputBox
                 label="H"
@@ -269,6 +273,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     onChaneDimensionHandler(e);
                   }
                 }}
+                inputError={inputError}
               />
             </div>
           </div>
@@ -388,7 +393,6 @@ const ErrorModal = (props: ErrorModalProps) => {
   // };
 
   const updateProducts = async (isProcessOrder?: any) => {
-    // if (isProcess) {
     !isProcessOrder && setUpdateButtonLoader(true);
     let payLoad = {
       boxDetails: [productAndBoxDetails],
@@ -412,7 +416,6 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
       return true;
     }
-    // }
   };
 
   const handleService = (index: any) => {
@@ -1261,21 +1264,20 @@ const ErrorModal = (props: ErrorModalProps) => {
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
         const dimensions = ["length", "breadth", "height", "deadWeight"];
-
         for (const dimension of dimensions) {
           if (
             !productAndBoxDetails?.[dimension] ||
             productAndBoxDetails?.[dimension] == 0
           ) {
-            for (let i = 0; i < productAndBoxDetails?.products?.length; i++) {
-              if (
-                productAndBoxDetails?.products[i]?.dimension ||
-                productAndBoxDetails?.products[i]?.dimension == 0
-              ) {
-                return false;
-              }
-            }
             return false;
+          }
+
+          for (let i = 0; i < productAndBoxDetails.products.length; i++) {
+            const productDimension =
+              productAndBoxDetails.products[i][dimension];
+            if (!productDimension || productDimension == 0) {
+              return false;
+            }
           }
         }
         return true;
@@ -1517,7 +1519,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className={`flex w-[50%] items-center justify-center border-2 rounded-md bg-black text-white
+            className={`flex w-[50%] items-center justify-center border-2 rounded-md  text-white
           ${switchForValidation() ? "bg-black cursor-pointer" : "bg-[#D2D2D2]"}
             py-2`}
             onClick={() => {
@@ -1535,7 +1537,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         ) : (
           <div
-            className={`flex w-[50%] items-center justify-center border-2 rounded-md bg-black  text-white 
+            className={`flex w-[50%] items-center justify-center border-2 rounded-md  text-white 
             ${
               switchForValidation() ? "bg-black cursor-pointer" : "bg-[#D2D2D2]"
             }
