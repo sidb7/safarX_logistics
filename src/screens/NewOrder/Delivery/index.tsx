@@ -51,7 +51,7 @@ import {
   VERIFY_ADDRESS,
   GET_LATEST_ORDER,
 } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";

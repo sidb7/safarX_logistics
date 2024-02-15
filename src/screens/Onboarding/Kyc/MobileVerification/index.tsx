@@ -15,7 +15,7 @@ import {
   POST_VERIFY_AADHAR_URL,
   POST_VERIFY_GST_URL,
 } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 
@@ -43,7 +43,7 @@ const Index = (props: ITypeProps) => {
   const [heading, setHeading] = useState("");
 
   const isLgScreen = useMediaQuery({ query: "(min-width: 1024px)" });
-  const {  isMdScreen } = ResponsiveState();
+  const { isMdScreen } = ResponsiveState();
 
   useEffect(() => {
     if (
@@ -273,93 +273,94 @@ const Index = (props: ITypeProps) => {
 
   const mobileVerificationComponent = () => {
     return (
-      <div 
-      className={`${
-        isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
-      }flex flex-col relative md:px-0 md:gap-y-0`}>
+      <div
+        className={`${
+          isMdScreen ? " m-auto  !w-[500px] " : "w-full !h-full"
+        }flex flex-col relative md:px-0 md:gap-y-0`}
+      >
         <div className={`${isMdScreen ? "custom_shadow" : ""}`}>
-      <div className=" md:px-0 ">
-        <div className="product-box flex  items-center w-full h-[60px] mb-6 ">
-          <img
-            className="my-auto ml-6  h-[25px] object-contain"
-            src={CompanyLogo}
-            alt=""
-          />
-        </div>
-        {heading === "Aadhaar Verification" ? (
-          <p className="flex justify-center">
-            Aadhaar OTP will be valid for 10 Minutes
-          </p>
-        ) : (
-          <p className="flex justify-center">
-            GST OTP will be valid for 10 Minutes
-          </p>
-        )}
-        <WelcomeHeader className="!mt-3" title={heading} content="" />
-
-        <form onSubmit={onVerifyOtp}>
-          <div className="px-5 md:mb-6">
-            <div className="flex flex-col md:items-center ">
+          <div className=" md:px-0 ">
+            <div className="product-box flex  items-center w-full h-[60px] mb-6 ">
               <img
-                src={MobileVerificationIcon}
+                className="my-auto ml-6  h-[25px] object-contain"
+                src={CompanyLogo}
                 alt=""
-                width={180}
-                height={180}
-                className="mb-8 self-center"
               />
-              <div className="!w-full mb-2 md:mb-2">
-                <CustomInputBox
-                  label="Enter OTP"
-                  inputType="text"
-                  inputMode="numeric"
-                  containerStyle="md:!w-auto self-center"
-                  className=" md:!w-[320px] !font-Open "
-                  labelClassName="!font-Open"
-                  maxLength={businessType === "company" ? 4 : 6}
-                  value={otpNumber || ""}
-                  onChange={(e: any) => {
-                    if (isNaN(e.target.value)) {
-                    } else {
-                      setOTPNumber(+e.target.value);
-                    }
-                  }}
+            </div>
+            {heading === "Aadhaar Verification" ? (
+              <p className="flex justify-center">
+                Aadhaar OTP will be valid for 10 Minutes
+              </p>
+            ) : (
+              <p className="flex justify-center">
+                GST OTP will be valid for 10 Minutes
+              </p>
+            )}
+            <WelcomeHeader className="!mt-3" title={heading} content="" />
+
+            <form onSubmit={onVerifyOtp}>
+              <div className="px-5 md:mb-6">
+                <div className="flex flex-col md:items-center ">
+                  <img
+                    src={MobileVerificationIcon}
+                    alt=""
+                    width={180}
+                    height={180}
+                    className="mb-8 self-center"
+                  />
+                  <div className="!w-full mb-2 md:mb-2">
+                    <CustomInputBox
+                      label="Enter OTP"
+                      inputType="text"
+                      inputMode="numeric"
+                      containerStyle="md:!w-auto self-center"
+                      className=" md:!w-[320px] !font-Open "
+                      labelClassName="!font-Open"
+                      maxLength={businessType === "company" ? 4 : 6}
+                      value={otpNumber || ""}
+                      onChange={(e: any) => {
+                        if (isNaN(e.target.value)) {
+                        } else {
+                          setOTPNumber(+e.target.value);
+                        }
+                      }}
+                    />
+                  </div>
+                  <p className="font-semibold font-Open text-[12px] text-[#494949] mb-4 self-center">
+                    {resendOtpTimer()}
+                  </p>
+
+                  <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 md:mb-0 self-center">
+                    <p className="text-[#494949] font-Open font-normal text-xs leading-4">
+                      Didn't Receive Code ?
+                      <span
+                        className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
+                          seconds > 0 || (seconds > 0 && minutes === 0)
+                            ? "text-[#494949]"
+                            : "cursor-pointer"
+                        }`}
+                        onClick={() => {
+                          if (seconds === 0 && minutes === 0) {
+                            resendOtp();
+                          }
+                        }}
+                      >
+                        Resend
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col md:justify-center px-4 md:items-center"></div>
+              <div className="flex flex-col md:justify-center px-4 md:items-center">
+                <ServiceButton
+                  text="SUBMIT"
+                  className="bg-[#1C1C1C] !h-[36px] !font-Open text-white md:!w-[320px] mb-5"
+                  btnType="submit"
                 />
               </div>
-              <p className="font-semibold font-Open text-[12px] text-[#494949] mb-4 self-center">
-                {resendOtpTimer()}
-              </p>
-
-              <div className="flex items-center gap-x-2 font-normal text-[12px] mb-6 md:mb-0 self-center">
-                <p className="text-[#494949] font-Open font-normal text-xs leading-4">
-                  Didn't Receive Code ?
-                  <span
-                    className={`mx-1 font-normal text-[#004EFF] text-[12px]  ${
-                      seconds > 0 || (seconds > 0 && minutes === 0)
-                        ? "text-[#494949]"
-                        : "cursor-pointer"
-                    }`}
-                    onClick={() => {
-                      if (seconds === 0 && minutes === 0) {
-                        resendOtp();
-                      }
-                    }}
-                  >
-                    Resend
-                  </span>
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col md:justify-center px-4 md:items-center"></div>
-          <div className="flex flex-col md:justify-center px-4 md:items-center">
-            <ServiceButton
-              text="SUBMIT"
-              className="bg-[#1C1C1C] !h-[36px] !font-Open text-white md:!w-[320px] mb-5"
-              btnType="submit"
-            />
-          </div>
-        </form>
-        {/* <div className="flex flex-col lg:justify-center px-4 lg:items-center">
+            </form>
+            {/* <div className="flex flex-col lg:justify-center px-4 lg:items-center">
           <ServiceButton
             text="BACK"
             className="!bg-[#E8E8E8] !text-black !h-[36px] !font-Open  lg:!w-[320px] mb-5"
@@ -374,8 +375,8 @@ const Index = (props: ITypeProps) => {
             }
           />
         </div> */}
-      </div>
-      </div>
+          </div>
+        </div>
       </div>
     );
   };
@@ -383,19 +384,17 @@ const Index = (props: ITypeProps) => {
   const renderMobileVerificationComponent = () => {
     if (isMdScreen) {
       return (
-        
-          <>
+        <>
           {loading ? (
             <div className="flex justify-center items-center h-full">
               <Spinner />
             </div>
           ) : (
             <div className="flex justify-center items-center h-screen">
-                {mobileVerificationComponent()}
+              {mobileVerificationComponent()}
             </div>
           )}
-          </>
-        
+        </>
       );
     } else {
       return loading ? (

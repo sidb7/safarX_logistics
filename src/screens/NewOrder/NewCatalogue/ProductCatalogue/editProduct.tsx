@@ -5,7 +5,7 @@ import "../../../../styles/productStyle.css";
 import { POST } from "../../../../utils/webService";
 import { FILE_UPLOAD, POST_UPDATE_PRODUCT } from "../../../../utils/ApiUrls";
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CustomInputBox from "../../../../components/Input";
 import CustomRightModal from "../../../../components/CustomModal/customRightModal";
 import ServiceButton from "../../../../components/Button/ServiceButton";

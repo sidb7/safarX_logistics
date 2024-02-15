@@ -7,7 +7,7 @@ import { ProfileReferEarn } from "./ReferEarn/referEarn";
 import { ProfileSetting } from "./Settings/setting";
 import { POST } from "../../utils/webService";
 import { GET_PROFILE_URL, LOGO_AND_BRAND } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 import ProfileBrandingDetails from "./BrandingDetails";

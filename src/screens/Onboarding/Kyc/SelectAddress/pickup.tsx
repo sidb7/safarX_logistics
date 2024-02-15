@@ -12,7 +12,7 @@ import {
   GET_DEFAULT_ADDRESS,
   POST_UPDATE_DEFAULT_ADDRESS,
 } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 // import AddButton from "../../../../components/Button/addButton";
@@ -88,7 +88,7 @@ const PickUp = (props: ITypeProps) => {
   const addAddress = () => {
     for (let i = 0; i < defaultAddress.length; i++) {
       if (defaultAddress[i].fullAddress?.length === 1) {
-        toast.warning("Previous Address Field Is Empty...");
+        toast.error("Previous Address Field Is Empty...");
         return;
       }
     }

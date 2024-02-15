@@ -23,7 +23,7 @@ import {
   ADD_COMBO_PRODUCT_URL,
   GET_PRODUCT_URL,
 } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import CustomInputBox from "../../../../components/Input";
 

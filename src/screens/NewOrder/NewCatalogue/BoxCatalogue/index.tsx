@@ -9,7 +9,7 @@ import PackageBox from "../../Product/PackageBox";
 import { POST } from "../../../../utils/webService";
 import CustomRightModal from "../../../../components/CustomModal/customRightModal";
 import { DELETE_SELLER_BOX } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   GET_SELLER_BOX_DETAILS,
   GET_COMPANY_BOX_DETAILS,

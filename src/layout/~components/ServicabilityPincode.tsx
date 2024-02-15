@@ -5,7 +5,7 @@ import CustomInputBox from "../../components/Input";
 import { POST } from "../../utils/webService";
 import { GET_SERVICABLE_PINCODE } from "../../utils/ApiUrls";
 import "../../styles/scrollablePincodeServiceTale.css";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";

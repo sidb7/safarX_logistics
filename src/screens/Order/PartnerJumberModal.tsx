@@ -9,7 +9,7 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 import { useEffect, useState } from "react";
 import CustomDropDown from "../../components/DropDown";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   GET_SELLER_ORDER_COMPLETE_DATA,
   POST_PLACE_ALL_ORDERS,

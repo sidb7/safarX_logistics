@@ -9,7 +9,7 @@ import UpArrowIcon from "../../assets/Filter/upArrow.svg";
 import DownArrowIcon from "../../assets/Filter/downArrow.svg";
 import RateCardTable from "./rateCardTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../components/Spinner";
 interface ICourierPricingPropTypes {
   planId?: any;

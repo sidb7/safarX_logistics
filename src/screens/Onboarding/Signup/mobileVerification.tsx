@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { constructNavigationObject } from "../../../utils/utility";
 

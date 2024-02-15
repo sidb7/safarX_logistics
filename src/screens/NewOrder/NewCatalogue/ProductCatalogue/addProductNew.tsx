@@ -17,7 +17,7 @@ import {
 } from "../../../../utils/validationRules";
 import { CREATE_BULK_PRODUCT } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useMediaQuery } from "react-responsive";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";

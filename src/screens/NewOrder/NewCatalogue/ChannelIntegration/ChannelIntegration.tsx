@@ -16,7 +16,7 @@ import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface IChannelIntegrationProps {
   setChannelData: any;

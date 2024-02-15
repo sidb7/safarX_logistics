@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
 import { POST_BUSINESS_TYPE_URL } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { Spinner } from "../../../../components/Spinner";
 

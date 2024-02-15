@@ -7,7 +7,7 @@ import { useState } from "react";
 import { POST_ADD_BANK_DETAILS } from "../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import NavBar from "../../../layout/Old_NavBar";
 import { Spinner } from "../../../components/Spinner";

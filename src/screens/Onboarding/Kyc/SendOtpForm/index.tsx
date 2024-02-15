@@ -17,7 +17,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { aadharRegex, panRegex, gstRegex } from "../../../../utils/regexCheck";
 import { setOnOtpClientId } from "../../../../redux/reducers/onboarding";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import ErrorIcon from "../../../../assets/common/info-circle.svg";
 import { Spinner } from "../../../../components/Spinner";
 import TimerCounter from "../../../../components/TimerCountdown";

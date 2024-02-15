@@ -6,7 +6,7 @@ import CustomButton from "../../../../components/Button";
 import { SearchBox } from "../../../../components/SearchBox";
 import { createColumnHelper } from "@tanstack/react-table";
 import EyeIcon from "../../../../assets/Login/eye.svg";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import DeleteConfirmModale from "./deleteConfirmatiomModal";

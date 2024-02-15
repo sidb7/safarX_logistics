@@ -1,6 +1,6 @@
 import React, { useState, useEffect, SetStateAction } from "react";
 
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import WeightFreezeBanner from "./WeightFreezeBanner";
 import BottomLayout from "../../components/Layout/bottomLayout";

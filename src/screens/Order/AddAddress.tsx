@@ -15,7 +15,7 @@ import {
   VERIFY_ADDRESS,
 } from "../../utils/ApiUrls";
 import { dummyStateDropdownData } from "../../utils/dummyData";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
   const [magicAddress, setMagicAddress]: any = useState("");

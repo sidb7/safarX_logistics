@@ -10,7 +10,6 @@ import Sidebar from "./hoverSideBar";
 import { useOutsideTriggered } from "../hooks";
 import { useNavigate } from "react-router-dom";
 import { GetCurrentPath, clearLocalStorage } from "../utils/utility";
-import { ToastContainer } from "react-toastify";
 
 interface IpropTypes {
   menuData?: any;
@@ -141,8 +140,6 @@ const NavBar = (props: IpropTypes) => {
       </nav>
 
       <div className={open ? "min-w-[100px] min-h-screen" : "hidden"}>
-        <ToastContainer />
-
         <div
           // onClick={() => setOpen(false)}
           className={`hidden fixed inset-0 max-h-screen z-[998] ${
