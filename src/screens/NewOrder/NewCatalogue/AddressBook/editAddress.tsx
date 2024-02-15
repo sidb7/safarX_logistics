@@ -94,9 +94,17 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   let payload: any;
 
   if (activeTab === "pickup") {
-    payload = { ...updateAddress, pickupAddressId };
+    payload = {
+      ...updateAddress,
+      pickupAddressId,
+      fullAddress: `${updateAddress.flatNo} ${updateAddress.sector} ${updateAddress.landmark} ${updateAddress.locality} ${updateAddress.city} ${updateAddress.pincode} ${updateAddress.state} ${updateAddress.country} `,
+    };
   } else {
-    payload = { ...updateAddress, deliveryAddressId };
+    payload = {
+      ...updateAddress,
+      deliveryAddressId,
+      fullAddress: `${updateAddress.flatNo} ${updateAddress.sector} ${updateAddress.landmark} ${updateAddress.locality} ${updateAddress.city} ${updateAddress.pincode} ${updateAddress.state} ${updateAddress.country} `,
+    };
   }
 
   const [isDisabled, setIsDisabled] = useState(false);
