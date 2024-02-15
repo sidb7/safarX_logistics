@@ -4,6 +4,8 @@ import CustomeBottomModal from "./customBottomModal";
 import { POST } from "../../utils/webService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Spinner } from "../Spinner";
 
 interface IDeleteProps {
   isOpen: boolean;
@@ -27,15 +29,21 @@ const DeleteModal = (props: IDeleteProps) => {
     reloadData,
   } = props;
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const deleteApi = async () => {
+    setIsLoading(true);
     const { data } = await POST(deleteURL, { awbs: payloadBody });
     if (data?.success) {
       setIsDeleted(true);
       toast.success(data?.message);
+      reloadData(8);
+      setIsLoading(false);
       navigate(`/orders/view-orders?activeTab=cancelled`);
     } else {
+      setIsLoading(false);
       toast.error(data?.message);
     }
     setModalClose();
@@ -67,13 +75,19 @@ const DeleteModal = (props: IDeleteProps) => {
             >
               No
             </button>
-            <button
-              type="submit"
-              className=" bg-[#1C1C1C] text-white px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg"
-              onClick={() => deleteApi()}
-            >
-              Yes
-            </button>
+            {isLoading ? (
+              <div className="flex justify-center items-center border px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg">
+                <Spinner />
+              </div>
+            ) : (
+              <button
+                type="submit"
+                className="bg-[#1C1C1C] text-white px-5 py-[10px] text-sm font-semibold rounded shadow-md hover:shadow-lg"
+                onClick={() => deleteApi()}
+              >
+                Yes
+              </button>
+            )}
           </div>
         </div>
       </CustomeBottomModal>

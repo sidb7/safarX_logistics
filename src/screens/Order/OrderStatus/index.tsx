@@ -415,9 +415,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 isLoading: false,
                 identifier: "",
               });
+
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
+              handleTabChange(1);
+              navigate(`/orders/view-orders?activeTab=booked`);
             } else {
               setIsLoadingManifest({
                 isLoading: false,
