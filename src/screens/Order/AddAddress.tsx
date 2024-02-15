@@ -202,14 +202,14 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
     }));
 
     if (
-      addAddress?.flatNo === "" ||
-      addAddress?.landmark === "" ||
-      addAddress?.city === "" ||
-      addAddress?.state === "" ||
-      addAddress?.country === "" ||
-      addAddress?.contactcontact?.contactName === "" ||
-      addAddress?.mobileNo === "" ||
-      addAddress?.pincode === ""
+      addAddress?.flatNo.trim() === "" ||
+      addAddress?.landmark.trim() === "" ||
+      addAddress?.city.trim() === "" ||
+      addAddress?.state.trim() === "" ||
+      addAddress?.country.trim() === "" ||
+      addAddress?.contactcontact?.contactName.trim() === "" ||
+      addAddress?.mobileNo.trim() === "" ||
+      addAddress?.pincode.trim() === ""
     ) {
       setInputError(true);
       return;
@@ -257,6 +257,21 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
       }
     }
   };
+
+  useEffect(() => {
+    if (
+      addAddress?.flatNo.trim() === "" ||
+      addAddress?.landmark.trim() === "" ||
+      addAddress?.city.trim() === "" ||
+      addAddress?.state.trim() === "" ||
+      addAddress?.country.trim() === "" ||
+      addAddress?.contactcontact?.contactName.trim() === "" ||
+      addAddress?.mobileNo.trim() === "" ||
+      addAddress?.pincode.trim() === ""
+    ) {
+      setInputError(true);
+    }
+  }, [addAddress]);
 
   return (
     <div className=" my-6">

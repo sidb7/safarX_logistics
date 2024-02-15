@@ -5,6 +5,7 @@ import DeleteGif from "../../assets/common/DeleteGif.gif";
 import { useState } from "react";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
+import { Spinner } from "../Spinner";
 interface IDeleteModal {
   url: string;
   postData: any;
@@ -54,15 +55,21 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
             <div className="flex justify-center space-x-6">
               <CustomButton
                 className="bg-white px-2 !w-min !text-black !border-[1px] !border-[#A4A4A4]"
-                text="Yes"
-                onClick={() => deleteApi()}
-                loading={loading}
-              />
-              <CustomButton
-                className="px-2 !w-min"
                 text="Cancel"
                 onClick={() => closeModal()}
               />
+              {loading ? (
+                <div className=" px-4 !w-min !border-[1px] !border-[#A4A4A4] rounded shadow-md hover:shadow-lg">
+                  <Spinner />
+                </div>
+              ) : (
+                <CustomButton
+                  className="bg-[#000000] px-4 !w-min !text-[#FFFFFF] !border-[1px] !border-[#A4A4A4]"
+                  text="Yes"
+                  onClick={() => deleteApi()}
+                  loading={loading}
+                />
+              )}
             </div>
           </div>
         }
