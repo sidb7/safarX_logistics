@@ -27,7 +27,7 @@ import { useSelector } from "react-redux";
 import AccessDenied from "../../../components/AccessDenied";
 import alertInfoIcon from "../../../assets/info-circle-outline.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Tooltip } from "../../../components/Tooltip/Tooltip";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
 
@@ -123,7 +123,7 @@ const Tracking = () => {
     let urlWithTrackingNo = "";
 
     if (!trackingNoFromUrl && !trackingNo) {
-      return toast.warning("Please Enter Tracking Number");
+      return toast.error("Please Enter Tracking Number");
     }
 
     try {

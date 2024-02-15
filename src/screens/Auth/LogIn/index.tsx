@@ -17,7 +17,7 @@ import {
   VALIDATE_USER_TOKEN,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { signInUser } from "../../../redux/reducers/signInReducer";
 import InfoCircle from "../../../assets/info-circle.svg";

@@ -5,7 +5,7 @@ import { POST } from "../../../utils/webService";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import ProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 
 export const EditProfile = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { POST } from "../../../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { v4 as uuidv4 } from "uuid";
 import whiteDownloadIcon from "../../../../../assets/whiteDownloadIcon.svg";
 import { Breadcrum } from "../../../../../components/Layout/breadcrum";

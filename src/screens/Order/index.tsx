@@ -32,7 +32,7 @@ import {
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import CenterModal from "../../components/CustomModal/customCenterModal";
@@ -376,8 +376,15 @@ const Index = () => {
 
       const { data } = await POST(POST_SYNC_ORDER);
       if (data?.success) {
-        toast.success(data?.message || "Sync Successful");
-        window.location.reload();
+        toast.success("Sync In Progress", {
+          className: "custom-toast-success",
+        });
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 5000);
       } else {
         toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");

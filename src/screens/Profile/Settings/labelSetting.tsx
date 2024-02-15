@@ -10,7 +10,7 @@ import {
 } from "../../../utils/ApiUrls";
 import { GET, POST } from "../../../utils/webService";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface ILabelProps {}
 

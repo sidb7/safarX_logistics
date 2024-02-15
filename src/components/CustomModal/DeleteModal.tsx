@@ -2,7 +2,7 @@ import DeleteGif from "../../assets/common/DeleteGif.gif";
 import CloseIcon from "../../assets/CloseIcon.svg";
 import CustomeBottomModal from "./customBottomModal";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface IDeleteProps {

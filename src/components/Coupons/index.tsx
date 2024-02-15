@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 // import { POST } from "../../utils/webService";
 // import { GET_PROFILE_URL } from "../../utils/ApiUrls";
 // import { Spinner } from "../../components/Spinner";
-// import { toast } from "react-toastify";
+// import { toast } from "react-hot-toast";
 
 interface IIndexProps {}
 

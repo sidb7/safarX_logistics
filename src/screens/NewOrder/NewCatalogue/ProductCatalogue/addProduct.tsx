@@ -23,7 +23,7 @@ import {
   POST_PRODUCT_URL,
 } from "../../../../utils/ApiUrls";
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Breadcrum } from "../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../components/Input";
@@ -500,7 +500,7 @@ export default AddProduct;
 // // import AddOrder from "../../../../assets/Catalogue/add_order.svg";
 // import { POST } from "../../../../utils/webService";
 // import { POST_ADD_PRODUCT } from "../../../../utils/ApiUrls";
-// import { toast } from "react-toastify";
+// import { toast } from "react-hot-toast";
 // import { useNavigate } from "react-router-dom";
 // import { v4 as uuidv4 } from "uuid";
 

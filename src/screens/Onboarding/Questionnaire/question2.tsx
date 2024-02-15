@@ -7,7 +7,7 @@ import Onboarding from "../../../assets/AccountQuestions/Onboarding.gif";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { constructNavigationObject } from "../../../utils/utility";
 

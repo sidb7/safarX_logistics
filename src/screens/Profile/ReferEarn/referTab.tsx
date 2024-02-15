@@ -7,7 +7,7 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL } from "../../../utils/ApiUrls";
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 export const ReferTab = () => {
   const [profileData, setProfileData]: any = useState([]);
   useEffect(() => {

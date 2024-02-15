@@ -2,7 +2,7 @@ import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import CustomInputBox from "../../../../components/Input";
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import { FILE_UPLOAD } from "../../../../utils/ApiUrls";
 import { v4 as uuidv4 } from "uuid";

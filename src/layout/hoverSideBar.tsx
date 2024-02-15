@@ -6,7 +6,6 @@ import ShipyaariLogo from "../assets/webshipyaarilogo.svg";
 import CompanyLogo from "../assets/ShipyaariLogos.svg";
 
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import { GetCurrentPath } from "../utils/utility";
 import { useOutsideTriggered } from "../hooks";
 
@@ -62,8 +61,6 @@ const Sidebar = (props: IpropTypes) => {
 
   return (
     <div className=" min-h-screen">
-      <ToastContainer />
-
       <div
         onClick={() => setOpen(false)}
         className={`md:hidden fixed inset-0 max-h-screen z-[998] bg-black/50 ${

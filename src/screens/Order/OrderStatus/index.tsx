@@ -19,7 +19,7 @@ import {
   POST_PLACE_ALL_ORDERS,
 } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CustomDropDown from "../../../components/DropDown";
 import DatePicker from "react-datepicker";
 import CenterModal from "../../../components/CustomModal/customCenterModal";

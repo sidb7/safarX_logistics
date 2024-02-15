@@ -22,7 +22,7 @@ import AddBulkIcon from "../../assets/quickAction/addBulk.svg";
 import PinCodeIcon from "../../assets/quickAction/pin.svg";
 import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
 import ServiceabilityIcon from "../../assets/Serviceability.svg";

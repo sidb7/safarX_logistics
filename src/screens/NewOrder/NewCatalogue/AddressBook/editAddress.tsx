@@ -10,7 +10,7 @@ import {
   GET_PINCODE_DATA,
 } from "../../../../utils/ApiUrls";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import CustomDropDown from "../../../../components/DropDown";
 import { emptyOrFullTextRegex } from "../../../../utils/regexCheck";

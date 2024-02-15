@@ -33,7 +33,7 @@ import CustomButton from "../../components/Button";
 import CrossIcon from "../../assets/CloseIcon.svg";
 import CenterModal from "../../components/CustomModal/customCenterModal";
 import { capitalizeFirstLetter } from "../../utils/utility";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CodPricing from "./CodPricing";
 
 interface ITypeProps {}

@@ -8,7 +8,7 @@ import { POST } from "../../../utils/webService";
 import { GET_REPORTS } from "../../../utils/ApiUrls";
 import AccessDenied from "../../../components/AccessDenied";
 import { checkPageAuthorized } from "../../../redux/reducers/role";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { convertXMLToXLSX } from "../../../utils/helper";
 import { capitalizeFirstLetter } from "../../../utils/utility";
 

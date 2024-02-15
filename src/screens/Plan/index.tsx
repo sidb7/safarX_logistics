@@ -8,7 +8,7 @@ import {
   POST_CREATE_PLAN,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import ComparePlans from "./comparePlans";
