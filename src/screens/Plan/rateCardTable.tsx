@@ -187,7 +187,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
                 data?.hasOwnProperty("transit") &&
@@ -220,7 +220,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
                 data?.hasOwnProperty("transit") &&
@@ -292,7 +292,7 @@ const RateCardTable = (props: any) => {
               ) {
                 return (
                   <div className="leading-10">
-                    <div className="flex gap-2 pr-5">
+                    <div className="flex gap-2 pr-5 justify-center text-center itmes-center">
                       <div>
                         <input
                           className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 ${tempOriginal?.partnerServiceId}_editSingleRow`}
@@ -313,7 +313,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -322,7 +322,7 @@ const RateCardTable = (props: any) => {
               ) {
                 return (
                   <div className="leading-10">
-                    <div className="flex gap-2 pr-5">
+                    <div className="flex gap-2 pr-5 justify-center text-center itmes-center">
                       <div>
                         <input
                           className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 ${tempOriginal?.partnerServiceId}_editSingleRow`}
@@ -343,7 +343,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -352,7 +352,7 @@ const RateCardTable = (props: any) => {
               ) {
                 return (
                   <div className="leading-10">
-                    <div className="flex gap-2 pr-5">
+                    <div className="flex gap-2 pr-5 justify-center items-center itmes-center">
                       <div>
                         <input
                           className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 ${tempOriginal?.partnerServiceId}_editSingleRow`}
@@ -421,6 +421,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -436,6 +437,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -444,7 +446,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
                 data?.hasOwnProperty("transit") &&
@@ -461,6 +463,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -476,6 +479,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -484,7 +488,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
                 data?.hasOwnProperty("transit") &&
@@ -501,6 +505,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -516,6 +521,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -572,6 +578,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -587,6 +594,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -595,7 +603,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -613,6 +621,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -628,6 +637,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -636,7 +646,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -654,6 +664,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -669,6 +680,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -725,6 +737,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -740,6 +753,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -748,7 +762,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -766,6 +780,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -781,6 +796,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -789,7 +805,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -807,6 +823,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -822,6 +839,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -878,6 +896,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -893,6 +912,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -901,7 +921,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -919,6 +939,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -934,6 +955,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -942,7 +964,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -960,6 +982,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -975,6 +998,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -1031,6 +1055,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -1046,6 +1071,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -1054,7 +1080,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length > 1 && <hr className="h-[20px]" />}
+            {uniqueValue?.length > 1 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -1072,6 +1098,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -1087,6 +1114,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
@@ -1095,7 +1123,7 @@ const RateCardTable = (props: any) => {
                 );
               }
             })}
-            {uniqueValue?.length >= 3 && <hr className="h-[20px]" />}
+            {uniqueValue?.length >= 3 && <hr className="h-[12px] mt-2" />}
 
             {tempOriginal?.weightSlab?.map((data: any, index: number) => {
               if (
@@ -1113,6 +1141,7 @@ const RateCardTable = (props: any) => {
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
                           style={{ background: "#F3F3F3" }}
+                          readOnly
                         />
                       </div>
                       <div>
@@ -1128,6 +1157,7 @@ const RateCardTable = (props: any) => {
                             // color: "#004EFF",
                             background: "#F3F3F3",
                           }}
+                          readOnly
                         />
                       </div>
                       <img src={UpArrowIcon} alt="" />
