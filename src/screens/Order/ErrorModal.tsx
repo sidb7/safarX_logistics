@@ -57,12 +57,9 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [processOrderLoader, setProcessOrderLoader] = useState(false);
   const [serviceDropDownLoader, setServiceDropDownLoader] = useState(false);
   const [inputError, setInputError] = useState(false);
-  // -------------------------------------------------
   const [isProcess, setIsProcess] = useState(false);
   const [showAlertMessage, setAlertMessage] = useState(false);
   const [isProcessOrderCall, setIsProcessOrderCall] = useState();
-
-  // -------------------------------------------------
 
   const [otherErrorDetails, setOtherErrorDetails]: any = useState({
     tempOrderId: 0,
@@ -469,18 +466,18 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
 
       if (
-        addressData[targetAddress]?.flatNo === "" ||
-        addressData[targetAddress]?.country === "" ||
-        addressData[targetAddress]?.state === "" ||
-        addressData[targetAddress]?.city === "" ||
-        addressData[targetAddress]?.locality === "" ||
-        addressData[targetAddress]?.contact?.emailId === "" ||
-        addressData[targetAddress]?.contact?.mobileNo === "" ||
-        addressData[targetAddress]?.contact?.type === "" ||
-        addressData[targetAddress]?.contact?.name === "" ||
-        addressData[targetAddress]?.pincode === "" ||
-        addressData[targetAddress]?.pincode === 0 ||
-        addressData[targetAddress]?.landmark === ""
+        addressData[targetAddress]?.flatNo.trim() === "" ||
+        addressData[targetAddress]?.country.trim() === "" ||
+        addressData[targetAddress]?.state.trim() === "" ||
+        addressData[targetAddress]?.city.trim() === "" ||
+        addressData[targetAddress]?.locality.trim() === "" ||
+        addressData[targetAddress]?.contact?.emailId.trim() === "" ||
+        addressData[targetAddress]?.contact?.mobileNo.trim() === "" ||
+        addressData[targetAddress]?.contact?.type.trim() === "" ||
+        addressData[targetAddress]?.contact?.name.trim() === "" ||
+        addressData[targetAddress]?.pincode.trim() === "" ||
+        addressData[targetAddress]?.pincode.trim() === 0 ||
+        addressData[targetAddress]?.landmark.trim() === ""
       ) {
         setInputError(true);
         return;
@@ -493,7 +490,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           ...addressData[targetAddress],
           pincode: +addressData[targetAddress]?.pincode,
 
-          fullAddress: `${addressData[targetAddress]?.contact?.name} ${addressData[targetAddress]?.landmark} ${addressData[targetAddress]?.locality} ${addressData[targetAddress]?.city} ${addressData[targetAddress]?.state} ${addressData[targetAddress]?.country} ${addressData[targetAddress]?.pincode}`,
+          fullAddress: `${addressData[targetAddress]?.flatNo}  ${addressData[targetAddress]?.landmark} ${addressData[targetAddress]?.locality} ${addressData[targetAddress]?.city} ${addressData[targetAddress]?.state} ${addressData[targetAddress]?.country} ${addressData[targetAddress]?.pincode}`,
         },
         tempOrderDetails: [
           {
@@ -983,29 +980,31 @@ const ErrorModal = (props: ErrorModalProps) => {
                       </div>
 
                       <div className="flex mt-[1rem] gap-[1rem]">
-                        <CustomDropDown
-                          value={
-                            businessTypeDropDown
-                              .map((valueObj: any) => valueObj?.value)
-                              .includes(
-                                capitalizeFirstLetter(
-                                  addressData?.[targetAddress]?.contact?.type
+                        <div className="w-[100%]">
+                          <CustomDropDown
+                            value={
+                              businessTypeDropDown
+                                .map((valueObj: any) => valueObj?.value)
+                                .includes(
+                                  capitalizeFirstLetter(
+                                    addressData?.[targetAddress]?.contact?.type
+                                  )
                                 )
-                              )
-                              ? capitalizeFirstLetter(
-                                  addressData?.[targetAddress]?.contact?.type
-                                )
-                              : "Others"
-                          }
-                          name="type"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e, "contact")
-                          }
-                          options={businessTypeDropDown}
-                          placeHolder="Select Business Type"
-                          wrapperClass="w-[100%]"
-                          inputError={inputError}
-                        />
+                                ? capitalizeFirstLetter(
+                                    addressData?.[targetAddress]?.contact?.type
+                                  )
+                                : "Others"
+                            }
+                            name="type"
+                            onChange={(e: any) =>
+                              handleInputChange(targetAddress, e, "contact")
+                            }
+                            options={businessTypeDropDown}
+                            placeHolder="Select Business Type"
+                            wrapperClass="w-[100%]"
+                            inputError={inputError}
+                          />
+                        </div>
 
                         <div className="w-[100%]">
                           <InputBox
@@ -1282,6 +1281,9 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         return true;
       }
+      // case orderErrorCategoryENUMs["Delivery Address"]:
+      // case orderErrorCategoryENUMs["Pickup Address"]: {
+      // }
       case orderErrorCategoryENUMs["Service"]: {
         if (services.length === 0) {
           return false;
@@ -1313,10 +1315,6 @@ const ErrorModal = (props: ErrorModalProps) => {
         return true;
     }
   };
-
-  // const UpdateProductHandler = () =>{
-
-  // }
 
   const switchForUpdateActions = async (isProcessOrder?: any) => {
     let result: any = false;
@@ -1464,6 +1462,37 @@ const ErrorModal = (props: ErrorModalProps) => {
   }, [addressData]);
 
   useEffect(() => {
+    if (
+      errorModalData.error === "Delivery Address" ||
+      errorModalData.error === "Pickup Address"
+    ) {
+      let targetAddress = "";
+      if (errorModalData.error === "Delivery Address") {
+        targetAddress = "deliveryAddress";
+      } else if (errorModalData.error === "Pickup Address") {
+        targetAddress = "pickupAddress";
+      }
+
+      if (
+        addressData[targetAddress]?.flatNo.trim() === "" ||
+        addressData[targetAddress]?.country.trim() === "" ||
+        addressData[targetAddress]?.state.trim() === "" ||
+        addressData[targetAddress]?.city.trim() === "" ||
+        addressData[targetAddress]?.locality.trim() === "" ||
+        addressData[targetAddress]?.contact?.emailId.trim() === "" ||
+        addressData[targetAddress]?.contact?.mobileNo.trim() === "" ||
+        addressData[targetAddress]?.contact?.type.trim() === "" ||
+        addressData[targetAddress]?.contact?.name.trim() === "" ||
+        addressData[targetAddress]?.pincode.trim() === "" ||
+        addressData[targetAddress]?.pincode.trim() === 0 ||
+        addressData[targetAddress]?.landmark.trim() === ""
+      ) {
+        setInputError(true);
+      }
+    }
+  }, [addressData]);
+
+  useEffect(() => {
     if (isProcess) {
       if (isProcessOrderCall) {
         processOrder();
@@ -1564,7 +1593,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         </div>
         <div className="px-16 ">
           <p className=" text-base   lg:text-lg font-semibold  text-center">
-            Weight Of Products Should be always Greater then Box Volumetric
+            Weight Of Products Should be always Greater than Box Volumetric
             weight
           </p>
           <p className=" text-base   lg:text-lg font-semibold  text-center">
