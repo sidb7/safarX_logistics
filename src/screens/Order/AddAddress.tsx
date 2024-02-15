@@ -202,14 +202,15 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
     }));
 
     if (
-      addAddress?.flatNo.trim() === "" ||
-      addAddress?.landmark.trim() === "" ||
-      addAddress?.city.trim() === "" ||
-      addAddress?.state.trim() === "" ||
-      addAddress?.country.trim() === "" ||
-      addAddress?.contactcontact?.contactName.trim() === "" ||
-      addAddress?.mobileNo.trim() === "" ||
-      addAddress?.pincode.trim() === ""
+      (addAddress?.flatNo.trim() === "" ||
+        addAddress?.landmark.trim() === "" ||
+        addAddress?.city.trim() === "" ||
+        addAddress?.state.trim() === "" ||
+        addAddress?.country.trim() === "" ||
+        addAddress?.contactcontact?.contactName.trim() === "" ||
+        addAddress?.mobileNo === "" ||
+        addAddress?.pincode === "",
+      addAddress?.pincode === 0)
     ) {
       setInputError(true);
       return;
