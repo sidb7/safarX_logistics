@@ -3,7 +3,7 @@ import CloseIcon from "../../../../assets/CloseIcon.svg";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { GET, POST } from "../../../../utils/webService";
 import {
   GET_SINGLE_STORE,

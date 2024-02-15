@@ -3,7 +3,7 @@ import CancelIcon from "../../../assets/common/cancel.svg";
 import AddButton from "../../../components/Button";
 import CustomInputBox from "../../../components/Input";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import Checkbox from "../../../components/CheckBox";
 import InputWithFileUpload from "../../../components/InputBox/InputWithFileUpload";
 import { v4 as uuidv4 } from "uuid";
@@ -82,7 +82,7 @@ const BulkUpload = (props: ITypeProps) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // navigate("/orders/view-orders");
-      window.location.replace("/orders/view-orders");
+      window.location.replace("/orders/view-orders?activeTab=booked");
     }
   };
 

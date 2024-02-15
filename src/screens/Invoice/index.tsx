@@ -6,7 +6,7 @@ import {
   GET_ALL_INVOICES,
   GET_SINGLE_FILE,
 } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   capitalizeFirstLetter,
   convertEpochToDateTime,

@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import PlanCard from "./planCard";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import "../../styles/plan.css";
-import { GET_ALL_PLANS, POST_CREATE_PLAN } from "../../utils/ApiUrls";
+import {
+  GET_ALL_PLANS,
+  POST_ASSIGN_PLANV3,
+  POST_CREATE_PLAN,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import AccessDenied from "../../components/AccessDenied";
 import ComparePlans from "./comparePlans";
@@ -14,6 +18,7 @@ import WebCrossIcon from "../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
+import { Spinner } from "../../components/Spinner";
 
 interface ITypeProps {}
 
@@ -28,6 +33,7 @@ const Index = (props: ITypeProps) => {
   const [activePlanId, setActivePlanId] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [onSelectPlan, setOnSelectPlan] = useState<any>();
+  const [loading, setLoading] = useState(false);
 
   const ModalContent = () => {
     return (
@@ -52,7 +58,7 @@ const Index = (props: ITypeProps) => {
                 text="Yes"
                 className="bg-[#ffffff] px-4 py-2 text-[#1c1c1c] font-semibold text-sm"
                 onClick={() => {
-                  createPlan(onSelectPlan);
+                  assignPlan(onSelectPlan);
                   setIsModalOpen(false);
                 }}
               />
@@ -68,14 +74,14 @@ const Index = (props: ITypeProps) => {
     );
   };
 
-  const createPlan = async (payload: any) => {
+  const assignPlan = async (payload: any) => {
     try {
-      //Create Plan API
-      const { data: response }: any = await POST(POST_CREATE_PLAN, payload);
-
+      // Assign Plan API
+      const { data: response }: any = await POST(POST_ASSIGN_PLANV3, {
+        planId: payload?.planId,
+      });
       if (response?.success) {
         setActivePlanId(payload?.planId);
-
         toast.success(response?.message);
       } else {
         toast.error(response?.message);
@@ -89,12 +95,17 @@ const Index = (props: ITypeProps) => {
     (async () => {
       try {
         //Get all plans API
-        const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
+        setLoading(true);
+        const { data: response }: any = await POST(GET_ALL_PLANS, {
+          limit: 1000000,
+        });
 
         if (response?.success) {
+          setLoading(false);
           setAllPlans(response?.data?.reverse());
         }
       } catch (error) {
+        setLoading(false);
         console.error("GET PLAN API ERROR", error);
         return error;
       }
@@ -110,40 +121,52 @@ const Index = (props: ITypeProps) => {
               <Breadcrum label="Plans" />
             </div>
 
-            {/* Plan Cards */}
-            <div className="flex items-center justify-center gap-x-6 customScroll ml-5  mb-8 lg:mb-[60px] ">
-              {[allPlans[0]]?.map((eachPlan: any, index: any) => {
-                return (
-                  <PlanCard
-                    planId={eachPlan?.planId}
-                    planName={eachPlan?.planName}
-                    price={eachPlan?.price}
-                    validity={eachPlan?.validity}
-                    description={eachPlan?.description}
+            {loading ? (
+              <div className="flex items-center justify-center w-full h-[40vh]">
+                <Spinner />
+              </div>
+            ) : (
+              <>
+                {/* Plan Cards */}
+                <div className="px-4 flex items-center justify-between w-full gap-x-6   overflow-x-auto   ml-6  mb-8 lg:mb-[60px] ">
+                  {allPlans?.map((eachPlan: any, index: any) => {
+                    return (
+                      <>
+                        {eachPlan?.isPublic && (
+                          <PlanCard
+                            planId={eachPlan?.planId}
+                            planName={eachPlan?.planName}
+                            price={eachPlan?.price}
+                            validity={eachPlan?.validity}
+                            description={eachPlan?.description}
+                            onClick={() => {
+                              setIsModalOpen(true);
+                              setOnSelectPlan(eachPlan);
+                            }}
+                            activePlanId={activePlanId}
+                            isSelected={eachPlan?.isSelected}
+                          />
+                        )}
+                      </>
+                    );
+                  })}
+                </div>
+                {/*Compare Button */}
+                <div className="flex justify-center ml-5  lg:hidden">
+                  <ServiceButton
+                    text="COMPARE"
+                    className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
                     onClick={() => {
-                      setIsModalOpen(true);
-                      setOnSelectPlan(eachPlan);
+                      navigate("/plans/compare-plans");
                     }}
-                    activePlanId={activePlanId}
-                    isSelected={eachPlan?.isSelected}
                   />
-                );
-              })}
-            </div>
-            {/*Compare Button */}
-            <div className="flex justify-center ml-5  lg:hidden">
-              <ServiceButton
-                text="COMPARE"
-                className="bg-[#1c1c1c] !w-[160px] px-4 py-2 text-[#ffffff] font-semibold text-sm"
-                onClick={() => {
-                  navigate("/plans/compare-plans");
-                }}
-              />
-            </div>
-            {/* Table */}
-            <div className="hidden lg:block">
-              <ComparePlans />
-            </div>
+                </div>
+                {/* Table */}
+                <div className="hidden lg:block">
+                  <ComparePlans />
+                </div>
+              </>
+            )}
           </div>
           {/* Bottom NavBar */}
           {/* <div className="lg:hidden">

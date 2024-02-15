@@ -10,7 +10,7 @@ import TickLogo from "../../../assets/common/Tick.svg";
 import PickupAddress from "./PickupAddress/pickupLocation";
 import CustomBranding from "./CustomBranding/customBranding";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
 import {
   ADD_PICKUP_LOCATION,

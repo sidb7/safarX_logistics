@@ -5,7 +5,7 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import VerifyDocument from "./verifyDocument";
 
 export const EditProfileKyc = () => {

@@ -12,7 +12,12 @@ import TermsAndConditionsIcon from "../../assets/Plan/document.svg";
 import "../../styles/plan.css";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
-import { GET_PLAN_URL } from "../../utils/ApiUrls";
+import {
+  GET_PLAN_URL,
+  GET_PENDING_PLANS,
+  POST_ASSIGN_PLANV3,
+  GET_PLANS_PREVIEW,
+} from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import PlanDetailsGif from "../../assets/Plan/plan-details.gif";
 import { GET_ALL_PLANS } from "../../utils/ApiUrls";
@@ -24,6 +29,12 @@ import { ResponsiveState } from "../../utils/responsiveState";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "../../components/Button";
+import CrossIcon from "../../assets/CloseIcon.svg";
+import CenterModal from "../../components/CustomModal/customCenterModal";
+import { capitalizeFirstLetter } from "../../utils/utility";
+import { toast } from "react-hot-toast";
+import CodPricing from "./CodPricing";
 
 interface ITypeProps {}
 
@@ -36,8 +47,18 @@ const PlanDetails = (props: ITypeProps) => {
 
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
+  const [pendingPlan, setPendingPlan] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [renderingComponents, setRenderingComponents] = useState<any>(0);
 
-  const [renderingComponents, setRenderingComponents] = React.useState(0);
+  // State to hold logistics rate card data
+  const [logisticsData, setLogisticsData] = useState<any>([]);
+
+  // State to hold COD rate card data
+  const [codData, setCodData] = useState<any>([]);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const { isLgScreen } = ResponsiveState();
 
   const arrayData = [
@@ -685,8 +706,56 @@ const PlanDetails = (props: ITypeProps) => {
     setRenderingComponents(id);
   };
 
+  const assignPlan = async () => {
+    let payload = { planId: pendingPlan?.planId };
+    try {
+      const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
+      if (responseV4?.success) {
+        setIsModalOpen(false);
+        toast.success(responseV4?.message);
+      } else {
+        toast.error(responseV4?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const planPreview = async (planId: any) => {
+    let payload = {
+      planId: planId,
+    };
+    try {
+      setIsLoading(true);
+      const { data } = await POST(GET_PLANS_PREVIEW, payload);
+      if (data?.success && data?.data?.length > 0) {
+        let rateCards: any = data.data[0].rateCards;
+
+        // Filter and set logistics data
+        const filteredLogisticsData: any = rateCards
+          .filter((card: any) => card.type === "LOGISTIC")
+          .map((card: any) => card.data);
+        setLogisticsData(filteredLogisticsData);
+
+        // Filter and set COD data
+        const filteredCodData = rateCards
+          .filter((card: any) => card.type === "COD")
+          .map((card: any) => card.data);
+        setCodData(filteredCodData);
+        setIsLoading(false);
+      } else {
+        setIsLoading(false);
+        toast.error(data.message);
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
+      let planId: any = "";
       try {
         //Get Plan API
         const { data: planResponse }: any = await POST(GET_PLAN_URL);
@@ -696,6 +765,8 @@ const PlanDetails = (props: ITypeProps) => {
 
         if (planResponse?.success) {
           setPlanData(planResponse?.data);
+          planId = planResponse?.data?.[0]?.planId;
+          planPreview(planId);
         }
 
         if (response?.success) {
@@ -708,6 +779,23 @@ const PlanDetails = (props: ITypeProps) => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data: response }: any = await POST(GET_PENDING_PLANS);
+        if (response?.success && response?.data?.length > 0) {
+          setPendingPlan(response?.data[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
+  // useEffect(() => {
+  //   planPreview();
+  // }, []);
 
   return (
     <>
@@ -762,7 +850,15 @@ const PlanDetails = (props: ITypeProps) => {
               setScrollIndex={setScrollIndex}
             />
           </div>
-          {renderingComponents === 0 && <CourierPricing />}
+          {renderingComponents === 0 && (
+            <CourierPricing
+              logisticsData={logisticsData}
+              setLogisticsData={setLogisticsData}
+              isLoading={isLoading}
+            />
+          )}
+
+          {renderingComponents === 1 && <CodPricing codData={codData} />}
 
           {/* Info Cards */}
           {/* <div className="grid grid-cols-2 lg:grid-cols-4   gap-5   mb-6 mx-5 lg:ml-[30px] ">
@@ -827,18 +923,133 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between   h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
-            <ServiceButton
-              className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
-              text="TALK TO OUR SUPPORT"
-              onClick={() => {
-                window.open("https://support.shipyaari.com/tickets", "_blank");
-              }}
-            />
+            <div className="flex gap-x-2">
+              {Object.keys(pendingPlan).length !== 0 ? (
+                <>
+                  <div>
+                    <CustomButton
+                      className=" !bg-[#FFFFFF] !border-[#FABCAF] !text-[#F35838] !py-2 !px-4 !font-Open !border-2 !rounded-[4px] hover:-translate-y-1 hover:scale-100 duration-300"
+                      text={"Pending Plan!"}
+                      onClick={() => {
+                        setIsModalOpen(true);
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+
+              <div>
+                <ServiceButton
+                  className=" !h-[48px] md:!h-[36px]   !bg-[#1C1C1C] !text-[#FFFFFF] !py-2 !px-4 !font-Open"
+                  text="TALK TO OUR SUPPORT"
+                  onClick={() => {
+                    window.open(
+                      "https://support.shipyaari.com/tickets",
+                      "_blank"
+                    );
+                  }}
+                />
+              </div>
+            </div>
           </div>
+
+          {isModalOpen && (
+            <CenterModal
+              isOpen={isModalOpen}
+              onRequestClose={() => setIsModalOpen(false)}
+              className="md:h-[65%] md:w-[65%] lg:h-[70%] lg:w-[50%] xl:h-[60%] xl:w-[40%]"
+            >
+              <>
+                <div className=" w-full h-full gap-y-6 p-4 flex flex-col">
+                  <div className="flex items-center justify-end">
+                    {/* <p className="font-open text-lg font-semibold leading-5">
+                      Plan Info
+                    </p> */}
+                    <div
+                      onClick={() => {
+                        setIsModalOpen(false);
+                      }}
+                      className="flex justify-end"
+                    >
+                      <img alt="" className="cursor-pointer" src={CrossIcon} />
+                    </div>
+                  </div>
+                  <div className="flex flex-col m-7 gap-y-14">
+                    <div className="p-5 border-[1px] border-[#FFFFFF] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Plan Name:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.planName)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Validity:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {capitalizeFirstLetter(pendingPlan?.validity)}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Description:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px] overflow-hidden text-ellipsis whitespace-nowrap">
+                            {capitalizeFirstLetter(
+                              pendingPlan?.shortDescription
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Amount:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            {pendingPlan?.price}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-5 border-[1px] border-[#FFFFFF] shadow-lg rounded-md">
+                      <div className="flex flex-col gap-y-6">
+                        <div className="flex justify-between">
+                          <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
+                            Total:
+                          </p>
+                          <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
+                            ₹ {pendingPlan?.price}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex justify-center gap-x-3">
+                      <CustomButton
+                        text="close"
+                        onClick={() => {
+                          setIsModalOpen(false);
+                        }}
+                        className="lg:!w-[184px] lg:!h-[54px] !bg-[white] !border-[1px] !border-[#A4A4A4] !text-[black] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                      />
+                      <CustomButton
+                        text="yes"
+                        onClick={assignPlan}
+                        className="lg:!w-[184px] lg:!h-[54px] lg:!py-[18px] lg:!px-[80px] !rounded-[4px]"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            </CenterModal>
+          )}
 
           {/* Terms & Conditions */}
 

@@ -45,7 +45,7 @@ const InputWithFileUpload = (props: propTypes) => {
         <input
           placeholder="Choose Images "
           type={type ? type : "text"}
-          className={`${className}  rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input`}
+          className={`${className}  rounded border-[1px] border-[#A4A4A4] p-[10px] gap-[10px] h-[48px] w-[100%] font-semibold text-[12px] text-[#1C1C1C] outline-none custom-input`}
           required={isRequired}
           title="inputBox"
           onChange={onChange}

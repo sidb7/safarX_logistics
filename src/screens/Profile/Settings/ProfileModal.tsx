@@ -6,7 +6,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import EditProfileIcon from "../../../assets/Profile/ProfileIcon.svg";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface PassModalProps {
   isProfileModalOpen: boolean;

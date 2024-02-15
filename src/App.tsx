@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import toast, { Toaster } from "react-hot-toast";
 import MyRoutes from "./routes/MyRoutes";
 import { useSelector } from "react-redux";
 import CheckIsOnline from "./components/CheckIsOnline";
@@ -196,17 +195,12 @@ const App = () => {
     <>
       <MyRoutes />
       <CheckIsOnline />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        pauseOnHover
-        draggable
-        theme="colored"
+      <Toaster
+        position="top-center"
+        reverseOrder={true}
+        gutter={8}
+        containerClassName=""
+        containerStyle={{}}
       />
     </>
   );

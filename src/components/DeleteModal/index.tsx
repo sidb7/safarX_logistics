@@ -4,7 +4,7 @@ import CustomButton from "../Button";
 import DeleteGif from "../../assets/common/DeleteGif.gif";
 import { useState } from "react";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 interface IDeleteModal {
   url: string;
   postData: any;
@@ -29,7 +29,7 @@ export const DeleteModal: React.FunctionComponent<IDeleteModal> = ({
       const { data: deleteData } = await POST(url, postData);
       if (deleteData?.success) {
         toast.success(deleteData?.message);
-        reloadData();
+        reloadData(0);
       } else {
         toast.error(deleteData?.message);
       }

@@ -18,7 +18,7 @@ import {
   getQueryJson,
 } from "../../../utils/utility";
 import PricingDetails from "./pricingDetails";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import AutoGenerateIcon from "../../../assets/Product/autogenerate.svg";
 import CustomInputBox from "../../../components/Input";
 import BoxDetails from "./boxDetails";
@@ -155,12 +155,12 @@ const Summary = (props: Props) => {
           // Add a cache-busting parameter and then replace the URL
           // const newUrl =
           //   "/orders/view-orders?timestamp=" + new Date().getTime();
-          window.location.replace("/orders/view-orders");
+          window.location.replace("/orders/view-orders?activeTab=booked");
         } else {
           // Handle errors from the second API call
           let errorText = placeOrderPromise?.data?.message;
           if (errorText.startsWith("Wallet")) {
-            toast.warning(placeOrderPromise?.data?.message);
+            toast.error(placeOrderPromise?.data?.message);
             const requiredBalance =
               placeOrderPromise?.data?.data[0]?.requiredBalance;
 

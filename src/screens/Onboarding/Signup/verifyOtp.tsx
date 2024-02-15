@@ -10,7 +10,7 @@ import CustomInputBox from "../../../components/Input";
 import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   constructNavigationObject,
   setLocalStorage,
@@ -233,7 +233,7 @@ const Index = () => {
                 <p className="text-[#494949] font-Open font-normal text-xs leading-4">
                   Didn't Receive Code ?
                   <span
-                    className={`mx-1 font-bold text-[#004EFF] text-[12px] ${
+                    className={`mx-1 font-extrabold text-[#004EFF] text-[12px] leading-5 ${
                       seconds > 0 || (seconds > 0 && minutes === 0)
                         ? "cursor-not-allowed  text-[#494949]"
                         : "cursor-pointer"

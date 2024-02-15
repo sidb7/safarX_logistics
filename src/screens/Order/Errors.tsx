@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Spinner } from "../../components/Spinner";
 import UpArrow from "../../assets/AccordionUp.svg";
+import DownArrowIcon from "../../assets/Filter/downArrow.svg";
+import { pickupAddress, deliveryAddress } from "../../utils/dummyData";
+import CustomRightModal from "../../components/CustomModal/customRightModal";
 import {
   capitalizeFirstLetter,
   convertNumberToMultipleOfhundred,
@@ -10,6 +13,16 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { PaymentSlice } from "../../redux/reducers/paymentReducer";
+import CustomDropDown from "../../components/DropDown";
+import addCircleIcon from "../../assets/add-circle.svg";
+import AddAddress from "./AddAddress";
+import {
+  RETURNING_USER_DELIVERY,
+  RETURNING_USER_PICKUP,
+  UPDATE_TEMP_ORDER_ADDRESS,
+} from "../../utils/ApiUrls";
+import { POST } from "../../utils/webService";
+import { toast } from "react-hot-toast";
 
 let dummyErrors = [
   "Insufficient Balance",
@@ -131,14 +144,47 @@ const Errors = (props: ErrorProps) => {
   let finalError = [];
   // for (let i = 0; i < errors.length; i++) {}
   const [openIndex, setOpenIndex] = useState(null);
+  const [globalIndex, setGlobalIndex]: any = useState(null);
+  // const [selectedAddress, setSelectedAddress]: any = useState("");
+  const [seletedPickupAddress, setSelectedPickupAddress]: any = useState("");
+  const [addAddressModal, setAddAddressModal] = useState({
+    isOpen: false,
+    addressType: "",
+  });
+  const [selectedDeliveryAddress, setSelectedDeliveryAddress]: any =
+    useState("");
+
+  const [indexFixedAllLoader, setIndexFixedAllLoader]: any = useState(null);
+
+  const [addressLoader, setAddressLoader] = useState(false);
+  const [pickupAddressDropDownData, setPickupAddressDropDownData] = useState(
+    []
+  );
+  const [deliveryAddressDropDownData, setDeliveryAddressDropDownData] =
+    useState([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleError = (elem: any, errorName: any, orderDetails?: any) => {
+  const handleProductsDetails = (index?: any) => {
+    setGlobalIndex(index === globalIndex ? null : index);
+  };
+
+  const handleError = (
+    elem: any,
+    errorName: any,
+    orderDetails?: any,
+    orderData?: any
+  ) => {
     if (errorName === "Box And Product") {
       setErrorModalData({
         entityDetails: elem,
+        error: errorName,
+        orderDetails,
+      });
+    } else if (errorName === "Others") {
+      setErrorModalData({
+        entityDetails: orderData,
         error: errorName,
         orderDetails,
       });
@@ -162,21 +208,145 @@ const Errors = (props: ErrorProps) => {
     setOpenIndex(index === openIndex ? null : index);
   };
 
-  const switchConditionsForError = (errorName?: any, elem?: any) => {
+  const DropDownjsx = (order: any, errorName: any) => {
+    return (
+      <>
+        {order.orders.map((eachOrder: any) => {
+          return (
+            <div className="flex flex-col mb-1 min-w-[100%] bg-[#fdfdfd] border-1 p-[5px] px-[10px] shadow-inner rounded-br rounded-bl border-t-0 ">
+              <div className="flex justify-between border-1 my-1 shadow-md w-[100%] py-[10px] px-[10px] rounded ">
+                <div className="">
+                  <div>OrderId - {eachOrder.orderId}</div>
+                  <div></div>
+                </div>
+                <div
+                  onClick={() =>
+                    order?.errorType !== "Administrative Errors" &&
+                    order?.errorType !== "GST Number Errors"
+                      ? handleError(
+                          order,
+                          errorName,
+                          order?.errorType,
+                          eachOrder
+                        )
+                      : null
+                  }
+                  className="border-[blue] border-b-[1px] mr-2 text-[blue]"
+                >
+                  {order?.errorType === "Administrative Errors"
+                    ? "CONTACT ADMINISTRATION"
+                    : "UPDATE"}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  const returnUserAddress = async () => {
+    // setAddressDropDownLoad(true);
+    const { data: pickupResponse } = await POST(RETURNING_USER_PICKUP, {});
+    const { data: deliveresponse } = await POST(RETURNING_USER_DELIVERY, {});
+
+    let pickupDropDownData = pickupResponse.data.map((address: any) => {
+      return { label: address?.fullAddress, value: address?.pickupAddressId };
+    });
+    let DeliveryDropDownData = deliveresponse.data.map((address: any) => {
+      return {
+        label: address?.fullAddress,
+        value: address?.deliveryAddressId,
+      };
+    });
+
+    pickupDropDownData.unshift({ label: "", value: "" });
+    DeliveryDropDownData.unshift({ label: "", value: "" });
+
+    setDeliveryAddressDropDownData(DeliveryDropDownData);
+    setPickupAddressDropDownData(pickupDropDownData);
+  };
+
+  const fixAllHandler = async (errorName: any, data: any, index: any) => {
+    try {
+      setAddressLoader(true);
+      setIndexFixedAllLoader(index);
+
+      let payLoad: any = {
+        tempOrderDetails: [],
+      };
+
+      data[0]?.orders.map((tempOrderData: any) => {
+        payLoad.tempOrderDetails.push({
+          orderId: tempOrderData?.orderId,
+          tempOrderId: tempOrderData?.tempOrderId,
+          source: tempOrderData?.source,
+        });
+      });
+
+      if (errorName === "Delivery Address") {
+        payLoad = {
+          ...payLoad,
+          deliveryAddressId: selectedDeliveryAddress,
+        };
+      } else if (errorName === "Pickup Address") {
+        payLoad = { ...payLoad, pickupAddressId: seletedPickupAddress };
+      }
+
+      let payload: any = {};
+      const { data: responseData } = await POST(
+        UPDATE_TEMP_ORDER_ADDRESS,
+        payLoad
+      );
+      if (responseData?.success) {
+        setAddressLoader(false);
+        getErrors();
+        toast.success(responseData?.message);
+        return true;
+      } else {
+        setAddressLoader(false);
+        getErrors();
+        toast.error(responseData?.message);
+
+        return false;
+      }
+    } catch (error: any) {
+      toast.error(error?.message);
+      setAddressLoader(false);
+      return false;
+    }
+  };
+
+  const onSelectDropDownHandler = (e: any, errorName?: any) => {
+    if (errorName === "Pickup Address") {
+      setSelectedPickupAddress(e.target.value);
+    } else {
+      setSelectedDeliveryAddress(e.target.value);
+    }
+  };
+
+  const switchConditionsForError = (
+    errorName?: any,
+    elem?: any,
+    Index?: any
+  ) => {
     switch (errorName) {
       case orderErrorCategoryENUMs["Box And Product"]: {
         return (
-          <div>
+          <div
+            className="hover:bg-[#F6F6F6] hover:shadow-inner py-[0.5rem]"
+            onClick={() => handleError(elem?.boxInfo, errorName, elem?.orders)}
+          >
             <div className="flex items-center justify-between my-1 ml-2 mr-4">
-              <div className="flex items-center justify-between gap-x-2 mx-2 max-w-[80%] line-clamp-1">
-                <div className="text-[12px] border border-[#cecece] flex justify-center rounded-md bg-[#D2D2D2] items-center w-[22px] h-[22px]">
-                  {elem.ordersCount}
-                </div>
+              <div className="flex items-start  justify-between gap-x-2 max-w-[80%] line-clamp-1">
                 {elem?.boxInfo?.map((sinleBox: any) => (
-                  <div className="flex">
+                  <div className="flex flex-col ml-2 ">
                     {sinleBox?.products?.map((singleProduct: any) => (
-                      <div className="max-w-[120px] mr-1 line-clamp-1">
-                        {capitalizeFirstLetter(singleProduct?.name)}
+                      <div className="flex items-center fit-content">
+                        <div className="w-[10px] mx-1 h-[10px] border rounded-full bg-black"></div>
+                        <span className="my-[2px]">
+                          {capitalizeFirstLetter(singleProduct?.name)}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -186,31 +356,37 @@ const Errors = (props: ErrorProps) => {
                 onClick={() =>
                   handleError(elem?.boxInfo, errorName, elem?.orders)
                 }
-                className="border-[blue] border-b-[1px] text-[blue]"
+                className="border-[blue] flex border-b-[1px] text-[blue]"
               >
-                UPDATE
+                UPDATE {"("}
+                <div className="text-[18px] flex justify-center items-center mx-[2px]">
+                  {elem.ordersCount}
+                </div>
+                {")"}
               </div>
             </div>
           </div>
         );
       }
-      case orderErrorCategoryENUMs["Address"]: {
+      case orderErrorCategoryENUMs["Delivery Address"]:
+      case orderErrorCategoryENUMs["Pickup Address"]: {
         return (
-          <div className="flex items-center justify-between my-1">
+          <div className="flex items-center justify-between ">
             <div className="flex flex-col items-center w-[100%] justify-between">
               {elem?.orders?.map((order: any, index: any) => {
                 return (
                   <div
-                    className={`py-2 flex justify-between w-[100%] items-center ${
-                      elem?.orders.length - 1 !== index
-                        ? "border-b-[2px] mb-2"
-                        : ""
+                    className={`py-2 hover:bg-[#F6F6F6] hover:shadow-inner flex justify-between w-[100%] items-center ${
+                      elem?.orders.length - 1 !== index ? "border-b-[2px]" : ""
                     }  px-4`}
                     key={index}
+                    onClick={() => handleError(order, errorName)}
                   >
                     <div className="flex items-center">
                       <div className="rounded-md py-1">
-                        {order?.orderId ? order?.orderId : order?.tempOrderId}
+                        {order?.orderId
+                          ? "OrderId - " + order?.orderId
+                          : "TempOrderId - " + order?.tempOrderId}
                       </div>
                     </div>
                     <div
@@ -234,12 +410,13 @@ const Errors = (props: ErrorProps) => {
                 {elem?.orders?.map((order: any, index: any) => {
                   return (
                     <div
-                      className={`py-2 flex justify-between w-[100%] items-center ${
+                      className={`py-3 flex justify-between w-[100%] items-center hover:bg-[#F6F6F6] hover:shadow-inner ${
                         elem?.orders.length - 1 !== index
-                          ? "border-b-[2px] mb-2"
+                          ? "border-b-[2px]"
                           : ""
                       }  px-4`}
                       key={index}
+                      onClick={() => handleError(order, errorName)}
                     >
                       <div className="flex items-center">
                         <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
@@ -264,32 +441,34 @@ const Errors = (props: ErrorProps) => {
       case orderErrorCategoryENUMs["Others"]: {
         return (
           <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-[5px] bg-[#F5F5F4]">
               <div className="flex flex-col items-center w-[100%] justify-between">
-                {elem?.orders?.map((order: any, index: any) => {
-                  return (
-                    <div
-                      className={`py-2 flex justify-between w-[100%] items-center ${
-                        elem?.orders.length - 1 !== index
-                          ? "border-b-[2px] mb-2"
-                          : ""
-                      } px-4`}
-                      key={index}
-                    >
-                      <div className="flex items-center">
-                        <div className="rounded-md py-1">
-                          {order?.orderId ? order?.orderId : order?.tempOrderId}
-                        </div>
-                      </div>
-                      <div
+                <>
+                  <div
+                    className={`py-2 flex justify-between w-[100%] bg-white mt-0 rounded shadow-md items-center px-4`}
+                    key={Index}
+                    // onClick={() => handleError(order, errorName)}
+                    onClick={() => handleProductsDetails(Index)}
+                  >
+                    <div className="flex items-start  flex-col">
+                      <div className="rounded-md py-1">{elem.errorType}</div>
+                      <div>{elem?.orders?.length} Orders</div>
+                    </div>
+                    {/* <div
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
                         UPDATE
-                      </div>
+                      </div> */}
+                    <div className="mr-[1rem]">
+                      <img
+                        className={`${Index === globalIndex && "rotate-180"}`}
+                        src={DownArrowIcon}
+                      />
                     </div>
-                  );
-                })}
+                  </div>
+                  {Index === globalIndex && DropDownjsx(elem, errorName)}
+                </>
               </div>
             </div>
           </>
@@ -306,6 +485,11 @@ const Errors = (props: ErrorProps) => {
       getErrors();
     }
   }, [isErrorModalOpen]);
+
+  useEffect(() => {
+    returnUserAddress();
+  }, []);
+
   return (
     <div className="h-[70vh]">
       {isLoading ? (
@@ -324,49 +508,137 @@ const Errors = (props: ErrorProps) => {
                 <>
                   {item?.value.length > 0 && (
                     <div
-                      className="flex flex-col mb-5 cursor-pointer mr-3"
+                      className="flex flex-col mb-5  cursor-pointer mr-3 rounded-lg"
                       style={{
                         boxShadow: "1px 1px 8px 0px rgba(0, 0, 0, 0.12)",
                       }}
                       key={index}
                     >
                       <div
-                        className={`flex select-none gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
+                        className={`flex select-none items-center gap-y-[1rem] justify-between p-3  border-[1px] border-[#E8E8E8] ${
                           openIndex === index
                             ? "  rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : " rounded-lg "
                         }`}
-                        onClick={() => handleItemClick(index)}
                       >
-                        <div className="mx-1">
+                        <div
+                          className="mx-1 flex flex-col flex-1 "
+                          onClick={() => handleItemClick(index)}
+                        >
                           <div>{item?.errorName}</div>
                           <div className="text-[14px]">
                             {totalOrdersCount} Orders
                           </div>
                         </div>
+
                         <div className="flex items-center">
-                          <span className="mr-[1rem] border-[blue] border-b-[1px] text-[blue]"></span>
-                          <span>
+                          {(item?.errorName === "Delivery Address" ||
+                            item?.errorName === "Pickup Address") && (
+                            <div className="flex w-[600px] mx-4">
+                              <button
+                                className="border py-2 px-4 rounded drop-shadow-sm"
+                                onClick={() =>
+                                  fixAllHandler(
+                                    item?.errorName,
+                                    item?.value,
+                                    index
+                                  )
+                                }
+                              >
+                                {addressLoader &&
+                                indexFixedAllLoader === index ? (
+                                  <div className="flex justify-center items-center">
+                                    <Spinner />
+                                  </div>
+                                ) : (
+                                  "FIX ALL"
+                                )}
+                              </button>
+                              <div className="flex-1 mx-4">
+                                <CustomDropDown
+                                  value={
+                                    item?.errorName === "Pickup Address"
+                                      ? seletedPickupAddress
+                                      : selectedDeliveryAddress
+                                  }
+                                  name="Selete Address"
+                                  onChange={(e: any) =>
+                                    onSelectDropDownHandler(e, item?.errorName)
+                                  }
+                                  options={
+                                    item?.errorName === "Pickup Address"
+                                      ? pickupAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
+                                      : deliveryAddressDropDownData.map(
+                                          (e: any) => {
+                                            return {
+                                              ...e,
+                                              label: `${
+                                                e.label === ""
+                                                  ? ""
+                                                  : e.label.slice(0, 60) + "..."
+                                              }`,
+                                            };
+                                          }
+                                        )
+                                  }
+                                  placeHolder="Selete Address"
+                                  wrapperClass="w-[100%]"
+                                />
+                              </div>
+                              <button
+                                className="flex justify-center items-center"
+                                onClick={() =>
+                                  setAddAddressModal({
+                                    isOpen: true,
+                                    addressType: item?.errorName,
+                                  })
+                                }
+                              >
+                                <img src={addCircleIcon} alt="" />
+                              </button>
+                            </div>
+                          )}
+                          <button
+                            className="p-4"
+                            onClick={() => handleItemClick(index)}
+                          >
                             <img
                               className={`${
                                 index !== openIndex && "rotate-180"
                               }`}
                               src={UpArrow}
                             />
-                          </span>
+                          </button>
                         </div>
                       </div>
                       {openIndex === index &&
-                        item?.value.map((elem: any, nestedIndex: any) => (
-                          <div
-                            className={`flex flex-col overflow-auto border py-[0.5rem]`}
-                            key={nestedIndex}
-                          >
-                            <div>
-                              {switchConditionsForError(item.errorName, elem)}
+                        item?.value.map((elem: any, nestedIndex: any) => {
+                          return (
+                            <div
+                              className={`flex flex-col overflow-auto border`}
+                              key={nestedIndex}
+                            >
+                              <div>
+                                {switchConditionsForError(
+                                  item.errorName,
+                                  elem,
+                                  nestedIndex
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                     </div>
                   )}
                 </>
@@ -379,6 +651,18 @@ const Errors = (props: ErrorProps) => {
           )}
         </div>
       )}
+
+      <CustomRightModal
+        isOpen={addAddressModal?.isOpen}
+        onClose={() => setAddAddressModal({ isOpen: false, addressType: "" })}
+        className="!justify-start "
+      >
+        <AddAddress
+          addressType={addAddressModal?.addressType}
+          setAddAddressModal={setAddAddressModal}
+          returnAddress={returnUserAddress}
+        />
+      </CustomRightModal>
     </div>
   );
 };

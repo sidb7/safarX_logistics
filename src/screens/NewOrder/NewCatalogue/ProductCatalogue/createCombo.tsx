@@ -19,7 +19,7 @@ import {
 } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import InputWithFileUpload from "../../../../components/InputBox/InputWithFileUpload";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import BottomModal from "../../../../components/CustomModal/customBottomModal";
 import { useMediaQuery } from "react-responsive";
 import { Navigate } from "react-router-dom";

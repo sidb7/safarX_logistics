@@ -23,7 +23,7 @@ import {
   DELETE_COMBO_PRODUCT,
 } from "../../../../utils/ApiUrls";
 import ComboProductBox from "../../../../components/ComboProductBox";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import EditProduct from "./editProduct";
 import axios from "axios";
 import { Spinner } from "../../../../components/Spinner";

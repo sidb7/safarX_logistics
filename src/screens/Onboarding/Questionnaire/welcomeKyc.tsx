@@ -3,7 +3,7 @@ import Checkbox from "../../../components/CheckBox";
 import CustomButton from "../../../components/Button";
 import { useNavigate, useLocation } from "react-router-dom";
 import WelcomeHeader from "./welcomeHeader";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";

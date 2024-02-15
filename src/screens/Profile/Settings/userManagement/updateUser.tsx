@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import CustomButton from "../../../../components/Button";
 import EyeIcon from "../../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../../assets/Login/crosseye.svg";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../../utils/webService";
 import CustomDropDown from "../../../../components/DropDown";
 import {

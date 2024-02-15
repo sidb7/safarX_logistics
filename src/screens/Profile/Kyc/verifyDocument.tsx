@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import CustomInputBox from "../../../components/Input";
 import CustomBottomModal from "../../../components/CustomModal/customBottomModal";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
 import {
   POST_VERIFY_AADHAR_OTP_URL,

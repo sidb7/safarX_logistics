@@ -1,6 +1,6 @@
 import { POST } from "../../utils/webService";
 import { GET_SINGLE_FILE } from "../../utils/ApiUrls";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import downloadIcon from "../../assets/download.svg";
 import { useState } from "react";
 interface IShowLabelProps {

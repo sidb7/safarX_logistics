@@ -7,7 +7,7 @@ interface propTypes {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
-  className?: string;
+  className?: any;
   containerStyle?: string;
   inputClassName?: string;
   labelClassName?: string;
@@ -139,7 +139,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
             style={{
               backgroundColor: "#4D83FF",
               color: "#FFFFFF",
-              width: "320px",
+              width: "270px",
               fontSize: "12px",
               lineHeight: "14px",
               textTransform: "capitalize",

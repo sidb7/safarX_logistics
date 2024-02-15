@@ -4,7 +4,7 @@ import {
   POST_VERIFY_AADHAR_URL,
   POST_VERIFY_GST_URL,
 } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface IProps {
   sec?: any;
@@ -130,7 +130,7 @@ const TimerCounter = (props: IProps) => {
         <p className="text-[#494949] font-Open font-normal text-xs leading-4">
           Didn't Receive Code ?
           <span
-            className={`mx-1 font-bold text-[#004EFF] text-[12px]  ${
+            className={`mx-1 text-[#004EFF] text-[12px] font-extrabold leading-5  ${
               seconds > 0 || (seconds > 0 && minutes === 0)
                 ? "text-[#8e8e8e] cursor-not-allowed"
                 : "cursor-pointer"

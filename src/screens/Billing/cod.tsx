@@ -13,7 +13,7 @@ import { DOWNLOAD_COD_REMITTED, GET_COD_REMITTED } from "../../utils/ApiUrls";
 import CodRemittedAwbModal from "./Modal/codRemittedAwbsModal";
 import ReactDatePicker from "react-datepicker";
 import { convertXMLToXLSX } from "../../utils/helper";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface IInvoiceProps {}
 

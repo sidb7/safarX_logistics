@@ -4,7 +4,7 @@ import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 

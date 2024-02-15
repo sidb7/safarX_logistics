@@ -37,11 +37,11 @@ const PlanCard = (props: ITypeProps) => {
           </p>
         </div>
       ) : (
-        <div></div>
+        <div className=" h-[40px] lg:h-[44px]"></div>
       )}
 
       <div
-        className={`flex flex-col  items-center  ${
+        className={`flex flex-col  items-center   ${
           planName?.toUpperCase() === "GOLD" ? "rounded-t-none" : "rounded-lg"
         } ${
           isSelected && "!border-[#004EFF] rounded-t-none rounded-b-lg"
@@ -55,7 +55,7 @@ const PlanCard = (props: ITypeProps) => {
           className="mb-6 lg:mb-4"
         />
 
-        <p className="text-[#004EFF] font-Lato text-[22px] font-semibold leading-7 uppercase mb-2 ">
+        <p className="text-[#004EFF] font-Lato text-[22px]  font-semibold leading-7 uppercase mb-2 ">
           {planName}
         </p>
 
@@ -70,7 +70,7 @@ const PlanCard = (props: ITypeProps) => {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col items-center mb-8">
+          <div className="flex flex-col items-center  mb-8">
             <div className="flex items-end gap-x-1">
               <p className="text-[#777777] font-Lato text-[22px] font-semibold leading-7  ">
                 <span className="font-Open text-[12px] font-semibold leading-4 text-[#777777] ">
@@ -85,7 +85,7 @@ const PlanCard = (props: ITypeProps) => {
           </div>
         )}
 
-        <p className="font-Open text-sm font-normal h-[45px] lg:h-[35px] customScroll leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4">
+        <p className="font-Open text-sm font-normal  h-[45px] lg:h-[35px] customScroll leading-[18px] text-[#1C1C1C] text-center lg:text-start mb-4">
           {description}
         </p>
 

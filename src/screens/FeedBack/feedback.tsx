@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { tabs } from "./data";
 import { GET_FEEDBACK } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import FeedbackTable from "./feedbackTable";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { checkPageAuthorized } from "../../redux/reducers/role";

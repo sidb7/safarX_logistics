@@ -9,7 +9,7 @@ import {
   DELETE_DELIVERY_ADDRESS,
   ACTIVATE_PICKUP_ADDRESS,
 } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import CenterModal from "../../../../components/CustomModal/customCenterModal";
 import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";

@@ -14,7 +14,7 @@ import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import UpiPayment from "./upiPayment";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import { useNavigate, useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";
@@ -269,7 +269,7 @@ const Payment = () => {
         <div className="flex justify-center items-center mt-10">
           <ServiceButton
             text="GO TO ORDER"
-            onClick={() => navigate("/orders/view-orders")}
+            onClick={() => navigate("/orders/view-orders?activeTab=draft")}
             className="bg-[#1C1C1C] px-4 py-2 text-white font-semibold text-sm"
           />
         </div>
@@ -307,7 +307,7 @@ const Payment = () => {
       if (data?.success) {
         toast.success(data?.message);
         // setIsLabelRightModal(true);
-        navigate("/orders/view-orders");
+        navigate("/orders/view-orders?activeTab=draft");
       } else {
         toast.error(data?.message);
       }

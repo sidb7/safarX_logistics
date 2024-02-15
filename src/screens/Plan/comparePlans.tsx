@@ -17,7 +17,9 @@ const ComparePlans = (props: ITypeProps) => {
     (async () => {
       try {
         //Get all plans API
-        const { data: response }: any = await POST(GET_ALL_PLANS, { limit: 4 });
+        const { data: response }: any = await POST(GET_ALL_PLANS, {
+          limit: 10000,
+        });
 
         if (response?.success) {
           setAllPlans(response?.data.reverse());
