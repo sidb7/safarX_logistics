@@ -49,3 +49,9 @@ tbody tr:nth-child(odd) {
 /* .ReactModal__Content{
     width: 388px;
 } */
+
+.custom-toast-success {
+  background-color: white !important; /* Set the desired background color for toast.success */
+  color: green !important; /* You can customize text color, if needed */
+  /* Add any other styles you want to customize */
+}
