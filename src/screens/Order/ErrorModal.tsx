@@ -208,7 +208,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
             <InputBox
               label="Dead Weight (Kg)"
-              value={data?.deadWeight}
+              value={data?.deadWeight || ""}
               name="deadWeight"
               inputType="text"
               inputMode="numeric"
@@ -221,7 +221,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             />
             <InputBox
               label="Volumetric Weight"
-              value={data?.volumetricWeight}
+              value={data?.volumetricWeight || ""}
               name="volumetricWeight"
               inputType="number"
               isDisabled={true}
@@ -238,7 +238,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 inputType="text"
                 inputMode="numeric"
                 name="length"
-                value={data?.length}
+                value={data?.length || ""}
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -248,7 +248,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               />
               <InputBox
                 label="B"
-                value={data?.breadth}
+                value={data?.breadth || ""}
                 name="breadth"
                 inputType="text"
                 inputMode="numeric"
@@ -261,7 +261,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               />
               <InputBox
                 label="H"
-                value={data?.height}
+                value={data?.height || ""}
                 name="height"
                 inputType="text"
                 inputMode="numeric"
@@ -472,11 +472,11 @@ const ErrorModal = (props: ErrorModalProps) => {
         addressData[targetAddress]?.city.trim() === "" ||
         addressData[targetAddress]?.locality.trim() === "" ||
         addressData[targetAddress]?.contact?.emailId.trim() === "" ||
-        addressData[targetAddress]?.contact?.mobileNo.trim() === "" ||
+        addressData[targetAddress]?.contact?.mobileNo === "" ||
         addressData[targetAddress]?.contact?.type.trim() === "" ||
         addressData[targetAddress]?.contact?.name.trim() === "" ||
         addressData[targetAddress]?.pincode.trim() === "" ||
-        addressData[targetAddress]?.pincode.trim() === 0 ||
+        addressData[targetAddress]?.pincode === 0 ||
         addressData[targetAddress]?.landmark.trim() === ""
       ) {
         setInputError(true);
@@ -872,20 +872,21 @@ const ErrorModal = (props: ErrorModalProps) => {
                           }
                           inputError={inputError}
                         />
-
-                        <CustomDropDown
-                          value={capitalizeFirstLetter(
-                            addressData?.[targetAddress]?.state
-                          )}
-                          name="state"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e)
-                          }
-                          options={dummyStateDropdownData}
-                          placeHolder="Select State"
-                          wrapperClass="w-[100%]"
-                          inputError={inputError}
-                        />
+                        <div className="w-[100%]">
+                          <CustomDropDown
+                            value={capitalizeFirstLetter(
+                              addressData?.[targetAddress]?.state
+                            )}
+                            name="state"
+                            onChange={(e: any) =>
+                              handleInputChange(targetAddress, e)
+                            }
+                            options={dummyStateDropdownData}
+                            placeHolder="Select State"
+                            wrapperClass="w-[100%]"
+                            inputError={inputError}
+                          />
+                        </div>
                       </div>
                       <div className="flex mt-[1rem] gap-[1rem]">
                         <InputBox
@@ -1425,6 +1426,7 @@ const ErrorModal = (props: ErrorModalProps) => {
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Box And Product"]) {
       setProductAndBoxDetails(errorModalData?.entityDetails?.[0]);
+      setInputError(true);
     }
   }, [errorModalData]);
 
@@ -1480,11 +1482,11 @@ const ErrorModal = (props: ErrorModalProps) => {
         addressData[targetAddress]?.city.trim() === "" ||
         addressData[targetAddress]?.locality.trim() === "" ||
         addressData[targetAddress]?.contact?.emailId.trim() === "" ||
-        addressData[targetAddress]?.contact?.mobileNo.trim() === "" ||
+        addressData[targetAddress]?.contact?.mobileNo === "" ||
         addressData[targetAddress]?.contact?.type.trim() === "" ||
         addressData[targetAddress]?.contact?.name.trim() === "" ||
         addressData[targetAddress]?.pincode.trim() === "" ||
-        addressData[targetAddress]?.pincode.trim() === 0 ||
+        addressData[targetAddress]?.pincode === 0 ||
         addressData[targetAddress]?.landmark.trim() === ""
       ) {
         setInputError(true);
