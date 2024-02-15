@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CustomTable } from "../../components/Table";
 import { createColumnHelper } from "@tanstack/react-table";
 import { POST } from "../../utils/webService";
-import { COURIER_PRICING, GET_PLANS_PREVIEW } from "../../utils/ApiUrls";
+import { COURIER_PRICING } from "../../utils/ApiUrls";
 import { ScrollNav } from "../../components/ScrollNav";
 import upArrowBlue from "../../assets/upArrorwBlue.svg";
 import UpArrowIcon from "../../assets/Filter/upArrow.svg";
@@ -12,25 +12,19 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../components/Spinner";
 interface ICourierPricingPropTypes {
-  planId?: any;
+  logisticsData?: any;
+  setLogisticsData?: any;
+  isLoading?: boolean;
 }
 
 const CourierPricing = (props: ICourierPricingPropTypes) => {
-  const { planId } = props;
+  const { logisticsData, setLogisticsData, isLoading } = props;
 
   const columnsHelper = createColumnHelper<any>();
 
   const [data, setData] = useState<any>({ b2bData: [], b2cData: [] });
-  // const [planPreviewData, setPlanPreviewData] = useState({});
 
-  // State to hold logistics rate card data
-  const [logisticsData, setLogisticsData] = useState<any>([]);
-
-  // State to hold COD rate card data
-  const [codData, setCodData] = useState([]);
-
-  const [renderingComponents, setRenderingComponents] = React.useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [renderingComponents, setRenderingComponents] = useState(0);
 
   const arrayData = [
     { index: 0, label: "B2C" },
@@ -834,39 +828,6 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
     }),
   ];
 
-  const planPreview = async () => {
-    let payload = {
-      planId: planId,
-    };
-    try {
-      setIsLoading(true);
-      const { data } = await POST(GET_PLANS_PREVIEW, payload);
-      if (data?.success && data?.data?.length > 0) {
-        // setPlanPreviewData(data?.data[0]);
-        let rateCards: any = data.data[0].rateCards;
-
-        // Filter and set logistics data
-        const filteredLogisticsData: any = rateCards
-          .filter((card: any) => card.type === "LOGISTIC")
-          .map((card: any) => card.data);
-        setLogisticsData(filteredLogisticsData);
-
-        // Filter and set COD data
-        const filteredCodData = rateCards
-          .filter((card: any) => card.type === "COD")
-          .map((card: any) => card.data);
-        setCodData(filteredCodData);
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-        toast.error(data.message);
-      }
-    } catch (error) {
-      setIsLoading(false);
-      console.error(error);
-    }
-  };
-
   const RatesForpartners: any = () => {
     return logisticsData?.map((logisticsInfo: any, index: number) => {
       if (logisticsData.length > 0) {
@@ -926,6 +887,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
                           <div className="overflow-auto ">
                             <RateCardTable serviceData={rateCard?.service} />
                           </div>
+
+                          {/* variable charges code commented for now as no requirement for now */}
+
                           {/* <div className="ml-4 mt-6">
                             {" "}
                             <h4 className="text-[22px] font-Lato font-semibold">
@@ -953,11 +917,8 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
       const { data } = await POST(COURIER_PRICING);
-
       if (data?.success) {
-        setIsLoading(false);
         if (data.data[0].accountType === "B2C") {
           setData({ ...data, b2cData: data.data[0].rates });
         } else {
@@ -965,14 +926,9 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
         }
       } else {
         toast.error(data.message);
-        setIsLoading(false);
       }
     })();
   }, [renderingComponents]);
-
-  useEffect(() => {
-    planPreview();
-  }, []);
 
   return (
     <div>
@@ -989,7 +945,6 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
         {renderingComponents === 0 ? (
           // <CustomTable columns={columns} data={data.b2cData || []} />
-
           isLoading ? (
             <div className="flex justify-center w-[100%] h-[40vh] items-center">
               <Spinner />
