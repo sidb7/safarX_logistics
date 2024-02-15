@@ -4,7 +4,7 @@ import CustomButton from "../Button";
 import DeleteGif from "../../assets/common/DeleteGif.gif";
 import { useState } from "react";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../Spinner";
 interface IDeleteModal {
   url: string;
