@@ -1197,7 +1197,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 </div>
               )}
             </div>
-            {errorModalData.orderDetails === "EWay Bill Errors" && (
+            {errorModalData.orderDetails === "EWay Bill Error" && (
               <div className="my-[2rem]">
                 <InputBox
                   label="Enter Eway Bill No"
@@ -1297,7 +1297,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         if (
           !otherErrorDetails?.eWayBillNo &&
-          errorModalData?.orderDetails === "EWay Bill Errors"
+          errorModalData?.orderDetails === "EWay Bill Error"
         ) {
           return false;
         }
