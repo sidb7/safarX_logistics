@@ -7,7 +7,7 @@ import CustomCheckbox from "../../../components/CheckBox";
 import TickLogo from "../../../assets/common/Tick.svg";
 import DeliveryAddress from "./DeliveryAddress/deliveryLocation";
 import BottomLayout from "../../../components/Layout/bottomLayout";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
 import {
   ADD_DELIVERY_LOCATION,

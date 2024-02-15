@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { GST_AGREEMENTS } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import Checkbox from "../../../../components/CheckBox";

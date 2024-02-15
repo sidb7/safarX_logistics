@@ -34,7 +34,7 @@ import {
   VERIFY_ADDRESS,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { dummyStateDropdownData } from "../../utils/dummyData";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
 
@@ -1196,7 +1196,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 </div>
               )}
             </div>
-            {errorModalData.orderDetails === "EWayBill Errors" && (
+            {errorModalData.orderDetails === "EWay Bill Errors" && (
               <div className="my-[2rem]">
                 <InputBox
                   label="Enter Eway Bill No"
@@ -1299,7 +1299,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         if (
           !otherErrorDetails?.eWayBillNo &&
-          errorModalData?.orderDetails === "EWayBill Errors"
+          errorModalData?.orderDetails === "EWay Bill Errors"
         ) {
           return false;
         }

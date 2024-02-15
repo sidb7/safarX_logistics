@@ -20,7 +20,7 @@ import {
   LOGO_AND_BRAND,
 } from "../../../../utils/ApiUrls";
 import AddButton from "../../../../components/Button/addButton";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import { v4 as uuidv4 } from "uuid";
 import { ResponsiveState } from "../../../../utils/responsiveState";
@@ -221,7 +221,7 @@ const BusinessType = (props: ITypeProps) => {
   const addAddress = () => {
     for (let i = 0; i < defaultAddress.length; i++) {
       if (defaultAddress[i].fullAddress?.length === 1) {
-        toast.warning("Previous Address Field Is Empty...");
+        toast.error("Previous Address Field Is Empty...");
         return;
       }
     }

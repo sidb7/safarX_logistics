@@ -14,7 +14,7 @@ import { OnlineDetailsColumns } from "./history/onlineHistory";
 import { cashbackDetailsColumns } from "./history/cashbackHistory";
 import { POST } from "../../utils/webService";
 import { GET_WALLET_TRANSACTION } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../components/Layout/breadcrum";
 import { Spinner } from "../../components/Spinner";
 import { useSelector } from "react-redux";

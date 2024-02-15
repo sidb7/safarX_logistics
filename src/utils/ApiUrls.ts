@@ -197,6 +197,7 @@ const GET_ALL_PLANS = `${SELLER_BASE_URL}/sellerPlans/getAllCompanyPlanBySeller`
 const POST_CREATE_PLAN = `${SELLER_BASE_URL}/sellerPlans/createSellerPlan`;
 const GET_PENDING_PLANS = `${SELLER_BASE_URL}/seller/pendingPlans`;
 const POST_ASSIGN_PLANV3 = `${SELLER_BASE_URL}/seller/assignPlanV4`;
+const GET_PLANS_PREVIEW = `${SELLER_BASE_URL}/sellerPlans/planPreview`;
 
 //Gst Agreement
 const GST_AGREEMENTS = `${SELLER_URL}/api/v1/seller/acceptNoGSTAgreement`;
@@ -266,8 +267,8 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING = `${SELLER_BASE_URL}/tracking/getTracking`;
-const GET_CLIENTTRACKING_INFO = `${SELLER_BASE_URL}/tracking/getTracking`;
+const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${TRACKING_URL}/api/v1/tracking/getTracking`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -501,4 +502,5 @@ export {
   DELETE_INTEGRATED_STORE,
   UPDATE_OTHER_ORDER_DETAILS,
   GET_PENDING_PLANS,
+  GET_PLANS_PREVIEW,
 };

@@ -27,7 +27,7 @@ import LayersIcon from "../../../assets/layer.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import BottomModal from "../../../components/CustomModal/customBottomModal";
 import { Spinner } from "../../../components/Spinner";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const Catalogue = () => {
   const navigate = useNavigate();

@@ -18,7 +18,7 @@ import {
   GET_LATEST_ORDER,
   SET_PARTNER_SERVICE_INFO,
 } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../../components/Spinner";

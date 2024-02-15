@@ -22,7 +22,7 @@ import {
   UPDATE_TEMP_ORDER_ADDRESS,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 let dummyErrors = [
   "Insufficient Balance",

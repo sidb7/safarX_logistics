@@ -10,7 +10,7 @@ import CustomInputBox from "../../../components/Input";
 import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
 import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   constructNavigationObject,
   setLocalStorage,

@@ -9,7 +9,7 @@ import ServiceButton from "../../../components/Button/ServiceButton";
 import ComboProductBox from "../../../components/ComboProductBox";
 import { POST } from "../../../utils/webService";
 import { GET_COMBO_PRODUCT, GET_PRODUCTS } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 import StackLogo from "../../../assets/Catalogue/StackIcon.svg";
 import "../../../styles/skeleton.css";

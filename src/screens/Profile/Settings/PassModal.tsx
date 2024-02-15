@@ -4,7 +4,7 @@ import InformativeIcon from "../../../assets/I icon.svg";
 import CustomInputBox from "../../../components/Input";
 import RightSideModal from "../.././../components/CustomModal/customRightModal";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { UPDATE_PASSWORD } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import EyeIcon from "../../../assets/Login/eye.svg";

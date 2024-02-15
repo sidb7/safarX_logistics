@@ -4,7 +4,7 @@ import {
   POST_VERIFY_AADHAR_URL,
   POST_VERIFY_GST_URL,
 } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface IProps {
   sec?: any;

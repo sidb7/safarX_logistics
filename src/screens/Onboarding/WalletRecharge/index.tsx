@@ -27,7 +27,7 @@
 //   RECHARGE_STATUS,
 // } from "../../../utils/ApiUrls";
 // import { POST } from "../../../utils/webService";
-// import { toast } from "react-toastify";
+// import { toast } from "react-hot-toast";
 // // import { PaytmButton } from "../../../utils/payPaytm";
 // import YaariPointsIcon from "../../../assets/Transaction/YaariPoints.svg";
 // import {

@@ -8,7 +8,7 @@ import AccessDenied from "../../components/AccessDenied";
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import { POST } from "../../utils/webService";
 import { GET_ALL_INVOICES } from "../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { ScrollNav } from "../../components/ScrollNav";
 import { Spinner } from "../../components/Spinner";
 

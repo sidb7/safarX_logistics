@@ -21,7 +21,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import PackageBox from "./PackageBox";
 import BoxDetails from "./BoxDetails";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { useSelector } from "react-redux";
 import AddPackageDetails from "./AddPackageDetails";

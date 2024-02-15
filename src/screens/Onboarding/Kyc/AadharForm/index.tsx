@@ -21,7 +21,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { POST } from "../../../../utils/webService";
 import { POST_VERIFY_AADHAR_URL } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { aadharRegex } from "../../../../utils/regexCheck";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 // import TimerCounter from "../../../../components/TimerCountdown";
