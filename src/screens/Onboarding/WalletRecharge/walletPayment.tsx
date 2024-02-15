@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import NavBar from "../../../layout/Old_NavBar";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import CustomDropDown from "../../../components/DropDown";
 import { POST } from "../../../utils/webService";
 import JusPayIcon from "../../../assets/juspay.png";

@@ -10,7 +10,7 @@ import { Spinner } from "../../../components/Spinner";
 import { GET, POST } from "../../../utils/webService";
 import { GET_CLIENTTRACKING_INFO } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { convertEpochToDateTime } from "../../../utils/utility";
 import { getQueryJson } from "../../../utils/utility";
 import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";

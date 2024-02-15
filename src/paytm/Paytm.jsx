@@ -6,7 +6,7 @@ import {
   INITIAL_RECHARGE,
   RECHARGE_STATUS,
 } from "../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 function Paytm({ text, amt, navigate, isDisabled }) {
   let urlLink = "";
@@ -122,12 +122,12 @@ function Paytm({ text, amt, navigate, isDisabled }) {
           amount: data?.data?.amount,
         },
       });
-    }else{
-      toast.error( data?.message || "Some Thing Went Wrong")
+    } else {
+      toast.error(data?.message || "Some Thing Went Wrong");
     }
 
-    if(!data){
-      toast.error("Some Thing Went Wrong" ) 
+    if (!data) {
+      toast.error("Some Thing Went Wrong");
     }
   };
 

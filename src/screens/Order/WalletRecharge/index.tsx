@@ -14,7 +14,7 @@ import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import ServiceButton from "../../../components/Button/ServiceButton";
 import leftArrow from "../../../assets/leftArrow.svg";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useSelector, useDispatch } from "react-redux";
 import "react-tooltip/dist/react-tooltip.css";
 import { Tooltip } from "react-tooltip";

@@ -15,7 +15,7 @@ import infoCircleOutline from "../../../../assets/info-circle-outline.svg";
 import AmazonIcon from "../../../../assets/AmazonIcon.png";
 import Input from "../../../../components/Input";
 import { Tooltip } from "react-tooltip";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 interface IProps {}
 
@@ -416,7 +416,6 @@ const Channel = (props: IProps) => {
 
           {/*  */}
         </div>
-        {/* <ToastContainer /> */}
       </div>
       {/* ) : (
         <AccessDenied />

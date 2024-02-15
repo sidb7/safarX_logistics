@@ -6,7 +6,7 @@ import InfoCircle from "../../../assets/info-circle.svg";
 import CustomInputBox from "../../../components/Input";
 import AddButton from "../../../components/Button/addButton";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   FORGOT_PASSWORD,
   POST_SEND_OTP_URL,

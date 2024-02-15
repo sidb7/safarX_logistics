@@ -3,7 +3,7 @@ import CustomInputBox from "../../../components/Input";
 import { useEffect, useState } from "react";
 import { POST } from "../../../utils/webService";
 import { GET_PROFILE_URL, UPDATE_SELLER } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 

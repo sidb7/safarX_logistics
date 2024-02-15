@@ -11,7 +11,7 @@ import {
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import downArrowIcon from "../../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../../assets/Filter/upArrow.svg";
 

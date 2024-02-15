@@ -5,8 +5,7 @@ import { Breadcrum } from "../../../../../components/Layout/breadcrum";
 import CustomInputBox from "../../../../../components/Input";
 import { SearchBox } from "../../../../../components/SearchBox";
 import ReusableAccordion from "../../../../../components/CustomAccordian/reusableAccordion";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../../../utils/webService";
 import {
   POST_GET_ALL_INITIAL_MENU,
@@ -610,7 +609,6 @@ function AddRole() {
                     </div>
                 }
             ></CustomModal> */}
-        <ToastContainer />
       </div>
     </div>
   );

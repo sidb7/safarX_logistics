@@ -6,7 +6,7 @@ import ProductIcon from "../../../../assets/Product/Product.svg";
 import BottomLayout from "../../../../components/Layout/bottomLayout";
 import { CREATE_SELLER_BOX } from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   checkNonNegative,
   greaterThenZero,

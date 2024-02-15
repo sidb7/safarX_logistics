@@ -17,7 +17,7 @@ import {
   POST_SIGN_UP_WITH_GOOGLE_URL,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { signUpUser } from "../../../redux/reducers/signUpReducer";
 import {

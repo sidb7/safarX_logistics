@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { POST } from "../utils/webService";
 import { LOGOUT } from "../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { socketCallbacks } from "../Socket";
 
 type Props = {};

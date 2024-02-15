@@ -10,7 +10,7 @@ import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 // import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../utils/webService";
 import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
 

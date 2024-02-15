@@ -52,7 +52,7 @@ import BackArrowIcon from "../../../assets/backArrow.svg";
 import WebBackArrowIcon from "../../../assets/PickUp/EssentialWeb.svg";
 import NavBar from "../../../layout/Old_NavBar";
 import ServiceButton from "../../../components/Button/ServiceButton";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import LandmarkContent from "./landmarkContent";

@@ -11,7 +11,7 @@ import { POST } from "../../../../utils/webService";
 import { POST_ACCEPT_AGREEMENTS } from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Spinner } from "../../../../components/Spinner";
 import Checkbox from "../../../../components/CheckBox";
 

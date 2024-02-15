@@ -9,7 +9,7 @@ import { Spinner } from "../../../components/Spinner";
 import { ResponsiveState } from "../../../utils/responsiveState";
 // import CloseIcon from "../../../assets/CloseIcon.svg";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
 import { GET_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 import { constructNavigationObject } from "../../../utils/utility";

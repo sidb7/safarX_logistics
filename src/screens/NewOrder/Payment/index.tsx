@@ -35,7 +35,7 @@ import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
 import { POST } from "../../../utils/webService";
 import { POST_PLACE_ORDER } from "../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { getQueryJson } from "../../../utils/utility";
 

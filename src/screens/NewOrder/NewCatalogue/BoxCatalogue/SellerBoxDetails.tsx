@@ -9,7 +9,7 @@ import {
   CREATE_SELLER_BOX,
   UPDATE_SELLER_BOX,
 } from "../../../../utils/ApiUrls";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import {
   checkNonNegative,
   greaterThenZero,
