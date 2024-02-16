@@ -140,9 +140,13 @@ const Summary = (props: Props) => {
       if (setOrderIdPromise?.data?.success) {
         // If successful, proceed with the second API call
         const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, {
-          tempOrderId: +shipyaari_id,
-          source: orderSource,
-          orderId,
+          orders: [
+            {
+              tempOrderId: +shipyaari_id,
+              source: orderSource,
+              orderId,
+            },
+          ],
         });
 
         // Check the result of the second API call

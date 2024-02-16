@@ -165,9 +165,13 @@ const Index = () => {
 
   const placeOrder = async () => {
     const payload = {
-      tempOrderId: shipyaari_id,
-      source: orderSource,
-      orderId,
+      orders: [
+        {
+          tempOrderId: shipyaari_id,
+          source: orderSource,
+          orderId,
+        },
+      ],
     };
     const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, payload);
     let promisePlaceOrder = new Promise(function (resolve, reject) {

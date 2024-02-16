@@ -303,9 +303,13 @@ const Payment = () => {
   const placeOrderApi = async () => {
     try {
       const payload = {
-        tempOrderId: shipyaari_id,
-        source: orderSource,
-        orderId,
+        orders: [
+          {
+            tempOrderId: shipyaari_id,
+            source: orderSource,
+            orderId,
+          },
+        ],
       };
       const { data } = await POST(POST_PLACE_ALL_ORDERS, payload);
 

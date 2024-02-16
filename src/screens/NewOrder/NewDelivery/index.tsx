@@ -66,7 +66,7 @@ const DeliveryLocation = () => {
   const [inputError, setInputError] = useState(false);
   const shipyaari_id = params?.shipyaari_id;
   let orderSource = params?.source || "";
-  let orderId = params?.orderId;
+  let orderId = params?.orderId || "";
 
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
