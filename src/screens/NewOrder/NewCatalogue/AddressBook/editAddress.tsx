@@ -210,11 +210,11 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
           />
           <CustomInputBox
             label="Locality"
-            value={updateAddress.sector}
+            value={updateAddress.locality}
             onChange={(e: any) =>
               setUpdateAddress({
                 ...updateAddress,
-                sector: e.target.value,
+                locality: e.target.value,
               })
             }
           />
