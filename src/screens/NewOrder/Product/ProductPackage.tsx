@@ -124,6 +124,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
   const params = getQueryJson();
   let shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
+  let orderId = params?.orderId || "";
 
   const [isSearchProductRightModalOpen, setIsSearchProductRightModalOpen] =
     useState<boolean>(false);
@@ -384,7 +385,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
       } else {
         toast.error(data?.message);
         navigate(
-          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
         );
         return;
       }
@@ -455,7 +456,7 @@ const Package: React.FunctionComponent<IPackageProps> = (props) => {
     if (data?.success) {
       toast.success(data?.message);
       navigate(
-        `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
       );
     } else {
       toast.error(data?.message);
