@@ -41,9 +41,9 @@ import {
   INITIAL_RECHARGE,
   PLACE_ORDER,
   RECHARGE_STATUS,
-  POST_PLACE_ORDER,
   PHONEPE_TRANSACTION_STATUS,
   SELLER_WEB_URL,
+  POST_PLACE_ALL_ORDERS,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -102,6 +102,7 @@ const Payment = () => {
 
   const shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
+  const orderId = params?.orderId || "";
   // useEffect(() => {
   //   (async () => {
   //     try {
@@ -301,8 +302,12 @@ const Payment = () => {
 
   const placeOrderApi = async () => {
     try {
-      const payload = { tempOrderId: shipyaari_id, source: orderSource };
-      const { data } = await POST(POST_PLACE_ORDER, payload);
+      const payload = {
+        tempOrderId: shipyaari_id,
+        source: orderSource,
+        orderId,
+      };
+      const { data } = await POST(POST_PLACE_ALL_ORDERS, payload);
 
       if (data?.success) {
         toast.success(data?.message);

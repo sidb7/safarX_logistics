@@ -5,7 +5,7 @@ import { POST } from "../../../utils/webService";
 import {
   GET_LATEST_ORDER,
   POST_SET_ORDER_ID,
-  POST_PLACE_ORDER,
+  POST_PLACE_ALL_ORDERS,
 } from "../../../utils/ApiUrls";
 import { HighRiskPincodeModal } from "./whatsappModal";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
@@ -139,9 +139,10 @@ const Summary = (props: Props) => {
 
       if (setOrderIdPromise?.data?.success) {
         // If successful, proceed with the second API call
-        const placeOrderPromise = await POST(POST_PLACE_ORDER, {
+        const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, {
           tempOrderId: +shipyaari_id,
           source: orderSource,
+          orderId,
         });
 
         // Check the result of the second API call
@@ -165,7 +166,7 @@ const Summary = (props: Props) => {
               placeOrderPromise?.data?.data[0]?.requiredBalance;
 
             navigate(
-              `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}`,
+              `/orders/add-order/payment?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`,
               {
                 state: { requiredBalance: requiredBalance },
               }
@@ -413,6 +414,7 @@ const Summary = (props: Props) => {
                 mode={serviceDetails?.serviceMode}
                 shipyaari_id={shipyaari_id}
                 orderSource={orderSource}
+                orderId={orderId}
               />
             </div>
           </div>

@@ -34,7 +34,7 @@ import { Link } from "react-router-dom";
 import DoneIcon from "../../../assets/Payment/Done.gif";
 import WebCrossIcon from "../../../assets/PickUp/ModalCrossWeb.svg";
 import { POST } from "../../../utils/webService";
-import { POST_PLACE_ORDER } from "../../../utils/ApiUrls";
+import { POST_PLACE_ALL_ORDERS } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Breadcrum } from "../../../components/Layout/breadcrum";
 import { getQueryJson } from "../../../utils/utility";
@@ -92,6 +92,7 @@ const Index = () => {
   const params = getQueryJson();
   const shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
+  const orderId = params?.orderId || "";
 
   const handleUpiPayment: any = () => {
     if (payment === true) {
@@ -163,8 +164,12 @@ const Index = () => {
   };
 
   const placeOrder = async () => {
-    const payload = { tempOrderId: shipyaari_id, source: orderSource };
-    const placeOrderPromise = await POST(POST_PLACE_ORDER, payload);
+    const payload = {
+      tempOrderId: shipyaari_id,
+      source: orderSource,
+      orderId,
+    };
+    const placeOrderPromise = await POST(POST_PLACE_ALL_ORDERS, payload);
     let promisePlaceOrder = new Promise(function (resolve, reject) {
       resolve(placeOrderPromise);
     });
