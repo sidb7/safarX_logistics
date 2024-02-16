@@ -266,8 +266,9 @@ const PickupLocation = () => {
         shipyaari_id = params?.shipyaari_id || tempOrderId || "";
         const orderTypeForNeworder = response?.data[0]?.source;
         orderSource = params?.source || orderTypeForNeworder || "";
+        let orderId = params?.orderId;
         navigate(
-          `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+          `/orders/add-order/delivery?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
         );
       } else {
         toast.error(response?.message);

@@ -414,6 +414,7 @@ const Summary = (props: Props) => {
                 mode={serviceDetails?.serviceMode}
                 shipyaari_id={shipyaari_id}
                 orderSource={orderSource}
+                orderId={orderId}
               />
             </div>
           </div>

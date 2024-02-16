@@ -24,6 +24,7 @@ interface ISummaryData {
   mode?: any;
   shipyaari_id?: any;
   orderSource?: any;
+  orderId?: any;
 }
 const SummaryService: React.FunctionComponent<ISummaryData> = ({
   companyServiceName = "",
@@ -46,6 +47,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
   mode = "",
   shipyaari_id = "",
   orderSource = "",
+  orderId = "",
 }) => {
   const navigate = useNavigate();
 
@@ -63,7 +65,7 @@ const SummaryService: React.FunctionComponent<ISummaryData> = ({
             className="cursor-pointer"
             onClick={() => {
               navigate(
-                `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+                `/orders/add-order/service?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
               );
             }}
           >

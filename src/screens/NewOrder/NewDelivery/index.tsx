@@ -66,6 +66,7 @@ const DeliveryLocation = () => {
   const [inputError, setInputError] = useState(false);
   const shipyaari_id = params?.shipyaari_id;
   let orderSource = params?.source || "";
+  let orderId = params?.orderId;
 
   const [isBillingAddress, setIsBillingAddress] = useState(true);
   const [deliveryAddress, setDeliveryAddress] = useState<any>({
@@ -252,7 +253,7 @@ const DeliveryLocation = () => {
         toast.success(response?.message);
 
         navigate(
-          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+          `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
         );
       } else {
         toast.error(response?.message);
