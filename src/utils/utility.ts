@@ -147,7 +147,42 @@ export const convertEpochToDateTime = (value: number) => {
   return formattedDateTime;
 };
 
-//export verifyToken = apiIntergration function
+// export const convertEpochToDateTimeV2 = (value: number) => {
+//   console.log("****************", value);
+//   let epoch = value as any;
+//   console.log("🚀 ~ convertEpochToDateTimeV2 ~ epoch:", epoch);
+//   const date = new Date(epoch);
+//   console.log("🚀 ~ convertEpochToDateTimeV2 ~ date:", date);
+//   const year = date.getFullYear();
+//   const month = date.getMonth() + 1; // Months are zero-based, so add 1
+//   const day = date.getDate();
+//   const hours = date.getHours();
+//   const minutes = date.getMinutes();
+//   const seconds = date.getSeconds();
+
+//   // const formattedDateTime = `${year}-${month.toString().padStart(2, "0")}-${day
+//   //   .toString()
+//   //   .padStart(2, "0")}`;
+//   const formattedDateTime = `${day.toString().padStart(2, "0")}/${month
+//     .toString()
+//     .padStart(2, "0")}/${year} `;
+//   console.log("🚀 ~ formattedDateTime ~ formattedDateTime:", formattedDateTime);
+
+//   return formattedDateTime;
+// };
+
+export const convertEpochToDateTimeV2 = (value: any) => {
+  if (!value) return;
+  let epoch = +value; // convert seconds to milliseconds
+  const date = new Date(epoch);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0"); // Months are zero-based, so add 1
+  const day = date.getDate().toString().padStart(2, "0");
+  const formattedDateTime = `${day}-${month}-${year}`;
+  return formattedDateTime;
+};
+
+// export verifyToken = apiIntergration function
 export const tokenKey = "891f5e6d-b3b3-4c16-929d-b06c3895e38d";
 
 export const titleCase = (str: string) => {

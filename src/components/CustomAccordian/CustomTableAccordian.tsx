@@ -4,6 +4,15 @@ import { POST } from "../../utils/webService";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
 import { Spinner } from "../../components/Spinner/index";
+import CustomInputBox from "../../components/Input";
+import { GET_PINCODE_DATA, UPDATE_TEMP_ORDER_INFO } from "../../utils/ApiUrls";
+import { pickupAddress } from "../../utils/dummyData";
+import { convertXMLToXLSX } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { convertEpochToDateTimeV2 } from "../../utils/utility";
+import DatePicker from "react-datepicker";
+
 interface ICustomTableAccordion {
   data?: any;
 }
@@ -13,6 +22,73 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [openIndex, setOpenIndex] = useState(null);
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [isLoading, setIsLoading]: any = useState(false);
+  const [pincode, setPincode] = useState<any>();
+  const [pincodeData, setPincodeData] = useState<any>({});
+
+  const navigate = useNavigate();
+
+  const [pickupDate, setPickupDate] = useState("");
+  //storing these details to call the post api for updation
+  const [updatePayload, setUpdatePayload] = useState({
+    orderId: "",
+    tempOrderId: "",
+    source: "",
+  });
+
+  //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
+  const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
+    pickUpAddress: {
+      contact: {
+        contactName: "",
+        mobileNo: "",
+        emailId: "",
+        contactType: "",
+      },
+
+      flatNo: "",
+      locality: "",
+      landmark: "",
+      city: "",
+      state: "",
+      country: "",
+      pincode: "",
+      addressType: "",
+      pickupDate: "",
+    },
+  });
+
+  const mainDate: any = convertEpochToDateTimeV2(
+    getPickAddressData?.pickUpAddress?.pickupDate
+  );
+
+  let selectedDate = getPickAddressData?.pickUpAddress?.pickupDate;
+
+  const epochTimestamp = new Date(selectedDate).getTime() / 1000;
+
+  const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
+    deliveryAddress: {
+      contact: {
+        contactName: "",
+        mobileNo: "",
+        emailId: "",
+        contactType: "",
+      },
+
+      flatNo: "",
+      locality: "",
+      landmark: "",
+      city: "",
+      state: "",
+      country: "",
+      pincode: "",
+      addressType: "",
+      gstNumber: "",
+    },
+  });
+
+  const [addressOpenModal, setAddressOpenModal] = useState(false);
+  const [convertedDate, setConvertedDate] = useState("");
+
   const entries: any = document?.getElementsByClassName("entries");
 
   useEffect(() => {
@@ -24,10 +100,147 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (orderDetails.length > 0) {
+      const deliveryAddress = orderDetails[1];
+      // delete deliveryAddress.Type;
+      delete deliveryAddress.title;
+      // delete deliveryAddress["Email Id"];
+      // delete deliveryAddress["Address Type"];
+      const pickAddress = orderDetails[0];
+      // delete deliveryAddress.Type;
+      delete pickAddress.title;
+      setOrderDetails({ ...orderDetails, deliveryAddress });
+    }
+  }, []);
+
+  useEffect(() => {
+    setGetPickUpAddressData(getPickAddressData);
+  }, [getPickAddressData]);
+
   const entriesHeight = entries?.[0]?.offsetHeight;
 
-  const handleItemClick = (index: any) => {
+  const handleItemClick = async (index: any, requestName?: string) => {
     setOpenIndex(openIndex === index ? null : index);
+
+    setAddressOpenModal(!addressOpenModal);
+    if (openIndex === 0) {
+      try {
+        const payload = {
+          pickupAddress: {
+            contact: {
+              name: getPickAddressData?.pickUpAddress?.contact?.contactName,
+              mobileNo: getPickAddressData?.pickUpAddress?.contact?.mobileNo,
+              emailId: getPickAddressData?.pickUpAddress?.contact?.emailId,
+              type: getPickAddressData?.pickUpAddress?.contact?.contactType,
+            },
+
+            flatNo: getPickAddressData?.pickUpAddress?.flatNo,
+            locality: getPickAddressData?.pickUpAddress?.locality,
+            landmark: getPickAddressData?.pickUpAddress?.landmark,
+            city: getPickAddressData?.pickUpAddress?.city,
+            state: getPickAddressData?.pickUpAddress?.state,
+            country: getPickAddressData?.pickUpAddress?.country,
+            pincode: getPickAddressData?.pickUpAddress?.pincode,
+            fullAddress:
+              getPickAddressData?.pickUpAddress?.flatNo +
+              " " +
+              getPickAddressData?.pickUpAddress?.locality +
+              " " +
+              getPickAddressData?.pickUpAddress?.city +
+              " " +
+              getPickAddressData?.pickUpAddress?.state +
+              " " +
+              getPickAddressData?.pickUpAddress?.country +
+              " " +
+              getPickAddressData?.pickUpAddress?.pincode,
+            addressType: getPickAddressData?.pickUpAddress?.addressType,
+            pickupDate: epochTimestamp,
+          },
+          orderId: updatePayload.orderId,
+          tempOrderId: updatePayload.tempOrderId,
+          source: updatePayload.source,
+        };
+
+        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        if (data?.success) {
+          toast.success("Update Success");
+          let temp: any;
+          temp.pickUpAddress.pickupDate = "";
+        } else {
+          toast.error(data?.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    if (openIndex === 1) {
+      try {
+        const payload = {
+          deliveryAddress: {
+            contact: {
+              name: getDeliveryAddressData?.deliveryAddress?.contact
+                ?.contactName,
+              mobileNo:
+                getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo,
+              emailId:
+                getDeliveryAddressData?.deliveryAddress?.contact?.emailId,
+              type: getDeliveryAddressData?.deliveryAddress?.contact
+                ?.contactType,
+            },
+
+            flatNo: getDeliveryAddressData?.deliveryAddress?.flatNo,
+            locality: getDeliveryAddressData?.deliveryAddress?.locality,
+            landmark: getDeliveryAddressData?.deliveryAddress?.landmark,
+            city: getDeliveryAddressData?.deliveryAddress?.city,
+            state: getDeliveryAddressData?.deliveryAddress?.state,
+            country: getDeliveryAddressData?.deliveryAddress?.country,
+            pincode: getDeliveryAddressData?.deliveryAddress?.pincode,
+            fullAddress:
+              getDeliveryAddressData?.deliveryAddress?.flatNo +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.locality +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.city +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.state +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.country +
+              " " +
+              getDeliveryAddressData?.deliveryAddress?.pincode,
+            addressType: getDeliveryAddressData?.deliveryAddress?.addressType,
+            gstNumber: getDeliveryAddressData?.deliveryAddress?.gstNumber,
+          },
+
+          orderId: updatePayload.orderId,
+          tempOrderId: updatePayload.tempOrderId,
+          source: updatePayload.source,
+        };
+
+        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        if (data?.success) {
+          toast.success("Update Success");
+        } else {
+          toast.error(data?.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
+  const fetchPincodeData = async (e: any) => {
+    if (!isNaN(e.target.value)) {
+      setPincode(e.target.value);
+    }
+    if (e.target.value.length === 6) {
+      const payload = {
+        pincode: e.target.value,
+      };
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      setPincodeData(response?.data[0]);
+    }
   };
 
   const getSellerOrderCompleteData = async (orderData: any) => {
@@ -39,55 +252,195 @@ const Accordion = (props: ICustomTableAccordion) => {
         awb: orderData?.awb ? orderData?.awb : "0",
       });
 
+      let temp;
+      temp = getPickAddressData;
+      temp.pickUpAddress.contact.contactName =
+        data?.data[0]?.data[0]?.pickupAddress.contact.name;
+      temp.pickUpAddress.contact.mobileNo =
+        data?.data[0]?.data[0]?.pickupAddress.contact.mobileNo;
+      temp.pickUpAddress.contact.emailId =
+        data?.data[0]?.data[0]?.pickupAddress.contact.emailId;
+      temp.pickUpAddress.contact.contactType =
+        data?.data[0]?.data[0]?.pickupAddress.contact.type;
+      temp.pickUpAddress.flatNo = data?.data[0]?.data[0]?.pickupAddress.flatNo;
+      temp.pickUpAddress.locality =
+        data?.data[0]?.data[0]?.pickupAddress.locality;
+      temp.pickUpAddress.landmark =
+        data?.data[0]?.data[0]?.pickupAddress.landmark;
+      temp.pickUpAddress.city = data?.data[0]?.data[0]?.pickupAddress.city;
+      temp.pickUpAddress.state = data?.data[0]?.data[0]?.pickupAddress.state;
+      temp.pickUpAddress.country =
+        data?.data[0]?.data[0]?.pickupAddress.country;
+      temp.pickUpAddress.pincode =
+        data?.data[0]?.data[0]?.pickupAddress.pincode;
+      temp.pickUpAddress.addressType =
+        data?.data[0]?.data[0]?.pickupAddress.addressType;
+      temp.pickUpAddress.pickupDate = +(
+        +data?.data[0]?.data[0]?.pickupAddress.pickupDate * 1000
+      );
+
+      setGetPickUpAddressData({ ...temp });
+
+      let deliveryTemp;
+      deliveryTemp = getDeliveryAddressData;
+      deliveryTemp.deliveryAddress.contact.contactName =
+        data?.data[0]?.data[0]?.deliveryAddress.contact.name;
+      deliveryTemp.deliveryAddress.contact.mobileNo =
+        data?.data[0]?.data[0]?.deliveryAddress.contact.mobileNo;
+      deliveryTemp.deliveryAddress.contact.emailId =
+        data?.data[0]?.data[0]?.deliveryAddress.contact.emailId;
+      deliveryTemp.deliveryAddress.contact.contactType =
+        data?.data[0]?.data[0]?.deliveryAddress.contact.type;
+      deliveryTemp.deliveryAddress.flatNo =
+        data?.data[0]?.data[0]?.deliveryAddress.flatNo;
+      deliveryTemp.deliveryAddress.locality =
+        data?.data[0]?.data[0]?.deliveryAddress.locality;
+      deliveryTemp.deliveryAddress.landmark =
+        data?.data[0]?.data[0]?.deliveryAddress.landmark;
+      deliveryTemp.deliveryAddress.city =
+        data?.data[0]?.data[0]?.deliveryAddress.city;
+      deliveryTemp.deliveryAddress.state =
+        data?.data[0]?.data[0]?.deliveryAddress.state;
+      deliveryTemp.deliveryAddress.country =
+        data?.data[0]?.data[0]?.deliveryAddress.country;
+      deliveryTemp.deliveryAddress.pincode =
+        data?.data[0]?.data[0]?.deliveryAddress.pincode;
+      deliveryTemp.deliveryAddress.addressType =
+        data?.data[0]?.data[0]?.deliveryAddress.addressType;
+      deliveryTemp.deliveryAddress.gstNumber =
+        data?.data[0]?.data[0]?.deliveryAddress.gstNumber;
+      setGetDeliveryAddressData({ ...deliveryTemp });
+
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
 
-        let rows: any = [
-          {
-            title: "Pickup Address",
-            FlatNo: rowsData?.pickupAddress?.flatNo,
-            LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
-            Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
-            City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
-            State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
-            Pincode: rowsData?.pickupAddress?.pincode,
-            Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
-            "Address Type": capitalizeFirstLetter(
-              rowsData?.pickupAddress?.addressType
-            ),
-            Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
-            MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+        let updateData;
+        updateData = updatePayload;
+        updateData.orderId = rowsData?.orderId;
+        updateData.tempOrderId = rowsData?.tempOrderId;
+        updateData.source = rowsData?.source;
+        setUpdatePayload({ ...updateData });
 
+        let rows: any = [
+          // {
+          //   MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+          //   // title: "Pickup Address",
+          //   FlatNo: rowsData?.pickupAddress?.flatNo,
+          //   Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
+          //   "Email Id": capitalizeFirstLetter(
+          //     rowsData?.pickupAddress?.contact?.emailId
+          //   ),
+
+          //   LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+          //   Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+          //   State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
+          //   City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+          //   Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
+          //   // Pincode: rowsData?.pickupAddress?.pincode,
+          //   Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+          //   // Name: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.name),
+          //   Pincode: rowsData?.pickupAddress?.pincode,
+          //   "Address Type": capitalizeFirstLetter(
+          //     rowsData?.pickupAddress?.addressType
+          //   ),
+          //   // MobileNo: rowsData?.pickupAddress?.contact?.mobileNo,
+          //   title: "Pickup Address",
+
+          //   // "Email Id": capitalizeFirstLetter(
+          //   //   rowsData?.pickupAddress?.contact?.emailId
+          //   // ),
+          //   // Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
+          // },
+          {
+            "contact Name": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.contact?.name
+            ),
+            "Mobile No": rowsData?.pickupAddress?.contact?.mobileNo,
             "Email Id": capitalizeFirstLetter(
               rowsData?.pickupAddress?.contact?.emailId
             ),
-            Type: capitalizeFirstLetter(rowsData?.pickupAddress?.contact?.type),
+            "contact Type": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.contact?.type
+            ),
+            FlatNo: rowsData?.pickupAddress?.flatNo,
+            Locality: capitalizeFirstLetter(rowsData?.pickupAddress?.locality),
+            LandkMark: capitalizeFirstLetter(rowsData?.pickupAddress?.landmark),
+            City: capitalizeFirstLetter(rowsData?.pickupAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.pickupAddress?.state),
+            Country: capitalizeFirstLetter(rowsData?.pickupAddress?.country),
+            Pincode: rowsData?.pickupAddress?.pincode,
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.addressType
+            ),
+            "Pickup Date": capitalizeFirstLetter(
+              rowsData?.pickupAddress?.pickupDate
+            ),
+            title: "Pickup Address",
           },
+          // {
+          //   MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+          //   // title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
+          //   FlatNo: rowsData?.deliveryAddress?.flatNo,
+          //   Type: capitalizeFirstLetter(
+          //     rowsData?.deliveryAddress?.contact?.type
+          //   ),
+          //   "Email Id": capitalizeFirstLetter(
+          //     rowsData?.deliveryAddress?.contact?.emailId
+          //   ),
+          //   Landmark: capitalizeFirstLetter(
+          //     rowsData?.deliveryAddress?.landmark
+          //   ),
+          //   Locality: capitalizeFirstLetter(
+          //     rowsData?.deliveryAddress?.locality
+          //   ),
+          //   State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
+          //   City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+          //   Name: capitalizeFirstLetter(
+          //     rowsData?.deliveryAddress?.contact?.name
+          //   ),
+          //   Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
+          //   Pincode: rowsData?.deliveryAddress?.pincode,
+          //   "Address Type": rowsData?.deliveryAddress?.addressType,
+          //   // Name: capitalizeFirstLetter(
+          //   //   rowsData?.deliveryAddress?.contact?.name
+          //   // ),
+          //   // MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
+
+          //   // "Email Id": capitalizeFirstLetter(
+          //   //   rowsData?.deliveryAddress?.contact?.emailId
+          //   // ),
+          //   // Type: capitalizeFirstLetter(
+          //   //   rowsData?.deliveryAddress?.contact?.type
+          //   // ),
+          //   title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
+          // },
           {
-            title: rowsData?.deliveryAddress?.flatNo && "Delivery Address",
-            FlatNo: rowsData?.deliveryAddress?.flatNo,
-            Landmark: capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.landmark
-            ),
-            Locality: capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.locality
-            ),
-            City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
-            State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
-            Pincode: rowsData?.deliveryAddress?.pincode,
-            Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
-            "Address Type": rowsData?.deliveryAddress?.addressType,
-            Name: capitalizeFirstLetter(
+            "contact Name": capitalizeFirstLetter(
               rowsData?.deliveryAddress?.contact?.name
             ),
-            MobileNo: rowsData?.deliveryAddress?.contact?.mobileNo,
-
+            "Mobile No": rowsData?.deliveryAddress?.contact?.mobileNo,
             "Email Id": capitalizeFirstLetter(
               rowsData?.deliveryAddress?.contact?.emailId
             ),
             Type: capitalizeFirstLetter(
               rowsData?.deliveryAddress?.contact?.type
             ),
+            FlatNo: rowsData?.deliveryAddress?.flatNo,
+            Locality: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.locality
+            ),
+            LandkMark: capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.landmark
+            ),
+            City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+            State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
+            Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
+            Pincode: rowsData?.deliveryAddress?.pincode,
+            "Address Type": capitalizeFirstLetter(
+              rowsData?.deliveryAddress?.addressType
+            ),
+            title: "Delivery Address",
+            "GST Number": rowsData?.deliveryAddress?.gstNumber,
           },
           {
             title:
@@ -190,10 +543,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         setIsLoading(false);
       }
     } catch (error) {
-      console.error(
-        "🚀 ~ file: index.tsx:289 ~ getSellerOrderCompleteData ~ error:",
-        error
-      );
       setIsLoading(false);
       return [];
     }
@@ -210,6 +559,8 @@ const Accordion = (props: ICustomTableAccordion) => {
           <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
+                if (item?.title === "Delivery Address") {
+                }
                 return (
                   item?.title && (
                     <div
@@ -222,7 +573,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                             ? "bg-[black] text-[white] rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : "bg-[white] text-[black] rounded-lg "
                         }`}
-                        onClick={() => handleItemClick(index)}
+                        onClick={(e: any) =>
+                          handleItemClick(index, e.target.textContent)
+                        }
                       >
                         {item?.title}
                       </div>
@@ -246,7 +599,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       className="grid grid-cols-12"
                                       key={key}
                                     >
-                                      <div
+                                      {/* <div
                                         id="boxInfo"
                                         className={`col-span-3 mt-1  ${
                                           index === 1 ||
@@ -266,35 +619,35 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             ? "border-b-2"
                                             : ""
                                         }  py-[0.5rem]`}
-                                      >
-                                        {(index === 5 ||
+                                      > */}
+                                      {/* {(index === 5 ||
                                           index === 13 ||
                                           index === 21 ||
                                           index === 28) && (
                                           <div className="col-span-3 px-[1rem]">
                                             {`Product ${key[key.length - 1]} `}
                                           </div>
-                                        )}
-                                      </div>
-                                      <div className="col-span-9">
-                                        <div
+                                        )} */}
+                                      {/* </div> */}
+                                      {/* <div className="col-span-9"> */}
+                                      {/* <div
                                           className={`grid grid-cols-12 mt-1 border-2 py-[0.5rem] ${
                                             index % 2 === 0
                                               ? "bg-[#F9FBFC]"
                                               : "bg-white"
                                           }`}
                                           key={key}
-                                        >
-                                          <div className="col-span-5 px-[1rem] border-r-2">
+                                        > */}
+                                      {/* <div className="col-span-5 px-[1rem] border-r-2">
                                             <strong>
                                               {key.slice(0, key.length - 1)}:
                                             </strong>
-                                          </div>
-                                          <div className="col-span-7 px-[1rem] ">
+                                          </div> */}
+                                      {/* <div className="col-span-7 px-[1rem] ">
                                             {value}
-                                          </div>
-                                        </div>
-                                      </div>
+                                          </div> */}
+                                      {/* </div> */}
+                                      {/* </div> */}
                                     </div>
                                   ) : (
                                     // <div className="flex">
@@ -321,32 +674,638 @@ const Accordion = (props: ICustomTableAccordion) => {
                                     //     <div className="px-[1rem] ">{value}</div>
                                     //   </div>
                                     // </div>
-                                    <div>
-                                      {item?.title === "Status" &&
-                                        (index === 7 ||
-                                          index === 13 ||
-                                          index === 19) && <br />}
-                                      <div
-                                        className={`grid grid-cols-12 mt-1 border-2 py-[0.5rem] ${
-                                          index % 2 === 0
-                                            ? "bg-[#F9FBFC]"
-                                            : "bg-white"
-                                        }`}
-                                        key={key}
-                                      >
-                                        <div className="col-span-4 px-[1rem] border-r-2">
-                                          <strong>
-                                            {item?.title === "Status"
-                                              ? key.slice(0, key.length - 1)
-                                              : key}
-                                            :
-                                          </strong>
-                                        </div>
-                                        <div className="col-span-8 px-[1rem]">
-                                          {value}
-                                        </div>
+                                    <>
+                                      <div>
+                                        {item.title === "Pickup Address" &&
+                                          // <p>{key + "-- " + value}</p>
+                                          index === 1 && (
+                                            <div className="flex gap-x-5 mt-4 mb-2">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.contact
+                                                      ?.contactName
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.contact.contactName =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.contact
+                                                      ?.mobileNo
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.contact.mobileNo =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Pickup Address" &&
+                                          // <p>{key + "-- " + value}</p>
+                                          index === 3 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.contact
+                                                      ?.emailId
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.contact.emailId =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.contact
+                                                      ?.contactType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.contact.contactType =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Pickup Address" &&
+                                          index === 5 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.flatNo
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.flatNo =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.locality
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.locality =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Pickup Address" &&
+                                          index === 7 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.landmark
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.landmark =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.city
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.city =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Pickup Address" &&
+                                          index === 9 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.state
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.state =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.country
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.country =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+
+                                        {item.title === "Pickup Address" &&
+                                          // <p>{key + "-- " + value}</p>
+                                          index === 11 && (
+                                            <div className="flex gap-x-5 mt-4 mb-2">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.pincode
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.pincode =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress
+                                                      ?.addressType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.addressType =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {/* {
+                                          getPickAddressData?.pickUpAddress
+                                            ?.pickupDate
+                                        } */}
+                                        {item.title === "Pickup Address" &&
+                                          index === 13 && (
+                                            <div className="grid grid-cols-2  mt-2">
+                                              <div className="  xl:w-[274px] col-span-1 pr-[10px] xl:pr-[70px] 2xl:pr-[0px]">
+                                                <div className="rounded border-[1px]  border-[#A4A4A4]">
+                                                  <DatePicker
+                                                    value={convertEpochToDateTimeV2(
+                                                      +getPickAddressData
+                                                        ?.pickUpAddress
+                                                        ?.pickupDate
+                                                    )}
+                                                    onChange={(e: any) => {
+                                                      let temp =
+                                                        getPickAddressData;
+                                                      temp.pickUpAddress.pickupDate =
+                                                        +Date.parse(e);
+                                                      setGetPickUpAddressData({
+                                                        ...temp,
+                                                      });
+                                                    }}
+                                                    placeholderText="Pickup Date"
+                                                    className="cursor-pointer removePaddingPlaceHolder  !w-full "
+                                                    dateFormat="dd/MM/yyyy"
+                                                  />
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
+
+                                        {item?.title === "Status" &&
+                                          (index === 7 ||
+                                            index === 13 ||
+                                            index === 19) && <br />}
                                       </div>
-                                    </div>
+
+                                      <div>
+                                        {item.title === "Delivery Address" &&
+                                          index === 1 && (
+                                            <div className="flex gap-x-5 mt-4 mb-2">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.contact
+                                                      ?.contactName
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.contact.contactName =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.contact
+                                                      ?.mobileNo
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.contact.mobileNo =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Delivery Address" &&
+                                          index === 3 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.contact
+                                                      ?.emailId
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.contact.emailId =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.contact
+                                                      ?.contactType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.contact.contactType =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Delivery Address" &&
+                                          index === 5 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.flatNo
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.flatNo =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.locality
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.locality =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Delivery Address" &&
+                                          index === 7 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.landmark
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.landmark =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.city
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.city =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Delivery Address" &&
+                                          // <p>{key + "-- " + value}</p>
+                                          index === 9 && (
+                                            <div className="flex gap-x-5 mt-4">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.state
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.state =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.country
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.country =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+
+                                        {item.title === "Delivery Address" &&
+                                          index === 11 && (
+                                            <div className="flex gap-x-5 mt-4 mb-2">
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index - 1]
+                                                  }
+                                                  inputMode="numeric"
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress.pincode
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.pincode =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                              <div className="xl:w-[274px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress
+                                                      .addressType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.addressType =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+                                        {item.title === "Delivery Address" &&
+                                          index === 13 && (
+                                            <div className="grid grid-cols-2   mt-4">
+                                              <div className="xl:w-[274px] col-span-1 pr-[10px] xl:pr-[70px] 2xl:pr-[0px]">
+                                                <CustomInputBox
+                                                  label={
+                                                    Object.keys(item)[index]
+                                                  }
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress
+                                                      .gstNumber
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.gstNumber =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                />
+                                              </div>
+                                            </div>
+                                          )}
+
+                                        {item?.title === "Status" &&
+                                          (index === 7 ||
+                                            index === 13 ||
+                                            index === 19) && <br />}
+                                      </div>
+                                    </>
                                   );
                                 }
                               )}
