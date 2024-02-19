@@ -424,7 +424,11 @@ const Errors = (props: ErrorProps) => {
                     >
                       <div className="flex items-center">
                         <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
-                          {order?.orderId ? order?.orderId : order?.tempOrderId}
+                          {order?.orderNumber
+                            ? order?.orderNumber
+                            : order?.orderId
+                            ? order?.orderId
+                            : order?.tempOrderId}
                         </div>
                         <div>{order?.source}</div>
                       </div>
