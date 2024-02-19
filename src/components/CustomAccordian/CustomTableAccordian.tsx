@@ -1577,7 +1577,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             <div className="w-full">
                                               <div className="w-full">
                                                 <div
-                                                  className="border-2  border-black-600 p-6 flex justify-between w-full rounded-md"
+                                                  className="border-2  border-black-600 p-2 flex justify-between w-full rounded-md"
                                                   onClick={(e: any) => {
                                                     boxloops(
                                                       boxProductDetails,
@@ -1990,7 +1990,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             <>
                                               {
                                                 <>
-                                                  <div>
+                                                  <div className="p-4">
                                                     <div>
                                                       {Object.entries(
                                                         orderDetails[5]
