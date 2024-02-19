@@ -54,7 +54,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
             eachChannel.storeId !== deleteChannel.storeId
         );
 
-        setChannelData(filteredChannels);
+        setChannelData({ channels: filteredChannels });
       } else {
         toast.error(response?.message);
       }
