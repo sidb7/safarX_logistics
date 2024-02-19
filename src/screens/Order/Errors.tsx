@@ -216,7 +216,9 @@ const Errors = (props: ErrorProps) => {
             <div className="flex flex-col mb-1 min-w-[100%] bg-[#fdfdfd] border-1 p-[5px] px-[10px] shadow-inner rounded-br rounded-bl border-t-0 ">
               <div className="flex justify-between border-1 my-1 shadow-md w-[100%] py-[10px] px-[10px] rounded ">
                 <div className="">
-                  <div>OrderId - {eachOrder.orderId}</div>
+                  <div>
+                    OrderId - {eachOrder?.orderNumber || eachOrder.orderId}
+                  </div>
                   <div></div>
                 </div>
                 <div
@@ -384,7 +386,9 @@ const Errors = (props: ErrorProps) => {
                   >
                     <div className="flex items-center">
                       <div className="rounded-md py-1">
-                        {order?.orderId
+                        {order?.orderNumber
+                          ? "OrderId - " + order?.orderNumber
+                          : order?.orderId
                           ? "OrderId - " + order?.orderId
                           : "TempOrderId - " + order?.tempOrderId}
                       </div>

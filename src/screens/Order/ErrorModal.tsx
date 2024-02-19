@@ -1521,7 +1521,8 @@ const ErrorModal = (props: ErrorModalProps) => {
                   </p>
                   <p className="flex justify-center items-center mx-2 text-[14px] font-medium">
                     Order Id : {"("}
-                    {errorModalData?.entityDetails?.orderId}
+                    {errorModalData?.entityDetails?.orderNumber ||
+                      errorModalData?.entityDetails?.orderId}
                     {")"}
                   </p>
                 </div>
