@@ -11,12 +11,15 @@ import { checkPageAuthorized } from "../../../redux/reducers/role";
 import { toast } from "react-hot-toast";
 import { convertXMLToXLSX } from "../../../utils/helper";
 import { capitalizeFirstLetter } from "../../../utils/utility";
+import { Spinner } from "../../../components/Spinner";
 
 const Reports = () => {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [reportValue, setReportValue] = useState<any>();
   const [isActive, setIsActive] = useState<any>(false);
+  const [isLoading, setIsLoading] = useState<any>(false);
+
   const [dataset, setDataset] = useState<any>();
   const reportMenu = [
     {
@@ -70,11 +73,12 @@ const Reports = () => {
           endDate: lastendEpoch,
           apiStatus: reportValue,
         };
-
+        setIsLoading(true);
         const response = await POST(GET_REPORTS, payload);
         // const apiData = response.data;
         if (!response?.data?.success) {
           toast.error(response?.data?.message);
+          setIsLoading(false);
           return;
         }
         const date: any = JSON.stringify(new Date());
@@ -88,6 +92,7 @@ const Reports = () => {
         );
         if (result) {
           toast.success(response?.data?.message);
+          setIsLoading(false);
         }
       }
     }
@@ -130,11 +135,17 @@ const Reports = () => {
                 dateFormat="dd/MM/yyyy"
               />
             </div>
-            <ServiceButton
-              text={"FETCH REPORT"}
-              className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
-              onClick={() => fetchReport()}
-            />
+            {isLoading ? (
+              <div className="border py-2 w-[200px] flex items-center justify-center ">
+                <Spinner />
+              </div>
+            ) : (
+              <ServiceButton
+                text={"FETCH REPORT"}
+                className={`bg-[#1C1C1C] text-[#FFFFFF] py-3 w-[200px]`}
+                onClick={() => fetchReport()}
+              />
+            )}
           </div>
         </div>
       ) : (
