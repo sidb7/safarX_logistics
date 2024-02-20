@@ -19,7 +19,7 @@ import {
 import { pickupAddress } from "../../utils/dummyData";
 import { convertXMLToXLSX } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { convertEpochToDateTimeV2 } from "../../utils/utility";
 import DatePicker from "react-datepicker";
 import CustomDate from "./CustomDateWithTime";
@@ -1343,10 +1343,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           className=""
                                                           alt=""
                                                         />
-                                                        <p className="flex items-center whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
+                                                        <p className="flex items-center mt-4 whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
                                                           {eachProduct?.name}
                                                         </p>
-                                                        <span className="flex items-center mt-1 text-[16px] font-Open">
+                                                        <span className="flex items-center mt-1 text-[16px] font-Open ">
                                                           (Product Info)
                                                         </span>
                                                       </div>
