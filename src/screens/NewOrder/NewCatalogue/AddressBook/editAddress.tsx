@@ -111,6 +111,8 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
   const [editAddressType, setEditAddressType] = useState<any>();
 
   const addressUpdation = async (e: any) => {
+    if (!updateAddress.contactName)
+      return toast.error("Please Enter Contact Name");
     // for (const key in updateAddress) {
     //   if (updateAddress.hasOwnProperty(key)) {
     //     const value = updateAddress[key];
@@ -210,11 +212,11 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
           />
           <CustomInputBox
             label="Locality"
-            value={updateAddress.sector}
+            value={updateAddress.locality}
             onChange={(e: any) =>
               setUpdateAddress({
                 ...updateAddress,
-                sector: e.target.value,
+                locality: e.target.value,
               })
             }
           />
@@ -272,12 +274,16 @@ const EditAddress: React.FunctionComponent<IEditAddressProps> = () => {
             label="Contact Name"
             value={updateAddress.contactName}
             onChange={(e: any) => {
-              if (emptyOrFullTextRegex.test(e.target.value)) {
-                const temp = updateAddress;
-                temp.contactName = e.target.value;
-                temp.contact.name = e.target.value;
-                setUpdateAddress({ ...temp });
-              }
+              setUpdateAddress({
+                ...updateAddress,
+                contactName: e.target.value,
+              });
+              // if (emptyOrFullTextRegex.test(e.target.value)) {
+              //   const temp = updateAddress;
+              //   temp.contactName = e.target.value;
+              //   temp.contact.name = e.target.value;
+              //   setUpdateAddress({ ...temp });
+              // }
             }}
           />
           <CustomInputBox

@@ -744,7 +744,7 @@ export const columnHelperForNewOrder = (
                       </div>
                     ) : (
                       <Link
-                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}&orderId=${orderId}`}
                         className="underline text-blue-500 cursor-pointer"
                       >
                         <span
