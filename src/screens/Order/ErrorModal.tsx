@@ -184,14 +184,15 @@ const ErrorModal = (props: ErrorModalProps) => {
           ).toFixed(2);
         }
 
-        const totalDeadWeightOfBox = updatedProductDimensions?.products?.reduce(
-          (sum: any, item: any) => sum + +item.deadWeight,
-          0
-        );
+        updatedProductDimensions.deadWeight =
+          updatedProductDimensions?.products?.reduce(
+            (sum: any, item: any) => sum + +item.deadWeight,
+            0
+          );
 
-        console.log("totalDeadWeightOfBox", totalDeadWeightOfBox);
+        // console.log("totalDeadWeightOfBox", totalDeadWeightOfBox);
 
-        updatedProductDimensions.deadWeight = totalDeadWeightOfBox;
+        //  = totalDeadWeightOfBox;
 
         updatedProductDimensions.products[index].appliedWeight = +Math.max(
           updatedProductDimensions?.products[index].deadWeight,
