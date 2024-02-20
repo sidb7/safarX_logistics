@@ -24,6 +24,7 @@ import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
 import CustomeBottomModal from "../../components/CustomModal/customBottomModal";
 import {
+  GET_PINCODE_DATA,
   GET_SERVICE_LIST_ORDER,
   ORDERID_AND_EWAYBILLINFO,
   POST_PLACE_ALL_ORDERS,
@@ -134,6 +135,15 @@ const ErrorModal = (props: ErrorModalProps) => {
       return null;
     } else {
       return "Mobile number must be a 10-digit number";
+    }
+  };
+
+  const validatePincode = (pincode: string) => {
+    const numericValue = pincode.replace(/[^0-9]/g, "");
+    if (numericValue.length === 6 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Pincode must have 6 digits";
     }
   };
 
@@ -485,7 +495,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         addressData[targetAddress]?.contact?.mobileNo === "" ||
         addressData[targetAddress]?.contact?.type.trim() === "" ||
         addressData[targetAddress]?.contact?.name.trim() === "" ||
-        addressData[targetAddress]?.pincode.trim() === "" ||
+        addressData[targetAddress]?.pincode === "" ||
         addressData[targetAddress]?.pincode === 0 ||
         addressData[targetAddress]?.landmark.trim() === ""
       ) {
@@ -679,6 +689,34 @@ const ErrorModal = (props: ErrorModalProps) => {
         setUpdateButtonLoader(false);
       }
       return false;
+    }
+  };
+
+  const postServicablePincode = async (pincode: any, targetAddress: any) => {
+    try {
+      const payload = {
+        pincode,
+      };
+
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.success) {
+        const pincodeData = response.data[0];
+        setAddressData((prevData: any) => {
+          return {
+            ...prevData,
+            [targetAddress]: {
+              ...prevData[targetAddress],
+              city: pincodeData.city,
+              state: pincodeData.state,
+              country: "India",
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Error in ServicablePincode API", error);
+      return error;
     }
   };
 
@@ -1038,10 +1076,30 @@ const ErrorModal = (props: ErrorModalProps) => {
                           label="Pincode"
                           value={addressData?.[targetAddress]?.pincode}
                           name="pincode"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e)
-                          }
+                          onChange={(e: any) => {
+                            const numericValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              ""
+                            );
+                            handleInputChange(targetAddress, e);
+                            setValidationError(
+                              "pincode",
+                              validatePincode(numericValue)
+                            );
+                            if (setInputError) {
+                              setInputError(false);
+                            }
+                            if (e.target.value.length >= 6)
+                              postServicablePincode(
+                                e.target.value,
+                                targetAddress
+                              );
+                          }}
                           inputError={inputError}
+                          inputType="text"
+                          inputMode="numeric"
+                          maxLength={6}
+                          className="w-[100%]"
                         />
 
                         <InputBox
@@ -1495,7 +1553,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         addressData[targetAddress]?.contact?.mobileNo === "" ||
         addressData[targetAddress]?.contact?.type.trim() === "" ||
         addressData[targetAddress]?.contact?.name.trim() === "" ||
-        addressData[targetAddress]?.pincode.trim() === "" ||
+        addressData[targetAddress]?.pincode === "" ||
         addressData[targetAddress]?.pincode === 0 ||
         addressData[targetAddress]?.landmark.trim() === ""
       ) {
