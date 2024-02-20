@@ -190,10 +190,6 @@ const ErrorModal = (props: ErrorModalProps) => {
             0
           );
 
-        // console.log("totalDeadWeightOfBox", totalDeadWeightOfBox);
-
-        //  = totalDeadWeightOfBox;
-
         updatedProductDimensions.products[index].appliedWeight = +Math.max(
           updatedProductDimensions?.products[index].deadWeight,
           updatedProductDimensions?.products[index].volumetricWeight
