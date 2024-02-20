@@ -1,10 +1,15 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { GET_SELLER_ORDER_COMPLETE_DATA } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
-import { capitalizeFirstLetter } from "../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  convertEpochToDateTime,
+} from "../../utils/utility";
 import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
 import { Spinner } from "../../components/Spinner/index";
 import CustomInputBox from "../../components/Input";
+import { parse } from "date-fns";
+
 import {
   GET_PINCODE_DATA,
   UPDATE_TEMP_ORDER_INFO,
@@ -17,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convertEpochToDateTimeV2 } from "../../utils/utility";
 import DatePicker from "react-datepicker";
+import CustomDate from "./CustomDateWithTime";
 import InputBox from "../../components/Input";
 import CustomDropDown from "../../components/DropDown";
 import ItemIcon from "../../assets/Product/Item.svg";
@@ -24,6 +30,9 @@ import BoxIcon from "../../assets/layer.svg";
 import DownwardArrow from "../../assets/downwardArrow.svg";
 import { gstRegex } from "../../utils/regexCheck";
 import UpwardArrow from "../../assets/AccordionUp.svg";
+import CustomInputWithImage from "../../components/InputWithImage/InputWithImage";
+import CalenderIcon from "../../assets/calendar.svg";
+import Van from "../../assets/vanWithoutBG.svg";
 
 interface ICustomTableAccordion {
   data?: any;
@@ -37,9 +46,12 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [openIndex, setOpenIndex] = useState<any>(null);
   const [orderDetails, setOrderDetails]: any = useState([]);
 
+  const [openPickupDatePicker, setOpenPickupDatePicker] =
+    useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
   const [pincode, setPincode] = useState<any>();
-  const [pincodeData, setPincodeData] = useState<any>({});
+  const [pincodeData, setPincodeData] = useState<any>("");
+
   const [boxProductDetails, setBoxProductDetails] = useState<any>();
 
   const [serviceLoading, setServiceLoading] = useState<any>(false);
@@ -220,10 +232,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     getPickAddressData?.pickUpAddress?.pickupDate
   );
 
-  let selectedDate = getPickAddressData?.pickUpAddress?.pickupDate;
-
-  const epochTimestamp = new Date(selectedDate).getTime() / 1000;
-
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
       contact: {
@@ -286,6 +294,25 @@ const Accordion = (props: ICustomTableAccordion) => {
     } catch (error: any) {
       console.log(error);
     }
+  };
+
+  const handleScheduleDateTimeChange = (selectedDate: Date) => {
+    if (
+      selectedDate.getHours() == 0 &&
+      selectedDate.getMinutes() == 0 &&
+      selectedDate.getSeconds() == 0
+    ) {
+      setOpenPickupDatePicker(true);
+      return;
+    }
+    setGetPickUpAddressData({
+      ...getPickAddressData,
+      pickUpAddress: {
+        ...getPickAddressData?.pickUpAddress,
+        pickupDate: new Date(selectedDate).getTime(),
+      },
+    });
+    setOpenPickupDatePicker(false);
   };
 
   //for product updation
@@ -394,13 +421,11 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
 
     setOpenIndex(openIndex === index ? null : index);
-
+    setAddressOpenModal(!addressOpenModal);
     if (!apiCall) {
       setApiCall(true);
       return;
     }
-
-    setAddressOpenModal(!addressOpenModal);
 
     if (requestName == "Pickup Address") {
       try {
@@ -433,7 +458,7 @@ const Accordion = (props: ICustomTableAccordion) => {
               " " +
               getPickAddressData?.pickUpAddress?.pincode,
             addressType: getPickAddressData?.pickUpAddress?.addressType,
-            pickupDate: epochTimestamp,
+            pickupDate: getPickAddressData?.pickUpAddress?.pickupDate,
           },
           orderId: updatePayload.orderId,
           tempOrderId: updatePayload.tempOrderId,
@@ -567,8 +592,8 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
     // }
   };
-
-  const fetchPincodeData = async (e: any) => {
+  //to set particular object key you can use this
+  const fetchPincodeData = async (e: any, title: any) => {
     if (!isNaN(e.target.value)) {
       setPincode(e.target.value);
     }
@@ -577,8 +602,32 @@ const Accordion = (props: ICustomTableAccordion) => {
         pincode: e.target.value,
       };
       const { data: response } = await POST(GET_PINCODE_DATA, payload);
-
       setPincodeData(response?.data[0]);
+
+      if (title === "Pickup Address") {
+        setGetPickUpAddressData({
+          ...getPickAddressData,
+          pickUpAddress: {
+            ...getPickAddressData?.pickUpAddress,
+            pincode: response?.data[0]?.pincode,
+            city: response?.data[0]?.city,
+            state: response?.data[0]?.state,
+            country: response?.data[0]?.country,
+          },
+        });
+      }
+      if (title === "Delivery Address") {
+        setGetDeliveryAddressData({
+          ...getDeliveryAddressData,
+          deliveryAddress: {
+            ...getDeliveryAddressData?.deliveryAddress,
+            pincode: response?.data[0]?.pincode,
+            city: response?.data[0]?.city,
+            state: response?.data?.[0]?.state,
+            country: response?.data?.[0]?.country,
+          },
+        });
+      }
     }
   };
 
@@ -613,41 +662,43 @@ const Accordion = (props: ICustomTableAccordion) => {
         data?.data[0]?.data[0]?.pickupAddress.pincode;
       temp.pickUpAddress.addressType =
         data?.data[0]?.data[0]?.pickupAddress.addressType;
-      temp.pickUpAddress.pickupDate = +(
-        +data?.data[0]?.data[0]?.pickupAddress.pickupDate * 1000
-      );
+      temp.pickUpAddress.pickupDate =
+        +data?.data[0]?.data[0]?.pickupAddress.pickupDate;
 
       setGetPickUpAddressData({ ...temp });
 
       let deliveryTemp;
       deliveryTemp = getDeliveryAddressData;
       deliveryTemp.deliveryAddress.contact.contactName =
-        data?.data[0]?.data[0]?.deliveryAddress.contact.name;
+        data?.data[0]?.data[0]?.deliveryAddress?.contact?.name;
       deliveryTemp.deliveryAddress.contact.mobileNo =
-        data?.data[0]?.data[0]?.deliveryAddress.contact.mobileNo;
+        data?.data[0]?.data[0]?.deliveryAddress?.contact?.mobileNo;
       deliveryTemp.deliveryAddress.contact.emailId =
-        data?.data[0]?.data[0]?.deliveryAddress.contact.emailId;
+        data?.data[0]?.data[0]?.deliveryAddress?.contact?.emailId;
       deliveryTemp.deliveryAddress.contact.contactType =
-        data?.data[0]?.data[0]?.deliveryAddress.contact.type;
+        data?.data[0]?.data[0]?.deliveryAddress?.contact?.type;
       deliveryTemp.deliveryAddress.flatNo =
-        data?.data[0]?.data[0]?.deliveryAddress.flatNo;
+        data?.data[0]?.data[0]?.deliveryAddress?.flatNo;
       deliveryTemp.deliveryAddress.locality =
-        data?.data[0]?.data[0]?.deliveryAddress.locality;
+        data?.data[0]?.data[0]?.deliveryAddress?.locality;
       deliveryTemp.deliveryAddress.landmark =
-        data?.data[0]?.data[0]?.deliveryAddress.landmark;
+        data?.data[0]?.data[0]?.deliveryAddress?.landmark;
       deliveryTemp.deliveryAddress.city =
-        data?.data[0]?.data[0]?.deliveryAddress.city;
+        data?.data[0]?.data[0]?.deliveryAddress?.city;
       deliveryTemp.deliveryAddress.state =
-        data?.data[0]?.data[0]?.deliveryAddress.state;
+        data?.data[0]?.data[0]?.deliveryAddress?.state;
       deliveryTemp.deliveryAddress.country =
-        data?.data[0]?.data[0]?.deliveryAddress.country;
+        data?.data[0]?.data[0]?.deliveryAddress?.country;
       deliveryTemp.deliveryAddress.pincode =
-        data?.data[0]?.data[0]?.deliveryAddress.pincode;
+        data?.data[0]?.data[0]?.deliveryAddress?.pincode;
       deliveryTemp.deliveryAddress.addressType =
-        data?.data[0]?.data[0]?.deliveryAddress.addressType;
+        data?.data[0]?.data[0]?.deliveryAddress?.addressType;
       deliveryTemp.deliveryAddress.gstNumber =
-        data?.data[0]?.data[0]?.deliveryAddress.gstNumber;
-      setGetDeliveryAddressData({ ...deliveryTemp });
+        data?.data[0]?.data[0]?.deliveryAddress?.gstNumber;
+      setGetDeliveryAddressData({
+        // deliveryAddress: data?.data[0]?.data[0]?.deliveryAddress,
+        ...deliveryTemp,
+      });
 
       let productTemp;
       productTemp = productDetails;
@@ -677,59 +728,59 @@ const Accordion = (props: ICustomTableAccordion) => {
       productTemp[0].eWayBillNo =
         data?.data[0]?.data[0]?.boxInfo[0]?.eWayBillNo;
       productTemp[0].tracking.awb =
-        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.awb;
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.awb;
       productTemp[0].tracking.label =
-        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.label;
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.label;
       productTemp[0].tracking.taxInvoice =
-        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.taxInvoice;
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.taxInvoice;
       productTemp[0].tracking.manifest =
-        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.manifest;
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.manifest;
       productTemp[0].tracking.status =
-        data?.data[0]?.data[0]?.boxInfo[0]?.tracking.status;
+        data?.data[0]?.data[0]?.boxInfo[0]?.tracking?.status;
       productTemp[0].codInfo.isCod =
-        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.isCod;
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.isCod;
       productTemp[0].codInfo.collectableAmount =
-        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.collectableAmount;
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.collectableAmount;
       productTemp[0].codInfo.invoiceValue =
-        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo.invoiceValue;
+        data?.data[0]?.data[0]?.boxInfo[0]?.codInfo?.invoiceValue;
       productTemp[0].podInfo.isPod =
-        data?.data[0]?.data[0]?.boxInfo[0]?.podInfo.isPod;
+        data?.data[0]?.data[0]?.boxInfo[0]?.podInfo?.isPod;
       productTemp[0].insurance.isInsured =
-        data?.data[0]?.data[0]?.boxInfo[0]?.insurance.isInsured;
+        data?.data[0]?.data[0]?.boxInfo[0]?.insurance?.isInsured;
       productTemp[0].insurance.amount =
-        data?.data[0]?.data[0]?.boxInfo[0]?.insurance.amount;
+        data?.data[0]?.data[0]?.boxInfo[0]?.insurance?.amount;
       productTemp[0].service.partnerServiceId =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerServiceId;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerServiceId;
       productTemp[0].service.partnerServiceName =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerServiceName;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerServiceName;
       productTemp[0].service.companyServiceId =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.companyServiceId;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.companyServiceId;
       productTemp[0].service.companyServiceName =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.companyServiceName;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.companyServiceName;
       productTemp[0].service.partnerName =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.partnerName;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.partnerName;
       productTemp[0].service.serviceMode =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.serviceMode;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.serviceMode;
       productTemp[0].service.appliedWeight =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.appliedWeight;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.appliedWeight;
       productTemp[0].service.invoiceValue =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.invoiceValue;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.invoiceValue;
       productTemp[0].service.collectableAmount =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.collectableAmount;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.collectableAmount;
       productTemp[0].service.insurance =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.insurance;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.insurance;
       productTemp[0].service.base =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.base;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.base;
       productTemp[0].service.add =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.add;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.add;
       productTemp[0].service.variables =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.variables;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.variables;
       productTemp[0].service.cod =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.cod;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.cod;
       productTemp[0].service.tax =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.tax;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.tax;
       productTemp[0].service.total =
-        data?.data[0]?.data[0]?.boxInfo[0]?.service.total;
+        data?.data[0]?.data[0]?.boxInfo[0]?.service?.total;
 
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
@@ -776,69 +827,63 @@ const Accordion = (props: ICustomTableAccordion) => {
             ),
             title: "Pickup Address",
           },
-
-          {
-            "Contact Name": capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.contact?.name
-            ),
-            "Mobile No": rowsData?.deliveryAddress?.contact?.mobileNo,
-            "Email Id": capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.contact?.emailId
-            ),
-            Type: capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.contact?.type
-            ),
-            FlatNo: rowsData?.deliveryAddress?.flatNo,
-            Locality: capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.locality
-            ),
-            LandkMark: capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.landmark
-            ),
-            City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
-            State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
-            Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
-            Pincode: rowsData?.deliveryAddress?.pincode,
-            "Address Type": capitalizeFirstLetter(
-              rowsData?.deliveryAddress?.addressType
-            ),
-            title: "Delivery Address",
-            "GST Number": rowsData?.deliveryAddress?.gstNumber,
-          },
-          {
-            title:
-              rowsData?.boxInfo?.[0]?.service?.companyServiceId && "Services",
-            "Partner Name": capitalizeFirstLetter(
-              rowsData?.boxInfo?.[0]?.service?.partnerName
-            ),
-            "AVN Service": capitalizeFirstLetter(
-              rowsData?.boxInfo?.[0]?.service?.companyServiceName
-            ),
-            "Service Mode": capitalizeFirstLetter(
-              rowsData?.boxInfo?.[0]?.service?.serviceMode
-            ),
-            "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-            "Freight Charges": `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.add +
-                rowsData?.boxInfo?.[0]?.service?.base
-            )?.toLocaleString("en-IN")}`,
-            "COD Charges": `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.cod
-            )?.toLocaleString("en-IN")}`,
-            Insurance: `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.insurance
-            )?.toLocaleString("en-IN")}`,
-            "Other Charges": `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.variables
-            )?.toLocaleString("en-IN")}`,
-            Tax: `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.tax
-            )?.toLocaleString("en-IN")}`,
-            Total: `₹ ${Math.round(
-              rowsData?.boxInfo?.[0]?.service?.total
-            )?.toLocaleString("en-IN")}`,
-          },
         ];
+
+        rows.push({
+          "Contact Name": capitalizeFirstLetter(
+            rowsData?.deliveryAddress?.contact?.name
+          ),
+          "Mobile No": rowsData?.deliveryAddress?.contact?.mobileNo,
+          "Email Id": capitalizeFirstLetter(
+            rowsData?.deliveryAddress?.contact?.emailId
+          ),
+          Type: capitalizeFirstLetter(rowsData?.deliveryAddress?.contact?.type),
+          FlatNo: rowsData?.deliveryAddress?.flatNo,
+          Locality: capitalizeFirstLetter(rowsData?.deliveryAddress?.locality),
+          LandkMark: capitalizeFirstLetter(rowsData?.deliveryAddress?.landmark),
+          City: capitalizeFirstLetter(rowsData?.deliveryAddress?.city),
+          State: capitalizeFirstLetter(rowsData?.deliveryAddress?.state),
+          Country: capitalizeFirstLetter(rowsData?.deliveryAddress?.country),
+          Pincode: rowsData?.deliveryAddress?.pincode,
+          "Address Type": capitalizeFirstLetter(
+            rowsData?.deliveryAddress?.addressType
+          ),
+          title: "Delivery Address",
+          "GST Number": rowsData?.deliveryAddress?.gstNumber,
+        });
+        rows.push({
+          title: "Services",
+          "Partner Name": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.partnerName
+          ),
+          "AVN Service": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.companyServiceName
+          ),
+          "Service Mode": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.serviceMode
+          ),
+          "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
+          "Freight Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.add +
+              rowsData?.boxInfo?.[0]?.service?.base
+          )?.toLocaleString("en-IN")}`,
+          "COD Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.cod
+          )?.toLocaleString("en-IN")}`,
+          Insurance: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.insurance
+          )?.toLocaleString("en-IN")}`,
+          "Other Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.variables
+          )?.toLocaleString("en-IN")}`,
+          Tax: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.tax
+          )?.toLocaleString("en-IN")}`,
+          Total: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
+        });
+
         let boxObj: any = { title: "" };
         rowsData?.boxInfo?.map((item: any, index: any) => {
           let title = `Box Info ${
@@ -894,6 +939,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
+          "Eway Bill NO": rowsData?.boxInfo[0]?.eWayBillNo,
           Source: capitalizeFirstLetter(rowsData?.source),
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
@@ -911,28 +957,38 @@ const Accordion = (props: ICustomTableAccordion) => {
   servicePartnerServiceId =
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
 
-  const [productError, setProdctError] = useState<any>({
-    deadWeight: false,
-    volumetricWeight: false,
-    length: false,
-    breadth: false,
-    height: false,
-  });
+  const [productError, setProdctError] = useState<any>([]);
 
-  const productLoops = (productAccordian: any, index: any) => {
+  const productLoops = (productAccordian: any, dataIndex: any) => {
     // for (let i = 0; i < productAccordian.length; i++) {
-    const product = productAccordian[index];
+    const product = productAccordian[dataIndex];
 
     if (
-      product.deadWeight > 0 &&
-      product.volumetricWeight > 0 &&
-      product.length > 0 &&
-      product.breadth > 0 &&
-      product.height > 0
+      product?.deadWeight > 0 &&
+      product?.volumetricWeight > 0 &&
+      product?.length > 0 &&
+      product?.breadth > 0 &&
+      product?.height > 0
     ) {
       return false;
     } else {
       setInputError(true);
+      // setProdctError(
+      //   productError?.map((item: any, index: any) => {
+      //     if (dataIndex === index) {
+      //       return {
+      //         ...item,
+      //         deadWeight: product?.deadWeight > 0 ? false : true,
+      //         volumetricWeight: product?.volumetricWeight > 0 ? false : true,
+      //         length: product?.length > 0 ? false : true,
+      //         breadth: product?.breadth > 0 ? false : true,
+      //         height: product?.height > 0 ? false : true,
+      //       };
+      //     } else {
+      //       return item;
+      //     }
+      //   })
+      // );
       return true;
     }
 
@@ -951,10 +1007,19 @@ const Accordion = (props: ICustomTableAccordion) => {
     ) {
       return false;
     } else {
+      setValidationError({
+        ...validationError,
+        boxDeadWeight:
+          boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
+        boxVolumtericWeight:
+          boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
+        boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
+        boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
+        boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
+      });
       setInputError(true);
       return true;
     }
-    // }
   };
 
   useEffect(() => {
@@ -984,10 +1049,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   }, [getPickAddressData]);
 
   useEffect(() => {
-    // getServiceList();
-  }, [boxProductDetails]);
-
-  useEffect(() => {
     // if()
 
     if (isFirstRender.current) {
@@ -999,6 +1060,19 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   useEffect(() => {
     setproductAccordian(boxProductDetails?.boxInfo?.[0]?.products);
+    setProdctError(
+      boxProductDetails?.boxInfo?.[0]?.products?.map(
+        (item: any, index: number) => {
+          return {
+            deadWeight: "",
+            volumetricWeight: "",
+            length: "",
+            breadth: "",
+            height: "",
+          };
+        }
+      )
+    );
   }, [boxProductDetails]);
 
   useEffect(() => {
@@ -1058,7 +1132,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.gstNumber?.length === 0
+        (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
+          getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
       ) {
         setOpen({
           [`item${index}`]: true,
@@ -1093,6 +1168,19 @@ const Accordion = (props: ICustomTableAccordion) => {
         }
       }
     }
+
+    // if (key == "Services") {
+    //   handleItemClick(index, e.target.textContent);
+    //   setOpen({
+    //     [`item${index}`]: false,
+    //   });
+
+    //   setOpenIndex(null);
+
+    //   setOtherDetailsAccordian(false);
+    //   //   setAddressOpenModal(true);
+    //   setApiCall(false);
+    // }
   };
 
   return (
@@ -1125,16 +1213,28 @@ const Accordion = (props: ICustomTableAccordion) => {
                             setOpen({
                               [`item${index}`]: true,
                             });
+
                             handleItemClick(index, e.target.textContent);
                           } else if (e.target.textContent === "Status") {
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
+
                             // setApiCall(false);
                             // setOpen({
                             //   [`item${index}`]: false,
                             // });
+                          } else if (e.target.textContent == "Services") {
+                            handleItemClick(index, e.target.textContent);
+                            setAddressOpenModal(false);
+                            setOpen({
+                              [`item${index}`]: false,
+                            });
+                            setOpenIndex(null);
+                            setOtherDetailsAccordian(false);
+
+                            setApiCall(false);
                           }
                         }}
                         key={index}
@@ -1243,7 +1343,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           className=""
                                                           alt=""
                                                         />
-                                                        <p className="flex items-center text-[18px] font-Open">
+                                                        <p className="flex items-center whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
                                                           {eachProduct?.name}
                                                         </p>
                                                         <span className="flex items-center mt-1 text-[16px] font-Open">
@@ -1279,7 +1379,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachProduct?.deadWeight
                                                             }
-                                                            name="deadWeight"
+                                                            name={`deadWeight${index}`}
                                                             inputType="number"
                                                             inputMode="numeric"
                                                             className="!w-[100%]"
@@ -1291,39 +1391,55 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 e.target.value,
                                                                 "deadWeight"
                                                               );
-                                                              if (
-                                                                e.target
-                                                                  .value <= 0 &&
-                                                                eachProduct
-                                                                  .deadWeight
-                                                                  ?.length != 0
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    deadWeight:
-                                                                      "Should be greater than 0",
+
+                                                              setProdctError(
+                                                                productError.map(
+                                                                  (
+                                                                    itemData: any,
+                                                                    errIndex: number
+                                                                  ) => {
+                                                                    if (
+                                                                      errIndex ==
+                                                                      e.target
+                                                                        .name[
+                                                                        e.target
+                                                                          .name
+                                                                          .length -
+                                                                          1
+                                                                      ]
+                                                                    ) {
+                                                                      return {
+                                                                        ...itemData,
+                                                                        deadWeight:
+                                                                          e
+                                                                            .target
+                                                                            .value <=
+                                                                            0 &&
+                                                                          eachProduct
+                                                                            .deadWeight
+                                                                            ?.length !=
+                                                                            0
+                                                                            ? "Should be greater than 0"
+                                                                            : e
+                                                                                .target
+                                                                                .value ===
+                                                                              ""
+                                                                            ? "Field is Required"
+                                                                            : "",
+                                                                      };
+                                                                    } else {
+                                                                      return itemData;
+                                                                    }
                                                                   }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    deadWeight:
-                                                                      "",
-                                                                  }
-                                                                );
-                                                              }
+                                                                )
+                                                              );
                                                             }}
-                                                            inputError={
-                                                              eachProduct
-                                                                .deadWeight
-                                                                ?.length == 0
-                                                            }
                                                           />
                                                           <p className="open-sans text-[12px] text-red-600">
                                                             {
-                                                              validationError.deadWeight
+                                                              productError?.[
+                                                                index
+                                                              ]?.deadWeight
                                                             }
                                                           </p>
                                                         </div>
@@ -1333,7 +1449,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachProduct?.volumetricWeight
                                                             }
-                                                            name="volumetricWeight"
+                                                            name={`volumetricWeight${index}`}
                                                             className="!w-[100%]"
                                                             inputType="number"
                                                             onChange={(
@@ -1344,42 +1460,55 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 e.target.value,
                                                                 "volumetricWeight"
                                                               );
-                                                              if (
-                                                                e.target
-                                                                  .value <= 0 &&
-                                                                eachProduct
-                                                                  .volumetricWeight
-                                                                  ?.length != 0
-
-                                                                // e.target.value
-                                                                //   .length === 0
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    volumetricWeight:
-                                                                      "Should be greater than 0",
+                                                              setProdctError(
+                                                                productError.map(
+                                                                  (
+                                                                    itemData: any,
+                                                                    errIndex: number
+                                                                  ) => {
+                                                                    if (
+                                                                      errIndex ==
+                                                                      e.target
+                                                                        .name[
+                                                                        e.target
+                                                                          .name
+                                                                          .length -
+                                                                          1
+                                                                      ]
+                                                                    ) {
+                                                                      return {
+                                                                        ...itemData,
+                                                                        volumetricWeight:
+                                                                          e
+                                                                            .target
+                                                                            .value <=
+                                                                            0 &&
+                                                                          eachProduct
+                                                                            .volumetricWeight
+                                                                            ?.length !=
+                                                                            0
+                                                                            ? "Should be greater than 0"
+                                                                            : e
+                                                                                .target
+                                                                                .value ===
+                                                                              ""
+                                                                            ? "Field is Required"
+                                                                            : "",
+                                                                      };
+                                                                    } else {
+                                                                      return itemData;
+                                                                    }
                                                                   }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    volumetricWeight:
-                                                                      "",
-                                                                  }
-                                                                );
-                                                              }
+                                                                )
+                                                              );
                                                             }}
-                                                            inputError={
-                                                              eachProduct
-                                                                .volumetricWeight
-                                                                ?.length === 0
-                                                            }
                                                           />
                                                           <p className="open-sans text-[12px] text-red-600">
                                                             {
-                                                              validationError.volumetricWeight
+                                                              productError?.[
+                                                                index
+                                                              ]
+                                                                ?.volumetricWeight
                                                             }
                                                           </p>
                                                         </div>
@@ -1399,7 +1528,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               label="L"
                                                               inputType="number"
                                                               inputMode="numeric"
-                                                              name="length"
+                                                              name={`length${index}`}
                                                               defaultValue={
                                                                 eachProduct?.length
                                                               }
@@ -1412,41 +1541,55 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     .value,
                                                                   "length"
                                                                 );
-                                                                if (
-                                                                  e.target
-                                                                    .value <=
-                                                                    0 &&
-                                                                  eachProduct
-                                                                    .length
-                                                                    ?.length !=
-                                                                    0
-                                                                ) {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      length:
-                                                                        "sould be greater than 0",
+                                                                setProdctError(
+                                                                  productError.map(
+                                                                    (
+                                                                      itemData: any,
+                                                                      errIndex: number
+                                                                    ) => {
+                                                                      if (
+                                                                        errIndex ==
+                                                                        e.target
+                                                                          .name[
+                                                                          e
+                                                                            .target
+                                                                            .name
+                                                                            .length -
+                                                                            1
+                                                                        ]
+                                                                      ) {
+                                                                        return {
+                                                                          ...itemData,
+                                                                          length:
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachProduct
+                                                                              .length
+                                                                              ?.length !=
+                                                                              0
+                                                                              ? "Should be greater than 0"
+                                                                              : e
+                                                                                  .target
+                                                                                  .value ===
+                                                                                ""
+                                                                              ? "Field is Required"
+                                                                              : "",
+                                                                        };
+                                                                      } else {
+                                                                        return itemData;
+                                                                      }
                                                                     }
-                                                                  );
-                                                                } else {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      length:
-                                                                        "",
-                                                                    }
-                                                                  );
-                                                                }
+                                                                  )
+                                                                );
                                                               }}
-                                                              inputError={
-                                                                eachProduct
-                                                                  .length
-                                                                  ?.length === 0
-                                                              }
                                                             />
                                                             <p className="open-sans text-[12px] text-red-600">
                                                               {
-                                                                validationError?.length
+                                                                productError?.[
+                                                                  index
+                                                                ]?.length
                                                               }
                                                             </p>
                                                           </div>
@@ -1456,7 +1599,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               defaultValue={
                                                                 eachProduct?.breadth
                                                               }
-                                                              name="breadth"
+                                                              name={`breadth${index}`}
                                                               inputType="number"
                                                               inputMode="numeric"
                                                               onChange={(
@@ -1468,41 +1611,55 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     .value,
                                                                   "breadth"
                                                                 );
-                                                                if (
-                                                                  e.target
-                                                                    .value <=
-                                                                    0 &&
-                                                                  eachProduct
-                                                                    .breadth
-                                                                    ?.length !=
-                                                                    0
-                                                                ) {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      breadth:
-                                                                        "Should be greater than 0",
+                                                                setProdctError(
+                                                                  productError.map(
+                                                                    (
+                                                                      itemData: any,
+                                                                      errIndex: number
+                                                                    ) => {
+                                                                      if (
+                                                                        errIndex ==
+                                                                        e.target
+                                                                          .name[
+                                                                          e
+                                                                            .target
+                                                                            .name
+                                                                            .length -
+                                                                            1
+                                                                        ]
+                                                                      ) {
+                                                                        return {
+                                                                          ...itemData,
+                                                                          breadth:
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachProduct
+                                                                              .breadth
+                                                                              ?.length !=
+                                                                              0
+                                                                              ? "Should be greater than 0"
+                                                                              : e
+                                                                                  .target
+                                                                                  .value ===
+                                                                                ""
+                                                                              ? "Field is Required"
+                                                                              : "",
+                                                                        };
+                                                                      } else {
+                                                                        return itemData;
+                                                                      }
                                                                     }
-                                                                  );
-                                                                } else {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      breadth:
-                                                                        "",
-                                                                    }
-                                                                  );
-                                                                }
+                                                                  )
+                                                                );
                                                               }}
-                                                              inputError={
-                                                                eachProduct
-                                                                  ?.breadth
-                                                                  ?.length === 0
-                                                              }
                                                             />
                                                             <p className="open-sans text-[12px] text-red-600">
                                                               {
-                                                                validationError.breadth
+                                                                productError?.[
+                                                                  index
+                                                                ]?.breadth
                                                               }
                                                             </p>
                                                           </div>
@@ -1510,9 +1667,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             <InputBox
                                                               label="H"
                                                               defaultValue={
-                                                                eachProduct?.breadth
+                                                                eachProduct?.height
                                                               }
-                                                              name="height"
+                                                              name={`height${index}`}
                                                               inputType="number"
                                                               inputMode="numeric"
                                                               onChange={(
@@ -1524,41 +1681,55 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     .value,
                                                                   "height"
                                                                 );
-                                                                if (
-                                                                  e.target
-                                                                    .value <=
-                                                                    0 &&
-                                                                  eachProduct
-                                                                    ?.height
-                                                                    ?.length !=
-                                                                    0
-                                                                ) {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      height:
-                                                                        "Should be greater than 0",
+                                                                setProdctError(
+                                                                  productError.map(
+                                                                    (
+                                                                      itemData: any,
+                                                                      errIndex: number
+                                                                    ) => {
+                                                                      if (
+                                                                        errIndex ==
+                                                                        e.target
+                                                                          .name[
+                                                                          e
+                                                                            .target
+                                                                            .name
+                                                                            .length -
+                                                                            1
+                                                                        ]
+                                                                      ) {
+                                                                        return {
+                                                                          ...itemData,
+                                                                          height:
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachProduct
+                                                                              .height
+                                                                              ?.length !=
+                                                                              0
+                                                                              ? "Should be greater than 0"
+                                                                              : e
+                                                                                  .target
+                                                                                  .value ===
+                                                                                ""
+                                                                              ? "Field is Required"
+                                                                              : "",
+                                                                        };
+                                                                      } else {
+                                                                        return itemData;
+                                                                      }
                                                                     }
-                                                                  );
-                                                                } else {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      height:
-                                                                        "",
-                                                                    }
-                                                                  );
-                                                                }
+                                                                  )
+                                                                );
                                                               }}
-                                                              inputError={
-                                                                eachProduct
-                                                                  .height
-                                                                  ?.length === 0
-                                                              }
                                                             />
                                                             <p className="open-sans text-[12px] text-red-600">
                                                               {
-                                                                validationError.height
+                                                                productError?.[
+                                                                  index
+                                                                ]?.height
                                                               }
                                                             </p>
                                                           </div>
@@ -1652,7 +1823,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         <InputBox
                                                           label="Dead Weight (Kg)"
                                                           defaultValue={
-                                                            eachBox?.breadth
+                                                            eachBox?.deadWeight
                                                           }
                                                           inputType="number"
                                                           name="deadWeight"
@@ -1747,7 +1918,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         />
                                                         <p className="open-sans text-[12px] text-red-600">
                                                           {
-                                                            validationError.boxVolumetricWeight
+                                                            validationError.boxVolumtericWeight
                                                           }
                                                         </p>
                                                       </div>
@@ -1992,9 +2163,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 <>
                                                   <div className="p-4">
                                                     <div>
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
@@ -2020,9 +2194,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     </div>
                                                     {/* this is for order id */}
                                                     <div className="mt-2">
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
@@ -2057,7 +2234,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           0 &&
                                                                         e.target
                                                                           .value
-                                                                          .length !=
+                                                                          ?.length !=
                                                                           0
                                                                         // eachService
                                                                         //   .orderId
@@ -2089,7 +2266,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                       orderId?.length ===
                                                                       0
                                                                     }
-                                                                    className="!max-w-[100px] !h-[20px]"
+                                                                    className="!max-w-[120px] !h-[30px] !rounded-sm"
                                                                   />
                                                                   <p className="open-sans text-[12px] text-red-600">
                                                                     {
@@ -2104,9 +2281,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )}
                                                     </div>
                                                     <div className="mt-2">
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
@@ -2131,9 +2311,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )}
                                                     </div>
                                                     <div className="mt-2">
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
@@ -2158,9 +2341,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )}
                                                     </div>
                                                     <div className="mt-2">
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
@@ -2185,15 +2371,48 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )}
                                                     </div>
                                                     <div className="mt-2">
-                                                      {Object.entries(
-                                                        orderDetails[5]
-                                                      ).map(
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
                                                         (
                                                           eachService: any,
                                                           index: any
                                                         ) => {
                                                           return (
                                                             index === 6 && (
+                                                              <div className="flex justify-between">
+                                                                <p className="open-sans">
+                                                                  {
+                                                                    eachService[0]
+                                                                  }
+                                                                </p>
+                                                                <p className="open-sans">
+                                                                  {
+                                                                    eachService[1]
+                                                                  }
+                                                                </p>
+                                                              </div>
+                                                            )
+                                                          );
+                                                        }
+                                                      )}
+                                                    </div>
+                                                    <div className="mt-2">
+                                                      {Object?.entries(
+                                                        orderDetails?.[
+                                                          orderDetails?.length -
+                                                            1
+                                                        ]
+                                                      )?.map(
+                                                        (
+                                                          eachService: any,
+                                                          index: any
+                                                        ) => {
+                                                          return (
+                                                            index === 7 && (
                                                               <div className="flex justify-between">
                                                                 <p className="open-sans">
                                                                   {
@@ -2219,82 +2438,115 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       </div>
 
                                       <div>
-                                        {item.title === "Services" &&
-                                          index === 3 && (
-                                            <div>
-                                              {index === 3 && (
-                                                <>
-                                                  {serviceLoading ? (
-                                                    <div className="flex w-full justify-center items-center h-[80%]">
-                                                      <Spinner />
-                                                    </div>
-                                                  ) : (
+                                        {item.title === "Services" && (
+                                          <div>
+                                            {index === 3 && (
+                                              <>
+                                                {serviceLoading ? (
+                                                  <div className="flex w-full justify-center items-center h-[80%]">
+                                                    <Spinner />
+                                                  </div>
+                                                ) : (
+                                                  <div>
                                                     <div>
-                                                      {serviceList?.map(
-                                                        (
-                                                          service: any,
-                                                          index: any
-                                                        ) => {
-                                                          return (
-                                                            <div
-                                                              className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
-                                                              onClick={() =>
-                                                                handleService(
-                                                                  index
-                                                                )
-                                                              }
-                                                            >
-                                                              <div
-                                                                className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
-                                                                style={{
-                                                                  boxShadow:
-                                                                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                                                                }}
-                                                                // onClick={() => handleProductsDetails(index)}
-                                                              >
+                                                      {serviceList.length ===
+                                                      0 ? (
+                                                        <div className="flex justify-center py-4">
+                                                          <p className="open-sans text-[14px]">
+                                                            No Data Found
+                                                          </p>
+                                                        </div>
+                                                      ) : (
+                                                        <div>
+                                                          {serviceList?.map(
+                                                            (
+                                                              service: any,
+                                                              index: any
+                                                            ) => {
+                                                              return (
                                                                 <div
-                                                                  className="flex items-center  max-w-[90%] min-w-[90%]  "
-                                                                  style={{
-                                                                    justifyContent:
-                                                                      "space-between",
-                                                                    marginRight:
-                                                                      "1rem",
-                                                                  }}
+                                                                  className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0  ${
+                                                                    index ===
+                                                                      serviceIndex &&
+                                                                    "bg-slate-200"
+                                                                  }`}
+                                                                  onClick={() =>
+                                                                    handleService(
+                                                                      index
+                                                                    )
+                                                                  }
                                                                 >
                                                                   <div
-                                                                    className={`flex gap-x-4 ${
-                                                                      index ===
-                                                                        serviceIndex &&
-                                                                      "font-semibold"
-                                                                    }`}
+                                                                    className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
+                                                                    // style={{
+                                                                    //   boxShadow:
+                                                                    //     "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                                                                    // }}
+                                                                    // onClick={() => handleProductsDetails(index)}
                                                                   >
-                                                                    {capitalizeFirstLetter(
-                                                                      service.partnerName
-                                                                    ) +
-                                                                      " " +
-                                                                      capitalizeFirstLetter(
-                                                                        service.serviceMode
-                                                                      )}
-                                                                  </div>
-                                                                  <div>
-                                                                    {
-                                                                      service.total
-                                                                    }
+                                                                    <div
+                                                                      className={`flex items-center  max-w-[90%] min-w-[90%] `}
+                                                                      style={{
+                                                                        justifyContent:
+                                                                          "space-between",
+                                                                        marginRight:
+                                                                          "1rem",
+                                                                      }}
+                                                                    >
+                                                                      <div
+                                                                        className={`flex gap-x-3 items-center  ${
+                                                                          index ===
+                                                                            serviceIndex &&
+                                                                          " font-Lato font-semibold text-[16px] leading-5"
+                                                                        }`}
+                                                                      >
+                                                                        {index ===
+                                                                          serviceIndex && (
+                                                                          <img
+                                                                            src={
+                                                                              Van
+                                                                            }
+                                                                            alt="Van"
+                                                                            className="w-5 h-5"
+                                                                          />
+                                                                        )}
+                                                                        {capitalizeFirstLetter(
+                                                                          service.partnerName
+                                                                        ) +
+                                                                          " " +
+                                                                          capitalizeFirstLetter(
+                                                                            service.serviceMode
+                                                                          )}
+                                                                      </div>
+                                                                      <div
+                                                                        className={` ${
+                                                                          index ===
+                                                                            serviceIndex &&
+                                                                          " font-Lato font-semibold text-[16px] leading-5"
+                                                                        }`}
+                                                                      >
+                                                                        {
+                                                                          service.total
+                                                                        }
+                                                                      </div>
+                                                                    </div>
                                                                   </div>
                                                                 </div>
-                                                              </div>
-                                                            </div>
-                                                          );
-                                                        }
+                                                              );
+                                                            }
+                                                          )}
+                                                        </div>
                                                       )}
                                                     </div>
-                                                  )}
-                                                </>
-                                              )}
-                                            </div>
-                                          )}
+                                                  </div>
+                                                )}
+                                              </>
+                                            )}
+                                          </div>
+                                        )}
                                       </div>
-                                      <div>
+
+                                      <div className="flex justify-center">
                                         {item.title === "Pickup Address" &&
                                           // <p>{key + "-- " + value}</p>
                                           index === 1 && (
@@ -2748,8 +3000,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   inputMode="numeric"
                                                   isRequired={true}
                                                   onChange={(e: any) => {
+                                                    fetchPincodeData(
+                                                      e,
+                                                      item.title
+                                                    );
                                                     const numericValue =
-                                                      e.target.value.replace(
+                                                      e.target?.value?.replace(
                                                         /[^0-9]/g,
                                                         ""
                                                       );
@@ -2836,28 +3092,35 @@ const Accordion = (props: ICustomTableAccordion) => {
 
                                         {item.title === "Pickup Address" &&
                                           index === 13 && (
-                                            <div className="grid grid-cols-2  mt-2">
-                                              <div className="  xl:w-[274px] col-span-1 pr-[10px] xl:pr-[70px] 2xl:pr-[0px]">
-                                                <div className="rounded border-[1px]  border-[#A4A4A4]">
-                                                  <DatePicker
-                                                    value={convertEpochToDateTimeV2(
-                                                      +getPickAddressData
-                                                        ?.pickUpAddress
-                                                        ?.pickupDate
-                                                    )}
-                                                    onChange={(e: any) => {
-                                                      let temp =
-                                                        getPickAddressData;
-                                                      temp.pickUpAddress.pickupDate =
-                                                        +Date.parse(e);
-                                                      setGetPickUpAddressData({
-                                                        ...temp,
-                                                      });
-                                                    }}
-                                                    placeholderText="Pickup Date"
-                                                    className="cursor-pointer removePaddingPlaceHolder  !w-full "
-                                                    dateFormat="dd/MM/yyyy"
-                                                  />
+                                            <div className="">
+                                              <div className="  ">
+                                                <div className="">
+                                                  <div className="flex mt-4">
+                                                    <CustomInputWithImage
+                                                      placeholder="Pickup Date"
+                                                      imgSrc={CalenderIcon}
+                                                      value={date_DD_MMM_YYYY_HH_MM_SS(
+                                                        getPickAddressData
+                                                          .pickUpAddress
+                                                          .pickupDate
+                                                      )}
+                                                      onClick={() => {
+                                                        setOpenPickupDatePicker(
+                                                          true
+                                                        );
+                                                      }}
+                                                      inputError={inputError}
+                                                      inputClassName="w-[330px] xl:!w-[570px]"
+                                                    />
+                                                  </div>
+
+                                                  {openPickupDatePicker && (
+                                                    <CustomDate
+                                                      onSelect={
+                                                        handleScheduleDateTimeChange
+                                                      }
+                                                    />
+                                                  )}
                                                 </div>
                                               </div>
                                             </div>
@@ -2866,10 +3129,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item?.title === "Status" &&
                                           (index === 7 ||
                                             index === 13 ||
-                                            index === 19) && <br />}
+                                            index === 19)}
                                       </div>
 
-                                      <div>
+                                      <div className="flex justify-center">
                                         {item.title === "Delivery Address" &&
                                           index === 1 && (
                                             <div className="flex gap-x-5 mt-4 mb-2">
@@ -3323,6 +3586,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress.pincode
                                                   }
                                                   onChange={(e: any) => {
+                                                    fetchPincodeData(
+                                                      e,
+                                                      item.title
+                                                    );
                                                     const numericValue =
                                                       e.target.value.replace(
                                                         /[^0-9]/g,
@@ -3412,7 +3679,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item.title === "Delivery Address" &&
                                           index === 13 && (
                                             <div className="grid grid-cols-2   mt-4">
-                                              <div className="xl:w-[274px] col-span-1 pr-[10px] xl:pr-[70px] 2xl:pr-[0px]">
+                                              <div className="xl:w-[360px] col-span-1 pl-2 xl:pl-4 pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
                                                 <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
@@ -3453,7 +3720,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       });
                                                     }
                                                   }}
-                                                  inputError={inputError}
+                                                  inputError={false}
                                                 />
 
                                                 <p className="open-sans text-[12px] text-red-600">
@@ -3466,7 +3733,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item?.title === "Status" &&
                                           (index === 7 ||
                                             index === 13 ||
-                                            index === 19) && <br />}
+                                            index === 19)}
                                       </div>
                                     </>
                                   );
