@@ -173,6 +173,16 @@ const ErrorModal = (props: ErrorModalProps) => {
             5000
           ).toFixed(2);
         }
+
+        const totalDeadWeightOfBox = updatedProductDimensions?.products?.reduce(
+          (sum: any, item: any) => sum + +item.deadWeight,
+          0
+        );
+
+        console.log("totalDeadWeightOfBox", totalDeadWeightOfBox);
+
+        updatedProductDimensions.deadWeight = totalDeadWeightOfBox;
+
         updatedProductDimensions.products[index].appliedWeight = +Math.max(
           updatedProductDimensions?.products[index].deadWeight,
           updatedProductDimensions?.products[index].volumetricWeight
@@ -208,7 +218,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
             <InputBox
               label="Dead Weight (Kg)"
-              value={data?.deadWeight || ""}
+              value={data?.deadWeight}
               name="deadWeight"
               inputType="text"
               inputMode="numeric"
@@ -221,11 +231,11 @@ const ErrorModal = (props: ErrorModalProps) => {
             />
             <InputBox
               label="Volumetric Weight"
-              value={data?.volumetricWeight || ""}
+              value={data?.volumetricWeight}
               name="volumetricWeight"
               inputType="number"
               isDisabled={true}
-              inputError={inputError}
+              // inputError={inputError}
             />
           </div>
           <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
@@ -238,7 +248,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 inputType="text"
                 inputMode="numeric"
                 name="length"
-                value={data?.length || ""}
+                value={data?.length}
                 onChange={(e: any) => {
                   if (!isNaN(e.target.value)) {
                     onChaneDimensionHandler(e);
@@ -248,7 +258,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               />
               <InputBox
                 label="B"
-                value={data?.breadth || ""}
+                value={data?.breadth}
                 name="breadth"
                 inputType="text"
                 inputMode="numeric"
@@ -261,7 +271,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               />
               <InputBox
                 label="H"
-                value={data?.height || ""}
+                value={data?.height}
                 name="height"
                 inputType="text"
                 inputMode="numeric"
