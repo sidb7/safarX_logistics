@@ -73,7 +73,8 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
   const actionsObject: any = {
     DRAFT: [
-      { title: "Edit Order", actionType: "edit" },
+      //commneted as it is not needed at this time
+      // { title: "Edit Order", actionType: "edit" },
       { title: "Delete Order", actionType: "delete" },
     ],
     BOOKED: [

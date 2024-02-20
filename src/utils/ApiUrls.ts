@@ -121,6 +121,7 @@ const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
+const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
 
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
@@ -501,6 +502,7 @@ export {
   POST_ASSIGN_PLANV3,
   DELETE_INTEGRATED_STORE,
   UPDATE_OTHER_ORDER_DETAILS,
+  UPDATE_TEMP_ORDER_INFO,
   GET_PENDING_PLANS,
   GET_PLANS_PREVIEW,
 };

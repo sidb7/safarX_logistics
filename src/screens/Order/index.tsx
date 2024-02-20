@@ -1021,6 +1021,17 @@ const Index = () => {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      if (!infoModalContent.isOpen) {
+        const data = await getSellerOrderByStatus();
+        const { OrderData } = data;
+        setOrders(OrderData);
+        console.log("Orders: ", orders);
+      }
+    })();
+  }, [infoModalContent.isOpen]);
+
   return (
     <>
       {isActive ? (
@@ -1216,7 +1227,7 @@ const Index = () => {
       <CustomRightModal
         isOpen={infoModalContent.isOpen}
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
-        className="!justify-start"
+        className="!justify-start !w-[400px] xl:!w-[650px]"
       >
         <div className="flex mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[1.2rem]">
           <p className="">
