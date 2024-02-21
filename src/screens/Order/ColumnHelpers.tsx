@@ -73,7 +73,8 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
   const actionsObject: any = {
     DRAFT: [
-      { title: "Edit Order", actionType: "edit" },
+      //commneted as it is not needed at this time
+      // { title: "Edit Order", actionType: "edit" },
       { title: "Delete Order", actionType: "delete" },
     ],
     BOOKED: [
@@ -1229,14 +1230,12 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
+                {Number(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
-                    "en-IN"
-                  )}
+                  {Number(codInfo?.collectableAmount)?.toLocaleString("en-IN")}
                 </p>
               )}
 
