@@ -3,6 +3,7 @@ import "../../styles/inputBox.css";
 interface propTypes {
   label?: string;
   value?: string | number;
+  defaultValue?: string | number;
   inputMode?: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -42,6 +43,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
   const {
     label,
     value = undefined,
+    defaultValue = undefined,
     inputMode = "",
     onChange = () => {},
     onBlur = () => {},
@@ -92,6 +94,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           onBlur={(e: any) => onBlur(e)}
           autoComplete={autoComplete}
           value={value}
+          defaultValue={defaultValue}
           disabled={isDisabled}
           inputMode={inputMode}
           minLength={minLength}
