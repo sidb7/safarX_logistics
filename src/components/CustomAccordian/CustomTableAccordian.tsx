@@ -193,7 +193,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     },
   ]);
   const [boxDetails, setBoxDetails] = useState<any>();
-
+  const [productError, setProdctError] = useState<any>([]);
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
 
   const [pickupDate, setPickupDate] = useState("");
@@ -225,6 +225,8 @@ const Accordion = (props: ICustomTableAccordion) => {
       pickupDate: "",
     },
   });
+
+  console.log("getPickAddressData", getPickAddressData);
 
   const [serviceList, setServiceList] = useState<any>([]);
 
@@ -851,38 +853,38 @@ const Accordion = (props: ICustomTableAccordion) => {
           title: "Delivery Address",
           "GST Number": rowsData?.deliveryAddress?.gstNumber,
         });
-        rows.push({
-          title: "Services",
-          "Partner Name": capitalizeFirstLetter(
-            rowsData?.boxInfo?.[0]?.service?.partnerName
-          ),
-          "AVN Service": capitalizeFirstLetter(
-            rowsData?.boxInfo?.[0]?.service?.companyServiceName
-          ),
-          "Service Mode": capitalizeFirstLetter(
-            rowsData?.boxInfo?.[0]?.service?.serviceMode
-          ),
-          "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-          "Freight Charges": `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.add +
-              rowsData?.boxInfo?.[0]?.service?.base
-          )?.toLocaleString("en-IN")}`,
-          "COD Charges": `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.cod
-          )?.toLocaleString("en-IN")}`,
-          Insurance: `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.insurance
-          )?.toLocaleString("en-IN")}`,
-          "Other Charges": `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.variables
-          )?.toLocaleString("en-IN")}`,
-          Tax: `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.tax
-          )?.toLocaleString("en-IN")}`,
-          Total: `₹ ${Math.round(
-            rowsData?.boxInfo?.[0]?.service?.total
-          )?.toLocaleString("en-IN")}`,
-        });
+        // rows.push({
+        //   title: "Services",
+        //   "Partner Name": capitalizeFirstLetter(
+        //     rowsData?.boxInfo?.[0]?.service?.partnerName
+        //   ),
+        //   "AVN Service": capitalizeFirstLetter(
+        //     rowsData?.boxInfo?.[0]?.service?.companyServiceName
+        //   ),
+        //   "Service Mode": capitalizeFirstLetter(
+        //     rowsData?.boxInfo?.[0]?.service?.serviceMode
+        //   ),
+        //   "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
+        //   "Freight Charges": `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.add +
+        //       rowsData?.boxInfo?.[0]?.service?.base
+        //   )?.toLocaleString("en-IN")}`,
+        //   "COD Charges": `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.cod
+        //   )?.toLocaleString("en-IN")}`,
+        //   Insurance: `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.insurance
+        //   )?.toLocaleString("en-IN")}`,
+        //   "Other Charges": `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.variables
+        //   )?.toLocaleString("en-IN")}`,
+        //   Tax: `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.tax
+        //   )?.toLocaleString("en-IN")}`,
+        //   Total: `₹ ${Math.round(
+        //     rowsData?.boxInfo?.[0]?.service?.total
+        //   )?.toLocaleString("en-IN")}`,
+        // });
 
         let boxObj: any = { title: "" };
         rowsData?.boxInfo?.map((item: any, index: any) => {
@@ -916,6 +918,39 @@ const Accordion = (props: ICustomTableAccordion) => {
           rows.push(boxObj);
         });
 
+        rows.push({
+          title: "Services",
+          "Partner Name": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.partnerName
+          ),
+          "AVN Service": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.companyServiceName
+          ),
+          "Service Mode": capitalizeFirstLetter(
+            rowsData?.boxInfo?.[0]?.service?.serviceMode
+          ),
+          "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
+          "Freight Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.add +
+              rowsData?.boxInfo?.[0]?.service?.base
+          )?.toLocaleString("en-IN")}`,
+          "COD Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.cod
+          )?.toLocaleString("en-IN")}`,
+          Insurance: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.insurance
+          )?.toLocaleString("en-IN")}`,
+          "Other Charges": `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.variables
+          )?.toLocaleString("en-IN")}`,
+          Tax: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.tax
+          )?.toLocaleString("en-IN")}`,
+          Total: `₹ ${Math.round(
+            rowsData?.boxInfo?.[0]?.service?.total
+          )?.toLocaleString("en-IN")}`,
+        });
+
         let statusObj: any = { title: "" };
         rowsData?.status?.map((elem: any, index: any) => {
           statusObj = {
@@ -930,12 +965,12 @@ const Accordion = (props: ICustomTableAccordion) => {
             [`Notes ${index + 1}`]: elem.notes,
             [`Time ${index + 1}`]: date_DD_MMM_YYYY_HH_MM_SS(elem.timeStamp),
           };
-          statusObj.title = "Status";
+          statusObj.title = "Event Logs";
         });
         rows.push(statusObj);
 
         rows.push({
-          title: "Other Details",
+          title: "Other History",
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
@@ -944,7 +979,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
         });
-
+        console.log("rows", rows);
         setOrderDetails(rows);
         setIsLoading(false);
       }
@@ -956,8 +991,6 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   servicePartnerServiceId =
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
-
-  const [productError, setProdctError] = useState<any>([]);
 
   const productLoops = (productAccordian: any, dataIndex: any) => {
     // for (let i = 0; i < productAccordian.length; i++) {
@@ -973,22 +1006,47 @@ const Accordion = (props: ICustomTableAccordion) => {
       return false;
     } else {
       setInputError(true);
-      // setProdctError(
-      //   productError?.map((item: any, index: any) => {
-      //     if (dataIndex === index) {
-      //       return {
-      //         ...item,
-      //         deadWeight: product?.deadWeight > 0 ? false : true,
-      //         volumetricWeight: product?.volumetricWeight > 0 ? false : true,
-      //         length: product?.length > 0 ? false : true,
-      //         breadth: product?.breadth > 0 ? false : true,
-      //         height: product?.height > 0 ? false : true,
-      //       };
-      //     } else {
-      //       return item;
-      //     }
-      //   })
-      // );
+      setProdctError(
+        productError?.map((item: any, index: any) => {
+          if (dataIndex === index) {
+            return {
+              ...item,
+              deadWeight:
+                product?.deadWeight <= 0
+                  ? "Should be greater than 0"
+                  : product?.deadWeight === ""
+                  ? "Field is Required"
+                  : "",
+              volumetricWeight:
+                product?.volumetricWeight <= 0
+                  ? "Should be greater than 0"
+                  : product?.volumetricWeight === ""
+                  ? "Field is Required"
+                  : "",
+              length:
+                product?.length <= 0
+                  ? "Should be greater than 0"
+                  : product?.length === ""
+                  ? "Field is Required"
+                  : "",
+              breadth:
+                product?.breadth <= 0
+                  ? "Should be greater than 0"
+                  : product?.breadth === ""
+                  ? "Field is Required"
+                  : "",
+              height:
+                product?.height <= 0
+                  ? "Should be greater than 0"
+                  : product?.height === ""
+                  ? "Field is Required"
+                  : "",
+            };
+          } else {
+            return item;
+          }
+        })
+      );
       return true;
     }
 
@@ -1062,17 +1120,55 @@ const Accordion = (props: ICustomTableAccordion) => {
     setproductAccordian(boxProductDetails?.boxInfo?.[0]?.products);
     setProdctError(
       boxProductDetails?.boxInfo?.[0]?.products?.map(
-        (item: any, index: number) => {
+        (product: any, index: any) => {
           return {
-            deadWeight: "",
-            volumetricWeight: "",
-            length: "",
-            breadth: "",
-            height: "",
+            deadWeight:
+              product?.deadWeight <= 0
+                ? "Should be greater than 0"
+                : product?.deadWeight === ""
+                ? "Field is Required"
+                : "",
+            volumetricWeight:
+              product?.volumetricWeight <= 0
+                ? "Should be greater than 0"
+                : product?.volumetricWeight === ""
+                ? "Field is Required"
+                : "",
+            length:
+              product?.length <= 0
+                ? "Should be greater than 0"
+                : product?.length === ""
+                ? "Field is Required"
+                : "",
+            breadth:
+              product?.breadth <= 0
+                ? "Should be greater than 0"
+                : product?.breadth === ""
+                ? "Field is Required"
+                : "",
+            height:
+              product?.height <= 0
+                ? "Should be greater than 0"
+                : product?.height === ""
+                ? "Field is Required"
+                : "",
           };
         }
       )
     );
+    // setProdctError(
+    //   boxProductDetails?.boxInfo?.[0]?.products?.map(
+    //     (item: any, index: number) => {
+    //       return {
+    //         deadWeight: "",
+    //         volumetricWeight: "",
+    //         length: "",
+    //         breadth: "",
+    //         height: "",
+    //       };
+    //     }
+    //   )
+    // );
   }, [boxProductDetails]);
 
   useEffect(() => {
@@ -1284,10 +1380,11 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   <div
                                                     className="border-2  border-black-600 p-2 rounded-md w-full"
                                                     onClick={(e: any) => {
-                                                      productLoops(
-                                                        productAccordian,
-                                                        index
-                                                      );
+                                                      // productLoops(
+                                                      //   productAccordian,
+                                                      //   index
+                                                      // );
+
                                                       let temp = [
                                                         ...productAccordian,
                                                       ];
@@ -1305,7 +1402,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         setproductAccordian(
                                                           temp
                                                         );
-
+                                                        setOpen({
+                                                          [`itemproductAccordian${index}`]:
+                                                            false,
+                                                        });
                                                         handleSingleProductUpdation();
                                                       } else {
                                                         eachProduct.isCollapse =
@@ -1313,6 +1413,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         setproductAccordian(
                                                           temp
                                                         );
+                                                        setOpen({
+                                                          [`itemproductAccordian${index}`]:
+                                                            true,
+                                                        });
                                                         // setInputError(true);
                                                       }
                                                       hanldeProducts(
@@ -1327,11 +1431,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         setOpen({
                                                           [`itemproductAccordian${index}`]:
                                                             true,
-                                                        });
-                                                      } else {
-                                                        setOpen({
-                                                          [`itemproductAccordian${index}`]:
-                                                            false,
                                                         });
                                                       }
                                                     }}
@@ -2097,7 +2196,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                   ) : (
                                     <>
                                       <div>
-                                        {item.title === "Status" &&
+                                        {item.title === "Event Logs" &&
                                           index === 4 && (
                                             <div>
                                               {boxProductDetails?.status.map(
@@ -2156,7 +2255,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       </div>
 
                                       <div>
-                                        {item.title === "Other Details" &&
+                                        {item.title === "Other History" &&
                                           index === 5 && (
                                             <>
                                               {
@@ -2664,6 +2763,16 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.pickUpAddress?.contact
                                                       ?.emailId
                                                   }
+                                                  // onChange={(e: any) => {
+                                                  //   let emailValue =
+                                                  //     e.target.value;
+                                                  //   setGetPickUpAddressData({
+                                                  //     ...getPickAddressData
+                                                  //       ?.pickUpAdress?.contact,
+                                                  //     emailId: emailValue,
+                                                  //   });
+                                                  //   validateEmailId(emailValue);
+                                                  // }}
                                                   onChange={(e: any) => {
                                                     const emailValue =
                                                       e.target.value;
@@ -2685,7 +2794,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }
                                                 </p>
                                               </div>
-                                              <div className="xl:w-[274px]">
+                                              {/* <div className="xl:w-[274px]">
                                                 <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
@@ -2725,6 +2834,49 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 <p className="open-sans text-[12px] text-red-600">
                                                   {validationError.contactType}
                                                 </p>
+                                              </div> */}
+                                              <div className="w-[158px] xl:w-[274px]">
+                                                <CustomDropDown
+                                                  // onChange={(e: any) => {
+                                                  //   setServiceabilityData({
+                                                  //     ...serviceabilityData,
+                                                  //     paymentMode:
+                                                  //       e.target.value,
+                                                  //   });
+                                                  // }}
+                                                  // value={
+                                                  //   serviceabilityData?.paymentMode
+                                                  // }
+                                                  value={
+                                                    getPickAddressData
+                                                      ?.pickUpAddress?.contact
+                                                      ?.contactType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getPickAddressData;
+                                                    temp.pickUpAddress.contact.contactType =
+                                                      e.target.value;
+                                                    setGetPickUpAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                  options={[
+                                                    {
+                                                      label: "Office",
+                                                      value: "Office",
+                                                    },
+                                                    {
+                                                      label: "Warehouse",
+                                                      value: "Warehouse",
+                                                    },
+                                                    {
+                                                      label: "Other",
+                                                      value: "Other",
+                                                    },
+                                                  ]}
+                                                  heading="Contact Type"
+                                                />
                                               </div>
                                             </div>
                                           )}
@@ -3101,8 +3253,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       imgSrc={CalenderIcon}
                                                       value={date_DD_MMM_YYYY_HH_MM_SS(
                                                         getPickAddressData
-                                                          .pickUpAddress
-                                                          .pickupDate
+                                                          ?.pickUpAddress
+                                                          ?.pickupDate
                                                       )}
                                                       onClick={() => {
                                                         setOpenPickupDatePicker(

@@ -408,8 +408,43 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const updateProducts = async (isProcessOrder?: any) => {
     !isProcessOrder && setUpdateButtonLoader(true);
+
+    let TempProductAndBoxDetails = { ...productAndBoxDetails };
+
+    const totalDeadWeight = productAndBoxDetails?.products?.reduce(
+      (sum: any, item: any) => sum + +item.deadWeight,
+      0
+    );
+
+    const totalVolumetricWeight = productAndBoxDetails?.products?.reduce(
+      (sum: any, item: any) => sum + +item.volumetricWeight,
+      0
+    );
+
+    if (TempProductAndBoxDetails?.deadWeight < totalDeadWeight) {
+      TempProductAndBoxDetails.deadWeight = totalDeadWeight;
+    }
+
+    if (TempProductAndBoxDetails?.volumetricWeight < totalVolumetricWeight) {
+      TempProductAndBoxDetails.volumetricWeight = totalVolumetricWeight;
+      TempProductAndBoxDetails.length = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+      TempProductAndBoxDetails.breadth = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+      TempProductAndBoxDetails.height = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+    }
+
+    TempProductAndBoxDetails.appliedWeight = +Math.max(
+      TempProductAndBoxDetails?.deadWeight,
+      TempProductAndBoxDetails?.volumetricWeight
+    );
+
     let payLoad = {
-      boxDetails: [productAndBoxDetails],
+      boxDetails: [TempProductAndBoxDetails],
       orderDetails: errorModalData?.orderDetails,
       category: errorModalData?.error,
     };
@@ -1172,11 +1207,16 @@ const ErrorModal = (props: ErrorModalProps) => {
                       {services.map((service: any, index: any) => {
                         return (
                           <div
-                            className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
+                            className={`flex  cursor-pointer   hover:shadow-inner hover:bg-[#F7F7F7]  ${
+                              index === serviceIndex &&
+                              "shadow-inner bg-[#F7F7F7]"
+                            } min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
                             onClick={() => handleService(index)}
                           >
                             <div
-                              className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
+                              className={`flex  ${
+                                index === serviceIndex && "bg-[#]"
+                              } flex-col items-center gap-y-[1rem] my-2 w-[100%]`}
                               style={{
                                 boxShadow:
                                   "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -1191,18 +1231,32 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 }}
                               >
                                 <div
-                                  className={`flex gap-x-4 ${
+                                  className={`flex items-center gap-x-4 ${
                                     index === serviceIndex && "font-semibold"
                                   }`}
                                 >
-                                  {index === serviceIndex && (
+                                  <input
+                                    type="radio"
+                                    value={service.partnerName}
+                                    className="!w-4"
+                                    readOnly={true}
+                                    checked={index === serviceIndex}
+                                    onChange={(e: any) => handleService(index)}
+                                  />
+                                  {/* {index === serviceIndex && (
                                     <img src={VanIcon} />
-                                  )}
+                                  )} */}
                                   {capitalizeFirstLetter(service.partnerName) +
                                     " " +
                                     capitalizeFirstLetter(service.serviceMode)}
                                 </div>
-                                <div>{service.total}</div>
+                                <div
+                                  className={`${
+                                    index === serviceIndex && "font-semibold"
+                                  }`}
+                                >
+                                  {service.total}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1385,25 +1439,25 @@ const ErrorModal = (props: ErrorModalProps) => {
   const switchForUpdateActions = async (isProcessOrder?: any) => {
     let result: any = false;
 
-    setIsProcessOrderCall(isProcessOrder);
+    // setIsProcessOrderCall(isProcessOrder);
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
-        if (!isProcess) {
-          const totalProductAppliedWeight =
-            productAndBoxDetails?.products.reduce(
-              (acc: any, obj: any) => acc + obj.appliedWeight,
-              0
-            );
+        // if (!isProcess) {
+        //   const totalProductAppliedWeight =
+        //     productAndBoxDetails?.products.reduce(
+        //       (acc: any, obj: any) => acc + obj.appliedWeight,
+        //       0
+        //     );
 
-          if (
-            totalProductAppliedWeight >
-              productAndBoxDetails?.volumetricWeight &&
-            !isProcess
-          ) {
-            setAlertMessage(true);
-            return false;
-          }
-        }
+        //   if (
+        //     totalProductAppliedWeight >
+        //       productAndBoxDetails?.volumetricWeight &&
+        //     !isProcess
+        //   ) {
+        //     setAlertMessage(true);
+        //     return false;
+        //   }
+        // }
 
         // console.log("updateProducts", await updateProducts(isProcessOrder));
         result = await updateProducts(isProcessOrder);
@@ -1559,15 +1613,15 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   }, [addressData]);
 
-  useEffect(() => {
-    if (isProcess) {
-      if (isProcessOrderCall) {
-        processOrder();
-      } else {
-        switchForUpdateActions(false);
-      }
-    }
-  }, [isProcess]);
+  // useEffect(() => {
+  //   if (isProcess) {
+  //     if (isProcessOrderCall) {
+  //       processOrder();
+  //     } else {
+  //       switchForUpdateActions(false);
+  //     }
+  //   }
+  // }, [isProcess]);
 
   return (
     <div className="overflow-h-auto max-h-[90vh]">
@@ -1622,7 +1676,6 @@ const ErrorModal = (props: ErrorModalProps) => {
             onClick={() => {
               if (switchForValidation()) switchForUpdateActions(false);
             }}
-            //
           >
             {switchForUpdateActionsName()}
           </div>
@@ -1647,7 +1700,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         )}
       </div>
-      <CustomeBottomModal
+      {/* <CustomeBottomModal
         isOpen={showAlertMessage}
         onRequestClose={() => setAlertMessage(false)}
         overlayClassName="flex p-5 items-center outline-none z-[99]"
@@ -1661,8 +1714,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         </div>
         <div className="px-16 ">
           <p className=" text-base   lg:text-lg font-semibold  text-center">
-            Weight Of Products Should be always Greater than Box Volumetric
-            weight
+            Box Volumetric weight Should be always Greater than
           </p>
           <p className=" text-base   lg:text-lg font-semibold  text-center">
             Are You Sure You Want To Proceed ?
@@ -1690,7 +1742,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             </button>
           </div>
         </div>
-      </CustomeBottomModal>
+      </CustomeBottomModal> */}
     </div>
   );
 };

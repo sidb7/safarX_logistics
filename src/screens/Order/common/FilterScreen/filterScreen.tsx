@@ -106,8 +106,13 @@ function FilterScreen({
     const endEpoch: any = endDate;
     endEpoch && endEpoch.setHours(23, 59, 59, 59);
     const lastendEpoch = endEpoch?.getTime();
+    const startEpoch: any = startDate;
+
+    startEpoch && startEpoch.setHours(0, 0, 0, 0);
+    const lastStartEpoch = startEpoch?.getTime();
+
     const payload = [
-      { createdAt: { $gte: convertEpoch(startDate) } },
+      { createdAt: { $gte: lastStartEpoch } },
       { createdAt: { $lte: lastendEpoch } },
     ];
     tempArr.push(...payload);
