@@ -3,8 +3,8 @@ import { io, Socket } from "socket.io-client";
 import { SELLER_URL } from "../utils/ApiUrls";
 import { GlobalToast } from "../components/GlobalToast/GlobalToast";
 import { setWalletBalance } from "../redux/reducers/userReducer";
-import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { channelState } from "../redux/reducers/syncChannel";
 
 let socket: Socket | null = null;
 
@@ -57,6 +57,36 @@ const connectSocket = (dispatch?: any) => {
     socket.on("bulkOrderFailed", (data: any) => {
       console.log(`Received bulk order failed event: ${JSON.stringify(data)}`);
       GlobalToast(data);
+    });
+
+    socket.on("order_error", (data: any) => {
+      GlobalToast(data);
+    });
+
+    socket.on("trigger_refresh", (data: any) => {
+      setTimeout(() => {
+        window.location.href = "/orders/view-orders?activeTab=draft";
+        window.onload = () => {
+          window.location.reload();
+        };
+      }, 3000);
+    });
+
+    socket.on("sync_orders", (data: any) => {
+      const parsedData = JSON.parse(data);
+      console.log("parsedData ------------------- : ", parsedData);
+      dispatch(channelState(parsedData));
+      // GlobalToast(data);
+    });
+
+    socket.on("switch_draft_page", (data: any) => {
+      console.log("parsedData ------------------- : ", data);
+      setTimeout(() => {
+        window.location.href = `/orders/view-orders?activeTab=${data}`;
+        window.onload = () => {
+          window.location.reload();
+        };
+      }, 1500);
     });
   }
 };
