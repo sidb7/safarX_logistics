@@ -399,7 +399,7 @@ const Index = () => {
     return (
       <div>
         <div className="flex justify-end mb-4">
-          <div className="border border-[#AFAFAF] w-fit rounded-md">
+          <div className="border border-[#AFAFAF] w-fit  !h-[36px] rounded-md">
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -419,13 +419,13 @@ const Index = () => {
               }}
               isClearable={true}
               placeholderText="Select From & To Date"
-              className="cursor-pointer h-12 border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              className="cursor-pointer !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
             />
           </div>
-          <div className="ml-2 flex items-center rounded border-[#AFAFAF] border">
+          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border">
             <SearchBox
-              className="removePaddingPlaceHolder !h-[100%] border-none "
+              className="removePaddingPlaceHolder !h-[34px] border-none"
               label="Search"
               value={searchedText}
               onChange={(e: any) => {
