@@ -1376,14 +1376,14 @@ const Index = () => {
 
   useEffect(() => {
     (async () => {
-      if (!infoModalContent.isOpen) {
-        const data = await getSellerOrderByStatus();
-        const { OrderData } = data;
-        setOrders(OrderData);
-        console.log("Orders: ", orders);
-      }
+      //   if (!infoModalContent.isOpen) {
+      const data = await getSellerOrderByStatus();
+      const { OrderData } = data;
+      setOrders(OrderData);
+      console.log("Orders: ", orders);
+      //   }
     })();
-  }, [infoModalContent.isOpen]);
+  }, []);
 
   return (
     <>
