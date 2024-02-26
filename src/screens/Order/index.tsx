@@ -217,6 +217,7 @@ const Index = () => {
   const [globalIndex, setGlobalIndex] = useState(0);
   const [tabStatusId, setTabStatusId] = useState(0);
   const syncRef: any = useRef(null);
+  const [currentTap, setCurrentTap] = useState<any>("DRAFT");
   const [cancellationModal, setCancellationModal]: any = useState({
     isOpen: false,
     awbNo: "",
@@ -690,7 +691,7 @@ const Index = () => {
       setTabStatusId(index);
 
       let currentStatus = tabs[index].value;
-
+      setCurrentTap(currentStatus);
       setIsErrorPage(index > 0 && false);
       index > 0 && setFilterId(0);
 
@@ -1023,15 +1024,15 @@ const Index = () => {
 
   useEffect(() => {
     (async () => {
-      //   if (!infoModalContent.isOpen) {
-      const data = await getSellerOrderByStatus();
-      const { OrderData } = data;
-      setOrders(OrderData);
-      console.log("Orders: ", orders);
-      //   }
+      if (!infoModalContent.isOpen && currentTap == "DRAFT") {
+        const data = await getSellerOrderByStatus();
+        const { OrderData } = data;
+        setOrders(OrderData);
+        console.log("Orders: ", orders);
+      }
     })();
-  }, []);
-
+  }, [infoModalContent]);
+  console.log(infoModalContent, "infoModalContent");
   return (
     <>
       {isActive ? (
@@ -1229,14 +1230,30 @@ const Index = () => {
         onClose={() => setInfoModalContent({ isOpen: false, data: {} })}
         className="!justify-start !w-[400px] xl:!w-[650px]"
       >
-        <div className="flex mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[1.2rem]">
-          <p className="">
-            {infoModalContent?.data?.orderId?.includes?.("T")
-              ? `${
-                  infoModalContent?.data?.orderId?.split("T")?.[1]
-                } - Temp Order Details`
-              : `${infoModalContent?.data?.orderId} - Order Details`}
-          </p>
+        <div className="flex justify-between mt-[1rem] rounded-lg mx-[1rem] h-[3rem] items-center bg-[#E5EDFF] border-b-2 w-[95%] px-[1rem] text-[16px]  py-8 ">
+          <div className="">
+            {infoModalContent?.data?.orderNumber && (
+              <p>
+                <span>Order Number:</span>
+                {infoModalContent?.data?.orderNumber || ""}{" "}
+              </p>
+            )}
+            <hr />
+            <p className="mt-1">
+              <span>Shipyaari ID:</span>
+              {infoModalContent?.data?.orderId?.split("T")?.[1] ||
+                infoModalContent?.data?.orderId ||
+                ""}
+              {/* {!infoModalContent?.data?.orderNumber
+                ? `Shipyaari Id: (${
+                    infoModalContent?.data?.orderId?.split("T")?.[1] ||
+                    infoModalContent?.data?.orderId
+                  })`
+                : `${
+                    infoModalContent?.data?.orderNumber || ""
+                  } - Order Details`} */}
+            </p>
+          </div>
         </div>
         <CustomTableAccordian data={infoModalContent} />
       </CustomRightModal>
