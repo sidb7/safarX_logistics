@@ -477,7 +477,7 @@ const Index = () => {
 
         <div
           ref={syncRef}
-          onClick={handleSyncOrder}
+          onClick={handleSyncOrder} // Function Added
           className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
         >
           <img src={SyncIcon} alt="" width="16px" />
