@@ -10,3 +10,29 @@
   width: 100%;
   background-color: #06981d;
 } */
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin: 0 5px;
+  background-color: #333;
+  border-radius: 50%;
+  animation: fly 0.6s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes fly {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-10px);
+  }
+}

@@ -8,6 +8,7 @@ import { SignInSlice } from "./reducers/signInReducer";
 import { catalogueSlice } from "./reducers/catalogue";
 import { onboardingSlice } from "./reducers/onboarding";
 import { Environment } from "../utils/ApiUrls";
+import { ChannelSlice } from "./reducers/syncChannel";
 export const store = configureStore({
   reducer: {
     user: userSlice.reducer,
@@ -18,6 +19,7 @@ export const store = configureStore({
     signin: SignInSlice.reducer,
     catalogue: catalogueSlice.reducer,
     onboarding: onboardingSlice.reducer,
+    channel: ChannelSlice.reducer,
   },
   devTools: Environment !== "production" ? true : false,
 });
