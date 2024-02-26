@@ -334,7 +334,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             <div>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Url - https://example.com"
+                placeholder="Store Url - https://www.my-woocommerce-store.com"
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) => {
