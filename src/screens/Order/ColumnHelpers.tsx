@@ -581,7 +581,6 @@ const idHelper = (
 
       let statusObj: any = { title: "" };
       rowsData?.status?.map((elem: any, index: any) => {
-        // console.log("descriptionBookedOrder", elem?.description);
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
@@ -709,8 +708,6 @@ export const columnHelperForNewOrder = (
         } = info?.row?.original;
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
-
-        console.log("Get Created AT: ", date_DD_MMM_YYYY_HH_MM_SS(createdAt));
 
         if (status?.length > 0) {
           updatedAtStatus = status[status.length - 1]?.timeStamp;
@@ -1022,8 +1019,6 @@ export const columnHelperForNewOrder = (
         });
 
         const handleInformativeModal = () => {
-          console.log("awb", awb);
-
           setInfoModalContentFunction({
             awb: "0",
             orderId: `T${rowsData.tempOrderId}`,

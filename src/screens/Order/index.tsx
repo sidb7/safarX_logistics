@@ -3,9 +3,10 @@ import AddOrderIcon from "../../assets/Order/AddOrder.svg";
 import BlukOrderIcon from "../../assets/Order/BlukOrderIcon.svg";
 import SyncIcon from "../../assets/Order/SyncIcon.svg";
 import { OrderStatus } from "./OrderStatus";
+import FilterIcon from "../../assets/Order/FilterIcon.svg";
 import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Stepper from "./Stepper";
 import "../../styles/silkStyle.css";
 import DeliveryIcon from "../../assets/Delivery.svg";
@@ -46,19 +47,27 @@ import CustomTableAccordian from "../../components/CustomAccordian/CustomTableAc
 import { checkPageAuthorized } from "../../redux/reducers/role";
 import CustomRightModal from "../../components/CustomModal/customRightModal";
 import orderCardImg from "../../assets/OrderCard/Gif.gif";
+import CloseIcon from "../../assets/CloseIcon.svg";
 import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
-import { capitalizeFirstLetter, tokenKey } from "../../utils/utility";
+import {
+  capitalizeFirstLetter,
+  getQueryJson,
+  tokenKey,
+} from "../../utils/utility";
 import "../../styles/hideScroll.css";
 import Errors from "./Errors";
 import ErrorModal from "./ErrorModal";
 import PartnerJumperModal from "./PartnerJumberModal";
+import DatePicker from "react-datepicker";
+import { debounce } from "lodash";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+
+
 import { io, Socket } from "socket.io-client";
 import { SearchBox } from "../../components/SearchBox";
-import FilterIcon from "../../assets/Order/FilterIcon.svg";
 import FilterScreen from "./common/FilterScreen/filterScreen";
 import ServiceButton from "../../components/Button/ServiceButton";
-import CloseIcon from "../../assets/CloseIcon.svg";
 import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
 
@@ -276,7 +285,7 @@ const Index = () => {
 
   const isActive = checkPageAuthorized("View Orders");
   const [isSticky, setIsSticky] = useState(false);
-
+  const [isFilterLoading, setIsFilterLoading] = useState<any>(false);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [draftOrderCount, setDraftOrderCount] = useState({
     all: 0,
@@ -284,12 +293,38 @@ const Index = () => {
     failed: 0,
     error: 0,
   });
+  const [filterModal, setFilterModal] = useState(false);
+  const [filterState, setFilterState] = useState({
+    name: "",
+    menu: [],
+    label: "",
+    isCollapse: false,
+  });
+  const [filterPayLoad, setFilterPayLoad] = useState({
+    filterArrOne: [],
+    filterArrTwo: [],
+  });
+
+  const [persistFilterData, setPersistFilterData] = useState({});
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
   const [errorData, setErrorData]: any = useState();
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
+  const [dateRange, setDateRange]: any = useState([null, null]);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [searchedText, setSearchedText] = useState("");
+  let debounceTimer: any;
+  let { activeTab } = getQueryJson();
+  activeTab = activeTab?.toUpperCase();
+
+  interface MainObject {
+    [key: string]: {
+      $in: any[];
+    };
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -316,58 +351,198 @@ const Index = () => {
     });
   };
 
+  const handleSearchOrder = async (e: any) => {
+    try {
+      let currentStatus = tabs[globalIndex]?.value;
+      const payload: any = {
+        currentStatus,
+        filterArrOne: filterPayLoad?.filterArrOne || [],
+        filterArrTwo: filterPayLoad?.filterArrTwo || [],
+      };
+
+      if (e.target.value.length > 0) {
+        payload.id = e.target.value;
+      }
+
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        setIsLoading(true);
+        const { data } = await POST(GET_SELLER_ORDER, {
+          id: e.target.value,
+          currentStatus,
+        });
+        const { OrderData, orderCount } = data?.data?.[0];
+        setStatusCount("", currentStatus, orderCount);
+        setTotalcount(orderCount ? orderCount : 0);
+        if (data?.status) {
+          setIsLoading(false);
+          setOrders(OrderData);
+          setFilterModal(false);
+        } else {
+          setIsLoading(false);
+          setFilterModal(false);
+          throw new Error(data?.meesage);
+        }
+      }, 800);
+    } catch (error: any) {
+      console.warn("Error in OrderStatus Debouncing: ", error.message);
+    }
+  };
+
+  const getAllOrders = async (subStatus?: any) => {
+    let currentStatus = tabs[globalIndex]?.value;
+
+    let payload: any = {
+      skip: 0,
+      limit: 10,
+      pageNo: 1,
+      sort: { _id: -1 },
+      currentStatus,
+      subStatus,
+    };
+
+    if (startDate && endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.filterArrOne = [
+        {
+          createdAt: {
+            $gte: startEpoch,
+          },
+        },
+        {
+          createdAt: {
+            $lte: lastendEpoch,
+          },
+        },
+      ];
+      payload.filterArrTwo = [];
+    }
+
+    const { data } = await POST(GET_SELLER_ORDER, payload);
+
+    if (data?.status) {
+      const { OrderData, orderCount } = data?.data?.[0];
+      setSearchedText("");
+      setOrders(OrderData);
+      setTotalcount(orderCount || 0);
+      getStatusCount(currentStatus, true, "", startDate, endDate);
+    }
+  };
+
   const Buttons = (className?: string) => {
     return (
-      <div
-        className={
-          className
-            ? className
-            : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-4 lg:mt-0 h-[54px] items-center`
-        }
-      >
-        <div className="grid col-span-2">
-          <CustomButton
-            className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
-            text="ADD ORDER"
-            onClick={() => navigate("/orders/add-order/pickup")}
-            showIcon={true}
-            icon={AddOrderIcon}
-          />
-        </div>
-
-        <div
-          ref={syncRef}
-          onClick={handleSyncOrder}
-          className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
-        >
-          <img src={SyncIcon} alt="" width="16px" />
-          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            {capitalizeFirstLetter("SYNC CHANNEL")}
-          </span>
-        </div>
-
-        <div
-          className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
-          // onClick={() => setIsModalOpen(true)}
-          onClick={() => navigate("/orders/add-bulk")}
-        >
-          <img src={BlukOrderIcon} alt="" width="16px" />
-          <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C] capitalize">
-            Bulk Upload
-          </span>
-        </div>
-        {isModalOpen && (
-          <CenterModal
-            isOpen={isModalOpen}
-            onRequestClose={() => setIsModalOpen(false)}
-          >
-            <BulkUpload
-              onClick={() => {
-                setIsModalOpen(false);
+      <div>
+        <div className="flex justify-end mb-4">
+          <div className="border border-[#AFAFAF] w-fit  !h-[36px] rounded-md">
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update: any) => {
+                setDateRange(update);
+                if (update[0] === null && update[1] === null) {
+                  // Explicitly set startDate and endDate to null when cleared
+                  setStartDate(null);
+                  setEndDate(null);
+                  // fetchCodRemittanceData();
+                } else {
+                  // Update startDate and endDate based on the selected range
+                  setStartDate(update[0]);
+                  setEndDate(update[1]);
+                }
               }}
+              isClearable={true}
+              placeholderText="Select From & To Date"
+              className="cursor-pointer !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              dateFormat="dd/MM/yyyy"
             />
-          </CenterModal>
-        )}
+          </div>
+          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border">
+            <SearchBox
+              className="removePaddingPlaceHolder !h-[34px] border-none"
+              label="Search"
+              value={searchedText}
+              onChange={(e: any) => {
+                // handleSearchOrder(e);
+                setSearchedText(e.target.value);
+              }}
+              getFullContent={getAllOrders}
+              customPlaceholder="Search By Order Id, AWB"
+            />
+          </div>
+          <div
+            className="flex ml-2 rounded-md py-2 px-4 bg-[#E5EDFF] justify-between cursor-pointer items-center  gap-x-2"
+            onClick={() => setFilterModal(true)}
+          >
+            <img src={FilterIcon} alt="" />
+            <span className="text-[#004EFF] text-[14px] font-semibold">
+              FILTER
+            </span>
+          </div>
+        </div>
+        <div
+          className={
+            className
+              ? className
+              : `lg:flex lg:flex-row-reverse hidden grid-cols-4 gap-x-2 mt-6 lg:mt-0 h-[54px] items-center`
+          }
+        >
+          <div className="grid col-span-2">
+            <CustomButton
+              className="lg:px-2 lg:py-4 lg:font-semibold lg:text-[14px]"
+              text="ADD ORDER"
+              onClick={() => navigate("/orders/add-order/pickup")}
+              showIcon={true}
+              icon={AddOrderIcon}
+            />
+          </div>
+
+          <div
+            ref={syncRef}
+            onClick={handleSyncOrder}
+            className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+          >
+            <img src={SyncIcon} alt="" width="16px" />
+            <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
+              {capitalizeFirstLetter("SYNC CHANNEL")}
+            </span>
+          </div>
+
+          <div
+            className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
+            // onClick={() => setIsModalOpen(true)}
+            onClick={() => navigate("/orders/add-bulk")}
+          >
+            <img src={BlukOrderIcon} alt="" width="16px" />
+            <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C] capitalize">
+              Bulk Upload
+            </span>
+          </div>
+          {isModalOpen && (
+            <CenterModal
+              isOpen={isModalOpen}
+              onRequestClose={() => setIsModalOpen(false)}
+            >
+              <BulkUpload
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              />
+            </CenterModal>
+          )}
+        </div>
       </div>
     );
   };
@@ -518,22 +693,93 @@ const Index = () => {
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
-    limit: number = 10
+    limit: number = 10,
+    dateFilter: any = false,
+    searchText?: any,
+    startDate?: any,
+    endDate?: any,
+    filterPayLoadData?: any
   ) => {
     try {
       setIsLoading(true);
-      const { data } = await POST(GET_SELLER_ORDER, {
+
+      let firstFilterData = [];
+      let secondFilterData = [];
+
+      let payload: any = {
         pageNo: 1, //temp
         sort: { _id: -1 }, //temp
         skip: 0, //temp
         limit: 10, //temp
         currentStatus,
-      });
+      };
+
+      if (searchText?.length > 0) {
+        payload.id = searchText;
+      }
+
+      if (
+        filterPayLoadData?.filterArrOne.length > 0 ||
+        filterPayLoadData?.filterArrTwo.length > 0
+      ) {
+        const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
+          (obj: any) => !Object.keys(obj).includes("createdAt")
+        );
+
+        firstFilterData = newFilterArrOne;
+        secondFilterData = filterPayLoadData?.filterArrTwo;
+      }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        firstFilterData.unshift(
+          {
+            createdAt: {
+              $gte: startEpoch,
+            },
+          },
+          {
+            createdAt: {
+              $lte: lastendEpoch,
+            },
+          }
+        );
+      }
+
+      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+        payload.filterArrOne = firstFilterData;
+        payload.filterArrTwo = secondFilterData;
+      }
+
+      const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
 
-      // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
-      setStatusCount("", currentStatus, orderCount);
+      if (dateFilter === true) {
+        getStatusCount(
+          currentStatus,
+          dateFilter,
+          searchText,
+          startDate,
+          endDate,
+          firstFilterData,
+          secondFilterData
+        );
+      } else {
+        setStatusCount("", currentStatus, orderCount);
+      }
       setTotalcount(orderCount ? orderCount : 0);
 
       setDraftOrderCount({
@@ -545,9 +791,8 @@ const Index = () => {
       });
 
       setSelectedRowData([]);
-      if (data?.status) {
+      if (data?.status || data?.success) {
         setIsLoading(false);
-
         return data?.data[0];
       } else {
         setIsLoading(false);
@@ -653,7 +898,8 @@ const Index = () => {
   const setStatusCount = (
     statusListFromApi: any,
     currentStatus: any,
-    updatedCount: any = undefined
+    updatedCount: any = undefined,
+    dateFilter = false
   ) => {
     try {
       let tempArr = statusData;
@@ -661,26 +907,57 @@ const Index = () => {
       if (updatedCount === undefined) {
         statusListFromApi.length > 0 &&
           statusListFromApi?.forEach((e1: any) => {
-            const matchingStatus = tempArr.find(
+            const matchingIndex = tempArr.findIndex(
               (e: any) => e.value === e1._id?.toUpperCase()
             );
-            if (matchingStatus) {
-              matchingStatus.orderNumber = e1?.count?.toLocaleString("en-US", {
-                minimumIntegerDigits: 2,
-                useGrouping: false,
-              });
+
+            for (let index = 0; index < tempArr.length; index++) {
+              const element1 = tempArr[index];
+
+              if (element1.value === e1._id?.toUpperCase()) {
+                element1.orderNumber = e1?.count?.toLocaleString("en-US", {
+                  minimumIntegerDigits: 2,
+                  useGrouping: false,
+                });
+              } else {
+                if (dateFilter === true) {
+                  const num: any = 0;
+                  element1.orderNumber = num.toLocaleString("en-US", {
+                    minimumIntegerDigits: 2,
+                    useGrouping: false,
+                  });
+                }
+              }
             }
           });
       } else {
-        const index = tempArr.findIndex(
-          (statusData: any) => statusData?.value === currentStatus
-        );
+        // const index = tempArr.findIndex(
+        //   (statusData: any) => statusData?.value === currentStatus
+        // );
 
-        if (index > -1) {
-          tempArr[index].orderNumber = updatedCount.toLocaleString("en-US", {
-            minimumIntegerDigits: 2,
-            useGrouping: false,
-          });
+        // if (index > -1) {
+        //   tempArr[index].orderNumber = updatedCount.toLocaleString("en-US", {
+        //     minimumIntegerDigits: 2,
+        //     useGrouping: false,
+        //   });
+        // }
+
+        for (let index = 0; index < tempArr.length; index++) {
+          const element = tempArr[index];
+
+          const { value } = element;
+          if (value === currentStatus) {
+            element.orderNumber = updatedCount.toLocaleString("en-US", {
+              minimumIntegerDigits: 2,
+              useGrouping: false,
+            });
+          } else {
+            // const num: any = 0;
+            //   element.orderNumber = num.toLocaleString("en-US", {
+            //     minimumIntegerDigits: 2,
+            //     useGrouping: false,
+            //   });
+          }
         }
       }
 
@@ -690,9 +967,27 @@ const Index = () => {
     }
   };
 
-  const handleTabChanges = async (index?: any) => {
+  const handleTabChanges = async (
+    index?: any,
+    dateFilter = false,
+    searchedText?: any,
+    startDate?: any,
+    endDate?: any,
+    filterPayLoad?: any
+  ) => {
     try {
-      const data = await getSellerOrderByStatus(statusData[index].value);
+      const data = await getSellerOrderByStatus(
+        statusData[index].value,
+        1,
+        { _id: -1 },
+        0,
+        10,
+        dateFilter,
+        searchedText,
+        startDate,
+        endDate,
+        filterPayLoad
+      );
       const { OrderData } = data;
       setOrders(OrderData);
       setAllOrders(OrderData);
@@ -759,23 +1054,191 @@ const Index = () => {
     }
   };
 
-  const getStatusCount = async () => {
+  function getObjectWithIsActiveTrue(data: any, name: any) {
+    let tempArrTwo = filterPayLoad?.filterArrTwo;
+    let tempArrOne = filterPayLoad?.filterArrOne;
+
+    const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
+      const index = arr.findIndex(
+        (findArr: any) => Object.keys(findArr)[0] === key
+      );
+
+      if (index > -1) {
+        arr[index][key][subKey] = data;
+      } else {
+        const newObj = { [key]: { [subKey]: [...data] } };
+        arr.push(newObj);
+      }
+    };
+
+    const PersistFilterArr = (key: any, data: any) => {
+      setPersistFilterData((prevData) => {
+        return { ...prevData, [key]: [...data] };
+      });
+    };
+
+    switch (name) {
+      case "Delivery Pincode":
+        updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
+        PersistFilterArr("deliveryPincode", data);
+        break;
+      case "Pickup Pincode":
+        updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
+        PersistFilterArr("pickupPincode", data);
+        break;
+      case "Payment Type":
+        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        PersistFilterArr("paymentType", data);
+        break;
+      case "Partners":
+        updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+        PersistFilterArr("partners", data);
+        break;
+      case "Order Type":
+        updateFilterArr(tempArrOne, "orderType", "$in", data);
+        PersistFilterArr("orderType", data);
+        break;
+      case "Sources":
+        updateFilterArr(tempArrOne, "source", "$in", data);
+        PersistFilterArr("sources", data);
+        break;
+      case "Seller Id":
+        updateFilterArr(tempArrOne, "sellerId", "$in", data);
+        PersistFilterArr("sellerId", data);
+        break;
+      default:
+        break;
+    }
+
+    tempArrOne = tempArrOne.filter((obj: any) => {
+      const key = Object.keys(obj)[0];
+      return obj[key].$in.length > 0;
+    });
+
+    tempArrTwo = tempArrTwo.filter((obj: any) => {
+      const key = Object.keys(obj)[0];
+      return obj[key].$in.length > 0;
+    });
+
+    setFilterPayLoad({
+      ...filterPayLoad,
+      filterArrTwo: [...tempArrTwo],
+      filterArrOne: [...tempArrOne],
+    });
+  }
+
+  const getStatusCount = async (
+    currentStatus: any = "DARFT",
+    dateFilter = false,
+    searchText?: any,
+    selectedStartDate?: any,
+    selectedEndDate?: any,
+    firstFilterData?: any,
+    secondFilterData?: any
+    // filterPayLoad?: any,
+  ) => {
+    let payload: any = {};
+
+    if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
+      payload.filterArrOne = firstFilterData || [];
+      payload.filterArrTwo = secondFilterData || [];
+    }
+
+    // if (selectedStartDate && selectedEndDate) {
+    //   let startEpoch = null;
+    //   let lastendEpoch = null;
+
+    //   if (
+    //     selectedStartDate instanceof Date &&
+    //     selectedEndDate instanceof Date
+    //   ) {
+    //     selectedStartDate.setHours(0, 0, 0, 0);
+    //     startEpoch = selectedStartDate.getTime();
+
+    //     selectedEndDate.setHours(23, 59, 59, 999);
+    //     const endEpoch = selectedEndDate.getTime();
+
+    //     lastendEpoch = endEpoch;
+    //   }
+
+    //   payload.startDate = startEpoch;
+    //   payload.endDate = lastendEpoch;
+    // }
+
+    if (searchText?.length > 0) {
+      payload.id = searchText;
+    }
+
     try {
-      const { data } = await POST(GET_STATUS_COUNT);
+      const { data } = await POST(GET_STATUS_COUNT, payload);
       const { status: isStatus, data: statusList } = data;
       if (isStatus) {
         // return data?.data;
-        setStatusCount(statusList, "DRAFT");
+
+        if (dateFilter) {
+          setStatusCount(statusList, currentStatus, undefined, dateFilter);
+        }
+
+        setStatusCount(statusList, currentStatus);
       }
     } catch (error) {
       console.log("🚀 ~ file: index.tsx:609 ~ getStatusCount ~ error:", error);
     }
   };
 
+  const getIndexFromActiveTab = (arr: any, tabName: any) => {
+    let tabIndex = arr.findIndex((e: any) => e.value === tabName);
+    if (tabIndex > -1) {
+      return +tabIndex;
+    } else {
+      return 0;
+    }
+  };
+
+  // useEffect(() => {
+  //   getStatusCount("DARFT");
+  // }, []);
+  // -------------------------------------------------------------------------------------------------------------------------------------------
+
+  const debounce = (fn: any, delay: any) => {
+    let timerId: any;
+    return (...args: any) => {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const searchDebounce = useCallback(debounce(handleTabChanges, 1000), []);
+
   useEffect(() => {
-    getStatusCount();
-    handleTabChanges();
-  }, []); //deleteModalDraftOrder
+    if (endDate === undefined) return;
+
+    const tabIndex = activeTab
+      ? getIndexFromActiveTab(statusData, activeTab)
+      : 0;
+
+    if (searchedText.length > 0) {
+      searchDebounce(
+        tabIndex,
+        true,
+        searchedText,
+        startDate,
+        endDate,
+        filterPayLoad
+      );
+    } else {
+      handleTabChanges(tabIndex, true, "", startDate, endDate, filterPayLoad);
+    }
+  }, [endDate, activeTab, searchedText]);
+
+  // handleTabChanges(tabIndex, true, searchedText);
+  // useEffect(() => {
+  //   const tabIndex = activeTab
+  //     ? getIndexFromActiveTab(statusData, activeTab)
+  //     : 0;
+  //   searchDebounce(tabIndex, true, searchedText);
+  // }, [searchedText, activeTab]);
+  // -------------------------------------------------------------------------------------------------------------------------------------------
 
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
@@ -797,7 +1260,11 @@ const Index = () => {
       pageNo,
       { _id: -1 },
       skip,
-      limit
+      limit,
+      true,
+      searchedText,
+      startDate,
+      endDate
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
@@ -828,7 +1295,11 @@ const Index = () => {
       pageNo,
       { _id: -1 },
       skip,
-      limit
+      limit,
+      true,
+      searchedText,
+      startDate,
+      endDate
     );
 
     setOrders([...OrderData]);
@@ -842,16 +1313,55 @@ const Index = () => {
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
-    limit: number = 10
+    limit: number = 10,
+    dateFilter: any = false,
+    searchText?: any,
+    startDate?: any,
+    endDate?: any
   ) => {
     try {
-      const { data } = await POST(GET_SELLER_ORDER, {
+      const payload: any = {
         skip,
         limit,
         pageNo,
         sort,
         currentStatus,
-      });
+      };
+
+      if (searchText?.length > 0) {
+        payload.id = searchText;
+      }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        payload.filterArrOne = [
+          {
+            createdAt: {
+              $gte: startEpoch,
+            },
+          },
+          {
+            createdAt: {
+              $lte: lastendEpoch,
+            },
+          },
+        ];
+        payload.filterArrTwo = [];
+      }
+
+      const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
@@ -1025,7 +1535,6 @@ const Index = () => {
         return { ...prev, error: errorListCount };
       });
 
-      console.log("result", result);
       setErrorData(result);
       setIsErrorListLoading(false);
     } else {
@@ -1033,16 +1542,121 @@ const Index = () => {
     }
   };
 
+  const applyFilterforOrders = async () => {
+    try {
+      setIsFilterLoading(true);
+
+      const filterArrOneList: any = filterPayLoad?.filterArrOne;
+
+      let currentStatus = tabs[globalIndex]?.value;
+      let payload: any = {
+        skip: 0,
+        limit: 10,
+        pageNo: 1,
+        sort: { _id: -1 },
+        currentStatus,
+        filterArrOne: filterArrOneList || [],
+        filterArrTwo: filterPayLoad?.filterArrTwo || [],
+      };
+
+      if (searchedText?.length > 0) {
+        payload.id = searchedText;
+      }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        filterArrOneList.unshift(
+          {
+            createdAt: {
+              $gte: startEpoch,
+            },
+          },
+          {
+            createdAt: {
+              $lte: lastendEpoch,
+            },
+          }
+        );
+      }
+
+      const { data } = await POST(GET_SELLER_ORDER, payload);
+      const { OrderData, orderCount } = data?.data?.[0];
+      setStatusCount("", currentStatus, orderCount);
+      setTotalcount(orderCount ? orderCount : 0);
+
+      if (data?.status) {
+        setIsFilterLoading(false);
+
+        const newArray = filterPayLoad?.filterArrOne.filter(
+          (obj) => !Object.keys(obj).includes("createdAt")
+        );
+
+        setFilterPayLoad((prevState: any) => {
+          return {
+            ...prevState,
+            filterArrOne: newArray,
+          };
+        });
+
+        setOrders(OrderData);
+        getStatusCount(
+          currentStatus,
+          true,
+          searchedText,
+          startDate,
+          endDate,
+          filterPayLoad?.filterArrOne,
+          filterPayLoad?.filterArrTwo
+        );
+        setFilterModal(false);
+      } else {
+        setIsFilterLoading(false);
+        setFilterModal(false);
+        throw new Error(data?.meesage);
+      }
+    } catch (error: any) {
+      setIsFilterLoading(false);
+      toast.error(error);
+      return false;
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      //   if (!infoModalContent.isOpen) {
-      const data = await getSellerOrderByStatus();
-      const { OrderData } = data;
-      setOrders(OrderData);
-      console.log("Orders: ", orders);
-      //   }
-    })();
-  }, []);
+    // if (filterState?.menu?.length === 0) return;
+    getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+    // if (filterState?.menu?.length > 0) {
+    // }
+  }, [filterState]);
+
+  // useEffect(() => {
+  //   (async () => {
+  //     //   if (!infoModalContent.isOpen) {
+  //     const data = await getSellerOrderByStatus();
+  //     const { OrderData } = data;
+  //     setOrders(OrderData);
+
+  //     //   }
+  //   })();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "filterPayLoad-----------------%$##$%^----------->",
+  //     filterPayLoad
+  //   );
+  // }, [filterPayLoad]);
 
   useEffect(() => {
     if (channelReduxData.length > 0) {
@@ -1111,6 +1725,7 @@ const Index = () => {
                 setErrorData={setErrorData}
                 setIsErrorListLoading={setIsErrorListLoading}
                 getErrors={getErrors}
+                selectedDateRange={{ startDate, endDate }}
               />
             </div>
             <div
@@ -1283,6 +1898,67 @@ const Index = () => {
           closeModal={() => setPartnerModalData({ isOpen: false })}
         />
       </CustomRightModal>
+      {isLgScreen && (
+        <RightSideModal
+          isOpen={filterModal}
+          onClose={() => {
+            setFilterModal(false);
+          }}
+          className="w-[30%] !justify-between !items-stretch !hidden lg:!block"
+        >
+          <div>
+            <div className="flex justify-between mt-5 mx-5">
+              <div>
+                <p className="text-2xl font-normal">Filter</p>
+              </div>
+              <div>
+                <img
+                  src={CloseIcon}
+                  alt="close button"
+                  onClick={() => {
+                    setFilterModal(false);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="mx-5 ">
+              <FilterScreen
+                filterState={filterState}
+                setFilterState={setFilterState}
+                setFilterPayLoad={setFilterPayLoad}
+                filterPayLoad={filterPayLoad}
+                filterModal={filterModal}
+                persistFilterData={persistFilterData}
+              />
+            </div>
+
+            <div
+              className="hidden lg:flex justify-end  shadow-lg border-[1px]  bg-[#FFFFFF] px-6 py-4  rounded-tr-[32px] rounded-tl-[32px]  gap-x-5  fixed bottom-0 "
+              style={{ width: "-webkit-fill-available" }}
+            >
+              <ServiceButton
+                text="RESET ALL"
+                onClick={() => {
+                  window.location.reload();
+                  setFilterModal(false);
+                }}
+                className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+              />
+              {isFilterLoading ? (
+                <div className="flex justify-center items-center lg:!py-2 lg:!px-4">
+                  <Spinner />
+                </div>
+              ) : (
+                <ServiceButton
+                  text="APPLY"
+                  onClick={applyFilterforOrders}
+                  className="bg-[#1C1C1C] text-[#FFFFFF] cursor-pointer text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
+                />
+              )}
+            </div>
+          </div>
+        </RightSideModal>
+      )}
 
       <CustomRightModal
         isOpen={isSyncModalOpen}
