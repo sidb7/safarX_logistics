@@ -709,6 +709,8 @@ export const columnHelperForNewOrder = (
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
 
+        // console.log("Get Created AT: ", date_DD_MMM_YYYY_HH_MM_SS(createdAt));
+
         if (status?.length > 0) {
           updatedAtStatus = status[status.length - 1]?.timeStamp;
         }
@@ -1019,9 +1021,12 @@ export const columnHelperForNewOrder = (
         });
 
         const handleInformativeModal = () => {
+          console.log("awb", awb);
+
           setInfoModalContentFunction({
             awb: "0",
-            orderId: `T${rowsData.tempOrderId}`,
+            orderId: `T${rowsData?.tempOrderId}`,
+            orderNumber: otherDetails?.orderNumber,
           });
         };
         return (
