@@ -63,7 +63,6 @@ import DatePicker from "react-datepicker";
 import { debounce } from "lodash";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 
-
 import { io, Socket } from "socket.io-client";
 import { SearchBox } from "../../components/SearchBox";
 import FilterScreen from "./common/FilterScreen/filterScreen";
@@ -1198,7 +1197,6 @@ const Index = () => {
   // useEffect(() => {
   //   getStatusCount("DARFT");
   // }, []);
-  // -------------------------------------------------------------------------------------------------------------------------------------------
 
   const debounce = (fn: any, delay: any) => {
     let timerId: any;
