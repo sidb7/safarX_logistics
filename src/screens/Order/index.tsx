@@ -6,7 +6,7 @@ import { OrderStatus } from "./OrderStatus";
 import FilterIcon from "../../assets/Order/FilterIcon.svg";
 import DeliveryGIF from "../../assets/OrderCard/Gif.png";
 import { CustomTable } from "../../components/Table";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Stepper from "./Stepper";
 import "../../styles/silkStyle.css";
 import DeliveryIcon from "../../assets/Delivery.svg";
@@ -297,7 +297,10 @@ const Index = () => {
     filterArrOne: [],
     filterArrTwo: [],
   });
-  // ---------------------------------------------------
+
+  // -----------------------persist FilterData -----------------------------------
+  const [persistFilterData, setPersistFilterData] = useState({});
+  // -----------------------persist FilterData -----------------------------------
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -305,12 +308,18 @@ const Index = () => {
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
   const [dateRange, setDateRange]: any = useState([null, null]);
-  const [startDate, setStartDate] = useState<Date | null>();
-  const [endDate, setEndDate] = useState<Date | null>();
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [searchedText, setSearchedText] = useState("");
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
+
+  interface MainObject {
+    [key: string]: {
+      $in: any[];
+    };
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -360,7 +369,6 @@ const Index = () => {
         const { OrderData, orderCount } = data?.data?.[0];
         setStatusCount("", currentStatus, orderCount);
         setTotalcount(orderCount ? orderCount : 0);
-
         if (data?.status) {
           setIsLoading(false);
           setOrders(OrderData);
@@ -379,7 +387,7 @@ const Index = () => {
   const getAllOrders = async (subStatus?: any) => {
     let currentStatus = tabs[globalIndex]?.value;
 
-    let payload = {
+    let payload: any = {
       skip: 0,
       limit: 10,
       pageNo: 1,
@@ -387,12 +395,45 @@ const Index = () => {
       currentStatus,
       subStatus,
     };
+
+    if (startDate && endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.filterArrOne = [
+        {
+          createdAt: {
+            $gte: startEpoch,
+          },
+        },
+        {
+          createdAt: {
+            $lte: lastendEpoch,
+          },
+        },
+      ];
+      payload.filterArrTwo = [];
+    }
+
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
-    const { OrderData, orderCount } = data?.data?.[0];
-
-    setOrders(OrderData);
-    setTotalcount(orderCount || 0);
+    if (data?.status) {
+      const { OrderData, orderCount } = data?.data?.[0];
+      setSearchedText("");
+      setOrders(OrderData);
+      setTotalcount(orderCount || 0);
+      getStatusCount(currentStatus, true, "", startDate, endDate);
+    }
   };
 
   const Buttons = (className?: string) => {
@@ -429,7 +470,8 @@ const Index = () => {
               label="Search"
               value={searchedText}
               onChange={(e: any) => {
-                handleSearchOrder(e);
+                // handleSearchOrder(e);
+                setSearchedText(e.target.value);
               }}
               getFullContent={getAllOrders}
               customPlaceholder="Search By Order Id, AWB"
@@ -646,10 +688,18 @@ const Index = () => {
     sort: object = { _id: -1 },
     skip: number = 0,
     limit: number = 10,
-    dateFilter: any = false
+    dateFilter: any = false,
+    searchText?: any,
+    startDate?: any,
+    endDate?: any,
+    filterPayLoadData?: any
   ) => {
     try {
       setIsLoading(true);
+
+      let firstFilterData = [];
+      let secondFilterData = [];
+
       let payload: any = {
         pageNo: 1, //temp
         sort: { _id: -1 }, //temp
@@ -657,6 +707,22 @@ const Index = () => {
         limit: 10, //temp
         currentStatus,
       };
+
+      if (searchText?.length > 0) {
+        payload.id = searchText;
+      }
+
+      if (
+        filterPayLoadData?.filterArrOne.length > 0 ||
+        filterPayLoadData?.filterArrTwo.length > 0
+      ) {
+        const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
+          (obj: any) => !Object.keys(obj).includes("createdAt")
+        );
+
+        firstFilterData = newFilterArrOne;
+        secondFilterData = filterPayLoadData?.filterArrTwo;
+      }
 
       if (startDate && endDate) {
         let startEpoch = null;
@@ -672,7 +738,7 @@ const Index = () => {
           lastendEpoch = endEpoch;
         }
 
-        payload.filterArrOne = [
+        firstFilterData.unshift(
           {
             createdAt: {
               $gte: startEpoch,
@@ -682,22 +748,45 @@ const Index = () => {
             createdAt: {
               $lte: lastendEpoch,
             },
-          },
-        ];
-        payload.filterArrTwo = [];
+          }
+        );
+      }
+
+      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+        payload.filterArrOne = firstFilterData;
+        payload.filterArrTwo = secondFilterData;
       }
 
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
 
-      // let countObj = statusList.find((elem: any) => elem._id === currentStatus);
+      // if (searchText?.length > 0) {
+      //   getStatusCount(
+      //     currentStatus,
+      //     dateFilter,
+      //     searchText,
+      //     startDate,
+      //     endDate
+      //   );
+      // }
+
+      console.log("getSellerOrderByStatus", firstFilterData, secondFilterData);
 
       if (dateFilter === true) {
-        getStatusCount(currentStatus, dateFilter);
+        getStatusCount(
+          currentStatus,
+          dateFilter,
+          searchText,
+          startDate,
+          endDate,
+          firstFilterData,
+          secondFilterData
+        );
       } else {
         setStatusCount("", currentStatus, orderCount);
       }
+
       setTotalcount(orderCount ? orderCount : 0);
 
       setDraftOrderCount({
@@ -885,7 +974,14 @@ const Index = () => {
     }
   };
 
-  const handleTabChanges = async (index?: any, dateFilter = false) => {
+  const handleTabChanges = async (
+    index?: any,
+    dateFilter = false,
+    searchedText?: any,
+    startDate?: any,
+    endDate?: any,
+    filterPayLoad?: any
+  ) => {
     try {
       const data = await getSellerOrderByStatus(
         statusData[index].value,
@@ -893,7 +989,11 @@ const Index = () => {
         { _id: -1 },
         0,
         10,
-        dateFilter
+        dateFilter,
+        searchedText,
+        startDate,
+        endDate,
+        filterPayLoad
       );
       const { OrderData } = data;
       setOrders(OrderData);
@@ -961,10 +1061,9 @@ const Index = () => {
     }
   };
 
-  // -----------------------------------------------------------------
   function getObjectWithIsActiveTrue(data: any, name: any) {
-    const tempArrTwo = filterPayLoad?.filterArrTwo;
-    const tempArrOne = filterPayLoad?.filterArrOne;
+    let tempArrTwo = filterPayLoad?.filterArrTwo;
+    let tempArrOne = filterPayLoad?.filterArrOne;
 
     const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
       const index = arr.findIndex(
@@ -979,31 +1078,55 @@ const Index = () => {
       }
     };
 
+    const PersistFilterArr = (key: any, data: any) => {
+      setPersistFilterData((prevData) => {
+        return { ...prevData, [key]: [...data] };
+      });
+    };
+
     switch (name) {
       case "Delivery Pincode":
         updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
+        PersistFilterArr("deliveryPincode", data);
         break;
       case "Pickup Pincode":
         updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
+        PersistFilterArr("pickupPincode", data);
         break;
-      case "PaymentType":
+      case "Payment Type":
         updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        PersistFilterArr("paymentType", data);
         break;
       case "Partners":
         updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+        PersistFilterArr("partners", data);
         break;
       case "Order Type":
         updateFilterArr(tempArrOne, "orderType", "$in", data);
+        PersistFilterArr("orderType", data);
         break;
       case "Sources":
         updateFilterArr(tempArrOne, "source", "$in", data);
+        PersistFilterArr("sources", data);
+
         break;
       case "Seller Id":
         updateFilterArr(tempArrOne, "sellerId", "$in", data);
+        PersistFilterArr("sellerId", data);
         break;
       default:
         break;
     }
+
+    tempArrOne = tempArrOne.filter((obj: any) => {
+      const key = Object.keys(obj)[0];
+      return obj[key].$in.length > 0;
+    });
+
+    tempArrTwo = tempArrTwo.filter((obj: any) => {
+      const key = Object.keys(obj)[0];
+      return obj[key].$in.length > 0;
+    });
 
     setFilterPayLoad({
       ...filterPayLoad,
@@ -1014,27 +1137,59 @@ const Index = () => {
 
   const getStatusCount = async (
     currentStatus: any = "DARFT",
-    dateFilter = false
+    dateFilter = false,
+    searchText?: any,
+    selectedStartDate?: any,
+    selectedEndDate?: any,
+    firstFilterData?: any,
+    secondFilterData?: any
+    // filterPayLoad?: any,
   ) => {
     let payload: any = {};
 
-    if (startDate && endDate) {
-      let startEpoch = null;
-      let lastendEpoch = null;
+    console.log(
+      "secondFilterData-----------------@#$%$#----->",
+      firstFilterData,
+      secondFilterData
+    );
 
-      if (startDate instanceof Date && endDate instanceof Date) {
-        startDate.setHours(0, 0, 0, 0);
-        startEpoch = startDate.getTime();
-
-        endDate.setHours(23, 59, 59, 999);
-        const endEpoch = endDate.getTime();
-
-        lastendEpoch = endEpoch;
-      }
-
-      payload.startDate = startEpoch;
-      payload.endDate = lastendEpoch;
+    if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
+      payload.filterArrOne = firstFilterData || [];
+      payload.filterArrTwo = secondFilterData || [];
     }
+
+    // if (selectedStartDate && selectedEndDate) {
+    //   let startEpoch = null;
+    //   let lastendEpoch = null;
+
+    //   if (
+    //     selectedStartDate instanceof Date &&
+    //     selectedEndDate instanceof Date
+    //   ) {
+    //     selectedStartDate.setHours(0, 0, 0, 0);
+    //     startEpoch = selectedStartDate.getTime();
+
+    //     selectedEndDate.setHours(23, 59, 59, 999);
+    //     const endEpoch = selectedEndDate.getTime();
+
+    //     lastendEpoch = endEpoch;
+    //   }
+
+    //   payload.startDate = startEpoch;
+    //   payload.endDate = lastendEpoch;
+    // }
+
+    if (searchText?.length > 0) {
+      payload.id = searchText;
+    }
+
+    // if (
+    //   filterPayLoad?.filterArrOne.length > 0 ||
+    //   filterPayLoad?.filterArrTwo.length > 0
+    // ) {
+    //   payload.filterArrOne = filterPayLoad?.filterArrOne;
+    //   payload.filterArrTwo = filterPayLoad?.filterArrTwo;
+    // }
 
     try {
       const { data } = await POST(GET_STATUS_COUNT, payload);
@@ -1062,9 +1217,20 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    getStatusCount("DARFT");
-  }, []);
+  // useEffect(() => {
+  //   getStatusCount("DARFT");
+  // }, []);
+  // -------------------------------------------------------------------------------------------------------------------------------------------
+
+  const debounce = (fn: any, delay: any) => {
+    let timerId: any;
+    return (...args: any) => {
+      clearTimeout(timerId);
+      timerId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const searchDebounce = useCallback(debounce(handleTabChanges, 1000), []);
 
   useEffect(() => {
     if (endDate === undefined) return;
@@ -1073,8 +1239,28 @@ const Index = () => {
       ? getIndexFromActiveTab(statusData, activeTab)
       : 0;
 
-    handleTabChanges(tabIndex, true);
-  }, [endDate]);
+    if (searchedText.length > 0) {
+      searchDebounce(
+        tabIndex,
+        true,
+        searchedText,
+        startDate,
+        endDate,
+        filterPayLoad
+      );
+    } else {
+      handleTabChanges(tabIndex, true, "", startDate, endDate, filterPayLoad);
+    }
+  }, [endDate, activeTab, searchedText]);
+
+  // handleTabChanges(tabIndex, true, searchedText);
+  // useEffect(() => {
+  //   const tabIndex = activeTab
+  //     ? getIndexFromActiveTab(statusData, activeTab)
+  //     : 0;
+  //   searchDebounce(tabIndex, true, searchedText);
+  // }, [searchedText, activeTab]);
+  // -------------------------------------------------------------------------------------------------------------------------------------------
 
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
@@ -1096,7 +1282,11 @@ const Index = () => {
       pageNo,
       { _id: -1 },
       skip,
-      limit
+      limit,
+      true,
+      searchedText,
+      startDate,
+      endDate
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
@@ -1127,7 +1317,11 @@ const Index = () => {
       pageNo,
       { _id: -1 },
       skip,
-      limit
+      limit,
+      true,
+      searchedText,
+      startDate,
+      endDate
     );
 
     setOrders([...OrderData]);
@@ -1141,16 +1335,55 @@ const Index = () => {
     pageNo: number = 1,
     sort: object = { _id: -1 },
     skip: number = 0,
-    limit: number = 10
+    limit: number = 10,
+    dateFilter: any = false,
+    searchText?: any,
+    startDate?: any,
+    endDate?: any
   ) => {
     try {
-      const { data } = await POST(GET_SELLER_ORDER, {
+      const payload: any = {
         skip,
         limit,
         pageNo,
         sort,
         currentStatus,
-      });
+      };
+
+      if (searchText?.length > 0) {
+        payload.id = searchText;
+      }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        payload.filterArrOne = [
+          {
+            createdAt: {
+              $gte: startEpoch,
+            },
+          },
+          {
+            createdAt: {
+              $lte: lastendEpoch,
+            },
+          },
+        ];
+        payload.filterArrTwo = [];
+      }
+
+      const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
       setTotalcount(orderCount ? orderCount : 0);
@@ -1324,7 +1557,6 @@ const Index = () => {
         return { ...prev, error: errorListCount };
       });
 
-      console.log("result", result);
       setErrorData(result);
       setIsErrorListLoading(false);
     } else {
@@ -1336,17 +1568,51 @@ const Index = () => {
     try {
       setIsFilterLoading(true);
 
-      let currentStatus = tabs[globalIndex]?.value;
+      const filterArrOneList: any = filterPayLoad?.filterArrOne;
 
+      let currentStatus = tabs[globalIndex]?.value;
       let payload: any = {
         skip: 0,
         limit: 10,
         pageNo: 1,
         sort: { _id: -1 },
         currentStatus,
-        filterArrOne: filterPayLoad?.filterArrOne || [],
+        filterArrOne: filterArrOneList || [],
         filterArrTwo: filterPayLoad?.filterArrTwo || [],
       };
+
+      if (searchedText?.length > 0) {
+        payload.id = searchedText;
+      }
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        filterArrOneList.unshift(
+          {
+            createdAt: {
+              $gte: startEpoch,
+            },
+          },
+          {
+            createdAt: {
+              $lte: lastendEpoch,
+            },
+          }
+        );
+      }
+
       const { data } = await POST(GET_SELLER_ORDER, payload);
       const { OrderData, orderCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);
@@ -1354,7 +1620,28 @@ const Index = () => {
 
       if (data?.status) {
         setIsFilterLoading(false);
+
+        const newArray = filterPayLoad?.filterArrOne.filter(
+          (obj) => !Object.keys(obj).includes("createdAt")
+        );
+
+        setFilterPayLoad((prevState: any) => {
+          return {
+            ...prevState,
+            filterArrOne: newArray,
+          };
+        });
+
         setOrders(OrderData);
+        getStatusCount(
+          currentStatus,
+          true,
+          searchedText,
+          startDate,
+          endDate,
+          filterPayLoad?.filterArrOne,
+          filterPayLoad?.filterArrTwo
+        );
         setFilterModal(false);
       } else {
         setIsFilterLoading(false);
@@ -1369,21 +1656,29 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (filterState?.menu?.length > 0) {
-      getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
-    }
+    // if (filterState?.menu?.length === 0) return;
+    getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+    // if (filterState?.menu?.length > 0) {
+    // }
   }, [filterState]);
 
-  useEffect(() => {
-    (async () => {
-      //   if (!infoModalContent.isOpen) {
-      const data = await getSellerOrderByStatus();
-      const { OrderData } = data;
-      setOrders(OrderData);
-      console.log("Orders: ", orders);
-      //   }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     //   if (!infoModalContent.isOpen) {
+  //     const data = await getSellerOrderByStatus();
+  //     const { OrderData } = data;
+  //     setOrders(OrderData);
+
+  //     //   }
+  //   })();
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(
+  //     "filterPayLoad-----------------%$##$%^----------->",
+  //     filterPayLoad
+  //   );
+  // }, [filterPayLoad]);
 
   return (
     <>
@@ -1646,6 +1941,7 @@ const Index = () => {
                 setFilterPayLoad={setFilterPayLoad}
                 filterPayLoad={filterPayLoad}
                 filterModal={filterModal}
+                persistFilterData={persistFilterData}
               />
             </div>
 
@@ -1656,11 +1952,8 @@ const Index = () => {
               <ServiceButton
                 text="RESET ALL"
                 onClick={() => {
-                  const tabIndex = activeTab
-                    ? getIndexFromActiveTab(statusData, activeTab)
-                    : 0;
+                  window.location.reload();
                   setFilterModal(false);
-                  handleTabChanges(tabIndex);
                 }}
                 className="bg-[#FFFFFF] text-[#1C1C1C] text-sm font-semibold leading-5 lg:!py-2 lg:!px-4 "
               />

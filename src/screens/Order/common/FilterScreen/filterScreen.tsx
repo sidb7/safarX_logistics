@@ -13,6 +13,7 @@ function FilterScreen({
   setFilterPayLoad,
   filterPayLoad,
   filterModal,
+  persistFilterData,
 }: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
@@ -44,10 +45,17 @@ function FilterScreen({
           return item;
         });
 
+        console.log("key", key);
+
         const menu = values?.map((value: any) => ({
           name: capitalizeFirstLetter(value),
           value: value,
-          isActive: false,
+          isActive:
+            Object.keys(persistFilterData).length > 0
+              ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(key)
+                ? persistFilterData[key]?.includes(+value)
+                : persistFilterData[key]?.includes(value)
+              : false,
         }));
 
         const currentObject = {
@@ -127,14 +135,14 @@ function FilterScreen({
   //   }
   // }, [startDate, endDate, dateRange]);
 
-  useEffect(() => {
-    if (filterModal === false) {
-      setFilterPayLoad({
-        filterArrOne: [],
-        filterArrTwo: [],
-      });
-    }
-  }, [filterModal]);
+  // useEffect(() => {
+  //   if (filterModal === false) {
+  //     setFilterPayLoad({
+  //       filterArrOne: [],
+  //       filterArrTwo: [],
+  //     });
+  //   }
+  // }, [filterModal]);
 
   useEffect(() => {
     getFilterDropDownData();

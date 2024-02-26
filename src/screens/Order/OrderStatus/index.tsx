@@ -150,15 +150,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
 
   const setScrollIndex = (id: number) => {
-    handleTabChange(id);
+    // handleTabChange(id);
     const tabName = statusData[id].value;
     navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
-  useEffect(() => {
-    handleTabChange(tabIndex);
-    // setStatusId(tabStatusId || statusId);
-  }, []);
+  // useEffect(() => {
+  //   handleTabChange(tabIndex);
+  // }, []);
 
   const [filterData, setFilterData] = useState([
     {
@@ -738,7 +737,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-
+            {/* 
             <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
@@ -760,7 +759,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div>
+            </div> */}
           </div>
         );
       }
@@ -913,6 +912,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       const { OrderData, orderCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
+
+      console.log("filterState----------------1 filterApi", filterState);
 
       if (data?.status) {
         setIsFilterLoading(false);
