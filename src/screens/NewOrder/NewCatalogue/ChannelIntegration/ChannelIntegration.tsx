@@ -48,6 +48,12 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
       );
 
       if (response?.status) {
+        let channelSessionObj: any = sessionStorage.getItem("userInfo");
+        channelSessionObj = JSON.parse(channelSessionObj);
+        if (channelSessionObj.nextStep?.isChannelIntegrated) {
+          channelSessionObj.nextStep.isChannelIntegrated = false;
+          sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+        }
         toast.success("Channel Deactivated Successfully!!");
         const filteredChannels = channelData.channels.filter(
           (eachChannel: any, index: number) =>
@@ -134,6 +140,15 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         const { data: response } = await POST(GET_ALL_STORES, {});
         setLoading(false);
         if (response && response.data.length > 0) {
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
+          channelSessionObj = JSON.parse(channelSessionObj);
+          if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+            channelSessionObj.nextStep.isChannelIntegrated = true;
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
+          }
           let tempArr: any = [];
           response?.data?.forEach((item: any) => {
             tempArr.push({
@@ -160,6 +175,16 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
             });
           });
           setChannelData({ channels: tempArr });
+        } else {
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
+          channelSessionObj = JSON.parse(channelSessionObj);
+          if (channelSessionObj?.nextStep?.isChannelIntegrated) {
+            channelSessionObj.nextStep.isChannelIntegrated = false;
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
+          }
         }
       } catch (error) {}
     })();
