@@ -13,6 +13,7 @@ function FilterScreen({
   setFilterPayLoad,
   filterPayLoad,
   filterModal,
+  persistFilterData,
 }: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
@@ -47,7 +48,12 @@ function FilterScreen({
         const menu = values?.map((value: any) => ({
           name: capitalizeFirstLetter(value),
           value: value,
-          isActive: false,
+          isActive:
+            Object.keys(persistFilterData).length > 0
+              ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(key)
+                ? persistFilterData[key]?.includes(+value)
+                : persistFilterData[key]?.includes(value)
+              : false,
         }));
 
         const currentObject = {
@@ -66,75 +72,75 @@ function FilterScreen({
     }
   };
 
-  useEffect(() => {
-    let tempArr: any = filterPayLoad?.filterArrOne || [];
+  // useEffect(() => {
+  //   let tempArr: any = filterPayLoad?.filterArrOne || [];
 
-    if (startDate === null && endDate === null) {
-      tempArr = tempArr.filter(
-        (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
-      );
+  //   if (startDate === null && endDate === null) {
+  //     tempArr = tempArr.filter(
+  //       (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
+  //     );
 
-      setFilterPayLoad((prevData: any) => {
-        return {
-          ...prevData,
-          filterArrOne: tempArr,
-        };
-      });
+  //     setFilterPayLoad((prevData: any) => {
+  //       return {
+  //         ...prevData,
+  //         filterArrOne: tempArr,
+  //       };
+  //     });
 
-      return;
-    } else if (endDate === null) {
-      return;
-    }
+  //     return;
+  //   } else if (endDate === null) {
+  //     return;
+  //   }
 
-    const isAlreadyTimeRangeSet = tempArr.filter(
-      (selectedtimeRangedata: any) => selectedtimeRangedata?.createdAt
-    );
+  //   const isAlreadyTimeRangeSet = tempArr.filter(
+  //     (selectedtimeRangedata: any) => selectedtimeRangedata?.createdAt
+  //   );
 
-    if (isAlreadyTimeRangeSet?.length > 0) {
-      tempArr = tempArr.filter(
-        (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
-      );
+  //   if (isAlreadyTimeRangeSet?.length > 0) {
+  //     tempArr = tempArr.filter(
+  //       (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
+  //     );
 
-      setFilterPayLoad((prevData: any) => {
-        return {
-          ...prevData,
-          filterArrOne: tempArr,
-        };
-      });
-    }
+  //     setFilterPayLoad((prevData: any) => {
+  //       return {
+  //         ...prevData,
+  //         filterArrOne: tempArr,
+  //       };
+  //     });
+  //   }
 
-    const endEpoch: any = endDate;
-    endEpoch && endEpoch.setHours(23, 59, 59, 59);
-    const lastendEpoch = endEpoch?.getTime();
-    const startEpoch: any = startDate;
+  //   const endEpoch: any = endDate;
+  //   endEpoch && endEpoch.setHours(23, 59, 59, 59);
+  //   const lastendEpoch = endEpoch?.getTime();
+  //   const startEpoch: any = startDate;
 
-    startEpoch && startEpoch.setHours(0, 0, 0, 0);
-    const lastStartEpoch = startEpoch?.getTime();
+  //   startEpoch && startEpoch.setHours(0, 0, 0, 0);
+  //   const lastStartEpoch = startEpoch?.getTime();
 
-    const payload = [
-      { createdAt: { $gte: lastStartEpoch } },
-      { createdAt: { $lte: lastendEpoch } },
-    ];
-    tempArr.push(...payload);
+  //   const payload = [
+  //     { createdAt: { $gte: lastStartEpoch } },
+  //     { createdAt: { $lte: lastendEpoch } },
+  //   ];
+  //   tempArr.push(...payload);
 
-    if (tempArr?.length > 1) {
-      setFilterPayLoad((prevData: any) => {
-        return {
-          ...prevData,
-          filterArrOne: [...tempArr],
-        };
-      });
-    }
-  }, [startDate, endDate, dateRange]);
+  //   if (tempArr?.length > 1) {
+  //     setFilterPayLoad((prevData: any) => {
+  //       return {
+  //         ...prevData,
+  //         filterArrOne: [...tempArr],
+  //       };
+  //     });
+  //   }
+  // }, [startDate, endDate, dateRange]);
 
-  useEffect(() => {
-    if (filterModal === false) {
-      setFilterPayLoad({
-        filterArrOne: [],
-        filterArrTwo: [],
-      });
-    }
-  }, [filterModal]);
+  // useEffect(() => {
+  //   if (filterModal === false) {
+  //     setFilterPayLoad({
+  //       filterArrOne: [],
+  //       filterArrTwo: [],
+  //     });
+  //   }
+  // }, [filterModal]);
 
   useEffect(() => {
     getFilterDropDownData();
@@ -148,7 +154,7 @@ function FilterScreen({
         </div>
       ) : (
         <>
-          <DatePicker
+          {/* <DatePicker
             selectsRange={true}
             startDate={startDate}
             endDate={endDate}
@@ -160,7 +166,7 @@ function FilterScreen({
             placeholderText="Select From & To Date"
             className="cursor-pointer border-solid border-2 datepickerCss border-sky-500 pl-6"
             dateFormat="dd/MM/yyyy"
-          />
+          /> */}
 
           {filterOptionList &&
             filterOptionList.map((singleAccordianDataList: any, i: any) => (
