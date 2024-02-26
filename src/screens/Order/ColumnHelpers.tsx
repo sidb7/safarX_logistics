@@ -384,7 +384,9 @@ const idHelper = (
               <span className=" text-sm font-light">Order ID :</span>
               <div className=" flex text-base items-center font-medium">
                 <span className="">
-                  {source === "SHOPIFY" || source === "ZOHO"
+                  {source === "SHOPIFY" ||
+                  source === "ZOHO" ||
+                  source === "WOOCOMMERCE"
                     ? otherDetails?.orderNumber
                       ? `${otherDetails?.orderNumber}`
                       : orderId
@@ -392,9 +394,11 @@ const idHelper = (
                 </span>
                 <CopyTooltip
                   stringToBeCopied={
-                    source === "SHOPIFY" || source === "ZOHO"
+                    source === "SHOPIFY" ||
+                    source === "ZOHO" ||
+                    source === "WOOCOMMERCE"
                       ? otherDetails?.orderNumber
-                        ? otherDetails?.orderNumber
+                        ? `${otherDetails?.orderNumber}`
                         : orderId
                       : orderId
                   }
@@ -763,7 +767,9 @@ export const columnHelperForNewOrder = (
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
                     <span className="">
-                      {source === "SHOPIFY" || source === "ZOHO"
+                      {source === "SHOPIFY" ||
+                      source === "ZOHO" ||
+                      source === "WOOCOMMERCE"
                         ? otherDetails?.orderNumber
                           ? `${otherDetails?.orderNumber}`
                           : orderId
@@ -771,9 +777,11 @@ export const columnHelperForNewOrder = (
                     </span>
                     <CopyTooltip
                       stringToBeCopied={
-                        source === "SHOPIFY" || source === "ZOHO"
+                        source === "SHOPIFY" ||
+                        source === "ZOHO" ||
+                        source === "WOOCOMMERCE"
                           ? otherDetails?.orderNumber
-                            ? otherDetails?.orderNumber
+                            ? `${otherDetails?.orderNumber}`
                             : orderId
                           : orderId
                       }

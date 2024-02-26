@@ -62,10 +62,14 @@ import PartnerJumperModal from "./PartnerJumberModal";
 import DatePicker from "react-datepicker";
 import { debounce } from "lodash";
 import RightSideModal from "../../components/CustomModal/customRightModal";
+
+
+import { io, Socket } from "socket.io-client";
+import { SearchBox } from "../../components/SearchBox";
 import FilterScreen from "./common/FilterScreen/filterScreen";
 import ServiceButton from "../../components/Button/ServiceButton";
-import { Spinner } from "flowbite-react";
-import { SearchBox } from "../../components/SearchBox";
+import { Spinner } from "../../components/Spinner";
+import "../../styles/progressBar.css";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -243,7 +247,7 @@ const Index = () => {
     isOpen: false,
     data: [],
   });
-
+  const [progress, setProgress]: any = useState(0);
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -266,8 +270,11 @@ const Index = () => {
     data: {},
     orderId: "",
   });
+  const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
 
   const roles = useSelector((state: any) => state?.roles);
+  const channelReduxData = useSelector((state: any) => state?.channel?.channel);
+
   const isMobileView = useMediaQuery({ maxWidth: 768 }); // Adjust the breakpoint as per your requirement
   const { isLgScreen } = ResponsiveState();
   const navigate = useNavigate();
@@ -541,6 +548,7 @@ const Index = () => {
   };
 
   const handleSyncOrder = async () => {
+    setIsSyncModalOpen(true);
     try {
       syncRef.current.childNodes[1].textContent = "Sync In Progress...";
       syncRef.current.style.backgroundColor = "#F8F8F8";
@@ -558,12 +566,12 @@ const Index = () => {
         toast.success("Sync In Progress", {
           className: "custom-toast-success",
         });
-        setTimeout(() => {
-          window.location.href = "/orders/view-orders?activeTab=draft";
-          window.onload = () => {
-            window.location.reload();
-          };
-        }, 5000);
+        // setTimeout(() => {
+        //   window.location.href = "/orders/view-orders?activeTab=draft";
+        //   window.onload = () => {
+        //     window.location.reload();
+        //   };
+        // }, 5000);
       } else {
         toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
@@ -1650,6 +1658,15 @@ const Index = () => {
   //   );
   // }, [filterPayLoad]);
 
+  useEffect(() => {
+    if (channelReduxData.length > 0) {
+      let totalOrderCount = +channelReduxData?.[0]?.TotalOrderCount;
+      let progress =
+        (+channelReduxData?.[0]?.syncedOrder / totalOrderCount) * 100;
+      setProgress(progress);
+    }
+  }, [channelReduxData?.length, channelReduxData?.[0]?.syncedOrder]);
+
   return (
     <>
       {isActive ? (
@@ -1942,6 +1959,37 @@ const Index = () => {
           </div>
         </RightSideModal>
       )}
+
+      <CustomRightModal
+        isOpen={isSyncModalOpen}
+        onClose={() => setIsSyncModalOpen(false)}
+        className="!justify-start"
+      >
+        <div className="mt-[3rem] mx-[1rem] p-[1rem] items-center flex flex-col border-4 rounded-md">
+          <div className="my-[2rem] text-[25px] flex flex-wrap items-center">
+            <div>
+              <b>WooCommerce</b> - Sync In Progress
+            </div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+          <div className={`relative progress-bar mb-[2rem] `}>
+            <div
+              className={` h-full bg-[#06981d] transition-all duration-700 ease-in-out !rounded-2xl`}
+              style={{
+                width: `${progress}%`,
+              }}
+            ></div>
+            <div className="absolute left-0">
+              {+channelReduxData?.[0]?.syncedOrder || 0}
+            </div>
+            <div className="absolute right-0">
+              {+channelReduxData?.[0]?.TotalOrderCount || 0}
+            </div>
+          </div>
+        </div>
+      </CustomRightModal>
     </>
   );
 };

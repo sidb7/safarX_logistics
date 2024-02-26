@@ -166,7 +166,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       value: "all",
     },
     {
-      label: `Draft`,
+      label: `Ready To Book`,
       isActive: false,
       value: "draft",
     },
@@ -420,8 +420,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
-              handleTabChange(1);
-              navigate(`/orders/view-orders?activeTab=booked`);
+              // handleTabChange(1);
+              // navigate(`/orders/view-orders?activeTab=booked`);
             } else {
               setIsLoadingManifest({
                 isLoading: false,
