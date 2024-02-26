@@ -291,6 +291,13 @@ const Index = () => {
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
 
+  let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
+  syncChannelTextObj = JSON.parse(syncChannelTextObj);
+
+  let syncChannelText = syncChannelTextObj.nextStep.isChannelIntegrated
+    ? "Sync Channel"
+    : "Add Channel";
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -342,7 +349,7 @@ const Index = () => {
         >
           <img src={SyncIcon} alt="" width="16px" />
           <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-            {capitalizeFirstLetter("SYNC CHANNEL")}
+            {syncChannelText}
           </span>
         </div>
 
@@ -373,12 +380,14 @@ const Index = () => {
   };
 
   const handleSyncOrder = async () => {
-    setIsSyncModalOpen(true);
     try {
-      syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      syncRef.current.style.backgroundColor = "#F8F8F8";
-      syncRef.current.style.pointerEvents = "none";
-      syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      if (syncChannelText.includes("Sync Channel")) {
+        setIsSyncModalOpen(true);
+        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+        syncRef.current.style.backgroundColor = "#F8F8F8";
+        syncRef.current.style.pointerEvents = "none";
+        syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      }
 
       // const { data: response } = await POST(GET_ALL_STORES, {});
       // if (response.data.length === 0) {
@@ -398,7 +407,7 @@ const Index = () => {
           };
         }, 5000);
       } else {
-        toast.error(data?.message || "Please Integrate A Channel First");
+        // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
       }
     } catch (error: any) {
