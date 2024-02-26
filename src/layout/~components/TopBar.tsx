@@ -22,6 +22,7 @@ import AddBulkIcon from "../../assets/quickAction/addBulk.svg";
 import PinCodeIcon from "../../assets/quickAction/pin.svg";
 import CrossIcon from "../../assets/cross.svg";
 import { POST } from "../../utils/webService";
+import profileIcon from "../../assets/Contact.svg";
 import { toast } from "react-hot-toast";
 import { GET_PROFILE_URL, LOGOUT } from "../../utils/ApiUrls";
 import "../../styles/skeleton.css";
@@ -272,6 +273,22 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
             onClick={() => {}}
           /> */}
           <div className="flex items-center justify-self-end gap-x-3 ">
+            {/* <div
+              className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]"
+              onClick={() => navigate("/wallet/view-wallet")}
+            >
+              <img
+                src={profileIcon}
+                width={35}
+                alt=""
+                className="border w-[16px] mx-1"
+              />
+              <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                <div>Seller ID :</div>
+                <div>1019</div>
+              </div>
+            </div> */}
+
             {isLoading ? (
               <div className="flex animated !rounded-md w-20 h-[36px]    ">
                 <img
@@ -361,7 +378,7 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
               {/* <img src={ProfileLogo} alt="" /> */}
               {isOpen && (
                 <div
-                  className="origin-top-right z-10 absolute right-2 mt-8 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
+                  className="origin-top-right z-50 absolute right-2 mt-8 w-56 rounded-md shadow-lg bg-white  ring-black ring-opacity-5"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="options-menu"

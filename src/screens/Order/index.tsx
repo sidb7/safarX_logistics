@@ -319,12 +319,6 @@ const Index = () => {
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
 
-  interface MainObject {
-    [key: string]: {
-      $in: any[];
-    };
-  }
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -1138,31 +1132,35 @@ const Index = () => {
   ) => {
     let payload: any = {};
 
-    if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
-      payload.filterArrOne = firstFilterData || [];
+    const newArray = filterPayLoad?.filterArrOne.filter(
+      (obj) => !Object.keys(obj).includes("createdAt")
+    );
+
+    if (newArray?.length > 0 || secondFilterData?.length > 0) {
+      payload.filterArrOne = newArray || [];
       payload.filterArrTwo = secondFilterData || [];
     }
 
-    // if (selectedStartDate && selectedEndDate) {
-    //   let startEpoch = null;
-    //   let lastendEpoch = null;
+    if (selectedStartDate && selectedEndDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
 
-    //   if (
-    //     selectedStartDate instanceof Date &&
-    //     selectedEndDate instanceof Date
-    //   ) {
-    //     selectedStartDate.setHours(0, 0, 0, 0);
-    //     startEpoch = selectedStartDate.getTime();
+      if (
+        selectedStartDate instanceof Date &&
+        selectedEndDate instanceof Date
+      ) {
+        selectedStartDate.setHours(0, 0, 0, 0);
+        startEpoch = selectedStartDate.getTime();
 
-    //     selectedEndDate.setHours(23, 59, 59, 999);
-    //     const endEpoch = selectedEndDate.getTime();
+        selectedEndDate.setHours(23, 59, 59, 999);
+        const endEpoch = selectedEndDate.getTime();
 
-    //     lastendEpoch = endEpoch;
-    //   }
+        lastendEpoch = endEpoch;
+      }
 
-    //   payload.startDate = startEpoch;
-    //   payload.endDate = lastendEpoch;
-    // }
+      payload.startDate = startEpoch;
+      payload.endDate = lastendEpoch;
+    }
 
     if (searchText?.length > 0) {
       payload.id = searchText;
@@ -1262,7 +1260,8 @@ const Index = () => {
       true,
       searchedText,
       startDate,
-      endDate
+      endDate,
+      filterPayLoad
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
@@ -1297,7 +1296,8 @@ const Index = () => {
       true,
       searchedText,
       startDate,
-      endDate
+      endDate,
+      filterPayLoad
     );
 
     setOrders([...OrderData]);
@@ -1315,7 +1315,8 @@ const Index = () => {
     dateFilter: any = false,
     searchText?: any,
     startDate?: any,
-    endDate?: any
+    endDate?: any,
+    filterPayLoadData?: any
   ) => {
     try {
       const payload: any = {
@@ -1326,8 +1327,23 @@ const Index = () => {
         currentStatus,
       };
 
+      let firstFilterData = [];
+      let secondFilterData = [];
+
       if (searchText?.length > 0) {
         payload.id = searchText;
+      }
+
+      if (
+        filterPayLoadData?.filterArrOne.length > 0 ||
+        filterPayLoadData?.filterArrTwo.length > 0
+      ) {
+        const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
+          (obj: any) => !Object.keys(obj).includes("createdAt")
+        );
+
+        firstFilterData = newFilterArrOne;
+        secondFilterData = filterPayLoadData?.filterArrTwo;
       }
 
       if (startDate && endDate) {
@@ -1344,7 +1360,7 @@ const Index = () => {
           lastendEpoch = endEpoch;
         }
 
-        payload.filterArrOne = [
+        firstFilterData.unshift(
           {
             createdAt: {
               $gte: startEpoch,
@@ -1354,9 +1370,13 @@ const Index = () => {
             createdAt: {
               $lte: lastendEpoch,
             },
-          },
-        ];
-        payload.filterArrTwo = [];
+          }
+        );
+      }
+
+      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+        payload.filterArrOne = firstFilterData;
+        payload.filterArrTwo = secondFilterData;
       }
 
       const { data } = await POST(GET_SELLER_ORDER, payload);
