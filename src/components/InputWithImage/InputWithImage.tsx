@@ -63,6 +63,7 @@ const InputWithImage = (props: IInputProps) => {
           onChange={onChange}
           onClick={onClick}
           value={value}
+          disabled={isDisabled}
           style={{ caretColor }}
         />
       </div>
