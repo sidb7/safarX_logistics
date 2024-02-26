@@ -40,12 +40,13 @@ interface ICustomTableAccordion {
 
 const Accordion = (props: ICustomTableAccordion) => {
   const isFirstRender = useRef(true);
-  const { data } = props;
-  let servicePartnerServiceId: any;
+
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState<any>(null);
-  const [orderDetails, setOrderDetails]: any = useState([]);
 
+  const [orderDetails, setOrderDetails]: any = useState([]);
+  console.log("openindex", orderDetails);
+  const [apiCall, setApiCall] = useState<any>(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
@@ -195,6 +196,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [boxDetails, setBoxDetails] = useState<any>();
   const [productError, setProdctError] = useState<any>([]);
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
+  console.log("boxAccordian", boxAccordian);
 
   const [pickupDate, setPickupDate] = useState("");
   //storing these details to call the post api for updation
@@ -203,7 +205,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     tempOrderId: "",
     source: "",
   });
-
+  const [enabled, setEnabled] = useState<boolean>(true);
   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
     pickUpAddress: {
@@ -226,13 +228,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     },
   });
 
-  console.log("getPickAddressData", getPickAddressData);
-
   const [serviceList, setServiceList] = useState<any>([]);
-
-  const mainDate: any = convertEpochToDateTimeV2(
-    getPickAddressData?.pickUpAddress?.pickupDate
-  );
 
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
@@ -260,6 +256,24 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [addressOpenModal, setAddressOpenModal] = useState(false);
 
   const [open, setOpen] = useState<any>({});
+  const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
+    useState();
+
+  const [partnerServiceId, setPartnerServiceId] = useState<any>();
+  console.log("partnerServiceId", typeof partnerServiceId);
+
+  const { data } = props;
+  let servicePartnerServiceId: any;
+
+  // boxProductDetails?.boxInfo?.[0]?.products.map(
+  //   (eachProduct: any, index: any) => {
+  //     console.log("eachProduct", eachProduct.volumetricWeight);
+  //   }
+  // );
+
+  const mainDate: any = convertEpochToDateTimeV2(
+    getPickAddressData?.pickUpAddress?.pickupDate
+  );
 
   const measureUnits = [
     {
@@ -285,13 +299,16 @@ const Accordion = (props: ICustomTableAccordion) => {
   //for updating product details api
   const handleSingleProductUpdation = async () => {
     try {
-      const payload = boxProductDetails;
+      if (!enabled) {
+        const payload = boxProductDetails;
 
-      const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-      if (data?.status) {
-        // toast.success("Updated Successfully");
-      } else {
-        toast.error(data?.message);
+        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+
+        if (data?.status) {
+          toast.success("Updated Product Successfully");
+        } else {
+          toast.error(data?.message);
+        }
       }
     } catch (error: any) {
       console.log(error);
@@ -327,19 +344,24 @@ const Accordion = (props: ICustomTableAccordion) => {
     for (let i = 0; i < temp?.length; i++) {
       if (product_index === i) {
         temp[i][fieldName] = value == "" ? "" : Number(value);
+        temp[i]["volumetricWeight"] =
+          (+temp[i]["length"] * +temp[i]["breadth"] * +temp[i]["height"]) /
+          5000;
       }
     }
     boxProductDetails.boxInfo[0].products = temp;
+    // setproductAccordian(temp);
+    setvolumetricWeighAfterEditValue(boxProductDetails?.boxInfo[0]?.products);
   };
 
   const handleBoxAccordian = async () => {
-    if (boxAccordian === true) {
+    if (boxAccordian === true && !enabled) {
       try {
         const payload = boxProductDetails;
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
-          // toast.success("Updated Successfully");
+          toast.success("Updated Box Successfully");
         } else {
           toast.error(data.message);
         }
@@ -358,6 +380,11 @@ const Accordion = (props: ICustomTableAccordion) => {
     for (let i = 0; i < boxTemp?.length; i++) {
       if (box_index === i) {
         boxTemp[i][fieldName] = value == "" ? "" : Number(value);
+        boxTemp[i]["volumetricWeight"] =
+          (boxTemp[i]["length"] *
+            boxTemp[i]["breadth"] *
+            boxTemp[i]["height"]) /
+          5000;
       }
       boxProductDetails.boxInfo = boxTemp;
     }
@@ -389,7 +416,11 @@ const Accordion = (props: ICustomTableAccordion) => {
   const entriesHeight = entries?.[0]?.offsetHeight;
 
   const getServiceList = async () => {
-    if (boxProductDetails?.tempOrderId && boxProductDetails?.source) {
+    if (
+      boxProductDetails?.tempOrderId &&
+      boxProductDetails?.source &&
+      !enabled
+    ) {
       try {
         const payload = {
           tempOrderId: boxProductDetails?.tempOrderId,
@@ -402,6 +433,8 @@ const Accordion = (props: ICustomTableAccordion) => {
           setServiceLoading(false);
           setServiceList(response?.data?.data);
         } else {
+          //services
+
           setServiceLoading(false);
         }
       } catch (error: any) {
@@ -409,7 +442,6 @@ const Accordion = (props: ICustomTableAccordion) => {
       }
     }
   };
-  const [apiCall, setApiCall] = useState<any>(false);
 
   const handleItemClick = async (
     index: any,
@@ -428,8 +460,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       setApiCall(true);
       return;
     }
-
-    if (requestName == "Pickup Address") {
+    if (requestName == "Pickup Address" && !enabled) {
       try {
         const payload = {
           pickupAddress: {
@@ -469,7 +500,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
-          // toast.success("Updated Successfully");
+          toast.success("Updated Pickup Successfully");
           let temp: any;
           temp.pickUpAddress.pickupDate = "";
         } else {
@@ -479,7 +510,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         console.log(error);
       }
     }
-    if (requestName == "Delivery Address") {
+    if (requestName == "Delivery Address" && !enabled) {
       try {
         const payload = {
           deliveryAddress: {
@@ -524,7 +555,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
-          // toast.success("Updated Successfully");
+          toast.success("Updated Delivery Successfully");
         } else {
           toast.error(data?.message);
         }
@@ -532,7 +563,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         console.log(error);
       }
     }
-    if (requestName == "Services") {
+
+    if (requestName == "Services" && !enabled) {
       try {
         const payload: any = {
           partnerServiceId: serviceList[serviceIndex].partnerServiceId,
@@ -547,7 +579,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
         if (responseData?.success) {
-          // toast.success(responseData?.message);
+          toast.success("Updated Service Successfully");
         } else {
           toast.error(responseData?.message);
         }
@@ -558,42 +590,42 @@ const Accordion = (props: ICustomTableAccordion) => {
   };
 
   //this is for updation the order id in other details
-  const postOtherDetails = async () => {
-    if (!apiCall) {
-      setApiCall(true);
-      return;
-    }
+  // const postOtherDetails = async () => {
+  //   if (!apiCall) {
+  //     setApiCall(true);
+  //     return;
+  //   }
 
-    if (!orderId) {
-      // setOpen({
-      //   [`otherDetails`]: true,
-      // });
-      setOtherDetailsAccordian(true);
-      setInputError(true);
-      return;
-    }
-    //if (otherDetailsAccordian === false) {
-    setOtherDetailsAccordian(false);
-    const payload = {
-      orderId: orderId,
-      tempOrderId: boxProductDetails?.tempOrderId,
-      source: boxProductDetails?.source,
-      eWayBillNo: boxProductDetails?.boxInfo[0]?.eWayBillNo,
-    };
-    // if(payload.orderId.length === 0){
+  //   if (!orderId) {
+  //     // setOpen({
+  //     //   [`otherDetails`]: true,
+  //     // });
+  //     setOtherDetailsAccordian(true);
+  //     setInputError(true);
+  //     return;
+  //   }
+  //   //if (otherDetailsAccordian === false) {
+  //   setOtherDetailsAccordian(false);
+  //   const payload = {
+  //     orderId: orderId,
+  //     tempOrderId: boxProductDetails?.tempOrderId,
+  //     source: boxProductDetails?.source,
+  //     eWayBillNo: boxProductDetails?.boxInfo[0]?.eWayBillNo,
+  //   };
+  //   // if(payload.orderId.length === 0){
 
-    // }
+  //   // }
 
-    try {
-      const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-      if (data?.status) {
-        // toast.success("Updated Successfully");
-      }
-    } catch (error: any) {
-      console.log(error.message);
-    }
-    // }
-  };
+  //   try {
+  //     const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+  //     if (data?.status) {
+  //       // toast.success("Updated Successfully");
+  //     }
+  //   } catch (error: any) {
+  //     console.log(error.message);
+  //   }
+  //   // }
+  // };
   //to set particular object key you can use this
   const fetchPincodeData = async (e: any, title: any) => {
     if (!isNaN(e.target.value)) {
@@ -640,6 +672,8 @@ const Accordion = (props: ICustomTableAccordion) => {
         tempOrderId: orderData?.orderId?.split("T")[1],
         awb: orderData?.awb ? orderData?.awb : "0",
       });
+
+      setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
 
       let temp;
       temp = getPickAddressData;
@@ -786,10 +820,10 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
-
         setBoxProductDetails(rowsData);
 
         setBoxDetails(rowsData);
+        setEnabled(orderData?.awb == 0 ? false : true);
 
         //otherdetails orderid
         let orderId;
@@ -970,7 +1004,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         rows.push(statusObj);
 
         rows.push({
-          title: "Other History",
+          title: "Order History",
           "Shipyaari ID": rowsData?.tempOrderId,
           "Order Id": rowsData?.orderId,
           "Tracking Id": orderData?.awb,
@@ -979,7 +1013,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           "Order Type": rowsData?.orderType,
           Zone: capitalizeFirstLetter(rowsData?.zone),
         });
-        console.log("rows", rows);
+
         setOrderDetails(rows);
         setIsLoading(false);
       }
@@ -993,12 +1027,15 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
 
   const productLoops = (productAccordian: any, dataIndex: any) => {
+    if (enabled) {
+      return false;
+    }
     // for (let i = 0; i < productAccordian.length; i++) {
     const product = productAccordian[dataIndex];
 
     if (
       product?.deadWeight > 0 &&
-      product?.volumetricWeight > 0 &&
+      // product?.volumetricWeight > 0 &&
       product?.length > 0 &&
       product?.breadth > 0 &&
       product?.height > 0
@@ -1017,12 +1054,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                   : product?.deadWeight === ""
                   ? "Field is Required"
                   : "",
-              volumetricWeight:
-                product?.volumetricWeight <= 0
-                  ? "Should be greater than 0"
-                  : product?.volumetricWeight === ""
-                  ? "Field is Required"
-                  : "",
+              // volumetricWeight:
+              //   product?.volumetricWeight <= 0
+              //     ? "Should be greater than 0"
+              //     : product?.volumetricWeight === ""
+              //     ? "Field is Required"
+              //     : "",
               length:
                 product?.length <= 0
                   ? "Should be greater than 0"
@@ -1052,16 +1089,20 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     // }
   };
-
   const boxloops: any = (boxProductDetails: any, index: any) => {
+    if (enabled) {
+      return false;
+    }
+
     const boxDetails = boxProductDetails?.boxInfo[index];
 
     if (
       boxDetails?.deadWeight > 0 &&
-      boxDetails?.volumetricWeight > 0 &&
+      // boxDetails?.volumetricWeight > 0 &&
       boxDetails?.length > 0 &&
       boxDetails?.breadth > 0 &&
-      boxDetails?.height > 0
+      boxDetails?.height > 0 &&
+      !enabled
     ) {
       return false;
     } else {
@@ -1069,14 +1110,270 @@ const Accordion = (props: ICustomTableAccordion) => {
         ...validationError,
         boxDeadWeight:
           boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
-        boxVolumtericWeight:
-          boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
+        // boxVolumtericWeight:
+        //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
         boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
         boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
         boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
       });
       setInputError(true);
       return true;
+    }
+  };
+
+  // const productVolumetricWeight = (): any => {
+  //   boxProductDetails?.boxInfo?.[0]?.products(
+  //     (eachProduct: any, index: any) => {
+  //       return eachProduct.volumetricWeight;
+  //     }
+  //   );
+  // };
+  // const productValues = productVolumetricWeight();
+  // console.log("productValues", productValues);
+
+  const handlePriorValidation = () => {
+    // Delivery Checks
+    if (
+      getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.length ===
+        0 ||
+      getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length ===
+        0 ||
+      // getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length === 0 ||
+      // getDeliveryAddressData?.deliveryAddress?.contact?.contactType?.length ===
+      //   0 ||
+      getDeliveryAddressData?.deliveryAddress?.flatNo?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.landmark?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
+      // getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.pickupDate?.length === 0
+    ) {
+      let element1: any = document.getElementById("Delivery Address");
+
+      if (element1) element1.style.borderColor = "red";
+    } else {
+      let element1: any = document.getElementById("Delivery Address");
+
+      if (element1) element1.style.borderColor = "#E8E8E8";
+    }
+    //Pickup Checks
+
+    if (
+      getPickAddressData?.pickUpAddress?.contact?.contactName?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length === 0 ||
+      // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
+      // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.flatNo?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.locality?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.landmark?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.city?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.state?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.country?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.pincode?.length === 0 ||
+      // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
+    ) {
+      let element2: any = document.getElementById("Pickup Address");
+
+      if (element2) element2.style.borderColor = "red";
+    } else {
+      let element2: any = document.getElementById("Pickup Address");
+      if (element2) element2.style.borderColor = "#E8E8E8";
+    }
+
+    //services
+
+    if (!partnerServiceId) {
+      let elemente3: any = document.getElementById("Services");
+      console.log("🚀 ~ handlePriorValidation ~ elemente3:", elemente3);
+
+      // if (elemente3) elemente3.style.backgroundColor = "yellow";
+      // if (elemente3) elemente3.style.borderColor = "rgb(255,0,0) ";
+      if (elemente3) elemente3.classList.add("!border-red-500");
+
+      // if (elemente3) elemente3.style.backgroundColor = "green";
+    } else {
+      let element3: any = document.getElementById("Services");
+      if (element3) element3.style.borderColor = "#E8E8E8";
+    }
+
+    //box and product
+    //console.log("------x------BoxDetails: ", boxProductDetails);
+    if (
+      boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
+      // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
+      boxProductDetails?.boxInfo?.[0]?.length === 0 ||
+      boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
+      boxProductDetails?.boxInfo?.[0]?.height === 0
+    ) {
+      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
+      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
+
+      // let element5: any = document.getElementById("Box 1");
+      let element5: any = document.getElementById(
+        `${boxProductDetails?.boxInfo?.[0]?.name}`
+      );
+
+      if (element4) element4.style.borderColor = "red";
+      if (element5) element5.style.borderColor = "red";
+    } else {
+      // let element4: any = document.getElementById("Box Info  Product(s) x 5");
+      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
+      // let element5: any = document.getElementById("Box 1");
+      let element5: any = document.getElementById(
+        `${boxProductDetails?.boxInfo?.[0]?.name}`
+      );
+      if (element4) element4.style.borderColor = "#E8E8E8";
+      if (element5) element5.style.borderColor = "#E8E8E8";
+    }
+
+    for (let i = 0; i < boxProductDetails?.boxInfo?.[0]?.products.length; i++) {
+      if (
+        boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0 ||
+        boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
+        boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
+        boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
+      ) {
+        console.log(
+          "-------If EXECUTED AND MADE WHITE BG",
+          boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight
+        );
+        let element6 = document.getElementById(
+          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        );
+
+        let element4: any = document.getElementById(
+          `${orderDetails[2]?.title}`
+        );
+        if (element6) element6.style.borderColor = "red";
+        if (element4) element4.style.borderColor = "red";
+        break;
+      } else {
+        console.log("-------ELSE EXECUTED AND MADE WHITE RED");
+
+        let element4: any = document.getElementById(
+          `${orderDetails[2]?.title}`
+        );
+        let element6 = document.getElementById(
+          `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
+        );
+        if (element6) element6.style.borderColor = "#E8E8E8";
+        if (element4) element4.style.borderColor = "#E8E8E8";
+      }
+    }
+    // boxProductDetails?.boxInfo?.[0]?.products?.map(
+    //   (eachProduct: any, index: any) => {
+    //     console.log("eachProduct????????????", eachProduct?.deadWeight);
+    //     if (eachProduct.deadWeight === 0) {
+    //       console.log("heeeeeelloooooo");
+    //     }
+    //   }
+    // );
+  };
+
+  const validationFunction = (e: any, key: any, index: any) => {
+    if (key == "Pickup Address") {
+      if (
+        getPickAddressData?.pickUpAddress?.contact?.contactName?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length === 0 ||
+        // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
+        // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.flatNo?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.locality?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.landmark?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.city?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.state?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.country?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.pincode?.length === 0 ||
+        // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
+      ) {
+        // setOpenIndex(0);
+
+        setOpen({
+          [`item${index}`]: true,
+        });
+        setInputError(true);
+        // setErrorStatusAccordian(true);
+      } else {
+        // setOpenIndex(0);
+        handleItemClick(index, e.target.textContent);
+        setOpen({
+          [`item${index}`]: false,
+        });
+        setApiCall(false);
+        // setErrorStatusAccordian(false);
+      }
+    }
+    if (key == "Delivery Address") {
+      if (
+        getDeliveryAddressData?.deliveryAddress?.contact?.contactName
+          ?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length ===
+          0 ||
+        // getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length ===
+        //   0 ||
+        // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
+        //   ?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.flatNo?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.landmark?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
+        (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
+          getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
+      ) {
+        setOpen({
+          [`item${index}`]: true,
+        });
+        setInputError(true);
+      } else {
+        // setOpenIndex(0);
+        handleItemClick(index, e.target.textContent);
+        setOpen({
+          [`item${index}`]: false,
+        });
+        setApiCall(false);
+      }
+    }
+    // if (key == "Other Details") {
+    //   {
+    //     if (!orderId) {
+    //       setOpen({
+    //         [`item${index}`]: true,
+    //       });
+    //       setInputError(true);
+    //     } else {
+    //       //  handleItemClick(index, e.target.textContent);
+    //       postOtherDetails();
+    //       setOpen({
+    //         [`item${index}`]: false,
+    //       });
+    //       setOpenIndex(null);
+    //       setOtherDetailsAccordian(false);
+    //       setAddressOpenModal(false);
+    //       setApiCall(false);
+    //     }
+    //   }
+    // }
+
+    if (key == "Services") {
+      handleItemClick(index, e.target.textContent);
+      setOpen({
+        [`item${index}`]: false,
+      });
+
+      setOpenIndex(null);
+
+      setOtherDetailsAccordian(false);
+      //setAddressOpenModal(true);
+      setApiCall(false);
     }
   };
 
@@ -1118,44 +1415,47 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   useEffect(() => {
     setproductAccordian(boxProductDetails?.boxInfo?.[0]?.products);
-    setProdctError(
-      boxProductDetails?.boxInfo?.[0]?.products?.map(
-        (product: any, index: any) => {
-          return {
-            deadWeight:
-              product?.deadWeight <= 0
-                ? "Should be greater than 0"
-                : product?.deadWeight === ""
-                ? "Field is Required"
-                : "",
-            volumetricWeight:
-              product?.volumetricWeight <= 0
-                ? "Should be greater than 0"
-                : product?.volumetricWeight === ""
-                ? "Field is Required"
-                : "",
-            length:
-              product?.length <= 0
-                ? "Should be greater than 0"
-                : product?.length === ""
-                ? "Field is Required"
-                : "",
-            breadth:
-              product?.breadth <= 0
-                ? "Should be greater than 0"
-                : product?.breadth === ""
-                ? "Field is Required"
-                : "",
-            height:
-              product?.height <= 0
-                ? "Should be greater than 0"
-                : product?.height === ""
-                ? "Field is Required"
-                : "",
-          };
-        }
-      )
-    );
+    if (!enabled) {
+      setProdctError(
+        boxProductDetails?.boxInfo?.[0]?.products?.map(
+          (product: any, index: any) => {
+            return {
+              deadWeight:
+                product?.deadWeight <= 0
+                  ? "Should be greater than 0"
+                  : product?.deadWeight === ""
+                  ? "Field is Required"
+                  : "",
+              volumetricWeight:
+                product?.volumetricWeight <= 0
+                  ? "Should be greater than 0"
+                  : product?.volumetricWeight === ""
+                  ? "Field is Required"
+                  : "",
+              length:
+                product?.length <= 0
+                  ? "Should be greater than 0"
+                  : product?.length === ""
+                  ? "Field is Required"
+                  : "",
+              breadth:
+                product?.breadth <= 0
+                  ? "Should be greater than 0"
+                  : product?.breadth === ""
+                  ? "Field is Required"
+                  : "",
+              height:
+                product?.height <= 0
+                  ? "Should be greater than 0"
+                  : product?.height === ""
+                  ? "Field is Required"
+                  : "",
+            };
+          }
+        )
+      );
+    }
+
     // setProdctError(
     //   boxProductDetails?.boxInfo?.[0]?.products?.map(
     //     (item: any, index: number) => {
@@ -1179,105 +1479,15 @@ const Accordion = (props: ICustomTableAccordion) => {
     });
   }, [serviceList]);
 
-  const validationFunction = (e: any, key: any, index: any) => {
-    if (key == "Pickup Address") {
-      if (
-        getPickAddressData?.pickUpAddress?.contact?.contactName?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.flatNo?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.locality?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.landmark?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.city?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.state?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pincode?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
-      ) {
-        // setOpenIndex(0);
-        setOpen({
-          [`item${index}`]: true,
-        });
-        setInputError(true);
-      } else {
-        // setOpenIndex(0);
-        handleItemClick(index, e.target.textContent);
-        setOpen({
-          [`item${index}`]: false,
-        });
-        setApiCall(false);
-      }
-    }
-    if (key == "Delivery Address") {
-      if (
-        getDeliveryAddressData?.deliveryAddress?.contact?.contactName
-          ?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length ===
-          0 ||
-        getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length ===
-          0 ||
-        getDeliveryAddressData?.deliveryAddress?.contact?.contactType
-          ?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.flatNo?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.landmark?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
-        (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
-          getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
-      ) {
-        setOpen({
-          [`item${index}`]: true,
-        });
-        setInputError(true);
-      } else {
-        // setOpenIndex(0);
-        handleItemClick(index, e.target.textContent);
-        setOpen({
-          [`item${index}`]: false,
-        });
-        setApiCall(false);
-      }
-    }
-    if (key == "Other Details") {
-      {
-        if (!orderId) {
-          setOpen({
-            [`item${index}`]: true,
-          });
-          setInputError(true);
-        } else {
-          //  handleItemClick(index, e.target.textContent);
-          postOtherDetails();
-          setOpen({
-            [`item${index}`]: false,
-          });
-          setOpenIndex(null);
-          setOtherDetailsAccordian(false);
-          setAddressOpenModal(false);
-          setApiCall(false);
-        }
-      }
-    }
-
-    // if (key == "Services") {
-    //   handleItemClick(index, e.target.textContent);
-    //   setOpen({
-    //     [`item${index}`]: false,
-    //   });
-
-    //   setOpenIndex(null);
-
-    //   setOtherDetailsAccordian(false);
-    //   //   setAddressOpenModal(true);
-    //   setApiCall(false);
-    // }
-  };
+  useEffect(() => {
+    handlePriorValidation(); // This Function is added here to trigger this function each time a user
+  }, [
+    getDeliveryAddressData,
+    getPickAddressData,
+    serviceList,
+    boxProductDetails,
+    openIndex,
+  ]);
 
   return (
     <div className="overflow-auto h-[100%] pb-[2rem]">
@@ -1290,6 +1500,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails?.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
+                console.log("🚀 ~ Accordion ~ item:", item);
                 return (
                   item?.title && (
                     <div
@@ -1299,9 +1510,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                       <div
                         className={`flex flex-col select-none gap-y-[1rem] justify-between p-3 h-[52px] border-[1px] border-[#E8E8E8] ${
                           openIndex === index
-                            ? "  rounded-tr-lg rounded-tl-lg rounded-b-none "
+                            ? "rounded-tr-lg rounded-tl-lg rounded-b-none "
                             : " text-[black] rounded-lg "
                         }`}
+                        id={`${item?.title}`}
                         onClick={(e: any) => {
                           validationFunction(e, item.title, index);
 
@@ -1321,14 +1533,27 @@ const Accordion = (props: ICustomTableAccordion) => {
                             // setOpen({
                             //   [`item${index}`]: false,
                             // });
-                          } else if (e.target.textContent == "Services") {
+                          } else if (e.target.textContent === "Order History") {
+                            setOpen({ [`item${index}`]: false });
+                            setOpenIndex(null);
+                          } else if (e.target.textContent == "Event Logs") {
                             handleItemClick(index, e.target.textContent);
-                            setAddressOpenModal(false);
+                            // setAddressOpenModal(false);
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-                            setOtherDetailsAccordian(false);
+                            // setOtherDetailsAccordian(false);
+
+                            setApiCall(false);
+                          } else if (e.target.textContent.includes("Box")) {
+                            // handleItemClick(index, e.target.textContent);
+                            // setAddressOpenModal(false);
+                            setOpen({
+                              [`item${index}`]: false,
+                            });
+                            setOpenIndex(null);
+                            // setOtherDetailsAccordian(false);
 
                             setApiCall(false);
                           }
@@ -1378,7 +1603,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                               <div className="w-full">
                                                 <div className="w-full">
                                                   <div
-                                                    className="border-2  border-black-600 p-2 rounded-md w-full"
+                                                    className="border  border-black-600 p-2 rounded-md w-full"
+                                                    // id={"productname"}
+                                                    id={`${eachProduct.productId}`}
                                                     onClick={(e: any) => {
                                                       // productLoops(
                                                       //   productAccordian,
@@ -1442,12 +1669,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           className=""
                                                           alt=""
                                                         />
-                                                        <p className="flex items-center mt-4 whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
+                                                        <p className="flex items-center mt-0 whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
                                                           {eachProduct?.name}
                                                         </p>
-                                                        <span className="flex items-center mt-1 text-[16px] font-Open ">
+                                                        {/* <span className="flex items-center mt-1 text-[16px] font-Open ">
                                                           (Product Info)
-                                                        </span>
+                                                        </span> */}
                                                       </div>
                                                       <div className="flex items-center">
                                                         {/* <img
@@ -1478,6 +1705,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachProduct?.deadWeight
                                                             }
+                                                            isDisabled={enabled}
                                                             name={`deadWeight${index}`}
                                                             inputType="number"
                                                             inputMode="numeric"
@@ -1542,66 +1770,81 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             }
                                                           </p>
                                                         </div>
+
                                                         <div className="col-span-1">
                                                           <InputBox
                                                             label="Volumetric Weight"
-                                                            defaultValue={
+                                                            // defaultValue={
+                                                            //   eachProduct?.volumetricWeight
+                                                            // }
+                                                            value={
                                                               eachProduct?.volumetricWeight
                                                             }
+                                                            // value={boxProductDetails?.boxInfo?.[0]?.products.map(
+                                                            //   (
+                                                            //     eachProduct: any,
+                                                            //     index: any
+                                                            //   ) => {
+                                                            //     eachProduct.volumetricWeight;
+                                                            //   }
+                                                            // )}
+                                                            // value={productVolumetricWeight()}
                                                             name={`volumetricWeight${index}`}
                                                             className="!w-[100%]"
                                                             inputType="number"
-                                                            onChange={(
-                                                              e: any
-                                                            ) => {
-                                                              handleInputUpdation(
-                                                                index,
-                                                                e.target.value,
-                                                                "volumetricWeight"
-                                                              );
-                                                              setProdctError(
-                                                                productError.map(
-                                                                  (
-                                                                    itemData: any,
-                                                                    errIndex: number
-                                                                  ) => {
-                                                                    if (
-                                                                      errIndex ==
-                                                                      e.target
-                                                                        .name[
-                                                                        e.target
-                                                                          .name
-                                                                          .length -
-                                                                          1
-                                                                      ]
-                                                                    ) {
-                                                                      return {
-                                                                        ...itemData,
-                                                                        volumetricWeight:
-                                                                          e
-                                                                            .target
-                                                                            .value <=
-                                                                            0 &&
-                                                                          eachProduct
-                                                                            .volumetricWeight
-                                                                            ?.length !=
-                                                                            0
-                                                                            ? "Should be greater than 0"
-                                                                            : e
-                                                                                .target
-                                                                                .value ===
-                                                                              ""
-                                                                            ? "Field is Required"
-                                                                            : "",
-                                                                      };
-                                                                    } else {
-                                                                      return itemData;
-                                                                    }
-                                                                  }
-                                                                )
-                                                              );
-                                                            }}
+                                                            isDisabled={true}
+                                                            // onChange={(
+                                                            //   e: any
+                                                            // ) => {
+                                                            //   handleInputUpdation(
+                                                            //     index,
+                                                            //     e.target.value,
+                                                            //     "volumetricWeight"
+                                                            //   );
+                                                            //   setProdctError(
+                                                            //     productError.map(
+                                                            //       (
+                                                            //         itemData: any,
+                                                            //         errIndex: number
+                                                            //       ) => {
+                                                            //         if (
+                                                            //           errIndex ==
+                                                            //           e.target
+                                                            //             .name[
+                                                            //             e.target
+                                                            //               .name
+                                                            //               .length -
+                                                            //               1
+                                                            //           ]
+                                                            //         ) {
+                                                            //           return {
+                                                            //             ...itemData,
+                                                            //             volumetricWeight:
+                                                            //               e
+                                                            //                 .target
+                                                            //                 .value <=
+                                                            //                 0 &&
+                                                            //               eachProduct
+                                                            //                 .volumetricWeight
+                                                            //                 ?.length !=
+                                                            //                 0
+                                                            //                 ? "Should be greater than 0"
+                                                            //                 : e
+                                                            //                     .target
+                                                            //                     .value ===
+                                                            //                   ""
+                                                            //                 ? "Field is Required"
+                                                            //                 : "",
+                                                            //           };
+                                                            //         } else {
+                                                            //           return itemData;
+                                                            //         }
+                                                            //       }
+                                                            //     )
+                                                            //   );
+                                                            // }}
                                                           />
+
                                                           <p className="open-sans text-[12px] text-red-600">
                                                             {
                                                               productError?.[
@@ -1630,6 +1873,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               name={`length${index}`}
                                                               defaultValue={
                                                                 eachProduct?.length
+                                                              }
+                                                              isDisabled={
+                                                                enabled
                                                               }
                                                               onChange={(
                                                                 e: any
@@ -1699,6 +1945,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 eachProduct?.breadth
                                                               }
                                                               name={`breadth${index}`}
+                                                              isDisabled={
+                                                                enabled
+                                                              }
                                                               inputType="number"
                                                               inputMode="numeric"
                                                               onChange={(
@@ -1769,6 +2018,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 eachProduct?.height
                                                               }
                                                               name={`height${index}`}
+                                                              isDisabled={
+                                                                enabled
+                                                              }
                                                               inputType="number"
                                                               inputMode="numeric"
                                                               onChange={(
@@ -1847,12 +2099,15 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             <div className="w-full">
                                               <div className="w-full">
                                                 <div
-                                                  className="border-2  border-black-600 p-2 flex justify-between w-full rounded-md"
+                                                  // id={`${item?.title}`}
+
+                                                  className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
+                                                  id={`${eachBox.name}`}
                                                   onClick={(e: any) => {
-                                                    boxloops(
-                                                      boxProductDetails,
-                                                      index
-                                                    );
+                                                    // boxloops(
+                                                    //   boxProductDetails,
+                                                    //   index
+                                                    // );
                                                     if (
                                                       boxAccordian === true &&
                                                       !boxloops(
@@ -1861,12 +2116,21 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )
                                                     ) {
                                                       setBoxAccordian(false);
-
+                                                      setOpen({
+                                                        [`itemboxProductDetails${index}`]:
+                                                          false,
+                                                      });
                                                       handleBoxAccordian();
                                                     } else {
                                                       setBoxAccordian(true);
+                                                      setOpen({
+                                                        [`itemboxProductDetails${index}`]:
+                                                          true,
+                                                      });
                                                     }
-
+                                                    // if (enabled) {
+                                                    //   setBoxAccordian(true);
+                                                    // }
                                                     if (
                                                       !open[
                                                         `itemboxProductDetails${index}`
@@ -1875,11 +2139,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           true,
-                                                      });
-                                                    } else {
-                                                      setOpen({
-                                                        [`itemboxProductDetails${index}`]:
-                                                          false,
                                                       });
                                                     }
                                                   }}
@@ -1924,6 +2183,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           defaultValue={
                                                             eachBox?.deadWeight
                                                           }
+                                                          isDisabled={enabled}
                                                           inputType="number"
                                                           name="deadWeight"
                                                           inputMode="numeric"
@@ -1972,54 +2232,58 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       <div className="col-span-1">
                                                         <InputBox
                                                           label="Volumetric Weight"
-                                                          defaultValue={
+                                                          // defaultValue={
+                                                          //   eachBox?.volumetricWeight
+                                                          // }
+                                                          value={
                                                             eachBox?.volumetricWeight
                                                           }
+                                                          isDisabled={enabled}
                                                           name="volumetricWeight"
                                                           inputType="number"
-                                                          onChange={(
-                                                            e: any
-                                                          ) => {
-                                                            handleBoxInputUpdation(
-                                                              index,
-                                                              e.target.value,
-                                                              "volumetricWeight"
-                                                            );
-                                                            if (
-                                                              e.target.value <=
-                                                                0 &&
-                                                              eachBox
-                                                                .volumetricWeight
-                                                                ?.length != 0
-                                                            ) {
-                                                              setValidationError(
-                                                                {
-                                                                  ...validationError,
-                                                                  boxVolumetricWeight:
-                                                                    "Should be greater than 0",
-                                                                }
-                                                              );
-                                                            } else {
-                                                              setValidationError(
-                                                                {
-                                                                  ...validationError,
-                                                                  boxVolumetricWeight:
-                                                                    "",
-                                                                }
-                                                              );
-                                                            }
-                                                          }}
-                                                          inputError={
-                                                            eachBox
-                                                              ?.volumetricWeight
-                                                              ?.length === 0
-                                                          }
+                                                          // onChange={(
+                                                          //   e: any
+                                                          // ) => {
+                                                          //   handleBoxInputUpdation(
+                                                          //     index,
+                                                          //     e.target.value,
+                                                          //     "volumetricWeight"
+                                                          //   );
+                                                          //   if (
+                                                          //     e.target.value <=
+                                                          //       0 &&
+                                                          //     eachBox
+                                                          //       .volumetricWeight
+                                                          //       ?.length != 0
+                                                          //   ) {
+                                                          //     setValidationError(
+                                                          //       {
+                                                          //         ...validationError,
+                                                          //         boxVolumetricWeight:
+                                                          //           "Should be greater than 0",
+                                                          //       }
+                                                          //     );
+                                                          //   } else {
+                                                          //     setValidationError(
+                                                          //       {
+                                                          //         ...validationError,
+                                                          //         boxVolumetricWeight:
+                                                          //           "",
+                                                          //       }
+                                                          //     );
+                                                          //   }
+                                                          // }}
+                                                          // inputError={
+                                                          //   eachBox
+                                                          //     ?.volumetricWeight
+                                                          //     ?.length === 0
+                                                          // }
                                                         />
-                                                        <p className="open-sans text-[12px] text-red-600">
+                                                        {/* <p className="open-sans text-[12px] text-red-600">
                                                           {
                                                             validationError.boxVolumtericWeight
                                                           }
-                                                        </p>
+                                                        </p> */}
                                                       </div>
                                                     </div>
                                                     <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
@@ -2039,6 +2303,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachBox?.length
                                                             }
+                                                            isDisabled={enabled}
                                                             onChange={(
                                                               e: any
                                                             ) => {
@@ -2087,6 +2352,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachBox?.breadth
                                                             }
+                                                            isDisabled={enabled}
                                                             name="breadth"
                                                             inputType="number"
                                                             inputMode="numeric"
@@ -2138,6 +2404,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             defaultValue={
                                                               eachBox.height
                                                             }
+                                                            isDisabled={enabled}
                                                             name="height"
                                                             inputType="number"
                                                             inputMode="numeric"
@@ -2255,7 +2522,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       </div>
 
                                       <div>
-                                        {item.title === "Other History" &&
+                                        {item.title === "Order History" &&
                                           index === 5 && (
                                             <>
                                               {
@@ -2320,58 +2587,61 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                       // eachService[1]
                                                                       orderId
                                                                     }
-                                                                    onChange={(
-                                                                      e: any
-                                                                    ) => {
-                                                                      setOrderId(
-                                                                        e.target
-                                                                          .value
-                                                                      );
-                                                                      if (
-                                                                        e.target
-                                                                          .value <=
-                                                                          0 &&
-                                                                        e.target
-                                                                          .value
-                                                                          ?.length !=
-                                                                          0
-                                                                        // eachService
-                                                                        //   .orderId
-                                                                        //   .length !=
-                                                                        //   0
-                                                                      ) {
-                                                                        setValidationError(
-                                                                          {
-                                                                            ...validationError,
-                                                                            orderId:
-                                                                              "Should be greater than 0",
-                                                                          }
-                                                                        );
-                                                                      } else {
-                                                                        setValidationError(
-                                                                          {
-                                                                            ...validationError,
-                                                                            orderId:
-                                                                              "",
-                                                                          }
-                                                                        );
-                                                                      }
-                                                                    }}
-                                                                    inputError={
-                                                                      // eachBox
-                                                                      //   ?.height
-                                                                      //   .length ===
-                                                                      // 0
-                                                                      orderId?.length ===
-                                                                      0
+                                                                    isDisabled={
+                                                                      true
                                                                     }
+                                                                    // onChange={(
+                                                                    //   e: any
+                                                                    // ) => {
+                                                                    //   setOrderId(
+                                                                    //     e.target
+                                                                    //       .value
+                                                                    //   );
+                                                                    //   if (
+                                                                    //     e.target
+                                                                    //       .value <=
+                                                                    //       0 &&
+                                                                    //     e.target
+                                                                    //       .value
+                                                                    //       ?.length !=
+                                                                    //       0
+                                                                    //     // eachService
+                                                                    //     //   .orderId
+                                                                    //     //   .length !=
+                                                                    //     //   0
+                                                                    //   ) {
+                                                                    //     setValidationError(
+                                                                    //       {
+                                                                    //         ...validationError,
+                                                                    //         orderId:
+                                                                    //           "Should be greater than 0",
+                                                                    //       }
+                                                                    //     );
+                                                                    //   } else {
+                                                                    //     setValidationError(
+                                                                    //       {
+                                                                    //         ...validationError,
+                                                                    //         orderId:
+                                                                    //           "",
+                                                                    //       }
+                                                                    //     );
+                                                                    //   }
+                                                                    // }}
+                                                                    // inputError={
+                                                                    //   // eachBox
+                                                                    //   //   ?.height
+                                                                    //   //   .length ===
+                                                                    //   // 0
+                                                                    //   orderId?.length ===
+                                                                    //   0
+                                                                    // }
                                                                     className="!max-w-[120px] !h-[30px] !rounded-sm"
                                                                   />
-                                                                  <p className="open-sans text-[12px] text-red-600">
+                                                                  {/* <p className="open-sans text-[12px] text-red-600">
                                                                     {
                                                                       validationError.orderId
                                                                     }
-                                                                  </p>
+                                                                  </p> */}
                                                                 </div>
                                                               </div>
                                                             )
@@ -2548,92 +2818,210 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 ) : (
                                                   <div>
                                                     <div>
-                                                      {serviceList.length ===
-                                                      0 ? (
-                                                        <div className="flex justify-center py-4">
-                                                          <p className="open-sans text-[14px]">
-                                                            No Data Found
-                                                          </p>
-                                                        </div>
-                                                      ) : (
-                                                        <div>
-                                                          {serviceList?.map(
-                                                            (
-                                                              service: any,
-                                                              index: any
-                                                            ) => {
-                                                              return (
-                                                                <div
-                                                                  className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0  ${
-                                                                    index ===
-                                                                      serviceIndex &&
-                                                                    "bg-slate-200"
-                                                                  }`}
-                                                                  onClick={() =>
-                                                                    handleService(
-                                                                      index
-                                                                    )
-                                                                  }
-                                                                >
+                                                      {!enabled ? (
+                                                        serviceList.length ===
+                                                        0 ? (
+                                                          <div className="flex justify-center py-4">
+                                                            <p className="open-sans text-[14px]">
+                                                              No Data Found
+                                                            </p>
+                                                          </div>
+                                                        ) : (
+                                                          <div>
+                                                            {serviceList?.map(
+                                                              (
+                                                                service: any,
+                                                                index: any
+                                                              ) => {
+                                                                return (
                                                                   <div
-                                                                    className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
-                                                                    // style={{
-                                                                    //   boxShadow:
-                                                                    //     "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-                                                                    // }}
-                                                                    // onClick={() => handleProductsDetails(index)}
+                                                                    className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0  ${
+                                                                      index ===
+                                                                        serviceIndex &&
+                                                                      "shadow-inner bg-[#F7F7F7]"
+                                                                    }hover:shadow-inner hover:bg-[#F7F7F7]`}
+                                                                    onClick={() =>
+                                                                      handleService(
+                                                                        index
+                                                                      )
+                                                                    }
                                                                   >
                                                                     <div
-                                                                      className={`flex items-center  max-w-[90%] min-w-[90%] `}
+                                                                      className="flex flex-col items-center gap-y-[1rem] my-2 w-[100%] "
                                                                       style={{
-                                                                        justifyContent:
-                                                                          "space-between",
-                                                                        marginRight:
-                                                                          "1rem",
+                                                                        boxShadow:
+                                                                          "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
                                                                       }}
+                                                                      // onClick={() => handleProductsDetails(index)}
                                                                     >
                                                                       <div
-                                                                        className={`flex gap-x-3 items-center  ${
-                                                                          index ===
-                                                                            serviceIndex &&
-                                                                          " font-Lato font-semibold text-[16px] leading-5"
-                                                                        }`}
+                                                                        className={`flex items-center  max-w-[90%] min-w-[90%]`}
+                                                                        style={{
+                                                                          justifyContent:
+                                                                            "space-between",
+                                                                          marginRight:
+                                                                            "1rem",
+                                                                        }}
                                                                       >
-                                                                        {index ===
-                                                                          serviceIndex && (
-                                                                          <img
-                                                                            src={
-                                                                              Van
+                                                                        <div
+                                                                          className={`flex gap-x-3 items-center  ${
+                                                                            index ===
+                                                                              serviceIndex &&
+                                                                            " font-Lato font-semibold text-[16px] leading-5"
+                                                                          }`}
+                                                                        >
+                                                                          <input
+                                                                            type="radio"
+                                                                            value={
+                                                                              service.partnerName
                                                                             }
-                                                                            alt="Van"
-                                                                            className="w-5 h-5"
+                                                                            className="!w-4"
+                                                                            readOnly={
+                                                                              true
+                                                                            }
+                                                                            checked={
+                                                                              index ===
+                                                                              serviceIndex
+                                                                            }
+                                                                            onChange={(
+                                                                              e: any
+                                                                            ) =>
+                                                                              handleService(
+                                                                                index
+                                                                              )
+                                                                            }
                                                                           />
-                                                                        )}
-                                                                        {capitalizeFirstLetter(
-                                                                          service.partnerName
-                                                                        ) +
-                                                                          " " +
-                                                                          capitalizeFirstLetter(
-                                                                            service.serviceMode
-                                                                          )}
-                                                                      </div>
-                                                                      <div
-                                                                        className={` ${
-                                                                          index ===
-                                                                            serviceIndex &&
-                                                                          " font-Lato font-semibold text-[16px] leading-5"
-                                                                        }`}
-                                                                      >
-                                                                        {
-                                                                          service.total
-                                                                        }
+                                                                          {capitalizeFirstLetter(
+                                                                            service.partnerName
+                                                                          ) +
+                                                                            " " +
+                                                                            capitalizeFirstLetter(
+                                                                              service.serviceMode
+                                                                            )}
+                                                                        </div>
+                                                                        <div
+                                                                          className={` ${
+                                                                            index ===
+                                                                              serviceIndex &&
+                                                                            "font-semibold"
+                                                                          }`}
+                                                                        >
+                                                                          {
+                                                                            service.total
+                                                                          }
+                                                                        </div>
                                                                       </div>
                                                                     </div>
                                                                   </div>
-                                                                </div>
-                                                              );
-                                                            }
-                                                          )}
+                                                                );
+                                                              }
+                                                            )}
+                                                          </div>
+                                                        )
+                                                      ) : (
+                                                        <div>
+                                                          <div className="flex flex-col gap-y-2 border border-[#A4A4A4]  p-4 mt-2 rounded-md">
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Partner Name
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Partner Name"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Service Mode
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Service Mode"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Applied Weight
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Applied Weight"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Freight Charges
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Freight Charges"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Other Charges
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Other Charges"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                COD Charges
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "COD Charges"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Insurance
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {
+                                                                  item[
+                                                                    "Insurance"
+                                                                  ]
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Tax
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {item["Tax"]}
+                                                              </p>
+                                                            </div>
+                                                            <div className="flex justify-between mx-2">
+                                                              <p className="font-open">
+                                                                Total
+                                                              </p>
+                                                              <p className="font-open">
+                                                                {item["Total"]}
+                                                              </p>
+                                                            </div>
+                                                          </div>
                                                         </div>
                                                       )}
                                                     </div>
@@ -2655,6 +3043,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   label={
                                                     Object.keys(item)[index - 1]
                                                   }
+                                                  isDisabled={enabled}
                                                   value={
                                                     getPickAddressData
                                                       ?.pickUpAddress?.contact
@@ -2705,6 +3094,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }
                                                   maxLength={10}
                                                   inputMode="numeric"
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const numericValue =
                                                       e.target.value.replace(
@@ -2752,7 +3142,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         {item.title === "Pickup Address" &&
                                           // <p>{key + "-- " + value}</p>
                                           index === 3 && (
-                                            <div className="flex gap-x-5 mt-4">
+                                            <div className="flex gap-x-5 mt-2">
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
                                                   label={
@@ -2773,6 +3163,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   //   });
                                                   //   validateEmailId(emailValue);
                                                   // }}
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const emailValue =
                                                       e.target.value;
@@ -2786,7 +3177,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
                                                     validateEmailId(emailValue);
                                                   }}
-                                                  inputError={inputError}
+                                                  // inputError={inputError}
                                                 />
                                                 <p className="open-sans text-[12px] text-red-600">
                                                   {
@@ -2847,6 +3238,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   // value={
                                                   //   serviceabilityData?.paymentMode
                                                   // }
+                                                  disabled={enabled}
                                                   value={
                                                     getPickAddressData
                                                       ?.pickUpAddress?.contact
@@ -2862,17 +3254,31 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
                                                   }}
                                                   options={[
+                                                    // {
+                                                    //   label: "Office",
+                                                    //   value: "Office",
+                                                    // },
+                                                    // {
+                                                    //   label: "Warehouse",
+                                                    //   value: "Warehouse",
+                                                    // },
+                                                    // {
+                                                    //   label: "Other",
+                                                    //   value: "Other",
+                                                    // },
                                                     {
-                                                      label: "Office",
-                                                      value: "Office",
+                                                      label: "Shopkeeper",
+                                                      value: "Shopkeeper",
                                                     },
                                                     {
-                                                      label: "Warehouse",
-                                                      value: "Warehouse",
+                                                      label:
+                                                        "Warehouse Associate",
+                                                      value:
+                                                        "Warehouse Associate",
                                                     },
                                                     {
-                                                      label: "Other",
-                                                      value: "Other",
+                                                      label: "Dispatcher",
+                                                      value: "Dispatcher",
                                                     },
                                                   ]}
                                                   heading="Contact Type"
@@ -2892,6 +3298,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.flatNo
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -2932,6 +3339,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.locality
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -2977,6 +3385,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.landmark
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3017,6 +3426,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.city
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3061,6 +3471,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.state
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3101,6 +3512,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.country
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3148,6 +3560,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.pincode
                                                   }
+                                                  isDisabled={enabled}
                                                   maxLength={6}
                                                   inputMode="numeric"
                                                   isRequired={true}
@@ -3199,7 +3612,41 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 </p>
                                               </div>
                                               <div className="xl:w-[274px]">
-                                                <CustomInputBox
+                                                <div className="w-[158px] xl:w-[274px]">
+                                                  <CustomDropDown
+                                                    disabled={enabled}
+                                                    value={
+                                                      getPickAddressData
+                                                        ?.pickUpAddress
+                                                        ?.addressType
+                                                    }
+                                                    onChange={(e: any) => {
+                                                      let temp =
+                                                        getPickAddressData;
+                                                      temp.pickUpAddress.addressType =
+                                                        e.target.value;
+                                                      setGetPickUpAddressData({
+                                                        ...temp,
+                                                      });
+                                                    }}
+                                                    options={[
+                                                      {
+                                                        label: "Office",
+                                                        value: "Office",
+                                                      },
+                                                      {
+                                                        label: "Warehouse",
+                                                        value: "Warehouse",
+                                                      },
+                                                      {
+                                                        label: "Other",
+                                                        value: "Other",
+                                                      },
+                                                    ]}
+                                                    heading="Address Type"
+                                                  />
+                                                </div>
+                                                {/* <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
                                                   }
@@ -3208,6 +3655,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.pickUpAddress
                                                       ?.addressType
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3234,7 +3682,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     }
                                                   }}
                                                   inputError={inputError}
-                                                />
+                                                /> */}
                                                 {/* <p className="open-sans text-[14px] text-red-600">
                                                   {validationError.addressType}
                                                 </p> */}
@@ -3247,7 +3695,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                             <div className="">
                                               <div className="  ">
                                                 <div className="">
-                                                  <div className="flex mt-4">
+                                                  <div className="flex mt-2">
                                                     <CustomInputWithImage
                                                       placeholder="Pickup Date"
                                                       imgSrc={CalenderIcon}
@@ -3256,6 +3704,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           ?.pickUpAddress
                                                           ?.pickupDate
                                                       )}
+                                                      isDisabled={enabled}
                                                       onClick={() => {
                                                         setOpenPickupDatePicker(
                                                           true
@@ -3271,6 +3720,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       onSelect={
                                                         handleScheduleDateTimeChange
                                                       }
+                                                      disabled={enabled}
                                                     />
                                                   )}
                                                 </div>
@@ -3298,6 +3748,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress?.contact
                                                       ?.contactName
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3341,6 +3792,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress?.contact
                                                       ?.mobileNo
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const numbericValue =
                                                       e.target.value.replace(
@@ -3389,7 +3841,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                           )}
                                         {item.title === "Delivery Address" &&
                                           index === 3 && (
-                                            <div className="flex gap-x-5 mt-4">
+                                            <div className="flex gap-x-5 mt-2">
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
                                                   label={
@@ -3400,6 +3852,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress?.contact
                                                       ?.emailId
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const emailValue =
                                                       e.target.value;
@@ -3412,13 +3865,13 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
                                                     validateEmailId(emailValue);
                                                   }}
-                                                  inputError={inputError}
+                                                  // inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
+                                                <p className="open-sans text-[12px] text-red-600">
                                                   {validationError.emailId}
-                                                </p> */}
+                                                </p>
                                               </div>
-                                              <div className="xl:w-[274px]">
+                                              {/* <div className="xl:w-[274px]">
                                                 <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
@@ -3453,12 +3906,58 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     }
                                                   }}
                                                   inputError={inputError}
-                                                />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
+                                                /> */}
+                                              {/* <p className="open-sans text-[12px] text-red-600">
                                                   {
                                                     validationError.deliveryContactType
                                                   }
                                                 </p> */}
+                                              {/* </div> */}
+                                              <div className="w-[158px] xl:w-[274px]">
+                                                <CustomDropDown
+                                                  // onChange={(e: any) => {
+                                                  //   setServiceabilityData({
+                                                  //     ...serviceabilityData,
+                                                  //     paymentMode:
+                                                  //       e.target.value,
+                                                  //   });
+                                                  // }}
+                                                  // value={
+                                                  //   serviceabilityData?.paymentMode
+                                                  // }
+                                                  disabled={enabled}
+                                                  value={
+                                                    getDeliveryAddressData
+                                                      ?.deliveryAddress?.contact
+                                                      ?.contactType
+                                                  }
+                                                  onChange={(e: any) => {
+                                                    let temp =
+                                                      getDeliveryAddressData;
+                                                    temp.deliveryAddress.contact.contactType =
+                                                      e.target.value;
+                                                    setGetDeliveryAddressData({
+                                                      ...temp,
+                                                    });
+                                                  }}
+                                                  options={[
+                                                    {
+                                                      label: "Recipient",
+                                                      value: "Recipient",
+                                                    },
+                                                    {
+                                                      label: "Shopkeeper",
+                                                      value: "Shopkeeper",
+                                                    },
+                                                    {
+                                                      label:
+                                                        "Warehouse associate",
+                                                      value:
+                                                        "Warehouse associate",
+                                                    },
+                                                  ]}
+                                                  heading="Contact Type"
+                                                />
                                               </div>
                                             </div>
                                           )}
@@ -3474,6 +3973,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.flatNo
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3511,6 +4011,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   label={
                                                     Object.keys(item)[index]
                                                   }
+                                                  isDisabled={enabled}
                                                   value={
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.locality
@@ -3561,6 +4062,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.landmark
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3602,6 +4104,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress?.city
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3647,6 +4150,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.state
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3688,6 +4192,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.country
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3737,6 +4242,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.pincode
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     fetchPincodeData(
                                                       e,
@@ -3785,7 +4291,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 </p>
                                               </div>
                                               <div className="xl:w-[274px]">
-                                                <CustomInputBox
+                                                {/* <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
                                                   }
@@ -3794,6 +4300,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress
                                                       .addressType
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -3819,7 +4326,41 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     }
                                                   }}
                                                   inputError={inputError}
-                                                />
+                                                /> */}
+                                                <div className="w-[158px] xl:w-[274px]">
+                                                  <CustomDropDown
+                                                    disabled={enabled}
+                                                    value={
+                                                      getPickAddressData
+                                                        ?.pickUpAddress
+                                                        ?.addressType
+                                                    }
+                                                    onChange={(e: any) => {
+                                                      let temp =
+                                                        getPickAddressData;
+                                                      temp.pickUpAddress.addressType =
+                                                        e.target.value;
+                                                      setGetPickUpAddressData({
+                                                        ...temp,
+                                                      });
+                                                    }}
+                                                    options={[
+                                                      {
+                                                        label: "Office",
+                                                        value: "Office",
+                                                      },
+                                                      {
+                                                        label: "Warehouse",
+                                                        value: "Warehouse",
+                                                      },
+                                                      {
+                                                        label: "Other",
+                                                        value: "Other",
+                                                      },
+                                                    ]}
+                                                    heading="Address Type"
+                                                  />
+                                                </div>
                                                 {/* <p className="open-sans text-[12px] text-red-600">
                                                   {
                                                     validationError.deliveryAddressType
@@ -3830,8 +4371,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                           )}
                                         {item.title === "Delivery Address" &&
                                           index === 13 && (
-                                            <div className="grid grid-cols-2   mt-4">
-                                              <div className="xl:w-[360px] col-span-1 pl-2 xl:pl-4 pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
+                                            <div className="grid grid-cols-2   mt-2">
+                                              <div className="xl:w-[360px] col-span-1 pl-2 xl:pl-4 2xl:pr-[70px] pr-[10px] xl:pr-[70px] 2xl:w-[360px]">
                                                 <CustomInputBox
                                                   label={
                                                     Object.keys(item)[index]
@@ -3841,6 +4382,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.deliveryAddress
                                                       .gstNumber
                                                   }
+                                                  isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const gstValue =
                                                       e.target.value.toUpperCase();

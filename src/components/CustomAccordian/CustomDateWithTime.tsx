@@ -5,10 +5,11 @@ import "../../styles/locationStyle.css";
 
 interface ITypeProps {
   onSelect: (selectedDate: Date) => void;
+  disabled?: boolean;
 }
 
 const CustomDatePicker = (props: ITypeProps) => {
-  const { onSelect } = props;
+  const { onSelect, disabled } = props;
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -28,6 +29,7 @@ const CustomDatePicker = (props: ITypeProps) => {
   return (
     <div className="relative flex justify-left">
       <DatePicker
+        disabled={disabled}
         selected={selectedDate}
         onChange={(date: Date) => {
           setSelectedDate(date);
