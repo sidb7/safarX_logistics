@@ -298,9 +298,7 @@ const Index = () => {
     filterArrTwo: [],
   });
 
-  // -----------------------persist FilterData -----------------------------------
   const [persistFilterData, setPersistFilterData] = useState({});
-  // -----------------------persist FilterData -----------------------------------
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -761,18 +759,6 @@ const Index = () => {
 
       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
 
-      // if (searchText?.length > 0) {
-      //   getStatusCount(
-      //     currentStatus,
-      //     dateFilter,
-      //     searchText,
-      //     startDate,
-      //     endDate
-      //   );
-      // }
-
-      console.log("getSellerOrderByStatus", firstFilterData, secondFilterData);
-
       if (dateFilter === true) {
         getStatusCount(
           currentStatus,
@@ -786,7 +772,6 @@ const Index = () => {
       } else {
         setStatusCount("", currentStatus, orderCount);
       }
-
       setTotalcount(orderCount ? orderCount : 0);
 
       setDraftOrderCount({
@@ -1108,7 +1093,6 @@ const Index = () => {
       case "Sources":
         updateFilterArr(tempArrOne, "source", "$in", data);
         PersistFilterArr("sources", data);
-
         break;
       case "Seller Id":
         updateFilterArr(tempArrOne, "sellerId", "$in", data);
@@ -1147,12 +1131,6 @@ const Index = () => {
   ) => {
     let payload: any = {};
 
-    console.log(
-      "secondFilterData-----------------@#$%$#----->",
-      firstFilterData,
-      secondFilterData
-    );
-
     if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
       payload.filterArrOne = firstFilterData || [];
       payload.filterArrTwo = secondFilterData || [];
@@ -1182,14 +1160,6 @@ const Index = () => {
     if (searchText?.length > 0) {
       payload.id = searchText;
     }
-
-    // if (
-    //   filterPayLoad?.filterArrOne.length > 0 ||
-    //   filterPayLoad?.filterArrTwo.length > 0
-    // ) {
-    //   payload.filterArrOne = filterPayLoad?.filterArrOne;
-    //   payload.filterArrTwo = filterPayLoad?.filterArrTwo;
-    // }
 
     try {
       const { data } = await POST(GET_STATUS_COUNT, payload);

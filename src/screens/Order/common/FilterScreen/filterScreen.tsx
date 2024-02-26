@@ -45,8 +45,6 @@ function FilterScreen({
           return item;
         });
 
-        console.log("key", key);
-
         const menu = values?.map((value: any) => ({
           name: capitalizeFirstLetter(value),
           value: value,
