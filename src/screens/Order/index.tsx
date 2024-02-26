@@ -328,7 +328,7 @@ const Index = () => {
   let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
 
-  let syncChannelText = syncChannelTextObj.nextStep.isChannelIntegrated
+  let syncChannelText = syncChannelTextObj?.nextStep?.isChannelIntegrated
     ? "Sync Channel"
     : "Add Channel";
 

@@ -64,6 +64,7 @@ const connectSocket = (dispatch?: any) => {
     });
 
     socket.on("trigger_refresh", (data: any) => {
+      console.log("WEBSOCKET TRIGGER REFRESH!!!!!!!!---");
       setTimeout(() => {
         window.location.href = "/orders/view-orders?activeTab=draft";
         window.onload = () => {
@@ -80,6 +81,7 @@ const connectSocket = (dispatch?: any) => {
     });
 
     socket.on("switch_draft_page", (data: any) => {
+      console.log("--------------SWITCHDRAFTPAGE-------------");
       console.log("parsedData ------------------- : ", data);
       setTimeout(() => {
         window.location.href = `/orders/view-orders?activeTab=${data}`;

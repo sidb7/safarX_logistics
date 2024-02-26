@@ -50,7 +50,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
       if (response?.status) {
         let channelSessionObj: any = sessionStorage.getItem("userInfo");
         channelSessionObj = JSON.parse(channelSessionObj);
-        if (channelSessionObj.nextStep.isChannelIntegrated) {
+        if (channelSessionObj.nextStep?.isChannelIntegrated) {
           channelSessionObj.nextStep.isChannelIntegrated = false;
           sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
         }
@@ -142,7 +142,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         if (response && response.data.length > 0) {
           let channelSessionObj: any = sessionStorage.getItem("userInfo");
           channelSessionObj = JSON.parse(channelSessionObj);
-          if (!channelSessionObj.nextStep.isChannelIntegrated) {
+          if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = true;
             sessionStorage.setItem(
               "userInfo",
@@ -178,7 +178,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
         } else {
           let channelSessionObj: any = sessionStorage.getItem("userInfo");
           channelSessionObj = JSON.parse(channelSessionObj);
-          if (channelSessionObj.nextStep.isChannelIntegrated) {
+          if (channelSessionObj?.nextStep?.isChannelIntegrated) {
             channelSessionObj.nextStep.isChannelIntegrated = false;
             sessionStorage.setItem(
               "userInfo",
