@@ -391,12 +391,12 @@ const Index = () => {
         toast.success("Sync In Progress", {
           className: "custom-toast-success",
         });
-        // setTimeout(() => {
-        //   window.location.href = "/orders/view-orders?activeTab=draft";
-        //   window.onload = () => {
-        //     window.location.reload();
-        //   };
-        // }, 5000);
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 5000);
       } else {
         toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
