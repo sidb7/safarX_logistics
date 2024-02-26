@@ -325,6 +325,13 @@ const Index = () => {
     };
   }
 
+  let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
+  syncChannelTextObj = JSON.parse(syncChannelTextObj);
+
+  let syncChannelText = syncChannelTextObj.nextStep.isChannelIntegrated
+    ? "Sync Channel"
+    : "Add Channel";
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -515,7 +522,7 @@ const Index = () => {
           >
             <img src={SyncIcon} alt="" width="16px" />
             <span className="text-[#004EFF] text-[10px] whitespace-nowrap lg:font-semibold lg:text-[14px] lg:text-[#1C1C1C]">
-              {capitalizeFirstLetter("SYNC CHANNEL")}
+              {syncChannelText}
             </span>
           </div>
 
@@ -547,12 +554,14 @@ const Index = () => {
   };
 
   const handleSyncOrder = async () => {
-    setIsSyncModalOpen(true);
     try {
-      syncRef.current.childNodes[1].textContent = "Sync In Progress...";
-      syncRef.current.style.backgroundColor = "#F8F8F8";
-      syncRef.current.style.pointerEvents = "none";
-      syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      if (syncChannelText.includes("Sync Channel")) {
+        setIsSyncModalOpen(true);
+        syncRef.current.childNodes[1].textContent = "Sync In Progress...";
+        syncRef.current.style.backgroundColor = "#F8F8F8";
+        syncRef.current.style.pointerEvents = "none";
+        syncRef.current.childNodes[0].classList.add("infinite-rotate");
+      }
 
       // const { data: response } = await POST(GET_ALL_STORES, {});
       // if (response.data.length === 0) {
@@ -565,14 +574,14 @@ const Index = () => {
         toast.success("Sync In Progress", {
           className: "custom-toast-success",
         });
-        // setTimeout(() => {
-        //   window.location.href = "/orders/view-orders?activeTab=draft";
-        //   window.onload = () => {
-        //     window.location.reload();
-        //   };
-        // }, 5000);
+        setTimeout(() => {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }, 5000);
       } else {
-        toast.error(data?.message || "Please Integrate A Channel First");
+        // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
       }
     } catch (error: any) {
@@ -642,7 +651,7 @@ const Index = () => {
 
         <div
           ref={syncRef}
-          onClick={handleSyncOrder}
+          onClick={handleSyncOrder} // Function Added
           className="flex flex-col items-center justify-center lg:px-2 lg:py-4 lg:border-[1px] lg:rounded-md lg:border-[#A4A4A4] lg:flex-row lg:space-x-2 lg:h-[36px] cursor-pointer"
         >
           <img src={SyncIcon} alt="" width="16px" />

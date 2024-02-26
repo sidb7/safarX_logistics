@@ -539,7 +539,11 @@ const Errors = (props: ErrorProps) => {
                           className="mx-1 flex flex-col flex-1 "
                           onClick={() => handleItemClick(index)}
                         >
-                          <div>{item?.errorName}</div>
+                          <div>
+                            {item?.errorName === "Box And Product"
+                              ? "Update Dimension And Weight"
+                              : item?.errorName}
+                          </div>
                           <div className="text-[14px]">
                             {totalOrdersCount} Orders
                           </div>

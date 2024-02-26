@@ -93,6 +93,15 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // setChannelData({ channels: newStore });
             setModalData({ isOpen: false });
             toast.success(data?.message);
+            let channelSessionObj: any = sessionStorage.getItem("userInfo");
+            channelSessionObj = JSON.parse(channelSessionObj);
+            if (!channelSessionObj.nextStep.isChannelIntegrated) {
+              channelSessionObj.nextStep.isChannelIntegrated = true;
+              sessionStorage.setItem(
+                "userInfo",
+                JSON.stringify(channelSessionObj)
+              );
+            }
             window.location.reload();
             return;
           } else {
@@ -325,7 +334,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             <div>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Url - https://example.com"
+                placeholder="Store Url - https://www.my-woocommerce-store.com"
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) => {
