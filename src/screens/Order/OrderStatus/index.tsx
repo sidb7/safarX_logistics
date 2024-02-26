@@ -165,7 +165,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       value: "all",
     },
     {
-      label: `Draft`,
+      label: `Ready To Book`,
       isActive: false,
       value: "draft",
     },
@@ -419,8 +419,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
-              handleTabChange(1);
-              navigate(`/orders/view-orders?activeTab=booked`);
+              // handleTabChange(1);
+              // navigate(`/orders/view-orders?activeTab=booked`);
             } else {
               setIsLoadingManifest({
                 isLoading: false,
@@ -670,7 +670,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-            <div>
+            {/* <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
                 label="Search"
@@ -690,7 +690,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 Filter
               </span>
-            </div>
+            </div> */}
           </div>
         );
       } else {
