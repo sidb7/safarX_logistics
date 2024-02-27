@@ -45,7 +45,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [openIndex, setOpenIndex] = useState<any>(null);
 
   const [orderDetails, setOrderDetails]: any = useState([]);
-  console.log("openindex", orderDetails);
+
   const [apiCall, setApiCall] = useState<any>(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
@@ -196,7 +196,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [boxDetails, setBoxDetails] = useState<any>();
   const [productError, setProdctError] = useState<any>([]);
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
-  console.log("boxAccordian", boxAccordian);
 
   const [pickupDate, setPickupDate] = useState("");
   //storing these details to call the post api for updation
@@ -1179,7 +1178,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     ) {
       let element2: any = document.getElementById("Pickup Address");
 
-      if (element2) element2.style.borderColor = "red";
+      if (element2 && !enabled) element2.style.borderColor = "red";
     } else {
       let element2: any = document.getElementById("Pickup Address");
       if (element2) element2.style.borderColor = "#E8E8E8";
@@ -2521,9 +2520,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       <div className="flex justify-between mt-4">
                                                         <p>Time Stamp:</p>
                                                         <p>
-                                                          {
+                                                          {convertEpochToDateTime(
                                                             eachStatus?.timeStamp
-                                                          }
+                                                          )}
                                                         </p>
                                                       </div>
                                                     </div>
