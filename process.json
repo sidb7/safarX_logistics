@@ -5,7 +5,7 @@
   "watch_options": {
     "followSymlinks": false
   },
-  "instances": "2",
+  "instances": "1",
   "exec_mode": "cluster",
   "env": {
     "PM2_SERVE_PATH": "build",
