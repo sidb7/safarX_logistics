@@ -1066,6 +1066,11 @@ const Index = () => {
         (findArr: any) => Object.keys(findArr)[0] === key
       );
 
+      console.log(
+        "data------------getObjectWithIsActiveTrue---------------",
+        data
+      );
+
       if (index > -1) {
         arr[index][key][subKey] = data;
       } else {
@@ -1090,7 +1095,17 @@ const Index = () => {
         PersistFilterArr("pickupPincode", data);
         break;
       case "Payment Type":
-        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        const tempArr = [...data];
+
+        for (let i = 0; i < tempArr.length; i++) {
+          if (tempArr[i] === "Prepaid") {
+            tempArr[i] = false;
+          } else if (tempArr[i] === "Cod") {
+            tempArr[i] = true;
+          }
+        }
+
+        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", tempArr);
         PersistFilterArr("paymentType", data);
         break;
       case "Partners":
@@ -1663,11 +1678,25 @@ const Index = () => {
 
   useEffect(() => {
     (async () => {
+      const tabIndex = activeTab
+        ? getIndexFromActiveTab(statusData, activeTab)
+        : 0;
+
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
-        const data = await getSellerOrderByStatus();
+        const data: any = await getSellerOrderByStatus(
+          currentTap,
+          1,
+          { _id: -1 },
+          0,
+          10,
+          true,
+          searchedText,
+          startDate,
+          endDate,
+          filterPayLoad
+        );
         const { OrderData } = data;
         setOrders(OrderData);
-        console.log("Orders: ", orders);
       }
     })();
   }, [infoModalContent]);

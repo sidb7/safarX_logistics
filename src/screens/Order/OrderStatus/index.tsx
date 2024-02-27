@@ -814,13 +814,20 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
-    const { OrderData, orderCount } = data?.data?.[0];
+    const { OrderData, orderCount, draftCount } = data?.data?.[0];
 
-    setDraftOrderCount({
-      ...draftOrderCount,
-      all: orderCount,
-      draft: orderCount || 0,
-    });
+    if (subStatus === "DRAFT") {
+      setDraftOrderCount({
+        ...draftOrderCount,
+        draft: orderCount || 0,
+      });
+    } else {
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+      });
+    }
 
     setOrders(OrderData);
     setTotalcount(orderCount || 0);
