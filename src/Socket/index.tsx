@@ -14,7 +14,7 @@ export const initSocket = (): Socket => {
     ? `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
     : "";
 
-  const sessionID = localStorage.getItem("sessionID");
+  // const sessionID = localStorage.getItem("sessionID");
   // if (sessionID && token && sellerId) {
   return io(`${SELLER_URL}`, {
     secure: true,
@@ -24,7 +24,7 @@ export const initSocket = (): Socket => {
     reconnectionDelayMax: 1000,
     auth: {
       token: localStorage.getItem(token),
-      sessionID: sessionID,
+      sessionID: token,
     },
     autoConnect: true,
     query: {
@@ -64,6 +64,7 @@ const connectSocket = (dispatch?: any) => {
     });
 
     socket.on("trigger_refresh", (data: any) => {
+      console.log("WEBSOCKET TRIGGER REFRESH!!!!!!!!---");
       setTimeout(() => {
         window.location.href = "/orders/view-orders?activeTab=draft";
         window.onload = () => {
@@ -80,13 +81,14 @@ const connectSocket = (dispatch?: any) => {
     });
 
     socket.on("switch_draft_page", (data: any) => {
+      console.log("--------------SWITCHDRAFTPAGE-------------");
       console.log("parsedData ------------------- : ", data);
       setTimeout(() => {
         window.location.href = `/orders/view-orders?activeTab=${data}`;
         window.onload = () => {
           window.location.reload();
         };
-      }, 1500);
+      }, 3500);
     });
   }
 };

@@ -320,16 +320,10 @@ const Index = () => {
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
 
-  interface MainObject {
-    [key: string]: {
-      $in: any[];
-    };
-  }
-
   let syncChannelTextObj: any = sessionStorage.getItem("userInfo");
   syncChannelTextObj = JSON.parse(syncChannelTextObj);
 
-  let syncChannelText = syncChannelTextObj.nextStep.isChannelIntegrated
+  let syncChannelText = syncChannelTextObj?.nextStep?.isChannelIntegrated
     ? "Sync Channel"
     : "Add Channel";
 
@@ -1072,6 +1066,11 @@ const Index = () => {
         (findArr: any) => Object.keys(findArr)[0] === key
       );
 
+      console.log(
+        "data------------getObjectWithIsActiveTrue---------------",
+        data
+      );
+
       if (index > -1) {
         arr[index][key][subKey] = data;
       } else {
@@ -1096,7 +1095,17 @@ const Index = () => {
         PersistFilterArr("pickupPincode", data);
         break;
       case "Payment Type":
-        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+        const tempArr = [...data];
+
+        for (let i = 0; i < tempArr.length; i++) {
+          if (tempArr[i] === "Prepaid") {
+            tempArr[i] = false;
+          } else if (tempArr[i] === "Cod") {
+            tempArr[i] = true;
+          }
+        }
+
+        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", tempArr);
         PersistFilterArr("paymentType", data);
         break;
       case "Partners":
@@ -1148,31 +1157,35 @@ const Index = () => {
   ) => {
     let payload: any = {};
 
-    if (firstFilterData?.length > 0 || secondFilterData?.length > 0) {
-      payload.filterArrOne = firstFilterData || [];
+    const newArray = filterPayLoad?.filterArrOne.filter(
+      (obj) => !Object.keys(obj).includes("createdAt")
+    );
+
+    if (newArray?.length > 0 || secondFilterData?.length > 0) {
+      payload.filterArrOne = newArray || [];
       payload.filterArrTwo = secondFilterData || [];
     }
 
-    // if (selectedStartDate && selectedEndDate) {
-    //   let startEpoch = null;
-    //   let lastendEpoch = null;
+    if (selectedStartDate && selectedEndDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
 
-    //   if (
-    //     selectedStartDate instanceof Date &&
-    //     selectedEndDate instanceof Date
-    //   ) {
-    //     selectedStartDate.setHours(0, 0, 0, 0);
-    //     startEpoch = selectedStartDate.getTime();
+      if (
+        selectedStartDate instanceof Date &&
+        selectedEndDate instanceof Date
+      ) {
+        selectedStartDate.setHours(0, 0, 0, 0);
+        startEpoch = selectedStartDate.getTime();
 
-    //     selectedEndDate.setHours(23, 59, 59, 999);
-    //     const endEpoch = selectedEndDate.getTime();
+        selectedEndDate.setHours(23, 59, 59, 999);
+        const endEpoch = selectedEndDate.getTime();
 
-    //     lastendEpoch = endEpoch;
-    //   }
+        lastendEpoch = endEpoch;
+      }
 
-    //   payload.startDate = startEpoch;
-    //   payload.endDate = lastendEpoch;
-    // }
+      payload.startDate = startEpoch;
+      payload.endDate = lastendEpoch;
+    }
 
     if (searchText?.length > 0) {
       payload.id = searchText;
@@ -1272,7 +1285,8 @@ const Index = () => {
       true,
       searchedText,
       startDate,
-      endDate
+      endDate,
+      filterPayLoad
     );
     setOrders(OrderData);
     setAllOrders(OrderData);
@@ -1307,7 +1321,8 @@ const Index = () => {
       true,
       searchedText,
       startDate,
-      endDate
+      endDate,
+      filterPayLoad
     );
 
     setOrders([...OrderData]);
@@ -1325,7 +1340,8 @@ const Index = () => {
     dateFilter: any = false,
     searchText?: any,
     startDate?: any,
-    endDate?: any
+    endDate?: any,
+    filterPayLoadData?: any
   ) => {
     try {
       const payload: any = {
@@ -1336,8 +1352,23 @@ const Index = () => {
         currentStatus,
       };
 
+      let firstFilterData = [];
+      let secondFilterData = [];
+
       if (searchText?.length > 0) {
         payload.id = searchText;
+      }
+
+      if (
+        filterPayLoadData?.filterArrOne.length > 0 ||
+        filterPayLoadData?.filterArrTwo.length > 0
+      ) {
+        const newFilterArrOne = filterPayLoadData?.filterArrOne.filter(
+          (obj: any) => !Object.keys(obj).includes("createdAt")
+        );
+
+        firstFilterData = newFilterArrOne;
+        secondFilterData = filterPayLoadData?.filterArrTwo;
       }
 
       if (startDate && endDate) {
@@ -1354,7 +1385,7 @@ const Index = () => {
           lastendEpoch = endEpoch;
         }
 
-        payload.filterArrOne = [
+        firstFilterData.unshift(
           {
             createdAt: {
               $gte: startEpoch,
@@ -1364,9 +1395,13 @@ const Index = () => {
             createdAt: {
               $lte: lastendEpoch,
             },
-          },
-        ];
-        payload.filterArrTwo = [];
+          }
+        );
+      }
+
+      if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+        payload.filterArrOne = firstFilterData;
+        payload.filterArrTwo = secondFilterData;
       }
 
       const { data } = await POST(GET_SELLER_ORDER, payload);
@@ -1644,10 +1679,20 @@ const Index = () => {
   useEffect(() => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
-        const data = await getSellerOrderByStatus();
+        const data: any = await getSellerOrderByStatus(
+          currentTap,
+          1,
+          { _id: -1 },
+          0,
+          10,
+          true,
+          searchedText,
+          startDate,
+          endDate,
+          filterPayLoad
+        );
         const { OrderData } = data;
         setOrders(OrderData);
-        console.log("Orders: ", orders);
       }
     })();
   }, [infoModalContent]);

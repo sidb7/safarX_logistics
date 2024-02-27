@@ -355,7 +355,7 @@ const Catalogue = () => {
 
         let channelSessionObj: any = sessionStorage.getItem("userInfo");
         channelSessionObj = JSON.parse(channelSessionObj);
-        if (!channelSessionObj.nextStep.isChannelIntegrated) {
+        if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
           channelSessionObj.nextStep.isChannelIntegrated = true;
           sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
         }
