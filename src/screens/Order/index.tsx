@@ -1678,10 +1678,6 @@ const Index = () => {
 
   useEffect(() => {
     (async () => {
-      const tabIndex = activeTab
-        ? getIndexFromActiveTab(statusData, activeTab)
-        : 0;
-
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
         const data: any = await getSellerOrderByStatus(
           currentTap,
