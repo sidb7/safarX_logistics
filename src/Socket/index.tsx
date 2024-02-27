@@ -19,7 +19,7 @@ export const initSocket = (): Socket => {
   return io(`${SELLER_URL}`, {
     secure: true,
     transports: ["websocket"],
-
+    withCredentials: true,
     path: "/socket.io",
     reconnectionDelayMax: 1000,
     auth: {
