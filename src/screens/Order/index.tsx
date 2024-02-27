@@ -1680,7 +1680,7 @@ const Index = () => {
     (async () => {
       if (!infoModalContent.isOpen && currentTap == "DRAFT") {
         const data: any = await getSellerOrderByStatus(
-          currentTap,
+          activeTab,
           1,
           { _id: -1 },
           0,
