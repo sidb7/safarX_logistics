@@ -1667,7 +1667,6 @@ const Index = () => {
         const data = await getSellerOrderByStatus();
         const { OrderData } = data;
         setOrders(OrderData);
-        console.log("Orders: ", orders);
       }
     })();
   }, [infoModalContent]);

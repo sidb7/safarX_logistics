@@ -206,6 +206,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     source: "",
   });
   const [enabled, setEnabled] = useState<boolean>(true);
+  console.log("enabled", enabled);
   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
     pickUpAddress: {
@@ -307,7 +308,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (data?.status) {
           toast.success("Updated Product Successfully");
         } else {
-          toast.error(data?.message);
+          toast.error("Something went wrong");
         }
       }
     } catch (error: any) {
@@ -363,7 +364,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (data?.status) {
           toast.success("Updated Box Successfully");
         } else {
-          toast.error(data.message);
+          toast.error("Something went wrong");
         }
       } catch (error: any) {
         console.log(error.message);
@@ -504,7 +505,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           let temp: any;
           temp.pickUpAddress.pickupDate = "";
         } else {
-          toast.error(data?.message);
+          toast.error("Something went wrong");
         }
       } catch (error) {
         console.log(error);
@@ -557,7 +558,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (data?.status) {
           toast.success("Updated Delivery Successfully");
         } else {
-          toast.error(data?.message);
+          toast.error("Something went wrong");
         }
       } catch (error) {
         console.log(error);
@@ -581,7 +582,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (responseData?.success) {
           toast.success("Updated Service Successfully");
         } else {
-          toast.error(responseData?.message);
+          toast.error("Something went wrong");
         }
       } catch (error: any) {
         console.log(error.message);
@@ -1147,13 +1148,13 @@ const Accordion = (props: ICustomTableAccordion) => {
       getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
-      getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
       // getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.pickupDate?.length === 0
     ) {
       let element1: any = document.getElementById("Delivery Address");
 
-      if (element1) element1.style.borderColor = "red";
+      if (element1 && !enabled) element1.style.borderColor = "red";
     } else {
       let element1: any = document.getElementById("Delivery Address");
 
@@ -1172,7 +1173,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
       getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.pincode?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
       // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
       getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
     ) {
@@ -1287,7 +1288,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pincode?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
       ) {
@@ -1308,7 +1309,14 @@ const Accordion = (props: ICustomTableAccordion) => {
         // setErrorStatusAccordian(false);
       }
     }
+
     if (key == "Delivery Address") {
+      console.log(
+        "getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 &&getDeliveryAddressData?.deliveryAddress?.pincode?.length <= 6",
+        getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0
+        // &&
+        //   getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6
+      );
       if (
         getDeliveryAddressData?.deliveryAddress?.contact?.contactName
           ?.length === 0 ||
@@ -1324,7 +1332,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
         getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
         (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
           getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
@@ -1669,9 +1677,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           className=""
                                                           alt=""
                                                         />
-                                                        <p className="flex items-center mt-0 whitespace-nowrap overflow-x-scroll customScroll  font-Lato text-[16px] w-[120px] ">
-                                                          {eachProduct?.name}
-                                                        </p>
+                                                        <div className="flex  items-center align-middle h-full  ">
+                                                          <div className="whitespace-nowrap overflow-x-scroll customScroll font-Lato ">
+                                                            {eachProduct?.name.slice(
+                                                              0,
+                                                              20
+                                                            ) + " ..."}
+                                                          </div>
+                                                        </div>
                                                         {/* <span className="flex items-center mt-1 text-[16px] font-Open ">
                                                           (Product Info)
                                                         </span> */}
@@ -1845,14 +1858,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             // }}
                                                           />
 
-                                                          <p className="open-sans text-[12px] text-red-600">
+                                                          {/* <p className="open-sans text-[12px] text-red-600">
                                                             {
                                                               productError?.[
                                                                 index
                                                               ]
                                                                 ?.volumetricWeight
                                                             }
-                                                          </p>
+                                                          </p> */}
                                                         </div>
                                                       </div>
                                                       <div className="flex justify-between  w-[100%] gap-x-[1rem] px-[1rem]  mt-2">
@@ -2238,7 +2251,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           value={
                                                             eachBox?.volumetricWeight
                                                           }
-                                                          isDisabled={enabled}
+                                                          isDisabled={true}
                                                           name="volumetricWeight"
                                                           inputType="number"
                                                           // onChange={(
