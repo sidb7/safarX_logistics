@@ -447,7 +447,7 @@ const Index = () => {
     return (
       <div>
         <div className="flex justify-end mb-4">
-          <div className="border border-[#AFAFAF] w-fit  !h-[36px] rounded-md">
+          <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -467,7 +467,7 @@ const Index = () => {
               }}
               isClearable={true}
               placeholderText="Select From & To Date"
-              className="cursor-pointer removePaddingPlaceHolder !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
             />
           </div>
