@@ -93,9 +93,13 @@ const Card = (props: any) => {
         <p className="absolute -top-3 left-5  z-2 bg-[#4D83FF] flex items-center px-3 py-1 h-[24px] font-semibold text-[12px] rounded text-white">
           {`${
             channel.integrated
-              ? calculateDaysAgoFromToday(channel.createdAt).toString()
+              ? calculateDaysAgoFromToday(channel.createdAt).toString() == "0"
+                ? "Integrated Today"
+                : `${calculateDaysAgoFromToday(
+                    channel.createdAt
+                  ).toString()} Days Ago`
               : ""
-          }  Days Ago`}
+          } `}
         </p>
       )}
     </div>
