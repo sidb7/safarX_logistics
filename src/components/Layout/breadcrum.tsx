@@ -122,7 +122,7 @@ export const Breadcrum = ({
           })}
         </div>
         <div className={`flex justify-between flex-col md:flex-row`}>
-          <div className="inline-flex space-x-1 items-center justify-start ">
+          <div className="inline-flex space-x-1 items-center justify-start h-fit">
             <img
               src={BackArrowIcon}
               alt=""
