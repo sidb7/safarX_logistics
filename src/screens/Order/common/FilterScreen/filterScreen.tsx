@@ -5,7 +5,6 @@ import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 import { keyNameMapping } from "../../../../utils/dummyData";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
-import DatePicker from "react-datepicker";
 
 function FilterScreen({
   filterState,
@@ -147,7 +146,7 @@ function FilterScreen({
   }, []);
 
   return (
-    <div className="my-4 h-[840px] overflow-auto">
+    <div className="my-4 h-[740px] overflow-auto">
       {isLoading ? (
         <div className="flex justify-center items-center h-[600px]">
           <Spinner />

@@ -15,6 +15,7 @@ import {
   ColumnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
 } from "./ColumnHelpers";
+import "./common/FilterScreen/OrderInput.css";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
@@ -313,8 +314,8 @@ const Index = () => {
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
   const [dateRange, setDateRange]: any = useState([null, null]);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [startDate, setStartDate] = useState<any>(new Date());
+  const [endDate, setEndDate] = useState<any>(new Date());
   const [searchedText, setSearchedText] = useState("");
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
@@ -466,13 +467,13 @@ const Index = () => {
               }}
               isClearable={true}
               placeholderText="Select From & To Date"
-              className="cursor-pointer !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              className="cursor-pointer removePaddingPlaceHolder !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
             />
           </div>
-          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border">
+          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border w-[250px]">
             <SearchBox
-              className="removePaddingPlaceHolder !h-[34px] border-none"
+              className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none"
               label="Search"
               value={searchedText}
               onChange={(e: any) => {
@@ -1064,11 +1065,6 @@ const Index = () => {
     const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
       const index = arr.findIndex(
         (findArr: any) => Object.keys(findArr)[0] === key
-      );
-
-      console.log(
-        "data------------getObjectWithIsActiveTrue---------------",
-        data
       );
 
       if (index > -1) {
