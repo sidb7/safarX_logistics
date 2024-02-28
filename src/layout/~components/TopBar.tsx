@@ -37,6 +37,7 @@ import { useDispatch } from "react-redux";
 import { io, Socket } from "socket.io-client";
 import { GlobalToast } from "../../components/GlobalToast/GlobalToast";
 import { initSocket } from "../../Socket";
+import ProfileIcon from "../../assets/ProfileIconBlue.png";
 
 let socket: Socket | null = null;
 
@@ -308,6 +309,18 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
                   <div className="flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
                     <div>₹</div>
                     <div>{walletBalance?.toLocaleString("en-IN")}</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {sessionStorage.getItem("sellerId") && (
+              <div className="hidden lg:block">
+                <div className="flex items-center cursor-pointer max-w-[180px] h-[36px]  rounded-lg py-4 px-2 bg-[#E5EDFF]">
+                  <img src={ProfileIcon} width={16} alt="" />
+                  <div className="ml-1 flex gap-x-1 items-center text-[#004EFF] text-sm font-Open font-semibold">
+                    <div>Seller ID: </div>
+                    <div>{sessionStorage.getItem("sellerId")}</div>
                   </div>
                 </div>
               </div>
