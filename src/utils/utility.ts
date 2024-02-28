@@ -357,3 +357,11 @@ export const convertNumberToMultipleOfhundred = (number: any) => {
   }
   return number;
 };
+
+export const calculateDaysAgoFromToday = (epochCreatedAt: any) => {
+  const now: any = new Date();
+  const epochDate = new Date(epochCreatedAt);
+  const diffInMillis = now - epochCreatedAt;
+  const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+  return Math.floor(diffInDays);
+};

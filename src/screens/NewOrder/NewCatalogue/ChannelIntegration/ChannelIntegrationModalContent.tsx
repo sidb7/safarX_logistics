@@ -346,6 +346,22 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                     setUrlError(false);
                   }
                 }}
+                onBlur={(e) => {
+                  if (e.target.value.includes("www."))
+                    setStoreData({
+                      ...storeData,
+                      storeName: capitalizeFirstLetter(
+                        e.target.value.split(".")[1]
+                      ),
+                    });
+                  else
+                    setStoreData({
+                      ...storeData,
+                      storeName: capitalizeFirstLetter(
+                        e.target.value.split(".")[0].slice(8)
+                      ),
+                    });
+                }}
               />
 
               {urlError === true && (

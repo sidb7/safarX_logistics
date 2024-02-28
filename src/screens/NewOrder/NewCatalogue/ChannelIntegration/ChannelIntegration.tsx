@@ -172,6 +172,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
               integrated: true,
               storeId: item.storeId,
               channelName: item.channel,
+              createdAt: item.createdAt,
             });
           });
           setChannelData({ channels: tempArr });
