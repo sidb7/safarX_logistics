@@ -205,7 +205,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     source: "",
   });
   const [enabled, setEnabled] = useState<boolean>(true);
-  console.log("enabled", enabled);
+
   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
     pickUpAddress: {
@@ -260,7 +260,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     useState();
 
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
-  console.log("partnerServiceId", typeof partnerServiceId);
 
   const { data } = props;
   let servicePartnerServiceId: any;
@@ -820,6 +819,11 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
+        console.log(
+          "🚀 ~ getSellerOrderCompleteData ~ rowsData:",
+          // rowsData,
+          rowsData
+        );
         setBoxProductDetails(rowsData);
 
         setBoxDetails(rowsData);
@@ -950,6 +954,15 @@ const Accordion = (props: ICustomTableAccordion) => {
           title += ` Product(s) x ${qty}`;
           boxObj.title = title;
           rows.push(boxObj);
+        });
+
+        //payment details
+
+        rows.push({
+          title: "Payment Details",
+          "Payment Type": rowsData?.codInfo?.isCod,
+          "Collectable Amount": rowsData?.codInfo?.collectableAmount,
+          "Invoice Value": rowsData?.codInfo?.invoiceValue.toFixed(2),
         });
 
         rows.push({
@@ -1089,6 +1102,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     // }
   };
+
   const boxloops: any = (boxProductDetails: any, index: any) => {
     if (enabled) {
       return false;
@@ -1188,7 +1202,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     if (!partnerServiceId) {
       let elemente3: any = document.getElementById("Services");
-      console.log("🚀 ~ handlePriorValidation ~ elemente3:", elemente3);
+      // console.log("🚀 ~ handlePriorValidation ~ elemente3:", elemente3);
 
       // if (elemente3) elemente3.style.backgroundColor = "yellow";
       // if (elemente3) elemente3.style.borderColor = "rgb(255,0,0) ";
@@ -1237,10 +1251,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         boxProductDetails?.boxInfo?.[0]?.products[i]?.breadth == 0 ||
         boxProductDetails?.boxInfo?.[0]?.products[i]?.height == 0
       ) {
-        console.log(
-          "-------If EXECUTED AND MADE WHITE BG",
-          boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight
-        );
         let element6 = document.getElementById(
           `${boxProductDetails?.boxInfo?.[0]?.products[i].productId}`
         );
@@ -1252,8 +1262,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (element4) element4.style.borderColor = "red";
         break;
       } else {
-        console.log("-------ELSE EXECUTED AND MADE WHITE RED");
-
         let element4: any = document.getElementById(
           `${orderDetails[2]?.title}`
         );
@@ -1310,12 +1318,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
 
     if (key == "Delivery Address") {
-      console.log(
-        "getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0 &&getDeliveryAddressData?.deliveryAddress?.pincode?.length <= 6",
-        getDeliveryAddressData?.deliveryAddress?.pincode?.length === 0
-        // &&
-        //   getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6
-      );
       if (
         getDeliveryAddressData?.deliveryAddress?.contact?.contactName
           ?.length === 0 ||
@@ -1507,7 +1509,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails?.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
-                console.log("🚀 ~ Accordion ~ item:", item);
+                // console.log("🚀 ~ Accordion ~ item:", item);
                 return (
                   item?.title && (
                     <div
@@ -1541,6 +1543,11 @@ const Accordion = (props: ICustomTableAccordion) => {
                             //   [`item${index}`]: false,
                             // });
                           } else if (e.target.textContent === "Order History") {
+                            setOpen({ [`item${index}`]: false });
+                            setOpenIndex(null);
+                          } else if (
+                            e.target.textContent === "Payment Details"
+                          ) {
                             setOpen({ [`item${index}`]: false });
                             setOpenIndex(null);
                           } else if (e.target.textContent == "Event Logs") {
@@ -1789,9 +1796,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             // defaultValue={
                                                             //   eachProduct?.volumetricWeight
                                                             // }
-                                                            value={
-                                                              eachProduct?.volumetricWeight
-                                                            }
+                                                            value={eachProduct?.volumetricWeight.toFixed(
+                                                              2
+                                                            )}
                                                             // value={boxProductDetails?.boxInfo?.[0]?.products.map(
                                                             //   (
                                                             //     eachProduct: any,
@@ -2247,9 +2254,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           // defaultValue={
                                                           //   eachBox?.volumetricWeight
                                                           // }
-                                                          value={
-                                                            eachBox?.volumetricWeight
-                                                          }
+                                                          value={eachBox?.volumetricWeight.toFixed(
+                                                            2
+                                                          )}
                                                           isDisabled={true}
                                                           name="volumetricWeight"
                                                           inputType="number"
@@ -3045,6 +3052,91 @@ const Accordion = (props: ICustomTableAccordion) => {
                                         )}
                                       </div>
 
+                                      <div>
+                                        {item.title === "Payment Details" &&
+                                          index === 1 && (
+                                            <div className="flex flex-col gap-y-2 border border-black-600 p-4 rounded-md">
+                                              <div>
+                                                {Object?.entries(
+                                                  orderDetails?.[
+                                                    orderDetails?.length - 4
+                                                  ]
+                                                )?.map(
+                                                  (
+                                                    eachDetail: any,
+                                                    index: any
+                                                  ) => {
+                                                    return (
+                                                      index === 1 && (
+                                                        <div className="flex justify-between">
+                                                          <p className="open-sans">
+                                                            {eachDetail[0]}
+                                                          </p>
+                                                          <p className="open-sans">
+                                                            {eachDetail[1]
+                                                              ? "COD"
+                                                              : "Prepaid"}
+                                                          </p>
+                                                        </div>
+                                                      )
+                                                    );
+                                                  }
+                                                )}
+                                              </div>
+                                              <div>
+                                                {Object?.entries(
+                                                  orderDetails?.[
+                                                    orderDetails?.length - 4
+                                                  ]
+                                                )?.map(
+                                                  (
+                                                    eachDetail: any,
+                                                    index: any
+                                                  ) => {
+                                                    return (
+                                                      index === 2 && (
+                                                        <div className="flex justify-between">
+                                                          <p className="open-sans">
+                                                            {eachDetail[0]}
+                                                          </p>
+                                                          <p className="open-sans">
+                                                            {eachDetail[1]}
+                                                          </p>
+                                                        </div>
+                                                      )
+                                                    );
+                                                  }
+                                                )}
+                                              </div>
+                                              <div>
+                                                {Object?.entries(
+                                                  orderDetails?.[
+                                                    orderDetails?.length - 4
+                                                  ]
+                                                )?.map(
+                                                  (
+                                                    eachDetail: any,
+                                                    index: any
+                                                  ) => {
+                                                    return (
+                                                      index === 3 && (
+                                                        <div className="flex justify-between">
+                                                          <p className="open-sans">
+                                                            {eachDetail[0]}
+                                                          </p>
+                                                          <p className="open-sans">
+                                                            {eachDetail[1]}
+                                                          </p>
+                                                        </div>
+                                                      )
+                                                    );
+                                                  }
+                                                )}
+                                              </div>
+                                            </div>
+                                          )}
+                                      </div>
+
                                       <div className="flex justify-center">
                                         {item.title === "Pickup Address" &&
                                           // <p>{key + "-- " + value}</p>
@@ -3438,7 +3530,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.city
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3483,7 +3575,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.state
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -3524,7 +3616,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getPickAddressData
                                                       ?.pickUpAddress?.country
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getPickAddressData;
@@ -4116,7 +4208,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress?.city
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -4162,7 +4254,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.state
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
@@ -4204,7 +4296,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     getDeliveryAddressData
                                                       ?.deliveryAddress.country
                                                   }
-                                                  isDisabled={enabled}
+                                                  isDisabled={true}
                                                   onChange={(e: any) => {
                                                     let temp =
                                                       getDeliveryAddressData;
