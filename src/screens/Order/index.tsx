@@ -240,6 +240,10 @@ const Index = () => {
     awbNo: "",
     orderId: "",
   });
+
+  let thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
@@ -314,8 +318,9 @@ const Index = () => {
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
   const [dateRange, setDateRange]: any = useState([null, null]);
-  const [startDate, setStartDate] = useState<any>(new Date());
   const [endDate, setEndDate] = useState<any>(new Date());
+
+  const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
@@ -747,6 +752,8 @@ const Index = () => {
 
           lastendEpoch = endEpoch;
         }
+
+        console.log("startEpoch:", startEpoch, "lastendEpoch:", lastendEpoch);
 
         firstFilterData.unshift(
           {
