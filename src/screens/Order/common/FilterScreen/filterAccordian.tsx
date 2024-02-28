@@ -5,7 +5,7 @@ import crossIcon from "../../../../assets/cross.svg";
 import searchIcon from "../../../../assets/Search.svg";
 import "./OrderInput.css";
 
-import Checkbox from "../../../../components/CheckBox/index";
+import Checkbox from "../../../../components/CheckBox/index2";
 import { keyNameMapping } from "../../../../utils/dummyData";
 
 interface IPropTypes {
@@ -23,9 +23,9 @@ const Index = (props: any) => {
   const [searchInput, setSearchInput] = useState<any>("");
   // const [isShow, setIsShow] = useState<any>(false);
 
-  useEffect(() => {
-    setFilterState(filterData);
-  }, [filterData]);
+  // useEffect(() => {
+  //   setFilterState(filterData);
+  // }, [filterData]);
 
   useEffect(() => {
     let selectedFilterDataMenu: any = [];
@@ -74,14 +74,14 @@ const Index = (props: any) => {
         className={`flex flex-col px-5  mb-3 shadow-md rounded-lg   cursor-pointer ${cardClassName}`}
       >
         <div
-          className={`flex  items-center justify-between px-3 py-6 h-[38px]  border-[1px]  ${
+          className={`flex  items-center justify-between px-3 py-6 h-[38px]  border-[1px] ${
             filterData?.isCollapse
-              ? "bg-[#f6f6f6] rounded-tr-lg rounded-tl-lg rounded-b-none "
+              ? "bg-[#f6f6f6] rounded-tr-lg rounded-tl-lg rounded-b-none"
               : "bg-[#FFFFFF] rounded-lg"
           }`}
         >
           <p
-            className="font-semibold flex-1 py-1 text-[16px] text-[#1C1C1C]"
+            className="font-semibold flex-1 py-3  text-[16px] text-[#1C1C1C]"
             onClick={() => {
               let temp: any = { ...filterData };
 
@@ -101,11 +101,11 @@ const Index = (props: any) => {
           <div
             className={`flex ${
               filterData.isCollapse && "border shadow-md"
-            }  rounded-lg  `}
+            }  rounded-lg `}
           >
             <div
               className={`flex  items-center justify-center rounded-l-lg ${
-                filterData.isCollapse ? "bg-[#F6F6F6]" : "bg-white"
+                filterData.isCollapse ? "bg-[#F6F6F6] w-[180px]" : "bg-white"
               }  rounded-r `}
             >
               {filterData.isCollapse && (
@@ -171,7 +171,7 @@ const Index = (props: any) => {
           <div
             className={`border-b  py-0 border-r border-l grid ${
               filterData?.menu?.length > 0 && " grid-cols-2 "
-            } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md  transition-all duration-400 ease-in-out `}
+            } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
           >
             {filterData?.menu?.length > 0 ? (
               filterData?.menu?.map((subMenu: any, index1: number) => {
@@ -183,36 +183,32 @@ const Index = (props: any) => {
                           ? "border-b-[#E8E8E8]"
                           : "border-b-0"
                       }  border-t-0 border-r-0 border-l-0`}
+                      onClick={(e) => {
+                        let temp = { ...filterData };
+                        temp.menu[index1].isActive =
+                          !temp.menu[index1].isActive;
+                        setFilterData(temp);
+                      }}
                     >
-                      {/* <Checkbox
-                          checked={menuData?.isActive}
-                          onChange={() =>
-                            handle_Level_2_Pages(
-                              roleData?.id,
-                              menuData?.id,
-                              !menuData?.isActive
-                            )
-                          }
-                          checkboxClassName="gap-2"
-                        /> */}
                       <Checkbox
-                        onChange={(e) => {
-                          let temp = { ...filterData };
-                          temp.menu[index1].isActive =
-                            !temp.menu[index1].isActive;
-                          setFilterData(temp);
-                        }}
+                        // onChange={(e) => {
+                        //   let temp = { ...filterData };
+                        //   temp.menu[index1].isActive =
+                        //     !temp.menu[index1].isActive;
+                        //   console.log("subMenu", e.target.checked);
+                        //   setFilterData(temp);
+                        // }}
                         className="px-4"
-                        label={subMenu.name}
+                        // label={subMenu.name}
                         checkboxClassName="gap-1"
                         name={filterData.name}
-                        labelClassName="px-4 text-[black]"
+                        // labelClassName="px-4 text-[black]"
                         checked={subMenu.isActive}
                         value={filterData.name}
                       />
-                      {/* <p className="font-bold text-[14px] text-[#323232]">
+                      <p className="font-bold text-[14px] text-[#323232]">
                         {subMenu?.name}
-                      </p> */}
+                      </p>
                     </button>
                   </div>
                 );
