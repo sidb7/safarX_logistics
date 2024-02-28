@@ -1,0 +1,15 @@
+.search-input-cl::placeholder {
+    padding: 0 !important;
+}
+
+.search-input-cl:-moz-placeholder {
+    padding: 0 !important;
+}
+
+.search-input-cl::-moz-placeholder {
+    padding: 0 !important;
+}
+
+.search-input-cl::-ms-input-placeholder {
+    padding: 0 !important;
+}
