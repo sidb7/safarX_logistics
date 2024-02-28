@@ -115,7 +115,7 @@ const Index = (props: any) => {
                       placeholder="Search..."
                       value={searchInput}
                       onChange={(e: any) => onSearchHandler(e.target.value)}
-                      className="w-[100px] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
+                      className="w-[100%] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
                     />
                   </div>
                   <div className={`flex items-center justify-center`}>
