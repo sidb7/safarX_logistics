@@ -271,6 +271,7 @@ const Index = () => {
     data: {},
     orderId: "",
   });
+  console.log("infoModalContent", infoModalContent);
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
 
   const roles = useSelector((state: any) => state?.roles);

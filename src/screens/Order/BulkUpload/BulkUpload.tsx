@@ -30,7 +30,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
   const [file, setFile] = useState<File | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string>("B2B");
+  const [selectedOption, setSelectedOption] = useState<string>("B2C");
   const [fileName, setFileName] = useState<string | null>(null);
   const [addButton, setAddButton]: any = useState(false);
   const [disabled, setDisabled]: any = useState(true);
