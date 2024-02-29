@@ -229,6 +229,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   });
 
   const [serviceList, setServiceList] = useState<any>([]);
+  console.log("🚀 ~ Accordion ~ serviceList:", serviceList);
 
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
@@ -254,6 +255,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [serviceIndex, setServiceIndex]: any = useState(0);
 
   const [addressOpenModal, setAddressOpenModal] = useState(false);
+  console.log("addressOpenModal+++++++++++", addressOpenModal);
 
   const [open, setOpen] = useState<any>({});
   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
@@ -261,14 +263,10 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
 
+  const [serviceRefresh, setServiceRefresh] = useState<any>(false);
+
   const { data } = props;
   let servicePartnerServiceId: any;
-
-  // boxProductDetails?.boxInfo?.[0]?.products.map(
-  //   (eachProduct: any, index: any) => {
-  //     console.log("eachProduct", eachProduct.volumetricWeight);
-  //   }
-  // );
 
   const mainDate: any = convertEpochToDateTimeV2(
     getPickAddressData?.pickUpAddress?.pickupDate
@@ -305,6 +303,9 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         if (data?.status) {
           toast.success("Updated Product Successfully");
+          // getServiceList();
+          setServiceList([]);
+          setServiceRefresh(true);
         } else {
           toast.error("Something went wrong");
         }
@@ -361,6 +362,9 @@ const Accordion = (props: ICustomTableAccordion) => {
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
           toast.success("Updated Box Successfully");
+          setServiceList([]);
+          setServiceRefresh(true);
+          // getServiceList();
         } else {
           toast.error("Something went wrong");
         }
@@ -431,6 +435,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (response?.status) {
           setServiceLoading(false);
           setServiceList(response?.data?.data);
+          setServiceRefresh(false);
         } else {
           //services
 
@@ -454,7 +459,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
 
     setOpenIndex(openIndex === index ? null : index);
-    setAddressOpenModal(!addressOpenModal);
+    setAddressOpenModal(false);
     if (!apiCall) {
       setApiCall(true);
       return;
@@ -500,6 +505,9 @@ const Accordion = (props: ICustomTableAccordion) => {
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
           toast.success("Updated Pickup Successfully");
+          // getServiceList();
+          setServiceList([]);
+          setServiceRefresh(true);
           let temp: any;
           temp.pickUpAddress.pickupDate = "";
         } else {
@@ -555,6 +563,9 @@ const Accordion = (props: ICustomTableAccordion) => {
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
           toast.success("Updated Delivery Successfully");
+          setServiceList([]);
+          setServiceRefresh(true);
+          // getServiceList();
         } else {
           toast.error("Something went wrong");
         }
@@ -588,43 +599,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
   };
 
-  //this is for updation the order id in other details
-  // const postOtherDetails = async () => {
-  //   if (!apiCall) {
-  //     setApiCall(true);
-  //     return;
-  //   }
-
-  //   if (!orderId) {
-  //     // setOpen({
-  //     //   [`otherDetails`]: true,
-  //     // });
-  //     setOtherDetailsAccordian(true);
-  //     setInputError(true);
-  //     return;
-  //   }
-  //   //if (otherDetailsAccordian === false) {
-  //   setOtherDetailsAccordian(false);
-  //   const payload = {
-  //     orderId: orderId,
-  //     tempOrderId: boxProductDetails?.tempOrderId,
-  //     source: boxProductDetails?.source,
-  //     eWayBillNo: boxProductDetails?.boxInfo[0]?.eWayBillNo,
-  //   };
-  //   // if(payload.orderId.length === 0){
-
-  //   // }
-
-  //   try {
-  //     const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-  //     if (data?.status) {
-  //       // toast.success("Updated Successfully");
-  //     }
-  //   } catch (error: any) {
-  //     console.log(error.message);
-  //   }
-  //   // }
-  // };
   //to set particular object key you can use this
   const fetchPincodeData = async (e: any, title: any) => {
     if (!isNaN(e.target.value)) {
@@ -891,38 +865,6 @@ const Accordion = (props: ICustomTableAccordion) => {
           title: "Delivery Address",
           "GST Number": rowsData?.deliveryAddress?.gstNumber,
         });
-        // rows.push({
-        //   title: "Services",
-        //   "Partner Name": capitalizeFirstLetter(
-        //     rowsData?.boxInfo?.[0]?.service?.partnerName
-        //   ),
-        //   "AVN Service": capitalizeFirstLetter(
-        //     rowsData?.boxInfo?.[0]?.service?.companyServiceName
-        //   ),
-        //   "Service Mode": capitalizeFirstLetter(
-        //     rowsData?.boxInfo?.[0]?.service?.serviceMode
-        //   ),
-        //   "Applied Weight": `${rowsData?.boxInfo?.[0]?.service?.appliedWeight} Kg`,
-        //   "Freight Charges": `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.add +
-        //       rowsData?.boxInfo?.[0]?.service?.base
-        //   )?.toLocaleString("en-IN")}`,
-        //   "COD Charges": `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.cod
-        //   )?.toLocaleString("en-IN")}`,
-        //   Insurance: `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.insurance
-        //   )?.toLocaleString("en-IN")}`,
-        //   "Other Charges": `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.variables
-        //   )?.toLocaleString("en-IN")}`,
-        //   Tax: `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.tax
-        //   )?.toLocaleString("en-IN")}`,
-        //   Total: `₹ ${Math.round(
-        //     rowsData?.boxInfo?.[0]?.service?.total
-        //   )?.toLocaleString("en-IN")}`,
-        // });
 
         let boxObj: any = { title: "" };
         rowsData?.boxInfo?.map((item: any, index: any) => {
@@ -962,7 +904,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           title: "Payment Details",
           "Payment Type": rowsData?.codInfo?.isCod,
           "Collectable Amount": rowsData?.codInfo?.collectableAmount,
-          "Invoice Value": rowsData?.codInfo?.invoiceValue.toFixed(2),
+          "Invoice Value": rowsData?.codInfo?.invoiceValue?.toFixed(2),
         });
 
         rows.push({
@@ -1135,16 +1077,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
   };
 
-  // const productVolumetricWeight = (): any => {
-  //   boxProductDetails?.boxInfo?.[0]?.products(
-  //     (eachProduct: any, index: any) => {
-  //       return eachProduct.volumetricWeight;
-  //     }
-  //   );
-  // };
-  // const productValues = productVolumetricWeight();
-  // console.log("productValues", productValues);
-
   const handlePriorValidation = () => {
     // Delivery Checks
     if (
@@ -1200,7 +1132,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     //services
 
-    if (!partnerServiceId) {
+    if ((serviceList.length === 0 && !partnerServiceId) || serviceRefresh) {
       let elemente3: any = document.getElementById("Services");
       // console.log("🚀 ~ handlePriorValidation ~ elemente3:", elemente3);
 
@@ -1272,14 +1204,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         if (element4) element4.style.borderColor = "#E8E8E8";
       }
     }
-    // boxProductDetails?.boxInfo?.[0]?.products?.map(
-    //   (eachProduct: any, index: any) => {
-    //     console.log("eachProduct????????????", eachProduct?.deadWeight);
-    //     if (eachProduct.deadWeight === 0) {
-    //       console.log("heeeeeelloooooo");
-    //     }
-    //   }
-    // );
   };
 
   const validationFunction = (e: any, key: any, index: any) => {
@@ -1351,26 +1275,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         setApiCall(false);
       }
     }
-    // if (key == "Other Details") {
-    //   {
-    //     if (!orderId) {
-    //       setOpen({
-    //         [`item${index}`]: true,
-    //       });
-    //       setInputError(true);
-    //     } else {
-    //       //  handleItemClick(index, e.target.textContent);
-    //       postOtherDetails();
-    //       setOpen({
-    //         [`item${index}`]: false,
-    //       });
-    //       setOpenIndex(null);
-    //       setOtherDetailsAccordian(false);
-    //       setAddressOpenModal(false);
-    //       setApiCall(false);
-    //     }
-    //   }
-    // }
 
     if (key == "Services") {
       handleItemClick(index, e.target.textContent);
@@ -1489,7 +1393,8 @@ const Accordion = (props: ICustomTableAccordion) => {
   }, [serviceList]);
 
   useEffect(() => {
-    handlePriorValidation(); // This Function is added here to trigger this function each time a user
+    handlePriorValidation();
+    // This Function is added here to trigger this function each time a user
   }, [
     getDeliveryAddressData,
     getPickAddressData,
@@ -1674,6 +1579,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             true,
                                                         });
                                                       }
+                                                      setAddressOpenModal(
+                                                        false
+                                                      );
                                                     }}
                                                   >
                                                     <div className="flex justify-between">
@@ -1691,9 +1599,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             ) + " ..."}
                                                           </div>
                                                         </div>
-                                                        {/* <span className="flex items-center mt-1 text-[16px] font-Open ">
-                                                          (Product Info)
-                                                        </span> */}
                                                       </div>
                                                       <div className="flex items-center">
                                                         {/* <img
@@ -1796,82 +1701,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             // defaultValue={
                                                             //   eachProduct?.volumetricWeight
                                                             // }
-                                                            value={eachProduct?.volumetricWeight.toFixed(
+                                                            value={eachProduct?.volumetricWeight?.toFixed(
                                                               2
                                                             )}
-                                                            // value={boxProductDetails?.boxInfo?.[0]?.products.map(
-                                                            //   (
-                                                            //     eachProduct: any,
-                                                            //     index: any
-                                                            //   ) => {
-                                                            //     eachProduct.volumetricWeight;
-                                                            //   }
-                                                            // )}
-                                                            // value={productVolumetricWeight()}
                                                             name={`volumetricWeight${index}`}
                                                             className="!w-[100%]"
                                                             inputType="number"
                                                             isDisabled={true}
-                                                            // onChange={(
-                                                            //   e: any
-                                                            // ) => {
-                                                            //   handleInputUpdation(
-                                                            //     index,
-                                                            //     e.target.value,
-                                                            //     "volumetricWeight"
-                                                            //   );
-                                                            //   setProdctError(
-                                                            //     productError.map(
-                                                            //       (
-                                                            //         itemData: any,
-                                                            //         errIndex: number
-                                                            //       ) => {
-                                                            //         if (
-                                                            //           errIndex ==
-                                                            //           e.target
-                                                            //             .name[
-                                                            //             e.target
-                                                            //               .name
-                                                            //               .length -
-                                                            //               1
-                                                            //           ]
-                                                            //         ) {
-                                                            //           return {
-                                                            //             ...itemData,
-                                                            //             volumetricWeight:
-                                                            //               e
-                                                            //                 .target
-                                                            //                 .value <=
-                                                            //                 0 &&
-                                                            //               eachProduct
-                                                            //                 .volumetricWeight
-                                                            //                 ?.length !=
-                                                            //                 0
-                                                            //                 ? "Should be greater than 0"
-                                                            //                 : e
-                                                            //                     .target
-                                                            //                     .value ===
-                                                            //                   ""
-                                                            //                 ? "Field is Required"
-                                                            //                 : "",
-                                                            //           };
-                                                            //         } else {
-                                                            //           return itemData;
-                                                            //         }
-                                                            //       }
-                                                            //     )
-                                                            //   );
-                                                            // }}
                                                           />
-
-                                                          {/* <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              productError?.[
-                                                                index
-                                                              ]
-                                                                ?.volumetricWeight
-                                                            }
-                                                          </p> */}
                                                         </div>
                                                       </div>
                                                       <div className="flex justify-between  w-[100%] gap-x-[1rem] px-[1rem]  mt-2">
@@ -2160,6 +1997,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           true,
                                                       });
                                                     }
+                                                    setAddressOpenModal(false);
                                                   }}
                                                 >
                                                   <div className="flex gap-x-3">
@@ -2254,7 +2092,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           // defaultValue={
                                                           //   eachBox?.volumetricWeight
                                                           // }
-                                                          value={eachBox?.volumetricWeight.toFixed(
+                                                          value={eachBox?.volumetricWeight?.toFixed(
                                                             2
                                                           )}
                                                           isDisabled={true}
@@ -3100,7 +2938,11 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             {eachDetail[0]}
                                                           </p>
                                                           <p className="open-sans">
-                                                            {eachDetail[1]}
+                                                            {
+                                                              +eachDetail?.[1]?.toFixed(
+                                                                2
+                                                              )
+                                                            }
                                                           </p>
                                                         </div>
                                                       )
@@ -3125,7 +2967,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             {eachDetail[0]}
                                                           </p>
                                                           <p className="open-sans">
-                                                            {eachDetail[1]}
+                                                            {eachDetail[1] &&
+                                                              (+eachDetail?.[1])?.toFixed(
+                                                                2
+                                                              )}
                                                           </p>
                                                         </div>
                                                       )
@@ -3289,47 +3134,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }
                                                 </p>
                                               </div>
-                                              {/* <div className="xl:w-[274px]">
-                                                <CustomInputBox
-                                                  label={
-                                                    Object.keys(item)[index]
-                                                  }
-                                                  value={
-                                                    getPickAddressData
-                                                      ?.pickUpAddress?.contact
-                                                      ?.contactType
-                                                  }
-                                                  onChange={(e: any) => {
-                                                    let temp =
-                                                      getPickAddressData;
-                                                    temp.pickUpAddress.contact.contactType =
-                                                      e.target.value;
-                                                    setGetPickUpAddressData({
-                                                      ...temp,
-                                                    });
 
-                                                    // if (
-                                                    //   e.target.value.length ===
-                                                    //   0
-                                                    // ) {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactType:
-                                                    //       "Field is required",
-                                                    //   });
-                                                    // } else {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactType: "",
-                                                    //   });
-                                                    // }
-                                                  }}
-                                                  inputError={inputError}
-                                                />
-                                                <p className="open-sans text-[12px] text-red-600">
-                                                  {validationError.contactType}
-                                                </p>
-                                              </div> */}
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
                                                   // onChange={(e: any) => {
@@ -3975,47 +3780,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   {validationError.emailId}
                                                 </p>
                                               </div>
-                                              {/* <div className="xl:w-[274px]">
-                                                <CustomInputBox
-                                                  label={
-                                                    Object.keys(item)[index]
-                                                  }
-                                                  value={
-                                                    getDeliveryAddressData
-                                                      ?.deliveryAddress?.contact
-                                                      ?.contactType
-                                                  }
-                                                  onChange={(e: any) => {
-                                                    let temp =
-                                                      getDeliveryAddressData;
-                                                    temp.deliveryAddress.contact.contactType =
-                                                      e.target.value;
-                                                    setGetDeliveryAddressData({
-                                                      ...temp,
-                                                    });
-                                                    if (
-                                                      e.target.value.length ===
-                                                      0
-                                                    ) {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        deliveryContactType:
-                                                          "Field is required",
-                                                      });
-                                                    } else {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        deliveryContactType: "",
-                                                      });
-                                                    }
-                                                  }}
-                                                  inputError={inputError}
-                                                /> */}
-                                              {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryContactType
-                                                  }
-                                                </p> */}
+
                                               {/* </div> */}
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
@@ -4395,42 +4160,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 </p>
                                               </div>
                                               <div className="xl:w-[274px]">
-                                                {/* <CustomInputBox
-                                                  label={
-                                                    Object.keys(item)[index]
-                                                  }
-                                                  value={
-                                                    getDeliveryAddressData
-                                                      ?.deliveryAddress
-                                                      .addressType
-                                                  }
-                                                  isDisabled={enabled}
-                                                  onChange={(e: any) => {
-                                                    let temp =
-                                                      getDeliveryAddressData;
-                                                    temp.deliveryAddress.addressType =
-                                                      e.target.value;
-                                                    setGetDeliveryAddressData({
-                                                      ...temp,
-                                                    });
-                                                    if (
-                                                      e.target.value.length ===
-                                                      0
-                                                    ) {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        deliveryAddressType:
-                                                          "Field is required",
-                                                      });
-                                                    } else {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        deliveryAddressType: "",
-                                                      });
-                                                    }
-                                                  }}
-                                                  inputError={inputError}
-                                                /> */}
                                                 <div className="w-[158px] xl:w-[274px]">
                                                   <CustomDropDown
                                                     disabled={enabled}
