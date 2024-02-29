@@ -932,7 +932,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   return (
     <div>
-      <div className="mx-5 lg:ml-[30px]">
+      <div className="mx-5 lg:ml-[20px]">
         <ScrollNav
           arrayData={arrayData}
           showNumber={false}
@@ -940,7 +940,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
         />
       </div>
 
-      <div className="mx-5 lg:ml-[30px] mb-[68px] customScroll ">
+      <div className="mx-5 lg:ml-[20px] mb-[68px] customScroll ">
         {/* {data[0].accountType==="B2C"} */}
 
         {renderingComponents === 0 ? (
