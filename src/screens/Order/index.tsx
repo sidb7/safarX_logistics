@@ -15,6 +15,7 @@ import {
   ColumnHelperForBookedAndReadyToPicked,
   columnHelpersForRest,
 } from "./ColumnHelpers";
+import "./common/FilterScreen/OrderInput.css";
 import { useMediaQuery } from "react-responsive";
 import { ResponsiveState } from "../../utils/responsiveState";
 import { POST } from "../../utils/webService";
@@ -239,6 +240,10 @@ const Index = () => {
     awbNo: "",
     orderId: "",
   });
+
+  let thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   const [deleteModalDraftOrder, setDeleteModalDraftOrder]: any = useState({
     isOpen: false,
     payload: "",
@@ -270,6 +275,7 @@ const Index = () => {
     data: {},
     orderId: "",
   });
+  console.log("infoModalContent", infoModalContent);
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
 
   const roles = useSelector((state: any) => state?.roles);
@@ -313,8 +319,9 @@ const Index = () => {
   const [isErrorListLoading, setIsErrorListLoading] = useState(false);
   const [errorModalData, setErrorModalData]: any = useState();
   const [dateRange, setDateRange]: any = useState([null, null]);
-  const [startDate, setStartDate] = useState<Date | null>(new Date());
-  const [endDate, setEndDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<any>(new Date());
+
+  const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
   let debounceTimer: any;
   let { activeTab } = getQueryJson();
@@ -446,7 +453,7 @@ const Index = () => {
     return (
       <div>
         <div className="flex justify-end mb-4">
-          <div className="border border-[#AFAFAF] w-fit  !h-[36px] rounded-md">
+          <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
             <DatePicker
               selectsRange={true}
               startDate={startDate}
@@ -466,13 +473,13 @@ const Index = () => {
               }}
               isClearable={true}
               placeholderText="Select From & To Date"
-              className="cursor-pointer !h-[30px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
               dateFormat="dd/MM/yyyy"
             />
           </div>
-          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border">
+          <div className="ml-2 flex items-center rounded-md border-[#AFAFAF] border w-[250px]">
             <SearchBox
-              className="removePaddingPlaceHolder !h-[34px] border-none"
+              className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none"
               label="Search"
               value={searchedText}
               onChange={(e: any) => {
@@ -574,7 +581,7 @@ const Index = () => {
           window.onload = () => {
             window.location.reload();
           };
-        }, 5000);
+        }, 10000);
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
@@ -746,6 +753,8 @@ const Index = () => {
 
           lastendEpoch = endEpoch;
         }
+
+        console.log("startEpoch:", startEpoch, "lastendEpoch:", lastendEpoch);
 
         firstFilterData.unshift(
           {
@@ -1064,11 +1073,6 @@ const Index = () => {
     const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
       const index = arr.findIndex(
         (findArr: any) => Object.keys(findArr)[0] === key
-      );
-
-      console.log(
-        "data------------getObjectWithIsActiveTrue---------------",
-        data
       );
 
       if (index > -1) {
