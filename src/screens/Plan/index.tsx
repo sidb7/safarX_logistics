@@ -128,7 +128,7 @@ const Index = (props: ITypeProps) => {
             ) : (
               <>
                 {/* Plan Cards */}
-                <div className="px-4 flex items-center justify-between w-full gap-x-6   overflow-x-auto   ml-6  mb-8 lg:mb-[60px] ">
+                <div className="px-4 flex items-center  w-full gap-x-6   overflow-x-auto   ml-5  mb-8 lg:mb-[60px] ">
                   {allPlans?.map((eachPlan: any, index: any) => {
                     return (
                       <>

@@ -714,6 +714,7 @@ const PlanDetails = (props: ITypeProps) => {
       if (responseV4?.success) {
         setIsModalOpen(false);
         toast.success(responseV4?.message);
+        window.location.reload();
       } else {
         toast.error(responseV4?.message);
       }
@@ -840,11 +841,11 @@ const PlanDetails = (props: ITypeProps) => {
             </div>
           </div> */}
           {/* Plan Details */}
-          <div className=" mb-9 mx-5 lg:ml-[30px]">
+          <div className=" mb-9 mx-5 lg:ml-[20px]">
             <PlanDetailsCard planDetails={planData} />
           </div>
           {/* Pricing Details */}
-          <div className="mb-4 mx-5 lg:ml-[30px]">
+          <div className="mb-4 mx-5 lg:ml-[20px]">
             <ScrollNav
               arrayData={arrayData}
               showNumber={false}
@@ -924,7 +925,7 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
