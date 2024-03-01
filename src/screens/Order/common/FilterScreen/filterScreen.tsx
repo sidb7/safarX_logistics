@@ -5,6 +5,7 @@ import { POST } from "../../../../utils/webService";
 import { Spinner } from "../../../../components/Spinner";
 import { keyNameMapping } from "../../../../utils/dummyData";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
+import PincodeFilterAccordian from "./pincodeFilterAccordian";
 
 function FilterScreen({
   filterState,
@@ -16,6 +17,24 @@ function FilterScreen({
 }: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [isLoading, setIsLoading] = useState<any>(false);
+  const [isSearchLoading, setIsSearchLoading] = useState([
+    { name: "deliveryPincode", isLoading: false },
+    { name: "pickupPincode", isLoading: false },
+  ]);
+  const [searchPincodListLoader, setSearchPincodListLoader]: any = useState([
+    {
+      label: "deliveryPincode",
+      name: "Delivery Pincode",
+      menu: [],
+      isCollapse: false,
+    },
+    {
+      label: "pickupPincode",
+      name: "Pickup Pincode",
+      menu: [],
+      isCollapse: false,
+    },
+  ]);
   const [dateRange, setDateRange]: any = useState([new Date(), new Date()]);
   const [startDate, endDate] = dateRange;
 
@@ -29,6 +48,26 @@ function FilterScreen({
     return epochDate?.getTime() || "";
   };
 
+  const sourcesObj: any = {
+    Zoho: "Cart - Zoho",
+    Shopify: "Cart - Shopify",
+    Woocommerce: "Cart - Woocommerce",
+    Bulk_b2c: "Sy - Bulk B2B",
+    Bulk_b2b: "Sy - Bulk B2C",
+    Website: "Sy - Single Order",
+    Api: "Sy - Api",
+  };
+
+  const sourcesArr = [
+    "Zoho",
+    "Shopify",
+    "Woocommerce",
+    "Bulk_b2c",
+    "Bulk_b2b",
+    "Website",
+    "Api",
+  ];
+
   const getFilterDropDownData = async () => {
     setIsLoading(true);
     const { data } = await POST(GET_FILTERS_INFO_MENTIONFORORDER, {});
@@ -40,20 +79,28 @@ function FilterScreen({
           (obj: any) => Object.values(obj)[0]
         );
 
-        values = values.map((item: any) => {
+        values = values?.map((item: any) => {
           return item;
         });
 
-        const menu = values?.map((value: any) => ({
-          name: capitalizeFirstLetter(value),
-          value: value,
-          isActive:
-            Object.keys(persistFilterData).length > 0
-              ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(key)
-                ? persistFilterData[key]?.includes(+value)
-                : persistFilterData[key]?.includes(value)
-              : false,
-        }));
+        let menu = values?.map((value: any) => {
+          return {
+            name: sourcesArr.includes(capitalizeFirstLetter(value))
+              ? sourcesObj[capitalizeFirstLetter(value)]
+              : value,
+            value: value,
+            isActive:
+              Object.keys(persistFilterData).length > 0
+                ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(
+                    key
+                  )
+                  ? persistFilterData[key]?.includes(+value)
+                  : persistFilterData[key]?.includes(value)
+                : false,
+          };
+        });
+
+        menu = menu.sort((a: any, b: any) => a.name.localeCompare(b.name));
 
         const currentObject = {
           name: name?.name,
@@ -63,7 +110,6 @@ function FilterScreen({
         };
         result.push(currentObject);
       }
-
       setFilterOptionList(result);
       setIsLoading(false);
     } else {
@@ -71,89 +117,32 @@ function FilterScreen({
     }
   };
 
-  // useEffect(() => {
-  //   let tempArr: any = filterPayLoad?.filterArrOne || [];
-
-  //   if (startDate === null && endDate === null) {
-  //     tempArr = tempArr.filter(
-  //       (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
-  //     );
-
-  //     setFilterPayLoad((prevData: any) => {
-  //       return {
-  //         ...prevData,
-  //         filterArrOne: tempArr,
-  //       };
-  //     });
-
-  //     return;
-  //   } else if (endDate === null) {
-  //     return;
-  //   }
-
-  //   const isAlreadyTimeRangeSet = tempArr.filter(
-  //     (selectedtimeRangedata: any) => selectedtimeRangedata?.createdAt
-  //   );
-
-  //   if (isAlreadyTimeRangeSet?.length > 0) {
-  //     tempArr = tempArr.filter(
-  //       (selectedtimeRangedata: any) => !selectedtimeRangedata?.createdAt
-  //     );
-
-  //     setFilterPayLoad((prevData: any) => {
-  //       return {
-  //         ...prevData,
-  //         filterArrOne: tempArr,
-  //       };
-  //     });
-  //   }
-
-  //   const endEpoch: any = endDate;
-  //   endEpoch && endEpoch.setHours(23, 59, 59, 59);
-  //   const lastendEpoch = endEpoch?.getTime();
-  //   const startEpoch: any = startDate;
-
-  //   startEpoch && startEpoch.setHours(0, 0, 0, 0);
-  //   const lastStartEpoch = startEpoch?.getTime();
-
-  //   const payload = [
-  //     { createdAt: { $gte: lastStartEpoch } },
-  //     { createdAt: { $lte: lastendEpoch } },
-  //   ];
-  //   tempArr.push(...payload);
-
-  //   if (tempArr?.length > 1) {
-  //     setFilterPayLoad((prevData: any) => {
-  //       return {
-  //         ...prevData,
-  //         filterArrOne: [...tempArr],
-  //       };
-  //     });
-  //   }
-  // }, [startDate, endDate, dateRange]);
-
-  // useEffect(() => {
-  //   if (filterModal === false) {
-  //     setFilterPayLoad({
-  //       filterArrOne: [],
-  //       filterArrTwo: [],
-  //     });
-  //   }
-  // }, [filterModal]);
-
   useEffect(() => {
     getFilterDropDownData();
   }, []);
 
   return (
     <div className="my-4 h-[740px] overflow-auto">
-      {isLoading ? (
-        <div className="flex justify-center items-center h-[600px]">
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          {/* <DatePicker
+      <div className="flex flex-col gap-y-4">
+        {searchPincodListLoader.map((pincodeData: any, i: any) => {
+          return (
+            <PincodeFilterAccordian
+              data={pincodeData}
+              persistFilterData={persistFilterData}
+              setFilterState={setFilterState}
+              key={`${i}_${pincodeData.name}`}
+            />
+          );
+        })}
+      </div>
+      <div>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-[600px]">
+            <Spinner />
+          </div>
+        ) : (
+          <>
+            {/* <DatePicker
             selectsRange={true}
             startDate={startDate}
             endDate={endDate}
@@ -167,19 +156,20 @@ function FilterScreen({
             dateFormat="dd/MM/yyyy"
           /> */}
 
-          {filterOptionList &&
-            filterOptionList.map((singleAccordianDataList: any, i: any) => (
-              <CustomAccordian
-                key={`${i}_${singleAccordianDataList?.name}`}
-                cardClassName="lg:!px-0 lg:!mt-4"
-                filterListDatas={singleAccordianDataList}
-                isLoading={isLoading}
-                setFilterState={setFilterState}
-                filterState={filterState}
-              />
-            ))}
-        </>
-      )}
+            {filterOptionList &&
+              filterOptionList.map((singleAccordianDataList: any, i: any) => (
+                <CustomAccordian
+                  key={`${i}_${singleAccordianDataList?.name}`}
+                  cardClassName="lg:!px-0 lg:!mt-4"
+                  filterListDatas={singleAccordianDataList}
+                  isLoading={isLoading}
+                  setFilterState={setFilterState}
+                  filterState={filterState}
+                />
+              ))}
+          </>
+        )}
+      </div>
     </div>
   );
 }

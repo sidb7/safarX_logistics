@@ -275,7 +275,6 @@ const Index = () => {
     data: {},
     orderId: "",
   });
-  console.log("infoModalContent", infoModalContent);
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
 
   const roles = useSelector((state: any) => state?.roles);
@@ -311,7 +310,7 @@ const Index = () => {
     filterArrTwo: [],
   });
 
-  const [persistFilterData, setPersistFilterData] = useState({});
+  const [persistFilterData, setPersistFilterData]: any = useState({});
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -448,6 +447,13 @@ const Index = () => {
       getStatusCount(currentStatus, true, "", startDate, endDate);
     }
   };
+
+  // useEffect(() => {
+  //   if (Object.keys(persistFilterData).length > 0) {
+  //     console.log("persistFilterData", persistFilterData);
+  //     sessionStorage.setItem("FilterData", JSON.stringify(persistFilterData));
+  //   }
+  // }, [persistFilterData]);
 
   const Buttons = (className?: string) => {
     return (
@@ -754,8 +760,6 @@ const Index = () => {
           lastendEpoch = endEpoch;
         }
 
-        console.log("startEpoch:", startEpoch, "lastendEpoch:", lastendEpoch);
-
         firstFilterData.unshift(
           {
             createdAt: {
@@ -975,7 +979,10 @@ const Index = () => {
 
       setStatusData([...tempArr]);
     } catch (error) {
-      console.log("🚀 ~ file: index.tsx:537 ~ setStatusCount ~ error:", error);
+      console.error(
+        "🚀 ~ file: index.tsx:537 ~ setStatusCount ~ error:",
+        error
+      );
     }
   };
 
@@ -1074,7 +1081,6 @@ const Index = () => {
       const index = arr.findIndex(
         (findArr: any) => Object.keys(findArr)[0] === key
       );
-
       if (index > -1) {
         arr[index][key][subKey] = data;
       } else {
@@ -1084,7 +1090,13 @@ const Index = () => {
     };
 
     const PersistFilterArr = (key: any, data: any) => {
-      setPersistFilterData((prevData) => {
+      // if (["pickupPincode", "deliveryPincode"].includes(key)) {
+      //   setPersistFilterData((prevData: any) => {
+      //     return { ...prevData, [key]: [...prevData[key], ...data] };
+      //   });
+      // } else {
+      // }
+      setPersistFilterData((prevData: any) => {
         return { ...prevData, [key]: [...data] };
       });
     };
@@ -1208,7 +1220,10 @@ const Index = () => {
         setStatusCount(statusList, currentStatus);
       }
     } catch (error) {
-      console.log("🚀 ~ file: index.tsx:609 ~ getStatusCount ~ error:", error);
+      console.error(
+        "🚀 ~ file: index.tsx:609 ~ getStatusCount ~ error:",
+        error
+      );
     }
   };
 
@@ -1255,15 +1270,6 @@ const Index = () => {
       handleTabChanges(tabIndex, true, "", startDate, endDate, filterPayLoad);
     }
   }, [endDate, activeTab, searchedText]);
-
-  // handleTabChanges(tabIndex, true, searchedText);
-  // useEffect(() => {
-  //   const tabIndex = activeTab
-  //     ? getIndexFromActiveTab(statusData, activeTab)
-  //     : 0;
-  //   searchDebounce(tabIndex, true, searchedText);
-  // }, [searchedText, activeTab]);
-  // -------------------------------------------------------------------------------------------------------------------------------------------
 
   const onPageIndexChange = async (data: any) => {
     let skip: any = 0;
@@ -1714,7 +1720,6 @@ const Index = () => {
   //     const data = await getSellerOrderByStatus();
   //     const { OrderData } = data;
   //     setOrders(OrderData);
-
   //     //   }
   //   })();
   // }, []);
@@ -1988,7 +1993,7 @@ const Index = () => {
           onClose={() => {
             setFilterModal(false);
           }}
-          className="w-[30%] !justify-between !items-stretch !hidden lg:!block"
+          className="w-[500px] !justify-between !items-stretch !hidden lg:!block"
         >
           <div>
             <div className="flex justify-between mt-5 mx-5">
@@ -2005,7 +2010,7 @@ const Index = () => {
                 />
               </div>
             </div>
-            <div className="mx-5 ">
+            <div className="mx-5">
               <FilterScreen
                 filterState={filterState}
                 setFilterState={setFilterState}
