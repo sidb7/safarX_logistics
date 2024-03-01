@@ -18,7 +18,7 @@ export const initSocket = (): Socket => {
   // if (sessionID && token && sellerId) {
   return io(`${SELLER_URL}`, {
     secure: true,
-    transports: ["websocket", "polling"],
+    transports: ["websocket"],
     withCredentials: true,
     path: "/socket.io",
     reconnectionDelayMax: 1000,
