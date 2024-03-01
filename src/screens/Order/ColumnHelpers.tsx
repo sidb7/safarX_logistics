@@ -1238,12 +1238,16 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {Number(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
+                {Number(codInfo?.invoiceValue?.toFixed(2))?.toLocaleString(
+                  "en-IN"
+                )}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {Number(codInfo?.collectableAmount)?.toLocaleString("en-IN")}
+                  {Number(
+                    codInfo?.collectableAmount?.toFixed(2)
+                  )?.toLocaleString("en-IN")}
                 </p>
               )}
 
