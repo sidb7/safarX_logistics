@@ -229,7 +229,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   });
 
   const [serviceList, setServiceList] = useState<any>([]);
-  console.log("🚀 ~ Accordion ~ serviceList:", serviceList);
 
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
@@ -255,7 +254,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [serviceIndex, setServiceIndex]: any = useState(0);
 
   const [addressOpenModal, setAddressOpenModal] = useState(false);
-  console.log("addressOpenModal+++++++++++", addressOpenModal);
 
   const [open, setOpen] = useState<any>({});
   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
@@ -793,11 +791,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       if (data.status) {
         const rowsData = data?.data[0]?.data[0];
-        console.log(
-          "🚀 ~ getSellerOrderCompleteData ~ rowsData:",
-          // rowsData,
-          rowsData
-        );
+
         setBoxProductDetails(rowsData);
 
         setBoxDetails(rowsData);
@@ -1094,6 +1088,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
+      getDeliveryAddressData?.deliveryAddress?.pincode === 0 ||
       // getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.pickupDate?.length === 0
     ) {
@@ -1119,6 +1114,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
       getPickAddressData?.pickUpAddress?.country?.length === 0 ||
       getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
+      getPickAddressData?.pickUpAddress?.pincode === 0 ||
       // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
       getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
     ) {
@@ -1220,6 +1216,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
+        getPickAddressData?.pickUpAddress?.pincode === 0 ||
         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
       ) {
@@ -1258,6 +1255,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.pincode?.length < 6 ||
+        getDeliveryAddressData?.deliveryAddress?.pincode === 0 ||
         getDeliveryAddressData?.deliveryAddress?.addressType?.length === 0 ||
         (!gstRegex.test(getDeliveryAddressData?.deliveryAddress?.gstNumber) &&
           getDeliveryAddressData?.deliveryAddress?.gstNumber?.length > 0)
