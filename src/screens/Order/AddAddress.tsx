@@ -189,7 +189,6 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
   };
 
   const createAddress = async () => {
-    console.log("its working");
     if (!addressType) {
       toast.error("Please Select Address Type");
       return;
@@ -306,7 +305,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                     </div> */}
             </div>
           </div>
-          <div className="border-2 border-t-0">
+          <div className="border-2 border-t-0 max-h-[640px] overflow-auto">
             {/* {globalIndex === index && ( */}
             <div className="p-[1rem]">
               <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
@@ -429,7 +428,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                       inputType="email"
                       label="Email ID (optional)"
                       name="emailId"
-                      inputError={inputError}
+                      // inputError={inputError}
                       value={addAddress?.contact?.emailId || ""}
                       onChange={(e: any) => handleInputChange(e, "contact")}
                     />
@@ -491,7 +490,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                       name="type"
                       onChange={handleInputChange}
                       options={businessTypeDropDown}
-                      inputError={inputError}
+                      // inputError={inputError}
                       placeHolder="Select Business Type"
                       wrapperClass="w-[100%]"
                     />
