@@ -31,7 +31,7 @@ const RateCardTable = (props: any) => {
     columnsHelper.accessor("serviceName", {
       header: (props) => {
         return (
-          <div className="flex items-center min-w-fit">
+          <div className="flex items-center">
             {/* <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -79,7 +79,7 @@ const RateCardTable = (props: any) => {
         let tempTransit = row?.original?.weightSlab;
         let uniqueValue: any = [];
         return (
-          <div className="-mt-[60px]">
+          <div className="-mt-[60px] flex flex-col  items-center">
             {tempTransit?.map((data: any, index: number) => {
               if (
                 !uniqueValue?.some((obj: any) => obj?.transit === data?.transit)
@@ -94,8 +94,9 @@ const RateCardTable = (props: any) => {
               if (el?.transit === "FORWARD") {
                 return (
                   <>
-                    <div className="leading-[195px] font-Open font-normal text-sm ">
+                    <div className="font-Open font-normal text-sm mt-14 text-center">
                       {capitalizeFirstLetter(el?.transit)}
+                      <hr className="mt-2 w-[150px]" />
                     </div>
                     <div>{el?.inputHtml}</div>
                   </>
@@ -107,7 +108,7 @@ const RateCardTable = (props: any) => {
               if (el?.transit === "RETURN") {
                 return (
                   <>
-                    <div className="font-Open font-normal text-sm leading-[75px]  ">
+                    <div className="font-Open font-normal text-sm  mt-2">
                       {capitalizeFirstLetter(el?.transit)}
                     </div>
                     {/* <div>{el?.inputHtml}</div> */}
