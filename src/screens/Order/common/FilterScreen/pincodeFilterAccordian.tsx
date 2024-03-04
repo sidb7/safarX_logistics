@@ -9,7 +9,6 @@ import { GET } from "../../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import { Spinner } from "../../../../components/Spinner";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
-import { log } from "console";
 
 function PincodeFilterAccordian({
   data,
@@ -83,9 +82,9 @@ function PincodeFilterAccordian({
     let tempArr: any = [...persistFilterData[key]];
 
     if (isCheckedAction) {
-      tempArr.push(checkedData);
-    } else {
       tempArr = tempArr.filter((item: any) => item !== checkedData);
+    } else {
+      tempArr.push(checkedData);
     }
 
     setPersistFilterData((prevData: any) => {
@@ -109,9 +108,9 @@ function PincodeFilterAccordian({
       tempArr = [...arr[index][key][subKey]];
 
       if (isCheckedAction) {
-        tempArr.push(checkedData);
-      } else {
         tempArr = tempArr.filter((item: any) => item !== checkedData);
+      } else {
+        tempArr.push(checkedData);
       }
       arr[index][key][subKey] = tempArr;
     } else {
@@ -123,22 +122,17 @@ function PincodeFilterAccordian({
   const onCheckedHandler = (e: any, index1: any) => {
     let tempArrTwo = filterPayLoad?.filterArrTwo;
     let temp = { ...searchPincodedata };
-    let selectedFilterDataMenu: any = [];
 
-    switch (searchPincodedata?.name) {
+    switch (temp?.name) {
       case "Delivery Pincode":
         updateFilterArr(
           tempArrTwo,
           "deliveryAddress.pincode",
           "$in",
           temp.menu[index1]?.value,
-          e.target.checked
+          e
         );
-        PersistFilterArr(
-          "deliveryPincode",
-          temp.menu[index1]?.value,
-          e.target.checked
-        );
+        PersistFilterArr("deliveryPincode", temp.menu[index1]?.value, e);
         break;
       case "Pickup Pincode":
         updateFilterArr(
@@ -146,13 +140,9 @@ function PincodeFilterAccordian({
           "pickupAddress.pincode",
           "$in",
           temp.menu[index1]?.value,
-          e.target.checked
+          e
         );
-        PersistFilterArr(
-          "pickupPincode",
-          temp.menu[index1]?.value,
-          e.target.checked
-        );
+        PersistFilterArr("pickupPincode", temp.menu[index1]?.value, e);
         break;
 
       default:
@@ -279,12 +269,12 @@ function PincodeFilterAccordian({
                                 : "pickupAddress.pincode",
                               "$in",
                               item,
-                              false
+                              true
                             );
                             PersistFilterArr(
                               searchPincodedata?.label,
                               item,
-                              false
+                              true
                             );
 
                             let tempArr = [...searchPincodedata?.menu];
@@ -295,8 +285,6 @@ function PincodeFilterAccordian({
                               }
                               return data;
                             });
-
-                            console.log("tempArr", tempArr);
 
                             setSearchPincodeData((prevData: any) => {
                               return { ...prevData, menu: tempArr };
@@ -322,28 +310,23 @@ function PincodeFilterAccordian({
                   return (
                     <div className="px-2" key={index1}>
                       <button
-                        className={`flex items-center cursor-pointer  w-full border  py-5  gap-3 h-[28px]  ${
+                        className={`flex items-center cursor-pointer  w-full border  py-5  gap-3 h-[28px] ${
                           index1 !== searchPincodedata?.menu?.length - 1
                             ? "border-b-[#E8E8E8]"
                             : "border-b-0"
-                        }  border-t-0 border-r-0 border-l-0`}
-                        onClick={(e: any) => onCheckedHandler(e, index1)}
+                        } border-t-0 border-r-0 border-l-0`}
+                        onClick={(e: any) =>
+                          onCheckedHandler(subMenu?.isActive, index1)
+                        }
                       >
                         <Checkbox
-                          // onChange={(e) => {
-                          //   let temp = { ...filterData };
-                          //   temp.menu[index1].isActive =
-                          //     !temp.menu[index1].isActive;
-                          //   console.log("subMenu", e.target.checked);
-                          //   setFilterData(temp);
-                          // }}
                           className="px-4"
-                          // label={subMenu.name}
                           checkboxClassName="gap-1"
                           name={subMenu?.name}
+                          // label={subMenu.name}
                           // labelClassName="px-4 text-[black]"
                           checked={subMenu?.isActive}
-                          value={subMenu?.name}
+                          // value={subMenu?.name}
                         />
                         <p className="font-bold text-[14px] text-[#323232]">
                           {subMenu?.name}
