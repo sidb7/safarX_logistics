@@ -71,6 +71,7 @@ const BulkUpload = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response?.message);
+        window.location.replace("/orders/view-orders?activeTab=booked");
       } else {
         toast.error(response?.message);
       }
@@ -82,7 +83,6 @@ const BulkUpload = (props: ITypeProps) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // navigate("/orders/view-orders");
-      window.location.replace("/orders/view-orders?activeTab=booked");
     }
   };
 
@@ -160,14 +160,15 @@ const BulkUpload = (props: ITypeProps) => {
                 B2C
               </p>
 
-              <Checkbox
+              {/* commented as instructed */}
+              {/* <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}
                 checkboxClassName="gap-2"
               />
               <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
                 B2B
-              </p>
+              </p> */}
 
               {/* <div className="w-[20%] ml-[250px]">
             <AddButton
