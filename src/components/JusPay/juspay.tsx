@@ -41,8 +41,10 @@ const JusPay = (props: IProps) => {
       if (response?.data?.status === "NEW") {
         localStorage.setItem("order_id", response?.data?.order_id);
         window.location.replace(response?.data?.payment_links?.web);
-        setLoading(false);
+        // setLoading(false);
       }
+    } else {
+      setLoading(false);
     }
     dispatch(PaymentSlice.actions.paymentAmount(0));
   };

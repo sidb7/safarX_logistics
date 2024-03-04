@@ -41,9 +41,11 @@ const Serviceability = (props: ITypeProps) => {
   } = props;
   const columnsHelper = createColumnHelper<any>();
 
-  const [serviceValue, setServiceValue] = useState(
-    serviceabilityData?.orderType
-  );
+  // const [serviceValue, setServiceValue] = useState(
+  //   serviceabilityData?.orderType
+  // );
+  const [serviceValue, setServiceValue] = useState("B2C");
+
   const [servicesDataArray, setServicesDataArray] = useState<any>();
 
   const weightData: any = [];
@@ -267,8 +269,8 @@ const Serviceability = (props: ITypeProps) => {
               <div className="flex items-center justify-start  p-5">
                 <GroupRadioButtons
                   options={[
-                    { text: "B2B", value: "B2B" },
                     { text: "B2C", value: "B2C" },
+                    // { text: "B2B", value: "B2B" },
                   ]}
                   value={serviceValue}
                   selectedValue={setServiceValue}
