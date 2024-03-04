@@ -9,7 +9,6 @@ import { GET } from "../../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import { Spinner } from "../../../../components/Spinner";
 import CloseIcon from "../../../../assets/CloseIcon.svg";
-import { log } from "console";
 
 function PincodeFilterAccordian({
   data,
@@ -82,8 +81,6 @@ function PincodeFilterAccordian({
   ) => {
     let tempArr: any = [...persistFilterData[key]];
 
-    console.log("isCheckedAction", isCheckedAction);
-
     if (isCheckedAction) {
       tempArr = tempArr.filter((item: any) => item !== checkedData);
     } else {
@@ -107,8 +104,6 @@ function PincodeFilterAccordian({
     );
     let tempArr = [];
 
-    console.log("isCheckedAction", isCheckedAction);
-
     if (index > -1) {
       tempArr = [...arr[index][key][subKey]];
 
@@ -130,7 +125,6 @@ function PincodeFilterAccordian({
 
     switch (temp?.name) {
       case "Delivery Pincode":
-        console.log("------------------------------Delivery-----------------1");
         updateFilterArr(
           tempArrTwo,
           "deliveryAddress.pincode",
@@ -141,7 +135,6 @@ function PincodeFilterAccordian({
         PersistFilterArr("deliveryPincode", temp.menu[index1]?.value, e);
         break;
       case "Pickup Pincode":
-        console.log("------------------------------Pickup-----------------1");
         updateFilterArr(
           tempArrTwo,
           "pickupAddress.pincode",
