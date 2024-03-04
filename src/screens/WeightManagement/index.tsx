@@ -62,20 +62,19 @@ const WeightFreeze: React.FunctionComponent = () => {
   ];
   const listTab = [
     {
-      statusName: "New Discrepancy",
+      statusName: "Weight-Freeze",
       index: 0,
     },
     {
-      statusName: "Pending Dispute",
+      statusName: "New Discrepancy",
       index: 1,
     },
     {
-      statusName: "Completed",
+      statusName: "Pending Dispute",
       index: 2,
     },
-
     {
-      statusName: "Weight-Freeze",
+      statusName: "Completed",
       index: 3,
     },
   ];
@@ -108,13 +107,13 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   const renderComponent = () => {
     if (renderingComponents === 0) {
-      return <NewDiscrepancyTable />;
-    } else if (renderingComponents === 1) {
-      return <PendingDispute />;
-    } else if (renderingComponents === 2) {
-      return <CompletedTable />;
-    } else if (renderingComponents === 3) {
       return <WeightFreezeTable />;
+    } else if (renderingComponents === 1) {
+      return <NewDiscrepancyTable />;
+    } else if (renderingComponents === 2) {
+      return <PendingDispute />;
+    } else if (renderingComponents === 3) {
+      return <CompletedTable />;
     }
   };
   const GetCurrentPath = () => {
@@ -134,22 +133,22 @@ const WeightFreeze: React.FunctionComponent = () => {
       setIsActive(checkPageAuthorized("Weight Freeze"));
 
       setRenderingComponents(3);
-      setScrollIndex(3);
+      setScrollIndex(0);
     } else if (data[1] === "new-discrepancy") {
       setIsActive(checkPageAuthorized("New Discrepancy"));
 
       setRenderingComponents(0);
-      setScrollIndex(0);
+      setScrollIndex(1);
     } else if (data[1] === "pending-dispute") {
       setIsActive(checkPageAuthorized("Pending Dispute"));
 
       setRenderingComponents(1);
-      setScrollIndex(1);
+      setScrollIndex(2);
     } else if (data[1] === "completed") {
       setIsActive(checkPageAuthorized("Completed"));
 
       setRenderingComponents(2);
-      setScrollIndex(2);
+      setScrollIndex(3);
     }
   }, [data]);
 
