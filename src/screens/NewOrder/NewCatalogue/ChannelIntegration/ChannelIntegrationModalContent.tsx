@@ -280,7 +280,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             />
             <CustomInputBox
               className="removePaddingPlaceHolder"
-              placeholder="Store Url - Storename"
+              placeholder="Store Domain"
               isRequired={true}
               value={storeData.storeUrl}
               onChange={(e) =>
@@ -288,7 +288,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               }
             />
             <p className="text-[15px]">
-              Example : https://<strong>storename</strong>.myshopify.com/{" "}
+              Example : https://<strong>domainName</strong>.myshopify.com/{" "}
             </p>
             <CustomInputBox
               className="removePaddingPlaceHolder"
@@ -334,7 +334,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             <div>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Url - https://www.my-woocommerce-store.com"
+                placeholder="Store Domain - https://www.my-woocommerce-store.com"
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) => {

@@ -2052,7 +2052,7 @@ const Index = () => {
         <div className="mt-[3rem] mx-[1rem] p-[1rem] items-center flex flex-col border-4 rounded-md">
           <div className="my-[2rem] text-[25px] flex flex-wrap items-center">
             <div>
-              <b>WooCommerce</b> - Sync In Progress
+              <b>Channel</b> - Sync In Progress
             </div>
             <div className="dot"></div>
             <div className="dot"></div>
