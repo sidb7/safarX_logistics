@@ -467,7 +467,8 @@ const Index = () => {
                     </div> */}
                   </div>
 
-                  <div>
+                  {/* commented as instructed */}
+                  {/* <div>
                     <CustomInputBox
                       label="Referal Code"
                       maxLength={20}
@@ -513,7 +514,7 @@ const Index = () => {
                         </span>
                       </div>
                     )}
-                  </div>
+                  </div> */}
 
                   <CustomButton
                     onClick={(e: any) => signUpOnClick(sellerData)}
