@@ -8,12 +8,15 @@ import { SEARCH_PINCODE } from "../../../../utils/ApiUrls";
 import { GET } from "../../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import { Spinner } from "../../../../components/Spinner";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
 import { log } from "console";
 
 function PincodeFilterAccordian({
   data,
   persistFilterData,
   setFilterState,
+  filterPayLoad,
+  setPersistFilterData,
 }: any) {
   const [searchPincodedata, setSearchPincodeData] = useState(data || {});
 
@@ -72,28 +75,92 @@ function PincodeFilterAccordian({
     }
   };
 
-  const onCheckedHandler = (e: any, index1: any) => {
-    let temp = { ...searchPincodedata };
+  const PersistFilterArr = (
+    key: any,
+    checkedData: any,
+    isCheckedAction: any
+  ) => {
+    let tempArr: any = [...persistFilterData[key]];
 
+    if (isCheckedAction) {
+      tempArr.push(checkedData);
+    } else {
+      tempArr = tempArr.filter((item: any) => item !== checkedData);
+    }
+
+    setPersistFilterData((prevData: any) => {
+      return { ...prevData, [key]: [...tempArr] };
+    });
+  };
+
+  const updateFilterArr = (
+    arr: any,
+    key: any,
+    subKey: any,
+    checkedData: any,
+    isCheckedAction: any
+  ) => {
+    const index = arr.findIndex(
+      (findArr: any) => Object.keys(findArr)[0] === key
+    );
+    let tempArr = [];
+
+    if (index > -1) {
+      tempArr = [...arr[index][key][subKey]];
+
+      if (isCheckedAction) {
+        tempArr.push(checkedData);
+      } else {
+        tempArr = tempArr.filter((item: any) => item !== checkedData);
+      }
+      arr[index][key][subKey] = tempArr;
+    } else {
+      const newObj = { [key]: { [subKey]: [checkedData] } };
+      arr.push(newObj);
+    }
+  };
+
+  const onCheckedHandler = (e: any, index1: any) => {
+    let tempArrTwo = filterPayLoad?.filterArrTwo;
+    let temp = { ...searchPincodedata };
     let selectedFilterDataMenu: any = [];
+
+    switch (searchPincodedata?.name) {
+      case "Delivery Pincode":
+        updateFilterArr(
+          tempArrTwo,
+          "deliveryAddress.pincode",
+          "$in",
+          temp.menu[index1]?.value,
+          e.target.checked
+        );
+        PersistFilterArr(
+          "deliveryPincode",
+          temp.menu[index1]?.value,
+          e.target.checked
+        );
+        break;
+      case "Pickup Pincode":
+        updateFilterArr(
+          tempArrTwo,
+          "pickupAddress.pincode",
+          "$in",
+          temp.menu[index1]?.value,
+          e.target.checked
+        );
+        PersistFilterArr(
+          "pickupPincode",
+          temp.menu[index1]?.value,
+          e.target.checked
+        );
+        break;
+
+      default:
+        break;
+    }
 
     temp.menu[index1].isActive = !temp.menu[index1].isActive;
     setSearchPincodeData(temp);
-
-    if (
-      ["Delivery Pincode", "Pickup Pincode"].includes(searchPincodedata?.name)
-    ) {
-      selectedFilterDataMenu = temp?.menu
-        ?.filter((data: any) => data?.isActive)
-        .map((data: any) => +data?.value);
-    }
-
-    setFilterState({
-      name: temp?.name,
-      label: temp?.label,
-      isCollapse: temp?.isCollapse,
-      menu: selectedFilterDataMenu,
-    });
   };
 
   return (
@@ -141,11 +208,14 @@ function PincodeFilterAccordian({
                     <input
                       placeholder="Search..."
                       value={searchInput}
+                      type="number"
                       onChange={(e: any) => {
-                        searchPincodeListHandler(
-                          e.target.value,
-                          persistFilterData
-                        );
+                        if (e.target.value.length <= 6) {
+                          searchPincodeListHandler(
+                            e.target.value,
+                            persistFilterData
+                          );
+                        }
                       }}
                       className="w-[100%] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
                     />
@@ -189,6 +259,58 @@ function PincodeFilterAccordian({
         </div>
         {searchPincodedata?.isCollapse && (
           <>
+            {persistFilterData[searchPincodedata?.label].length > 0 && (
+              <div className="border p-4  grid grid-cols-4 gap-y-2 gap-x-2">
+                {persistFilterData[searchPincodedata?.label].map(
+                  (item: any, i: any) => {
+                    return (
+                      <div
+                        className="border text-[14px] flex justify-between max-w-[90px] items-center px-2 py-1 rounded"
+                        key={`${item}_${i}`}
+                      >
+                        <div>{item}</div>
+                        <button
+                          className="w-[15px]"
+                          onClick={() => {
+                            updateFilterArr(
+                              filterPayLoad?.filterArrTwo,
+                              searchPincodedata?.label === "deliveryPincode"
+                                ? "deliveryAddress.pincode"
+                                : "pickupAddress.pincode",
+                              "$in",
+                              item,
+                              false
+                            );
+                            PersistFilterArr(
+                              searchPincodedata?.label,
+                              item,
+                              false
+                            );
+
+                            let tempArr = [...searchPincodedata?.menu];
+
+                            tempArr = tempArr.map((data: any, i: any) => {
+                              if (data?.value === item) {
+                                return { ...data, isActive: false };
+                              }
+                              return data;
+                            });
+
+                            console.log("tempArr", tempArr);
+
+                            setSearchPincodeData((prevData: any) => {
+                              return { ...prevData, menu: tempArr };
+                            });
+                          }}
+                        >
+                          <img src={CloseIcon} alt="" />
+                        </button>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            )}
             <div
               className={`border-b  py-0 border-r border-l grid ${
                 searchPincodedata?.menu?.length > 0 && " grid-cols-2"
@@ -218,10 +340,10 @@ function PincodeFilterAccordian({
                           className="px-4"
                           // label={subMenu.name}
                           checkboxClassName="gap-1"
-                          name={subMenu.name}
+                          name={subMenu?.name}
                           // labelClassName="px-4 text-[black]"
-                          checked={subMenu.isActive}
-                          value={subMenu.name}
+                          checked={subMenu?.isActive}
+                          value={subMenu?.name}
                         />
                         <p className="font-bold text-[14px] text-[#323232]">
                           {subMenu?.name}

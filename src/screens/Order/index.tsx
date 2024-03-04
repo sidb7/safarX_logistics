@@ -310,7 +310,10 @@ const Index = () => {
     filterArrTwo: [],
   });
 
-  const [persistFilterData, setPersistFilterData]: any = useState({});
+  const [persistFilterData, setPersistFilterData]: any = useState({
+    deliveryPincode: [],
+    pickupPincode: [],
+  });
 
   const [isErrorPage, setIsErrorPage] = useState(false);
   const [isErrorModalOpen, setIsErrorModalOpen] = useState(false);
@@ -1072,6 +1075,11 @@ const Index = () => {
       console.error("An error occurred in handleTabChanges function:", error);
     }
   };
+  const PersistFilterArr = (key: any, data: any) => {
+    setPersistFilterData((prevData: any) => {
+      return { ...prevData, [key]: [...data] };
+    });
+  };
 
   function getObjectWithIsActiveTrue(data: any, name: any) {
     let tempArrTwo = filterPayLoad?.filterArrTwo;
@@ -1087,18 +1095,6 @@ const Index = () => {
         const newObj = { [key]: { [subKey]: [...data] } };
         arr.push(newObj);
       }
-    };
-
-    const PersistFilterArr = (key: any, data: any) => {
-      // if (["pickupPincode", "deliveryPincode"].includes(key)) {
-      //   setPersistFilterData((prevData: any) => {
-      //     return { ...prevData, [key]: [...prevData[key], ...data] };
-      //   });
-      // } else {
-      // }
-      setPersistFilterData((prevData: any) => {
-        return { ...prevData, [key]: [...data] };
-      });
     };
 
     switch (name) {
@@ -2017,6 +2013,7 @@ const Index = () => {
                 setFilterPayLoad={setFilterPayLoad}
                 filterPayLoad={filterPayLoad}
                 filterModal={filterModal}
+                setPersistFilterData={setPersistFilterData}
                 persistFilterData={persistFilterData}
               />
             </div>

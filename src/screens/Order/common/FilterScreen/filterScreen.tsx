@@ -13,6 +13,7 @@ function FilterScreen({
   setFilterPayLoad,
   filterPayLoad,
   filterModal,
+  setPersistFilterData,
   persistFilterData,
 }: any) {
   const [filterOptionList, setFilterOptionList] = useState([]);
@@ -130,6 +131,9 @@ function FilterScreen({
               data={pincodeData}
               persistFilterData={persistFilterData}
               setFilterState={setFilterState}
+              filterPayLoad={filterPayLoad}
+              setFilterPayLoad={setFilterPayLoad}
+              setPersistFilterData={setPersistFilterData}
               key={`${i}_${pincodeData.name}`}
             />
           );

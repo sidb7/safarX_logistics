@@ -21,11 +21,6 @@ const Index = (props: any) => {
     ...filterListDatas?.menu,
   ]);
   const [searchInput, setSearchInput] = useState<any>("");
-  // const [isShow, setIsShow] = useState<any>(false);
-
-  // useEffect(() => {
-  //   setFilterState(filterData);
-  // }, [filterData]);
 
   useEffect(() => {
     let selectedFilterDataMenu: any = [];
