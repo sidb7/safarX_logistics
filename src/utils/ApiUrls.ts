@@ -133,6 +133,7 @@ const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 // const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
 const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
 const POST_PLACE_ORDER = `${SELLER_BASE_URL}/order/placeOrder`;
+const SEARCH_PINCODE = `${SELLER_BASE_URL}/pincodes/searchingPincode`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
@@ -505,4 +506,5 @@ export {
   UPDATE_TEMP_ORDER_INFO,
   GET_PENDING_PLANS,
   GET_PLANS_PREVIEW,
+  SEARCH_PINCODE,
 };

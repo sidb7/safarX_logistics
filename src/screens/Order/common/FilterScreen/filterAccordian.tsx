@@ -21,11 +21,6 @@ const Index = (props: any) => {
     ...filterListDatas?.menu,
   ]);
   const [searchInput, setSearchInput] = useState<any>("");
-  // const [isShow, setIsShow] = useState<any>(false);
-
-  // useEffect(() => {
-  //   setFilterState(filterData);
-  // }, [filterData]);
 
   useEffect(() => {
     let selectedFilterDataMenu: any = [];
@@ -135,7 +130,6 @@ const Index = (props: any) => {
               className="flex py-2 px-4  border-l rounded-r  hover:bg-[#F6F6F6]"
               onClick={() => {
                 let temp: any = { ...filterData };
-
                 if (filterData?.isCollapse === true) {
                   temp.isCollapse = false;
                   setFilterData(temp);
@@ -155,18 +149,7 @@ const Index = (props: any) => {
               />
             </div>
           </div>
-
-          {/* ------------------------------------------------------------------search filter--------------------------------------------------------------------------------------------- */}
-
-          {/* <img
-            src={filterData?.isCollapse ? upArrowIcon : downArrowIcon}
-            alt="downArrowIcon"
-            className={`transform transition-transform duration-400 ${
-              filterData?.isCollapse ? "rotate-180" : ""
-            }`}
-          /> */}
         </div>
-        {/* //flex flex-col */}
         {filterData?.isCollapse && (
           <div
             className={`border-b  py-0 border-r border-l grid ${
@@ -178,10 +161,10 @@ const Index = (props: any) => {
                 return (
                   <div className="px-2" key={index1}>
                     <button
-                      className={`flex items-center  w-full border  py-5  gap-3 h-[28px]  ${
+                      className={`flex items-center cursor-pointer  w-full border  py-5  gap-3 h-[28px]  ${
                         index1 !== filterData?.menu?.length - 1
                           ? "border-b-[#E8E8E8]"
-                          : "border-b-0"
+                          : "border-t-0"
                       }  border-t-0 border-r-0 border-l-0`}
                       onClick={(e) => {
                         let temp = { ...filterData };
@@ -214,15 +197,13 @@ const Index = (props: any) => {
                 );
               })
             ) : (
-              <div className="py-4 text-center font-Open w-[100%] font-semibold">
+              <div className="py-4 text-center border-t-0 font-Open w-[100%] font-semibold">
                 No Data Found
               </div>
             )}
           </div>
         )}
       </div>
-      {/* );
-      })} */}
     </>
   );
 };

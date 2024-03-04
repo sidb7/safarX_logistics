@@ -878,7 +878,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     </div> */}
                   </div>
                 </div>
-                <div className="border-2 border-t-0">
+                <div className="border-2 border-t-0 max-h-[640px] overflow-auto">
                   {/* {globalIndex === index && ( */}
                   <div className="p-[1rem]">
                     <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
@@ -1012,7 +1012,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                               );
                               setInputError(false);
                             }}
-                            inputError={inputError}
+                            // inputError={inputError}
                           />
                           {/* {inputError && validationErrors.emailId && (
                             <div className="flex items-center gap-x-1 mt-1">
@@ -1083,7 +1083,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                             options={businessTypeDropDown}
                             placeHolder="Select Business Type"
                             wrapperClass="w-[100%]"
-                            inputError={inputError}
+                            // inputError={inputError}
                           />
                         </div>
 
