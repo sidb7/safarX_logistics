@@ -8,12 +8,14 @@ import { SEARCH_PINCODE } from "../../../../utils/ApiUrls";
 import { GET } from "../../../../utils/webService";
 import { capitalizeFirstLetter } from "../../../../utils/utility";
 import { Spinner } from "../../../../components/Spinner";
-import { log } from "console";
+import CloseIcon from "../../../../assets/CloseIcon.svg";
 
 function PincodeFilterAccordian({
   data,
   persistFilterData,
   setFilterState,
+  filterPayLoad,
+  setPersistFilterData,
 }: any) {
   const [searchPincodedata, setSearchPincodeData] = useState(data || {});
 
@@ -72,28 +74,83 @@ function PincodeFilterAccordian({
     }
   };
 
+  const PersistFilterArr = (
+    key: any,
+    checkedData: any,
+    isCheckedAction: any
+  ) => {
+    let tempArr: any = [...persistFilterData[key]];
+
+    if (isCheckedAction) {
+      tempArr = tempArr.filter((item: any) => item !== checkedData);
+    } else {
+      tempArr.push(checkedData);
+    }
+
+    setPersistFilterData((prevData: any) => {
+      return { ...prevData, [key]: [...tempArr] };
+    });
+  };
+
+  const updateFilterArr = (
+    arr: any,
+    key: any,
+    subKey: any,
+    checkedData: any,
+    isCheckedAction: any
+  ) => {
+    const index = arr.findIndex(
+      (findArr: any) => Object.keys(findArr)[0] === key
+    );
+    let tempArr = [];
+
+    if (index > -1) {
+      tempArr = [...arr[index][key][subKey]];
+
+      if (isCheckedAction) {
+        tempArr = tempArr.filter((item: any) => item !== checkedData);
+      } else {
+        tempArr.push(checkedData);
+      }
+      arr[index][key][subKey] = tempArr;
+    } else {
+      const newObj = { [key]: { [subKey]: [checkedData] } };
+      arr.push(newObj);
+    }
+  };
+
   const onCheckedHandler = (e: any, index1: any) => {
+    let tempArrTwo = filterPayLoad?.filterArrTwo;
     let temp = { ...searchPincodedata };
 
-    let selectedFilterDataMenu: any = [];
+    switch (temp?.name) {
+      case "Delivery Pincode":
+        updateFilterArr(
+          tempArrTwo,
+          "deliveryAddress.pincode",
+          "$in",
+          temp.menu[index1]?.value,
+          e
+        );
+        PersistFilterArr("deliveryPincode", temp.menu[index1]?.value, e);
+        break;
+      case "Pickup Pincode":
+        updateFilterArr(
+          tempArrTwo,
+          "pickupAddress.pincode",
+          "$in",
+          temp.menu[index1]?.value,
+          e
+        );
+        PersistFilterArr("pickupPincode", temp.menu[index1]?.value, e);
+        break;
+
+      default:
+        break;
+    }
 
     temp.menu[index1].isActive = !temp.menu[index1].isActive;
     setSearchPincodeData(temp);
-
-    if (
-      ["Delivery Pincode", "Pickup Pincode"].includes(searchPincodedata?.name)
-    ) {
-      selectedFilterDataMenu = temp?.menu
-        ?.filter((data: any) => data?.isActive)
-        .map((data: any) => +data?.value);
-    }
-
-    setFilterState({
-      name: temp?.name,
-      label: temp?.label,
-      isCollapse: temp?.isCollapse,
-      menu: selectedFilterDataMenu,
-    });
   };
 
   return (
@@ -141,11 +198,14 @@ function PincodeFilterAccordian({
                     <input
                       placeholder="Search..."
                       value={searchInput}
+                      type="number"
                       onChange={(e: any) => {
-                        searchPincodeListHandler(
-                          e.target.value,
-                          persistFilterData
-                        );
+                        if (e.target.value.length <= 6) {
+                          searchPincodeListHandler(
+                            e.target.value,
+                            persistFilterData
+                          );
+                        }
                       }}
                       className="w-[100%] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
                     />
@@ -189,6 +249,56 @@ function PincodeFilterAccordian({
         </div>
         {searchPincodedata?.isCollapse && (
           <>
+            {persistFilterData[searchPincodedata?.label].length > 0 && (
+              <div className="border p-4  grid grid-cols-4 gap-y-2 gap-x-2">
+                {persistFilterData[searchPincodedata?.label].map(
+                  (item: any, i: any) => {
+                    return (
+                      <div
+                        className="border text-[14px] flex justify-between max-w-[90px] items-center px-2 py-1 rounded"
+                        key={`${item}_${i}`}
+                      >
+                        <div>{item}</div>
+                        <button
+                          className="w-[15px]"
+                          onClick={() => {
+                            updateFilterArr(
+                              filterPayLoad?.filterArrTwo,
+                              searchPincodedata?.label === "deliveryPincode"
+                                ? "deliveryAddress.pincode"
+                                : "pickupAddress.pincode",
+                              "$in",
+                              item,
+                              true
+                            );
+                            PersistFilterArr(
+                              searchPincodedata?.label,
+                              item,
+                              true
+                            );
+
+                            let tempArr = [...searchPincodedata?.menu];
+
+                            tempArr = tempArr.map((data: any, i: any) => {
+                              if (data?.value === item) {
+                                return { ...data, isActive: false };
+                              }
+                              return data;
+                            });
+
+                            setSearchPincodeData((prevData: any) => {
+                              return { ...prevData, menu: tempArr };
+                            });
+                          }}
+                        >
+                          <img src={CloseIcon} alt="" />
+                        </button>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+            )}
             <div
               className={`border-b  py-0 border-r border-l grid ${
                 searchPincodedata?.menu?.length > 0 && " grid-cols-2"
@@ -200,28 +310,23 @@ function PincodeFilterAccordian({
                   return (
                     <div className="px-2" key={index1}>
                       <button
-                        className={`flex items-center cursor-pointer  w-full border  py-5  gap-3 h-[28px]  ${
+                        className={`flex items-center cursor-pointer  w-full border  py-5  gap-3 h-[28px] ${
                           index1 !== searchPincodedata?.menu?.length - 1
                             ? "border-b-[#E8E8E8]"
                             : "border-b-0"
-                        }  border-t-0 border-r-0 border-l-0`}
-                        onClick={(e: any) => onCheckedHandler(e, index1)}
+                        } border-t-0 border-r-0 border-l-0`}
+                        onClick={(e: any) =>
+                          onCheckedHandler(subMenu?.isActive, index1)
+                        }
                       >
                         <Checkbox
-                          // onChange={(e) => {
-                          //   let temp = { ...filterData };
-                          //   temp.menu[index1].isActive =
-                          //     !temp.menu[index1].isActive;
-                          //   console.log("subMenu", e.target.checked);
-                          //   setFilterData(temp);
-                          // }}
                           className="px-4"
-                          // label={subMenu.name}
                           checkboxClassName="gap-1"
-                          name={subMenu.name}
+                          name={subMenu?.name}
+                          // label={subMenu.name}
                           // labelClassName="px-4 text-[black]"
-                          checked={subMenu.isActive}
-                          value={subMenu.name}
+                          checked={subMenu?.isActive}
+                          // value={subMenu?.name}
                         />
                         <p className="font-bold text-[14px] text-[#323232]">
                           {subMenu?.name}

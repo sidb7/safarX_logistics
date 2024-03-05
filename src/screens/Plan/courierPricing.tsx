@@ -28,7 +28,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   const arrayData = [
     { index: 0, label: "B2C" },
-    { index: 1, label: "B2B" },
+    // { index: 1, label: "B2B" },
   ];
 
   let variableData: any;

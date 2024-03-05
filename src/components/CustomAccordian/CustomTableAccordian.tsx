@@ -1074,16 +1074,16 @@ const Accordion = (props: ICustomTableAccordion) => {
   const handlePriorValidation = () => {
     // Delivery Checks
     if (
-      getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.length ===
-        0 ||
+      getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.trim()
+        ?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length ===
         0 ||
       // getDeliveryAddressData?.deliveryAddress?.contact?.emailId?.length === 0 ||
       // getDeliveryAddressData?.deliveryAddress?.contact?.contactType?.length ===
       //   0 ||
-      getDeliveryAddressData?.deliveryAddress?.flatNo?.length === 0 ||
-      getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
-      getDeliveryAddressData?.deliveryAddress?.landmark?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length === 0 ||
+      getDeliveryAddressData?.deliveryAddress?.landmark?.trim()?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
       getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
@@ -1103,13 +1103,14 @@ const Accordion = (props: ICustomTableAccordion) => {
     //Pickup Checks
 
     if (
-      getPickAddressData?.pickUpAddress?.contact?.contactName?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.contact?.contactName?.trim()
+        ?.length === 0 ||
       getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
       // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.flatNo?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.locality?.length === 0 ||
-      getPickAddressData?.pickUpAddress?.landmark?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+      getPickAddressData?.pickUpAddress?.landmark?.trim()?.length === 0 ||
       getPickAddressData?.pickUpAddress?.city?.length === 0 ||
       getPickAddressData?.pickUpAddress?.state?.length === 0 ||
       getPickAddressData?.pickUpAddress?.country?.length === 0 ||
@@ -1205,17 +1206,18 @@ const Accordion = (props: ICustomTableAccordion) => {
   const validationFunction = (e: any, key: any, index: any) => {
     if (key == "Pickup Address") {
       if (
-        getPickAddressData?.pickUpAddress?.contact?.contactName?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.contact?.contactName?.trim()
+          ?.length === 0 ||
         getPickAddressData?.pickUpAddress?.contact?.mobileNo?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.contact?.emailId?.length === 0 ||
         // getPickAddressData?.pickUpAddress?.contact?.contactType?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.flatNo?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.locality?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.landmark?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.flatNo?.trim()?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.locality?.trim()?.length === 0 ||
+        getPickAddressData?.pickUpAddress?.landmark?.trim().length === 0 ||
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
+        getPickAddressData?.pickUpAddress?.pincode.length < 6 ||
         getPickAddressData?.pickUpAddress?.pincode === 0 ||
         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
@@ -1240,7 +1242,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     if (key == "Delivery Address") {
       if (
-        getDeliveryAddressData?.deliveryAddress?.contact?.contactName
+        getDeliveryAddressData?.deliveryAddress?.contact?.contactName?.trim()
           ?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.contact?.mobileNo?.length ===
           0 ||
@@ -1248,9 +1250,11 @@ const Accordion = (props: ICustomTableAccordion) => {
         //   0 ||
         // getDeliveryAddressData?.deliveryAddress?.contact?.contactType
         //   ?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.flatNo?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.locality?.length === 0 ||
-        getDeliveryAddressData?.deliveryAddress?.landmark?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.flatNo?.trim()?.length === 0 ||
+        getDeliveryAddressData?.deliveryAddress?.locality?.trim()?.length ===
+          0 ||
+        getDeliveryAddressData?.deliveryAddress?.landmark?.trim()?.length ===
+          0 ||
         getDeliveryAddressData?.deliveryAddress?.city?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.state?.length === 0 ||
         getDeliveryAddressData?.deliveryAddress?.country?.length === 0 ||
