@@ -706,7 +706,7 @@ const WalletRecharge = () => {
                     </p>
                   </div>
 
-                  <div className="flex mt-1 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
+                  <div className="flex mt-1 mb-6 gap-x-[1rem] cursor-pointer lg:mb-0 ml-4 mr-5">
                     {/* <div className="flex flex-col items-center gap-y-2">
                       <img
                         src={

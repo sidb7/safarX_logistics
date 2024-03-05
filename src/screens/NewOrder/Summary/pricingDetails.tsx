@@ -7,6 +7,7 @@ interface PricingData {
   add?: string | number;
   base?: string | number;
   cod?: string | number;
+  codCharge?: string | number;
   variables?: string | number;
   tax?: number;
   invoiceValue?: number;
@@ -23,6 +24,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   cod = "",
   variables = "",
   tax = "",
+  codCharge = "",
   invoiceValue = "",
   insurance = "",
   appliedWeight = "",
@@ -34,10 +36,12 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
   const codValue = +cod;
   const variablesValue = +variables;
   const orderPrice = baseValue + addValue + variablesValue;
+  const codChargeValue = +codCharge;
 
   // Round off decimal numbers to the nearest whole number
   const roundedInvoiceValue = Math.round(+invoiceValue);
   const roundedCODValue = Math.round(codValue);
+  const codChargeValuePrice = Math.round(codChargeValue);
   const roundedOrderPrice = Math.round(orderPrice);
   const roundedInsuranceValue = Math.round(+insurance);
   const roundedTaxValue = Math.round(+tax);
@@ -78,7 +82,7 @@ const PricingDetails: React.FunctionComponent<PricingData> = ({
               COD:
             </p>
             <p>
-              {`\u20B9`} {roundedCODValue?.toLocaleString("en-IN")}
+              {`\u20B9`} {codChargeValuePrice?.toLocaleString("en-IN")}
             </p>
           </div>
           <div className="flex justify-between">
