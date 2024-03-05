@@ -432,6 +432,7 @@ const Summary = (props: Props) => {
               base={serviceDetails?.base}
               variables={serviceDetails?.variables}
               cod={codInfo?.collectableAmount}
+              codCharge={serviceDetails?.cod}
               tax={serviceDetails?.tax}
               invoiceValue={codInfo?.invoiceValue}
               insurance={serviceDetails?.insurance}
