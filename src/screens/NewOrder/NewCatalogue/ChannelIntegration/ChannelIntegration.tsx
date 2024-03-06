@@ -42,7 +42,9 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteChannel, setDeleteChannel] = useState<any>("");
-  let wooCommerceContents = getLocalStorage("wooCommerceContents");
+  const [shouldStoreLoad, setShouldStoreLoad] = useState(true);
+
+  let wooCommerceContents: any = getLocalStorage("wooCommerceContents");
 
   const deleteIntegratedChannel = async () => {
     try {
@@ -161,6 +163,14 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   };
 
   useEffect(() => {
+    if (wooCommerceContents) {
+      wooCommerceContents = JSON.parse(wooCommerceContents);
+      let store = channelData?.channels?.filter(
+        (item: any) => item.name === wooCommerceContents.storeName
+      );
+      if (store?.length > 0) setShouldStoreLoad(false);
+      else setShouldStoreLoad(true);
+    }
     (async () => {
       try {
         const searchParams: any = new URLSearchParams(window.location.search);
@@ -283,7 +293,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                 );
               })}
             </div>
-            {wooCommerceContents ? (
+            {wooCommerceContents && shouldStoreLoad ? (
               <div
                 className={`relative w-[200px] ${
                   channelData?.channels?.length > 0 ? "" : "h-[200px]"
