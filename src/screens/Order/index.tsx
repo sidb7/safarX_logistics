@@ -617,7 +617,7 @@ const Index = () => {
           window.onload = () => {
             window.location.reload();
           };
-        }, 12000);
+        }, 18000);
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
