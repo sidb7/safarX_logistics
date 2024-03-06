@@ -7,7 +7,11 @@ import WooLg from "../../../../assets/Catalogue/WooCommerceLg.svg";
 import ZohoIcon from "../../../../assets/Catalogue/ZOHO.svg.png";
 import Card from "./Card";
 import Header from "./Header";
-import { CREATE_AMAZON_STORE, GET_ALL_STORES } from "../../../../utils/ApiUrls";
+import {
+  CREATE_AMAZON_STORE,
+  GET_ALL_STORES,
+  UPDATE_WOOCOMMERCE_STORE,
+} from "../../../../utils/ApiUrls";
 import { POST } from "../../../../utils/webService";
 import { ChannelIntegrationCarts } from "../../../../utils/dummyData";
 import AmazonPngIcon from "../../../../assets/AmazonIcon.png";
@@ -17,6 +21,7 @@ import DeleteGifIcon from "../../../../assets/deleteGif.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
+import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -37,6 +42,7 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   const [loading, setLoading] = useState(true);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteChannel, setDeleteChannel] = useState<any>("");
+  let wooCommerceContents = getLocalStorage("wooCommerceContents");
 
   const deleteIntegratedChannel = async () => {
     try {
@@ -70,6 +76,48 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
       return error;
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      if (wooCommerceContents) {
+        const { storeUrl, userId, storeName } = JSON.parse(wooCommerceContents);
+
+        const { data } = await POST(UPDATE_WOOCOMMERCE_STORE, {
+          storeUrl,
+          userId,
+          storeName,
+        });
+
+        let channelSessionObj: any = sessionStorage.getItem("userInfo");
+        channelSessionObj = JSON.parse(channelSessionObj);
+        if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+          channelSessionObj.nextStep.isChannelIntegrated = true;
+          sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+        }
+
+        let newAddedChannel = [
+          {
+            icon: "",
+            iconLg: "",
+            integrated: true,
+            name: data?.data?.storeName,
+            storeId: data?.data?.storeId,
+          },
+        ];
+
+        removeLocalStorage("channelData");
+        removeLocalStorage("wooCommerceContents");
+
+        window.location.reload();
+
+        if (data?.success) {
+          toast.success(data?.message);
+        } else {
+          toast.error(data?.message);
+        }
+      }
+    })();
+  }, [wooCommerceContents, setChannelData, channelData]);
 
   const deleteModalContent = () => {
     return (
