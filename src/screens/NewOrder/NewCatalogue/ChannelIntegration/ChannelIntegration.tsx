@@ -262,23 +262,38 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
           )}
         </div>
         <div className="mt-6">
-          {channelData?.channels && <Header title="Integrated Channels" />}
-          <div className="flex gap-x-4 customScroll flex-wrap ">
-            {channelData.channels?.map((eachChannel: any, index: any) => {
-              return (
-                <Card
-                  setModalData={setModalData}
-                  channel={eachChannel}
-                  key={index}
-                  setIndexNum={setIndexNum}
-                  index={index}
-                  setIntegrate={setIntegrate}
-                  setDeleteModal={setDeleteModal}
-                  deleteChannel={deleteChannel}
-                  setDeleteChannel={setDeleteChannel}
-                />
-              );
-            })}
+          {channelData?.channels?.length > 0 && (
+            <Header title="Integrated Channels" />
+          )}
+          <div className="flex gap-x-4">
+            <div className="flex gap-x-4 customScroll flex-wrap ">
+              {channelData.channels?.map((eachChannel: any, index: any) => {
+                return (
+                  <Card
+                    setModalData={setModalData}
+                    channel={eachChannel}
+                    key={index}
+                    setIndexNum={setIndexNum}
+                    index={index}
+                    setIntegrate={setIntegrate}
+                    setDeleteModal={setDeleteModal}
+                    deleteChannel={deleteChannel}
+                    setDeleteChannel={setDeleteChannel}
+                  />
+                );
+              })}
+            </div>
+            {wooCommerceContents ? (
+              <div
+                className={`relative w-[200px] ${
+                  channelData?.channels?.length > 0 ? "" : "h-[200px]"
+                }`}
+              >
+                <div className="absolute right-[50%] top-[50%] transform -translate-y-1/2 cursor-pointer">
+                  <Spinner />
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
 
