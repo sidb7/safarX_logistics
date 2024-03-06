@@ -77,47 +77,47 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      if (wooCommerceContents) {
-        const { storeUrl, userId, storeName } = JSON.parse(wooCommerceContents);
+  // useEffect(() => {
+  //   (async () => {
+  //     if (wooCommerceContents) {
+  //       const { storeUrl, userId, storeName } = JSON.parse(wooCommerceContents);
 
-        const { data } = await POST(UPDATE_WOOCOMMERCE_STORE, {
-          storeUrl,
-          userId,
-          storeName,
-        });
+  //       const { data } = await POST(UPDATE_WOOCOMMERCE_STORE, {
+  //         storeUrl,
+  //         userId,
+  //         storeName,
+  //       });
 
-        let channelSessionObj: any = sessionStorage.getItem("userInfo");
-        channelSessionObj = JSON.parse(channelSessionObj);
-        if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
-          channelSessionObj.nextStep.isChannelIntegrated = true;
-          sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
-        }
+  //       let channelSessionObj: any = sessionStorage.getItem("userInfo");
+  //       channelSessionObj = JSON.parse(channelSessionObj);
+  //       if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+  //         channelSessionObj.nextStep.isChannelIntegrated = true;
+  //         sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+  //       }
 
-        let newAddedChannel = [
-          {
-            icon: "",
-            iconLg: "",
-            integrated: true,
-            name: data?.data?.storeName,
-            storeId: data?.data?.storeId,
-          },
-        ];
+  //       let newAddedChannel = [
+  //         {
+  //           icon: "",
+  //           iconLg: "",
+  //           integrated: true,
+  //           name: data?.data?.storeName,
+  //           storeId: data?.data?.storeId,
+  //         },
+  //       ];
 
-        removeLocalStorage("channelData");
-        removeLocalStorage("wooCommerceContents");
+  //       removeLocalStorage("channelData");
+  //       removeLocalStorage("wooCommerceContents");
 
-        window.location.reload();
+  //       window.location.reload();
 
-        if (data?.success) {
-          toast.success(data?.message);
-        } else {
-          toast.error(data?.message);
-        }
-      }
-    })();
-  }, [wooCommerceContents, setChannelData, channelData]);
+  //       if (data?.success) {
+  //         toast.success(data?.message);
+  //       } else {
+  //         toast.error(data?.message);
+  //       }
+  //     }
+  //   })();
+  // }, [wooCommerceContents, setChannelData, channelData]);
 
   const deleteModalContent = () => {
     return (
