@@ -56,11 +56,16 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
       );
 
       if (response?.status) {
-        let channelSessionObj: any = sessionStorage.getItem("userInfo");
-        channelSessionObj = JSON.parse(channelSessionObj);
-        if (channelSessionObj.nextStep?.isChannelIntegrated) {
-          channelSessionObj.nextStep.isChannelIntegrated = false;
-          sessionStorage.setItem("userInfo", JSON.stringify(channelSessionObj));
+        if (channelData?.channels?.length === 0) {
+          let channelSessionObj: any = sessionStorage.getItem("userInfo");
+          channelSessionObj = JSON.parse(channelSessionObj);
+          if (channelSessionObj.nextStep?.isChannelIntegrated) {
+            channelSessionObj.nextStep.isChannelIntegrated = false;
+            sessionStorage.setItem(
+              "userInfo",
+              JSON.stringify(channelSessionObj)
+            );
+          }
         }
         toast.success("Channel Deactivated Successfully!!");
         const filteredChannels = channelData.channels.filter(

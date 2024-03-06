@@ -361,7 +361,12 @@ export const convertNumberToMultipleOfhundred = (number: any) => {
 export const calculateDaysAgoFromToday = (epochCreatedAt: any) => {
   const now: any = new Date();
   const epochDate = new Date(epochCreatedAt);
-  const diffInMillis = now - epochCreatedAt;
+  const diffInMillis = Math.abs(now - epochCreatedAt);
   const diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
-  return Math.floor(diffInDays);
+  const roundedDiffInDays = Math.ceil(diffInDays);
+  if (diffInDays < 1) {
+    return 0;
+  } else {
+    return roundedDiffInDays;
+  }
 };
