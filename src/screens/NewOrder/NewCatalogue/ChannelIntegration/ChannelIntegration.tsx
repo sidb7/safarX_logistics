@@ -163,14 +163,6 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
   };
 
   useEffect(() => {
-    if (wooCommerceContents) {
-      wooCommerceContents = JSON.parse(wooCommerceContents);
-      let store = channelData?.channels?.filter(
-        (item: any) => item.name === wooCommerceContents.storeName
-      );
-      if (store?.length > 0) setShouldStoreLoad(false);
-      else setShouldStoreLoad(true);
-    }
     (async () => {
       try {
         const searchParams: any = new URLSearchParams(window.location.search);
@@ -248,6 +240,17 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
       } catch (error) {}
     })();
   }, []);
+
+  useEffect(() => {
+    if (wooCommerceContents) {
+      wooCommerceContents = JSON.parse(wooCommerceContents);
+      let store = channelData?.channels?.filter(
+        (item: any) => item.name === wooCommerceContents.storeName
+      );
+      if (store?.length > 0) setShouldStoreLoad(false);
+      else setShouldStoreLoad(true);
+    }
+  }, [wooCommerceContents, channelData]);
 
   return loading ? (
     <div className="absolute right-[50%] top-[50%] transform -translate-y-1/2 cursor-pointer">
