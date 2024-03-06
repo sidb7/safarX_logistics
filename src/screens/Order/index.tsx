@@ -580,7 +580,34 @@ const Index = () => {
       //   return navigate("/catalogues/channel-integration");
       // }
 
-      const { data } = await POST(POST_SYNC_ORDER);
+      let payload: any = {};
+
+      if (startDate && endDate) {
+        let startEpoch = null;
+        let lastendEpoch = null;
+
+        if (startDate instanceof Date && endDate instanceof Date) {
+          startDate.setHours(0, 0, 0, 0);
+          startEpoch = startDate.getTime();
+
+          endDate.setHours(23, 59, 59, 999);
+          const endEpoch = endDate.getTime();
+
+          lastendEpoch = endEpoch;
+        }
+
+        payload.dateFilter = {
+          createdAtMin: {
+            $gte: startEpoch,
+          },
+
+          createdAtMax: {
+            $lte: lastendEpoch,
+          },
+        };
+      }
+
+      const { data } = await POST(POST_SYNC_ORDER, payload);
       if (data?.success) {
         toast.success("Sync In Progress", {
           className: "custom-toast-success",
@@ -590,7 +617,7 @@ const Index = () => {
           window.onload = () => {
             window.location.reload();
           };
-        }, 10000);
+        }, 18000);
       } else {
         // toast.error(data?.message || "Please Integrate A Channel First");
         return navigate("/catalogues/channel-integration");
