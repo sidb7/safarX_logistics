@@ -20,6 +20,8 @@ import "./style.css";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
+  console.log("trackingState", trackingState);
+  console.log("trackingStatelastupdate", trackingState[0]?.shipmentStatus?.EDD);
 
   const [openOrderDetails, setOpenOrderDetails] = useState<string | null>(null);
 
@@ -245,7 +247,7 @@ const Tracking = () => {
     return trackingCycleDetails?.Scans?.map((each: any, index: number) => {
       return (
         <div className="flex gap-x-4  w-full " key={index}>
-          <div className="font-bold pr-2 py-2 ">
+          <div className="font-bold pr-2 py-2 min-w-[24%] md:min-w-[14%] lg:min-w-[12%]">
             <p className="text-xs font-Open w-full ">
               {new Date(each?.time).toDateString().slice(3) || "-"}
             </p>
@@ -260,7 +262,7 @@ const Tracking = () => {
             <div className="text-xs font-Open font-medium  md:w-full ">
               <p className="capitalize">{each?.message.toLowerCase()}</p>
             </div>
-            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full  ">
+            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full">
               {each?.status.toLowerCase()}
             </p>
             <div className="flex gap-x-1">
@@ -332,24 +334,37 @@ const Tracking = () => {
                                             alt=""
                                             className="w-20"
                                           />
-                                          {lastUpdate?.time === "" &&
-                                          lastUpdate?.day === "" &&
-                                          lastUpdate?.date === "" &&
-                                          lastUpdate?.hours === "" ? (
-                                            ""
-                                          ) : (
-                                            <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
-                                              <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
-                                                Last Update:
-                                                <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
-                                                  <span>
+                                          {
+                                            //commented as changed the key of the updated time
+                                            // lastUpdate?.time === "" &&
+                                            // lastUpdate?.day === "" &&
+                                            // lastUpdate?.date === "" &&
+                                            // lastUpdate?.hours === ""
+                                            trackingState[0]?.shipmentStatus
+                                              ?.EDD === "" ||
+                                            trackingState[0]?.shipmentStatus
+                                              ?.EDD === undefined ? (
+                                              ""
+                                            ) : (
+                                              <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
+                                                <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
+                                                  Last Update:
+                                                  <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                                                    {/* <span>
                                                     {lastUpdate.hours + " |"}
                                                   </span>
-                                                  <span>{lastUpdate.date}</span>
-                                                </div>
-                                              </p>
-                                            </div>
-                                          )}
+                                                  <span>{lastUpdate.date}</span> */}
+                                                    <p className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                                                      {
+                                                        trackingState[0]
+                                                          ?.shipmentStatus?.EDD
+                                                      }
+                                                    </p>
+                                                  </div>
+                                                </p>
+                                              </div>
+                                            )
+                                          }
                                         </div>
 
                                         <div className="flex justify-between pt-2">
@@ -531,7 +546,7 @@ const Tracking = () => {
                                                   </p>
                                                   <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
                                                     {
-                                                      each?.pickupAddress
+                                                      each?.deliveryAddress
                                                         ?.contact?.name
                                                     }
                                                   </p>
@@ -542,7 +557,7 @@ const Tracking = () => {
                                                   </p>
                                                   <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
                                                     {
-                                                      each?.pickupAddress
+                                                      each?.deliveryAddress
                                                         ?.contact?.mobileNo
                                                     }
                                                   </p>
