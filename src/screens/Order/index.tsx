@@ -252,7 +252,6 @@ const Index = () => {
     isOpen: false,
     data: [],
   });
-  const [progress, setProgress]: any = useState(0);
   const [sellerOverview, setSellerOverview]: any = useState([
     {
       label: "Today's delivery",
@@ -276,6 +275,7 @@ const Index = () => {
     orderId: "",
   });
   const [isSyncModalOpen, setIsSyncModalOpen]: any = useState(false);
+  const [isSyncModalLoading, setIsSyncModalLoading] = useState(true);
 
   const roles = useSelector((state: any) => state?.roles);
   const channelReduxData = useSelector((state: any) => state?.channel?.channel);
@@ -1756,12 +1756,9 @@ const Index = () => {
 
   useEffect(() => {
     if (channelReduxData.length > 0) {
-      let totalOrderCount = +channelReduxData?.[0]?.TotalOrderCount;
-      let progress =
-        (+channelReduxData?.[0]?.syncedOrder / totalOrderCount) * 100;
-      setProgress(progress);
+      setIsSyncModalLoading(false);
     }
-  }, [channelReduxData?.length, channelReduxData?.[0]?.syncedOrder]);
+  }, [channelReduxData]);
 
   return (
     <>
@@ -2078,29 +2075,57 @@ const Index = () => {
         onClose={() => setIsSyncModalOpen(false)}
         className="!justify-start"
       >
-        <div className="mt-[3rem] mx-[1rem] p-[1rem] items-center flex flex-col border-4 rounded-md">
-          <div className="my-[2rem] text-[25px] flex flex-wrap items-center">
-            <div>
-              <b>Channel</b> - Sync In Progress
+        <div className="mt-[2rem]">
+          {isSyncModalLoading ? (
+            <div className="flex justify-center h-[90vh] items-center lg:!py-2 lg:!px-4">
+              <Spinner />
             </div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
-          </div>
-          <div className={`relative progress-bar mb-[2rem] `}>
-            <div
-              className={` h-full bg-[#06981d] transition-all duration-700 ease-in-out !rounded-2xl`}
-              style={{
-                width: `${progress}%`,
-              }}
-            ></div>
-            <div className="absolute left-0">
-              {+channelReduxData?.[0]?.syncedOrder || 0}
-            </div>
-            <div className="absolute right-0">
-              {+channelReduxData?.[0]?.TotalOrderCount || 0}
-            </div>
-          </div>
+          ) : (
+            channelReduxData.map((elem: any) => (
+              <div className="mt-[1rem] mx-[1rem] p-[1rem] items-center flex flex-col border-4 rounded-md">
+                <div className="my-[2rem] text-[18px] w-full flex flex-wrap items-center ">
+                  <div className="w-[85%] flex gap-x-1">
+                    <div>
+                      <b>{`${capitalizeFirstLetter(elem?.channel)}`} </b>
+                    </div>
+                    <div>-</div>
+                    <div
+                      className="w-[55%]"
+                      style={{
+                        overflow: "hidden",
+                        display: "-webkit-box",
+                        WebkitBoxOrient: "vertical",
+                        WebkitLineClamp: "1",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                      }}
+                    >
+                      {elem.storeName}
+                    </div>
+                  </div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
+                <div className={`relative progress-bar mb-[1rem] `}>
+                  <div
+                    className={` h-full bg-[#06981d] transition-all duration-700 ease-in-out !rounded-2xl`}
+                    style={{
+                      width: `${
+                        (elem?.syncedOrder / elem?.TotalOrderCount) * 100
+                      }%`,
+                    }}
+                  ></div>
+                  <div className="absolute left-0">
+                    {elem?.syncedOrder || 0}
+                  </div>
+                  <div className="absolute right-0">
+                    {elem?.TotalOrderCount || 0}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </CustomRightModal>
     </>
