@@ -76,7 +76,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   };
 
   const handleOnChange = (option: any) => {
-    console.log("option>>>>", option);
+    // console.log("option>>>>", option);
     setSelectedOption({
       ...option,
       type: option.type,
@@ -86,7 +86,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
       type: option.type,
     });
   };
-  console.log("options", options);
+  // console.log("options", options);
 
   const cheapestService = options[0];
   const fastestService = options[1];
