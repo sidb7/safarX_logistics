@@ -13,7 +13,7 @@ interface IInvoiceDataProps {
   setCodModal?: any;
   setAwbModal?: any;
   tableData?: any[];
-  downloadReport?: () => Promise<void>;
+  downloadReport?: (reportNumber: any) => Promise<void>;
 }
 
 const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
@@ -340,7 +340,9 @@ const CodData: React.FunctionComponent<IInvoiceDataProps> = ({
         return (
           <div
             className="flex justify-center gap-x-5 max-w-[50px]"
-            onClick={() => downloadReport && downloadReport()}
+            onClick={() =>
+              downloadReport && downloadReport(info.row.original.reportNumber)
+            }
           >
             <img className="cursor-pointer" src={downloadIcon} alt="" />
           </div>
