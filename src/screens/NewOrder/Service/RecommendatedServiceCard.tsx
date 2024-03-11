@@ -76,9 +76,17 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   };
 
   const handleOnChange = (option: any) => {
-    setSelectedOption(option);
-    selectedValue(option.value);
+    console.log("option>>>>", option);
+    setSelectedOption({
+      ...option,
+      type: option.type,
+    });
+    selectedValue({
+      value: option.value,
+      type: option.type,
+    });
   };
+  console.log("options", options);
 
   const cheapestService = options[0];
   const fastestService = options[1];
@@ -95,7 +103,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
           <>
             {/* Cheapest Card */}
             <div
-              key={`${cheapestService?.value}-cheapest`}
+              key={`${cheapestService?.value}-${cheapestService?.type}`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === cheapestService?.value
                   ? "border-[#004EFF] border-2"
@@ -115,7 +123,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   value={cheapestService?.value}
                   className="!w-4 !p-0 !m-0"
                   readOnly={true}
-                  checked={selectedOption?.value === cheapestService?.value}
+                  checked={
+                    selectedOption?.value === cheapestService?.value &&
+                    selectedOption?.type === cheapestService?.type
+                  }
                   onChange={() => handleOnChange(cheapestService)}
                 />
               </div>
@@ -145,7 +156,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
 
             {/* Fastest Card */}
             <div
-              key={`${fastestService?.value}-fastest`}
+              key={`${fastestService?.value}-${fastestService?.type}`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === fastestService?.value
                   ? "border-blue-500 border-2"
@@ -165,7 +176,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   value={fastestService?.value}
                   className="!w-4 !p-0 !m-0"
                   readOnly={true}
-                  checked={selectedOption?.value === fastestService?.value}
+                  checked={
+                    selectedOption?.value === fastestService?.value &&
+                    selectedOption?.type === fastestService?.type
+                  }
                   onChange={() => handleOnChange(fastestService)}
                 />
               </div>
@@ -193,7 +207,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
 
             {/* Balanced Card */}
             <div
-              key={`${balancedService?.value}-balanced`}
+              key={`${balancedService?.value}-${balancedService?.type}`}
               className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
                 selectedOption?.value === balancedService?.value
                   ? "border-blue-500 border-2"
@@ -213,7 +227,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   value={balancedService?.value}
                   className="!w-4 !p-0 !m-0"
                   readOnly={true}
-                  checked={selectedOption?.value === balancedService?.value}
+                  checked={
+                    selectedOption?.value === balancedService?.value &&
+                    selectedOption?.type === balancedService?.type
+                  }
                   onChange={() => handleOnChange(balancedService)}
                 />
               </div>

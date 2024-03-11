@@ -217,10 +217,11 @@ const Index: React.FC = () => {
           options[0]
         );
 
+        /*  Set recommended options with type to make them unique*/
         setRecommendatedOptions([
-          cheapestService,
-          fastestService,
-          balancedService,
+          { ...cheapestService, type: "cheapest" },
+          { ...fastestService, type: "fastest" },
+          { ...balancedService, type: "balanced" },
         ]);
 
         setLoading(false);
@@ -312,7 +313,7 @@ const Index: React.FC = () => {
       }
       return null;
     });
-    // console.log("filters", filters);
+    console.log("filters", filters);
 
     const cheapestService = filters.reduce(
       (minOption: any, currentOption: any) => {
@@ -323,6 +324,8 @@ const Index: React.FC = () => {
       filters[0]
     );
 
+    console.log("cheapestService", cheapestService);
+
     const fastestService = filters.reduce(
       (minOption: any, currentOption: any) => {
         return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
@@ -331,6 +334,7 @@ const Index: React.FC = () => {
       },
       filters[0]
     );
+    console.log("fastestService", fastestService);
 
     const balancedService = filters.reduce(
       (minOption: any, currentOption: any) => {
@@ -345,6 +349,7 @@ const Index: React.FC = () => {
       },
       filters[0]
     );
+    console.log("balancedService", balancedService);
 
     setRecommendatedOptions([cheapestService, fastestService, balancedService]);
   }, [surface, air]);
@@ -356,9 +361,9 @@ const Index: React.FC = () => {
     setSurface(isSurfaceSelected);
     setAir(isAirSelected);
   };
-  // console.log("serviceOptions", serviceOptions);
+  console.log("serviceOptions", serviceOptions);
 
-  // console.log("recommendedOptions", recommendedOptions);
+  console.log("recommendedOptions", recommendedOptions);
 
   // console.log("surface", surface);
   // console.log("air", air);
