@@ -28,6 +28,10 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
+  console.log(
+    "🚀 ~ Tracking ~ trackingCycleDetails:",
+    trackingCycleDetails.length
+  );
   const [orderType, setOrderType] = useState<any>(false);
   const [rtoAwbNo, setRtoAwbNo] = useState<any>();
   const [cancelledOrder, setCancelledOrder] = useState<any>(false);
@@ -242,39 +246,45 @@ const Tracking = () => {
   }, []);
 
   const trackingCycleInformation = useMemo(() => {
-    return trackingCycleDetails?.Scans?.map((each: any, index: number) => {
-      return (
-        <div className="flex gap-x-4  w-full " key={index}>
-          <div className="font-bold pr-2 py-2 min-w-[24%] md:min-w-[14%] lg:min-w-[12%]">
-            <p className="text-xs font-Open w-full ">
-              {new Date(each?.time).toDateString().slice(3) || "-"}
-            </p>
-            <p className="text-xs font-Open">
-              {new Date(each?.time).toLocaleTimeString() || "-"}
-            </p>
-          </div>
-          <div className="relative border-l-[2px] mt-[2px]  border-l-[#80A7FF] border-dotted">
-            <div className="w-3 h-3 bg-[#80A7FF] rounded-full absolute top-2 left-[-7px]"></div>
-          </div>
-          <div className="py-2">
-            <div className="text-xs font-Open font-medium  md:w-full ">
-              <p className="capitalize text-xs font-Open">
-                {each?.message.toLowerCase()}
+    return trackingCycleDetails.length === 0 ? (
+      <p className="text-sm font-Open text-center font-semibold">
+        No Data Found
+      </p>
+    ) : (
+      trackingCycleDetails?.Scans?.map((each: any, index: number) => {
+        return (
+          <div className="flex gap-x-4  w-full " key={index}>
+            <div className="font-bold pr-2 py-2 min-w-[24%] md:min-w-[14%] lg:min-w-[12%]">
+              <p className="text-xs font-Open w-full ">
+                {new Date(each?.time).toDateString().slice(3) || "-"}
+              </p>
+              <p className="text-xs font-Open">
+                {new Date(each?.time).toLocaleTimeString() || "-"}
               </p>
             </div>
-            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full">
-              {each?.status.toLowerCase()}
-            </p>
-            <div className="flex gap-x-1">
-              <img src={Location} alt="" className="w-4 h-4" />
-              <p className="text-xs font-Open font-normal capitalize md:w-full  ">
-                {each?.location.toLowerCase()}
+            <div className="relative border-l-[2px] mt-[2px]  border-l-[#80A7FF] border-dotted">
+              <div className="w-3 h-3 bg-[#80A7FF] rounded-full absolute top-2 left-[-7px]"></div>
+            </div>
+            <div className="py-2">
+              <div className="text-xs font-Open font-medium  md:w-full ">
+                <p className="capitalize text-xs font-Open">
+                  {each?.message.toLowerCase()}
+                </p>
+              </div>
+              <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full">
+                {each?.status.toLowerCase()}
               </p>
+              <div className="flex gap-x-1">
+                <img src={Location} alt="" className="w-4 h-4" />
+                <p className="text-xs font-Open font-normal capitalize md:w-full  ">
+                  {each?.location.toLowerCase()}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    });
+        );
+      })
+    );
   }, [trackingCycleDetails]);
 
   return (
@@ -475,11 +485,15 @@ const Tracking = () => {
                                           </div>
                                         </div>
                                         {each?.currentStatus === "CANCELLED" ||
+                                        each?.currentStatus ===
+                                          "CANCEL REQUESTED" ||
                                         each?.currentStatus === "EXCEPTION" ? (
                                           <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
                                             <p>
                                               {each?.currentStatus ===
-                                              "CANCELLED"
+                                                "CANCELLED" ||
+                                              each?.currentStatus ===
+                                                "CANCEL REQUESTED"
                                                 ? "Cancelled Order"
                                                 : "Exception"}
                                             </p>
@@ -491,6 +505,8 @@ const Tracking = () => {
                                           className={`mt-6 ${
                                             each?.currentStatus ===
                                               "CANCELLED" ||
+                                            each?.currentStatus ===
+                                              "CANCEL REQUESTED" ||
                                             each?.currentStatus === "EXCEPTION"
                                               ? "blur-sm"
                                               : ""
