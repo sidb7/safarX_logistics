@@ -69,7 +69,7 @@ const CompletedTable = ({
     columnsHelper.accessor("packageDetails", {
       header: (props) => {
         return (
-          <div className="flex min-w-[170px]">
+          <div className="flex">
             {/* <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -130,7 +130,7 @@ const CompletedTable = ({
     columnsHelper.accessor("orderDetails", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[150px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Order Details
             </p>
@@ -230,7 +230,7 @@ const CompletedTable = ({
     columnsHelper.accessor("dispute", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[120px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Dispute
             </p>
@@ -299,7 +299,7 @@ const CompletedTable = ({
     columnsHelper.accessor("sellerPhoto", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[150px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Seller Photo
             </p>
@@ -404,7 +404,7 @@ const CompletedTable = ({
     columnsHelper.accessor("courierPhotos", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[150px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Courier Photos
             </p>
