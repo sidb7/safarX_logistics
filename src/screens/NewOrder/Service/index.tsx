@@ -217,11 +217,10 @@ const Index: React.FC = () => {
           options[0]
         );
 
-        /*  Set recommended options with type to make them unique*/
         setRecommendatedOptions([
-          { ...cheapestService, type: "cheapest" },
-          { ...fastestService, type: "fastest" },
-          { ...balancedService, type: "balanced" },
+          cheapestService,
+          fastestService,
+          balancedService,
         ]);
 
         setLoading(false);
@@ -324,8 +323,6 @@ const Index: React.FC = () => {
       filters[0]
     );
 
-    // console.log("cheapestService", cheapestService);
-
     const fastestService = filters.reduce(
       (minOption: any, currentOption: any) => {
         return currentOption.text.EDT_Epoch < minOption.text.EDT_Epoch
@@ -334,7 +331,6 @@ const Index: React.FC = () => {
       },
       filters[0]
     );
-    // console.log("fastestService", fastestService);
 
     const balancedService = filters.reduce(
       (minOption: any, currentOption: any) => {
@@ -349,13 +345,8 @@ const Index: React.FC = () => {
       },
       filters[0]
     );
-    // console.log("balancedService", balancedService);
 
-    setRecommendatedOptions([
-      { ...cheapestService, type: "cheapest" },
-      { ...fastestService, type: "fastest" },
-      { ...balancedService, type: "balanced" },
-    ]);
+    setRecommendatedOptions([cheapestService, fastestService, balancedService]);
   }, [surface, air]);
 
   const handleSortBy = (selectedItems: string[]) => {

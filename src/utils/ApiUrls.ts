@@ -338,6 +338,14 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
 const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
 
+// weight Management
+const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
+const UPLOAD_DISPUTE_IMAGE = `${SELLER_BASE_URL}/weightDispute/uploadDisputeImages`;
+const GET_MULTIPLE_FILE = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
+const DELETE_DISPUTE_IMAGES = `${SELLER_BASE_URL}/weightDispute/deleteDisputeImages`;
+const ACCEPT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/acceptDispute`;
+const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -507,4 +515,10 @@ export {
   GET_PENDING_PLANS,
   GET_PLANS_PREVIEW,
   SEARCH_PINCODE,
+  GET_WRIGHT_DISPUTE,
+  UPLOAD_DISPUTE_IMAGE,
+  GET_MULTIPLE_FILE,
+  DELETE_DISPUTE_IMAGES,
+  ACCEPT_DISPUTE,
+  REJECT_DISPUTE,
 };
