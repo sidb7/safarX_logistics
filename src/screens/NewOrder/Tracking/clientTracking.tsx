@@ -168,6 +168,7 @@ const Tracking = () => {
       setLastUpdate({ time: time, date: latestDate, day: day, hours: hours });
     } else {
       setLastUpdate({ time: "", date: "", day: "", hours: "" });
+      setTrackingCycleDetails([]);
     }
   };
 
