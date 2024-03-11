@@ -351,7 +351,11 @@ const Index: React.FC = () => {
     );
     console.log("balancedService", balancedService);
 
-    setRecommendatedOptions([cheapestService, fastestService, balancedService]);
+    setRecommendatedOptions([
+      { ...cheapestService, type: "cheapest" },
+      { ...fastestService, type: "fastest" },
+      { ...balancedService, type: "balanced" },
+    ]);
   }, [surface, air]);
 
   const handleSortBy = (selectedItems: string[]) => {

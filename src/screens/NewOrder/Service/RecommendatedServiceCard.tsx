@@ -104,8 +104,9 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
             {/* Cheapest Card */}
             <div
               key={`${cheapestService?.value}-${cheapestService?.type}`}
-              className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
-                selectedOption?.value === cheapestService?.value
+              className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
+                selectedOption?.value === cheapestService?.value &&
+                selectedOption?.type === "cheapest"
                   ? "border-[#004EFF] border-2"
                   : "border-[#c1c1c1]"
               }`}
@@ -157,9 +158,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
             {/* Fastest Card */}
             <div
               key={`${fastestService?.value}-${fastestService?.type}`}
-              className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
-                selectedOption?.value === fastestService?.value
-                  ? "border-blue-500 border-2"
+              className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
+                selectedOption?.value === fastestService?.value &&
+                selectedOption?.type === "fastest"
+                  ? "border-[#004EFF] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(fastestService)}
@@ -208,9 +210,10 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
             {/* Balanced Card */}
             <div
               key={`${balancedService?.value}-${balancedService?.type}`}
-              className={` relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
-                selectedOption?.value === balancedService?.value
-                  ? "border-blue-500 border-2"
+              className={`relative flex items-center p-2 shadow-md border rounded-lg w-[288px] h-[112px] mb-4 md:mb-0 ${
+                selectedOption?.value === balancedService?.value &&
+                selectedOption?.type === "balanced"
+                  ? "border-[#004EFF] border-2"
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(balancedService)}
