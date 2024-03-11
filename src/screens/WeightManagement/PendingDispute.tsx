@@ -123,7 +123,7 @@ const PendingDispute = ({
     columnsHelper.accessor("packageDetails", {
       header: (props) => {
         return (
-          <div className="flex min-w-[170px]">
+          <div className="flex">
             {/* <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -182,7 +182,7 @@ const PendingDispute = ({
     columnsHelper.accessor("orderDetails", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[170px]">
+          <div className="flex justify-between ">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Order Details
             </p>
@@ -209,7 +209,7 @@ const PendingDispute = ({
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-[18px] text-[#1C1C1C] self-center whitespace-nowrap">
               Applied Weight And Price
             </p>
           </div>
@@ -248,7 +248,6 @@ const PendingDispute = ({
           </div>
         );
       },
-
       cell: ({ row }: any) => {
         const rowData = row?.original;
         const disputeInfo = rowData?.disputeInfo;
@@ -280,7 +279,7 @@ const PendingDispute = ({
     columnsHelper.accessor("dispute", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[120px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Dispute
             </p>
@@ -291,7 +290,7 @@ const PendingDispute = ({
       cell: ({ row }: any) => {
         const rowData = row?.original;
         return (
-          <div className=" flex flex-col  text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
+          <div className=" flex flex-col text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
               <div>Weight Difference</div>
               <div className="font-semibold">
@@ -350,7 +349,7 @@ const PendingDispute = ({
     columnsHelper.accessor("sellerPhoto", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[150px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Seller Photo
             </p>
@@ -371,7 +370,7 @@ const PendingDispute = ({
         return (
           <>
             {sellerWeightImages.filter((e: any) => e.isActive)?.length !== 5 ? (
-              <div className="">
+              <div>
                 <div className="flex justify-start gap-x-2 whitespace-nowrap flex-wrap cursor-pointer">
                   <p className="font-Open text-sm font-normal leading-5 mt-1 ">
                     <div
@@ -452,14 +451,13 @@ const PendingDispute = ({
     columnsHelper.accessor("courierPhotos", {
       header: () => {
         return (
-          <div className="flex justify-between min-w-[150px]">
+          <div className="flex justify-between">
             <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Courier Photos
             </p>
           </div>
         );
       },
-
       cell: ({ row }: any) => {
         const rowData = row?.original;
         let partnerWeightImages = rowData?.partnerPhoto || [];
