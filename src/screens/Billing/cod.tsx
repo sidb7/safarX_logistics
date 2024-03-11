@@ -52,10 +52,10 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   const getCodRemittedDetails = async () => {
     try {
       setLoading(true);
-      // const payload = { sellerId: +`${sessionStorage.getItem("sellerId")}` };
-      const payload = {
-        sellerId: 2483, //only for testing
-      };
+      const payload = { sellerId: +`${sessionStorage.getItem("sellerId")}` };
+      // const payload = {
+      //   sellerId: 2483, //only for testing
+      // };
 
       const { data: response } = await POST(GET_COD_REMITTED, payload);
 
@@ -117,13 +117,20 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
   //   await convertXMLToXLSX(formattedData, `BankData_${formattedDate}.xlsx`);
   // };
 
-  const downloadReport = async () => {
+  const downloadReport = async (reportNumber: any) => {
     setIsDownloading(true);
 
-    // const payload = { sellerId: +`${sessionStorage.getItem("sellerId")}` };
+    // so dailyrpeortnumber, utrNO needs to given in payload too ,
+
     const payload = {
-      sellerId: 2483, //only for testing
+      sellerId: +`${sessionStorage.getItem("sellerId")}`,
+      reportNumber: reportNumber,
     };
+    // const payload = {
+    //   sellerId: 2483, //only for testing
+    // };
+
+    // so dailyrpeortnumber, utrNO needs to given in payload too ,
 
     try {
       const { data: response } = await POST(DOWNLOAD_COD_REMITTED, payload);
@@ -139,6 +146,7 @@ const Cod: React.FunctionComponent<IInvoiceProps> = (props) => {
             InvoiceValue: order?.codInfo?.invoiceValue,
             SellerId: order.sellerId,
             CourierPartnerName: order.courierPartnerName,
+            // PaymentRefNo:
           };
         });
 
