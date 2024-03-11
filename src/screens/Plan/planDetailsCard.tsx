@@ -63,7 +63,11 @@ const PlanDetailsCard = (props: ITypeProps) => {
                       {"Subscription Amount"}
                     </span>
                     <span className="font-Open font-semibold text-sm leading-5 text-[#1C1C1C]">
-                      {`₹${eachPlan?.price}`}
+                      {`${
+                        eachPlan?.price === 0
+                          ? "₹ 0 (FREE)"
+                          : `₹ ${eachPlan?.price}`
+                      }`}
                     </span>
                   </div>
                   {/* Subscription Period */}

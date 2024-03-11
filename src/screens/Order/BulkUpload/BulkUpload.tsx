@@ -30,7 +30,7 @@ const BulkUpload = (props: ITypeProps) => {
 
   const [bulkOrderUploadFile, setBulkOrderUploadFile]: any = useState([]);
   const [file, setFile] = useState<File | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string>("B2B");
+  const [selectedOption, setSelectedOption] = useState<string>("B2C");
   const [fileName, setFileName] = useState<string | null>(null);
   const [addButton, setAddButton]: any = useState(false);
   const [disabled, setDisabled]: any = useState(true);
@@ -71,6 +71,7 @@ const BulkUpload = (props: ITypeProps) => {
 
       if (response?.success) {
         toast.success(response?.message);
+        window.location.replace("/orders/view-orders?activeTab=booked");
       } else {
         toast.error(response?.message);
       }
@@ -82,7 +83,6 @@ const BulkUpload = (props: ITypeProps) => {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // navigate("/orders/view-orders");
-      window.location.replace("/orders/view-orders?activeTab=booked");
     }
   };
 
@@ -150,22 +150,26 @@ const BulkUpload = (props: ITypeProps) => {
               <p className="bg-white mr-1  lg:font-semibold lg:font-Open lg:text-base">
                 Order Type:
               </p>
+
               <Checkbox
+                checked={selectedOption === "B2C"}
+                onChange={() => handleOptionSelect("B2C")}
+                checkboxClassName="gap-2"
+              />
+              <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm mr-4">
+                B2C
+              </p>
+
+              {/* commented as instructed */}
+              {/* <Checkbox
                 checked={selectedOption === "B2B"}
                 onChange={() => handleOptionSelect("B2B")}
                 checkboxClassName="gap-2"
               />
               <p className="bg-white mr-4  lg:font-semibold lg:font-Open lg:text-sm">
                 B2B
-              </p>
-              <Checkbox
-                checked={selectedOption === "B2C"}
-                onChange={() => handleOptionSelect("B2C")}
-                checkboxClassName="gap-2"
-              />
-              <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">
-                B2C
-              </p>
+              </p> */}
+
               {/* <div className="w-[20%] ml-[250px]">
             <AddButton
               text={`Download ${selectedOption} Sample`}

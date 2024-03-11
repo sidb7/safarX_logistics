@@ -74,6 +74,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
   const params = getQueryJson();
   const shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
+  let orderId = params?.orderId || "";
 
   const initialUserData = {
     productId: "",
@@ -110,7 +111,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
     if (response?.success) {
       toast.success(response?.message);
       navigate(
-        `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}`
+        `/orders/add-order/product-package?shipyaari_id=${shipyaari_id}&source=${orderSource}&orderId=${orderId}`
       );
     } else {
       toast.error("Failed To Upload!");

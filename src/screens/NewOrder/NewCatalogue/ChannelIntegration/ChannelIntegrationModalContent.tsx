@@ -93,6 +93,15 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             // setChannelData({ channels: newStore });
             setModalData({ isOpen: false });
             toast.success(data?.message);
+            let channelSessionObj: any = sessionStorage.getItem("userInfo");
+            channelSessionObj = JSON.parse(channelSessionObj);
+            if (!channelSessionObj?.nextStep?.isChannelIntegrated) {
+              channelSessionObj.nextStep.isChannelIntegrated = true;
+              sessionStorage.setItem(
+                "userInfo",
+                JSON.stringify(channelSessionObj)
+              );
+            }
             window.location.reload();
             return;
           } else {
@@ -271,7 +280,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             />
             <CustomInputBox
               className="removePaddingPlaceHolder"
-              placeholder="Store Url - Storename"
+              placeholder="Store Domain"
               isRequired={true}
               value={storeData.storeUrl}
               onChange={(e) =>
@@ -279,7 +288,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               }
             />
             <p className="text-[15px]">
-              Example : https://<strong>storename</strong>.myshopify.com/{" "}
+              Example : https://<strong>domainName</strong>.myshopify.com/{" "}
             </p>
             <CustomInputBox
               className="removePaddingPlaceHolder"
@@ -325,7 +334,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
             <div>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Url - https://example.com"
+                placeholder="Store Domain - https://www.my-woocommerce-store.com"
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) => {
@@ -336,6 +345,22 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                   } else {
                     setUrlError(false);
                   }
+                }}
+                onBlur={(e) => {
+                  if (e.target.value.includes("www."))
+                    setStoreData({
+                      ...storeData,
+                      storeName: capitalizeFirstLetter(
+                        e.target.value.split(".")[1]
+                      ),
+                    });
+                  else
+                    setStoreData({
+                      ...storeData,
+                      storeName: capitalizeFirstLetter(
+                        e.target.value.split(".")[0].slice(8)
+                      ),
+                    });
                 }}
               />
 

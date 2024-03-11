@@ -28,7 +28,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   const arrayData = [
     { index: 0, label: "B2C" },
-    { index: 1, label: "B2B" },
+    // { index: 1, label: "B2B" },
   ];
 
   let variableData: any;
@@ -932,7 +932,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
 
   return (
     <div>
-      <div className="mx-5 lg:ml-[30px]">
+      <div className="mx-5 lg:ml-[20px]">
         <ScrollNav
           arrayData={arrayData}
           showNumber={false}
@@ -940,7 +940,7 @@ const CourierPricing = (props: ICourierPricingPropTypes) => {
         />
       </div>
 
-      <div className="mx-5 lg:ml-[30px] mb-[68px] customScroll ">
+      <div className="mx-5 lg:ml-[20px] mb-[68px] customScroll ">
         {/* {data[0].accountType==="B2C"} */}
 
         {renderingComponents === 0 ? (

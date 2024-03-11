@@ -121,6 +121,7 @@ const CANCEL_TEMP_SELLER_ORDER = `${SELLER_BASE_URL}/order/deleteTempOrder`;
 const GET_ORDER_ERRORS = `${SELLER_BASE_URL}/order/tempOrderBoxCountError`;
 //NewOrder URLs
 const VERIFY_ADDRESS = `${SELLER_BASE_URL}/seller/verifyAddress`;
+const UPDATE_TEMP_ORDER_INFO = `${SELLER_BASE_URL}/order/updateTempOrderInfo`;
 
 const ADD_PICKUP_LOCATION = `${SELLER_BASE_URL}/order/addPickupAddress`;
 const ADD_DELIVERY_LOCATION = `${SELLER_BASE_URL}/order/addDeliveryAddress`;
@@ -132,6 +133,7 @@ const PLACE_ORDER = `${SELLER_BASE_URL}/order/payOrderAmount`;
 // const LANDMARK_API = `${SELLER_BASE_URL}/landmark/landmark`;
 const POST_SET_ORDER_ID = `${SELLER_BASE_URL}/order/setOrderId`;
 const POST_PLACE_ORDER = `${SELLER_BASE_URL}/order/placeOrder`;
+const SEARCH_PINCODE = `${SELLER_BASE_URL}/pincodes/searchingPincode`;
 
 //product URLs
 const POST_PRODUCT_URL = `${SELLER_URL}/api/v1/order/addProductInfo`;
@@ -267,8 +269,8 @@ const RETURNING_USER_PICKUP = `${SELLER_BASE_URL}/pickupAddress/getPickupAddress
 const RETURNING_USER_DELIVERY = `${SELLER_BASE_URL}/deliveryAddress/getDeliveryAddress`;
 
 //Tracking
-const TRACKING = `${TRACKING_URL}/api/v1/tracking/getTracking`;
-const GET_CLIENTTRACKING_INFO = `${TRACKING_URL}/api/v1/tracking/getTracking`;
+const TRACKING = `${SELLER_URL}/api/v1/tracking/getTracking`;
+const GET_CLIENTTRACKING_INFO = `${SELLER_URL}/api/v1/tracking/getTracking`;
 
 //feedback
 const CREATE_FEEDBACK = `${SELLER_BASE_URL}/feedback/createFeedback`;
@@ -501,6 +503,8 @@ export {
   POST_ASSIGN_PLANV3,
   DELETE_INTEGRATED_STORE,
   UPDATE_OTHER_ORDER_DETAILS,
+  UPDATE_TEMP_ORDER_INFO,
   GET_PENDING_PLANS,
   GET_PLANS_PREVIEW,
+  SEARCH_PINCODE,
 };

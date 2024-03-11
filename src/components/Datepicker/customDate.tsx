@@ -19,7 +19,7 @@ interface IInputProps {
   inputError?: boolean;
 }
 
-const InputWithImage = (props: IInputProps) => {
+const CustomDate = (props: IInputProps) => {
   const {
     label,
     value,
@@ -38,44 +38,28 @@ const InputWithImage = (props: IInputProps) => {
     inputError,
   } = props;
 
-  const inputContainerClass = imgSrc && value ? "input-container-aligned" : "";
-  const inputPaddingClass = value ? "pl-[42px]" : "pl-[9px] ";
-  const caretColor = value ? "text-[#1C1C1C]" : "transparent";
-
   return (
     <>
       <div className={`${inputClassName} relative flex items-center`}>
-        {imgSrc && (
-          <img
-            src={imgSrc ? imgSrc : dummyImage}
-            alt=""
-            className="absolute z-2 left-[18px]"
-          />
-        )}
-
         <input
           placeholder={placeholder}
-          type="text"
+          type="date"
           className={`rounded border-[1px]  ${
             inputError && !value ? "!border-red-500" : "border-[#A4A4A4]"
-          } placeholder:text-[12px] placeholder:text-[#777777] w-full placeholder:font-Open bg-white text-[12px] outline-none ${inputPaddingClass}`}
+          } placeholder:text-[12px] placeholder:text-[#777777] w-full placeholder:font-Open bg-white text-[12px] outline-none`}
           required={isRequired}
           onChange={onChange}
           onClick={onClick}
           value={value}
-          disabled={isDisabled}
-          style={{ caretColor }}
         />
-      </div>
-      {inputError && !value && (
-        <span
-          className={`text-[red] transition-all ease-out h-0  h-[18px]  delay-100 font-Open text-[11px] mt-1 px-2 `}
+        <label
+          className={`text-[12px] text-[#777777] absolute leading-4 font-Open custom-label transition-all ease-out`}
         >
-          Field is required
-        </span>
-      )}
+          {label}
+        </label>
+      </div>
     </>
   );
 };
 
-export default InputWithImage;
+export default CustomDate;

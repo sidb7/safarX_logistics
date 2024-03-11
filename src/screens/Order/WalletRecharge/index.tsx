@@ -693,16 +693,20 @@ const WalletRecharge = () => {
               {/* Payment Gateway */}
               <div className="lg:grid grid-cols-2 mb-[30px] ">
                 <div className="w-full   my-5 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm lg:p-2">
-                  <div className="flex  gap-x-2 text-[14px] mt-1">
-                    <img src={rechargeIcon} alt="" className="object-contain" />
-                    <p className=" font-Lato font-semibold text-sm lg:text-lg lg:text-[#1C1C1C] lg:leading-6 ">
+                  <div className="flex  gap-x-2  text-[14px] mt-1">
+                    <img
+                      src={rechargeIcon}
+                      alt=""
+                      className="object-contain cursor-pointer"
+                    />
+                    <p className=" font-Lato font-semibold text-sm lg:text-lg lg:text-[#1C1C1C] lg:leading-6 cursor-pointer">
                       {isItLgScreen
                         ? "Payment gateway"
                         : "Recharge with payment gateway"}
                     </p>
                   </div>
 
-                  <div className="flex mt-1 mb-6 gap-x-[1rem] lg:mb-0 ml-4 mr-5">
+                  <div className="flex mt-1 mb-6 gap-x-[1rem] cursor-pointer lg:mb-0 ml-4 mr-5">
                     {/* <div className="flex flex-col items-center gap-y-2">
                       <img
                         src={

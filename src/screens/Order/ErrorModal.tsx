@@ -24,6 +24,7 @@ import AiIcon from "../../assets/Buttons.svg";
 import LocationIcon from "../../assets/Location.svg";
 import CustomeBottomModal from "../../components/CustomModal/customBottomModal";
 import {
+  GET_PINCODE_DATA,
   GET_SERVICE_LIST_ORDER,
   ORDERID_AND_EWAYBILLINFO,
   POST_PLACE_ALL_ORDERS,
@@ -57,12 +58,9 @@ const ErrorModal = (props: ErrorModalProps) => {
   const [processOrderLoader, setProcessOrderLoader] = useState(false);
   const [serviceDropDownLoader, setServiceDropDownLoader] = useState(false);
   const [inputError, setInputError] = useState(false);
-  // -------------------------------------------------
   const [isProcess, setIsProcess] = useState(false);
   const [showAlertMessage, setAlertMessage] = useState(false);
   const [isProcessOrderCall, setIsProcessOrderCall] = useState();
-
-  // -------------------------------------------------
 
   const [otherErrorDetails, setOtherErrorDetails]: any = useState({
     tempOrderId: 0,
@@ -140,6 +138,15 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
+  const validatePincode = (pincode: string) => {
+    const numericValue = pincode.replace(/[^0-9]/g, "");
+    if (numericValue.length === 6 || numericValue.length === 0) {
+      return null;
+    } else {
+      return "Pincode must have 6 digits";
+    }
+  };
+
   const validateEmailId = (emailId: string) => {
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailId) || emailId === "") {
       return null;
@@ -176,6 +183,13 @@ const ErrorModal = (props: ErrorModalProps) => {
             5000
           ).toFixed(2);
         }
+
+        updatedProductDimensions.deadWeight =
+          updatedProductDimensions?.products?.reduce(
+            (sum: any, item: any) => sum + +item.deadWeight,
+            0
+          );
+
         updatedProductDimensions.products[index].appliedWeight = +Math.max(
           updatedProductDimensions?.products[index].deadWeight,
           updatedProductDimensions?.products[index].volumetricWeight
@@ -228,7 +242,7 @@ const ErrorModal = (props: ErrorModalProps) => {
               name="volumetricWeight"
               inputType="number"
               isDisabled={true}
-              inputError={inputError}
+              // inputError={inputError}
             />
           </div>
           <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
@@ -394,8 +408,43 @@ const ErrorModal = (props: ErrorModalProps) => {
 
   const updateProducts = async (isProcessOrder?: any) => {
     !isProcessOrder && setUpdateButtonLoader(true);
+
+    let TempProductAndBoxDetails = { ...productAndBoxDetails };
+
+    const totalDeadWeight = productAndBoxDetails?.products?.reduce(
+      (sum: any, item: any) => sum + +item.deadWeight,
+      0
+    );
+
+    const totalVolumetricWeight = productAndBoxDetails?.products?.reduce(
+      (sum: any, item: any) => sum + +item.volumetricWeight,
+      0
+    );
+
+    if (TempProductAndBoxDetails?.deadWeight < totalDeadWeight) {
+      TempProductAndBoxDetails.deadWeight = totalDeadWeight;
+    }
+
+    if (TempProductAndBoxDetails?.volumetricWeight < totalVolumetricWeight) {
+      TempProductAndBoxDetails.volumetricWeight = totalVolumetricWeight;
+      TempProductAndBoxDetails.length = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+      TempProductAndBoxDetails.breadth = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+      TempProductAndBoxDetails.height = +Math.cbrt(
+        totalVolumetricWeight
+      ).toFixed(2);
+    }
+
+    TempProductAndBoxDetails.appliedWeight = +Math.max(
+      TempProductAndBoxDetails?.deadWeight,
+      TempProductAndBoxDetails?.volumetricWeight
+    );
+
     let payLoad = {
-      boxDetails: [productAndBoxDetails],
+      boxDetails: [TempProductAndBoxDetails],
       orderDetails: errorModalData?.orderDetails,
       category: errorModalData?.error,
     };
@@ -469,18 +518,18 @@ const ErrorModal = (props: ErrorModalProps) => {
       }
 
       if (
-        addressData[targetAddress]?.flatNo === "" ||
-        addressData[targetAddress]?.country === "" ||
-        addressData[targetAddress]?.state === "" ||
-        addressData[targetAddress]?.city === "" ||
-        addressData[targetAddress]?.locality === "" ||
-        addressData[targetAddress]?.contact?.emailId === "" ||
+        addressData[targetAddress]?.flatNo.trim() === "" ||
+        addressData[targetAddress]?.country.trim() === "" ||
+        addressData[targetAddress]?.state.trim() === "" ||
+        addressData[targetAddress]?.city.trim() === "" ||
+        addressData[targetAddress]?.locality.trim() === "" ||
+        addressData[targetAddress]?.contact?.emailId.trim() === "" ||
         addressData[targetAddress]?.contact?.mobileNo === "" ||
-        addressData[targetAddress]?.contact?.type === "" ||
-        addressData[targetAddress]?.contact?.name === "" ||
+        addressData[targetAddress]?.contact?.type.trim() === "" ||
+        addressData[targetAddress]?.contact?.name.trim() === "" ||
         addressData[targetAddress]?.pincode === "" ||
         addressData[targetAddress]?.pincode === 0 ||
-        addressData[targetAddress]?.landmark === ""
+        addressData[targetAddress]?.landmark.trim() === ""
       ) {
         setInputError(true);
         return;
@@ -493,7 +542,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           ...addressData[targetAddress],
           pincode: +addressData[targetAddress]?.pincode,
 
-          fullAddress: `${addressData[targetAddress]?.contact?.name} ${addressData[targetAddress]?.landmark} ${addressData[targetAddress]?.locality} ${addressData[targetAddress]?.city} ${addressData[targetAddress]?.state} ${addressData[targetAddress]?.country} ${addressData[targetAddress]?.pincode}`,
+          fullAddress: `${addressData[targetAddress]?.flatNo}  ${addressData[targetAddress]?.landmark} ${addressData[targetAddress]?.locality} ${addressData[targetAddress]?.city} ${addressData[targetAddress]?.state} ${addressData[targetAddress]?.country} ${addressData[targetAddress]?.pincode}`,
         },
         tempOrderDetails: [
           {
@@ -675,6 +724,34 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
+  const postServicablePincode = async (pincode: any, targetAddress: any) => {
+    try {
+      const payload = {
+        pincode,
+      };
+
+      const { data: response } = await POST(GET_PINCODE_DATA, payload);
+
+      if (response?.success) {
+        const pincodeData = response.data[0];
+        setAddressData((prevData: any) => {
+          return {
+            ...prevData,
+            [targetAddress]: {
+              ...prevData[targetAddress],
+              city: pincodeData.city,
+              state: pincodeData.state,
+              country: "India",
+            },
+          };
+        });
+      }
+    } catch (error) {
+      console.error("Error in ServicablePincode API", error);
+      return error;
+    }
+  };
+
   const switchConditions = () => {
     switch (errorModalData.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
@@ -801,7 +878,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                     </div> */}
                   </div>
                 </div>
-                <div className="border-2 border-t-0">
+                <div className="border-2 border-t-0 max-h-[640px] overflow-auto">
                   {/* {globalIndex === index && ( */}
                   <div className="p-[1rem]">
                     <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
@@ -875,20 +952,21 @@ const ErrorModal = (props: ErrorModalProps) => {
                           }
                           inputError={inputError}
                         />
-
-                        <CustomDropDown
-                          value={capitalizeFirstLetter(
-                            addressData?.[targetAddress]?.state
-                          )}
-                          name="state"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e)
-                          }
-                          options={dummyStateDropdownData}
-                          placeHolder="Select State"
-                          wrapperClass="w-[100%]"
-                          inputError={inputError}
-                        />
+                        <div className="w-[100%]">
+                          <CustomDropDown
+                            value={capitalizeFirstLetter(
+                              addressData?.[targetAddress]?.state
+                            )}
+                            name="state"
+                            onChange={(e: any) =>
+                              handleInputChange(targetAddress, e)
+                            }
+                            options={dummyStateDropdownData}
+                            placeHolder="Select State"
+                            wrapperClass="w-[100%]"
+                            inputError={inputError}
+                          />
+                        </div>
                       </div>
                       <div className="flex mt-[1rem] gap-[1rem]">
                         <InputBox
@@ -934,7 +1012,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                               );
                               setInputError(false);
                             }}
-                            inputError={inputError}
+                            // inputError={inputError}
                           />
                           {/* {inputError && validationErrors.emailId && (
                             <div className="flex items-center gap-x-1 mt-1">
@@ -983,29 +1061,31 @@ const ErrorModal = (props: ErrorModalProps) => {
                       </div>
 
                       <div className="flex mt-[1rem] gap-[1rem]">
-                        <CustomDropDown
-                          value={
-                            businessTypeDropDown
-                              .map((valueObj: any) => valueObj?.value)
-                              .includes(
-                                capitalizeFirstLetter(
-                                  addressData?.[targetAddress]?.contact?.type
+                        <div className="w-[100%]">
+                          <CustomDropDown
+                            value={
+                              businessTypeDropDown
+                                .map((valueObj: any) => valueObj?.value)
+                                .includes(
+                                  capitalizeFirstLetter(
+                                    addressData?.[targetAddress]?.contact?.type
+                                  )
                                 )
-                              )
-                              ? capitalizeFirstLetter(
-                                  addressData?.[targetAddress]?.contact?.type
-                                )
-                              : "Others"
-                          }
-                          name="type"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e, "contact")
-                          }
-                          options={businessTypeDropDown}
-                          placeHolder="Select Business Type"
-                          wrapperClass="w-[100%]"
-                          inputError={inputError}
-                        />
+                                ? capitalizeFirstLetter(
+                                    addressData?.[targetAddress]?.contact?.type
+                                  )
+                                : "Others"
+                            }
+                            name="type"
+                            onChange={(e: any) =>
+                              handleInputChange(targetAddress, e, "contact")
+                            }
+                            options={businessTypeDropDown}
+                            placeHolder="Select Business Type"
+                            wrapperClass="w-[100%]"
+                            // inputError={inputError}
+                          />
+                        </div>
 
                         <div className="w-[100%]">
                           <InputBox
@@ -1028,10 +1108,30 @@ const ErrorModal = (props: ErrorModalProps) => {
                           label="Pincode"
                           value={addressData?.[targetAddress]?.pincode}
                           name="pincode"
-                          onChange={(e: any) =>
-                            handleInputChange(targetAddress, e)
-                          }
+                          onChange={(e: any) => {
+                            const numericValue = e.target.value.replace(
+                              /[^0-9]/g,
+                              ""
+                            );
+                            handleInputChange(targetAddress, e);
+                            setValidationError(
+                              "pincode",
+                              validatePincode(numericValue)
+                            );
+                            if (setInputError) {
+                              setInputError(false);
+                            }
+                            if (e.target.value.length >= 6)
+                              postServicablePincode(
+                                e.target.value,
+                                targetAddress
+                              );
+                          }}
                           inputError={inputError}
+                          inputType="text"
+                          inputMode="numeric"
+                          maxLength={6}
+                          className="w-[100%]"
                         />
 
                         <InputBox
@@ -1107,11 +1207,16 @@ const ErrorModal = (props: ErrorModalProps) => {
                       {services.map((service: any, index: any) => {
                         return (
                           <div
-                            className={`flex  cursor-pointer min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
+                            className={`flex  cursor-pointer   hover:shadow-inner hover:bg-[#F7F7F7]  ${
+                              index === serviceIndex &&
+                              "shadow-inner bg-[#F7F7F7]"
+                            } min-w-[90%] border-2 rounded-br rounded-bl border-t-0`}
                             onClick={() => handleService(index)}
                           >
                             <div
-                              className="flex flex-col items-center gap-y-[1rem] my-5 w-[100%]"
+                              className={`flex  ${
+                                index === serviceIndex && "bg-[#]"
+                              } flex-col items-center gap-y-[1rem] my-2 w-[100%]`}
                               style={{
                                 boxShadow:
                                   "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
@@ -1126,18 +1231,32 @@ const ErrorModal = (props: ErrorModalProps) => {
                                 }}
                               >
                                 <div
-                                  className={`flex gap-x-4 ${
+                                  className={`flex items-center gap-x-4 ${
                                     index === serviceIndex && "font-semibold"
                                   }`}
                                 >
-                                  {index === serviceIndex && (
+                                  <input
+                                    type="radio"
+                                    value={service.partnerName}
+                                    className="!w-4"
+                                    readOnly={true}
+                                    checked={index === serviceIndex}
+                                    onChange={(e: any) => handleService(index)}
+                                  />
+                                  {/* {index === serviceIndex && (
                                     <img src={VanIcon} />
-                                  )}
+                                  )} */}
                                   {capitalizeFirstLetter(service.partnerName) +
                                     " " +
                                     capitalizeFirstLetter(service.serviceMode)}
                                 </div>
-                                <div>{service.total}</div>
+                                <div
+                                  className={`${
+                                    index === serviceIndex && "font-semibold"
+                                  }`}
+                                >
+                                  {service.total}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -1197,7 +1316,7 @@ const ErrorModal = (props: ErrorModalProps) => {
                 </div>
               )}
             </div>
-            {errorModalData.orderDetails === "EWay Bill Errors" && (
+            {errorModalData.orderDetails === "EWay Bill Error" && (
               <div className="my-[2rem]">
                 <InputBox
                   label="Enter Eway Bill No"
@@ -1282,6 +1401,9 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         return true;
       }
+      // case orderErrorCategoryENUMs["Delivery Address"]:
+      // case orderErrorCategoryENUMs["Pickup Address"]: {
+      // }
       case orderErrorCategoryENUMs["Service"]: {
         if (services.length === 0) {
           return false;
@@ -1297,7 +1419,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         }
         if (
           !otherErrorDetails?.eWayBillNo &&
-          errorModalData?.orderDetails === "EWay Bill Errors"
+          errorModalData?.orderDetails === "EWay Bill Error"
         ) {
           return false;
         }
@@ -1314,32 +1436,28 @@ const ErrorModal = (props: ErrorModalProps) => {
     }
   };
 
-  // const UpdateProductHandler = () =>{
-
-  // }
-
   const switchForUpdateActions = async (isProcessOrder?: any) => {
     let result: any = false;
 
-    setIsProcessOrderCall(isProcessOrder);
+    // setIsProcessOrderCall(isProcessOrder);
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
-        if (!isProcess) {
-          const totalProductAppliedWeight =
-            productAndBoxDetails?.products.reduce(
-              (acc: any, obj: any) => acc + obj.appliedWeight,
-              0
-            );
+        // if (!isProcess) {
+        //   const totalProductAppliedWeight =
+        //     productAndBoxDetails?.products.reduce(
+        //       (acc: any, obj: any) => acc + obj.appliedWeight,
+        //       0
+        //     );
 
-          if (
-            totalProductAppliedWeight >
-              productAndBoxDetails?.volumetricWeight &&
-            !isProcess
-          ) {
-            setAlertMessage(true);
-            return false;
-          }
-        }
+        //   if (
+        //     totalProductAppliedWeight >
+        //       productAndBoxDetails?.volumetricWeight &&
+        //     !isProcess
+        //   ) {
+        //     setAlertMessage(true);
+        //     return false;
+        //   }
+        // }
 
         // console.log("updateProducts", await updateProducts(isProcessOrder));
         result = await updateProducts(isProcessOrder);
@@ -1427,6 +1545,7 @@ const ErrorModal = (props: ErrorModalProps) => {
   useEffect(() => {
     if (errorModalData.error === orderErrorCategoryENUMs["Box And Product"]) {
       setProductAndBoxDetails(errorModalData?.entityDetails?.[0]);
+      setInputError(true);
     }
   }, [errorModalData]);
 
@@ -1464,14 +1583,45 @@ const ErrorModal = (props: ErrorModalProps) => {
   }, [addressData]);
 
   useEffect(() => {
-    if (isProcess) {
-      if (isProcessOrderCall) {
-        processOrder();
-      } else {
-        switchForUpdateActions(false);
+    if (
+      errorModalData.error === "Delivery Address" ||
+      errorModalData.error === "Pickup Address"
+    ) {
+      let targetAddress = "";
+      if (errorModalData.error === "Delivery Address") {
+        targetAddress = "deliveryAddress";
+      } else if (errorModalData.error === "Pickup Address") {
+        targetAddress = "pickupAddress";
+      }
+
+      if (
+        addressData[targetAddress]?.flatNo.trim() === "" ||
+        addressData[targetAddress]?.country.trim() === "" ||
+        addressData[targetAddress]?.state.trim() === "" ||
+        addressData[targetAddress]?.city.trim() === "" ||
+        addressData[targetAddress]?.locality.trim() === "" ||
+        addressData[targetAddress]?.contact?.emailId.trim() === "" ||
+        addressData[targetAddress]?.contact?.mobileNo === "" ||
+        addressData[targetAddress]?.contact?.type.trim() === "" ||
+        addressData[targetAddress]?.contact?.name.trim() === "" ||
+        addressData[targetAddress]?.pincode === "" ||
+        addressData[targetAddress]?.pincode === 0 ||
+        addressData[targetAddress]?.landmark.trim() === ""
+      ) {
+        setInputError(true);
       }
     }
-  }, [isProcess]);
+  }, [addressData]);
+
+  // useEffect(() => {
+  //   if (isProcess) {
+  //     if (isProcessOrderCall) {
+  //       processOrder();
+  //     } else {
+  //       switchForUpdateActions(false);
+  //     }
+  //   }
+  // }, [isProcess]);
 
   return (
     <div className="overflow-h-auto max-h-[90vh]">
@@ -1490,7 +1640,8 @@ const ErrorModal = (props: ErrorModalProps) => {
                   </p>
                   <p className="flex justify-center items-center mx-2 text-[14px] font-medium">
                     Order Id : {"("}
-                    {errorModalData?.entityDetails?.orderId}
+                    {errorModalData?.entityDetails?.orderNumber ||
+                      errorModalData?.entityDetails?.orderId}
                     {")"}
                   </p>
                 </div>
@@ -1525,7 +1676,6 @@ const ErrorModal = (props: ErrorModalProps) => {
             onClick={() => {
               if (switchForValidation()) switchForUpdateActions(false);
             }}
-            //
           >
             {switchForUpdateActionsName()}
           </div>
@@ -1550,7 +1700,7 @@ const ErrorModal = (props: ErrorModalProps) => {
           </div>
         )}
       </div>
-      <CustomeBottomModal
+      {/* <CustomeBottomModal
         isOpen={showAlertMessage}
         onRequestClose={() => setAlertMessage(false)}
         overlayClassName="flex p-5 items-center outline-none z-[99]"
@@ -1564,8 +1714,7 @@ const ErrorModal = (props: ErrorModalProps) => {
         </div>
         <div className="px-16 ">
           <p className=" text-base   lg:text-lg font-semibold  text-center">
-            Weight Of Products Should be always Greater then Box Volumetric
-            weight
+            Box Volumetric weight Should be always Greater than
           </p>
           <p className=" text-base   lg:text-lg font-semibold  text-center">
             Are You Sure You Want To Proceed ?
@@ -1593,7 +1742,7 @@ const ErrorModal = (props: ErrorModalProps) => {
             </button>
           </div>
         </div>
-      </CustomeBottomModal>
+      </CustomeBottomModal> */}
     </div>
   );
 };

@@ -73,7 +73,8 @@ const moreDropDown = (currentStatus?: any, orderActions?: any, data?: any) => {
 
   const actionsObject: any = {
     DRAFT: [
-      { title: "Edit Order", actionType: "edit" },
+      //commneted as it is not needed at this time
+      // { title: "Edit Order", actionType: "edit" },
       { title: "Delete Order", actionType: "delete" },
     ],
     BOOKED: [
@@ -383,7 +384,9 @@ const idHelper = (
               <span className=" text-sm font-light">Order ID :</span>
               <div className=" flex text-base items-center font-medium">
                 <span className="">
-                  {source === "SHOPIFY" || source === "ZOHO"
+                  {source === "SHOPIFY" ||
+                  source === "ZOHO" ||
+                  source === "WOOCOMMERCE"
                     ? otherDetails?.orderNumber
                       ? `${otherDetails?.orderNumber}`
                       : orderId
@@ -391,9 +394,11 @@ const idHelper = (
                 </span>
                 <CopyTooltip
                   stringToBeCopied={
-                    source === "SHOPIFY" || source === "ZOHO"
+                    source === "SHOPIFY" ||
+                    source === "ZOHO" ||
+                    source === "WOOCOMMERCE"
                       ? otherDetails?.orderNumber
-                        ? otherDetails?.orderNumber
+                        ? `${otherDetails?.orderNumber}`
                         : orderId
                       : orderId
                   }
@@ -576,7 +581,6 @@ const idHelper = (
 
       let statusObj: any = { title: "" };
       rowsData?.status?.map((elem: any, index: any) => {
-        // console.log("descriptionBookedOrder", elem?.description);
         statusObj = {
           ...statusObj,
           [`AWB No ${index + 1}`]: awb,
@@ -705,7 +709,7 @@ export const columnHelperForNewOrder = (
         // const AWB = otherDetails?.awbNo
         let updatedAtStatus = 0;
 
-        console.log("Get Created AT: ", date_DD_MMM_YYYY_HH_MM_SS(createdAt));
+        // console.log("Get Created AT: ", date_DD_MMM_YYYY_HH_MM_SS(createdAt));
 
         if (status?.length > 0) {
           updatedAtStatus = status[status.length - 1]?.timeStamp;
@@ -744,7 +748,7 @@ export const columnHelperForNewOrder = (
                       </div>
                     ) : (
                       <Link
-                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}`}
+                        to={`/orders/add-order/pickup?shipyaari_id=${tempOrderId}&source=${source}&orderId=${orderId}`}
                         className="underline text-blue-500 cursor-pointer"
                       >
                         <span
@@ -765,7 +769,9 @@ export const columnHelperForNewOrder = (
                   <span className=" text-sm font-light">Order ID :</span>
                   <div className=" flex text-base items-center font-medium">
                     <span className="">
-                      {source === "SHOPIFY" || source === "ZOHO"
+                      {source === "SHOPIFY" ||
+                      source === "ZOHO" ||
+                      source === "WOOCOMMERCE"
                         ? otherDetails?.orderNumber
                           ? `${otherDetails?.orderNumber}`
                           : orderId
@@ -773,9 +779,11 @@ export const columnHelperForNewOrder = (
                     </span>
                     <CopyTooltip
                       stringToBeCopied={
-                        source === "SHOPIFY" || source === "ZOHO"
+                        source === "SHOPIFY" ||
+                        source === "ZOHO" ||
+                        source === "WOOCOMMERCE"
                           ? otherDetails?.orderNumber
-                            ? otherDetails?.orderNumber
+                            ? `${otherDetails?.orderNumber}`
                             : orderId
                           : orderId
                       }
@@ -1017,7 +1025,8 @@ export const columnHelperForNewOrder = (
 
           setInfoModalContentFunction({
             awb: "0",
-            orderId: `T${rowsData.tempOrderId}`,
+            orderId: `T${rowsData?.tempOrderId}`,
+            orderNumber: otherDetails?.orderNumber,
           });
         };
         return (
@@ -1229,14 +1238,16 @@ export const columnHelperForNewOrder = (
             <div className="flex flex-col gap-y-1 text-base py-3">
               <p>
                 <span>Invoice Value : </span>₹{" "}
-                {Math.round(codInfo?.invoiceValue)?.toLocaleString("en-IN")}
+                {Number(codInfo?.invoiceValue?.toFixed(2))?.toLocaleString(
+                  "en-IN"
+                )}
               </p>
               {codInfo?.isCod && (
                 <p>
                   <span>COD Amount : </span>₹{" "}
-                  {Math.round(codInfo?.collectableAmount)?.toLocaleString(
-                    "en-IN"
-                  )}
+                  {Number(
+                    codInfo?.collectableAmount?.toFixed(2)
+                  )?.toLocaleString("en-IN")}
                 </p>
               )}
 

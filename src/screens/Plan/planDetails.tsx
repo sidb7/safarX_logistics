@@ -48,6 +48,7 @@ const PlanDetails = (props: ITypeProps) => {
   const [planData, setPlanData] = useState<any>([]);
   const [allPlans, setAllPlans] = useState<any>([]);
   const [pendingPlan, setPendingPlan] = useState<any>({});
+  console.log("🚀 ~ PlanDetails ~ pendingPlan:", pendingPlan);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [renderingComponents, setRenderingComponents] = useState<any>(0);
 
@@ -713,6 +714,7 @@ const PlanDetails = (props: ITypeProps) => {
       if (responseV4?.success) {
         setIsModalOpen(false);
         toast.success(responseV4?.message);
+        window.location.reload();
       } else {
         toast.error(responseV4?.message);
       }
@@ -839,11 +841,11 @@ const PlanDetails = (props: ITypeProps) => {
             </div>
           </div> */}
           {/* Plan Details */}
-          <div className=" mb-9 mx-5 lg:ml-[30px]">
+          <div className=" mb-9 mx-5 lg:ml-[20px]">
             <PlanDetailsCard planDetails={planData} />
           </div>
           {/* Pricing Details */}
-          <div className="mb-4 mx-5 lg:ml-[30px]">
+          <div className="mb-4 mx-5 lg:ml-[20px]">
             <ScrollNav
               arrayData={arrayData}
               showNumber={false}
@@ -923,7 +925,7 @@ const PlanDetails = (props: ITypeProps) => {
               thclassName={"border-none bg-white"}
             />
           </div> */}
-          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[30px]">
+          <div className="flex items-center justify-between h-[60px] rounded-lg p-3 bg-[#E5E4FF]  mb-6 mx-5 lg:ml-[20px]">
             <p className=" font-Open lg:font-Lato font-semibold text-sm  lg:text-xl leading-4 lg:leading-[26px] text-[#494949]">
               Not sure which plan to choose?
             </p>
@@ -963,10 +965,10 @@ const PlanDetails = (props: ITypeProps) => {
             <CenterModal
               isOpen={isModalOpen}
               onRequestClose={() => setIsModalOpen(false)}
-              className="md:h-[65%] md:w-[65%] lg:h-[70%] lg:w-[50%] xl:h-[60%] xl:w-[40%]"
+              className="md:h-[65%] md:w-[65%] h-[55%] lg:h-[60%%] lg:w-[50%] xl:h-[60%] 2xl:h-[56%] xl:w-[40%]"
             >
               <>
-                <div className=" w-full h-full gap-y-6 p-4 flex flex-col">
+                <div className=" w-full gap-y-6 p-4 flex flex-col">
                   <div className="flex items-center justify-end">
                     {/* <p className="font-open text-lg font-semibold leading-5">
                       Plan Info
@@ -980,8 +982,8 @@ const PlanDetails = (props: ITypeProps) => {
                       <img alt="" className="cursor-pointer" src={CrossIcon} />
                     </div>
                   </div>
-                  <div className="flex flex-col m-7 gap-y-14">
-                    <div className="p-5 border-[1px] border-[#FFFFFF] shadow-lg rounded-md">
+                  <div className="flex flex-col m-5 mt-3 gap-y-4">
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
                       <div className="flex flex-col gap-y-6">
                         <div className="flex justify-between">
                           <p className="font-Open font-normal text-base leading-[22px]">
@@ -1011,27 +1013,35 @@ const PlanDetails = (props: ITypeProps) => {
                         </div>
                         <div className="flex justify-between">
                           <p className="font-Open font-normal text-base leading-[22px]">
-                            Amount:
+                            Plan Price:
                           </p>
                           <p className="font-Open text-base font-semibold leading-[22px]">
-                            {pendingPlan?.price}
+                            ₹ {pendingPlan?.preTaxPrice || 0}
+                          </p>
+                        </div>
+                        <div className="flex justify-between">
+                          <p className="font-Open font-normal text-base leading-[22px]">
+                            Tax:
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            ₹ {pendingPlan?.taxAmount || 0}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="p-5 border-[1px] border-[#FFFFFF] shadow-lg rounded-md">
+                    <div className="p-5 border-[1px] border-[#DDDDDD] shadow-lg rounded-md">
                       <div className="flex flex-col gap-y-6">
                         <div className="flex justify-between">
                           <p className="font-Open font-semibold text-lg leading-[24px] text-[#004EFF]">
                             Total:
                           </p>
                           <p className="font-Open text-lg font-semibold leading-[24px] text-[#004EFF]">
-                            ₹ {pendingPlan?.price}
+                            ₹ {pendingPlan?.price || 0}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <div className="flex justify-center gap-x-3">
+                    <div className="flex justify-center gap-x-3 mt-5">
                       <CustomButton
                         text="close"
                         onClick={() => {

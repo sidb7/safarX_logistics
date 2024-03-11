@@ -163,6 +163,8 @@ const Errors = (props: ErrorProps) => {
   const [deliveryAddressDropDownData, setDeliveryAddressDropDownData] =
     useState([]);
 
+  const [isFixDisabled, setIsFixDisabled] = useState(true);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -216,7 +218,9 @@ const Errors = (props: ErrorProps) => {
             <div className="flex flex-col mb-1 min-w-[100%] bg-[#fdfdfd] border-1 p-[5px] px-[10px] shadow-inner rounded-br rounded-bl border-t-0 ">
               <div className="flex justify-between border-1 my-1 shadow-md w-[100%] py-[10px] px-[10px] rounded ">
                 <div className="">
-                  <div>OrderId - {eachOrder.orderId}</div>
+                  <div>
+                    OrderId - {eachOrder?.orderNumber || eachOrder.orderId}
+                  </div>
                   <div></div>
                 </div>
                 <div
@@ -320,8 +324,12 @@ const Errors = (props: ErrorProps) => {
   const onSelectDropDownHandler = (e: any, errorName?: any) => {
     if (errorName === "Pickup Address") {
       setSelectedPickupAddress(e.target.value);
+      if (e.target.value.length > 0) setIsFixDisabled(false);
+      else setIsFixDisabled(true);
     } else {
       setSelectedDeliveryAddress(e.target.value);
+      if (e.target.value.length > 0) setIsFixDisabled(false);
+      else setIsFixDisabled(true);
     }
   };
 
@@ -384,7 +392,9 @@ const Errors = (props: ErrorProps) => {
                   >
                     <div className="flex items-center">
                       <div className="rounded-md py-1">
-                        {order?.orderId
+                        {order?.orderNumber
+                          ? "OrderId - " + order?.orderNumber
+                          : order?.orderId
                           ? "OrderId - " + order?.orderId
                           : "TempOrderId - " + order?.tempOrderId}
                       </div>
@@ -420,7 +430,11 @@ const Errors = (props: ErrorProps) => {
                     >
                       <div className="flex items-center">
                         <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
-                          {order?.orderId ? order?.orderId : order?.tempOrderId}
+                          {order?.orderNumber
+                            ? order?.orderNumber
+                            : order?.orderId
+                            ? order?.orderId
+                            : order?.tempOrderId}
                         </div>
                         <div>{order?.source}</div>
                       </div>
@@ -525,7 +539,11 @@ const Errors = (props: ErrorProps) => {
                           className="mx-1 flex flex-col flex-1 "
                           onClick={() => handleItemClick(index)}
                         >
-                          <div>{item?.errorName}</div>
+                          <div>
+                            {item?.errorName === "Box And Product"
+                              ? "Update Dimension And Weight"
+                              : item?.errorName}
+                          </div>
                           <div className="text-[14px]">
                             {totalOrdersCount} Orders
                           </div>
@@ -536,7 +554,10 @@ const Errors = (props: ErrorProps) => {
                             item?.errorName === "Pickup Address") && (
                             <div className="flex w-[600px] mx-4">
                               <button
-                                className="border py-2 px-4 rounded drop-shadow-sm"
+                                disabled={isFixDisabled}
+                                className={`border py-2 px-4 rounded drop-shadow-sm ${
+                                  isFixDisabled ? "opacity-50" : "opacity-100"
+                                }`}
                                 onClick={() =>
                                   fixAllHandler(
                                     item?.errorName,

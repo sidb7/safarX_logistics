@@ -59,6 +59,7 @@ interface IOrderstatusProps {
   setErrorData?: any;
   setIsErrorListLoading: any;
   getErrors: any;
+  selectedDateRange: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -106,6 +107,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setErrorData,
   setIsErrorListLoading,
   getErrors,
+  selectedDateRange,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -148,15 +150,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const tabIndex = activeTab ? getIndexFromActiveTab(statusData, activeTab) : 0;
 
   const setScrollIndex = (id: number) => {
-    handleTabChange(id);
+    // handleTabChange(id);
     const tabName = statusData[id].value;
     navigate(`/orders/view-orders?activeTab=${tabName?.toLowerCase()}`);
   };
 
-  useEffect(() => {
-    handleTabChange(tabIndex);
-    // setStatusId(tabStatusId || statusId);
-  }, []);
+  // useEffect(() => {
+  //   handleTabChange(tabIndex);
+  // }, []);
 
   const [filterData, setFilterData] = useState([
     {
@@ -165,7 +166,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       value: "all",
     },
     {
-      label: `Draft`,
+      label: `Ready To Book`,
       isActive: false,
       value: "draft",
     },
@@ -415,9 +416,12 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 isLoading: false,
                 identifier: "",
               });
+
               toast.success(
                 data?.message || "Successfully Placed Channel Orders"
               );
+              // handleTabChange(1);
+              // navigate(`/orders/view-orders?activeTab=booked`);
             } else {
               setIsLoadingManifest({
                 isLoading: false,
@@ -667,7 +671,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-            <div>
+            {/* <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
                 label="Search"
@@ -687,7 +691,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 Filter
               </span>
-            </div>
+            </div> */}
           </div>
         );
       } else {
@@ -733,7 +737,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
                 })}
               </div>
             )}
-
+            {/* 
             <div>
               <SearchBox
                 className="removePaddingPlaceHolder"
@@ -755,7 +759,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
               <span className="text-[#004EFF] text-[14px] font-semibold">
                 FILTER
               </span>
-            </div>
+            </div> */}
           </div>
         );
       }
@@ -768,7 +772,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   // };
 
   const getAllOrders = async (subStatus?: any) => {
-    let payload = {
+    let payload: any = {
       skip: 0,
       limit: 10,
       pageNo: 1,
@@ -776,9 +780,54 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       currentStatus,
       subStatus,
     };
+
+    if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      const { startDate, endDate } = selectedDateRange;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.filterArrOne = [
+        {
+          createdAt: {
+            $gte: startEpoch,
+          },
+        },
+        {
+          createdAt: {
+            $lte: lastendEpoch,
+          },
+        },
+      ];
+      payload.filterArrTwo = [];
+    }
+
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
-    const { OrderData, orderCount } = data?.data?.[0];
+    const { OrderData, orderCount, draftCount } = data?.data?.[0];
+
+    if (subStatus === "DRAFT") {
+      setDraftOrderCount({
+        ...draftOrderCount,
+        draft: orderCount || 0,
+      });
+    } else {
+      setDraftOrderCount({
+        ...draftOrderCount,
+        all: orderCount,
+        draft: draftCount || 0,
+      });
+    }
 
     setOrders(OrderData);
     setTotalcount(orderCount || 0);
@@ -870,6 +919,8 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       const { OrderData, orderCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);
       setTotalcount(orderCount ? orderCount : 0);
+
+      console.log("filterState----------------1 filterApi", filterState);
 
       if (data?.status) {
         setIsFilterLoading(false);

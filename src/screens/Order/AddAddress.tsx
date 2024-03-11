@@ -189,7 +189,6 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
   };
 
   const createAddress = async () => {
-    console.log("its working");
     if (!addressType) {
       toast.error("Please Select Address Type");
       return;
@@ -202,14 +201,15 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
     }));
 
     if (
-      addAddress?.flatNo === "" ||
-      addAddress?.landmark === "" ||
-      addAddress?.city === "" ||
-      addAddress?.state === "" ||
-      addAddress?.country === "" ||
-      addAddress?.contactcontact?.contactName === "" ||
-      addAddress?.mobileNo === "" ||
-      addAddress?.pincode === ""
+      (addAddress?.flatNo.trim() === "" ||
+        addAddress?.landmark.trim() === "" ||
+        addAddress?.city.trim() === "" ||
+        addAddress?.state.trim() === "" ||
+        addAddress?.country.trim() === "" ||
+        addAddress?.contactcontact?.contactName.trim() === "" ||
+        addAddress?.mobileNo === "" ||
+        addAddress?.pincode === "",
+      addAddress?.pincode === 0)
     ) {
       setInputError(true);
       return;
@@ -258,6 +258,21 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
     }
   };
 
+  useEffect(() => {
+    if (
+      addAddress?.flatNo.trim() === "" ||
+      addAddress?.landmark.trim() === "" ||
+      addAddress?.city.trim() === "" ||
+      addAddress?.state.trim() === "" ||
+      addAddress?.country.trim() === "" ||
+      addAddress?.contactcontact?.contactName.trim() === "" ||
+      addAddress?.mobileNo.trim() === "" ||
+      addAddress?.pincode.trim() === ""
+    ) {
+      setInputError(true);
+    }
+  }, [addAddress]);
+
   return (
     <div className=" my-6">
       <div className="mx-4 font-medium text-[22px] p-2 border-b">
@@ -290,7 +305,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                     </div> */}
             </div>
           </div>
-          <div className="border-2 border-t-0">
+          <div className="border-2 border-t-0 max-h-[640px] overflow-auto">
             {/* {globalIndex === index && ( */}
             <div className="p-[1rem]">
               <div className="bg-white rounded-lg border border-black overflow-hidden shadow-lg relative">
@@ -413,7 +428,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                       inputType="email"
                       label="Email ID (optional)"
                       name="emailId"
-                      inputError={inputError}
+                      // inputError={inputError}
                       value={addAddress?.contact?.emailId || ""}
                       onChange={(e: any) => handleInputChange(e, "contact")}
                     />
@@ -475,7 +490,7 @@ function AddAddress({ addressType, setAddAddressModal, returnAddress }: any) {
                       name="type"
                       onChange={handleInputChange}
                       options={businessTypeDropDown}
-                      inputError={inputError}
+                      // inputError={inputError}
                       placeHolder="Select Business Type"
                       wrapperClass="w-[100%]"
                     />

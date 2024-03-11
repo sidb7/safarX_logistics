@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
 import UpArrowIcon from "../../assets/upArrorwBlue.svg";
@@ -6,6 +6,11 @@ import { capitalizeFirstLetter } from "../../utils/utility";
 
 const RateCardTable = (props: any) => {
   const { serviceData } = props;
+
+  let activeServiceInfo: any = serviceData.filter(
+    (serviceObj: any) => serviceObj?.isActive === true
+  );
+
   const formatString = (inputString: any) => {
     // Split the string by underscore
     const words = inputString.split("_");
@@ -26,7 +31,7 @@ const RateCardTable = (props: any) => {
     columnsHelper.accessor("serviceName", {
       header: (props) => {
         return (
-          <div className="flex items-center min-w-fit">
+          <div className="flex items-center">
             {/* <PartialChecked
               checked={props.table?.getIsAllRowsSelected()}
               onChange={props?.table?.getToggleAllRowsSelectedHandler()}
@@ -74,7 +79,7 @@ const RateCardTable = (props: any) => {
         let tempTransit = row?.original?.weightSlab;
         let uniqueValue: any = [];
         return (
-          <div className="-mt-[60px]">
+          <div className="-mt-[60px] flex flex-col  items-center">
             {tempTransit?.map((data: any, index: number) => {
               if (
                 !uniqueValue?.some((obj: any) => obj?.transit === data?.transit)
@@ -89,8 +94,9 @@ const RateCardTable = (props: any) => {
               if (el?.transit === "FORWARD") {
                 return (
                   <>
-                    <div className="leading-[195px] font-Open font-normal text-sm ">
+                    <div className="font-Open font-normal text-sm mt-14 text-center">
                       {capitalizeFirstLetter(el?.transit)}
+                      <hr className="mt-2 w-[150px]" />
                     </div>
                     <div>{el?.inputHtml}</div>
                   </>
@@ -102,7 +108,7 @@ const RateCardTable = (props: any) => {
               if (el?.transit === "RETURN") {
                 return (
                   <>
-                    <div className="font-Open font-normal text-sm leading-[75px]  ">
+                    <div className="font-Open font-normal text-sm  mt-2">
                       {capitalizeFirstLetter(el?.transit)}
                     </div>
                     {/* <div>{el?.inputHtml}</div> */}
@@ -416,7 +422,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
@@ -429,7 +435,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
@@ -458,7 +464,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
@@ -471,7 +477,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
@@ -500,7 +506,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.base}
                           defaultValue={data["ZONE 1"]?.base || ""}
@@ -513,7 +519,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 1"]?.add}
                           defaultValue={data["ZONE 1"]?.add || ""}
@@ -573,7 +579,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC]  ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C]  ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
@@ -586,7 +592,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
@@ -616,7 +622,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
@@ -629,7 +635,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
@@ -659,7 +665,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.base}
                           defaultValue={data["ZONE 2"]?.base || ""}
@@ -672,7 +678,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 2"]?.add}
                           defaultValue={data["ZONE 2"]?.add || ""}
@@ -732,7 +738,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC]  ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C]  ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
@@ -745,7 +751,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
@@ -775,7 +781,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
@@ -788,7 +794,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
@@ -818,7 +824,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.base}
                           defaultValue={data["ZONE 3"]?.base || ""}
@@ -831,7 +837,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 3"]?.add}
                           defaultValue={data["ZONE 3"]?.add || ""}
@@ -891,7 +897,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
@@ -904,7 +910,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
@@ -934,7 +940,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
@@ -947,7 +953,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
@@ -977,7 +983,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.base}
                           defaultValue={data["ZONE 4"]?.base || ""}
@@ -990,7 +996,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 4"]?.add}
                           defaultValue={data["ZONE 4"]?.add || ""}
@@ -1050,7 +1056,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
@@ -1063,7 +1069,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
@@ -1093,7 +1099,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
@@ -1106,7 +1112,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
@@ -1136,7 +1142,7 @@ const RateCardTable = (props: any) => {
                     <div className="flex gap-2 pr-5">
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.base}
                           defaultValue={data["ZONE 5"]?.base || ""}
@@ -1149,7 +1155,7 @@ const RateCardTable = (props: any) => {
                       </div>
                       <div>
                         <input
-                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#CCCCCC] ${tempOriginal?.partnerServiceId}_editSingleRow`}
+                          className={`h-[30px] w-[50px] p-[11px] cursor-not-allowed border-none font-Open text-sm font-normal leading-5 text-[#1C1C1C] ${tempOriginal?.partnerServiceId}_editSingleRow`}
                           type="text"
                           // value={data["ZONE 5"]?.add}
                           defaultValue={data["ZONE 5"]?.add || ""}
@@ -1172,7 +1178,7 @@ const RateCardTable = (props: any) => {
     }),
   ];
 
-  return <CustomTable data={serviceData || []} columns={columns} />;
+  return <CustomTable data={activeServiceInfo || []} columns={columns} />;
 };
 
 export default RateCardTable;

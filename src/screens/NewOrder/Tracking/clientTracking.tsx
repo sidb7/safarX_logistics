@@ -245,7 +245,7 @@ const Tracking = () => {
     return trackingCycleDetails?.Scans?.map((each: any, index: number) => {
       return (
         <div className="flex gap-x-4  w-full " key={index}>
-          <div className="font-bold pr-2 py-2 ">
+          <div className="font-bold pr-2 py-2 min-w-[24%] md:min-w-[14%] lg:min-w-[12%]">
             <p className="text-xs font-Open w-full ">
               {new Date(each?.time).toDateString().slice(3) || "-"}
             </p>
@@ -258,9 +258,11 @@ const Tracking = () => {
           </div>
           <div className="py-2">
             <div className="text-xs font-Open font-medium  md:w-full ">
-              <p className="capitalize">{each?.message.toLowerCase()}</p>
+              <p className="capitalize text-xs font-Open">
+                {each?.message.toLowerCase()}
+              </p>
             </div>
-            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full  ">
+            <p className="text-xs py-1 font-Open  capitalize font-semibold   md:w-full">
               {each?.status.toLowerCase()}
             </p>
             <div className="flex gap-x-1">
@@ -332,31 +334,65 @@ const Tracking = () => {
                                             alt=""
                                             className="w-20"
                                           />
-                                          {lastUpdate?.time === "" &&
-                                          lastUpdate?.day === "" &&
-                                          lastUpdate?.date === "" &&
-                                          lastUpdate?.hours === "" ? (
-                                            ""
-                                          ) : (
-                                            <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
-                                              <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
-                                                Last Update:
-                                                <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
-                                                  <span>
-                                                    {lastUpdate.hours + " |"}
-                                                  </span>
-                                                  <span>{lastUpdate.date}</span>
-                                                </div>
+                                          <div className="flex gap-x-6">
+                                            {trackingState[0]?.shipmentStatus
+                                              ?.EDD === "" ||
+                                            trackingState[0]?.shipmentStatus
+                                              ?.EDD === undefined ? (
+                                              ""
+                                            ) : (
+                                              <p className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                                                <span className="text-[12px] font-semibold font-Open leading-[16px]">
+                                                  EDD:{" "}
+                                                </span>
+                                                {
+                                                  trackingState[0]
+                                                    ?.shipmentStatus?.EDD
+                                                }
                                               </p>
-                                            </div>
-                                          )}
+                                            )}
+                                            {
+                                              //commented as changed the key of the updated time
+                                              lastUpdate?.time === "" &&
+                                              lastUpdate?.day === "" &&
+                                              lastUpdate?.date === "" &&
+                                              lastUpdate?.hours === "" ? (
+                                                // trackingState[0]?.shipmentStatus
+                                                //   ?.EDD === "" ||
+                                                // trackingState[0]?.shipmentStatus
+                                                //   ?.EDD === undefined
+                                                ""
+                                              ) : (
+                                                <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
+                                                  <p className="flex flex-col md:flex-row text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  md:items-center">
+                                                    Last Update:
+                                                    <div className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                                                      <span>
+                                                        {lastUpdate.hours +
+                                                          " |"}
+                                                      </span>
+                                                      <span>
+                                                        {lastUpdate.date}
+                                                      </span>
+                                                      {/* <p className="flex gap-x-1 md:ml-1 text-[12px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                                                      {
+                                                        trackingState[0]
+                                                          ?.shipmentStatus?.EDD
+                                                      }
+                                                    </p> */}
+                                                    </div>
+                                                  </p>
+                                                </div>
+                                              )
+                                            }
+                                          </div>
                                         </div>
 
                                         <div className="flex justify-between pt-2">
                                           <div className="flex flex-col md:flex-row gap-y-1 md:gap-y-0 gap-x-4 md:items-end xl:pr-4">
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Tracking ID:
-                                              <span className="font-bold text-[#004EFF]">
+                                              <span className="font-bold font-Open text-[#004EFF]">
                                                 {each?.awb}
                                               </span>
                                               <CopyTooltip
@@ -377,7 +413,7 @@ const Tracking = () => {
 
                                             <p className="text-xs font-normal font-Open flex gap-x-1">
                                               Order ID:
-                                              <span className="font-bold text-[#004EFF]">
+                                              <span className="font-bold font-Open text-[#004EFF]">
                                                 {each?.otherDetails?.orderNumber
                                                   ? each?.otherDetails
                                                       ?.orderNumber
@@ -387,7 +423,8 @@ const Tracking = () => {
                                                 stringToBeCopied={each?.orderId}
                                               />
                                             </p>
-                                            {each?.expectedDelivery
+                                            {/* commented as it is required as we added EDD */}
+                                            {/* {each?.expectedDelivery
                                               ?.currentDelivery === "" ||
                                             each?.expectedDelivery
                                               ?.currentDelivery ===
@@ -403,7 +440,7 @@ const Tracking = () => {
                                                   }
                                                 </span>
                                               </p>
-                                            )}
+                                            )} */}
                                             {orderType && (
                                               <div>
                                                 <p className="text-xs font-Open font-normal md:pt-2">
@@ -418,18 +455,18 @@ const Tracking = () => {
                                         </div>
                                         <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
                                           <div className="md:flex-1 mt-2">
-                                            <p className="text-[14px] font-normal leading-[16px] ">
+                                            <p className="text-[14px] font-normal font-Open leading-[16px] ">
                                               From:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1  h-[50px] customScroll">
+                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
                                               {each?.pickupAddress?.fullAddress}
                                             </p>
                                           </div>
                                           <div className="md:flex-1 mt-2 ]">
-                                            <p className="text-[14px] font-normal leading-[16px]">
+                                            <p className="text-[14px] font-normal font-Open leading-[16px]">
                                               To:
                                             </p>
-                                            <p className="text-[12px] font-normal leading-[16px] mt-1 h-[50px] customScroll">
+                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
                                               {
                                                 each?.deliveryAddress
                                                   ?.fullAddress
@@ -437,10 +474,15 @@ const Tracking = () => {
                                             </p>
                                           </div>
                                         </div>
-                                        {each?.currentStatus ===
-                                        "cancelledOrder" ? (
+                                        {each?.currentStatus === "CANCELLED" ||
+                                        each?.currentStatus === "EXCEPTION" ? (
                                           <div className="mt-4 flex justify-center text-white bg-[#80A7FF]  rounded-lg absoute top-10">
-                                            <p>cancelledOrder Order</p>
+                                            <p>
+                                              {each?.currentStatus ===
+                                              "CANCELLED"
+                                                ? "Cancelled Order"
+                                                : "Exception"}
+                                            </p>
                                           </div>
                                         ) : (
                                           <></>
@@ -448,7 +490,8 @@ const Tracking = () => {
                                         <div
                                           className={`mt-6 ${
                                             each?.currentStatus ===
-                                            "cancelledOrder"
+                                              "CANCELLED" ||
+                                            each?.currentStatus === "EXCEPTION"
                                               ? "blur-sm"
                                               : ""
                                           }`}
@@ -526,43 +569,39 @@ const Tracking = () => {
                                             <>
                                               <div className="flex flex-col md:flex-row w-full mt-2 gap-x-5">
                                                 <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                                  <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                  <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                     Buyer's Name
                                                   </p>
-                                                  <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                                    {
-                                                      each?.pickupAddress
-                                                        ?.contact?.name
-                                                    }
+                                                  <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                    {each?.deliveryAddress
+                                                      ?.contact?.name ||
+                                                      "No Data Found"}
                                                   </p>
                                                 </div>
                                                 <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                                  <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                  <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                     Phone Number
                                                   </p>
-                                                  <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                                    {
-                                                      each?.pickupAddress
-                                                        ?.contact?.mobileNo
-                                                    }
+                                                  <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                    {each?.deliveryAddress
+                                                      ?.contact?.mobileNo ||
+                                                      "No Data Found"}
                                                   </p>
                                                 </div>
                                                 <div className="border-r-2 border-[#D9DBDD] pr-6">
-                                                  <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                  <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                     Invoice
                                                   </p>
-                                                  <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
-                                                    {
-                                                      each?.codInfo
-                                                        ?.invoiceValue
-                                                    }
+                                                  <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
+                                                    {each?.codInfo
+                                                      ?.invoiceValue || 0}
                                                   </p>
                                                 </div>
                                                 <div className="">
-                                                  <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                  <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                     Payment Mode
                                                   </p>
-                                                  <p className="whitespace-nowrap font-normal font-sans text-[14px] leading-5">
+                                                  <p className="whitespace-nowrap font-normal font-Open text-[14px] leading-5">
                                                     {each?.codInfo?.isCod
                                                       ? "COD"
                                                       : "Prepaid"}
@@ -570,23 +609,27 @@ const Tracking = () => {
                                                 </div>
                                               </div>
                                               <div className="mt-2 ">
-                                                <p className="text-[#777777] text-[12px] font-normal leading-5">
+                                                <p className="text-[#777777] text-[12px] font-Open font-normal leading-5">
                                                   Address
                                                 </p>
-                                                <p className=" font-normal font-sans text-[11px] md:text-[14px] leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
+                                                <p className=" font-normal font-Open text-[12px]  leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
                                                   {
                                                     each?.pickupAddress
                                                       ?.fullAddress
                                                   }
                                                 </p>
                                               </div>
-                                              <p className="mt-4 leading-4  text-[12px] font-medium">
+                                              <p className="mt-4 leading-4 font-Open text-[12px] font-medium">
                                                 Product Details
                                               </p>
 
                                               {each?.products?.map(
                                                 (each: any, index: number) => {
-                                                  return <>{each?.breadth}</>;
+                                                  return (
+                                                    <p className="font-Open text-[12px] font-medium">
+                                                      {each?.breadth}
+                                                    </p>
+                                                  );
                                                 }
                                               )}
                                             </>

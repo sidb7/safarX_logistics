@@ -67,7 +67,7 @@ export const Breadcrum = ({
         )}
       </div>
       <div className="pl-5 pt-5 pr-5 lg:p-5">
-        <div className={`hidden lg:flex gap-x-2 pl-8 font-Lato `}>
+        <div className={`hidden lg:flex gap-x-2 pl-1 font-Lato `}>
           <div
             className={`flex items-center gap-x-2 cursor-pointer`}
             onClick={() => navigate("/")}
@@ -122,7 +122,7 @@ export const Breadcrum = ({
           })}
         </div>
         <div className={`flex justify-between flex-col md:flex-row`}>
-          <div className="inline-flex space-x-1 items-center justify-start ">
+          <div className="inline-flex space-x-1 items-center justify-start h-fit">
             <img
               src={BackArrowIcon}
               alt=""
