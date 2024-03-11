@@ -60,6 +60,7 @@ interface IOrderstatusProps {
   setIsErrorListLoading: any;
   getErrors: any;
   selectedDateRange: any;
+  filterPayLoad: any;
 }
 
 const statusBar = (statusName: string, orderNumber: string) => {
@@ -108,6 +109,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   setIsErrorListLoading,
   getErrors,
   selectedDateRange,
+  filterPayLoad,
 }) => {
   const navigate = useNavigate();
   let debounceTimer: any;
@@ -131,10 +133,10 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     label: "",
     isCollapse: false,
   });
-  const [filterPayLoad, setFilterPayLoad] = useState({
-    filterArrOne: [],
-    filterArrTwo: [],
-  });
+  // const [filterPayLoad, setFilterPayLoad] = useState({
+  //   filterArrOne: [],
+  //   filterArrTwo: [],
+  // });
   const [manifestButton, setManifestButton] = useState<any>(true);
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
@@ -594,37 +596,37 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
     }
   };
 
-  const handleSearchOrder = async (e: any) => {
-    try {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(async () => {
-        if (e.target.value.length > 0) {
-          isOrderTableLoader(true);
-          const { data } = await POST(GET_SELLER_ORDER, {
-            id: e.target.value,
-            currentStatus,
-            filterArrOne: filterPayLoad?.filterArrOne || [],
-            filterArrTwo: filterPayLoad?.filterArrTwo || [],
-          });
-          const { OrderData, orderCount } = data?.data?.[0];
-          setStatusCount("", currentStatus, orderCount);
-          setTotalcount(orderCount ? orderCount : 0);
+  // const handleSearchOrder = async (e: any) => {
+  //   try {
+  //     clearTimeout(debounceTimer);
+  //     debounceTimer = setTimeout(async () => {
+  //       if (e.target.value.length > 0) {
+  //         isOrderTableLoader(true);
+  //         const { data } = await POST(GET_SELLER_ORDER, {
+  //           id: e.target.value,
+  //           currentStatus,
+  //           filterArrOne: filterPayLoad?.filterArrOne || [],
+  //           filterArrTwo: filterPayLoad?.filterArrTwo || [],
+  //         });
+  //         const { OrderData, orderCount } = data?.data?.[0];
+  //         setStatusCount("", currentStatus, orderCount);
+  //         setTotalcount(orderCount ? orderCount : 0);
 
-          if (data?.status) {
-            isOrderTableLoader(false);
-            setOrders(OrderData);
-            setFilterModal(false);
-          } else {
-            isOrderTableLoader(false);
-            setFilterModal(false);
-            throw new Error(data?.meesage);
-          }
-        }
-      }, 800);
-    } catch (error: any) {
-      console.warn("Error in OrderStatus Debouncing: ", error.message);
-    }
-  };
+  //         if (data?.status) {
+  //           isOrderTableLoader(false);
+  //           setOrders(OrderData);
+  //           setFilterModal(false);
+  //         } else {
+  //           isOrderTableLoader(false);
+  //           setFilterModal(false);
+  //           throw new Error(data?.meesage);
+  //         }
+  //       }
+  //     }, 800);
+  //   } catch (error: any) {
+  //     console.warn("Error in OrderStatus Debouncing: ", error.message);
+  //   }
+  // };
 
   const filterButton = () => {
     if (isLgScreen) {
@@ -781,6 +783,21 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       subStatus,
     };
 
+    let firstFilterData: any = [];
+    let secondFilterData: any = [];
+
+    if (
+      filterPayLoad?.filterArrOne.length > 0 ||
+      filterPayLoad?.filterArrTwo.length > 0
+    ) {
+      const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
+        (obj: any) => !Object.keys(obj).includes("createdAt")
+      );
+
+      firstFilterData = newFilterArrOne;
+      secondFilterData = filterPayLoad?.filterArrTwo;
+    }
+
     if (selectedDateRange?.startDate && selectedDateRange?.endDate) {
       let startEpoch = null;
       let lastendEpoch = null;
@@ -810,6 +827,11 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
         },
       ];
       payload.filterArrTwo = [];
+    }
+
+    if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+      payload.filterArrOne = firstFilterData;
+      payload.filterArrTwo = secondFilterData;
     }
 
     const { data } = await POST(GET_SELLER_ORDER, payload);
@@ -853,96 +875,96 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   //   }
   // };
 
-  function getObjectWithIsActiveTrue(data: any, name: any) {
-    const tempArrTwo = filterPayLoad?.filterArrTwo;
-    const tempArrOne = filterPayLoad?.filterArrOne;
+  // function getObjectWithIsActiveTrue(data: any, name: any) {
+  //   const tempArrTwo = filterPayLoad?.filterArrTwo;
+  //   const tempArrOne = filterPayLoad?.filterArrOne;
 
-    const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
-      const index = arr.findIndex(
-        (findArr: any) => Object.keys(findArr)[0] === key
-      );
+  //   const updateFilterArr = (arr: any, key: any, subKey: any, data: any) => {
+  //     const index = arr.findIndex(
+  //       (findArr: any) => Object.keys(findArr)[0] === key
+  //     );
 
-      if (index > -1) {
-        arr[index][key][subKey] = data;
-      } else {
-        const newObj = { [key]: { [subKey]: [...data] } };
-        arr.push(newObj);
-      }
-    };
+  //     if (index > -1) {
+  //       arr[index][key][subKey] = data;
+  //     } else {
+  //       const newObj = { [key]: { [subKey]: [...data] } };
+  //       arr.push(newObj);
+  //     }
+  //   };
 
-    switch (name) {
-      case "Delivery Pincode":
-        updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
-        break;
-      case "Pickup Pincode":
-        updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
-        break;
-      case "PaymentType":
-        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
-        break;
-      case "Partners":
-        updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
-        break;
-      case "Order Type":
-        updateFilterArr(tempArrOne, "orderType", "$in", data);
-        break;
-      case "Sources":
-        updateFilterArr(tempArrOne, "source", "$in", data);
-        break;
-      case "Seller Id":
-        updateFilterArr(tempArrOne, "sellerId", "$in", data);
-        break;
-      default:
-        break;
-    }
+  //   switch (name) {
+  //     case "Delivery Pincode":
+  //       updateFilterArr(tempArrTwo, "deliveryAddress.pincode", "$in", data);
+  //       break;
+  //     case "Pickup Pincode":
+  //       updateFilterArr(tempArrTwo, "pickupAddress.pincode", "$in", data);
+  //       break;
+  //     case "PaymentType":
+  //       updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", data);
+  //       break;
+  //     case "Partners":
+  //       updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+  //       break;
+  //     case "Order Type":
+  //       updateFilterArr(tempArrOne, "orderType", "$in", data);
+  //       break;
+  //     case "Sources":
+  //       updateFilterArr(tempArrOne, "source", "$in", data);
+  //       break;
+  //     case "Seller Id":
+  //       updateFilterArr(tempArrOne, "sellerId", "$in", data);
+  //       break;
+  //     default:
+  //       break;
+  //   }
 
-    setFilterPayLoad({
-      ...filterPayLoad,
-      filterArrTwo: [...tempArrTwo],
-      filterArrOne: [...tempArrOne],
-    });
-  }
+  //   setFilterPayLoad({
+  //     ...filterPayLoad,
+  //     filterArrTwo: [...tempArrTwo],
+  //     filterArrOne: [...tempArrOne],
+  //   });
+  // }
 
-  const applyFilterforOrders = async () => {
-    try {
-      setIsFilterLoading(true);
-      let payload = {
-        skip: 0,
-        limit: 10,
-        pageNo: 1,
-        sort: { _id: -1 },
-        currentStatus,
-        filterArrOne: filterPayLoad?.filterArrOne || [],
-        filterArrTwo: filterPayLoad?.filterArrTwo || [],
-      };
-      const { data } = await POST(GET_SELLER_ORDER, payload);
-      const { OrderData, orderCount } = data?.data?.[0];
-      setStatusCount("", currentStatus, orderCount);
-      setTotalcount(orderCount ? orderCount : 0);
+  // const applyFilterforOrders = async () => {
+  //   try {
+  //     setIsFilterLoading(true);
+  //     let payload = {
+  //       skip: 0,
+  //       limit: 10,
+  //       pageNo: 1,
+  //       sort: { _id: -1 },
+  //       currentStatus,
+  //       filterArrOne: filterPayLoad?.filterArrOne || [],
+  //       filterArrTwo: filterPayLoad?.filterArrTwo || [],
+  //     };
+  //     const { data } = await POST(GET_SELLER_ORDER, payload);
+  //     const { OrderData, orderCount } = data?.data?.[0];
+  //     setStatusCount("", currentStatus, orderCount);
+  //     setTotalcount(orderCount ? orderCount : 0);
 
-      console.log("filterState----------------1 filterApi", filterState);
+  //     console.log("filterState----------------1 filterApi", filterState);
 
-      if (data?.status) {
-        setIsFilterLoading(false);
-        setOrders(OrderData);
-        setFilterModal(false);
-      } else {
-        setIsFilterLoading(false);
-        setFilterModal(false);
-        throw new Error(data?.meesage);
-      }
-    } catch (error: any) {
-      setIsFilterLoading(false);
-      toast.error(error);
-      return false;
-    }
-  };
+  //     if (data?.status) {
+  //       setIsFilterLoading(false);
+  //       setOrders(OrderData);
+  //       setFilterModal(false);
+  //     } else {
+  //       setIsFilterLoading(false);
+  //       setFilterModal(false);
+  //       throw new Error(data?.meesage);
+  //     }
+  //   } catch (error: any) {
+  //     setIsFilterLoading(false);
+  //     toast.error(error);
+  //     return false;
+  //   }
+  // };
 
-  useEffect(() => {
-    if (filterState?.menu?.length > 0) {
-      getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
-    }
-  }, [filterState]);
+  // useEffect(() => {
+  //   if (filterState?.menu?.length > 0) {
+  //     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
+  //   }
+  // }, [filterState]);
 
   return (
     <div className="flex flex-col pt-7">
@@ -1001,7 +1023,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
 
       {/* filter modal */}
 
-      {isLgScreen && (
+      {/* {isLgScreen && (
         <RightSideModal
           isOpen={filterModal}
           onClose={() => {
@@ -1060,7 +1082,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
             </div>
           </div>
         </RightSideModal>
-      )}
+      )} */}
     </div>
   );
 };
