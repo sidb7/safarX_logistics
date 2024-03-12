@@ -76,21 +76,21 @@ const WeightFreeze: React.FunctionComponent = () => {
   ]);
 
   const [listTab, setListTab] = useState([
-    {
-      key: "Weight_Freeze",
-      statusName: "Weight-Freeze",
-      name: "",
-      count: 0,
-      payload: "",
-      index: 0,
-    },
+    // {
+    //   key: "Weight_Freeze",
+    //   statusName: "Weight-Freeze",
+    //   name: "",
+    //   count: 0,
+    //   payload: "",
+    //   index: 0,
+    // },
     {
       key: "New_Discrepancy",
       statusName: "New Discrepancy",
       name: "totalNewWeightDispute",
       count: 0,
       payload: "DISPUTE_RAISED_TO_SELLER",
-      index: 1,
+      index: 0,
     },
     {
       key: "Pending_Dispute",
@@ -101,7 +101,7 @@ const WeightFreeze: React.FunctionComponent = () => {
         { actionStatus: "PROOF_SUBMITTED_BY_SELLER" },
         { actionStatus: "PROOF_TO_BE_SUBMITTED" },
       ],
-      index: 2,
+      index: 1,
     },
     {
       key: "Completed",
@@ -109,7 +109,7 @@ const WeightFreeze: React.FunctionComponent = () => {
       name: "totalWeightDisputeResolved",
       count: 0,
       payload: "",
-      index: 3,
+      index: 2,
     },
   ]);
 
@@ -198,26 +198,24 @@ const WeightFreeze: React.FunctionComponent = () => {
   const data = GetCurrentPath();
 
   useEffect(() => {
-    if (data[1] === "weight-freeze") {
-      setIsActive(checkPageAuthorized("Weight Freeze"));
-
-      setRenderingComponents(3);
-      setScrollIndex(0);
-    } else if (data[1] === "new-discrepancy") {
+    // if (data[1] === "weight-freeze") {
+    //   setIsActive(checkPageAuthorized("Weight Freeze"));
+    //   console.log("--------------------------2");
+    //   // setRenderingComponents(3);
+    //   // setScrollIndex(0);
+    // } else
+    if (data[1] === "new-discrepancy") {
       setIsActive(checkPageAuthorized("New Discrepancy"));
-
       setRenderingComponents(0);
-      setScrollIndex(1);
+      setScrollIndex(0);
     } else if (data[1] === "pending-dispute") {
       setIsActive(checkPageAuthorized("Pending Dispute"));
-
       setRenderingComponents(1);
-      setScrollIndex(2);
+      setScrollIndex(1);
     } else if (data[1] === "completed") {
       setIsActive(checkPageAuthorized("Completed"));
-
       setRenderingComponents(2);
-      setScrollIndex(3);
+      setScrollIndex(2);
     }
   }, [data]);
 
@@ -279,9 +277,10 @@ const WeightFreeze: React.FunctionComponent = () => {
   };
 
   const renderComponent = () => {
+    // if (renderingComponents === 0) {
+    //   return <WeightFreezeTable />;
+    // } else
     if (renderingComponents === 0) {
-      return <WeightFreezeTable />;
-    } else if (renderingComponents === 1) {
       return (
         <NewDiscrepancyTable
           data={weightManagementData}
@@ -290,7 +289,7 @@ const WeightFreeze: React.FunctionComponent = () => {
           setRowSelectedData={setSelectedRowData}
         />
       );
-    } else if (renderingComponents === 2) {
+    } else if (renderingComponents === 1) {
       return (
         <PendingDispute
           data={weightManagementData}
@@ -299,7 +298,7 @@ const WeightFreeze: React.FunctionComponent = () => {
           setRowSelectedData={setSelectedRowData}
         />
       );
-    } else if (renderingComponents === 3) {
+    } else if (renderingComponents === 2) {
       return (
         <CompletedTable
           data={weightManagementData}
@@ -382,8 +381,7 @@ const WeightFreeze: React.FunctionComponent = () => {
                               "!border-[#004EFF]"
                             }`}
                         onClick={() => {
-                          sessionStorage.setItem("WeightTab", statusName);
-                          // setTabName(statusName);
+                          // sessionStorage.setItem("WeightTab", statusName);
                           setScrollIndex(index);
                         }}
                         key={index}

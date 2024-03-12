@@ -72,6 +72,8 @@ const NewDiscrepancyTable = ({
       const { data: responseData } = await POST(ACCEPT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
+        const newUrl = `weight-management/completed`;
+        window.history.pushState(null, "", newUrl);
         window.location.reload();
       } else {
         toast.error(responseData?.message);
@@ -88,6 +90,8 @@ const NewDiscrepancyTable = ({
       if (responseData?.status) {
         toast.success(responseData?.message);
         getWeightDispute();
+        const newUrl = `/weight-management/pending-dispute`;
+        window.history.pushState(null, "", newUrl);
       } else {
         toast.error(responseData?.message);
       }
