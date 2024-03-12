@@ -332,8 +332,6 @@ const WeightFreeze: React.FunctionComponent = () => {
     setSelectedRowData([]);
   }, [renderingComponents]);
 
-  console.log("weightManagementData", weightManagementData);
-
   return (
     <>
       {isActive ? (
