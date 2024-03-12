@@ -294,13 +294,13 @@ const PendingDispute = ({
             <div className="mb-4">
               <div>Weight Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInWeightKG.toFixed(2)}
+                {`${rowData?.differenceInWeightKG.toFixed(2)} Kg`}
               </div>
             </div>
             <div className="mt-3">
               <div>Price Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInCharge.toFixed(2)}
+                {`₹ ${rowData?.differenceInCharge.toFixed(2)}`}
               </div>
             </div>
           </div>

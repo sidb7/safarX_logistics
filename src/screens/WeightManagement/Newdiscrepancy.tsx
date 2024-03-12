@@ -349,13 +349,13 @@ const NewDiscrepancyTable = ({
             <div className="mb-4">
               <div>Weight Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInWeightKG.toFixed(2)}
+                {`${rowData?.differenceInWeightKG.toFixed(2)} Kg`}
               </div>
             </div>
             <div className="mt-3">
               <div>Price Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInCharge.toFixed(2)}
+                {`₹ ${rowData?.differenceInCharge.toFixed(2)}`}
               </div>
             </div>
           </div>
@@ -450,7 +450,6 @@ const NewDiscrepancyTable = ({
                       <button className="text-[#004EFF] text-[14px] mx-1">
                         ({SellerPhotoLength.length})
                       </button>
-                      :
                     </div>
                     <button
                       className="flex mt-1 gap-x-2"
