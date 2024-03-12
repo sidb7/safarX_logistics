@@ -41,10 +41,6 @@ const NewDiscrepancyTable = ({
       privateCompanyId: "",
     },
   });
-  const [loading, setLoading] = useState({
-    index: "",
-    isLoading: false,
-  });
 
   const getPartnerImages = async (dataItem: any) => {
     try {
@@ -55,7 +51,6 @@ const NewDiscrepancyTable = ({
             fileNameArr: [dataItem[i]?.url],
             ttl: 3600,
           };
-
           const { data } = await POST(GET_MULTIPLE_FILE, payload);
           if (data?.status) {
             dataItem[i].openUrl = data?.data?.[0];
@@ -74,33 +69,30 @@ const NewDiscrepancyTable = ({
   const acceptDisputeHanlder = async (awb: any, index: any) => {
     const payload: any = { awbNo: awb };
     try {
-      setLoading({ index: index, isLoading: true });
       const { data: responseData } = await POST(ACCEPT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
-        setLoading({ index: "", isLoading: false });
+        window.location.reload();
       } else {
         toast.error(responseData?.message);
-        setLoading({ index: "", isLoading: false });
       }
     } catch (error) {
-      // toast.error(error?.message);
+      console.error(error);
     }
   };
+
   const raiseDisputeHandler = async (awb: any, index: any) => {
     const payload: any = { awbNo: awb };
     try {
-      setLoading({ index: index, isLoading: true });
       const { data: responseData } = await POST(REJECT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
-        setLoading({ index: "", isLoading: false });
+        getWeightDispute();
       } else {
         toast.error(responseData?.message);
-        setLoading({ index: "", isLoading: false });
       }
     } catch (error) {
-      // toast.error(error?.message);
+      console.error(error);
     }
   };
 
@@ -129,22 +121,19 @@ const NewDiscrepancyTable = ({
     return (
       <div className=" min-w-[150px] rounded-md border">
         {status !== "DISPUTE_CLOSE" ? (
-          actionDropDown?.map((action: any, index: any) => (
-            <div className="flex justify-between items-center hover:bg-[#E5E7EB] ">
-              <div
-                className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
-                key={`${index}_${action}`}
-                onClick={() => actionClickHandler(action?.actionType, index)}
-              >
-                {action?.title}
-              </div>
-              {index === loading?.index && loading?.isLoading && (
-                <div className="flex justify-center items-center mr-2">
-                  <Spinner className={"!w-[15px] !h-[15px] !border-2"} />
+          actionDropDown?.map((action: any, index: any) => {
+            return (
+              <div className="flex justify-between items-center hover:bg-[#E5E7EB] ">
+                <div
+                  className="flex-1 text-[14px] flex p-3 items-center"
+                  key={`${index}_${action}`}
+                  onClick={() => actionClickHandler(action?.actionType, index)}
+                >
+                  {action?.title}
                 </div>
-              )}
-            </div>
-          ))
+              </div>
+            );
+          })
         ) : (
           <div
             className="hover:bg-[#E5E7EB] text-[14px] text-[#F67C63] flex p-3 items-center"

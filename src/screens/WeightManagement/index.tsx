@@ -71,7 +71,7 @@ const WeightFreeze: React.FunctionComponent = () => {
     {
       count: 0,
       text: "Action Required",
-      name: "totalWeightDisputePending",
+      name: "actionRequired",
     },
   ]);
 
@@ -185,38 +185,6 @@ const WeightFreeze: React.FunctionComponent = () => {
     setCurrentPage(1);
   };
 
-  const renderComponent = () => {
-    if (renderingComponents === 0) {
-      return <WeightFreezeTable />;
-    } else if (renderingComponents === 1) {
-      return (
-        <NewDiscrepancyTable
-          data={weightManagementData}
-          getWeightDispute={getWeightDispute}
-          isLoading={isLoading}
-          setRowSelectedData={setSelectedRowData}
-        />
-      );
-    } else if (renderingComponents === 2) {
-      return (
-        <PendingDispute
-          data={weightManagementData}
-          getWeightDispute={getWeightDispute}
-          isLoading={isLoading}
-          setRowSelectedData={setSelectedRowData}
-        />
-      );
-    } else if (renderingComponents === 3) {
-      return (
-        <CompletedTable
-          data={weightManagementData}
-          getWeightDispute={getWeightDispute}
-          isLoading={isLoading}
-          setRowSelectedData={setSelectedRowData}
-        />
-      );
-    }
-  };
   const GetCurrentPath = () => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
@@ -310,6 +278,39 @@ const WeightFreeze: React.FunctionComponent = () => {
     }
   };
 
+  const renderComponent = () => {
+    if (renderingComponents === 0) {
+      return <WeightFreezeTable />;
+    } else if (renderingComponents === 1) {
+      return (
+        <NewDiscrepancyTable
+          data={weightManagementData}
+          getWeightDispute={getWeightDispute}
+          isLoading={isLoading}
+          setRowSelectedData={setSelectedRowData}
+        />
+      );
+    } else if (renderingComponents === 2) {
+      return (
+        <PendingDispute
+          data={weightManagementData}
+          getWeightDispute={getWeightDispute}
+          isLoading={isLoading}
+          setRowSelectedData={setSelectedRowData}
+        />
+      );
+    } else if (renderingComponents === 3) {
+      return (
+        <CompletedTable
+          data={weightManagementData}
+          getWeightDispute={getWeightDispute}
+          isLoading={isLoading}
+          setRowSelectedData={setSelectedRowData}
+        />
+      );
+    }
+  };
+
   const debounce = (fn: any, delay: any) => {
     let timerId: any;
     return (...args: any) => {
@@ -330,7 +331,6 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   useEffect(() => {
     setSelectedRowData([]);
-    // getWeightDispute();
   }, [renderingComponents]);
 
   console.log("weightManagementData", weightManagementData);
