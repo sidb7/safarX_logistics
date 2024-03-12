@@ -41,10 +41,6 @@ const NewDiscrepancyTable = ({
       privateCompanyId: "",
     },
   });
-  const [loading, setLoading] = useState({
-    index: "",
-    isLoading: false,
-  });
 
   const getPartnerImages = async (dataItem: any) => {
     try {
@@ -55,7 +51,6 @@ const NewDiscrepancyTable = ({
             fileNameArr: [dataItem[i]?.url],
             ttl: 3600,
           };
-
           const { data } = await POST(GET_MULTIPLE_FILE, payload);
           if (data?.status) {
             dataItem[i].openUrl = data?.data?.[0];
@@ -74,33 +69,34 @@ const NewDiscrepancyTable = ({
   const acceptDisputeHanlder = async (awb: any, index: any) => {
     const payload: any = { awbNo: awb };
     try {
-      setLoading({ index: index, isLoading: true });
       const { data: responseData } = await POST(ACCEPT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
-        setLoading({ index: "", isLoading: false });
+        const newUrl = `weight-management/completed`;
+        window.history.pushState(null, "", newUrl);
+        window.location.reload();
       } else {
         toast.error(responseData?.message);
-        setLoading({ index: "", isLoading: false });
       }
     } catch (error) {
-      // toast.error(error?.message);
+      console.error(error);
     }
   };
+
   const raiseDisputeHandler = async (awb: any, index: any) => {
     const payload: any = { awbNo: awb };
     try {
-      setLoading({ index: index, isLoading: true });
       const { data: responseData } = await POST(REJECT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
-        setLoading({ index: "", isLoading: false });
+        getWeightDispute();
+        const newUrl = `/weight-management/pending-dispute`;
+        window.history.pushState(null, "", newUrl);
       } else {
         toast.error(responseData?.message);
-        setLoading({ index: "", isLoading: false });
       }
     } catch (error) {
-      // toast.error(error?.message);
+      console.error(error);
     }
   };
 
@@ -129,22 +125,19 @@ const NewDiscrepancyTable = ({
     return (
       <div className=" min-w-[150px] rounded-md border">
         {status !== "DISPUTE_CLOSE" ? (
-          actionDropDown?.map((action: any, index: any) => (
-            <div className="flex justify-between items-center hover:bg-[#E5E7EB] ">
-              <div
-                className="hover:bg-[#E5E7EB] text-[14px] flex p-3 items-center"
-                key={`${index}_${action}`}
-                onClick={() => actionClickHandler(action?.actionType, index)}
-              >
-                {action?.title}
-              </div>
-              {index === loading?.index && loading?.isLoading && (
-                <div className="flex justify-center items-center mr-2">
-                  <Spinner className={"!w-[15px] !h-[15px] !border-2"} />
+          actionDropDown?.map((action: any, index: any) => {
+            return (
+              <div className="flex justify-between items-center hover:bg-[#E5E7EB] ">
+                <div
+                  className="flex-1 text-[14px] flex p-3 items-center"
+                  key={`${index}_${action}`}
+                  onClick={() => actionClickHandler(action?.actionType, index)}
+                >
+                  {action?.title}
                 </div>
-              )}
-            </div>
-          ))
+              </div>
+            );
+          })
         ) : (
           <div
             className="hover:bg-[#E5E7EB] text-[14px] text-[#F67C63] flex p-3 items-center"
@@ -356,13 +349,13 @@ const NewDiscrepancyTable = ({
             <div className="mb-4">
               <div>Weight Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInWeightKG.toFixed(2)}
+                {`${rowData?.differenceInWeightKG.toFixed(2)} Kg`}
               </div>
             </div>
             <div className="mt-3">
               <div>Price Difference</div>
               <div className="font-semibold">
-                {rowData?.differenceInCharge.toFixed(2)}
+                {`₹ ${rowData?.differenceInCharge.toFixed(2)}`}
               </div>
             </div>
           </div>
@@ -457,7 +450,6 @@ const NewDiscrepancyTable = ({
                       <button className="text-[#004EFF] text-[14px] mx-1">
                         ({SellerPhotoLength.length})
                       </button>
-                      :
                     </div>
                     <button
                       className="flex mt-1 gap-x-2"
