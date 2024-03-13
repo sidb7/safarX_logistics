@@ -147,7 +147,6 @@ const Serviceability = (props: ITypeProps) => {
         );
       },
     }),
-
     columnsHelper.accessor("insurance", {
       header: () => {
         return (
