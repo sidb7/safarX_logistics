@@ -1,10 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import { capitalizeFirstLetter } from "../../utils/utility";
 import { CustomTable } from "../../components/Table";
 import cameraIcon from "../../assets/cameraIconBlue.svg";
 import reloadIcon from "../../assets/Reload.svg";
 import { Spinner } from "../../components/Spinner";
+import { GET_MULTIPLE_FILE } from "../../utils/ApiUrls";
+import toast from "react-hot-toast";
+import { POST } from "../../utils/webService";
+import RightSideModal from "../../components/CustomModal/customRightModal";
+import SideDrawerForImgs from "./sideDrawerForImgs";
 
 const CompletedTable = ({
   data,
@@ -13,6 +18,39 @@ const CompletedTable = ({
   setRowSelectedData,
 }: any) => {
   const columnsHelper = createColumnHelper<any>();
+  const [imagesList, setImagesList] = useState<any>([]);
+  const [sideDrawer, setSideDrawer] = useState({
+    isOpen: false,
+    data: {},
+  });
+  const [getImageLoading, setGetImageLoading] = useState(false);
+
+  const getPartnerImages = async (dataItem: any) => {
+    try {
+      setGetImageLoading(true);
+      let urlFromApi: any = [];
+      for (let i = 0; i < dataItem?.length; i++) {
+        if (dataItem[i]?.isActive === true) {
+          const payload = {
+            fileNameArr: [dataItem[i]?.url],
+            ttl: 3600,
+          };
+          const { data } = await POST(GET_MULTIPLE_FILE, payload);
+          if (data?.status) {
+            dataItem[i].openUrl = data?.data?.[0];
+            urlFromApi.push(dataItem[i]);
+          } else {
+            toast.error(data?.message);
+          }
+        }
+      }
+      setImagesList(urlFromApi);
+      setGetImageLoading(false);
+    } catch (error) {
+      setGetImageLoading(false);
+      return error;
+    }
+  };
 
   const PendingDisputeData = [
     {
@@ -321,81 +359,31 @@ const CompletedTable = ({
 
         return (
           <>
-            {sellerWeightImages.filter((e: any) => e.isActive)?.length !== 5 ? (
-              <div className="">
-                <div className="flex justify-start gap-x-2 whitespace-nowrap flex-wrap cursor-pointer">
-                  <p className="font-Open text-sm font-normal leading-5 mt-1 ">
-                    <div
-                    // onClick={() => {
-                    //   if (SellerPhotoLength.length > 0) {
-                    //     getPartnerImages(sellerWeightImages);
-                    //     setSideDrawer({
-                    //       isOpen: true,
-                    //       data: {
-                    //         awb: awb,
-                    //         privateCompanyId: id,
-                    //         name: "seller",
-                    //       },
-                    //     });
-                    //   } else {
-                    //     toast.error("No Image Found");
-                    //   }
-                    // }}
-                    >
-                      Seller Images
-                      <button className="text-[#004EFF] text-[14px] mx-1">
-                        ({SellerPhotoLength.length})
-                      </button>
-                    </div>
-                    <button
-                      className="flex mt-1 gap-x-2"
-                      // onClick={() =>
-                      //   setUploadImgModal({
-                      //     isOpen: true,
-                      //     data: {
-                      //       awb: awb,
-                      //       privateCompanyId: id,
-                      //       previousLength: sellerWeightImages.length,
-                      //     },
-                      //   })
-                      // }
-                    >
-                      <img src={cameraIcon} alt="" />
-                      <p className="font-Open text-[13px] font-semibold leading-5 text-[#004EFF]">
-                        UPLOAD
-                      </p>
-                    </button>
-                  </p>
-                </div>
-                <div className="mt-4 text-[14px]"></div>
-              </div>
-            ) : (
-              <div>
-                <p
-                  className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
-                  // onClick={() => {
-                  //   if (SellerPhotoLength.length > 0) {
-                  //     getPartnerImages(sellerWeightImages);
-                  //     setSideDrawer({
-                  //       isOpen: true,
-                  //       data: {
-                  //         awb: awb,
-                  //         privateCompanyId: id,
-                  //         name: "seller",
-                  //       },
-                  //     });
-                  //   } else {
-                  //     toast.error("No Image Found");
-                  //   }
-                  // }}
-                >
-                  Uploaded Images
-                  <span className="text-[#004EFF] mx-1">
-                    ({SellerPhotoLength?.length})
-                  </span>
-                </p>
-              </div>
-            )}
+            <div>
+              <p
+                className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
+                onClick={() => {
+                  if (SellerPhotoLength.length > 0) {
+                    getPartnerImages(SellerPhotoLength);
+                    setSideDrawer({
+                      isOpen: true,
+                      data: {
+                        awb: awb,
+                        privateCompanyId: id,
+                        name: "seller",
+                      },
+                    });
+                  } else {
+                    toast.error("No Image Found");
+                  }
+                }}
+              >
+                Uploaded Images
+                <span className="text-[#004EFF] mx-1">
+                  ({SellerPhotoLength?.length})
+                </span>
+              </p>
+            </div>
           </>
         );
       },
@@ -415,6 +403,10 @@ const CompletedTable = ({
         const rowData = row?.original;
         let partnerWeightImages = rowData?.partnerPhoto || [];
 
+        let partnerPhotoLength = partnerWeightImages.filter(
+          (item: any, i: any) => item?.isActive
+        );
+
         let sellerWeightImages = rowData?.sellerPhoto || [];
         let awb = rowData?.awb || 0;
         let id = rowData?.privateCompanyId || 0;
@@ -422,21 +414,25 @@ const CompletedTable = ({
         return (
           <p
             className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
-            // onClick={() => {
-            //   getPartnerImages(partnerWeightImages);
-            //   setSideDrawer({
-            //     isOpen: true,
-            //     data: {
-            //       awb: awb,
-            //       privateCompanyId: id,
-            //       name: "partner",
-            //     },
-            //   });
-            // }}
+            onClick={() => {
+              if (partnerPhotoLength.length > 0) {
+                getPartnerImages(partnerPhotoLength);
+                setSideDrawer({
+                  isOpen: true,
+                  data: {
+                    awb: awb,
+                    privateCompanyId: id,
+                    name: "partner",
+                  },
+                });
+              } else {
+                toast.error("No Image Found");
+              }
+            }}
           >
             Uploaded Images
             <span className="text-[#004EFF] mx-1">
-              ({rowData?.partnerPhoto?.length})
+              ({partnerPhotoLength?.length})
             </span>
           </p>
         );
@@ -479,6 +475,20 @@ const CompletedTable = ({
           // setRowSelectedData={setRowSelectedData}
         />
       )}
+
+      <RightSideModal
+        isOpen={sideDrawer?.isOpen}
+        onClose={() => setSideDrawer({ isOpen: false, data: [] })}
+        className="!w-[570px]"
+      >
+        <SideDrawerForImgs
+          data={sideDrawer?.data}
+          setSideDrawer={setSideDrawer}
+          imagesList={imagesList}
+          getWeightDispute={getWeightDispute}
+          getImageLoading={getImageLoading}
+        />
+      </RightSideModal>
     </>
   );
 };

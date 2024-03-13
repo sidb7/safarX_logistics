@@ -369,14 +369,14 @@ const PendingDispute = ({
         let id = rowData.privateCompanyId || 0;
         return (
           <>
-            {sellerWeightImages.filter((e: any) => e.isActive)?.length !== 5 ? (
+            {SellerPhotoLength?.length !== 5 ? (
               <div>
                 <div className="flex justify-start gap-x-2 whitespace-nowrap flex-wrap cursor-pointer">
                   <p className="font-Open text-sm font-normal leading-5 mt-1 ">
                     <div
                       onClick={() => {
                         if (SellerPhotoLength.length > 0) {
-                          getPartnerImages(sellerWeightImages);
+                          getPartnerImages(SellerPhotoLength);
                           setSideDrawer({
                             isOpen: true,
                             data: {
@@ -403,7 +403,7 @@ const PendingDispute = ({
                           data: {
                             awb: awb,
                             privateCompanyId: id,
-                            previousLength: sellerWeightImages.length,
+                            previousLength: SellerPhotoLength.length,
                           },
                         })
                       }
@@ -423,7 +423,7 @@ const PendingDispute = ({
                   className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
                   onClick={() => {
                     if (SellerPhotoLength.length > 0) {
-                      getPartnerImages(sellerWeightImages);
+                      getPartnerImages(SellerPhotoLength);
                       setSideDrawer({
                         isOpen: true,
                         data: {
@@ -462,7 +462,10 @@ const PendingDispute = ({
         const rowData = row?.original;
         let partnerWeightImages = rowData?.partnerPhoto || [];
 
-        let sellerWeightImages = rowData?.sellerPhoto || [];
+        let partnerPhotoLength = partnerWeightImages?.filter(
+          (item: any, i: any) => item?.isActive
+        );
+
         let awb = rowData?.awb || 0;
         let id = rowData?.privateCompanyId || 0;
 
@@ -470,20 +473,25 @@ const PendingDispute = ({
           <p
             className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
             onClick={() => {
-              getPartnerImages(partnerWeightImages);
-              setSideDrawer({
-                isOpen: true,
-                data: {
-                  awb: awb,
-                  privateCompanyId: id,
-                  name: "partner",
-                },
-              });
+              if (partnerPhotoLength?.length > 0) {
+                console.log("-------------------------------1");
+                getPartnerImages(partnerPhotoLength);
+                setSideDrawer({
+                  isOpen: true,
+                  data: {
+                    awb: awb,
+                    privateCompanyId: id,
+                    name: "partner",
+                  },
+                });
+              } else {
+                toast.error("No Image Found");
+              }
             }}
           >
             Uploaded Images
             <span className="text-[#004EFF] mx-1">
-              ({rowData?.partnerPhoto?.length})
+              ({partnerPhotoLength?.length})
             </span>
           </p>
         );
