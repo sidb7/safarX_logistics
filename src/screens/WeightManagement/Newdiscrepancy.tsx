@@ -425,14 +425,14 @@ const NewDiscrepancyTable = ({
 
         return (
           <>
-            {sellerWeightImages.filter((e: any) => e.isActive)?.length !== 5 ? (
+            {SellerPhotoLength?.length !== 5 ? (
               <div className="">
                 <div className="flex justify-start gap-x-2 whitespace-nowrap flex-wrap cursor-pointer">
                   <p className="font-Open text-sm font-normal leading-5 mt-1 ">
                     <div
                       onClick={() => {
                         if (SellerPhotoLength.length > 0) {
-                          getPartnerImages(sellerWeightImages);
+                          getPartnerImages(SellerPhotoLength);
                           setSideDrawer({
                             isOpen: true,
                             data: {
@@ -459,7 +459,7 @@ const NewDiscrepancyTable = ({
                           data: {
                             awb: awb,
                             privateCompanyId: id,
-                            previousLength: sellerWeightImages.length,
+                            previousLength: SellerPhotoLength.length,
                           },
                         })
                       }
@@ -471,7 +471,6 @@ const NewDiscrepancyTable = ({
                     </button>
                   </p>
                 </div>
-                <div className="mt-4 text-[14px]"></div>
               </div>
             ) : (
               <div>
@@ -479,7 +478,7 @@ const NewDiscrepancyTable = ({
                   className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
                   onClick={() => {
                     if (SellerPhotoLength.length > 0) {
-                      getPartnerImages(sellerWeightImages);
+                      getPartnerImages(SellerPhotoLength);
                       setSideDrawer({
                         isOpen: true,
                         data: {
@@ -527,15 +526,19 @@ const NewDiscrepancyTable = ({
           <p
             className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
             onClick={() => {
-              getPartnerImages(partnerWeightImages);
-              setSideDrawer({
-                isOpen: true,
-                data: {
-                  awb: awb,
-                  privateCompanyId: id,
-                  name: "partner",
-                },
-              });
+              if (partnerWeightImages.length > 0) {
+                getPartnerImages(partnerWeightImages);
+                setSideDrawer({
+                  isOpen: true,
+                  data: {
+                    awb: awb,
+                    privateCompanyId: id,
+                    name: "partner",
+                  },
+                });
+              } else {
+                toast.error("No Image Found");
+              }
             }}
           >
             Uploaded Images

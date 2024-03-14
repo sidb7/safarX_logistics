@@ -94,7 +94,7 @@ const WeightFreeze: React.FunctionComponent = () => {
     },
     {
       key: "Pending_Dispute",
-      statusName: "Pending Dispute",
+      statusName: "Raise Dispute",
       name: "totalWeightDisputePending",
       count: 0,
       payload: [
@@ -105,50 +105,13 @@ const WeightFreeze: React.FunctionComponent = () => {
     },
     {
       key: "Completed",
-      statusName: "Completed",
+      statusName: "Dispute Closed",
       name: "totalWeightDisputeResolved",
       count: 0,
       payload: "",
       index: 2,
     },
   ]);
-
-  //   {
-  //     key: "Weight_Freeze",
-  //     statusName: "Weight-Freeze",
-  //     name: "",
-  //     count: 0,
-  //     payload: "",
-  //     index: 0,
-  //   },
-  //   {
-  //     key: "New_Discrepancy",
-  //     statusName: "New Discrepancy",
-  //     name: "totalNewWeightDispute",
-  //     count: 0,
-  //     payload: "DISPUTE_RAISED_TO_SELLER",
-  //     index: 1,
-  //   },
-  //   {
-  //     key: "Pending_Dispute",
-  //     statusName: "Pending Dispute",
-  //     name: "totalWeightDisputePending",
-  //     count: 0,
-  //     payload: [
-  //       { actionStatus: "PROOF_SUBMITTED_BY_SELLER" },
-  //       { actionStatus: "PROOF_TO_BE_SUBMITTED" },
-  //     ],
-  //     index: 2,
-  //   },
-  //   {
-  //     key: "Completed",
-  //     statusName: "Completed",
-  //     name: "totalWeightDisputeResolved",
-  //     count: 0,
-  //     payload: "",
-  //     index: 3,
-  //   },
-  // ];
 
   const setScrollIndex = (id: any) => {
     let filterName = listTab.filter((array) => array?.index === id);
