@@ -415,7 +415,6 @@ const PendingDispute = ({
                     </button>
                   </p>
                 </div>
-                <div className="mt-4 text-[14px]"></div>
               </div>
             ) : (
               <div>
@@ -474,7 +473,6 @@ const PendingDispute = ({
             className=" flex items-center text-[#1C1C1C] font-Open text-[14px] leading-5 cursor-pointer"
             onClick={() => {
               if (partnerPhotoLength?.length > 0) {
-                console.log("-------------------------------1");
                 getPartnerImages(partnerPhotoLength);
                 setSideDrawer({
                   isOpen: true,
