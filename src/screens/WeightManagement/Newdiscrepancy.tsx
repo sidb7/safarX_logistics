@@ -451,9 +451,26 @@ const NewDiscrepancyTable = ({
                         ({SellerPhotoLength.length})
                       </button>
                     </div>
+                    <button
+                      className="flex mt-1 gap-x-2"
+                      onClick={() =>
+                        setUploadImgModal({
+                          isOpen: true,
+                          data: {
+                            awb: awb,
+                            privateCompanyId: id,
+                            previousLength: SellerPhotoLength.length,
+                          },
+                        })
+                      }
+                    >
+                      <img src={cameraIcon} alt="" />
+                      <p className="font-Open text-[13px] font-semibold leading-5 text-[#004EFF]">
+                        UPLOAD
+                      </p>
+                    </button>
                   </p>
                 </div>
-                <div className="mt-4 text-[14px]"></div>
               </div>
             ) : (
               <div>
