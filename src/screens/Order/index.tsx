@@ -31,6 +31,8 @@ import {
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_SELLER_ORDER_COMPLETE_DATA,
   GET_ORDER_ERRORS,
+  RECHARGE_STATUS,
+  PAYMENT_ERRORS,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -53,7 +55,9 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import {
   capitalizeFirstLetter,
+  getLocalStorage,
   getQueryJson,
+  removeLocalStorage,
   tokenKey,
 } from "../../utils/utility";
 import "../../styles/hideScroll.css";
@@ -1796,6 +1800,39 @@ const Index = () => {
       setIsSyncModalLoading(false);
     }
   }, [channelReduxData]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // fetchCurrentWallet();
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          // setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          if (orderStatus?.data?.success === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            toast.success("Wallet Recharge Successfully");
+            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
+            // ------------------------------------------------------------------------------------------
+            let paymentPayload: any = getLocalStorage("paymentErrorObject");
+            if (paymentPayload) {
+              paymentPayload = JSON.parse(paymentPayload);
+              await POST(PAYMENT_ERRORS, paymentPayload);
+            }
+            removeLocalStorage("paymentErrorObject");
+          }
+          removeLocalStorage("order_id");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
 
   return (
     <>
