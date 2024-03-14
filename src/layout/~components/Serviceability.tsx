@@ -9,6 +9,11 @@ import { DropDownWeightData } from "../../utils/dummyData";
 import { createColumnHelper } from "@tanstack/react-table";
 import { CustomTable } from "../../components/Table";
 import { Spinner } from "../../components/Spinner";
+import {
+  date_DD_MMM,
+  date_DD_MMM_YYY,
+  date_DD_MMM_YYYY_HH_MM,
+} from "../../utils/dateFormater";
 
 interface ITypeProps {
   onClick: () => void;
@@ -64,6 +69,26 @@ const Serviceability = (props: ITypeProps) => {
       });
     setServicesDataArray(temp);
   }, [servicesData, serviceValue]);
+
+  function validateData(data: any) {
+    // Check if any of the required fields are empty
+    if (
+      !data?.pickupPincode ||
+      !data?.deliveryPincode ||
+      !data?.invoiceValue ||
+      !data?.paymentMode ||
+      !data?.serviceId ||
+      !data?.weight ||
+      !data?.orderType ||
+      !data?.dimension ||
+      !data?.dimension.width ||
+      !data?.dimension.height ||
+      !data?.dimension.length
+    ) {
+      return false;
+    }
+    return true;
+  }
 
   const columns = [
     columnsHelper.accessor("partnerName", {
@@ -147,7 +172,6 @@ const Serviceability = (props: ITypeProps) => {
         );
       },
     }),
-
     columnsHelper.accessor("insurance", {
       header: () => {
         return (
@@ -200,14 +224,17 @@ const Serviceability = (props: ITypeProps) => {
       header: () => {
         return (
           <p className="font-Open flex justify-start items-center text-sm font-semibold leading-[18px] text-[#004EFF] text-start whitespace-nowrap ">
-            {"EDT"}
+            {"EDD"}
           </p>
         );
       },
       cell: (info: any) => {
+        console.log("EDT_Epoch", info.row?.original?.EDT_Epoch);
         return (
           <div className="flex items-center text-[#1C1C1C] font-Open text-sm font-semibold leading-5 whitespace-nowrap">
-            {info.row?.original?.EDT_Epoch}
+            {info.row?.original?.EDT_Epoch
+              ? date_DD_MMM_YYYY_HH_MM(info.row?.original?.EDT_Epoch)
+              : "---"}
           </div>
         );
       },
@@ -451,13 +478,19 @@ const Serviceability = (props: ITypeProps) => {
                 <ServiceButton
                   text={"Submit"}
                   onClick={() => {
-                    onSubmitServiceability({
-                      ...serviceabilityData,
-                      orderType: serviceValue,
-                    });
-                    clearServiceabilityState();
+                    if (validateData(serviceabilityData)) {
+                      onSubmitServiceability({
+                        ...serviceabilityData,
+                        orderType: serviceValue,
+                      });
+                      clearServiceabilityState();
+                    }
                   }}
-                  className="!p-2 !w-[120px] !text-[#ffffff] !bg-[#1c1c1c]"
+                  className={`!p-2 !w-[120px] !text-[#ffffff] ${
+                    validateData(serviceabilityData)
+                      ? "!bg-[#1c1c1c]"
+                      : "!bg-[#D2D2D2] border-none cursor-not-allowed"
+                  }`}
                 />
               )}
             </div>

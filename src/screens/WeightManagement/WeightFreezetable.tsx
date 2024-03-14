@@ -11,7 +11,7 @@ import blueDeleteIcon from "../../assets/WeightManagement/blueDeleteIcon.svg";
 import blueEditIcon from "../../assets/WeightManagement/blueEditIcon.svg";
 import CustomCheckbox from "../../components/CheckBox";
 
-const WeightFreezeTable = () => {
+const WeightFreezeTable = ({ data }: any) => {
   const [isCheckedAll, setIsCheckedAll] = useState<boolean>(false);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
 
