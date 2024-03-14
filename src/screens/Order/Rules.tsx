@@ -11,6 +11,19 @@ import addIcon from "../../assets/Catalogue/add.svg";
 import CrossIcon from "../../assets/PickUp/ModalCrossWeb.svg";
 import CustomDropDown from "../../components/DropDown";
 import CustomInputBox from "../../components/Input";
+import {
+  CREATE_RULE_SERVICE,
+  FETCH_ALL_CATEGOROIES,
+  FETCH_ALL_PARTNER_WITH_SERVICE,
+  FETCH_ALL_PINCODE,
+} from "../../utils/ApiUrls";
+import InvoiceRule from "./ruleEngine/invoice";
+import PinCode from "./ruleEngine/pinCode";
+import ProductCategory from "./ruleEngine/productCategory";
+import PaymentMode from "./ruleEngine/paymentMode";
+import WeightRange from "./ruleEngine/weightRange";
+import ApplicableOrders from "./ruleEngine/applicableOrders";
+import { v4 as uuidv4 } from "uuid";
 
 const Rules = () => {
   const navigate = useNavigate();
@@ -19,138 +32,187 @@ const Rules = () => {
   const [ruleTitleValue, setRuleTitleValue] = useState("");
   const [applicableOrderValue, setApplicableOrderValue] = useState("");
   const [ruleName, setRuleName] = useState(["applicable_orders"]);
+  const [partnerList, setPartnerList] = useState<any>();
+  const [pinCodeList, setPinCodeList] = useState<any>();
+  const [categoriesList, setCategoriesList] = useState<any>();
+  const [persistFilterData, setPersistFilterData]: any = useState([]);
 
   let initialRuleEngine = [
     {
-      ruleId: "12345678",
+      ruleId: uuidv4(),
       ruleName: "invoice_value",
-      from: 1,
-      to: 5,
-      type: "greater",
-      sortBy: "cheapest",
+      from: 0,
+      to: 0,
+      type: "",
+      sortBy: "",
       priority: [
         {
-          partnerName: "DTDC",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Bludart",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "ExpressBess",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Ecom",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
       ],
     },
     {
-      ruleId: "12345678",
-      ruleName: "pincode",
-      sortBy: "cheapest",
-      pincode: ["401105", "40001", "40002"],
+      ruleId: uuidv4(),
+      ruleName: "pin_code",
+      sortBy: "",
+      pincode: [],
       priority: [
         {
-          partnerName: "DTDC",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Bludart",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "ExpressBess",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Ecom",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
       ],
     },
     {
-      ruleId: "12345678",
+      ruleId: uuidv4(),
       ruleName: "product_category",
-      sortBy: "cheapest",
-      category: ["fashion", "gift", "electronics"],
+      sortBy: "",
+      category: [],
       priority: [
         {
-          partnerName: "DTDC",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Bludart",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "ExpressBess",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Ecom",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
       ],
     },
     {
-      ruleId: "12345678",
+      ruleId: uuidv4(),
       ruleName: "payment_mode",
-      sortBy: "cheapest",
-      mode: "COD",
+      sortBy: "",
+      mode: "",
       priority: [
         {
-          partnerName: "DTDC",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Bludart",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "ExpressBess",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Ecom",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
       ],
     },
     {
-      ruleId: "12345678",
+      ruleId: uuidv4(),
       ruleName: "weight_range",
-      sortBy: "cheapest",
-      from: 1,
-      to: 5,
-      type: "greater",
+      sortBy: "",
+      from: 0,
+      to: 0,
+      type: "",
       priority: [
         {
-          partnerName: "DTDC",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Bludart",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "ExpressBess",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
         {
-          partnerName: "Ecom",
-          serviceName: "Air",
+          partnerName: "",
+          serviceName: "",
         },
       ],
     },
     {
-      ruleId: "12345678",
+      ruleId: uuidv4(),
       ruleName: "applicable_orders",
-      sortBy: "cheapest",
+      sortBy: "",
     },
   ];
+
+  const fetchAllPartner = async () => {
+    try {
+      const { data: response } = await POST(FETCH_ALL_PARTNER_WITH_SERVICE, {});
+      if (response?.success) {
+        setPartnerList(response?.data);
+      } else {
+        toast.error("Somethnig went wrong...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const fetchAllPinCode = async () => {
+    try {
+      const { data: response } = await POST(FETCH_ALL_PINCODE, {});
+      if (response?.success) {
+        setPinCodeList(response?.data);
+      } else {
+        toast.error("Somethnig went wrong...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const fetchAllCategory = async () => {
+    try {
+      const { data: response } = await POST(FETCH_ALL_CATEGOROIES, {});
+      if (response?.success) {
+        setCategoriesList(response?.data);
+      } else {
+        toast.error("Somethnig went wrong...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllPartner();
+    fetchAllPinCode();
+    fetchAllCategory();
+  }, []);
 
   const ruleTitle = [
     {
@@ -161,10 +223,10 @@ const Rules = () => {
       value: "pin_code",
       label: "Pin Code",
     },
-    {
-      value: "shipment_type",
-      label: "Shipment Type",
-    },
+    // {
+    //   value: "shipment_type",
+    //   label: "Shipment Type",
+    // },
     {
       value: "product_category",
       label: "Product Category",
@@ -183,62 +245,6 @@ const Rules = () => {
     // },
   ];
 
-  const sortBy = [
-    {
-      label: "Cheapest",
-      value: "Cheapest",
-    },
-    {
-      label: "Highest",
-      value: "Highest",
-    },
-  ];
-
-  const condition = [
-    {
-      label: "Greater Than",
-      value: "greater",
-    },
-    {
-      label: "Less Than",
-      value: "less",
-    },
-    {
-      label: "Between",
-      value: "between",
-    },
-  ];
-
-  const partnerName = [
-    {
-      label: "DTDC",
-      value: "DTDC",
-    },
-    {
-      label: "Bluedart",
-      value: "Bluedart",
-    },
-    {
-      label: "Ecom",
-      value: "Ecom",
-    },
-  ];
-
-  const serviceName = [
-    {
-      label: "All",
-      value: "All",
-    },
-    {
-      label: "Air",
-      value: "Air",
-    },
-    {
-      label: "Surface",
-      value: "Surface",
-    },
-  ];
-
   const renderHeaderComponent = () => {
     return (
       <CustomButton
@@ -255,59 +261,16 @@ const Rules = () => {
     setModalOpen(false);
     setRuleTitleValue("");
     let newRuleName = value;
-    setRuleName((prevArray: any) => [...prevArray, newRuleName]);
+    setRuleName((prevArray: any) => [newRuleName, ...prevArray]);
   };
-
-  const priorityLoop = () => {
-    return (
-      <div className="mt-5 grid grid-cols-2 gap-4">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="flex items-center gap-4">
-            <div>
-              <h1 className="text-[16px] font-Open font-semibold">
-                Priority {i}
-              </h1>
-            </div>
-            <div className="!w-[300px] !h-[48px]">
-              <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                {partnerName?.map((option: any) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="!w-[300px] !h-[48px]">
-              <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                {serviceName?.map((option: any) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  console.log("ruleName", ruleName);
 
   const changeHandler = (
     ruleName: any,
     fieldName: any,
     actualValue: any,
-    index: number
+    index: number,
+    column?: any
   ) => {
-    console.log(
-      "initState",
-      initialRuleEngine,
-      ruleName,
-      fieldName,
-      actualValue,
-      index
-    );
     for (let i = 0; i < initialRuleEngine?.length; i++) {
       if (initialRuleEngine[i]?.ruleName === ruleName) {
         if (fieldName === "from") {
@@ -318,10 +281,58 @@ const Rules = () => {
           initialRuleEngine[i].sortBy = actualValue;
         } else if (fieldName === "condition") {
           initialRuleEngine[i].type = actualValue;
+        } else if (fieldName === "pin_code") {
+          let tempArr: any = [];
+          tempArr.push(actualValue);
+          initialRuleEngine[i].pincode = tempArr;
+        } else if (fieldName === "product_category") {
+          let tempArr: any = [];
+          tempArr.push(actualValue);
+          initialRuleEngine[i].category = tempArr;
+        } else if (fieldName === "priority") {
+          initialRuleEngine[i].priority?.map((el: any, i: number) => {
+            if (column === "partnerCol" && i === index) {
+              el.partnerName = actualValue;
+            } else if (column === "serviceCol" && i === index) {
+              el.serviceName = actualValue;
+            }
+          });
         }
       }
     }
-    console.log("final Output", initialRuleEngine);
+  };
+
+  const submitHandler = async () => {
+    let finalRuleEngine: any = [];
+    initialRuleEngine?.map((el: any, i: number) => {
+      if (el?.sortBy != "") {
+        el.isActive = true;
+        el?.priority?.map((priorities: any, i: number) => {
+          if (
+            priorities?.partnerName !== "" &&
+            priorities?.serviceName !== ""
+          ) {
+            priorities.isActive = true;
+          } else {
+            priorities.isActive = false;
+          }
+        });
+        finalRuleEngine.push(el);
+      }
+    });
+    try {
+      let payload = {
+        ruleEngine: finalRuleEngine,
+      };
+      const { data: response } = await POST(CREATE_RULE_SERVICE, payload);
+      if (response?.status) {
+        toast.success(response?.message);
+      } else {
+        toast.error("Somethnig went wrong...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -331,276 +342,57 @@ const Rules = () => {
 
         {ruleName?.length > 0 &&
           ruleName?.map((el: any, i: number) => {
-            if (el === "applicable_orders") {
+            if (el === "invoice_value") {
               return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. Applicable To All Orders
-                  </h1>
-                  <div className="mt-5">
-                    <CustomDropDown
-                      value={applicableOrderValue}
-                      options={sortBy?.map((order: any) => ({
-                        label: order.label,
-                        value: order.value,
-                      }))}
-                      onChange={(e: any) =>
-                        setApplicableOrderValue(e.target.value)
-                      }
-                      selectClassName="rounded-md bg-[#FEFEFE] !w-[372px]"
-                      //   heading="Select Role"
-                    />
-                  </div>
-                </div>
-              );
-            } else if (el === "invoice_value") {
-              return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. Invoice Value
-                  </h1>
-                  <div className="mt-5">
-                    <div className="flex gap-4 items-center">
-                      <div>
-                        <h1 className="text-[18px] font-Open text-[#323232]">
-                          Invoice Value
-                        </h1>
-                      </div>
-                      <div className="!w-[115px] !h-[48px]">
-                        <CustomInputBox
-                          label="From"
-                          className="text-[12px] font-Open font-semibold"
-                          defaultValue=""
-                          onChange={(e: any) =>
-                            changeHandler(
-                              "invoice_value",
-                              "from",
-                              e.target.value,
-                              i
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="!w-[140px] !h-[48px]">
-                        <select
-                          onChange={(e: any) =>
-                            changeHandler(
-                              "invoice_value",
-                              "condition",
-                              e.target.value,
-                              i
-                            )
-                          }
-                          className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]"
-                        >
-                          {condition?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="!w-[115px] !h-[48px]">
-                        <CustomInputBox
-                          className="text-[12px] font-Open font-semibold"
-                          label="To"
-                          defaultValue={""}
-                          onChange={(e: any) =>
-                            changeHandler(
-                              "invoice_value",
-                              "to",
-                              e.target.value,
-                              i
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-5">
-                      <div>Sort By</div>
-                      <div className="!w-[115px] flex !h-[48px]">
-                        <select
-                          onChange={(e: any) =>
-                            changeHandler(
-                              "invoice_value",
-                              "sort",
-                              e.target.value,
-                              i
-                            )
-                          }
-                          className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]"
-                        >
-                          {sortBy?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {priorityLoop()}
-                  </div>
-                </div>
+                <InvoiceRule
+                  index={i}
+                  partnerList={partnerList}
+                  changeHandler={changeHandler}
+                />
               );
             } else if (el === "pin_code") {
               return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. PIN Code
-                  </h1>
-                  <div className="mt-5">
-                    <div className="flex gap-4 items-center">
-                      <div>
-                        <h1 className="text-[18px] font-Open text-[#323232]">
-                          PIN Code
-                        </h1>
-                      </div>
-
-                      <div className="!w-[140px] !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {condition?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-5">
-                      <div>Sort By</div>
-                      <div className="!w-[115px] flex !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {sortBy?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {priorityLoop()}
-                  </div>
-                </div>
+                <PinCode
+                  index={i}
+                  partnerList={partnerList}
+                  pinCodeList={pinCodeList}
+                  changeHandler={changeHandler}
+                  setPersistFilterData={setPersistFilterData}
+                  persistFilterData={persistFilterData}
+                />
               );
             } else if (el === "product_category") {
               return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. Product Category
-                  </h1>
-                  <div className="mt-5">
-                    <div className="flex gap-4 items-center">
-                      <div>
-                        <h1 className="text-[18px] font-Open text-[#323232]">
-                          Product Category
-                        </h1>
-                      </div>
-
-                      <div className="!w-[140px] !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {condition?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-5">
-                      <div>Sort By</div>
-                      <div className="!w-[115px] flex !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {sortBy?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {priorityLoop()}
-                  </div>
-                </div>
+                <ProductCategory
+                  index={i}
+                  partnerList={partnerList}
+                  categoriesList={categoriesList}
+                  changeHandler={changeHandler}
+                />
               );
             } else if (el === "payment_mode") {
               return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. Payment Mode
-                  </h1>
-                  <div className="mt-5">
-                    <div className="flex gap-4 items-center">
-                      <div>
-                        <h1 className="text-[18px] font-Open text-[#323232]">
-                          Payment Mode
-                        </h1>
-                      </div>
-
-                      <div className="!w-[140px] !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {condition?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-5">
-                      <div>Sort By</div>
-                      <div className="!w-[115px] flex !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {sortBy?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {priorityLoop()}
-                  </div>
-                </div>
+                <PaymentMode
+                  index={i}
+                  partnerList={partnerList}
+                  changeHandler={changeHandler}
+                />
               );
             } else if (el === "weight_range") {
               return (
-                <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
-                  <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-                    {i + 1}. Weight Range
-                  </h1>
-                  <div className="mt-5">
-                    <div className="flex gap-4 items-center">
-                      <div>
-                        <h1 className="text-[18px] font-Open text-[#323232]">
-                          Weight Range
-                        </h1>
-                      </div>
-
-                      <div className="!w-[140px] !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {condition?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 mt-5">
-                      <div>Sort By</div>
-                      <div className="!w-[115px] flex !h-[48px]">
-                        <select className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]">
-                          {sortBy?.map((option: any, i: number) => (
-                            <option value={option?.value}>
-                              {option?.label}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-                    {priorityLoop()}
-                  </div>
-                </div>
+                <WeightRange
+                  index={i}
+                  partnerList={partnerList}
+                  changeHandler={changeHandler}
+                />
+              );
+            } else if (el === "applicable_orders") {
+              return (
+                <ApplicableOrders
+                  index={i}
+                  partnerList={partnerList}
+                  changeHandler={changeHandler}
+                />
               );
             }
           })}
@@ -664,7 +456,10 @@ const Rules = () => {
       </CustomCenterModal>
 
       <footer className="w-full fixed bottom-0">
-        <div className="flex items-center justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]">
+        <div
+          className="flex items-center justify-end shadow-lg border-[1px]  bg-[#FFFFFF] gap-[32px] p-[24px] rounded-tr-[24px] rounded-tl-[24px] fixed w-full bottom-0 lg:flex lg:justify-end lg:!w-[calc(100%-64px)]"
+          onClick={() => submitHandler()}
+        >
           <div className="flex">
             <button className="mx-4 flex items-center  font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded py-[8px] text-sm font-semibold text-center bg-[#1C1C1C] text-[#FFFFFF] w-[110px]">
               {" "}
