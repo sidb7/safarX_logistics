@@ -151,7 +151,7 @@ const PendingDispute = ({
             <div className=" flex flex-col text-[#1C1C1C] font-Odiven text-sm leading-5 ">
               <div className="text-[15px]">
                 {ProductList.map((data: any, i: any) => {
-                  return <span>Product {i + 1} + Product 2</span>;
+                  return <span>Product {i + 1}</span>;
                 })}
               </div>
               <div className="my-2">
@@ -209,7 +209,7 @@ const PendingDispute = ({
       header: () => {
         return (
           <div className="flex justify-between">
-            <p className="font-Open text-sm font-semibold leading-[18px] text-[#1C1C1C] self-center whitespace-nowrap">
+            <p className="font-Open text-sm font-semibold leading-[18px]  text-[#1C1C1C] self-center whitespace-nowrap">
               Applied Weight And Price
             </p>
           </div>
@@ -219,6 +219,7 @@ const PendingDispute = ({
       cell: ({ row }: any) => {
         const rowData = row?.original;
         const orderPlaceInfo = rowData?.orderPlaceInfo;
+
         return (
           <div className=" flex flex-col  text-[#1C1C1C] font-Odiven text-sm  leading-5 ">
             <div className="mb-4">
@@ -227,12 +228,12 @@ const PendingDispute = ({
                 <div>
                   {`${orderPlaceInfo?.length} X ${orderPlaceInfo?.breadth} X ${orderPlaceInfo?.height}`}
                 </div>
-                <div>{`${orderPlaceInfo?.appliedWeight} Kg`}</div>
+                <div>{`${orderPlaceInfo?.service?.appliedWeight} Kg`}</div>
               </div>
             </div>
             <div className="mt-3">
               <div>Price</div>
-              <div className="font-semibold">{`₹ ${orderPlaceInfo?.price}`}</div>
+              <div className="font-semibold">{`₹ ${orderPlaceInfo?.service?.total}`}</div>
             </div>
           </div>
         );
@@ -248,6 +249,7 @@ const PendingDispute = ({
           </div>
         );
       },
+
       cell: ({ row }: any) => {
         const rowData = row?.original;
         const disputeInfo = rowData?.disputeInfo;
@@ -263,15 +265,15 @@ const PendingDispute = ({
                       : disputeInfo?.width
                   } X ${disputeInfo?.height}`}
                 </div>
-                <div>{`${disputeInfo?.appliedWeight} Kg`}</div>
+                <div>{`${rowData.newServiceObj?.appliedWeight} Kg`}</div>
               </div>
             </div>
-            <div className="mt-3">
-              <div>Price</div>
-              {disputeInfo?.price && (
-                <div className="font-semibold">{`₹ ${disputeInfo?.price}`}</div>
-              )}
-            </div>
+            {rowData?.newServiceObj?.total && (
+              <div className="mt-3">
+                <div>Price</div>
+                <div className="font-semibold">{`₹ ${rowData?.newServiceObj?.total}`}</div>
+              </div>
+            )}
           </div>
         );
       },
@@ -530,11 +532,13 @@ const PendingDispute = ({
           <Spinner />
         </div>
       ) : (
-        <CustomTable
-          columns={PendingDisputeHeading}
-          data={data || []}
-          // setRowSelectedData={setRowSelectedData}
-        />
+        <div className="overflow-x-auto">
+          <CustomTable
+            columns={PendingDisputeHeading}
+            data={data || []}
+            // setRowSelectedData={setRowSelectedData}
+          />
+        </div>
       )}
       <RightSideModal
         isOpen={uploadImgModal?.isOpen}

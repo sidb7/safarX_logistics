@@ -167,16 +167,17 @@ const WeightFreeze: React.FunctionComponent = () => {
     //   // setRenderingComponents(3);
     //   // setScrollIndex(0);
     // } else
+
     if (data[1] === "new-discrepancy") {
       setIsActive(checkPageAuthorized("New Discrepancy"));
       setRenderingComponents(0);
       setScrollIndex(0);
-    } else if (data[1] === "pending-dispute") {
-      setIsActive(checkPageAuthorized("Pending Dispute"));
+    } else if (data[1] === "raise-dispute") {
+      setIsActive(checkPageAuthorized("Raise Dispute"));
       setRenderingComponents(1);
       setScrollIndex(1);
-    } else if (data[1] === "completed") {
-      setIsActive(checkPageAuthorized("Completed"));
+    } else if (data[1] === "dispute-closed") {
+      setIsActive(checkPageAuthorized("Dispute Closed"));
       setRenderingComponents(2);
       setScrollIndex(2);
     }
