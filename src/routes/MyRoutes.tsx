@@ -1244,7 +1244,7 @@ const MyRoutes: React.FC = () => {
         />
 
         <Route
-          path="/weight-management/pending-dispute"
+          path="/weight-management/raise-dispute"
           element={
             <ProtectedRoute>
               <WeightFreeze />
@@ -1252,7 +1252,7 @@ const MyRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/weight-management/completed"
+          path="/weight-management/dispute-closed"
           element={
             <ProtectedRoute>
               <WeightFreeze />

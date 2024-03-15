@@ -215,12 +215,12 @@ const CompletedTable = ({
                 <div>
                   {`${orderPlaceInfo?.length} X ${orderPlaceInfo?.breadth} X ${orderPlaceInfo?.height}`}
                 </div>
-                <div>{`${orderPlaceInfo?.appliedWeight} Kg`}</div>
+                <div>{`${orderPlaceInfo?.service?.appliedWeight} Kg`}</div>
               </div>
             </div>
             <div className="mt-3">
               <div>Price</div>
-              <div className="font-semibold">{`₹ ${orderPlaceInfo?.price}`}</div>
+              <div className="font-semibold">{`₹ ${orderPlaceInfo?.service?.total}`}</div>
             </div>
           </div>
         );
@@ -252,15 +252,15 @@ const CompletedTable = ({
                       : disputeInfo?.width
                   } X ${disputeInfo?.height}`}
                 </div>
-                <div>{`${disputeInfo?.appliedWeight.toFixed(2)} Kg`}</div>
+                <div>{`${rowData.newServiceObj?.appliedWeight} Kg`}</div>
               </div>
             </div>
-            <div className="mt-3">
-              <div>Price</div>
-              {disputeInfo?.price && (
-                <div className="font-semibold">{`₹ ${disputeInfo?.price}`}</div>
-              )}
-            </div>
+            {rowData?.newServiceObj?.total && (
+              <div className="mt-3">
+                <div>Price</div>
+                <div className="font-semibold">{`₹ ${rowData?.newServiceObj?.total}`}</div>
+              </div>
+            )}
           </div>
         );
       },
@@ -469,11 +469,13 @@ const CompletedTable = ({
           <Spinner />
         </div>
       ) : (
-        <CustomTable
-          columns={PendingDisputeHeading}
-          data={data || []}
-          // setRowSelectedData={setRowSelectedData}
-        />
+        <div className="overflow-x-auto">
+          <CustomTable
+            columns={PendingDisputeHeading}
+            data={data || []}
+            // setRowSelectedData={setRowSelectedData}
+          />
+        </div>
       )}
 
       <RightSideModal
