@@ -163,6 +163,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
 import CouponScreen from "../components/Coupons/index";
+import Rules from "../screens/Order/Rules";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -551,6 +552,14 @@ const MyRoutes: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Payment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders/rules"
+            element={
+              <ProtectedRoute>
+                <Rules />
               </ProtectedRoute>
             }
           />
