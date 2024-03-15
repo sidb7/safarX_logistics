@@ -72,7 +72,7 @@ const NewDiscrepancyTable = ({
       const { data: responseData } = await POST(ACCEPT_DISPUTE, payload);
       if (responseData?.status) {
         toast.success(responseData?.message);
-        const newUrl = `weight-management/completed`;
+        const newUrl = `/weight-management/dispute-closed`;
         window.history.pushState(null, "", newUrl);
         window.location.reload();
       } else {
@@ -90,7 +90,7 @@ const NewDiscrepancyTable = ({
       if (responseData?.status) {
         toast.success(responseData?.message);
         getWeightDispute();
-        const newUrl = `/weight-management/pending-dispute`;
+        const newUrl = `/weight-management/raise-dispute`;
         window.history.pushState(null, "", newUrl);
       } else {
         toast.error(responseData?.message);
@@ -202,7 +202,7 @@ const NewDiscrepancyTable = ({
             <div className=" flex flex-col text-[#1C1C1C] font-Odiven text-sm leading-5 ">
               <div className="text-[15px]">
                 {ProductList.map((data: any, i: any) => {
-                  return <span>Product {i + 1} + Product 2</span>;
+                  return <span>Product {i + 1}</span>;
                 })}
               </div>
               <div className="my-2">
@@ -281,12 +281,12 @@ const NewDiscrepancyTable = ({
                 <div>
                   {`${orderPlaceInfo?.length} X ${orderPlaceInfo?.breadth} X ${orderPlaceInfo?.height}`}
                 </div>
-                <div>{`${orderPlaceInfo?.appliedWeight} Kg`}</div>
+                <div>{`${orderPlaceInfo?.service?.appliedWeight} Kg`}</div>
               </div>
             </div>
             <div className="mt-3">
               <div>Price</div>
-              <div className="font-semibold">{`₹ ${orderPlaceInfo?.price}`}</div>
+              <div className="font-semibold">{`₹ ${orderPlaceInfo?.service?.total}`}</div>
             </div>
           </div>
         );
@@ -318,15 +318,15 @@ const NewDiscrepancyTable = ({
                       : disputeInfo?.width
                   } X ${disputeInfo?.height}`}
                 </div>
-                <div>{`${disputeInfo?.appliedWeight} Kg`}</div>
+                <div>{`${rowData.newServiceObj?.appliedWeight} Kg`}</div>
               </div>
             </div>
-            <div className="mt-3">
-              <div>Price</div>
-              {disputeInfo?.price && (
-                <div className="font-semibold">{`₹ ${disputeInfo?.price}`}</div>
-              )}
-            </div>
+            {rowData?.newServiceObj?.total && (
+              <div className="mt-3">
+                <div>Price</div>
+                <div className="font-semibold">{`₹ ${rowData?.newServiceObj?.total}`}</div>
+              </div>
+            )}
           </div>
         );
       },
@@ -593,11 +593,13 @@ const NewDiscrepancyTable = ({
           <Spinner />
         </div>
       ) : (
-        <CustomTable
-          columns={NewDiscrepancyHeading}
-          data={data || []}
-          // setRowSelectedData={setRowSelectedData}
-        />
+        <div className="overflow-x-auto">
+          <CustomTable
+            columns={NewDiscrepancyHeading}
+            data={data || []}
+            // setRowSelectedData={setRowSelectedData}
+          />
+        </div>
       )}
       <RightSideModal
         isOpen={uploadImgModal?.isOpen}
