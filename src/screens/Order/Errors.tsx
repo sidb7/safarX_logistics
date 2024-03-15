@@ -218,8 +218,8 @@ const Errors = (props: ErrorProps) => {
     // let amount = amountArray?.[amountArray?.length - 2];
     // const walletAmount = amount ? amount : 1000;
     // dispatch(PaymentSlice.actions.paymentAmount(walletAmount));
-    // if (errorName === "Recharge") navigate(`/wallet/view-wallet`);
-    // else setIsErrorModalOpen(true);
+    if (errorName === "Recharge") navigate(`/wallet/view-wallet`);
+    else setIsErrorModalOpen(true);
   };
 
   const handleItemClick = (index: any) => {
@@ -253,9 +253,10 @@ const Errors = (props: ErrorProps) => {
                   }
                   className="border-[blue] border-b-[1px] mr-2 text-[blue]"
                 >
-                  {order?.errorType === "Administrative Errors"
-                    ? "CONTACT ADMINISTRATION"
-                    : "UPDATE"}
+                  {order?.errorType === "Administrative Errors" ||
+                  order?.errorType === "Server Error"
+                    ? eachOrder?.notesObject?.notes
+                    : "Update"}
                 </div>
               </div>
             </div>
@@ -382,7 +383,7 @@ const Errors = (props: ErrorProps) => {
                 }
                 className="border-[blue] flex border-b-[1px] text-[blue]"
               >
-                UPDATE {"("}
+                Update {"("}
                 <div className="text-[18px] flex justify-center items-center mx-[2px]">
                   {elem.ordersCount}
                 </div>
@@ -419,7 +420,7 @@ const Errors = (props: ErrorProps) => {
                       onClick={() => handleError(order, errorName)}
                       className="border-[blue] border-b-[1px] text-[blue]"
                     >
-                      UPDATE
+                      Update
                     </div>
                   </div>
                 );
@@ -458,7 +459,7 @@ const Errors = (props: ErrorProps) => {
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
-                        UPDATE
+                        Update
                       </div>
                     </div>
                   );
@@ -488,7 +489,7 @@ const Errors = (props: ErrorProps) => {
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
-                        UPDATE
+                        Update
                       </div> */}
                     <div className="mr-[1rem]">
                       <img
