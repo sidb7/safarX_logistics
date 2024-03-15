@@ -187,16 +187,16 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const actionsObject: any = {
     DRAFT: [
       {
-        icon: DeleteIconForLg,
-        hovertext: "Delete Orders",
-        identifier: "Delete",
-        buttonName: "Delete Orders",
-      },
-      {
         icon: PlaceChannelOrder,
         hovertext: "Place Orders",
         identifier: "PlaceOrder",
         buttonName: "Place Orders",
+      },
+      {
+        icon: DeleteIconForLg,
+        hovertext: "Delete Orders",
+        identifier: "Delete",
+        buttonName: "Delete Orders",
       },
     ],
     BOOKED: [
