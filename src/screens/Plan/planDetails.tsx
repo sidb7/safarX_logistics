@@ -712,9 +712,15 @@ const PlanDetails = (props: ITypeProps) => {
     try {
       const { data: responseV4 }: any = await POST(POST_ASSIGN_PLANV3, payload);
       if (responseV4?.success) {
-        setIsModalOpen(false);
-        toast.success(responseV4?.message);
-        window.location.reload();
+        console.log("responseV4", responseV4?.message.includes("Approve"));
+        if (responseV4?.message.includes("Approve")) {
+          toast.success(responseV4?.message);
+          setIsModalOpen(false);
+        } else {
+          setIsModalOpen(false);
+          toast.success(responseV4?.message);
+          window.location.reload();
+        }
       } else {
         toast.error(responseV4?.message);
       }

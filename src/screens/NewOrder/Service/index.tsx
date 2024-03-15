@@ -136,10 +136,16 @@ interface IServiceOption {
   };
 }
 
+interface SelectedServiceType {
+  value: number;
+  type: string;
+}
+
 const Index: React.FC = () => {
   // const [recommendedData, setRecommendedData] = useState([]);
   const [filterData, setFilterData] = useState([]);
-  const [selectedService, setSelectedService] = useState(null);
+  const [selectedService, setSelectedService] =
+    useState<SelectedServiceType | null>(null);
   const [selectedOption, setSelectedOption] = useState<any>(null);
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const [response, setResponse] = useState<any>();
@@ -218,9 +224,9 @@ const Index: React.FC = () => {
         );
 
         setRecommendatedOptions([
-          cheapestService,
-          fastestService,
-          balancedService,
+          { ...cheapestService, type: "cheapest" },
+          { ...fastestService, type: "fastest" },
+          { ...balancedService, type: "balanced" },
         ]);
 
         setLoading(false);
@@ -346,7 +352,11 @@ const Index: React.FC = () => {
       filters[0]
     );
 
-    setRecommendatedOptions([cheapestService, fastestService, balancedService]);
+    setRecommendatedOptions([
+      { ...cheapestService, type: "cheapest" },
+      { ...fastestService, type: "fastest" },
+      { ...balancedService, type: "balanced" },
+    ]);
   }, [surface, air]);
 
   const handleSortBy = (selectedItems: string[]) => {
@@ -366,18 +376,28 @@ const Index: React.FC = () => {
   const postServiceDetails = async () => {
     try {
       setLoading(true);
-      if (selectedService === null) {
+      //  console.log("selectedService", selectedService);
+
+      if (!selectedService) {
         toast.error("Please Select a Service");
         setLoading(false);
         return;
       }
 
-      let {
+      const serviceDetails = response.data[selectedService.value];
+
+      if (!serviceDetails) {
+        toast.error("Service details not found.");
+        setLoading(false);
+        return;
+      }
+
+      const {
         partnerServiceId,
         partnerServiceName,
         companyServiceId,
         companyServiceName,
-      } = response.data[selectedService];
+      } = serviceDetails;
 
       const payload = {
         partnerServiceId,
@@ -387,6 +407,7 @@ const Index: React.FC = () => {
         tempOrderId: +shipyaari_id,
         source: orderSource,
       };
+
       const { data: responseData } = await POST(
         SET_PARTNER_SERVICE_INFO,
         payload
@@ -404,7 +425,8 @@ const Index: React.FC = () => {
       }
     } catch (error) {
       setLoading(false);
-      return error;
+      console.error("Failed to post service details:", error);
+      toast.error("Failed to update service details.");
     }
   };
 

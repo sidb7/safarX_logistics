@@ -338,6 +338,22 @@ const AMAZON_BASE_URL = "https://sellercentral.amazon.in";
 const GET_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod`;
 const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitReport`;
 
+// RuleEngine
+const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPartner`;
+const FETCH_ALL_PINCODE = `${SELLER_BASE_URL}/pincodes/getAllPincode`;
+const FETCH_ALL_CATEGOROIES = `${SELLER_BASE_URL}/categories/getOnlyCategories`;
+const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
+// weight Management
+const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
+const UPLOAD_DISPUTE_IMAGE = `${SELLER_BASE_URL}/weightDispute/uploadDisputeImages`;
+const GET_MULTIPLE_FILE = `${SELLER_BASE_URL}/fileManagement/getMutipleFile`;
+const DELETE_DISPUTE_IMAGES = `${SELLER_BASE_URL}/weightDispute/deleteDisputeImages`;
+const ACCEPT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/acceptDispute`;
+const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
+
+// Errors Handling API
+const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -507,4 +523,15 @@ export {
   GET_PENDING_PLANS,
   GET_PLANS_PREVIEW,
   SEARCH_PINCODE,
+  FETCH_ALL_PARTNER_WITH_SERVICE,
+  FETCH_ALL_PINCODE,
+  FETCH_ALL_CATEGOROIES,
+  CREATE_RULE_SERVICE,
+  GET_WRIGHT_DISPUTE,
+  UPLOAD_DISPUTE_IMAGE,
+  GET_MULTIPLE_FILE,
+  DELETE_DISPUTE_IMAGES,
+  ACCEPT_DISPUTE,
+  REJECT_DISPUTE,
+  PAYMENT_ERRORS,
 };

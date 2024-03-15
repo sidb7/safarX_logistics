@@ -31,6 +31,8 @@ import {
   FETCH_MULTI_TAX_REPORT_DOWNLOAD,
   GET_SELLER_ORDER_COMPLETE_DATA,
   GET_ORDER_ERRORS,
+  RECHARGE_STATUS,
+  PAYMENT_ERRORS,
 } from "../../utils/ApiUrls";
 import OrderCard from "./OrderCard";
 import "../../styles/index.css";
@@ -53,7 +55,9 @@ import CopyTooltip from "../../components/CopyToClipboard";
 import { BottomNavBar } from "../../components/BottomNavBar";
 import {
   capitalizeFirstLetter,
+  getLocalStorage,
   getQueryJson,
+  removeLocalStorage,
   tokenKey,
 } from "../../utils/utility";
 import "../../styles/hideScroll.css";
@@ -411,6 +415,21 @@ const Index = () => {
       subStatus,
     };
 
+    let firstFilterData: any = [];
+    let secondFilterData: any = [];
+
+    if (
+      filterPayLoad?.filterArrOne.length > 0 ||
+      filterPayLoad?.filterArrTwo.length > 0
+    ) {
+      const newFilterArrOne = filterPayLoad?.filterArrOne.filter(
+        (obj: any) => !Object.keys(obj).includes("createdAt")
+      );
+
+      firstFilterData = newFilterArrOne;
+      secondFilterData = filterPayLoad?.filterArrTwo;
+    }
+
     if (startDate && endDate) {
       let startEpoch = null;
       let lastendEpoch = null;
@@ -425,7 +444,7 @@ const Index = () => {
         lastendEpoch = endEpoch;
       }
 
-      payload.filterArrOne = [
+      firstFilterData.unshift(
         {
           createdAt: {
             $gte: startEpoch,
@@ -435,10 +454,43 @@ const Index = () => {
           createdAt: {
             $lte: lastendEpoch,
           },
-        },
-      ];
-      payload.filterArrTwo = [];
+        }
+      );
     }
+
+    if (firstFilterData.length > 0 || secondFilterData.length > 0) {
+      payload.filterArrOne = firstFilterData;
+      payload.filterArrTwo = secondFilterData;
+    }
+
+    // if (startDate && endDate) {
+    //   let startEpoch = null;
+    //   let lastendEpoch = null;
+
+    //   if (startDate instanceof Date && endDate instanceof Date) {
+    //     startDate.setHours(0, 0, 0, 0);
+    //     startEpoch = startDate.getTime();
+
+    //     endDate.setHours(23, 59, 59, 999);
+    //     const endEpoch = endDate.getTime();
+
+    //     lastendEpoch = endEpoch;
+    //   }
+
+    //   payload.filterArrOne = [
+    //     {
+    //       createdAt: {
+    //         $gte: startEpoch,
+    //       },
+    //     },
+    //     {
+    //       createdAt: {
+    //         $lte: lastendEpoch,
+    //       },
+    //     },
+    //   ];
+    //   payload.filterArrTwo = [];
+    // }
 
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
@@ -450,13 +502,6 @@ const Index = () => {
       getStatusCount(currentStatus, true, "", startDate, endDate);
     }
   };
-
-  // useEffect(() => {
-  //   if (Object.keys(persistFilterData).length > 0) {
-  //     console.log("persistFilterData", persistFilterData);
-  //     sessionStorage.setItem("FilterData", JSON.stringify(persistFilterData));
-  //   }
-  // }, [persistFilterData]);
 
   const Buttons = (className?: string) => {
     return (
@@ -1259,10 +1304,6 @@ const Index = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getStatusCount("DARFT");
-  // }, []);
-
   const debounce = (fn: any, delay: any) => {
     let timerId: any;
     return (...args: any) => {
@@ -1607,9 +1648,9 @@ const Index = () => {
         }
       });
 
-      setDraftOrderCount((prev: any) => {
-        return { ...prev, error: errorListCount };
-      });
+      // setDraftOrderCount((prev: any) => {
+      //   return { ...prev, error: errorListCount };
+      // });
 
       setErrorData(result);
       setIsErrorListLoading(false);
@@ -1760,6 +1801,39 @@ const Index = () => {
     }
   }, [channelReduxData]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        // fetchCurrentWallet();
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          // setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          if (orderStatus?.data?.success === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            toast.success("Wallet Recharge Successfully");
+            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
+            // ------------------------------------------------------------------------------------------
+            let paymentPayload: any = getLocalStorage("paymentErrorObject");
+            if (paymentPayload) {
+              paymentPayload = JSON.parse(paymentPayload);
+              await POST(PAYMENT_ERRORS, paymentPayload);
+            }
+            removeLocalStorage("paymentErrorObject");
+          }
+          removeLocalStorage("order_id");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
+  }, []);
+
   return (
     <>
       {isActive ? (
@@ -1819,6 +1893,7 @@ const Index = () => {
                 setIsErrorListLoading={setIsErrorListLoading}
                 getErrors={getErrors}
                 selectedDateRange={{ startDate, endDate }}
+                filterPayLoad={filterPayLoad}
               />
             </div>
             <div

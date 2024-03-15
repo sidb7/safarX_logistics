@@ -47,8 +47,6 @@ export const Transaction = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSelectedData, setRowSelectedData]: any = useState([]);
 
-  console.log("renderingComponents", renderingComponents);
-
   useEffect(() => {
     if (renderingComponents === 0) {
       // setLoading(true);

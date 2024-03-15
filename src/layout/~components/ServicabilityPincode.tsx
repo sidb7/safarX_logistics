@@ -78,7 +78,6 @@ const ServicabilityPincode = (props: ITypeProps) => {
         );
       },
     }),
-
     columnsHelper.accessor("pincode", {
       header: () => {
         return (

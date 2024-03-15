@@ -65,9 +65,15 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   //   setSortedOptions(filters.slice(0, 10));
   // }, [surface, air, sortingPrice, sortingFastest, options]);
 
-  const handleOnChange = (option: IServiceOption) => {
-    setSelectedOption(option);
-    selectedValue(option.value);
+  const handleOnChange = (option: any) => {
+    setSelectedOption({
+      ...option,
+      type: option.type,
+    });
+    selectedValue({
+      value: option.value,
+      type: option.type,
+    });
   };
 
   const handleSortBy = (selectedItems: string[]) => {
@@ -118,7 +124,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
         return a.text.total - b.text.total;
       }
     });
-    console.log("filters>>", filters);
+    // console.log("filters>>", filters);
 
     setSortedOptions(filters);
   }, [options, surface, air, sortingPrice, sortingFastest]);
