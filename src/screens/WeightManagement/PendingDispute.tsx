@@ -17,6 +17,7 @@ import { GET_MULTIPLE_FILE } from "../../utils/ApiUrls";
 import toast from "react-hot-toast";
 import { POST } from "../../utils/webService";
 import { Spinner } from "../../components/Spinner";
+import ActivityLogs from "./ActivityLogs";
 
 const PendingDispute = ({
   data,
@@ -30,6 +31,11 @@ const PendingDispute = ({
   const [sideDrawer, setSideDrawer] = useState({
     isOpen: false,
     data: {},
+  });
+
+  const [sideDrawerForTracking, setSideDrawerForTracking] = useState({
+    isOpen: false,
+    data: [],
   });
 
   const [uploadImgModal, setUploadImgModal]: any = useState({
@@ -508,18 +514,26 @@ const PendingDispute = ({
         );
       },
 
-      cell: (info: any) => {
+      cell: ({ row }: any) => {
+        const rowData = row?.original;
+        const disputeLogs = rowData?.logs || [];
+
         return (
-          <div className="flex p-2">
-            <div className="">
+          <>
+            {/* <div className="">
               <img src={weightClockIcon} alt="" />
-            </div>
-            <div className=" ml-4">
-              <img src={reloadIcon} alt="" />
-            </div>
+            </div> */}
+            <button
+              className="ml-4 rounded-full flex justify-center items-center w-[40px] h-[40px]"
+              onClick={() =>
+                setSideDrawerForTracking({ isOpen: true, data: disputeLogs })
+              }
+            >
+              <img src={reloadIcon} alt="" className="hover:scale-100" />
+            </button>
 
             {/* <img src={LockIcon} alt="lockIcon" /> */}
-          </div>
+          </>
         );
       },
     }),
@@ -557,6 +571,22 @@ const PendingDispute = ({
           setUploadImgModal={setUploadImgModal}
           uploadImgModal={uploadImgModal}
           reloadMethod={getWeightDispute}
+        />
+      </RightSideModal>
+
+      <RightSideModal
+        isOpen={sideDrawerForTracking?.isOpen}
+        onClose={() =>
+          setSideDrawerForTracking({
+            isOpen: false,
+            data: [],
+          })
+        }
+        className="!w-[450px]"
+      >
+        <ActivityLogs
+          onClosed={setSideDrawerForTracking}
+          data={sideDrawerForTracking?.data}
         />
       </RightSideModal>
 

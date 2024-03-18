@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { POST } from "../../utils/webService";
 import RightSideModal from "../../components/CustomModal/customRightModal";
 import SideDrawerForImgs from "./sideDrawerForImgs";
+import ActivityLogs from "./ActivityLogs";
 
 const CompletedTable = ({
   data,
@@ -22,6 +23,10 @@ const CompletedTable = ({
   const [sideDrawer, setSideDrawer] = useState({
     isOpen: false,
     data: {},
+  });
+  const [sideDrawerForTracking, setSideDrawerForTracking] = useState({
+    isOpen: false,
+    data: [],
   });
   const [getImageLoading, setGetImageLoading] = useState(false);
 
@@ -451,13 +456,18 @@ const CompletedTable = ({
 
       cell: ({ row }: any) => {
         const rowData = row?.original;
-        let awb = rowData.awb || 0;
+        const disputeLogs = rowData?.logs || [];
         return (
-          <div className="flex justify-center items-center">
-            <div>
-              <img src={reloadIcon} alt="" />
-            </div>
-          </div>
+          <>
+            <button
+              className="ml-4 rounded-full flex justify-center items-center w-[40px] h-[40px]"
+              onClick={() =>
+                setSideDrawerForTracking({ isOpen: true, data: disputeLogs })
+              }
+            >
+              <img src={reloadIcon} alt="" className="hover:scale-100" />
+            </button>
+          </>
         );
       },
     }),
@@ -477,6 +487,22 @@ const CompletedTable = ({
           />
         </div>
       )}
+
+      <RightSideModal
+        isOpen={sideDrawerForTracking?.isOpen}
+        onClose={() =>
+          setSideDrawerForTracking({
+            isOpen: false,
+            data: [],
+          })
+        }
+        className="!w-[450px]"
+      >
+        <ActivityLogs
+          onClosed={setSideDrawerForTracking}
+          data={sideDrawerForTracking?.data}
+        />
+      </RightSideModal>
 
       <RightSideModal
         isOpen={sideDrawer?.isOpen}
