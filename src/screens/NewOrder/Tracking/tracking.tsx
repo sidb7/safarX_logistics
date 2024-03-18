@@ -325,7 +325,7 @@ const Tracking = () => {
                                   alt=""
                                 />
                               </div>
-                              {openSection === "tracking" &&
+                              {/* {openSection === "tracking" &&
                                 each?.trackingDetails?.map(
                                   (each: any, index: number) => {
                                     return (
@@ -360,7 +360,7 @@ const Tracking = () => {
                                       </div>
                                     );
                                   }
-                                )}
+                                )} */}
                               <div className="py-3">
                                 <hr />
                               </div>

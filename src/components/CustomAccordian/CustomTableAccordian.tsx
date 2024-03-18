@@ -15,6 +15,7 @@ import {
   UPDATE_TEMP_ORDER_INFO,
   GET_SERVICE_LIST_ORDER,
   SET_SERVICE_INFO,
+  GET_SELLER_BOX,
 } from "../../utils/ApiUrls";
 import { pickupAddress } from "../../utils/dummyData";
 import { convertXMLToXLSX } from "../../utils/helper";
@@ -33,6 +34,7 @@ import UpwardArrow from "../../assets/AccordionUp.svg";
 import CustomInputWithImage from "../../components/InputWithImage/InputWithImage";
 import CalenderIcon from "../../assets/calendar.svg";
 import Van from "../../assets/vanWithoutBG.svg";
+import AddBoxIcon from "../../assets/add-circle.svg";
 
 interface ICustomTableAccordion {
   data?: any;
@@ -42,6 +44,15 @@ const Accordion = (props: ICustomTableAccordion) => {
   const isFirstRender = useRef(true);
 
   const navigate = useNavigate();
+
+  //state to store the box data
+
+  const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
+  const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
+  const [customInpuBox, setCustomInputBox] = useState<any>(false);
+
+  const [boxName, setBoxName] = useState(false);
+
   const [openIndex, setOpenIndex] = useState<any>(null);
 
   const [orderDetails, setOrderDetails]: any = useState([]);
@@ -262,6 +273,8 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
 
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
+  //adding the box into boxinfo
+  const [newBox, setNewBox] = useState<any>();
 
   const { data } = props;
   let servicePartnerServiceId: any;
@@ -355,7 +368,9 @@ const Accordion = (props: ICustomTableAccordion) => {
   const handleBoxAccordian = async () => {
     if (boxAccordian === true && !enabled) {
       try {
-        const payload = boxProductDetails;
+        let payload = boxProductDetails;
+
+        boxProductDetails.boxInfo[0] = newBox;
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
@@ -378,6 +393,9 @@ const Accordion = (props: ICustomTableAccordion) => {
     fieldName: any
   ) => {
     let boxTemp = boxProductDetails?.boxInfo;
+
+    //while creating a box name, defining here
+    // boxTemp[0].name = value;
     for (let i = 0; i < boxTemp?.length; i++) {
       if (box_index === i) {
         boxTemp[i][fieldName] = value == "" ? "" : Number(value);
@@ -644,6 +662,10 @@ const Accordion = (props: ICustomTableAccordion) => {
         awb: orderData?.awb ? orderData?.awb : "0",
       });
 
+      const boxData = await POST(GET_SELLER_BOX);
+
+      setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
+      setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
 
       let temp;
@@ -1131,7 +1153,6 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     if ((serviceList.length === 0 && !partnerServiceId) || serviceRefresh) {
       let elemente3: any = document.getElementById("Services");
-      // console.log("🚀 ~ handlePriorValidation ~ elemente3:", elemente3);
 
       // if (elemente3) elemente3.style.backgroundColor = "yellow";
       // if (elemente3) elemente3.style.borderColor = "rgb(255,0,0) ";
@@ -1144,7 +1165,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
 
     //box and product
-    //console.log("------x------BoxDetails: ", boxProductDetails);
+
     if (
       boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
       // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
@@ -1416,7 +1437,6 @@ const Accordion = (props: ICustomTableAccordion) => {
           <div className="w-[100%] p-[1rem] items-start overflow-auto">
             {orderDetails?.length > 0 &&
               orderDetails?.map((item: any, index: any) => {
-                // console.log("🚀 ~ Accordion ~ item:", item);
                 return (
                   item?.title && (
                     <div
@@ -1974,6 +1994,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       )
                                                     ) {
                                                       setBoxAccordian(false);
+                                                      setCustomInputBox(false);
+                                                      setBoxName(false);
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           false,
@@ -2033,284 +2055,534 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     )}
                                                   </div>
                                                 </div>
+
                                                 {boxAccordian && (
                                                   <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-4 rounded-md">
-                                                    <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem]">
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Dead Weight (Kg)"
-                                                          defaultValue={
-                                                            eachBox?.deadWeight
-                                                          }
-                                                          isDisabled={enabled}
-                                                          inputType="number"
-                                                          name="deadWeight"
-                                                          inputMode="numeric"
-                                                          onChange={(
-                                                            e: any
-                                                          ) => {
-                                                            handleBoxInputUpdation(
-                                                              index,
-                                                              e.target.value,
-                                                              "deadWeight"
-                                                            );
-                                                            if (
-                                                              e.target.value <=
-                                                                0 &&
-                                                              eachBox.deadWeight
-                                                                ?.length != 0
-                                                            ) {
-                                                              setValidationError(
-                                                                {
-                                                                  ...validationError,
-                                                                  boxDeadWeight:
-                                                                    "Should be greater than 0",
-                                                                }
-                                                              );
-                                                            } else {
-                                                              setValidationError(
-                                                                {
-                                                                  ...validationError,
-                                                                  boxDeadWeight:
-                                                                    "",
-                                                                }
-                                                              );
+                                                    {boxDetailsData?.map(
+                                                      (
+                                                        boxDetails: any,
+                                                        index: any
+                                                      ) => {
+                                                        return (
+                                                          <div>
+                                                            <div
+                                                              className="font-open border-[1.5px] border-black-600 flex justify-between mx-4 py-3 px-1 rounded-md"
+                                                              onClick={() =>
+                                                                setBoxNameAccordian(
+                                                                  !boxNameAccordian
+                                                                )
+                                                              }
+                                                            >
+                                                              <p className="text-[16px] font-open text-[#777777]">
+                                                                Select Box From
+                                                                Catalogue
+                                                              </p>
+                                                              {boxNameAccordian ? (
+                                                                <img
+                                                                  src={
+                                                                    UpwardArrow
+                                                                  }
+                                                                  alt="img"
+                                                                />
+                                                              ) : (
+                                                                <img
+                                                                  src={
+                                                                    DownwardArrow
+                                                                  }
+                                                                  alt="img"
+                                                                />
+                                                              )}
+                                                            </div>
+                                                            {boxNameAccordian && (
+                                                              <>
+                                                                <p
+                                                                  className="font-open text-[14px] text-[#494949] mx-4 py-2 px-1 rounded-md 
+                                                                border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
+                                                                  onClick={() => {
+                                                                    setBoxName(
+                                                                      !boxName
+                                                                    );
+                                                                    setBoxNameAccordian(
+                                                                      false
+                                                                    );
+                                                                    setCustomInputBox(
+                                                                      false
+                                                                    );
+                                                                  }}
+                                                                >
+                                                                  {
+                                                                    boxDetails?.name
+                                                                  }
+                                                                </p>
+                                                                <p className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-4 py-2 px-1 rounded-md border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600">
+                                                                  <span>
+                                                                    <img
+                                                                      src={
+                                                                        AddBoxIcon
+                                                                      }
+                                                                      alt="boxImage"
+                                                                      className="w-4 h-4"
+                                                                    />
+                                                                  </span>
+                                                                  <span
+                                                                    className="font-open mt-1 "
+                                                                    onClick={() => {
+                                                                      setCustomInputBox(
+                                                                        !customInpuBox
+                                                                      );
+                                                                      setBoxNameAccordian(
+                                                                        false
+                                                                      );
+                                                                      setBoxName(
+                                                                        false
+                                                                      );
+                                                                    }}
+                                                                  >
+                                                                    Add Your Box
+                                                                  </span>
+                                                                </p>
+                                                              </>
+                                                            )}
+                                                          </div>
+                                                        );
+                                                      }
+                                                    )}
+                                                    {boxName && (
+                                                      <div>
+                                                        <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
+                                                          <p className="text-[16px] font-open ">
+                                                            {
+                                                              boxDetailsData[0]
+                                                                ?.name
                                                             }
-                                                          }}
-                                                          inputError={
-                                                            eachBox?.deadWeight
-                                                              ?.length === 0
-                                                          }
-                                                        />
-                                                        <p className="open-sans text-[12px] text-red-600">
-                                                          {
-                                                            validationError.boxDeadWeight
-                                                          }
-                                                        </p>
+                                                          </p>
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
+                                                          <div className="col-span-1">
+                                                            <InputBox
+                                                              label="Dead Weight (Kg)"
+                                                              defaultValue={
+                                                                boxDetailsData?.[0]
+                                                                  ?.deadWeight
+                                                              }
+                                                              isDisabled={true}
+                                                              inputType="number"
+                                                              name="deadWeight"
+                                                              inputMode="numeric"
+                                                            />
+                                                          </div>
+                                                          <div className="col-span-1">
+                                                            <InputBox
+                                                              label="Volumetric Weight"
+                                                              // defaultValue={
+                                                              //   eachBox?.volumetricWeight
+                                                              // }
+                                                              value={boxDetailsData?.[0]?.volumetricWeight?.toFixed(
+                                                                2
+                                                              )}
+                                                              isDisabled={true}
+                                                              name="volumetricWeight"
+                                                              inputType="number"
+                                                            />
+                                                          </div>
+                                                        </div>
+                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
+                                                          <div className="w-[50%]">
+                                                            <CustomDropDown
+                                                              onChange={() => {}}
+                                                              options={
+                                                                measureUnits
+                                                              }
+                                                            />
+                                                          </div>
+                                                          <div className="flex w-[50%] gap-x-4">
+                                                            <div>
+                                                              <InputBox
+                                                                label="L"
+                                                                inputType="number"
+                                                                inputMode="numeric"
+                                                                name="length"
+                                                                isDisabled={
+                                                                  true
+                                                                }
+                                                                defaultValue={
+                                                                  boxDetailsData?.[0]
+                                                                    ?.length
+                                                                }
+                                                              />
+                                                            </div>
+                                                            <div>
+                                                              <InputBox
+                                                                label="B"
+                                                                defaultValue={
+                                                                  boxDetailsData?.[0]
+                                                                    ?.breadth
+                                                                }
+                                                                isDisabled={
+                                                                  true
+                                                                }
+                                                                name="breadth"
+                                                                inputType="number"
+                                                                inputMode="numeric"
+                                                              />{" "}
+                                                            </div>
+                                                            <div>
+                                                              <InputBox
+                                                                label="H"
+                                                                defaultValue={
+                                                                  boxDetailsData?.[0]
+                                                                    ?.height
+                                                                }
+                                                                isDisabled={
+                                                                  true
+                                                                }
+                                                                name="height"
+                                                              />
+                                                            </div>
+                                                          </div>
+                                                        </div>
                                                       </div>
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Volumetric Weight"
-                                                          // defaultValue={
-                                                          //   eachBox?.volumetricWeight
-                                                          // }
-                                                          value={eachBox?.volumetricWeight?.toFixed(
-                                                            2
-                                                          )}
-                                                          isDisabled={true}
-                                                          name="volumetricWeight"
-                                                          inputType="number"
-                                                          // onChange={(
-                                                          //   e: any
-                                                          // ) => {
-                                                          //   handleBoxInputUpdation(
-                                                          //     index,
-                                                          //     e.target.value,
-                                                          //     "volumetricWeight"
-                                                          //   );
-                                                          //   if (
-                                                          //     e.target.value <=
-                                                          //       0 &&
-                                                          //     eachBox
-                                                          //       .volumetricWeight
-                                                          //       ?.length != 0
-                                                          //   ) {
-                                                          //     setValidationError(
-                                                          //       {
-                                                          //         ...validationError,
-                                                          //         boxVolumetricWeight:
-                                                          //           "Should be greater than 0",
-                                                          //       }
-                                                          //     );
-                                                          //   } else {
-                                                          //     setValidationError(
-                                                          //       {
-                                                          //         ...validationError,
-                                                          //         boxVolumetricWeight:
-                                                          //           "",
-                                                          //       }
-                                                          //     );
-                                                          //   }
-                                                          // }}
-                                                          // inputError={
-                                                          //   eachBox
-                                                          //     ?.volumetricWeight
-                                                          //     ?.length === 0
-                                                          // }
-                                                        />
-                                                        {/* <p className="open-sans text-[12px] text-red-600">
+                                                    )}
+                                                    {customInpuBox && (
+                                                      <div>
+                                                        <div className="mx-4 mt-4">
+                                                          <CustomInputBox
+                                                            label="Box Name"
+                                                            onChange={(e) =>
+                                                              // handleBoxInputUpdation(
+                                                              //   index,
+                                                              //   e.target.value,
+                                                              //   "boxname"
+                                                              // )
+                                                              setNewBox({
+                                                                ...newBox,
+                                                                name: e.target
+                                                                  .value,
+                                                              })
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
+                                                          <div className="col-span-1">
+                                                            <InputBox
+                                                              label="Dead Weight (Kg)"
+                                                              defaultValue={
+                                                                eachBox?.deadWeight
+                                                              }
+                                                              isDisabled={
+                                                                enabled
+                                                              }
+                                                              inputType="number"
+                                                              name="deadWeight"
+                                                              inputMode="numeric"
+                                                              onChange={(
+                                                                e: any
+                                                              ) => {
+                                                                setNewBox({
+                                                                  ...newBox,
+                                                                  deadWeight:
+                                                                    +e.target
+                                                                      .value,
+                                                                });
+                                                                if (
+                                                                  e.target
+                                                                    .value <=
+                                                                    0 &&
+                                                                  eachBox
+                                                                    .deadWeight
+                                                                    ?.length !=
+                                                                    0
+                                                                ) {
+                                                                  setValidationError(
+                                                                    {
+                                                                      ...validationError,
+                                                                      boxDeadWeight:
+                                                                        "Should be greater than 0",
+                                                                    }
+                                                                  );
+                                                                } else {
+                                                                  setValidationError(
+                                                                    {
+                                                                      ...validationError,
+                                                                      boxDeadWeight:
+                                                                        "",
+                                                                    }
+                                                                  );
+                                                                }
+                                                              }}
+                                                              inputError={
+                                                                eachBox
+                                                                  ?.deadWeight
+                                                                  ?.length === 0
+                                                              }
+                                                            />
+                                                            <p className="open-sans text-[12px] text-red-600">
+                                                              {
+                                                                validationError.boxDeadWeight
+                                                              }
+                                                            </p>
+                                                          </div>
+                                                          <div className="col-span-1">
+                                                            <InputBox
+                                                              label="Volumetric Weight"
+                                                              // defaultValue={
+                                                              //   (eachBox?.length *
+                                                              //     eachBox?.breadth *
+                                                              //     eachBox?.height) /
+                                                              //   5000
+                                                              // }
+                                                              value={
+                                                                // (eachBox?.length *
+                                                                //   eachBox?.breadth *
+                                                                //   eachBox?.height) /
+                                                                // 5000
+                                                                (newBox?.length *
+                                                                  newBox?.breadth *
+                                                                  newBox?.height) /
+                                                                5000
+                                                              }
+                                                              isDisabled={true}
+                                                              name="volumetricWeight"
+                                                              inputType="number"
+                                                              // onChange={(
+                                                              //   e: any
+                                                              // ) => {
+                                                              //   handleBoxInputUpdation(
+                                                              //     index,
+                                                              //     e.target.value,
+                                                              //     "volumetricWeight"
+                                                              //   );
+                                                              //   if (
+                                                              //     e.target.value <=
+                                                              //       0 &&
+                                                              //     eachBox
+                                                              //       .volumetricWeight
+                                                              //       ?.length != 0
+                                                              //   ) {
+                                                              //     setValidationError(
+                                                              //       {
+                                                              //         ...validationError,
+                                                              //         boxVolumetricWeight:
+                                                              //           "Should be greater than 0",
+                                                              //       }
+                                                              //     );
+                                                              //   } else {
+                                                              //     setValidationError(
+                                                              //       {
+                                                              //         ...validationError,
+                                                              //         boxVolumetricWeight:
+                                                              //           "",
+                                                              //       }
+                                                              //     );
+                                                              //   }
+                                                              // }}
+                                                              // inputError={
+                                                              //   eachBox
+                                                              //     ?.volumetricWeight
+                                                              //     ?.length === 0
+                                                              // }
+                                                            />
+                                                            {/* <p className="open-sans text-[12px] text-red-600">
                                                           {
                                                             validationError.boxVolumtericWeight
                                                           }
                                                         </p> */}
-                                                      </div>
-                                                    </div>
-                                                    <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                      <div className="w-[50%]">
-                                                        <CustomDropDown
-                                                          onChange={() => {}}
-                                                          options={measureUnits}
-                                                        />
-                                                      </div>
-                                                      <div className="flex w-[50%] gap-x-4">
-                                                        <div>
-                                                          <InputBox
-                                                            label="L"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                            name="length"
-                                                            defaultValue={
-                                                              eachBox?.length
-                                                            }
-                                                            isDisabled={enabled}
-                                                            onChange={(
-                                                              e: any
-                                                            ) => {
-                                                              handleBoxInputUpdation(
-                                                                index,
-                                                                e.target.value,
-                                                                "length"
-                                                              );
-                                                              if (
-                                                                e.target
-                                                                  .value <= 0 &&
-                                                                eachBox.length
-                                                                  ?.length != 0
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxLength:
-                                                                      "Should be greater than 0",
-                                                                  }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxLength:
-                                                                      "",
-                                                                  }
-                                                                );
-                                                              }
-                                                            }}
-                                                            inputError={
-                                                              eachBox?.length
-                                                                ?.length === 0
-                                                            }
-                                                          />
-                                                          <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              validationError.boxLength
-                                                            }
-                                                          </p>
+                                                          </div>
                                                         </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="B"
-                                                            defaultValue={
-                                                              eachBox?.breadth
-                                                            }
-                                                            isDisabled={enabled}
-                                                            name="breadth"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                            onChange={(
-                                                              e: any
-                                                            ) => {
-                                                              handleBoxInputUpdation(
-                                                                index,
-                                                                e.target.value,
-                                                                "breadth"
-                                                              );
-                                                              if (
-                                                                e.target
-                                                                  .value <= 0 &&
-                                                                eachBox.breadth
-                                                                  ?.length != 0
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxBreadth:
-                                                                      "Should be greater than 0",
-                                                                  }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxBreadth:
-                                                                      "",
-                                                                  }
-                                                                );
+                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
+                                                          <div className="w-[50%]">
+                                                            <CustomDropDown
+                                                              onChange={() => {}}
+                                                              options={
+                                                                measureUnits
                                                               }
-                                                            }}
-                                                            inputError={
-                                                              eachBox?.breadth
-                                                                ?.length === 0
-                                                            }
-                                                          />
-                                                          <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              validationError.boxBreadth
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="H"
-                                                            defaultValue={
-                                                              eachBox.height
-                                                            }
-                                                            isDisabled={enabled}
-                                                            name="height"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                            onChange={(
-                                                              e: any
-                                                            ) => {
-                                                              handleBoxInputUpdation(
-                                                                index,
-                                                                e.target.value,
-                                                                "height"
-                                                              );
-                                                              if (
-                                                                e.target
-                                                                  .value <= 0 &&
-                                                                eachBox.height
-                                                                  ?.length != 0
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxHeight:
-                                                                      "Should be greater than 0",
+                                                            />
+                                                          </div>
+                                                          <div className="flex w-[50%] gap-x-4">
+                                                            <div>
+                                                              <InputBox
+                                                                label="L"
+                                                                inputType="number"
+                                                                inputMode="numeric"
+                                                                name="length"
+                                                                defaultValue={
+                                                                  eachBox?.length
+                                                                }
+                                                                isDisabled={
+                                                                  enabled
+                                                                }
+                                                                onChange={(
+                                                                  e: any
+                                                                ) => {
+                                                                  setNewBox({
+                                                                    ...newBox,
+                                                                    length:
+                                                                      +e.target
+                                                                        .value,
+                                                                  });
+                                                                  if (
+                                                                    e.target
+                                                                      .value <=
+                                                                      0 &&
+                                                                    eachBox
+                                                                      .length
+                                                                      ?.length !=
+                                                                      0
+                                                                  ) {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxLength:
+                                                                          "Should be greater than 0",
+                                                                      }
+                                                                    );
+                                                                  } else {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxLength:
+                                                                          "",
+                                                                      }
+                                                                    );
                                                                   }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxHeight:
-                                                                      "",
+                                                                }}
+                                                                inputError={
+                                                                  eachBox
+                                                                    ?.length
+                                                                    ?.length ===
+                                                                  0
+                                                                }
+                                                              />
+                                                              <p className="open-sans text-[12px] text-red-600">
+                                                                {
+                                                                  validationError.boxLength
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div>
+                                                              <InputBox
+                                                                label="B"
+                                                                defaultValue={
+                                                                  eachBox?.breadth
+                                                                }
+                                                                isDisabled={
+                                                                  enabled
+                                                                }
+                                                                name="breadth"
+                                                                inputType="number"
+                                                                inputMode="numeric"
+                                                                onChange={(
+                                                                  e: any
+                                                                ) => {
+                                                                  setNewBox({
+                                                                    ...newBox,
+                                                                    breadth:
+                                                                      +e.target
+                                                                        .value,
+                                                                  });
+                                                                  if (
+                                                                    e.target
+                                                                      .value <=
+                                                                      0 &&
+                                                                    eachBox
+                                                                      .breadth
+                                                                      ?.length !=
+                                                                      0
+                                                                  ) {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxBreadth:
+                                                                          "Should be greater than 0",
+                                                                      }
+                                                                    );
+                                                                  } else {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxBreadth:
+                                                                          "",
+                                                                      }
+                                                                    );
                                                                   }
-                                                                );
-                                                              }
-                                                            }}
-                                                            inputError={
-                                                              eachBox?.height
-                                                                ?.length === 0
-                                                            }
-                                                          />
-                                                          <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              validationError.boxHeight
-                                                            }
-                                                          </p>
+                                                                }}
+                                                                inputError={
+                                                                  eachBox
+                                                                    ?.breadth
+                                                                    ?.length ===
+                                                                  0
+                                                                }
+                                                              />
+                                                              <p className="open-sans text-[12px] text-red-600">
+                                                                {
+                                                                  validationError.boxBreadth
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                            <div>
+                                                              <InputBox
+                                                                label="H"
+                                                                defaultValue={
+                                                                  eachBox.height
+                                                                }
+                                                                isDisabled={
+                                                                  enabled
+                                                                }
+                                                                name="height"
+                                                                inputType="number"
+                                                                inputMode="numeric"
+                                                                onChange={(
+                                                                  e: any
+                                                                ) => {
+                                                                  setNewBox({
+                                                                    ...newBox,
+                                                                    height:
+                                                                      +e.target
+                                                                        .value,
+                                                                  });
+                                                                  if (
+                                                                    e.target
+                                                                      .value <=
+                                                                      0 &&
+                                                                    eachBox
+                                                                      .height
+                                                                      ?.length !=
+                                                                      0
+                                                                  ) {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxHeight:
+                                                                          "Should be greater than 0",
+                                                                      }
+                                                                    );
+                                                                  } else {
+                                                                    setValidationError(
+                                                                      {
+                                                                        ...validationError,
+                                                                        boxHeight:
+                                                                          "",
+                                                                      }
+                                                                    );
+                                                                  }
+                                                                }}
+                                                                inputError={
+                                                                  eachBox
+                                                                    ?.height
+                                                                    ?.length ===
+                                                                  0
+                                                                }
+                                                              />
+                                                              <p className="open-sans text-[12px] text-red-600">
+                                                                {
+                                                                  validationError.boxHeight
+                                                                }
+                                                              </p>
+                                                            </div>
+                                                          </div>
                                                         </div>
                                                       </div>
-                                                    </div>
+                                                    )}
                                                   </div>
                                                 )}
                                               </div>
