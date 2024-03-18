@@ -350,6 +350,9 @@ const DELETE_DISPUTE_IMAGES = `${SELLER_BASE_URL}/weightDispute/deleteDisputeIma
 const ACCEPT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/acceptDispute`;
 const REJECT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/rejectDispute`;
 
+// Errors Handling API
+const PAYMENT_ERRORS = `${SELLER_BASE_URL}/order/updatePaymentErrors`;
+
 export {
   ADMIN_URL,
   GET_SELLER_ORDER_COMPLETE_DATA,
@@ -528,4 +531,5 @@ export {
   DELETE_DISPUTE_IMAGES,
   ACCEPT_DISPUTE,
   REJECT_DISPUTE,
+  PAYMENT_ERRORS,
 };

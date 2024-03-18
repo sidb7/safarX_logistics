@@ -9,6 +9,9 @@ import {
   convertNumberToMultipleOfhundred,
   orderErrorsEnum,
   orderErrorCategoryENUMs,
+  getLocalStorage,
+  removeLocalStorage,
+  setLocalStorage,
 } from "../../utils/utility";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -17,6 +20,8 @@ import CustomDropDown from "../../components/DropDown";
 import addCircleIcon from "../../assets/add-circle.svg";
 import AddAddress from "./AddAddress";
 import {
+  PAYMENT_ERRORS,
+  RECHARGE_STATUS,
   RETURNING_USER_DELIVERY,
   RETURNING_USER_PICKUP,
   UPDATE_TEMP_ORDER_ADDRESS,
@@ -165,6 +170,8 @@ const Errors = (props: ErrorProps) => {
 
   const [isFixDisabled, setIsFixDisabled] = useState(true);
 
+  let singlePaymentAmount = 0;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -172,6 +179,7 @@ const Errors = (props: ErrorProps) => {
     setGlobalIndex(index === globalIndex ? null : index);
   };
 
+  // This Method Is Used For Handling Child Accordion Error
   const handleError = (
     elem: any,
     errorName: any,
@@ -190,6 +198,15 @@ const Errors = (props: ErrorProps) => {
         error: errorName,
         orderDetails,
       });
+    } else if (errorName === "Payment") {
+      let paymentErrorObject = {
+        orderIds: [{ orderId: elem?.orderId, tempOrderId: elem?.tempOrderId }],
+        category: errorName,
+      };
+      setLocalStorage("paymentErrorObject", JSON.stringify(paymentErrorObject));
+      dispatch(PaymentSlice.actions.paymentAmount(singlePaymentAmount));
+      navigate("/wallet/view-wallet");
+      return;
     } else {
       setErrorModalData({
         entityDetails: elem,
@@ -199,7 +216,6 @@ const Errors = (props: ErrorProps) => {
     // console.log(convertNumberToMultipleOfhundred("2920"));
     // const amountArray = elem?.status?.[0]?.notes?.split(" ");
     // let amount = amountArray?.[amountArray?.length - 2];
-
     // const walletAmount = amount ? amount : 1000;
     // dispatch(PaymentSlice.actions.paymentAmount(walletAmount));
     if (errorName === "Recharge") navigate(`/wallet/view-wallet`);
@@ -237,9 +253,10 @@ const Errors = (props: ErrorProps) => {
                   }
                   className="border-[blue] border-b-[1px] mr-2 text-[blue]"
                 >
-                  {order?.errorType === "Administrative Errors"
-                    ? "CONTACT ADMINISTRATION"
-                    : "UPDATE"}
+                  {order?.errorType === "Administrative Errors" ||
+                  order?.errorType === "Server Error"
+                    ? eachOrder?.notesObject?.notes
+                    : "Update"}
                 </div>
               </div>
             </div>
@@ -366,7 +383,7 @@ const Errors = (props: ErrorProps) => {
                 }
                 className="border-[blue] flex border-b-[1px] text-[blue]"
               >
-                UPDATE {"("}
+                Update {"("}
                 <div className="text-[18px] flex justify-center items-center mx-[2px]">
                   {elem.ordersCount}
                 </div>
@@ -403,7 +420,7 @@ const Errors = (props: ErrorProps) => {
                       onClick={() => handleError(order, errorName)}
                       className="border-[blue] border-b-[1px] text-[blue]"
                     >
-                      UPDATE
+                      Update
                     </div>
                   </div>
                 );
@@ -442,7 +459,7 @@ const Errors = (props: ErrorProps) => {
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
-                        UPDATE
+                        Update
                       </div>
                     </div>
                   );
@@ -472,7 +489,7 @@ const Errors = (props: ErrorProps) => {
                         onClick={() => handleError(order, errorName)}
                         className="border-[blue] border-b-[1px] text-[blue]"
                       >
-                        UPDATE
+                        Update
                       </div> */}
                     <div className="mr-[1rem]">
                       <img
@@ -488,11 +505,75 @@ const Errors = (props: ErrorProps) => {
           </>
         );
       }
+      case orderErrorCategoryENUMs["Payment"]: {
+        return (
+          <>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center flex-col w-[100%] justify-between">
+                {elem?.orders?.map((order: any, index: any) => {
+                  let paymentAmount = order?.notesObject?.requiredAmount;
+                  paymentAmount = Math.ceil(paymentAmount);
+                  return (
+                    <div
+                      className={`py-3 flex justify-between w-[100%] items-center hover:bg-[#F6F6F6] hover:shadow-inner ${
+                        elem?.orders.length - 1 !== index
+                          ? "border-b-[2px]"
+                          : ""
+                      }  px-4`}
+                      key={index}
+                      onClick={() => {
+                        singlePaymentAmount = paymentAmount;
+                        handleError(order, errorName);
+                      }}
+                    >
+                      <div className="flex items-center w-[90%]">
+                        <div className="rounded-md bg-[#D2D2D2] mr-4 py-1 px-3">
+                          {order?.orderNumber
+                            ? order?.orderNumber
+                            : order?.orderId
+                            ? order?.orderId
+                            : order?.tempOrderId}
+                        </div>
+                        <div>{order?.source}</div>
+                      </div>
+                      <div
+                        // onClick={() => handleError(order, errorName)}
+                        className="w-[10%]"
+                      >
+                        <div
+                          className="border-[blue] border-b-[1px] text-[blue]"
+                          style={{ width: "fit-content" }}
+                        >
+                          {`Recharge: ₹ ${paymentAmount?.toLocaleString(
+                            "en-IN"
+                          )}`}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        );
+      }
     }
   };
 
   const allValuesEmpty =
     errorData && errorData?.some((error: any) => error.value.length !== 0);
+
+  const handlePaymentMethod = (item: any, totalPaymentAmount: any) => {
+    let paymentErrorObject = {
+      orderIds: item?.value?.[0]?.orders.map((orderId: any) => {
+        return { orderId: orderId.orderId, tempOrderId: orderId.tempOrderId };
+      }),
+      category: item?.errorName,
+    };
+    setLocalStorage("paymentErrorObject", JSON.stringify(paymentErrorObject));
+    dispatch(PaymentSlice.actions.paymentAmount(totalPaymentAmount));
+    navigate("/wallet/view-wallet");
+  };
 
   useEffect(() => {
     if (!isErrorModalOpen) {
@@ -502,6 +583,36 @@ const Errors = (props: ErrorProps) => {
 
   useEffect(() => {
     returnUserAddress();
+    (async () => {
+      try {
+        // fetchCurrentWallet();
+        const juspayOrderId = getLocalStorage("order_id");
+        if (juspayOrderId) {
+          // setPaymentLoader(true);
+          const orderStatus = await POST(RECHARGE_STATUS, {
+            orderId: juspayOrderId,
+            paymentGateway: "JUSPAY",
+            transactionId: juspayOrderId,
+          });
+          if (orderStatus?.data?.success === false) {
+            toast.error("Something Went Wrong");
+          } else {
+            toast.success("Wallet Recharge Successfully");
+            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
+            // ------------------------------------------------------------------------------------------
+            let paymentPayload: any = getLocalStorage("paymentErrorObject");
+            if (paymentPayload) {
+              paymentPayload = JSON.parse(paymentPayload);
+              await POST(PAYMENT_ERRORS, paymentPayload);
+            }
+            removeLocalStorage("paymentErrorObject");
+          }
+          removeLocalStorage("order_id");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    })();
   }, []);
 
   return (
@@ -514,6 +625,22 @@ const Errors = (props: ErrorProps) => {
         <div>
           {allValuesEmpty ? (
             errorData?.map((item: any, index: any) => {
+              let totalPaymentAmount = 0;
+              if (item?.errorName === "Payment") {
+                item?.value?.[0]?.orders?.map((elem: any) => {
+                  totalPaymentAmount += +elem?.notesObject?.requiredAmount;
+                });
+              }
+
+              let divisor = 100;
+
+              if (totalPaymentAmount.toString().length <= 2) {
+                divisor = totalPaymentAmount.toString().length;
+              }
+
+              totalPaymentAmount =
+                Math.ceil(totalPaymentAmount / divisor) * 100;
+
               const totalOrdersCount = item?.value.reduce(
                 (acc: any, obj: any) => acc + obj.ordersCount,
                 0
@@ -627,6 +754,31 @@ const Errors = (props: ErrorProps) => {
                                 }
                               >
                                 <img src={addCircleIcon} alt="" />
+                              </button>
+                            </div>
+                          )}
+                          {item?.errorName === "Payment" && (
+                            <div className="flex mx-2">
+                              <button
+                                className={`py-2 px-4 rounded drop-shadow-sm`}
+                                onClick={() =>
+                                  handlePaymentMethod(item, totalPaymentAmount)
+                                }
+                              >
+                                {indexFixedAllLoader === index ? (
+                                  <div className="flex justify-center items-center">
+                                    <Spinner />
+                                  </div>
+                                ) : (
+                                  <div
+                                    // onClick={() => handleError(order, errorName)}
+                                    className="border-[blue] border-b-[1px] text-[blue]"
+                                  >
+                                    {`Total Amount: ₹ ${totalPaymentAmount?.toLocaleString(
+                                      "en-IN"
+                                    )}`}
+                                  </div>
+                                )}
                               </button>
                             </div>
                           )}
