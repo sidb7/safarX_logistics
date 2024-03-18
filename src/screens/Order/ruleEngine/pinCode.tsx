@@ -8,32 +8,25 @@ import upArrowIcon from "../../../assets/Filter/upArrow.svg";
 import crossIcon from "../../../assets/cross.svg";
 
 // import MultiSelectDropdown from "../../../components/MultiselectDropdown/multiSelectDropdown";
+let pincodeArr: any = [];
 
 const PinCode = (props: any) => {
   const {
     index,
     partnerList,
-    pinCodeList,
     changeHandler,
+    setPersistFilterData,
     persistFilterData,
-    data,
   } = props;
   const [priority1ServiceList, setPriority1ServiceList] = useState<any>();
   const [priority2ServiceList, setPriority2ServiceList] = useState<any>();
   const [priority3ServiceList, setPriority3ServiceList] = useState<any>();
   const [priority4ServiceList, setPriority4ServiceList] = useState<any>();
-  const [selectedOption, setSelectedOption] = useState<any>(null);
-  const [finalPincodeList, setFinalPincodeList] = useState<any>();
-  //   const [searchPincodedata, setSearchPincodeData] = useState(data || {});
   const [searchPincodedata, setSearchPincodeData] = useState<any>([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   let debounceTimer: any;
-  let pincodeArr: any = [];
-  const handleChange = (selected: []) => {
-    setSelectedOption(selected);
-  };
 
   const sortBy = [
     {
@@ -45,20 +38,6 @@ const PinCode = (props: any) => {
       value: "Highest",
     },
   ];
-
-  //   useEffect(() => {
-  //     pinCodeList?.map((el: any) => {
-  //       let temp = {
-  //         value: el?.pincode,
-  //         label: el?.pincode,
-  //       };
-  //       pincodeArr.push(temp);
-  //       setFinalPincodeList(pincodeArr);
-  //       //   console.log("pincodeArr", pincodeArr);
-  //     });
-  //   }, []);
-
-  //   console.log("fainal pincode", finalPincodeList);
 
   const getServiceBasedOnPartner = (ruleName: any, value: any, i: number) => {
     let filterPartner = partnerList?.filter(
@@ -119,27 +98,20 @@ const PinCode = (props: any) => {
           const data = await GET(url);
 
           if (data?.data?.success) {
+            console.log("searchPincodedata", searchPincodedata);
+
             const result = data?.data?.data?.map((value: any, i: any) => ({
               name: value?.pincode,
               value: value?.pincode,
-              isActive: true,
-              // Object.keys(persistFilterDataArg).length > 0
-              //   ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(
-              //       searchPincodedata?.label
-              //     )
-              //     ? persistFilterDataArg[searchPincodedata?.label]?.includes(
-              //         +value?.pincode
-              //       )
-              //     : persistFilterDataArg[searchPincodedata?.label]?.includes(
-              //         value?.pincode
-              //       )
-              //   : false,
+              isActive:
+                persistFilterDataArg?.length > 0 &&
+                persistFilterDataArg?.includes(value?.pincode)
+                  ? true
+                  : false,
             }));
 
-            console.log("result", result);
-
             setSearchPincodeData((prevState: any) => {
-              return { ...prevState, menu: result };
+              return { ...prevState, result };
             });
 
             setIsLoading(false);
@@ -149,12 +121,27 @@ const PinCode = (props: any) => {
         });
       } else {
         setSearchPincodeData((prevState: any) => {
-          return { ...prevState, menu: [] };
+          return { ...prevState };
         });
       }
     } catch (error: any) {
       console.warn("Error in search pincode Debouncing: ", error.message);
     }
+  };
+
+  const onCheckedHandler = (e: any, index1: any) => {
+    let temp = { ...searchPincodedata };
+
+    if (e === false) {
+      pincodeArr.push(temp.result[index1]?.value);
+    } else {
+      pincodeArr = pincodeArr.filter(
+        (item: any) => item !== temp.result[index1]?.value
+      );
+    }
+    setPersistFilterData(pincodeArr);
+    temp.result[index1].isActive = !temp.result[index1].isActive;
+    setSearchPincodeData(temp);
   };
 
   return (
@@ -168,19 +155,6 @@ const PinCode = (props: any) => {
             <h1 className="text-[18px] font-Open text-[#323232]">PIN Code</h1>
           </div>
           <div className="!w-[280px]">
-            {/* <div className="flex w-[100%] border-r rounded-l-md bg-[#ffffff] h-full text-left">
-              <input
-                placeholder="Search..."
-                value={searchInput}
-                type="number"
-                onChange={(e: any) => {
-                  if (e.target.value.length <= 6) {
-                    searchPincodeListHandler(e.target.value, persistFilterData);
-                  }
-                }}
-                className="w-[100%] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
-              />
-            </div> */}
             {/* Pincode list */}
             <div
               className={`flex  items-center justify-between h-[38px]  border-[1px] ${
@@ -269,40 +243,39 @@ const PinCode = (props: any) => {
             </div>
             <div
               className={`border-b  py-0 border-r border-l grid ${
-                searchPincodedata?.menu?.length > 0 && " grid-cols-2"
+                searchPincodedata?.result?.length > 0 && " grid-cols-2"
               } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
             >
-              {searchPincodedata?.menu?.length > 0 ? (
+              {searchPincodedata?.result?.length > 0 ? (
                 !isLoading &&
-                searchPincodedata?.menu?.map((subMenu: any, index1: number) => {
-                  return (
-                    <div className="px-2  bg-white z-10" key={index1}>
-                      <button
-                        className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] ${
-                          index1 !== searchPincodedata?.menu?.length - 1
-                            ? "border-b-[#E8E8E8]"
-                            : "border-b-0"
-                        } border-t-0 border-r-0 border-l-0`}
-                        // onClick={(e: any) =>
-                        //   onCheckedHandler(subMenu?.isActive, index1)
-                        // }
-                      >
-                        <Checkbox
-                          className="px-4"
-                          checkboxClassName="gap-1"
-                          name={subMenu?.name}
-                          // label={subMenu.name}
-                          // labelClassName="px-4 text-[black]"
-                          checked={subMenu?.isActive}
-                          // value={subMenu?.name}
-                        />
-                        <p className="font-bold text-[14px] text-[#323232]">
-                          {subMenu?.name}
-                        </p>
-                      </button>
-                    </div>
-                  );
-                })
+                searchPincodedata?.result?.map(
+                  (subMenu: any, index1: number) => {
+                    return (
+                      <div className="px-2  bg-white z-10" key={index1}>
+                        <button
+                          className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] ${
+                            index1 !== searchPincodedata?.result?.length - 1
+                              ? "border-b-[#E8E8E8]"
+                              : "border-b-0"
+                          } border-t-0 border-r-0 border-l-0`}
+                          onClick={(e: any) =>
+                            onCheckedHandler(subMenu?.isActive, index1)
+                          }
+                        >
+                          <Checkbox
+                            className="px-4"
+                            checkboxClassName="gap-1"
+                            name={subMenu?.name}
+                            checked={subMenu?.isActive}
+                          />
+                          <p className="font-bold text-[14px] text-[#323232]">
+                            {subMenu?.name}
+                          </p>
+                        </button>
+                      </div>
+                    );
+                  }
+                )
               ) : (
                 <>
                   {isLoading && (

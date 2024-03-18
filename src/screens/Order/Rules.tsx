@@ -15,7 +15,6 @@ import {
   CREATE_RULE_SERVICE,
   FETCH_ALL_CATEGOROIES,
   FETCH_ALL_PARTNER_WITH_SERVICE,
-  FETCH_ALL_PINCODE,
 } from "../../utils/ApiUrls";
 import InvoiceRule from "./ruleEngine/invoice";
 import PinCode from "./ruleEngine/pinCode";
@@ -27,13 +26,10 @@ import { v4 as uuidv4 } from "uuid";
 
 const Rules = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
   const [ruleTitleValue, setRuleTitleValue] = useState("");
-  const [applicableOrderValue, setApplicableOrderValue] = useState("");
   const [ruleName, setRuleName] = useState(["applicable_orders"]);
   const [partnerList, setPartnerList] = useState<any>();
-  const [pinCodeList, setPinCodeList] = useState<any>();
   const [categoriesList, setCategoriesList] = useState<any>();
   const [persistFilterData, setPersistFilterData]: any = useState([]);
 
@@ -182,19 +178,6 @@ const Rules = () => {
     }
   };
 
-  const fetchAllPinCode = async () => {
-    try {
-      const { data: response } = await POST(FETCH_ALL_PINCODE, {});
-      if (response?.success) {
-        setPinCodeList(response?.data);
-      } else {
-        toast.error("Somethnig went wrong...");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   const fetchAllCategory = async () => {
     try {
       const { data: response } = await POST(FETCH_ALL_CATEGOROIES, {});
@@ -210,7 +193,6 @@ const Rules = () => {
 
   useEffect(() => {
     fetchAllPartner();
-    fetchAllPinCode();
     fetchAllCategory();
   }, []);
 
@@ -355,7 +337,6 @@ const Rules = () => {
                 <PinCode
                   index={i}
                   partnerList={partnerList}
-                  pinCodeList={pinCodeList}
                   changeHandler={changeHandler}
                   setPersistFilterData={setPersistFilterData}
                   persistFilterData={persistFilterData}
