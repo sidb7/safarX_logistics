@@ -140,8 +140,15 @@ const TopBar: React.FunctionComponent<ITopBarProps> = (props) => {
       const { data: response }: any = await POST(POST_SERVICEABILITY, payload);
 
       if (response?.success) {
+        const filterData: any = response?.data.filter(
+          (item: any, index: any) => {
+            if (item?.companyServiceId === payload?.serviceId) {
+              return item;
+            }
+          }
+        );
         setShowTable(true);
-        setServiceabilityTableData(response?.data);
+        setServiceabilityTableData(filterData);
         setServiceabilityTableLoader(false);
       } else {
         toast.error(response?.message);

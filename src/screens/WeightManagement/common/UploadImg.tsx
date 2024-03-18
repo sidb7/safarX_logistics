@@ -115,10 +115,6 @@ function UploadImg({ setUploadImgModal, uploadImgModal, reloadMethod }: any) {
     imageInputRef.current.value = "";
   };
 
-  useEffect(() => {
-    console.log(uploadedFiles.length);
-  }, [uploadedFiles]);
-
   return (
     <div className={`pt-5 px-5 pb-0 relative h-[100%]`}>
       <div className="flex justify-between">
@@ -162,7 +158,7 @@ function UploadImg({ setUploadImgModal, uploadImgModal, reloadMethod }: any) {
               <img src={UploadIcon} height={16} width={16} alt="" />
               <div>UPLOAD</div>
               <input
-                className="absolute cursor-pointer left-0 opacity-0 top-0 h-[48px]"
+                className="absolute cursor-pointer left-0 opacity-0 top-0 border h-[48px]"
                 type="file"
                 accept="image/jpg, image/jpeg, image/png"
                 multiple
