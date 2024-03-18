@@ -81,9 +81,9 @@ const Serviceability = (props: ITypeProps) => {
       !data?.dimension ||
       !data?.dimension.width ||
       !data?.dimension.height ||
-      !data?.dimension.length
-      // !data?.invoiceValue ||
-      // !data?.serviceId ||
+      !data?.dimension.length ||
+      !data?.invoiceValue ||
+      !data?.serviceId
     ) {
       return false;
     }

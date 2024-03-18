@@ -45,7 +45,7 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
           openMobileSideBar={openMobileSideBar}
           setMobileSideBar={setMobileSideBar}
         />
-        <main className="lg:ml-16  lg:pl-5 !h-[calc(100vh-150px)] customScroll">
+        <main className="lg:ml-16  lg:pl-5 !h-[calc(100vh-65px)] customScroll">
           <Outlet />
           {/* <BottomBar  /> */}
         </main>
