@@ -48,6 +48,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   //state to store the box data
 
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
+
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
 
@@ -110,6 +111,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxLength: "",
     boxBreadth: "",
     boxHeight: "",
+    boxName: "",
   });
 
   const [orderId, setOrderId] = useState<any>();
@@ -275,6 +277,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
   //adding the box into boxinfo
   const [newBox, setNewBox] = useState<any>();
+  const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
 
   const { data } = props;
   let servicePartnerServiceId: any;
@@ -370,7 +373,24 @@ const Accordion = (props: ICustomTableAccordion) => {
       try {
         let payload = boxProductDetails;
 
-        boxProductDetails.boxInfo[0] = newBox;
+        customInpuBox
+          ? (boxProductDetails.boxInfo[0] = newBox)
+          : (() => {
+              boxProductDetails.boxInfo[0].deadWeight =
+                boxDetailsData[selectBoxIndex]?.deadWeight;
+              boxProductDetails.boxInfo[0].appliedWeight =
+                boxDetailsData[selectBoxIndex]?.appliedWeight;
+              boxProductDetails.boxInfo[0].name =
+                boxDetailsData[selectBoxIndex]?.name;
+              boxProductDetails.boxInfo[0].boxId =
+                boxDetailsData[selectBoxIndex]?.boxId;
+              boxProductDetails.boxInfo[0].length =
+                boxDetailsData[selectBoxIndex]?.length;
+              boxProductDetails.boxInfo[0].breadth =
+                boxDetailsData[selectBoxIndex]?.breadth;
+              boxProductDetails.boxInfo[0].height =
+                boxDetailsData[selectBoxIndex]?.height;
+            })();
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
@@ -1087,6 +1107,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
         boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
         boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
+        boxName: boxDetails?.name.length == 0 ? "Field is required" : "",
       });
       setInputError(true);
       return true;
@@ -1996,6 +2017,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       setBoxAccordian(false);
                                                       setCustomInputBox(false);
                                                       setBoxName(false);
+                                                      setBoxNameAccordian(
+                                                        false
+                                                      );
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           false,
@@ -2057,6 +2081,34 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 </div>
 
                                                 {boxAccordian && (
+                                                  <div
+                                                    className="font-open border-[1.5px] border-black-600 flex justify-between mx-0 py-3 px-1 rounded-md"
+                                                    onClick={() => {
+                                                      setBoxNameAccordian(
+                                                        !boxNameAccordian
+                                                      );
+                                                      setBoxName(false);
+                                                      setCustomInputBox(false);
+                                                    }}
+                                                  >
+                                                    <p className="text-[16px] font-open text-[#777777] px-2">
+                                                      Select Box From Catalogue
+                                                    </p>
+                                                    {boxNameAccordian ? (
+                                                      <img
+                                                        src={UpwardArrow}
+                                                        alt="img"
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        src={DownwardArrow}
+                                                        alt="img"
+                                                      />
+                                                    )}
+                                                  </div>
+                                                )}
+
+                                                {boxNameAccordian && (
                                                   <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-4 rounded-md">
                                                     {boxDetailsData?.map(
                                                       (
@@ -2065,46 +2117,21 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ) => {
                                                         return (
                                                           <div>
-                                                            <div
-                                                              className="font-open border-[1.5px] border-black-600 flex justify-between mx-4 py-3 px-1 rounded-md"
-                                                              onClick={() =>
-                                                                setBoxNameAccordian(
-                                                                  !boxNameAccordian
-                                                                )
-                                                              }
-                                                            >
-                                                              <p className="text-[16px] font-open text-[#777777]">
-                                                                Select Box From
-                                                                Catalogue
-                                                              </p>
-                                                              {boxNameAccordian ? (
-                                                                <img
-                                                                  src={
-                                                                    UpwardArrow
-                                                                  }
-                                                                  alt="img"
-                                                                />
-                                                              ) : (
-                                                                <img
-                                                                  src={
-                                                                    DownwardArrow
-                                                                  }
-                                                                  alt="img"
-                                                                />
-                                                              )}
-                                                            </div>
                                                             {boxNameAccordian && (
                                                               <>
                                                                 <p
-                                                                  className="font-open text-[14px] text-[#494949] mx-4 py-2 px-1 rounded-md 
+                                                                  className="px-2 font-open text-[14px] text-[#494949] mx-4 py-2  rounded-md 
                                                                 border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
                                                                   onClick={() => {
+                                                                    setSelectBoxIndex(
+                                                                      index
+                                                                    );
                                                                     setBoxName(
-                                                                      !boxName
+                                                                      true
                                                                     );
-                                                                    setBoxNameAccordian(
-                                                                      false
-                                                                    );
+                                                                    // setBoxNameAccordian(
+                                                                    //   false
+                                                                    // );
                                                                     setCustomInputBox(
                                                                       false
                                                                     );
@@ -2114,46 +2141,41 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     boxDetails?.name
                                                                   }
                                                                 </p>
-                                                                <p className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-4 py-2 px-1 rounded-md border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600">
-                                                                  <span>
-                                                                    <img
-                                                                      src={
-                                                                        AddBoxIcon
-                                                                      }
-                                                                      alt="boxImage"
-                                                                      className="w-4 h-4"
-                                                                    />
-                                                                  </span>
-                                                                  <span
-                                                                    className="font-open mt-1 "
-                                                                    onClick={() => {
-                                                                      setCustomInputBox(
-                                                                        !customInpuBox
-                                                                      );
-                                                                      setBoxNameAccordian(
-                                                                        false
-                                                                      );
-                                                                      setBoxName(
-                                                                        false
-                                                                      );
-                                                                    }}
-                                                                  >
-                                                                    Add Your Box
-                                                                  </span>
-                                                                </p>
                                                               </>
                                                             )}
                                                           </div>
                                                         );
                                                       }
                                                     )}
+                                                    <p
+                                                      onClick={() => {
+                                                        setCustomInputBox(true);
+                                                        // setBoxNameAccordian(
+                                                        //   false
+                                                        // );
+                                                        setBoxName(false);
+                                                      }}
+                                                      className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-4 py-2 px-2 rounded-md border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
+                                                    >
+                                                      <span>
+                                                        <img
+                                                          src={AddBoxIcon}
+                                                          alt="boxImage"
+                                                          className="w-4 h-4"
+                                                        />
+                                                      </span>
+                                                      <span className="font-open mt-1 ">
+                                                        Add Your Box
+                                                      </span>
+                                                    </p>
                                                     {boxName && (
                                                       <div>
                                                         <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
                                                           <p className="text-[16px] font-open ">
                                                             {
-                                                              boxDetailsData[0]
-                                                                ?.name
+                                                              boxDetailsData[
+                                                                selectBoxIndex
+                                                              ]?.name
                                                             }
                                                           </p>
                                                         </div>
@@ -2162,8 +2184,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             <InputBox
                                                               label="Dead Weight (Kg)"
                                                               defaultValue={
-                                                                boxDetailsData?.[0]
-                                                                  ?.deadWeight
+                                                                boxDetailsData?.[
+                                                                  selectBoxIndex
+                                                                ]?.deadWeight
                                                               }
                                                               isDisabled={true}
                                                               inputType="number"
@@ -2177,7 +2200,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               // defaultValue={
                                                               //   eachBox?.volumetricWeight
                                                               // }
-                                                              value={boxDetailsData?.[0]?.volumetricWeight?.toFixed(
+                                                              value={boxDetailsData?.[
+                                                                selectBoxIndex
+                                                              ]?.volumetricWeight?.toFixed(
                                                                 2
                                                               )}
                                                               isDisabled={true}
@@ -2206,8 +2231,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                   true
                                                                 }
                                                                 defaultValue={
-                                                                  boxDetailsData?.[0]
-                                                                    ?.length
+                                                                  boxDetailsData?.[
+                                                                    selectBoxIndex
+                                                                  ]?.length
                                                                 }
                                                               />
                                                             </div>
@@ -2215,8 +2241,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               <InputBox
                                                                 label="B"
                                                                 defaultValue={
-                                                                  boxDetailsData?.[0]
-                                                                    ?.breadth
+                                                                  boxDetailsData?.[
+                                                                    selectBoxIndex
+                                                                  ]?.breadth
                                                                 }
                                                                 isDisabled={
                                                                   true
@@ -2230,8 +2257,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               <InputBox
                                                                 label="H"
                                                                 defaultValue={
-                                                                  boxDetailsData?.[0]
-                                                                    ?.height
+                                                                  boxDetailsData?.[
+                                                                    selectBoxIndex
+                                                                  ]?.height
                                                                 }
                                                                 isDisabled={
                                                                   true
@@ -2244,23 +2272,42 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       </div>
                                                     )}
                                                     {customInpuBox && (
-                                                      <div>
-                                                        <div className="mx-4 mt-4">
+                                                      <div className="">
+                                                        <div className="mx-4 mt-4 ">
                                                           <CustomInputBox
                                                             label="Box Name"
-                                                            onChange={(e) =>
-                                                              // handleBoxInputUpdation(
-                                                              //   index,
-                                                              //   e.target.value,
-                                                              //   "boxname"
-                                                              // )
+                                                            onChange={(e) => {
                                                               setNewBox({
                                                                 ...newBox,
                                                                 name: e.target
                                                                   .value,
-                                                              })
-                                                            }
+                                                              });
+                                                              if (
+                                                                e.target
+                                                                  .value === ""
+                                                              ) {
+                                                                setValidationError(
+                                                                  {
+                                                                    ...validationError,
+                                                                    boxName:
+                                                                      "Field is required",
+                                                                  }
+                                                                );
+                                                              } else {
+                                                                setValidationError(
+                                                                  {
+                                                                    ...validationError,
+                                                                    boxName: "",
+                                                                  }
+                                                                );
+                                                              }
+                                                            }}
                                                           />
+                                                          <p className="open-sans text-[12px] text-red-600">
+                                                            {
+                                                              validationError.boxName
+                                                            }
+                                                          </p>
                                                         </div>
                                                         <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
                                                           <div className="col-span-1">
