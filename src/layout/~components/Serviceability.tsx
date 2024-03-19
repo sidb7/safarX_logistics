@@ -75,15 +75,15 @@ const Serviceability = (props: ITypeProps) => {
     if (
       !data?.pickupPincode ||
       !data?.deliveryPincode ||
-      !data?.invoiceValue ||
       !data?.paymentMode ||
-      !data?.serviceId ||
       !data?.weight ||
       !data?.orderType ||
       !data?.dimension ||
       !data?.dimension.width ||
       !data?.dimension.height ||
-      !data?.dimension.length
+      !data?.dimension.length ||
+      !data?.invoiceValue ||
+      !data?.serviceId
     ) {
       return false;
     }
