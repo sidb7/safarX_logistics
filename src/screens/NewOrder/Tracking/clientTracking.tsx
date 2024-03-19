@@ -17,6 +17,7 @@ import shipyaari from "../../../assets/Rectangle_Shipyaari.svg";
 import CopyTooltip from "../../../components/CopyToClipboard";
 import CustomInputBox from "../../../components/Input/index";
 import "./style.css";
+import { isNumber } from "lodash";
 
 const Tracking = () => {
   const [trackingState, setTrackingState] = useState<any>([]);
@@ -32,6 +33,7 @@ const Tracking = () => {
     "🚀 ~ Tracking ~ trackingCycleDetails:",
     trackingCycleDetails.length
   );
+  const [edd, setEdd] = useState<any>();
   const [orderType, setOrderType] = useState<any>(false);
   const [rtoAwbNo, setRtoAwbNo] = useState<any>();
   const [cancelledOrder, setCancelledOrder] = useState<any>(false);
@@ -186,6 +188,22 @@ const Tracking = () => {
         `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
       );
 
+      console.log(
+        "data",
+        typeof response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
+      );
+
+      //edd datatypes are different so based on data type of it
+      if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
+        console.log("helloooooooooooo");
+        const EDDtime = convertEpochToDateTime(
+          response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
+        );
+        console.log("EDDtime", EDDtime);
+        setEdd(EDDtime);
+      } else {
+        setEdd(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD);
+      }
       if (response.success) {
         window.history.replaceState(
           {},
@@ -356,10 +374,8 @@ const Tracking = () => {
                                                 <span className="text-[12px] font-semibold font-Open leading-[16px]">
                                                   EDD:{" "}
                                                 </span>
-                                                {
-                                                  trackingState[0]
-                                                    ?.shipmentStatus?.EDD
-                                                }
+
+                                                {edd}
                                               </p>
                                             )}
                                             {
@@ -631,7 +647,7 @@ const Tracking = () => {
                                                 </p>
                                                 <p className=" font-normal font-Open text-[12px]  leading-5 w-[300px] md:w-[500px] lg:w-[600px] mt-1  ">
                                                   {
-                                                    each?.pickupAddress
+                                                    each?.deliveryAddress
                                                       ?.fullAddress
                                                   }
                                                 </p>
