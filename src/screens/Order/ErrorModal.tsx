@@ -7,6 +7,7 @@ import BoxIcon from "../../assets/layer.svg";
 import VanIcon from "../../assets/vanWithoutBG.svg";
 import InfoCircle from "../../assets/info-circle.svg";
 import DeleteGif from "../../assets/common/DeleteGif.gif";
+import AddBoxIcon from "../../assets/add-circle.svg";
 
 import AutoGenerateIcon from "../../assets/Product/autogenerate.svg";
 import {
@@ -33,11 +34,13 @@ import {
   UPDATE_PRODUCT_AND_BOX_DETAILS,
   UPDATE_TEMP_ORDER_ADDRESS,
   VERIFY_ADDRESS,
+  GET_SELLER_BOX,
 } from "../../utils/ApiUrls";
 import { POST } from "../../utils/webService";
 import { toast } from "react-hot-toast";
 import { dummyStateDropdownData } from "../../utils/dummyData";
 import DeleteModal from "../../components/CustomModal/DeleteModal";
+import DropDown from "../../components/DropDown/index";
 
 interface ErrorModalProps {
   errorModalData: any;
@@ -93,6 +96,22 @@ const ErrorModal = (props: ErrorModalProps) => {
     mobileNo: null,
     emailId: null,
     alternateMobileNo: null,
+  });
+  const [boxBoolean, setBoxBoolean]: any = useState({
+    isNewBox: false,
+    isSelectedBox: false,
+  });
+  const [listOfBoxes, setListOfBoxes]: any = useState([]);
+  const [dropDownBoxes, setDropDownBoxes]: any = useState([]);
+  const [selectedBox, setSelectedBox]: any = useState({});
+  const [newBox, setNewBox]: any = useState({
+    name: "",
+    deadWeight: 1,
+    volumetricWeight: 1,
+    length: 1,
+    breadth: 1,
+    height: 1,
+    appliedWeight: 1,
   });
 
   const businessTypeDropDown: any = [
@@ -213,86 +232,332 @@ const ErrorModal = (props: ErrorModalProps) => {
     };
 
     return (
-      <div className="flex min-w-[90%] border-2 rounded-br rounded-bl border-t-0 ">
-        <div
-          className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
-          style={{
-            boxShadow:
-              "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
-          }}
-          // onClick={() => handleProductsDetails(index)}
-        >
-          <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
-            <InputBox
-              label="Dead Weight (Kg)"
-              value={data?.deadWeight}
-              name="deadWeight"
-              inputType="text"
-              inputMode="numeric"
-              onChange={(e: any) => {
-                if (!isNaN(e.target.value)) {
-                  onChaneDimensionHandler(e);
-                }
-              }}
-              inputError={inputError}
-            />
-            <InputBox
-              label="Volumetric Weight"
-              value={data?.volumetricWeight}
-              name="volumetricWeight"
-              inputType="number"
-              isDisabled={true}
-              // inputError={inputError}
-            />
-          </div>
-          <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
-            <div className="w-[50%]">
-              <CustomDropDown onChange={() => {}} options={measureUnits} />
+      <>
+        {identifier === "productDimensions" ? (
+          <div>
+            <div className="flex min-w-[90%] border-2 rounded-br rounded-bl border-t-0 ">
+              <div
+                className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
+                style={{
+                  boxShadow:
+                    "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                }}
+                // onClick={() => handleProductsDetails(index)}
+              >
+                <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                  <InputBox
+                    label="Dead Weight (Kg)"
+                    value={data?.deadWeight}
+                    name="deadWeight"
+                    inputType="text"
+                    inputMode="numeric"
+                    onChange={(e: any) => {
+                      if (!isNaN(e.target.value)) {
+                        onChaneDimensionHandler(e);
+                      }
+                    }}
+                    inputError={inputError}
+                  />
+                  <InputBox
+                    label="Volumetric Weight"
+                    value={data?.volumetricWeight}
+                    name="volumetricWeight"
+                    inputType="number"
+                    isDisabled={true}
+                    // inputError={inputError}
+                  />
+                </div>
+                <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                  <div className="w-[50%]">
+                    <CustomDropDown
+                      onChange={() => {}}
+                      options={measureUnits}
+                    />
+                  </div>
+                  <div className="flex w-[50%] gap-x-4">
+                    <InputBox
+                      label="L"
+                      inputType="text"
+                      inputMode="numeric"
+                      name="length"
+                      value={data?.length}
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          onChaneDimensionHandler(e);
+                        }
+                      }}
+                      inputError={inputError}
+                    />
+                    <InputBox
+                      label="B"
+                      value={data?.breadth}
+                      name="breadth"
+                      inputType="text"
+                      inputMode="numeric"
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          onChaneDimensionHandler(e);
+                        }
+                      }}
+                      inputError={inputError}
+                    />
+                    <InputBox
+                      label="H"
+                      value={data?.height}
+                      name="height"
+                      inputType="text"
+                      inputMode="numeric"
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          onChaneDimensionHandler(e);
+                        }
+                      }}
+                      inputError={inputError}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex w-[50%] gap-x-4">
-              <InputBox
-                label="L"
-                inputType="text"
-                inputMode="numeric"
-                name="length"
-                value={data?.length}
+          </div>
+        ) : (
+          <div className="min-w-[90%] border-2 rounded-br rounded-bl border-t-0 ">
+            <div className="px-[1rem] w-[100%] pt-[1rem]">
+              <DropDown
+                heading="Select A Box"
+                selectClassName="cursor-pointer"
                 onChange={(e: any) => {
-                  if (!isNaN(e.target.value)) {
-                    onChaneDimensionHandler(e);
+                  let selectedBox = listOfBoxes?.filter(
+                    (box: any) => box.boxId === e.target.value
+                  );
+                  if (selectedBox.length > 0) {
+                    setBoxBoolean({ isSelectedBox: true });
+                    setSelectedBox(selectedBox[0]);
+                  } else {
+                    setBoxBoolean({ isSelectedBox: false });
                   }
                 }}
-                inputError={inputError}
+                options={dropDownBoxes}
               />
-              <InputBox
-                label="B"
-                value={data?.breadth}
-                name="breadth"
-                inputType="text"
-                inputMode="numeric"
-                onChange={(e: any) => {
-                  if (!isNaN(e.target.value)) {
-                    onChaneDimensionHandler(e);
-                  }
-                }}
-                inputError={inputError}
-              />
-              <InputBox
-                label="H"
-                value={data?.height}
-                name="height"
-                inputType="text"
-                inputMode="numeric"
-                onChange={(e: any) => {
-                  if (!isNaN(e.target.value)) {
-                    onChaneDimensionHandler(e);
-                  }
-                }}
-                inputError={inputError}
-              />
+              <div
+                onClick={() => setBoxBoolean({ isNewBox: true })}
+                className="cursor-pointer font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center my-2 py-2 px-1 rounded-md border-[1px] border-black-600"
+              >
+                <span>
+                  <img src={AddBoxIcon} alt="boxImage" className="w-4 h-4" />
+                </span>
+                <span className="font-open mt-1">Add Your Box</span>
+              </div>
+            </div>
+            <div className="flex">
+              {(boxBoolean.isNewBox || boxBoolean.isSelectedBox) && (
+                <div
+                  className="items-center flex flex-col gap-y-[1rem] justify-between my-5 w-[100%]"
+                  style={{
+                    boxShadow:
+                      "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
+                  }}
+                  // onClick={() => handleProductsDetails(index)}
+                >
+                  <div className="px-[1rem] w-[100%]">
+                    <InputBox
+                      label="Box Name"
+                      value={
+                        boxBoolean?.isSelectedBox
+                          ? selectedBox?.name
+                          : newBox?.name
+                      }
+                      isDisabled={boxBoolean?.isSelectedBox ? true : false}
+                      name="boxName"
+                      inputType="text"
+                      // inputMode="numeric"
+                      onChange={(e: any) => {
+                        boxBoolean?.isSelectedBox
+                          ? setSelectedBox({
+                              ...selectedBox,
+                              name: e.target.value,
+                            })
+                          : setNewBox({ ...newBox, name: e.target.value });
+                      }}
+                      // inputError={inputError}
+                    />
+                  </div>
+                  <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                    <InputBox
+                      label="Dead Weight (Kg)"
+                      value={
+                        boxBoolean?.isSelectedBox
+                          ? selectedBox?.deadWeight
+                          : newBox?.deadWeight
+                      }
+                      // isDisabled={boxBoolean?.isSelectedBox ? true : false}
+                      name="deadWeight"
+                      inputType="text"
+                      inputMode="numeric"
+                      onChange={(e: any) => {
+                        if (!isNaN(e.target.value)) {
+                          // onChaneDimensionHandler(e);
+                          boxBoolean?.isSelectedBox
+                            ? setSelectedBox({
+                                ...selectedBox,
+                                deadWeight: +e.target.value,
+                              })
+                            : setNewBox({
+                                ...newBox,
+                                deadWeight: +e.target.value,
+                              });
+                        }
+                      }}
+                      inputError={inputError}
+                    />
+                    <InputBox
+                      label="Volumetric Weight"
+                      value={
+                        boxBoolean?.isSelectedBox
+                          ? selectedBox?.volumetricWeight?.toFixed(2)
+                          : newBox?.volumetricWeight?.toFixed(2)
+                      }
+                      name="volumetricWeight"
+                      inputType="number"
+                      isDisabled={true}
+                      // inputError={inputError}
+                    />
+                  </div>
+                  <div className="flex justify-between w-[100%] gap-x-[2rem] px-[1rem]">
+                    <div className="w-[50%]">
+                      <CustomDropDown
+                        onChange={() => {}}
+                        options={measureUnits}
+                      />
+                    </div>
+                    <div className="flex w-[50%] gap-x-4">
+                      <InputBox
+                        label="L"
+                        inputType="text"
+                        inputMode="numeric"
+                        name="length"
+                        value={
+                          boxBoolean?.isSelectedBox
+                            ? selectedBox?.length
+                            : newBox?.length
+                        }
+                        // isDisabled={boxBoolean?.isSelectedBox ? true : false}
+                        onChange={(e: any) => {
+                          if (!isNaN(e.target.value)) {
+                            // calculateVolumetric(
+                            //   boxBoolean?.isSelectedBox ? false : true
+                            // );
+                            // onChaneDimensionHandler(e);
+                            boxBoolean?.isSelectedBox
+                              ? setSelectedBox({
+                                  ...selectedBox,
+                                  length: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (selectedBox.length *
+                                  //     selectedBox.breadth *
+                                  //     selectedBox.height) /
+                                  //   5000,
+                                })
+                              : setNewBox({
+                                  ...newBox,
+                                  length: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (newBox.length *
+                                  //     newBox.breadth *
+                                  //     newBox.height) /
+                                  //   5000,
+                                });
+                          }
+                        }}
+                        inputError={inputError}
+                      />
+                      <InputBox
+                        label="B"
+                        value={
+                          boxBoolean?.isSelectedBox
+                            ? selectedBox?.breadth
+                            : newBox?.breadth
+                        }
+                        // isDisabled={boxBoolean?.isSelectedBox ? true : false}
+                        name="breadth"
+                        inputType="text"
+                        inputMode="numeric"
+                        onChange={(e: any) => {
+                          if (!isNaN(e.target.value)) {
+                            // calculateVolumetric(
+                            //   boxBoolean?.isSelectedBox ? false : true
+                            // );
+                            // onChaneDimensionHandler(e);
+                            boxBoolean?.isSelectedBox
+                              ? setSelectedBox({
+                                  ...selectedBox,
+                                  breadth: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (selectedBox.length *
+                                  //     selectedBox.breadth *
+                                  //     selectedBox.height) /
+                                  //   5000,
+                                })
+                              : setNewBox({
+                                  ...newBox,
+                                  breadth: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (newBox.length *
+                                  //     newBox.breadth *
+                                  //     newBox.height) /
+                                  //   5000,
+                                });
+                          }
+                        }}
+                        inputError={inputError}
+                      />
+                      <InputBox
+                        label="H"
+                        value={
+                          boxBoolean?.isSelectedBox
+                            ? selectedBox?.height
+                            : newBox?.height
+                        }
+                        // isDisabled={boxBoolean?.isSelectedBox ? true : false}
+                        name="height"
+                        inputType="text"
+                        inputMode="numeric"
+                        onChange={(e: any) => {
+                          if (!isNaN(e.target.value)) {
+                            // calculateVolumetric(
+                            //   boxBoolean?.isSelectedBox ? false : true
+                            // );
+                            // onChaneDimensionHandler(e);
+                            boxBoolean?.isSelectedBox
+                              ? setSelectedBox({
+                                  ...selectedBox,
+                                  height: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (selectedBox.length *
+                                  //     selectedBox.breadth *
+                                  //     selectedBox.height) /
+                                  //   5000,
+                                })
+                              : setNewBox({
+                                  ...newBox,
+                                  height: +e.target.value,
+                                  // volumetricWeight:
+                                  //   (newBox.length *
+                                  //     newBox.breadth *
+                                  //     newBox.height) /
+                                  //   5000,
+                                });
+                          }
+                        }}
+                        inputError={inputError}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-        </div>
-      </div>
+        )}
+      </>
     );
   };
 
@@ -421,27 +686,51 @@ const ErrorModal = (props: ErrorModalProps) => {
       0
     );
 
-    if (TempProductAndBoxDetails?.deadWeight < totalDeadWeight) {
-      TempProductAndBoxDetails.deadWeight = totalDeadWeight;
-    }
+    // if (TempProductAndBoxDetails?.deadWeight < totalDeadWeight) {
+    //   TempProductAndBoxDetails.deadWeight = totalDeadWeight;
+    // }
 
-    if (TempProductAndBoxDetails?.volumetricWeight < totalVolumetricWeight) {
-      TempProductAndBoxDetails.volumetricWeight = totalVolumetricWeight;
-      TempProductAndBoxDetails.length = +Math.cbrt(
-        totalVolumetricWeight
-      ).toFixed(2);
-      TempProductAndBoxDetails.breadth = +Math.cbrt(
-        totalVolumetricWeight
-      ).toFixed(2);
-      TempProductAndBoxDetails.height = +Math.cbrt(
-        totalVolumetricWeight
-      ).toFixed(2);
-    }
+    // if (TempProductAndBoxDetails?.volumetricWeight < totalVolumetricWeight) {
+    //   TempProductAndBoxDetails.volumetricWeight = totalVolumetricWeight;
+    //   TempProductAndBoxDetails.length = +Math.cbrt(
+    //     totalVolumetricWeight
+    //   ).toFixed(2);
+    //   TempProductAndBoxDetails.breadth = +Math.cbrt(
+    //     totalVolumetricWeight
+    //   ).toFixed(2);
+    //   TempProductAndBoxDetails.height = +Math.cbrt(
+    //     totalVolumetricWeight
+    //   ).toFixed(2);
+    // }
 
-    TempProductAndBoxDetails.appliedWeight = +Math.max(
-      TempProductAndBoxDetails?.deadWeight,
-      TempProductAndBoxDetails?.volumetricWeight
-    );
+    // TempProductAndBoxDetails.appliedWeight = +Math.max(
+    //   TempProductAndBoxDetails?.deadWeight,
+    //   TempProductAndBoxDetails?.volumetricWeight
+    // );
+
+    if (boxBoolean?.isNewBox) {
+      TempProductAndBoxDetails.name = newBox?.name;
+      TempProductAndBoxDetails.deadWeight = newBox?.deadWeight;
+      TempProductAndBoxDetails.volumetricWeight = newBox?.volumetricWeight;
+      TempProductAndBoxDetails.length = newBox?.length;
+      TempProductAndBoxDetails.breadth = newBox?.breadth;
+      TempProductAndBoxDetails.height = newBox?.height;
+      TempProductAndBoxDetails.appliedWeight = Math.max(
+        newBox?.deadWeight,
+        newBox?.volumetricWeight
+      );
+    } else {
+      TempProductAndBoxDetails.name = selectedBox?.name;
+      TempProductAndBoxDetails.deadWeight = selectedBox?.deadWeight;
+      TempProductAndBoxDetails.volumetricWeight = selectedBox?.volumetricWeight;
+      TempProductAndBoxDetails.length = selectedBox?.length;
+      TempProductAndBoxDetails.breadth = selectedBox?.breadth;
+      TempProductAndBoxDetails.height = selectedBox?.height;
+      TempProductAndBoxDetails.appliedWeight = Math.max(
+        selectedBox?.deadWeight,
+        selectedBox?.volumetricWeight
+      );
+    }
 
     let payLoad = {
       boxDetails: [TempProductAndBoxDetails],
@@ -1382,6 +1671,31 @@ const ErrorModal = (props: ErrorModalProps) => {
   const switchForValidation = () => {
     switch (errorModalData?.error) {
       case orderErrorCategoryENUMs["Box And Product"]: {
+        if (boxBoolean?.isNewBox || boxBoolean?.isSelectedBox) {
+          if (
+            boxBoolean?.isNewBox &&
+            (newBox?.name?.trim() === "" ||
+              newBox?.deadWeight <= 0 ||
+              newBox?.length <= 0 ||
+              newBox?.breadth <= 0 ||
+              newBox?.height <= 0)
+          ) {
+            return false;
+          }
+          if (
+            boxBoolean?.isSelectedBox &&
+            (selectedBox?.name?.trim() === "" ||
+              selectedBox?.deadWeight <= 0 ||
+              selectedBox?.length <= 0 ||
+              selectedBox?.breadth <= 0 ||
+              selectedBox?.height <= 0)
+          ) {
+            return false;
+          }
+        } else {
+          return false;
+        }
+
         const dimensions = ["length", "breadth", "height", "deadWeight"];
         for (const dimension of dimensions) {
           if (
@@ -1622,6 +1936,40 @@ const ErrorModal = (props: ErrorModalProps) => {
   //     }
   //   }
   // }, [isProcess]);
+
+  useEffect(() => {
+    setNewBox({
+      ...newBox,
+      volumetricWeight: (newBox.length * newBox.breadth * newBox.height) / 5000,
+    });
+    setSelectedBox({
+      ...selectedBox,
+      volumetricWeight:
+        (selectedBox.length * selectedBox.breadth * selectedBox.height) / 5000,
+    });
+  }, [
+    newBox?.length,
+    selectedBox?.length,
+    newBox?.breadth,
+    selectedBox?.breadth,
+    newBox?.height,
+    selectedBox?.height,
+  ]);
+
+  useEffect(() => {
+    (async () => {
+      const { data } = await POST(GET_SELLER_BOX);
+      setListOfBoxes(data?.data);
+      let boxes: any = [];
+      data?.data?.map((item: any) => {
+        boxes.push({
+          label: item.name,
+          value: item.boxId,
+        });
+      });
+      setDropDownBoxes(boxes);
+    })();
+  }, []);
 
   return (
     <div className="overflow-h-auto max-h-[90vh]">
