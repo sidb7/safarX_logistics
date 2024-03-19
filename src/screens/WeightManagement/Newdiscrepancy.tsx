@@ -593,7 +593,7 @@ const NewDiscrepancyTable = ({
           <Spinner />
         </div>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto pb-5">
           <CustomTable
             columns={NewDiscrepancyHeading}
             data={data || []}
