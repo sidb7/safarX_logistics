@@ -98,8 +98,6 @@ const PinCode = (props: any) => {
           const data = await GET(url);
 
           if (data?.data?.success) {
-            console.log("searchPincodedata", searchPincodedata);
-
             const result = data?.data?.data?.map((value: any, i: any) => ({
               name: value?.pincode,
               value: value?.pincode,
@@ -139,6 +137,7 @@ const PinCode = (props: any) => {
         (item: any) => item !== temp.result[index1]?.value
       );
     }
+    changeHandler("pin_code", "pin_code", pincodeArr);
     setPersistFilterData(pincodeArr);
     temp.result[index1].isActive = !temp.result[index1].isActive;
     setSearchPincodeData(temp);
@@ -246,7 +245,8 @@ const PinCode = (props: any) => {
                 searchPincodedata?.result?.length > 0 && " grid-cols-2"
               } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
             >
-              {searchPincodedata?.result?.length > 0 ? (
+              {searchPincodedata?.isCollapse === true &&
+              searchPincodedata?.result?.length > 0 ? (
                 !isLoading &&
                 searchPincodedata?.result?.map(
                   (subMenu: any, index1: number) => {
@@ -264,11 +264,11 @@ const PinCode = (props: any) => {
                         >
                           <Checkbox
                             className="px-4"
-                            checkboxClassName="gap-1"
+                            checkboxClassName="gap-1 !h-[24px] !W-[24px]"
                             name={subMenu?.name}
                             checked={subMenu?.isActive}
                           />
-                          <p className="font-bold text-[14px] text-[#323232]">
+                          <p className="font-normal font-Open text-[14px] text-[#323232]">
                             {subMenu?.name}
                           </p>
                         </button>
@@ -286,24 +286,6 @@ const PinCode = (props: any) => {
                 </>
               )}
             </div>
-            {/* <select
-              onChange={(e: any) => {
-                if (e.target.value !== "") {
-                  changeHandler("pin_code", "pin_code", e.target.value);
-                }
-              }}
-              className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]"
-            >
-              <option value={""} className="bg-gray-100">
-                Select Pincode
-              </option>
-
-              {pinCodeList?.map((option: any, i: number) => {
-                return (
-                  <option value={option?.pincode}>{option?.pincode}</option>
-                );
-              })}
-            </select> */}
           </div>
         </div>
         <div className="flex items-center gap-4 mt-5">

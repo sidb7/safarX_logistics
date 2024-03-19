@@ -15,6 +15,8 @@ import {
   CREATE_RULE_SERVICE,
   FETCH_ALL_CATEGOROIES,
   FETCH_ALL_PARTNER_WITH_SERVICE,
+  FETCH_RULE,
+  GET_CATEGOROIES,
 } from "../../utils/ApiUrls";
 import InvoiceRule from "./ruleEngine/invoice";
 import PinCode from "./ruleEngine/pinCode";
@@ -24,16 +26,18 @@ import WeightRange from "./ruleEngine/weightRange";
 import ApplicableOrders from "./ruleEngine/applicableOrders";
 import { v4 as uuidv4 } from "uuid";
 
+let ruleName: any = ["applicable_orders"];
+
 const Rules = () => {
   const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
   const [ruleTitleValue, setRuleTitleValue] = useState("");
-  const [ruleName, setRuleName] = useState(["applicable_orders"]);
+  // const [ruleName, setRuleName] = useState(["applicable_orders"]);
   const [partnerList, setPartnerList] = useState<any>();
   const [categoriesList, setCategoriesList] = useState<any>();
   const [persistFilterData, setPersistFilterData]: any = useState([]);
-
-  let initialRuleEngine = [
+  const [getInitialRuleEnigne, setGetInitialRuleEnigne] = useState<any>();
+  const [tempInitialRuleEngine, setTempInitialRuleEngine] = useState<any>([
     {
       ruleId: uuidv4(),
       ruleName: "invoice_value",
@@ -163,7 +167,9 @@ const Rules = () => {
       ruleName: "applicable_orders",
       sortBy: "",
     },
-  ];
+  ]);
+
+  // let initialRuleEngine =
 
   const fetchAllPartner = async () => {
     try {
@@ -178,22 +184,46 @@ const Rules = () => {
     }
   };
 
-  const fetchAllCategory = async () => {
-    try {
-      const { data: response } = await POST(FETCH_ALL_CATEGOROIES, {});
-      if (response?.success) {
-        setCategoriesList(response?.data);
-      } else {
-        toast.error("Somethnig went wrong...");
-      }
-    } catch (error) {
-      console.log("error", error);
+  const getCategories = async () => {
+    const { data } = await POST(GET_CATEGOROIES, {
+      // productName: inputValue ? inputValue : initValue,
+      productName: "",
+    });
+    if (data?.success) {
+      let obj = data?.data[0];
+      obj?.forEach((category: any) => {
+        category.categoryName = category?.categoryName?.replace(
+          /\w+/g,
+          function (w: any) {
+            return w[0].toUpperCase() + w.slice(1).toLowerCase();
+          }
+        );
+      });
+      setCategoriesList([...obj, { categoryName: "Others" }]);
     }
   };
 
+  // const fetchRuleEngine = async () => {
+  //   const { data } = await POST(FETCH_RULE);
+  //   if (data?.success) {
+  //     let tempRules = data?.data?.[0]?.rules;
+  //     // console.log("🚀 ~ fetchRuleEngine ~ tempRules:", tempRules);
+  //     for (let i = 0; i < tempInitialRuleEngine?.length; i++) {
+  //       for (let j = 0; j < tempRules?.length; j++) {
+  //         if (tempInitialRuleEngine[i]?.ruleName === tempRules[j]?.ruleName) {
+  //           tempInitialRuleEngine[i] = tempRules[j];
+  //         }
+  //       }
+  //     }
+  //     console.log("tempInitialRuleEngine", tempInitialRuleEngine);
+  //     // setGetInitialRuleEnigne(data?.data?.[0]?.rules);
+  //   }
+  // };
+
   useEffect(() => {
+    getCategories();
     fetchAllPartner();
-    fetchAllCategory();
+    // fetchRuleEngine();
   }, []);
 
   const ruleTitle = [
@@ -241,9 +271,12 @@ const Rules = () => {
 
   const confirmHandler = (value: any) => {
     setModalOpen(false);
-    setRuleTitleValue("");
+    // setRuleTitleValue("");
     let newRuleName = value;
-    setRuleName((prevArray: any) => [newRuleName, ...prevArray]);
+    ruleName.push(newRuleName);
+    ruleName.sort();
+    ruleName.reverse();
+    // setRuleName((prevArray: any) => [newRuleName, ...prevArray]);
   };
 
   const changeHandler = (
@@ -253,6 +286,7 @@ const Rules = () => {
     index: number,
     column?: any
   ) => {
+    let initialRuleEngine = tempInitialRuleEngine;
     for (let i = 0; i < initialRuleEngine?.length; i++) {
       if (initialRuleEngine[i]?.ruleName === ruleName) {
         if (fieldName === "from") {
@@ -264,13 +298,9 @@ const Rules = () => {
         } else if (fieldName === "condition") {
           initialRuleEngine[i].type = actualValue;
         } else if (fieldName === "pin_code") {
-          let tempArr: any = [];
-          tempArr.push(actualValue);
-          initialRuleEngine[i].pincode = tempArr;
+          initialRuleEngine[i].pincode = actualValue;
         } else if (fieldName === "product_category") {
-          let tempArr: any = [];
-          tempArr.push(actualValue);
-          initialRuleEngine[i].category = tempArr;
+          initialRuleEngine[i].category = actualValue;
         } else if (fieldName === "priority") {
           initialRuleEngine[i].priority?.map((el: any, i: number) => {
             if (column === "partnerCol" && i === index) {
@@ -286,7 +316,7 @@ const Rules = () => {
 
   const submitHandler = async () => {
     let finalRuleEngine: any = [];
-    initialRuleEngine?.map((el: any, i: number) => {
+    tempInitialRuleEngine?.map((el: any, i: number) => {
       if (el?.sortBy != "") {
         el.isActive = true;
         el?.priority?.map((priorities: any, i: number) => {
@@ -300,15 +330,23 @@ const Rules = () => {
           }
         });
         finalRuleEngine.push(el);
+      } else if (el?.ruleName === "applicable_orders" && el?.sortBy !== "") {
+        el.isActive = true;
+        finalRuleEngine.push(el);
+      } else {
+        el.isActive = false;
+        finalRuleEngine.push(el);
       }
     });
+
     try {
       let payload = {
         ruleEngine: finalRuleEngine,
       };
       const { data: response } = await POST(CREATE_RULE_SERVICE, payload);
-      if (response?.status) {
+      if (response?.success) {
         toast.success(response?.message);
+        window.location.reload();
       } else {
         toast.error("Somethnig went wrong...");
       }
@@ -377,6 +415,63 @@ const Rules = () => {
               );
             }
           })}
+        {/* {tempInitialRuleEngine?.length > 0 &&
+          tempInitialRuleEngine?.map((el: any, i: number) => {
+            if (el?.isActive) {
+              if (el?.ruleName === "invoice_value") {
+                return (
+                  <InvoiceRule
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                  />
+                );
+              } else if (el?.ruleName === "pin_code") {
+                return (
+                  <PinCode
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    setPersistFilterData={setPersistFilterData}
+                    persistFilterData={persistFilterData}
+                  />
+                );
+              } else if (el?.ruleName === "product_category") {
+                return (
+                  <ProductCategory
+                    index={i}
+                    partnerList={partnerList}
+                    categoriesList={categoriesList}
+                    changeHandler={changeHandler}
+                  />
+                );
+              } else if (el?.ruleName === "payment_mode") {
+                return (
+                  <PaymentMode
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                  />
+                );
+              } else if (el?.ruleName === "weight_range") {
+                return (
+                  <WeightRange
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                  />
+                );
+              } else if (el?.ruleName === "applicable_orders") {
+                return (
+                  <ApplicableOrders
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                  />
+                );
+              }
+            }
+          })} */}
       </div>
 
       <CustomCenterModal

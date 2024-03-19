@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import Checkbox from "../../../components/CheckBox/index2";
+import downArrowIcon from "../../../assets/Filter/downArrow.svg";
+
+let categoriesArr: any = [];
 
 const ProductCategory = (props: any) => {
   const { index, partnerList, categoriesList, changeHandler } = props;
@@ -6,21 +10,7 @@ const ProductCategory = (props: any) => {
   const [priority2ServiceList, setPriority2ServiceList] = useState<any>();
   const [priority3ServiceList, setPriority3ServiceList] = useState<any>();
   const [priority4ServiceList, setPriority4ServiceList] = useState<any>();
-
-  const condition = [
-    {
-      label: "Greater Than",
-      value: "greater",
-    },
-    {
-      label: "Less Than",
-      value: "less",
-    },
-    {
-      label: "Between",
-      value: "between",
-    },
-  ];
+  const [categories, setCategories] = useState<any>(categoriesList);
 
   const sortBy = [
     {
@@ -77,19 +67,115 @@ const ProductCategory = (props: any) => {
     changeHandler(ruleName, "priority", value, i, "partnerCol"); // return the callBack value and update the object
   };
 
+  const onCheckedHandler = (e: any, index1: any) => {
+    let temp = { ...categories };
+
+    if (e === false) {
+      categoriesArr = categoriesArr.filter(
+        (item: any) => item !== temp[index1]?.categoryName
+      );
+    } else {
+      categoriesArr.push(temp[index1]?.categoryName);
+    }
+    changeHandler("product_category", "product_category", categoriesArr);
+    temp[index1].isActive = !temp[index1].isActive;
+    setCategories(temp);
+  };
+
   return (
     <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
       <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
         {index + 1}. Product Category
       </h1>
       <div className="mt-5">
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4">
           <div>
             <h1 className="text-[18px] font-Open text-[#323232]">
               Product Category
             </h1>
           </div>
-          <div className="!w-[140px] !h-[48px]">
+          <div className="!w-[300px]">
+            <div
+              className={`flex  items-center justify-between h-[38px]  border-[1px] ${
+                categories?.isCollapse
+                  ? "bg-[#f6f6f6] rounded-tr-lg rounded-tl-lg rounded-b-none"
+                  : "bg-[#FFFFFF] rounded-lg"
+              }`}
+            >
+              <p
+                className="font-semibold flex-1 py-3  text-[16px] text-[#1C1C1C]"
+                onClick={() => {
+                  let temp: any = { ...categories };
+
+                  if (categories?.isCollapse === true) {
+                    temp.isCollapse = false;
+                    setCategories(temp);
+                  } else {
+                    temp.isCollapse = true;
+                    setCategories(temp);
+                  }
+                }}
+              ></p>
+
+              <div className={`flex `}>
+                <div
+                  className={`flex  items-center justify-center rounded-l-lg ${
+                    categories?.isCollapse ? "bg-[#F6F6F6]" : "bg-white"
+                  }  rounded-r `}
+                ></div>
+                <div
+                  className="flex py-2 px-4  border-l rounded-r  hover:bg-[#F6F6F6]"
+                  onClick={() => {
+                    let temp: any = { ...categories };
+
+                    if (categories?.isCollapse === true) {
+                      temp.isCollapse = false;
+                      setCategories(temp);
+                    } else {
+                      temp.isCollapse = true;
+                      setCategories(temp);
+                    }
+                  }}
+                >
+                  <img
+                    src={downArrowIcon}
+                    alt="downArrowIcon"
+                    className={`transform w-[18px] transition-transform duration-400 ${
+                      categories?.isCollapse ? "rotate-180" : ""
+                    }`}
+                  />
+                </div>
+              </div>
+            </div>
+            {categories?.isCollapse === true && (
+              <div
+                className={`border-b  py-0 border-r border-l max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
+              >
+                {categoriesList?.map((option: any, index: number) => (
+                  <div className="px-2  bg-white z-10" key={index}>
+                    <button
+                      className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] border-t-0 border-r-0 border-l-0`}
+                      onClick={(e: any) =>
+                        onCheckedHandler(e.target.checked, index)
+                      }
+                    >
+                      <Checkbox
+                        className="px-4"
+                        checkboxClassName="gap-1 !h-[24px] !w-[24px] !rounded-lg"
+                        name={option?.categoryName}
+                        checked={option?.isActive}
+                      />
+                      <p className="font-normal font-Open text-[14px] text-[#323232]">
+                        {option?.categoryName}
+                      </p>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* <div className="!w-[140px] !h-[48px]">
             <select
               onChange={(e: any) => {
                 if (e.target.value !== "") {
@@ -106,10 +192,20 @@ const ProductCategory = (props: any) => {
                 Select Product Category
               </option>
               {categoriesList?.map((option: any, i: number) => (
-                <option value={option?._id}>{option?._id}</option>
+                <option value={option?.categoryName}>
+                  <Checkbox
+                    className="px-4"
+                    checkboxClassName="gap-1"
+                    // name={subMenu?.name}
+                    // checked={subMenu?.isActive}
+                  />
+                  <p className="font-bold text-[14px] text-[#323232]">
+                    {option?.categoryName}
+                  </p>
+                </option>
               ))}
             </select>
-          </div>
+          </div> */}
         </div>
         <div className="flex items-center gap-4 mt-5">
           <div>Sort By</div>

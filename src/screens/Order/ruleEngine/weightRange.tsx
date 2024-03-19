@@ -81,13 +81,13 @@ const WeightRange = (props: any) => {
   return (
     <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
       <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
-        {index + 1}. weight Range
+        {index + 1}. Weight Range
       </h1>
       <div className="mt-5">
         <div className="flex gap-4 items-center">
           <div>
             <h1 className="text-[18px] font-Open text-[#323232]">
-              weight Range
+              Weight Range
             </h1>
           </div>
           <div className="!w-[115px] !h-[48px]">
