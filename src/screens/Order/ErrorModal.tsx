@@ -213,21 +213,22 @@ const ErrorModal = (props: ErrorModalProps) => {
           updatedProductDimensions?.products[index].deadWeight,
           updatedProductDimensions?.products[index].volumetricWeight
         );
-      } else if (identifier === "boxDimensions") {
-        updatedProductDimensions[e.target.name] = e.target.value;
-        if (["length", "breadth", "height"].includes(e.target.name)) {
-          updatedProductDimensions.volumetricWeight = +(
-            (+updatedProductDimensions.length *
-              +updatedProductDimensions.breadth *
-              +updatedProductDimensions.height) /
-            5000
-          ).toFixed(2);
-        }
-        updatedProductDimensions.appliedWeight = +Math.max(
-          updatedProductDimensions.deadWeight,
-          updatedProductDimensions.volumetricWeight
-        );
       }
+      // else if (identifier === "boxDimensions") {
+      //   updatedProductDimensions[e.target.name] = e.target.value;
+      //   if (["length", "breadth", "height"].includes(e.target.name)) {
+      //     updatedProductDimensions.volumetricWeight = +(
+      //       (+updatedProductDimensions.length *
+      //         +updatedProductDimensions.breadth *
+      //         +updatedProductDimensions.height) /
+      //       5000
+      //     ).toFixed(2);
+      //   }
+      //   updatedProductDimensions.appliedWeight = +Math.max(
+      //     updatedProductDimensions.deadWeight,
+      //     updatedProductDimensions.volumetricWeight
+      //   );
+      // }
       setProductAndBoxDetails(updatedProductDimensions);
     };
 
@@ -675,6 +676,11 @@ const ErrorModal = (props: ErrorModalProps) => {
     !isProcessOrder && setUpdateButtonLoader(true);
 
     let TempProductAndBoxDetails = { ...productAndBoxDetails };
+
+    if (boxBoolean?.isSelectedBox) {
+      TempProductAndBoxDetails = { ...selectedBox };
+      TempProductAndBoxDetails.products = productAndBoxDetails.products;
+    }
 
     const totalDeadWeight = productAndBoxDetails?.products?.reduce(
       (sum: any, item: any) => sum + +item.deadWeight,
@@ -1698,13 +1704,6 @@ const ErrorModal = (props: ErrorModalProps) => {
 
         const dimensions = ["length", "breadth", "height", "deadWeight"];
         for (const dimension of dimensions) {
-          if (
-            !productAndBoxDetails?.[dimension] ||
-            productAndBoxDetails?.[dimension] == 0
-          ) {
-            return false;
-          }
-
           for (let i = 0; i < productAndBoxDetails.products.length; i++) {
             const productDimension =
               productAndBoxDetails.products[i][dimension];
