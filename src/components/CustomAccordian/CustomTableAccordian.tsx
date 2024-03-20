@@ -277,6 +277,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
   //adding the box into boxinfo
   const [newBox, setNewBox] = useState<any>();
+
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
 
   const { data } = props;
@@ -2085,9 +2086,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
                                                       <p className="text-[16px] font-open ">
                                                         {
-                                                          boxDetailsData[
-                                                            selectBoxIndex
-                                                          ]?.name
+                                                          // boxDetailsData[
+                                                          //   selectBoxIndex
+                                                          // ]?.name
+                                                          newBox?.name
                                                         }
                                                       </p>
                                                     </div>
@@ -2096,9 +2098,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         <InputBox
                                                           label="Dead Weight (Kg)"
                                                           defaultValue={
-                                                            boxDetailsData?.[
-                                                              selectBoxIndex
-                                                            ]?.deadWeight
+                                                            // boxDetailsData?.[
+                                                            //   selectBoxIndex
+                                                            // ]?.deadWeight
+                                                            newBox?.deadWeight
                                                           }
                                                           isDisabled={true}
                                                           inputType="number"
@@ -2109,14 +2112,16 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       <div className="col-span-1">
                                                         <InputBox
                                                           label="Volumetric Weight"
-                                                          // defaultValue={
-                                                          //   eachBox?.volumetricWeight
+                                                          defaultValue={
+                                                            newBox?.volumetricWeight
+                                                          }
+                                                          //   value={
+                                                          //     boxDetailsData?.[
+                                                          //     selectBoxIndex
+                                                          //   ]?.volumetricWeight?.toFixed(
+                                                          //     2
+                                                          //   )
                                                           // }
-                                                          value={boxDetailsData?.[
-                                                            selectBoxIndex
-                                                          ]?.volumetricWeight?.toFixed(
-                                                            2
-                                                          )}
                                                           isDisabled={true}
                                                           name="volumetricWeight"
                                                           inputType="number"
@@ -2139,9 +2144,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             name="length"
                                                             isDisabled={true}
                                                             defaultValue={
-                                                              boxDetailsData?.[
-                                                                selectBoxIndex
-                                                              ]?.length
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.length
+                                                              newBox?.length
                                                             }
                                                           />
                                                         </div>
@@ -2149,9 +2155,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           <InputBox
                                                             label="B"
                                                             defaultValue={
-                                                              boxDetailsData?.[
-                                                                selectBoxIndex
-                                                              ]?.breadth
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.breadth
+                                                              newBox?.breadth
                                                             }
                                                             isDisabled={true}
                                                             name="breadth"
@@ -2163,9 +2170,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           <InputBox
                                                             label="H"
                                                             defaultValue={
-                                                              boxDetailsData?.[
-                                                                selectBoxIndex
-                                                              ]?.height
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.height
+                                                              newBox?.height
                                                             }
                                                             isDisabled={true}
                                                             name="height"
