@@ -340,9 +340,10 @@ const DOWNLOAD_COD_REMITTED = `${SELLER_BASE_URL}/billing/cod/downloadCodRemitRe
 
 // RuleEngine
 const FETCH_ALL_PARTNER_WITH_SERVICE = `${SELLER_BASE_URL}/ruleEngine/getAllPartner`;
-const FETCH_ALL_PINCODE = `${SELLER_BASE_URL}/pincodes/getAllPincode`;
 const FETCH_ALL_CATEGOROIES = `${SELLER_BASE_URL}/categories/getOnlyCategories`;
 const CREATE_RULE_SERVICE = `${SELLER_BASE_URL}/ruleEngine/createRuleEngine`;
+const FETCH_RULE = `${SELLER_BASE_URL}/ruleEngine/fetchRuleEngine`;
+
 // weight Management
 const GET_WRIGHT_DISPUTE = `${SELLER_BASE_URL}/weightDispute/getDisputeInfo`;
 const UPLOAD_DISPUTE_IMAGE = `${SELLER_BASE_URL}/weightDispute/uploadDisputeImages`;
@@ -524,7 +525,6 @@ export {
   GET_PLANS_PREVIEW,
   SEARCH_PINCODE,
   FETCH_ALL_PARTNER_WITH_SERVICE,
-  FETCH_ALL_PINCODE,
   FETCH_ALL_CATEGOROIES,
   CREATE_RULE_SERVICE,
   GET_WRIGHT_DISPUTE,
@@ -534,4 +534,5 @@ export {
   ACCEPT_DISPUTE,
   REJECT_DISPUTE,
   PAYMENT_ERRORS,
+  FETCH_RULE,
 };

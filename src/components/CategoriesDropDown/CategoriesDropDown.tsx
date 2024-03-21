@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import CustomInputBox from "../Input";
-import "./CategoriesDropDown.css";
+import "../../../src/components/CategoriesDropDown/CategoriesDropDown.css";
 import { POST } from "../../utils/webService";
 import { GET_CATEGOROIES } from "../../utils/ApiUrls";
 import { Spinner } from "../Spinner";
@@ -13,12 +13,9 @@ interface CustomInputWithDropDownProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
-  value,
-  initValue,
-  className,
-  onChange = () => {},
-}) => {
+const RuleEngineCustomInputWithDropDown: React.FC<
+  CustomInputWithDropDownProps
+> = ({ value, initValue, className, onChange = () => {} }) => {
   const [arrayValue, setArrayValue] = useState<any>([]);
   const [inputValue, setInputValue] = useState<any>(value);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -122,4 +119,4 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
   );
 };
 
-export default CustomInputWithDropDown;
+export default RuleEngineCustomInputWithDropDown;

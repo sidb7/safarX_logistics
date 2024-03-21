@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const ApplicableOrders = (props: any) => {
-  const { index, changeHandler } = props;
+  const { index, changeHandler, getDataFromBackend } = props;
 
   const sortBy = [
     {
@@ -34,7 +34,14 @@ const ApplicableOrders = (props: any) => {
                 Select Sort
               </option>
               {sortBy?.map((option: any, i: number) => (
-                <option value={option?.value}>{option?.label}</option>
+                <option
+                  value={option?.value}
+                  selected={
+                    getDataFromBackend?.sortBy === option?.value ? true : false
+                  }
+                >
+                  {option?.label}
+                </option>
               ))}
             </select>
           </div>

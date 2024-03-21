@@ -6,34 +6,29 @@ import Checkbox from "../../../components/CheckBox/index2";
 import downArrowIcon from "../../../assets/Filter/downArrow.svg";
 import upArrowIcon from "../../../assets/Filter/upArrow.svg";
 import crossIcon from "../../../assets/cross.svg";
+import CloseIcon from "../../../assets/CloseIcon.svg";
 
 // import MultiSelectDropdown from "../../../components/MultiselectDropdown/multiSelectDropdown";
+let pincodeArr: any = [];
 
 const PinCode = (props: any) => {
   const {
     index,
     partnerList,
-    pinCodeList,
     changeHandler,
+    setPersistFilterData,
     persistFilterData,
-    data,
+    getDataFromBackend,
   } = props;
-  const [priority1ServiceList, setPriority1ServiceList] = useState<any>();
-  const [priority2ServiceList, setPriority2ServiceList] = useState<any>();
-  const [priority3ServiceList, setPriority3ServiceList] = useState<any>();
-  const [priority4ServiceList, setPriority4ServiceList] = useState<any>();
-  const [selectedOption, setSelectedOption] = useState<any>(null);
-  const [finalPincodeList, setFinalPincodeList] = useState<any>();
-  //   const [searchPincodedata, setSearchPincodeData] = useState(data || {});
+  const [priority1ServiceList, setPriority1ServiceList] = useState<any>([]);
+  const [priority2ServiceList, setPriority2ServiceList] = useState<any>([]);
+  const [priority3ServiceList, setPriority3ServiceList] = useState<any>([]);
+  const [priority4ServiceList, setPriority4ServiceList] = useState<any>([]);
   const [searchPincodedata, setSearchPincodeData] = useState<any>([]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   let debounceTimer: any;
-  let pincodeArr: any = [];
-  const handleChange = (selected: []) => {
-    setSelectedOption(selected);
-  };
 
   const sortBy = [
     {
@@ -45,20 +40,6 @@ const PinCode = (props: any) => {
       value: "Highest",
     },
   ];
-
-  //   useEffect(() => {
-  //     pinCodeList?.map((el: any) => {
-  //       let temp = {
-  //         value: el?.pincode,
-  //         label: el?.pincode,
-  //       };
-  //       pincodeArr.push(temp);
-  //       setFinalPincodeList(pincodeArr);
-  //       //   console.log("pincodeArr", pincodeArr);
-  //     });
-  //   }, []);
-
-  //   console.log("fainal pincode", finalPincodeList);
 
   const getServiceBasedOnPartner = (ruleName: any, value: any, i: number) => {
     let filterPartner = partnerList?.filter(
@@ -122,24 +103,15 @@ const PinCode = (props: any) => {
             const result = data?.data?.data?.map((value: any, i: any) => ({
               name: value?.pincode,
               value: value?.pincode,
-              isActive: true,
-              // Object.keys(persistFilterDataArg).length > 0
-              //   ? ["deliveryPincode", "pickupPincode", "sellerId"]?.includes(
-              //       searchPincodedata?.label
-              //     )
-              //     ? persistFilterDataArg[searchPincodedata?.label]?.includes(
-              //         +value?.pincode
-              //       )
-              //     : persistFilterDataArg[searchPincodedata?.label]?.includes(
-              //         value?.pincode
-              //       )
-              //   : false,
+              isActive:
+                persistFilterDataArg?.length > 0 &&
+                persistFilterDataArg?.includes(value?.pincode)
+                  ? true
+                  : false,
             }));
 
-            console.log("result", result);
-
             setSearchPincodeData((prevState: any) => {
-              return { ...prevState, menu: result };
+              return { ...prevState, result };
             });
 
             setIsLoading(false);
@@ -149,13 +121,40 @@ const PinCode = (props: any) => {
         });
       } else {
         setSearchPincodeData((prevState: any) => {
-          return { ...prevState, menu: [] };
+          return { ...prevState };
         });
       }
     } catch (error: any) {
       console.warn("Error in search pincode Debouncing: ", error.message);
     }
   };
+
+  const onCheckedHandler = (e: any, index1: any) => {
+    let temp = { ...searchPincodedata };
+
+    if (e?.isActive === false) {
+      pincodeArr.push(temp.result[index1]?.value);
+      let combineArr = persistFilterData.concat(temp.result[index1]?.value);
+      changeHandler("pin_code", "pin_code", combineArr);
+      setPersistFilterData(combineArr);
+    } else {
+      pincodeArr = persistFilterData?.filter((el: any) => el !== e?.value);
+      changeHandler("pin_code", "pin_code", pincodeArr);
+      setPersistFilterData(pincodeArr);
+    }
+
+    temp.result[index1].isActive = !temp.result[index1].isActive;
+    setSearchPincodeData(temp);
+  };
+
+  useEffect(() => {
+    getDataFromBackend?.priority?.map((el: any, i: number) => {
+      getServiceBasedOnPartner("pin_code", el?.partnerName, i);
+    });
+
+    setPersistFilterData(getDataFromBackend?.pincode);
+    changeHandler("pin_code", "pin_code", getDataFromBackend?.pincode);
+  }, []);
 
   return (
     <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
@@ -168,19 +167,6 @@ const PinCode = (props: any) => {
             <h1 className="text-[18px] font-Open text-[#323232]">PIN Code</h1>
           </div>
           <div className="!w-[280px]">
-            {/* <div className="flex w-[100%] border-r rounded-l-md bg-[#ffffff] h-full text-left">
-              <input
-                placeholder="Search..."
-                value={searchInput}
-                type="number"
-                onChange={(e: any) => {
-                  if (e.target.value.length <= 6) {
-                    searchPincodeListHandler(e.target.value, persistFilterData);
-                  }
-                }}
-                className="w-[100%] search-input-cl border-none rounded-md  h-[100%] text-[14px] py-2 "
-              />
-            </div> */}
             {/* Pincode list */}
             <div
               className={`flex  items-center justify-between h-[38px]  border-[1px] ${
@@ -267,42 +253,60 @@ const PinCode = (props: any) => {
                 </div>
               </div>
             </div>
-            <div
-              className={`border-b  py-0 border-r border-l grid ${
-                searchPincodedata?.menu?.length > 0 && " grid-cols-2"
-              } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
-            >
-              {searchPincodedata?.menu?.length > 0 ? (
-                !isLoading &&
-                searchPincodedata?.menu?.map((subMenu: any, index1: number) => {
+            {searchPincodedata?.isCollapse === true && (
+              <div className="border p-4  grid grid-cols-3 gap-y-2 gap-x-2">
+                {persistFilterData?.map((el: any) => {
                   return (
-                    <div className="px-2  bg-white z-10" key={index1}>
-                      <button
-                        className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] ${
-                          index1 !== searchPincodedata?.menu?.length - 1
-                            ? "border-b-[#E8E8E8]"
-                            : "border-b-0"
-                        } border-t-0 border-r-0 border-l-0`}
-                        // onClick={(e: any) =>
-                        //   onCheckedHandler(subMenu?.isActive, index1)
-                        // }
-                      >
-                        <Checkbox
-                          className="px-4"
-                          checkboxClassName="gap-1"
-                          name={subMenu?.name}
-                          // label={subMenu.name}
-                          // labelClassName="px-4 text-[black]"
-                          checked={subMenu?.isActive}
-                          // value={subMenu?.name}
+                    <div className="border text-[12px] flex justify-between w-[75px] items-center px-2 py-1 rounded">
+                      <div>{el}</div>
+                      <button>
+                        <img
+                          src={CloseIcon}
+                          className="h-[10px] w-[10px]"
+                          alt=""
                         />
-                        <p className="font-bold text-[14px] text-[#323232]">
-                          {subMenu?.name}
-                        </p>
                       </button>
                     </div>
                   );
-                })
+                })}
+              </div>
+            )}
+            <div
+              className={`border-b  py-0 border-r border-l grid ${
+                searchPincodedata?.result?.length > 0 && " grid-cols-2"
+              } max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
+            >
+              {searchPincodedata?.isCollapse === true &&
+              searchPincodedata?.result?.length > 0 ? (
+                !isLoading &&
+                searchPincodedata?.result?.map(
+                  (subMenu: any, index1: number) => {
+                    return (
+                      <div className="px-2  bg-white z-10" key={index1}>
+                        <button
+                          className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] ${
+                            index1 !== searchPincodedata?.result?.length - 1
+                              ? "border-b-[#E8E8E8]"
+                              : "border-b-0"
+                          } border-t-0 border-r-0 border-l-0`}
+                          onClick={(e: any) =>
+                            onCheckedHandler(subMenu, index1)
+                          }
+                        >
+                          <Checkbox
+                            className="px-4"
+                            checkboxClassName="gap-1 !h-[24px] !W-[24px]"
+                            name={subMenu?.name}
+                            checked={subMenu?.isActive}
+                          />
+                          <p className="font-normal font-Open text-[14px] text-[#323232]">
+                            {subMenu?.name}
+                          </p>
+                        </button>
+                      </div>
+                    );
+                  }
+                )
               ) : (
                 <>
                   {isLoading && (
@@ -313,24 +317,6 @@ const PinCode = (props: any) => {
                 </>
               )}
             </div>
-            {/* <select
-              onChange={(e: any) => {
-                if (e.target.value !== "") {
-                  changeHandler("pin_code", "pin_code", e.target.value);
-                }
-              }}
-              className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]"
-            >
-              <option value={""} className="bg-gray-100">
-                Select Pincode
-              </option>
-
-              {pinCodeList?.map((option: any, i: number) => {
-                return (
-                  <option value={option?.pincode}>{option?.pincode}</option>
-                );
-              })}
-            </select> */}
           </div>
         </div>
         <div className="flex items-center gap-4 mt-5">
@@ -348,7 +334,14 @@ const PinCode = (props: any) => {
                 Select Sort
               </option>
               {sortBy?.map((option: any, i: number) => (
-                <option value={option?.value}>{option?.label}</option>
+                <option
+                  value={option?.value}
+                  selected={
+                    getDataFromBackend?.sortBy === option?.value ? true : false
+                  }
+                >
+                  {option?.label}
+                </option>
               ))}
             </select>
           </div>
@@ -369,7 +362,16 @@ const PinCode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[0].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -390,16 +392,26 @@ const PinCode = (props: any) => {
                   }
                 }}
               >
-                <option className="cursor-not-allowed bg-gray-100" value={""}>
+                <option className="cursor-not-allowed bg-gray-100">
                   Select Services
                 </option>
-                {priority1ServiceList?.map((el: any) => {
-                  return (
-                    <option key={el.label} value={el.value}>
-                      {el.label}
-                    </option>
-                  );
-                })}
+                {priority1ServiceList?.length > 0 &&
+                  priority1ServiceList?.map((el: any) => {
+                    return (
+                      <option
+                        key={el.label}
+                        value={el.value}
+                        selected={
+                          getDataFromBackend?.priority?.[0]?.serviceName ===
+                          el?.value
+                            ? true
+                            : false
+                        }
+                      >
+                        {el.label}
+                      </option>
+                    );
+                  })}
               </select>
             </div>
           </div>
@@ -418,7 +430,16 @@ const PinCode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[1].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -444,7 +465,16 @@ const PinCode = (props: any) => {
                 </option>
                 {priority2ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[1]?.serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -467,7 +497,16 @@ const PinCode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[2].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -493,7 +532,16 @@ const PinCode = (props: any) => {
                 </option>
                 {priority3ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[2]?.serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -516,7 +564,16 @@ const PinCode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[3].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -542,7 +599,16 @@ const PinCode = (props: any) => {
                 </option>
                 {priority4ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[3]?.serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
