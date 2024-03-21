@@ -73,12 +73,25 @@ const Index = () => {
     // }
 
     try {
+
+      let signupUtm = {
+        utm_source: "sy_website",
+        utm_campaign: "",
+        utm_medium: "",
+      }
+      
       let payload = {
         sellerData: {
           ...value,
-          otherDetails: searchParams?.toString() === "" ? {} : getQueryJson(),
+          otherDetails: {
+            signupUtm: {
+              ...signupUtm,
+              ...getQueryJson()
+            },
+          },
         },
       };
+      console.log("🚀 ~ signUpOnClick ~ payload:", payload)
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 

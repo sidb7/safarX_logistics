@@ -277,6 +277,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
   //adding the box into boxinfo
   const [newBox, setNewBox] = useState<any>();
+
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
 
   const { data } = props;
@@ -2079,8 +2080,110 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     )}
                                                   </div>
                                                 </div>
-
-                                                {boxAccordian && (
+                                                {/* {boxAccordian && <p>hello</p>} */}
+                                                {enabled && boxAccordian && (
+                                                  <div>
+                                                    <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
+                                                      <p className="text-[16px] font-open ">
+                                                        {
+                                                          // boxDetailsData[
+                                                          //   selectBoxIndex
+                                                          // ]?.name
+                                                          newBox?.name
+                                                        }
+                                                      </p>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
+                                                      <div className="col-span-1">
+                                                        <InputBox
+                                                          label="Dead Weight (Kg)"
+                                                          defaultValue={
+                                                            // boxDetailsData?.[
+                                                            //   selectBoxIndex
+                                                            // ]?.deadWeight
+                                                            newBox?.deadWeight
+                                                          }
+                                                          isDisabled={true}
+                                                          inputType="number"
+                                                          name="deadWeight"
+                                                          inputMode="numeric"
+                                                        />
+                                                      </div>
+                                                      <div className="col-span-1">
+                                                        <InputBox
+                                                          label="Volumetric Weight"
+                                                          defaultValue={
+                                                            newBox?.volumetricWeight
+                                                          }
+                                                          //   value={
+                                                          //     boxDetailsData?.[
+                                                          //     selectBoxIndex
+                                                          //   ]?.volumetricWeight?.toFixed(
+                                                          //     2
+                                                          //   )
+                                                          // }
+                                                          isDisabled={true}
+                                                          name="volumetricWeight"
+                                                          inputType="number"
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                    <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
+                                                      <div className="w-[50%]">
+                                                        <CustomDropDown
+                                                          onChange={() => {}}
+                                                          options={measureUnits}
+                                                        />
+                                                      </div>
+                                                      <div className="flex w-[50%] gap-x-4">
+                                                        <div>
+                                                          <InputBox
+                                                            label="L"
+                                                            inputType="number"
+                                                            inputMode="numeric"
+                                                            name="length"
+                                                            isDisabled={true}
+                                                            defaultValue={
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.length
+                                                              newBox?.length
+                                                            }
+                                                          />
+                                                        </div>
+                                                        <div>
+                                                          <InputBox
+                                                            label="B"
+                                                            defaultValue={
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.breadth
+                                                              newBox?.breadth
+                                                            }
+                                                            isDisabled={true}
+                                                            name="breadth"
+                                                            inputType="number"
+                                                            inputMode="numeric"
+                                                          />{" "}
+                                                        </div>
+                                                        <div>
+                                                          <InputBox
+                                                            label="H"
+                                                            defaultValue={
+                                                              // boxDetailsData?.[
+                                                              //   selectBoxIndex
+                                                              // ]?.height
+                                                              newBox?.height
+                                                            }
+                                                            isDisabled={true}
+                                                            name="height"
+                                                          />
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                )}
+                                                {boxAccordian && !enabled && (
                                                   <div
                                                     className="font-open border-[1.5px] border-black-600 flex justify-between mx-0 py-3 px-1 rounded-md"
                                                     onClick={() => {
