@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Checkbox from "../../../components/CheckBox/index2";
 import downArrowIcon from "../../../assets/Filter/downArrow.svg";
 
 let categoriesArr: any = [];
 
 const ProductCategory = (props: any) => {
-  const { index, partnerList, categoriesList, changeHandler } = props;
+  const {
+    index,
+    partnerList,
+    categoriesList,
+    changeHandler,
+    setCategoriesList,
+    getDataFromBackend,
+  } = props;
   const [priority1ServiceList, setPriority1ServiceList] = useState<any>();
   const [priority2ServiceList, setPriority2ServiceList] = useState<any>();
   const [priority3ServiceList, setPriority3ServiceList] = useState<any>();
   const [priority4ServiceList, setPriority4ServiceList] = useState<any>();
-  const [categories, setCategories] = useState<any>(categoriesList);
+  const [persistFilterData, setPersistFilterData] = useState<any>([]);
+  const [categories, setCategories] = useState<any>();
 
   const sortBy = [
     {
@@ -68,19 +76,39 @@ const ProductCategory = (props: any) => {
   };
 
   const onCheckedHandler = (e: any, index1: any) => {
-    let temp = { ...categories };
+    let temp = [...categoriesList];
 
-    if (e === false) {
-      categoriesArr = categoriesArr.filter(
-        (item: any) => item !== temp[index1]?.categoryName
+    if (e?.isActive) {
+      // categoriesArr = categoriesArr.filter(
+      //   (item: any) => item !== temp[index1]?.categoryName
+      // );
+      categoriesArr = persistFilterData.filter(
+        (item: any) => item !== e?.categoryName
       );
+      changeHandler("product_category", "product_category", categoriesArr);
+      setPersistFilterData(categoriesArr);
     } else {
       categoriesArr.push(temp[index1]?.categoryName);
+      let combineArr = persistFilterData.concat(temp[index1]?.categoryName);
+      changeHandler("product_category", "product_category", combineArr);
+      setPersistFilterData(combineArr);
     }
-    changeHandler("product_category", "product_category", categoriesArr);
     temp[index1].isActive = !temp[index1].isActive;
-    setCategories(temp);
+    setCategoriesList(temp);
   };
+
+  useEffect(() => {
+    getDataFromBackend?.priority?.map((el: any, i: number) => {
+      getServiceBasedOnPartner("product_category", el?.partnerName, i);
+    });
+
+    changeHandler(
+      "product_category",
+      "product_category",
+      getDataFromBackend?.category
+    );
+    setPersistFilterData(getDataFromBackend?.category);
+  }, []);
 
   return (
     <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
@@ -151,26 +179,36 @@ const ProductCategory = (props: any) => {
               <div
                 className={`border-b  py-0 border-r border-l max-h-[300px] overflow-auto rounded-bl-md rounded-br-md `}
               >
-                {categoriesList?.map((option: any, index: number) => (
-                  <div className="px-2  bg-white z-10" key={index}>
-                    <button
-                      className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] border-t-0 border-r-0 border-l-0`}
-                      onClick={(e: any) =>
-                        onCheckedHandler(e.target.checked, index)
-                      }
-                    >
-                      <Checkbox
-                        className="px-4"
-                        checkboxClassName="gap-1 !h-[24px] !w-[24px] !rounded-lg"
-                        name={option?.categoryName}
-                        checked={option?.isActive}
-                      />
-                      <p className="font-normal font-Open text-[14px] text-[#323232]">
-                        {option?.categoryName}
-                      </p>
-                    </button>
-                  </div>
-                ))}
+                {categoriesList &&
+                  categoriesList?.map((option: any, index: number) => (
+                    <div className="px-2  bg-white z-10" key={index}>
+                      <button
+                        className={`flex cursor-pointer items-center  w-full border  py-5  gap-3 h-[28px] border-t-0 border-r-0 border-l-0`}
+                        onClick={(e: any) => onCheckedHandler(option, index)}
+                      >
+                        <Checkbox
+                          className="px-4"
+                          checkboxClassName="gap-1 !h-[24px] !w-[24px] !rounded-lg"
+                          name={option?.categoryName}
+                          checked={
+                            persistFilterData?.includes(option?.categoryName)
+                              ? true
+                              : false
+                          }
+                          // checked={
+                          //   getDataFromBackend?.category?.includes(
+                          //     option?.categoryName
+                          //   )
+                          //     ? true
+                          //     : false
+                          // }
+                        />
+                        <p className="font-normal font-Open text-[14px] text-[#323232]">
+                          {option?.categoryName}
+                        </p>
+                      </button>
+                    </div>
+                  ))}
               </div>
             )}
           </div>
@@ -222,7 +260,14 @@ const ProductCategory = (props: any) => {
                 Select Sort
               </option>
               {sortBy?.map((option: any, i: number) => (
-                <option value={option?.value}>{option?.label}</option>
+                <option
+                  value={option?.value}
+                  selected={
+                    getDataFromBackend?.sortBy === option?.value ? true : false
+                  }
+                >
+                  {option?.label}
+                </option>
               ))}
             </select>
           </div>
@@ -247,7 +292,16 @@ const ProductCategory = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[0].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -273,7 +327,16 @@ const ProductCategory = (props: any) => {
                 </option>
                 {priority1ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[0].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -300,7 +363,16 @@ const ProductCategory = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[1].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -326,7 +398,16 @@ const ProductCategory = (props: any) => {
                 </option>
                 {priority2ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[1].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -353,7 +434,16 @@ const ProductCategory = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[2].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -379,7 +469,16 @@ const ProductCategory = (props: any) => {
                 </option>
                 {priority3ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[2].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -406,7 +505,16 @@ const ProductCategory = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[3].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -432,7 +540,16 @@ const ProductCategory = (props: any) => {
                 </option>
                 {priority4ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[3].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );

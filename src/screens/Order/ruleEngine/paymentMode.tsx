@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomInputBox from "../../../components/Input";
 
 const PaymentMode = (props: any) => {
-  const { index, partnerList, changeHandler } = props;
+  const { index, partnerList, changeHandler, getDataFromBackend } = props;
   const [priority1ServiceList, setPriority1ServiceList] = useState<any>();
   const [priority2ServiceList, setPriority2ServiceList] = useState<any>();
   const [priority3ServiceList, setPriority3ServiceList] = useState<any>();
@@ -31,6 +31,17 @@ const PaymentMode = (props: any) => {
     {
       label: "Highest",
       value: "Highest",
+    },
+  ];
+
+  const mode = [
+    {
+      label: "COD",
+      value: "COD",
+    },
+    {
+      label: "Prepaid",
+      value: "Prepaid",
     },
   ];
 
@@ -78,6 +89,16 @@ const PaymentMode = (props: any) => {
     changeHandler(ruleName, "priority", value, i, "partnerCol"); // return the callBack value and update the object
   };
 
+  useEffect(() => {
+    getDataFromBackend?.priority?.map((el: any, i: number) => {
+      if (el?.partnerName !== "") {
+        getServiceBasedOnPartner("payment_mode", el?.partnerName, i);
+      }
+    });
+
+    // setPersistFilterData(getDataFromBackend?.pincode);
+  }, []);
+
   return (
     <div className="mx-5 mb-5 p-5 shadow-lg bg-white rounded-lg">
       <h1 className="text-[#1C1C1C] font-Lato font-semibold text-[28px]">
@@ -100,10 +121,17 @@ const PaymentMode = (props: any) => {
               className="h-full p-[5px] text-[12px] font-Open font-semibold w-full rounded-lg bg-transparent border-2 border-[#A4A4A4]"
             >
               <option value={""} className="bg-gray-100">
-                Select Condition
+                Select Mode
               </option>
-              {condition?.map((option: any, i: number) => (
-                <option value={option?.value}>{option?.label}</option>
+              {mode?.map((option: any, i: number) => (
+                <option
+                  value={option?.value}
+                  selected={
+                    getDataFromBackend?.type === option?.value ? true : false
+                  }
+                >
+                  {option?.label}
+                </option>
               ))}
             </select>
           </div>
@@ -123,7 +151,14 @@ const PaymentMode = (props: any) => {
                 Select Sort
               </option>
               {sortBy?.map((option: any, i: number) => (
-                <option value={option?.value}>{option?.label}</option>
+                <option
+                  value={option?.value}
+                  selected={
+                    getDataFromBackend?.sortBy === option?.value ? true : false
+                  }
+                >
+                  {option?.label}
+                </option>
               ))}
             </select>
           </div>
@@ -144,7 +179,16 @@ const PaymentMode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[0].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -170,7 +214,16 @@ const PaymentMode = (props: any) => {
                 </option>
                 {priority1ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[0].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -193,7 +246,16 @@ const PaymentMode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[1].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -219,7 +281,16 @@ const PaymentMode = (props: any) => {
                 </option>
                 {priority2ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[1].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -242,7 +313,16 @@ const PaymentMode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[2].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -268,7 +348,16 @@ const PaymentMode = (props: any) => {
                 </option>
                 {priority3ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[2].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );
@@ -291,7 +380,16 @@ const PaymentMode = (props: any) => {
                   Select Partner
                 </option>
                 {partnerList?.map((option: any) => (
-                  <option key={option.partnerId} value={option.partnerName}>
+                  <option
+                    key={option.partnerId}
+                    value={option.partnerName}
+                    selected={
+                      getDataFromBackend?.priority?.[3].partnerName ===
+                      option?.partnerName
+                        ? true
+                        : false
+                    }
+                  >
                     {option.partnerName}
                   </option>
                 ))}
@@ -317,7 +415,16 @@ const PaymentMode = (props: any) => {
                 </option>
                 {priority4ServiceList?.map((el: any) => {
                   return (
-                    <option key={el.label} value={el.value}>
+                    <option
+                      key={el.label}
+                      value={el.value}
+                      selected={
+                        getDataFromBackend?.priority?.[0].serviceName ===
+                        el?.value
+                          ? true
+                          : false
+                      }
+                    >
                       {el.label}
                     </option>
                   );

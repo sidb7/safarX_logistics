@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import CustomCenterModal from "../../components/CustomModal/customCenterModal";
@@ -36,7 +36,10 @@ const Rules = () => {
   const [partnerList, setPartnerList] = useState<any>();
   const [categoriesList, setCategoriesList] = useState<any>();
   const [persistFilterData, setPersistFilterData]: any = useState([]);
+  const [productCatPersistFilterData, setProductCatPersistFilterData]: any =
+    useState([]);
   const [getInitialRuleEnigne, setGetInitialRuleEnigne] = useState<any>();
+  let initialRuleEngineRef = useRef<any>([]);
   const [tempInitialRuleEngine, setTempInitialRuleEngine] = useState<any>([
     {
       ruleId: uuidv4(),
@@ -169,7 +172,137 @@ const Rules = () => {
     },
   ]);
 
-  // let initialRuleEngine =
+  let initialRuleEngine = [
+    {
+      ruleId: uuidv4(),
+      ruleName: "invoice_value",
+      from: 0,
+      to: 0,
+      type: "",
+      sortBy: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "pin_code",
+      sortBy: "",
+      pincode: [],
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "product_category",
+      sortBy: "",
+      category: [],
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "payment_mode",
+      sortBy: "",
+      mode: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "weight_range",
+      sortBy: "",
+      from: 0,
+      to: 0,
+      type: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "applicable_orders",
+      sortBy: "",
+    },
+  ];
 
   const fetchAllPartner = async () => {
     try {
@@ -203,27 +336,18 @@ const Rules = () => {
     }
   };
 
-  // const fetchRuleEngine = async () => {
-  //   const { data } = await POST(FETCH_RULE);
-  //   if (data?.success) {
-  //     let tempRules = data?.data?.[0]?.rules;
-  //     // console.log("🚀 ~ fetchRuleEngine ~ tempRules:", tempRules);
-  //     for (let i = 0; i < tempInitialRuleEngine?.length; i++) {
-  //       for (let j = 0; j < tempRules?.length; j++) {
-  //         if (tempInitialRuleEngine[i]?.ruleName === tempRules[j]?.ruleName) {
-  //           tempInitialRuleEngine[i] = tempRules[j];
-  //         }
-  //       }
-  //     }
-  //     console.log("tempInitialRuleEngine", tempInitialRuleEngine);
-  //     // setGetInitialRuleEnigne(data?.data?.[0]?.rules);
-  //   }
-  // };
+  const fetchRuleEngine = async () => {
+    const { data } = await POST(FETCH_RULE);
+    if (data?.success) {
+      // setTempInitialRuleEngine(data?.data?.[0]?.rules);
+      initialRuleEngineRef.current = data?.data?.[0]?.rules;
+    }
+  };
 
   useEffect(() => {
     getCategories();
     fetchAllPartner();
-    // fetchRuleEngine();
+    fetchRuleEngine();
   }, []);
 
   const ruleTitle = [
@@ -272,11 +396,16 @@ const Rules = () => {
   const confirmHandler = (value: any) => {
     setModalOpen(false);
     // setRuleTitleValue("");
-    let newRuleName = value;
-    ruleName.push(newRuleName);
-    ruleName.sort();
-    ruleName.reverse();
-    // setRuleName((prevArray: any) => [newRuleName, ...prevArray]);
+    let filterRuleObj: any = initialRuleEngine?.filter((el: any, i: number) => {
+      if (el?.ruleName === value) {
+        return (el.isActive = true);
+      }
+    });
+
+    initialRuleEngineRef.current = [
+      ...filterRuleObj,
+      ...initialRuleEngineRef.current,
+    ];
   };
 
   const changeHandler = (
@@ -286,23 +415,24 @@ const Rules = () => {
     index: number,
     column?: any
   ) => {
-    let initialRuleEngine = tempInitialRuleEngine;
-    for (let i = 0; i < initialRuleEngine?.length; i++) {
-      if (initialRuleEngine[i]?.ruleName === ruleName) {
+    // let initialRuleEngine = tempInitialRuleEngine;
+    let copyOfInitialRuleEngine = initialRuleEngineRef.current;
+    for (let i = 0; i < copyOfInitialRuleEngine?.length; i++) {
+      if (copyOfInitialRuleEngine[i]?.ruleName === ruleName) {
         if (fieldName === "from") {
-          initialRuleEngine[i].from = Number(actualValue);
+          copyOfInitialRuleEngine[i].from = Number(actualValue);
         } else if (fieldName === "to") {
-          initialRuleEngine[i].to = Number(actualValue);
+          copyOfInitialRuleEngine[i].to = Number(actualValue);
         } else if (fieldName === "sort") {
-          initialRuleEngine[i].sortBy = actualValue;
+          copyOfInitialRuleEngine[i].sortBy = actualValue;
         } else if (fieldName === "condition") {
-          initialRuleEngine[i].type = actualValue;
+          copyOfInitialRuleEngine[i].type = actualValue;
         } else if (fieldName === "pin_code") {
-          initialRuleEngine[i].pincode = actualValue;
+          copyOfInitialRuleEngine[i].pincode = actualValue;
         } else if (fieldName === "product_category") {
-          initialRuleEngine[i].category = actualValue;
+          copyOfInitialRuleEngine[i].category = actualValue;
         } else if (fieldName === "priority") {
-          initialRuleEngine[i].priority?.map((el: any, i: number) => {
+          copyOfInitialRuleEngine[i].priority?.map((el: any, i: number) => {
             if (column === "partnerCol" && i === index) {
               el.partnerName = actualValue;
             } else if (column === "serviceCol" && i === index) {
@@ -316,7 +446,8 @@ const Rules = () => {
 
   const submitHandler = async () => {
     let finalRuleEngine: any = [];
-    tempInitialRuleEngine?.map((el: any, i: number) => {
+    // tempInitialRuleEngine?.map((el: any, i: number) => {
+    initialRuleEngineRef?.current?.map((el: any, i: number) => {
       if (el?.sortBy != "") {
         el.isActive = true;
         el?.priority?.map((priorities: any, i: number) => {
@@ -339,9 +470,13 @@ const Rules = () => {
       }
     });
 
+    const isActiveFilter = finalRuleEngine?.filter(
+      (el: any, i: number) => el?.isActive === true
+    );
+
     try {
       let payload = {
-        ruleEngine: finalRuleEngine,
+        ruleEngine: isActiveFilter,
       };
       const { data: response } = await POST(CREATE_RULE_SERVICE, payload);
       if (response?.success) {
@@ -355,68 +490,15 @@ const Rules = () => {
     }
   };
 
+  console.log("initialRuleEngine?.current", initialRuleEngineRef?.current);
+
   return (
     <>
-      <div>
+      <div className="mb-[100px]">
         <Breadcrum label="Rules" component={renderHeaderComponent()} />
 
-        {ruleName?.length > 0 &&
-          ruleName?.map((el: any, i: number) => {
-            if (el === "invoice_value") {
-              return (
-                <InvoiceRule
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "pin_code") {
-              return (
-                <PinCode
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                  setPersistFilterData={setPersistFilterData}
-                  persistFilterData={persistFilterData}
-                />
-              );
-            } else if (el === "product_category") {
-              return (
-                <ProductCategory
-                  index={i}
-                  partnerList={partnerList}
-                  categoriesList={categoriesList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "payment_mode") {
-              return (
-                <PaymentMode
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "weight_range") {
-              return (
-                <WeightRange
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "applicable_orders") {
-              return (
-                <ApplicableOrders
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            }
-          })}
-        {/* {tempInitialRuleEngine?.length > 0 &&
-          tempInitialRuleEngine?.map((el: any, i: number) => {
+        {initialRuleEngineRef?.current?.length > 0 &&
+          initialRuleEngineRef?.current?.map((el: any, i: number) => {
             if (el?.isActive) {
               if (el?.ruleName === "invoice_value") {
                 return (
@@ -424,6 +506,7 @@ const Rules = () => {
                     index={i}
                     partnerList={partnerList}
                     changeHandler={changeHandler}
+                    getDataFromBackend={el}
                   />
                 );
               } else if (el?.ruleName === "pin_code") {
@@ -434,6 +517,7 @@ const Rules = () => {
                     changeHandler={changeHandler}
                     setPersistFilterData={setPersistFilterData}
                     persistFilterData={persistFilterData}
+                    getDataFromBackend={el}
                   />
                 );
               } else if (el?.ruleName === "product_category") {
@@ -442,7 +526,13 @@ const Rules = () => {
                     index={i}
                     partnerList={partnerList}
                     categoriesList={categoriesList}
+                    setCategoriesList={setCategoriesList}
+                    productCatPersistFilterData={productCatPersistFilterData}
+                    setProductCatPersistFilterData={
+                      setProductCatPersistFilterData
+                    }
                     changeHandler={changeHandler}
+                    getDataFromBackend={el}
                   />
                 );
               } else if (el?.ruleName === "payment_mode") {
@@ -451,6 +541,7 @@ const Rules = () => {
                     index={i}
                     partnerList={partnerList}
                     changeHandler={changeHandler}
+                    getDataFromBackend={el}
                   />
                 );
               } else if (el?.ruleName === "weight_range") {
@@ -459,6 +550,7 @@ const Rules = () => {
                     index={i}
                     partnerList={partnerList}
                     changeHandler={changeHandler}
+                    getDataFromBackend={el}
                   />
                 );
               } else if (el?.ruleName === "applicable_orders") {
@@ -467,11 +559,12 @@ const Rules = () => {
                     index={i}
                     partnerList={partnerList}
                     changeHandler={changeHandler}
+                    getDataFromBackend={el}
                   />
                 );
               }
             }
-          })} */}
+          })}
       </div>
 
       <CustomCenterModal
