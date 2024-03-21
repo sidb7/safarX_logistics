@@ -19,9 +19,14 @@ import { POST } from "../../utils/webService";
 import { GET_WRIGHT_DISPUTE } from "../../utils/ApiUrls";
 import Pagination from "../../components/Pagination";
 import { SearchBox } from "../../components/SearchBox";
+import DatePicker from "react-datepicker";
 
 const WeightFreeze: React.FunctionComponent = () => {
   const roles = useSelector((state: any) => state?.roles);
+
+  let thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
   const [renderingComponents, setRenderingComponents] = React.useState<any>(0);
   const [weightManagementData, setWeightManagementdata] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -51,6 +56,10 @@ const WeightFreeze: React.FunctionComponent = () => {
   const [discrepancyDetailsModal, setDiscrepancyDetailsModal] = useState(false);
   const [discrepancyDetailsRightModal, setDiscrepancyDetailsRightModal] =
     useState(false);
+
+  const [dateRange, setDateRange]: any = useState([null, null]);
+  const [endDate, setEndDate] = useState<any>(new Date());
+  const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
 
   const [cartStatus, setcartStatus] = useState([
     {
@@ -127,15 +136,57 @@ const WeightFreeze: React.FunctionComponent = () => {
 
   const renderHeaderComponent = () => {
     return (
-      <CustomButton
-        icon={addIcon}
-        showIcon={true}
-        text={"RAISE TICKET"}
-        className="!p-3"
-        onClick={() => {
-          setShowRaiseTicket(true);
-        }}
-      />
+      <div className="flex gap-4">
+        <div className="flex gap-4">
+          <div className="border border-[#AFAFAF] w-[230px]  !h-[36px] rounded-md">
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update: any) => {
+                setDateRange(update);
+                if (update[0] === null && update[1] === null) {
+                  // Explicitly set startDate and endDate to null when cleared
+                  setStartDate(null);
+                  setEndDate(null);
+                  // fetchCodRemittanceData();
+                } else {
+                  // Update startDate and endDate based on the selected range
+                  setStartDate(update[0]);
+                  setEndDate(update[1]);
+                }
+              }}
+              isClearable={true}
+              placeholderText="Select From & To Date"
+              className="cursor-pointer removePaddingPlaceHolder !w-[225px] !h-[31px] border-[#AFAFAF] rounded-md text-[12px] font-normal flex items-center datepickerCss pl-6"
+              dateFormat="dd/MM/yyyy"
+            />
+          </div>
+
+          <div className="rounded border border-[#AFAFAF]">
+            <SearchBox
+              className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none rounded"
+              label="Search"
+              value={searchedText}
+              onChange={(e: any) => {
+                setSearchedText(e.target.value);
+              }}
+              getFullContent={() => setSearchedText("")}
+              customPlaceholder="Search By Order Id, AWB"
+            />
+          </div>
+        </div>
+
+        <CustomButton
+          icon={addIcon}
+          showIcon={true}
+          text={"RAISE TICKET"}
+          className="!p-3"
+          onClick={() => {
+            setShowRaiseTicket(true);
+          }}
+        />
+      </div>
     );
   };
 
@@ -376,18 +427,6 @@ const WeightFreeze: React.FunctionComponent = () => {
                         : 0}
                     </div>
                     Results
-                  </div>
-                  <div className="rounded border">
-                    <SearchBox
-                      className="removePaddingPlaceHolder !h-[34px] w-[245px] border-none rounded"
-                      label="Search"
-                      value={searchedText}
-                      onChange={(e: any) => {
-                        setSearchedText(e.target.value);
-                      }}
-                      getFullContent={() => setSearchedText("")}
-                      customPlaceholder="Search By Order Id, AWB"
-                    />
                   </div>
                 </div>
                 <div>{renderComponent()}</div>
