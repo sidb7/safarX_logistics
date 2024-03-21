@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import CustomCenterModal from "../../components/CustomModal/customCenterModal";
@@ -15,7 +15,8 @@ import {
   CREATE_RULE_SERVICE,
   FETCH_ALL_CATEGOROIES,
   FETCH_ALL_PARTNER_WITH_SERVICE,
-  FETCH_ALL_PINCODE,
+  FETCH_RULE,
+  GET_CATEGOROIES,
 } from "../../utils/ApiUrls";
 import InvoiceRule from "./ruleEngine/invoice";
 import PinCode from "./ruleEngine/pinCode";
@@ -25,17 +26,151 @@ import WeightRange from "./ruleEngine/weightRange";
 import ApplicableOrders from "./ruleEngine/applicableOrders";
 import { v4 as uuidv4 } from "uuid";
 
+let ruleName: any = ["applicable_orders"];
+
 const Rules = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
   const [ruleTitleValue, setRuleTitleValue] = useState("");
-  const [applicableOrderValue, setApplicableOrderValue] = useState("");
-  const [ruleName, setRuleName] = useState(["applicable_orders"]);
+  // const [ruleName, setRuleName] = useState(["applicable_orders"]);
   const [partnerList, setPartnerList] = useState<any>();
-  const [pinCodeList, setPinCodeList] = useState<any>();
   const [categoriesList, setCategoriesList] = useState<any>();
   const [persistFilterData, setPersistFilterData]: any = useState([]);
+  const [productCatPersistFilterData, setProductCatPersistFilterData]: any =
+    useState([]);
+  const [getInitialRuleEnigne, setGetInitialRuleEnigne] = useState<any>();
+  let initialRuleEngineRef = useRef<any>([]);
+  const [tempInitialRuleEngine, setTempInitialRuleEngine] = useState<any>([
+    {
+      ruleId: uuidv4(),
+      ruleName: "invoice_value",
+      from: 0,
+      to: 0,
+      type: "",
+      sortBy: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "pin_code",
+      sortBy: "",
+      pincode: [],
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "product_category",
+      sortBy: "",
+      category: [],
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "payment_mode",
+      sortBy: "",
+      mode: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "weight_range",
+      sortBy: "",
+      from: 0,
+      to: 0,
+      type: "",
+      priority: [
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+        {
+          partnerName: "",
+          serviceName: "",
+        },
+      ],
+    },
+    {
+      ruleId: uuidv4(),
+      ruleName: "applicable_orders",
+      sortBy: "",
+    },
+  ]);
 
   let initialRuleEngine = [
     {
@@ -182,36 +317,37 @@ const Rules = () => {
     }
   };
 
-  const fetchAllPinCode = async () => {
-    try {
-      const { data: response } = await POST(FETCH_ALL_PINCODE, {});
-      if (response?.success) {
-        setPinCodeList(response?.data);
-      } else {
-        toast.error("Somethnig went wrong...");
-      }
-    } catch (error) {
-      console.log("error", error);
+  const getCategories = async () => {
+    const { data } = await POST(GET_CATEGOROIES, {
+      // productName: inputValue ? inputValue : initValue,
+      productName: "",
+    });
+    if (data?.success) {
+      let obj = data?.data[0];
+      obj?.forEach((category: any) => {
+        category.categoryName = category?.categoryName?.replace(
+          /\w+/g,
+          function (w: any) {
+            return w[0].toUpperCase() + w.slice(1).toLowerCase();
+          }
+        );
+      });
+      setCategoriesList([...obj, { categoryName: "Others" }]);
     }
   };
 
-  const fetchAllCategory = async () => {
-    try {
-      const { data: response } = await POST(FETCH_ALL_CATEGOROIES, {});
-      if (response?.success) {
-        setCategoriesList(response?.data);
-      } else {
-        toast.error("Somethnig went wrong...");
-      }
-    } catch (error) {
-      console.log("error", error);
+  const fetchRuleEngine = async () => {
+    const { data } = await POST(FETCH_RULE);
+    if (data?.success) {
+      // setTempInitialRuleEngine(data?.data?.[0]?.rules);
+      initialRuleEngineRef.current = data?.data?.[0]?.rules;
     }
   };
 
   useEffect(() => {
+    getCategories();
     fetchAllPartner();
-    fetchAllPinCode();
-    fetchAllCategory();
+    fetchRuleEngine();
   }, []);
 
   const ruleTitle = [
@@ -259,9 +395,17 @@ const Rules = () => {
 
   const confirmHandler = (value: any) => {
     setModalOpen(false);
-    setRuleTitleValue("");
-    let newRuleName = value;
-    setRuleName((prevArray: any) => [newRuleName, ...prevArray]);
+    // setRuleTitleValue("");
+    let filterRuleObj: any = initialRuleEngine?.filter((el: any, i: number) => {
+      if (el?.ruleName === value) {
+        return (el.isActive = true);
+      }
+    });
+
+    initialRuleEngineRef.current = [
+      ...filterRuleObj,
+      ...initialRuleEngineRef.current,
+    ];
   };
 
   const changeHandler = (
@@ -271,26 +415,24 @@ const Rules = () => {
     index: number,
     column?: any
   ) => {
-    for (let i = 0; i < initialRuleEngine?.length; i++) {
-      if (initialRuleEngine[i]?.ruleName === ruleName) {
+    // let initialRuleEngine = tempInitialRuleEngine;
+    let copyOfInitialRuleEngine = initialRuleEngineRef.current;
+    for (let i = 0; i < copyOfInitialRuleEngine?.length; i++) {
+      if (copyOfInitialRuleEngine[i]?.ruleName === ruleName) {
         if (fieldName === "from") {
-          initialRuleEngine[i].from = Number(actualValue);
+          copyOfInitialRuleEngine[i].from = Number(actualValue);
         } else if (fieldName === "to") {
-          initialRuleEngine[i].to = Number(actualValue);
+          copyOfInitialRuleEngine[i].to = Number(actualValue);
         } else if (fieldName === "sort") {
-          initialRuleEngine[i].sortBy = actualValue;
+          copyOfInitialRuleEngine[i].sortBy = actualValue;
         } else if (fieldName === "condition") {
-          initialRuleEngine[i].type = actualValue;
+          copyOfInitialRuleEngine[i].type = actualValue;
         } else if (fieldName === "pin_code") {
-          let tempArr: any = [];
-          tempArr.push(actualValue);
-          initialRuleEngine[i].pincode = tempArr;
+          copyOfInitialRuleEngine[i].pincode = actualValue;
         } else if (fieldName === "product_category") {
-          let tempArr: any = [];
-          tempArr.push(actualValue);
-          initialRuleEngine[i].category = tempArr;
+          copyOfInitialRuleEngine[i].category = actualValue;
         } else if (fieldName === "priority") {
-          initialRuleEngine[i].priority?.map((el: any, i: number) => {
+          copyOfInitialRuleEngine[i].priority?.map((el: any, i: number) => {
             if (column === "partnerCol" && i === index) {
               el.partnerName = actualValue;
             } else if (column === "serviceCol" && i === index) {
@@ -304,7 +446,8 @@ const Rules = () => {
 
   const submitHandler = async () => {
     let finalRuleEngine: any = [];
-    initialRuleEngine?.map((el: any, i: number) => {
+    // tempInitialRuleEngine?.map((el: any, i: number) => {
+    initialRuleEngineRef?.current?.map((el: any, i: number) => {
       if (el?.sortBy != "") {
         el.isActive = true;
         el?.priority?.map((priorities: any, i: number) => {
@@ -318,15 +461,27 @@ const Rules = () => {
           }
         });
         finalRuleEngine.push(el);
+      } else if (el?.ruleName === "applicable_orders" && el?.sortBy !== "") {
+        el.isActive = true;
+        finalRuleEngine.push(el);
+      } else {
+        el.isActive = false;
+        finalRuleEngine.push(el);
       }
     });
+
+    const isActiveFilter = finalRuleEngine?.filter(
+      (el: any, i: number) => el?.isActive === true
+    );
+
     try {
       let payload = {
-        ruleEngine: finalRuleEngine,
+        ruleEngine: isActiveFilter,
       };
       const { data: response } = await POST(CREATE_RULE_SERVICE, payload);
-      if (response?.status) {
+      if (response?.success) {
         toast.success(response?.message);
+        window.location.reload();
       } else {
         toast.error("Somethnig went wrong...");
       }
@@ -335,65 +490,79 @@ const Rules = () => {
     }
   };
 
+  console.log("initialRuleEngine?.current", initialRuleEngineRef?.current);
+
   return (
     <>
-      <div>
+      <div className="mb-[100px]">
         <Breadcrum label="Rules" component={renderHeaderComponent()} />
 
-        {ruleName?.length > 0 &&
-          ruleName?.map((el: any, i: number) => {
-            if (el === "invoice_value") {
-              return (
-                <InvoiceRule
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "pin_code") {
-              return (
-                <PinCode
-                  index={i}
-                  partnerList={partnerList}
-                  pinCodeList={pinCodeList}
-                  changeHandler={changeHandler}
-                  setPersistFilterData={setPersistFilterData}
-                  persistFilterData={persistFilterData}
-                />
-              );
-            } else if (el === "product_category") {
-              return (
-                <ProductCategory
-                  index={i}
-                  partnerList={partnerList}
-                  categoriesList={categoriesList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "payment_mode") {
-              return (
-                <PaymentMode
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "weight_range") {
-              return (
-                <WeightRange
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
-            } else if (el === "applicable_orders") {
-              return (
-                <ApplicableOrders
-                  index={i}
-                  partnerList={partnerList}
-                  changeHandler={changeHandler}
-                />
-              );
+        {initialRuleEngineRef?.current?.length > 0 &&
+          initialRuleEngineRef?.current?.map((el: any, i: number) => {
+            if (el?.isActive) {
+              if (el?.ruleName === "invoice_value") {
+                return (
+                  <InvoiceRule
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    getDataFromBackend={el}
+                  />
+                );
+              } else if (el?.ruleName === "pin_code") {
+                return (
+                  <PinCode
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    setPersistFilterData={setPersistFilterData}
+                    persistFilterData={persistFilterData}
+                    getDataFromBackend={el}
+                  />
+                );
+              } else if (el?.ruleName === "product_category") {
+                return (
+                  <ProductCategory
+                    index={i}
+                    partnerList={partnerList}
+                    categoriesList={categoriesList}
+                    setCategoriesList={setCategoriesList}
+                    productCatPersistFilterData={productCatPersistFilterData}
+                    setProductCatPersistFilterData={
+                      setProductCatPersistFilterData
+                    }
+                    changeHandler={changeHandler}
+                    getDataFromBackend={el}
+                  />
+                );
+              } else if (el?.ruleName === "payment_mode") {
+                return (
+                  <PaymentMode
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    getDataFromBackend={el}
+                  />
+                );
+              } else if (el?.ruleName === "weight_range") {
+                return (
+                  <WeightRange
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    getDataFromBackend={el}
+                  />
+                );
+              } else if (el?.ruleName === "applicable_orders") {
+                return (
+                  <ApplicableOrders
+                    index={i}
+                    partnerList={partnerList}
+                    changeHandler={changeHandler}
+                    getDataFromBackend={el}
+                  />
+                );
+              }
             }
           })}
       </div>

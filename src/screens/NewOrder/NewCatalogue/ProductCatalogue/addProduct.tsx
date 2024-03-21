@@ -234,6 +234,7 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
         <Stepper steps={steps} />
       </div> */}
       <div className="px-5 mb-20">
+        {console.log("productInputState", productInputState)}
         {productInputState?.map((e: any, index: number) => {
           return (
             <>
@@ -271,6 +272,12 @@ const AddProduct: React.FunctionComponent<IProductFilledProps> = (props) => {
                           )
                         }
                       />
+                      {/* {
+                        console.log(
+                          "productInputState[index].category",
+                          productInputState[index]
+                        ) as any
+                      } */}
                       <CustomInputWithDropDown
                         value={productInputState[index].category}
                         initValue={productInputState[index].name}
