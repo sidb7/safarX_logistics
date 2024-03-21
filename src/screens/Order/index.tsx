@@ -1626,8 +1626,41 @@ const Index = () => {
   }
 
   const getErrors = async () => {
+    let payload: any = {};
+
+    const newArray = filterPayLoad?.filterArrOne.filter(
+      (obj) => !Object.keys(obj).includes("createdAt")
+    );
+
+    if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
+      payload.filterArrOne = newArray || [];
+      payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
+    }
+
+    if (startDate && endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.startDate = startEpoch;
+      payload.endDate = lastendEpoch;
+    }
+
+    if (searchedText?.length > 0) {
+      payload.id = searchedText;
+    }
+
     setIsErrorListLoading(true);
-    const { data } = await POST(GET_ORDER_ERRORS);
+    const { data } = await POST(GET_ORDER_ERRORS, payload);
     if (data?.status) {
       const result: any = [];
       let errorListCount = 0;
