@@ -45,7 +45,7 @@ const Index = () => {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
         window?.dataLayer?.push({
-          event: "Mobile Verified",
+          event: "reg_2_Mobile_Verified",
           seller_email:email,
           seller_name: firstName,
           // seller_kyc: nextStep?.kyc,
