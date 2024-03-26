@@ -15,6 +15,7 @@ import {
   POST_SIGN_IN_URL,
   POST_SIGN_IN_WITH_GOOGLE_URL,
   VALIDATE_USER_TOKEN,
+  REACT_APP_GTM_ID,
 } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
@@ -97,6 +98,12 @@ const Index = () => {
           isReturningUser: response?.data[0]?.isReturningUser,
         });
 
+
+        window.gtag("config", REACT_APP_GTM_ID, {
+          user_id: response?.data[0]?.sellerId,
+        });
+
+
         const token = sessionStorage.getItem("sellerId")
           ? `${sessionStorage.getItem(
               "sellerId"
@@ -174,6 +181,12 @@ const Index = () => {
         isReturningUser: response?.data[0]?.isReturningUser,
       });
 
+
+      window.gtag("config", REACT_APP_GTM_ID, {
+        user_id: response?.data[0]?.sellerId,
+      });
+
+      
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token
