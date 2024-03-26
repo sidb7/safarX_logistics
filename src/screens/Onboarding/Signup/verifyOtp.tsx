@@ -88,6 +88,16 @@ const Index = () => {
         sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
+        window?.dataLayer?.push({
+          event: "User Registered",
+          seller_email: email,
+          seller_name: response?.data[0]?.name,
+          seller_kyc: response?.data[0]?.nextStep?.kyc,
+          sellerId: response?.data[0]?.sellerId,
+          seller_bank_verification_done: response?.data[0]?.nextStep?.bank,
+          // isReturningUser: isReturningUser,
+        });
+
         const navigationObject = constructNavigationObject(
           "/onBoarding/get-started",
           window.location.search

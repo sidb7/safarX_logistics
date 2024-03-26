@@ -101,10 +101,10 @@ const Index = () => {
         const { sellerId, email, isReturningUser, name, nextStep } =
           response?.data[0];
         window?.dataLayer?.push({
-          event: "Signup",
-          seller_email: email,
-          sellerId: sellerId,
-          seller_name: name,
+          event: "ClickedOnSignup",
+          seller_email: value?.email,
+          sellerId: value?.sellerId,
+          seller_name: value.name,
           seller_kyc: nextStep?.kyc,
           seller_bank_verification_done: nextStep?.bank,
           isReturningUser: isReturningUser,
