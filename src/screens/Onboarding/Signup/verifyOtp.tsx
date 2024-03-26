@@ -9,8 +9,13 @@ import CenterModal from "../../../components/CustomModal/customCenterModal";
 import CustomInputBox from "../../../components/Input";
 import { useSelector } from "react-redux";
 import { POST } from "../../../utils/webService";
-import { POST_VERIFY_OTP, POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
+import {
+  POST_VERIFY_OTP,
+  POST_SEND_OTP_URL,
+  REACT_APP_GTM_ID,
+} from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
+import TagManager from "react-gtm-module";
 import {
   constructNavigationObject,
   setLocalStorage,
@@ -89,13 +94,17 @@ const Index = () => {
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
         window?.dataLayer?.push({
-          event: "User Registered",
+          event: "reg_3_User Registered",
           seller_email: email,
           seller_name: response?.data[0]?.name,
           seller_kyc: response?.data[0]?.nextStep?.kyc,
           sellerId: response?.data[0]?.sellerId,
           seller_bank_verification_done: response?.data[0]?.nextStep?.bank,
           // isReturningUser: isReturningUser,
+        });
+
+        window.gtag("config", REACT_APP_GTM_ID, {
+          user_id: response?.data[0]?.sellerId,
         });
 
         const navigationObject = constructNavigationObject(
