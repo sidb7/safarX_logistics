@@ -93,7 +93,8 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   const balancedService = options[2];
 
   const toPascalCase = (str: string) => {
-    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    // console.log("🚀 ~ toPascalCase ~ str:", str);
+    return str?.charAt(0).toUpperCase() + str?.slice(1).toLowerCase();
   };
 
   return (
@@ -141,7 +142,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                 </p> */}
                 <p className="text-[14px] text-[#1C1C1C] font-semibold font-Open">
                   <span className="pr-2  text-[#1C1C1C] text-[16px] font-Open">
-                    {`${toPascalCase(cheapestService.text?.serviceMode)}`}
+                    {`${toPascalCase(cheapestService?.text?.serviceMode)}`}
                   </span>
                   {`\u20B9`}{" "}
                   {Math.round(cheapestService.text?.total)?.toLocaleString(
