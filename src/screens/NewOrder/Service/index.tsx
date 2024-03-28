@@ -464,18 +464,27 @@ const Index: React.FC = () => {
                 initialSelectedFilter="All"
               />
             </div>
-            {selectedOption !== null && (
-              <div className="flex flex-col lg:flex-row gap-4 p-2 ">
-                {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
-                <RecommendatedServiceCard
-                  // options={serviceOptions}
-                  options={recommendedOptions}
-                  selectedValue={setSelectedService}
-                  selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
-                />
-              </div>
-            )}
+            {
+              console.log(
+                "selectedOption",
+                selectedOption,
+                setSelectedOption,
+                setSelectedService,
+                recommendedOptions
+              ) as any
+            }
+
+            <div className="flex flex-col lg:flex-row gap-4 p-2 ">
+              {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
+              <RecommendatedServiceCard
+                // options={serviceOptions}
+                options={recommendedOptions}
+                selectedValue={setSelectedService}
+                selectedOption={selectedOption}
+                setSelectedOption={setSelectedOption}
+              />
+            </div>
+
             {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
               <FilterBy />
             </div> */}
