@@ -464,15 +464,6 @@ const Index: React.FC = () => {
                 initialSelectedFilter="All"
               />
             </div>
-            {
-              console.log(
-                "selectedOption",
-                selectedOption,
-                setSelectedOption,
-                setSelectedService,
-                recommendedOptions
-              ) as any
-            }
 
             <div className="flex flex-col lg:flex-row gap-4 p-2 ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
