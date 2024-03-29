@@ -464,6 +464,7 @@ const Index: React.FC = () => {
                 initialSelectedFilter="All"
               />
             </div>
+
             <div className="flex flex-col lg:flex-row gap-4 p-2 ">
               {/* <h1 className="font-Lato">Shipyaari Service</h1> */}
               <RecommendatedServiceCard
@@ -474,38 +475,41 @@ const Index: React.FC = () => {
                 setSelectedOption={setSelectedOption}
               />
             </div>
+
             {/* <div className="mx-5 mb-5 mt-4 lg:mb-6">
               <FilterBy />
             </div> */}
 
-            <div className=" gap-4 p-2 mb-[10%] ">
-              <div
-                className="flex gap-x-1"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <h1
-                  className="font-Lato ml-4 mb-3 text-[14px] font-bold lg:font-normal cursor-pointer text-blue-500"
-                  // onClick={() => setDropdownOpen(!dropdownOpen)}
+            {selectedOption !== null && (
+              <div className=" gap-4 p-2 mb-[10%] ">
+                <div
+                  className="flex gap-x-1"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  View All Services
-                </h1>
-                <img
-                  src={DownArrow}
-                  alt="Downarrow"
-                  className="pb-4  cursor-pointer"
-                />
-              </div>
+                  <h1
+                    className="font-Lato ml-4 mb-3 text-[14px] font-bold lg:font-normal cursor-pointer text-blue-500"
+                    // onClick={() => setDropdownOpen(!dropdownOpen)}
+                  >
+                    View All Services
+                  </h1>
+                  <img
+                    src={DownArrow}
+                    alt="Downarrow"
+                    className="pb-4  cursor-pointer"
+                  />
+                </div>
 
-              {dropdownOpen && (
-                <ServiceBox
-                  options={serviceOptions}
-                  selectedValue={setSelectedService}
-                  selectedOption={selectedOption}
-                  setSelectedOption={setSelectedOption}
-                  ignoreRecommended={true}
-                />
-              )}
-            </div>
+                {dropdownOpen && (
+                  <ServiceBox
+                    options={serviceOptions}
+                    selectedValue={setSelectedService}
+                    selectedOption={selectedOption}
+                    setSelectedOption={setSelectedOption}
+                    ignoreRecommended={true}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </>
       )}
