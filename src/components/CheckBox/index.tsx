@@ -61,7 +61,7 @@ const Checkbox: React.FC<IProps> = ({
         className={`${checkboxClassName} ${inputElementClass} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <span
-        className={`${labelClassName} select-none text-sm cursor-pointer`}
+        className={`${labelClassName} text-balance select-none text-sm cursor-pointer`}
         onClick={handleCheckboxChange} // Handle checkbox change when the span is clicked
       >
         {label}
