@@ -54,7 +54,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
     setQuestionsData([...tempArr]);
   }
 
-  const question = questionsData[4]?.question;
+  const question = questionsData[3]?.question;
 
   let payload = { answerBody: questionsData };
 

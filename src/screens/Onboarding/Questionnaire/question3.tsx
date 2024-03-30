@@ -89,7 +89,7 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     return (
       <div
         className={` ${
-          isMdScreen ? "custom_shadow m-auto  !w-[688px]" : ""
+          isMdScreen ? "custom_shadow m-auto  !w-[788px]" : ""
         } flex flex-col relative lg:px-0 lg:gap-y-0 rounded-lg`}
       >
         {/* {isLgScreen && modalTitle()} */}
