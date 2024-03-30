@@ -197,7 +197,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                     className="!bg-[#E8E8E8] !text-black"
                     text="BACK"
                     onClick={() =>
-                      navigate("/onboarding/questionnaire/question5", {
+                      navigate("/onboarding/questionnaire/question4", {
                         state: {
                           questionsData,
                         },
