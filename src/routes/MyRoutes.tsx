@@ -264,7 +264,7 @@ const MyRoutes: React.FC = () => {
           element={
             <KycProtectedRoute>
               {/* <ProtectedRoute> */}
-              <QuestionComponent5 />
+              <QuestionComponent6 />
               {/* </ProtectedRoute> */}
             </KycProtectedRoute>
           }
@@ -274,7 +274,7 @@ const MyRoutes: React.FC = () => {
           element={
             <KycProtectedRoute>
               {/* <ProtectedRoute> */}
-              <QuestionComponent6 />
+              <QuestionComponent5 />
               {/* </ProtectedRoute> */}
             </KycProtectedRoute>
           }

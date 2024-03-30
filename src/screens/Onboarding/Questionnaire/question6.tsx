@@ -48,7 +48,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
   //   );
   // };
 
-  const question = questionsData[5]?.question;
+  const question = questionsData[4]?.question;
 
   let payload = { answerBody: questionsData };
 
@@ -94,9 +94,28 @@ export const QuestionComponent6: React.FunctionComponent = () => {
     submitAnswer(payload);
   };
 
+  // const nextHandler = () => {
+  //   // const navigationObject = constructNavigationObject(
+  //   //   "/onboarding/questionnaire/question3",
+  //   //   window.location.search
+  //   // );
+
+  //   // navigate(navigationObject, {
+  //   //   state: { questionsData },
+  //   // });
+
+  //   const navigationObject = constructNavigationObject(
+  //     "/onboarding/questionnaire/question6",
+  //     window.location.search
+  //   );
+  //   navigate(navigationObject, {
+  //     state: { questionsData },
+  //   });
+  // };
+
   useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
-      const filterQuestion = questionsData[5]?.options.filter(
+      const filterQuestion = questionsData[4]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
@@ -106,7 +125,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
       }
     }
 
-    questionsData[5]?.options?.map((el: any) => {
+    questionsData[4]?.options?.map((el: any) => {
       dropDownArr.push({
         label: el?.value,
         option: el?.value,
@@ -120,7 +139,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
     setNextBtnStatus(true);
     let tempArr = questionsData;
 
-    tempArr[5]?.options?.filter((el: any) => {
+    tempArr[4]?.options?.filter((el: any) => {
       if (el?.value === e.target.value) {
         return (el.isChecked = true);
       }
@@ -178,7 +197,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
                     className="!bg-[#E8E8E8] !text-black"
                     text="BACK"
                     onClick={() =>
-                      navigate("/onboarding/questionnaire/question5", {
+                      navigate("/onboarding/questionnaire/question4", {
                         state: {
                           questionsData,
                         },
