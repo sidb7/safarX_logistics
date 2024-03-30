@@ -21,7 +21,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
   const [isModalOpen, setIsModalOpen] = useState(true);
   const questionsData = state?.questionsData;
 
-  const question = questionsData?.[4]?.question;
+  const question = questionsData?.[5]?.question;
 
   const modalTitle = () => {
     return (
@@ -45,7 +45,7 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
   function handleCheckBox(element: any, index: any) {
     const { value = false } = element;
-    questionsData[4].options[index].isChecked = value;
+    questionsData[5].options[index].isChecked = value;
   }
 
   const question5 = () => {
