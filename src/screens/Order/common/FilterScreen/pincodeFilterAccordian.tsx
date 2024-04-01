@@ -79,13 +79,22 @@ function PincodeFilterAccordian({
     checkedData: any,
     isCheckedAction: any
   ) => {
+    console.log(
+      "persistFilterData[key]",
+      persistFilterData,
+      checkedData,
+      isCheckedAction
+    );
+
     let tempArr: any = [...persistFilterData[key]];
+    // console.log("🚀 ~ tempArr:", tempArr);
 
     if (isCheckedAction) {
       tempArr = tempArr.filter((item: any) => item !== checkedData);
     } else {
       tempArr.push(checkedData);
     }
+    // console.log("🚀 ~ tempArr:", tempArr);
 
     setPersistFilterData((prevData: any) => {
       return { ...prevData, [key]: [...tempArr] };

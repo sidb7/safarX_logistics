@@ -7,6 +7,7 @@ function ActivityLogs({ onClosed, data }: any) {
   const actionName: any = {
     DISPUTE_ADDED_IN_SYSTEM: "Dispute Added In System",
     SELLER_REJECT_DISPUTE: "Seller Reject Dispute",
+    SELLER_ACCEPTED_DISPUTE: "Seller Accepted Dispute",
   };
 
   const trackingCycleInformation = useMemo(() => {

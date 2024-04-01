@@ -463,35 +463,6 @@ const Index = () => {
       payload.filterArrTwo = secondFilterData;
     }
 
-    // if (startDate && endDate) {
-    //   let startEpoch = null;
-    //   let lastendEpoch = null;
-
-    //   if (startDate instanceof Date && endDate instanceof Date) {
-    //     startDate.setHours(0, 0, 0, 0);
-    //     startEpoch = startDate.getTime();
-
-    //     endDate.setHours(23, 59, 59, 999);
-    //     const endEpoch = endDate.getTime();
-
-    //     lastendEpoch = endEpoch;
-    //   }
-
-    //   payload.filterArrOne = [
-    //     {
-    //       createdAt: {
-    //         $gte: startEpoch,
-    //       },
-    //     },
-    //     {
-    //       createdAt: {
-    //         $lte: lastendEpoch,
-    //       },
-    //     },
-    //   ];
-    //   payload.filterArrTwo = [];
-    // }
-
     const { data } = await POST(GET_SELLER_ORDER, payload);
 
     if (data?.status) {
@@ -801,7 +772,7 @@ const Index = () => {
         pageNo: 1, //temp
         sort: { _id: -1 }, //temp
         skip: 0, //temp
-        limit: 10, //temp
+        limit: limit, //temp
         currentStatus,
       };
 
@@ -1067,7 +1038,8 @@ const Index = () => {
     searchedText?: any,
     startDate?: any,
     endDate?: any,
-    filterPayLoad?: any
+    filterPayLoad?: any,
+    itemsPerPage?: any
   ) => {
     try {
       const data = await getSellerOrderByStatus(
@@ -1075,7 +1047,7 @@ const Index = () => {
         1,
         { _id: -1 },
         0,
-        10,
+        itemsPerPage,
         dateFilter,
         searchedText,
         startDate,
@@ -1328,10 +1300,19 @@ const Index = () => {
         searchedText,
         startDate,
         endDate,
-        filterPayLoad
+        filterPayLoad,
+        itemsPerPage
       );
     } else {
-      handleTabChanges(tabIndex, true, "", startDate, endDate, filterPayLoad);
+      handleTabChanges(
+        tabIndex,
+        true,
+        "",
+        startDate,
+        endDate,
+        filterPayLoad,
+        itemsPerPage
+      );
     }
   }, [endDate, activeTab, searchedText]);
 
@@ -1626,8 +1607,41 @@ const Index = () => {
   }
 
   const getErrors = async () => {
+    let payload: any = {};
+
+    const newArray = filterPayLoad?.filterArrOne.filter(
+      (obj) => !Object.keys(obj).includes("createdAt")
+    );
+
+    if (newArray?.length > 0 || filterPayLoad?.filterArrTwo?.length > 0) {
+      payload.filterArrOne = newArray || [];
+      payload.filterArrTwo = filterPayLoad?.filterArrTwo || [];
+    }
+
+    if (startDate && endDate) {
+      let startEpoch = null;
+      let lastendEpoch = null;
+
+      if (startDate instanceof Date && endDate instanceof Date) {
+        startDate.setHours(0, 0, 0, 0);
+        startEpoch = startDate.getTime();
+
+        endDate.setHours(23, 59, 59, 999);
+        const endEpoch = endDate.getTime();
+
+        lastendEpoch = endEpoch;
+      }
+
+      payload.startDate = startEpoch;
+      payload.endDate = lastendEpoch;
+    }
+
+    if (searchedText?.length > 0) {
+      payload.id = searchedText;
+    }
+
     setIsErrorListLoading(true);
-    const { data } = await POST(GET_ORDER_ERRORS);
+    const { data } = await POST(GET_ORDER_ERRORS, payload);
     if (data?.status) {
       const result: any = [];
       let errorListCount = 0;
@@ -1758,7 +1772,7 @@ const Index = () => {
           1,
           { _id: -1 },
           0,
-          10,
+          itemsPerPage,
           true,
           searchedText,
           startDate,

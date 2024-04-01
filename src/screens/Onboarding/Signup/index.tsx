@@ -73,12 +73,25 @@ const Index = () => {
     // }
 
     try {
+
+      let signupUtm = {
+        utm_source: "sy_website",
+        utm_campaign: "",
+        utm_medium: "",
+      }
+      
       let payload = {
         sellerData: {
           ...value,
-          otherDetails: searchParams?.toString() === "" ? {} : getQueryJson(),
+          otherDetails: {
+            signupUtm: {
+              ...signupUtm,
+              ...getQueryJson()
+            },
+          },
         },
       };
+      console.log("🚀 ~ signUpOnClick ~ payload:", payload)
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
@@ -88,10 +101,10 @@ const Index = () => {
         const { sellerId, email, isReturningUser, name, nextStep } =
           response?.data[0];
         window?.dataLayer?.push({
-          event: "Signup",
-          seller_email: email,
-          sellerId: sellerId,
-          seller_name: name,
+          event: "reg1_ClickedOnSignup",
+          seller_email: value?.email,
+          sellerId: value?.sellerId,
+          seller_name: value.name,
           seller_kyc: nextStep?.kyc,
           seller_bank_verification_done: nextStep?.bank,
           isReturningUser: isReturningUser,

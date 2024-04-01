@@ -119,6 +119,11 @@ const Index = (props: ITypeProps) => {
         } else {
           navigate("/onboarding/kyc");
         }
+
+        window?.dataLayer?.push({
+          event: "KYCVerification",
+          sellerInfo: sessionStorage.getItem("userInfo"),
+        });
       } else {
         setLoading(false);
         toast.error(response?.message);
@@ -284,6 +289,10 @@ const Index = (props: ITypeProps) => {
               );
               if (response?.success) {
                 setLoading(false);
+                window?.dataLayer?.push({
+                  event: "KYCVerification",
+                  sellerInfo: sessionStorage.getItem("userInfo"),
+                });
                 navigate("/onboarding/kyc");
               } else {
                 setLoading(false);
@@ -317,11 +326,19 @@ const Index = (props: ITypeProps) => {
               payload
             );
             if (response?.success) {
+              window?.dataLayer?.push({
+                event: "KYCVerification",
+                sellerInfo: sessionStorage.getItem("userInfo"),
+              });
               // setLoading(false);
               // verifyPAN(panNumber);
               // toast.success(response?.message);
               //Navigate Url's go here
             } else {
+              window?.dataLayer?.push({
+                event: "KYCVerification",
+                sellerInfo: sessionStorage.getItem("userInfo"),
+              });
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);

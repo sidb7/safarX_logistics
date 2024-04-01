@@ -44,11 +44,20 @@ const Index = () => {
     try {
       const { data: response } = await POST(POST_SEND_OTP_URL, value);
       if (response?.success === true) {
+        window?.dataLayer?.push({
+          event: "reg_2_Mobile_Verified",
+          seller_email:email,
+          seller_name: firstName,
+          // seller_kyc: nextStep?.kyc,
+          // seller_bank_verification_done: nextStep?.bank,
+          // isReturningUser: isReturningUser,
+        });
         const navigationObject = constructNavigationObject(
           "/onboarding/verifyOtp",
           window.location.search
         );
         navigate(navigationObject, { state: { path: body } });
+        
         // navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
