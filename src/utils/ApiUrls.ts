@@ -260,6 +260,7 @@ const GET_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/getSingleStore`;
 const UPDATE_SINGLE_STORE = `${SELLER_BASE_URL}/channel/shopify/updateStore`;
 const CREATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/createWCStore`;
 const UPDATE_WOOCOMMERCE_STORE = `${SELLER_BASE_URL}/channel/woocommerce/updateWCStore`;
+const UPDATE_EXPIRED_WC_TOKEN = `${SELLER_BASE_URL}/channel/woocommerce/updateExpireToken`;
 const CREATE_ZOHO_STORE = `${SELLER_BASE_URL}/channel/zoho/createZohoStore`;
 const CREATE_AMAZON_STORE = `${SELLER_BASE_URL}/channel/amazon/createAmazonStore`;
 const DELETE_INTEGRATED_STORE = `${SELLER_BASE_URL}/channel/deleteStore `;
@@ -539,4 +540,5 @@ export {
   CREATE_UNICOMMERCE_STORE,
   UPDATE_EXPIRED_TOKEN,
   FETCH_RULE,
+  UPDATE_EXPIRED_WC_TOKEN,
 };

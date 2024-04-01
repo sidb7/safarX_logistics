@@ -15,6 +15,7 @@ import {
   AMAZON_BASE_URL,
   CREATE_UNICOMMERCE_STORE,
   UPDATE_EXPIRED_TOKEN,
+  UPDATE_EXPIRED_WC_TOKEN,
 } from "../../../../utils/ApiUrls";
 import ShopifyIcon from "../../../../assets/Catalogue/shopify.svg";
 import ShopifyLg from "../../../../assets/Catalogue/shopifyLg.svg";
@@ -274,29 +275,29 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         } else toast.error(data.message);
         setModalData({ isOpen: false });
       } else if (modalData?.modalData?.channelName === "WOOCOMMERCE") {
-        // setIsModalLoading(true);
-        // let userId = Date.now();
+        let userId = Date.now();
         // let updateWooCommerceToken = {
         //   storeUrl: storeData.storeUrl,
         //   userId,
         //   storeName: storeData.storeName,
         // };
+        let storeId = modalData?.modalData?.storeId;
         // setLocalStorage(
         //   "updateWooCommerceToken",
         //   JSON.stringify(updateWooCommerceToken)
         // );
-        // let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
-        // const sellerId = sessionStorage.getItem("sellerId");
-        // const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${CREATE_WOOCOMMERCE_STORE}?sellerId=${sellerId}`;
-        // try {
-        //   const { data } = await axios.get(reqUrl);
-        //   console.log("data: ", data);
-        // } catch (error: any) {
-        //   console.log("error?.config?.url: ", error?.config?.url);
-        //   // window.alert(JSON.stringify(error));
-        //   window.location.href = error?.config?.url;
-        // }
-        // setIsModalLoading(false);
+        let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
+        const sellerId = sessionStorage.getItem("sellerId");
+        const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}&sellerId=${sellerId}&storeId=${storeId}`;
+        try {
+          const { data } = await axios.get(reqUrl);
+          console.log("data: ", data);
+        } catch (error: any) {
+          console.log("error?.config?.url: ", error?.config?.url);
+          // window.alert(JSON.stringify(error));
+          window.location.href = error?.config?.url;
+        }
+        setIsModalLoading(false);
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -340,6 +341,12 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
     } else if (
       expiredChannelObj?.channelName === "SHOPIFY" &&
       storeData.storeToken !== ""
+    ) {
+      setIsDisabled(false);
+    } else if (
+      expiredChannelObj?.channelName === "WOOCOMMERCE" &&
+      woocommerceUrl.test(storeData.storeUrl) &&
+      storeData.storeName !== ""
     ) {
       setIsDisabled(false);
     } else if (
@@ -433,6 +440,63 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 value={storeData.storeToken}
                 onChange={(e) =>
                   setStoreData({ ...storeData, storeToken: e.target.value })
+                }
+              />
+            </div>
+          ) : expiredChannelObj.channelName === "WOOCOMMERCE" ? (
+            <div className="grid gap-y-3">
+              <div>
+                <CustomInputBox
+                  className="removePaddingPlaceHolder"
+                  placeholder="Store Domain - https://www.my-woocommerce-store.com"
+                  isRequired={true}
+                  isDisabled={true}
+                  value={storeData.storeUrl}
+                  onChange={(e) => {
+                    setStoreData({ ...storeData, storeUrl: e.target.value });
+
+                    if (!woocommerceUrl.test(e.target.value)) {
+                      setUrlError(true);
+                    } else {
+                      setUrlError(false);
+                    }
+                  }}
+                  onBlur={(e) => {
+                    if (e.target.value.includes("www."))
+                      setStoreData({
+                        ...storeData,
+                        storeName: capitalizeFirstLetter(
+                          e.target.value.split(".")[1]
+                        ),
+                      });
+                    else
+                      setStoreData({
+                        ...storeData,
+                        storeName: capitalizeFirstLetter(
+                          e.target.value.split(".")[0].slice(8)
+                        ),
+                      });
+                  }}
+                />
+
+                {urlError === true && (
+                  <div className="flex items-center gap-x-1 mt-1">
+                    <img src={ErrorIcon} alt="" width={10} height={10} />
+                    <span className="font-normal text-[#F35838] text-xs leading-3">
+                      Url Format is https://example.domainName.com
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <CustomInputBox
+                className="removePaddingPlaceHolder"
+                placeholder="Store Name"
+                isRequired={true}
+                isDisabled={true}
+                value={storeData.storeName}
+                onChange={(e) =>
+                  setStoreData({ ...storeData, storeName: e.target.value })
                 }
               />
             </div>
