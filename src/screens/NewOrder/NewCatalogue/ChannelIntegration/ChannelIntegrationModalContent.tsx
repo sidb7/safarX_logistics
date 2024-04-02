@@ -288,7 +288,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
         // );
         let returnUrl = `${SELLER_WEB_URL}/catalogues/channel-integration`;
         const sellerId = sessionStorage.getItem("sellerId");
-        const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}&sellerId=${sellerId}&storeId=${storeId}`;
+        const reqUrl = `${storeData.storeUrl}/wc-auth/v1/authorize?app_name=SHIPYAARI&scope=read_write&user_id=${userId}&return_url=${returnUrl}&callback_url=${UPDATE_EXPIRED_WC_TOKEN}?storeId=${storeId}`;
         try {
           const { data } = await axios.get(reqUrl);
           console.log("data: ", data);
