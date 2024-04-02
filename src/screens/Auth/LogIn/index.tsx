@@ -83,10 +83,10 @@ const Index = () => {
           response?.data[0]?.token
         );
 
-        console.log(
-          "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
-          response?.data[0]
-        );
+        // console.log(
+        //   "🚀 ~ file: index.tsx:87 ~ logInOnClick ~ response?.data[0]?.sellerId:",
+        //   response?.data[0]
+        // );
 
         window?.dataLayer?.push({
           event: "Login",
@@ -98,11 +98,9 @@ const Index = () => {
           isReturningUser: response?.data[0]?.isReturningUser,
         });
 
-
         window.gtag("config", REACT_APP_GTM_ID, {
           user_id: response?.data[0]?.sellerId,
         });
-
 
         const token = sessionStorage.getItem("sellerId")
           ? `${sessionStorage.getItem(
@@ -181,12 +179,10 @@ const Index = () => {
         isReturningUser: response?.data[0]?.isReturningUser,
       });
 
-
       window.gtag("config", REACT_APP_GTM_ID, {
         user_id: response?.data[0]?.sellerId,
       });
 
-      
       setLocalStorage(
         `${response?.data[0]?.sellerId}_${tokenKey}`,
         response?.data[0]?.token

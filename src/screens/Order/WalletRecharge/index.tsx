@@ -64,6 +64,8 @@ import { checkPageAuthorized } from "../../../redux/reducers/role";
 import JusPayIcon from "../../../assets/juspay.png";
 import JusPay from "../../../components/JusPay/juspay";
 import PaymentLoader from "../../../components/paymentLoader/paymentLoader";
+import { ResponsiveState } from "../../../utils/responsiveState";
+import TransactionModalContent from "../WalletRecharge/transactions/index";
 
 const WalletRecharge = () => {
   const dispatch = useDispatch();
@@ -96,13 +98,15 @@ const WalletRecharge = () => {
   //const [Razorpay] = useRazorpay();
   const userDetails = useSelector((state: any) => state.signin);
   const [isDisabled, setIsDisabled] = useState(true);
-
+  const [openRightModal, setOpenRightModal] = useState(false);
+  const { isLgScreen } = ResponsiveState();
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const isItLgScreen = useMediaQuery({
     query: "(min-width: 1024px)",
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
+  const [dataFromSession, setDataFromSession] = useState<any>();
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -305,6 +309,12 @@ const WalletRecharge = () => {
     // rzp1.open();
   };
 
+  const userDetailsFromSession = () => {
+    let temp: any = sessionStorage.getItem("userInfo");
+    temp = JSON.parse(temp);
+    setDataFromSession(temp);
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -330,6 +340,7 @@ const WalletRecharge = () => {
         console.error(error);
       }
     })();
+    userDetailsFromSession();
   }, []);
 
   const startPayments = async () => {
@@ -455,7 +466,7 @@ const WalletRecharge = () => {
                 {/*Second */}
 
                 <div className="hidden lg:block">
-                  <div className="flex items-center justify-between mt-5   p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
+                  <div className="flex items-center justify-between mt-5 p-4 rounded-lg border-2 border-solid  border-[#E8E8E8]   shadow-sm h-[200px]  ">
                     {/* {checkYaariPoints ? (
                   <div className="w-[200px] flex flex-col justify-between">
                     <div>
@@ -497,20 +508,43 @@ const WalletRecharge = () => {
                     />
                   </div>
                 ) : ( */}
-                    <div className="flex flex-col h-full ">
-                      <div className="flex flex-col mb-12">
-                        <p className="font-Open text-base font-semibold leading-[22px]">
-                          Yaari points are availed after first
-                        </p>
-                        <p className="font-Open text-base font-semibold leading-[22px]">
-                          order is placed
-                        </p>
-                      </div>
+                    {dataFromSession?.isMigrated ? (
+                      <div className="flex flex-col h-full ">
+                        <div className="flex flex-col mb-10">
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                            Easily move funds to and from Blaze with just a tap.
+                          </p>
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-2">
+                            Experience hassle-free money transfers between old
+                          </p>
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                            account and Blaze Wallet!
+                          </p>
+                        </div>
 
-                      {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
+                        <div>
+                          <ServiceButton
+                            text="Transfer Now"
+                            onClick={() => setOpenRightModal(true)}
+                            className="bg-[#1C1C1C] text-white py-2 px-4  font-Open text-base font-semibold leading-5"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col h-full ">
+                        <div className="flex flex-col mb-12">
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            Yaari points are availed after first
+                          </p>
+                          <p className="font-Open text-base font-semibold leading-[22px]">
+                            order is placed
+                          </p>
+                        </div>
+                        {/* <p className="text-[1rem] text-[#004EFF] font-semibold ">
                         Tap to know how it works
                       </p> */}
-                    </div>
+                      </div>
+                    )}
                     {/* )} */}
                     <div>
                       <img
@@ -536,7 +570,8 @@ const WalletRecharge = () => {
               </p>
 
               {/* Available Offers Mobile */}
-              <div className="flex  gap-2 lg:hidden">
+              {/* temp commented  */}
+              {/* <div className="flex  gap-2 lg:hidden">
                 <img src={discountIcon} alt="" />
                 <p className="font-Lato text-2xl font-normal leading-8">
                   Available offers
@@ -571,10 +606,11 @@ const WalletRecharge = () => {
                     <p className="text-[16px]">Apply</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Available Offers Web */}
-              <div className=" gap-2 hidden lg:flex ">
+              {/* temp commented  */}
+              {/* <div className=" gap-2 hidden lg:flex ">
                 <img src={discountIcon} alt="" />
                 <p className="text-lg font-semibold  lg:font-normal lg:text-2xl lg:text-[#323232]">
                   Available offers
@@ -624,16 +660,18 @@ const WalletRecharge = () => {
                     <p className="text-[16px]">Apply</p>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className=" mb-7 lg:mb-6 lg:w-1/3">
-                <CustomInputWithImage
-                  placeholder="Have a gift card?"
-                  imgSrc={GiftIcon}
+              {/* have a gift card input box temp commented  */}
 
-                  // value={locateAddress}
-                />
-              </div>
+              {/* <div className=" mb-7 lg:mb-6 lg:w-1/3">
+                  <CustomInputWithImage
+                    placeholder="Have a gift card?"
+                    imgSrc={GiftIcon}
+
+                    // value={locateAddress}
+                  />
+                </div> */}
               {/* Yaari Points Mobile */}
               <div className=" lg:hidden  grid grid-cols-2 w-100%  mb-7 p-3 rounded-lg border-2 border-solid border-[#E8E8E8] shadow-sm">
                 {checkYaariPoints ? (
@@ -807,6 +845,27 @@ const WalletRecharge = () => {
               ></iframe>
             </div>
           </PhonePeModal> */}
+            <RightSideModal
+              isOpen={openRightModal}
+              onClose={() => setOpenRightModal(false)}
+              className={`w-full ${
+                isLgScreen ? "md:!w-[30%]" : "mobile-modal-styles"
+              }`}
+            >
+              <TransactionModalContent
+                setOpenRightModal={() => {
+                  setOpenRightModal(false);
+                }}
+              />
+              {/* <BrandingModalContent
+                setBrandingModal={() => {
+                  setBrandingModal(false);
+                }}
+                brandingModalDetails={brandingModalDetails}
+                setBrandingModalDetails={setBrandingModalDetails}
+                updateBrandingDetails={updateBrandingDetails}
+              /> */}
+            </RightSideModal>
           </div>
         )
       ) : (
