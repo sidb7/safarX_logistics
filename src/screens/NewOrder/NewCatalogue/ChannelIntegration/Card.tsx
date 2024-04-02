@@ -3,6 +3,7 @@ import {
   calculateDaysAgoFromToday,
   capitalizeFirstLetter,
 } from "../../../../utils/utility";
+import OrangeAlertIcon from "../../../../assets/info-circle-outline.svg";
 
 const Card = (props: any) => {
   const {
@@ -20,7 +21,7 @@ const Card = (props: any) => {
 
   const handleIntegration = (e: any) => {
     if (setModalData) {
-      if (e.target.textContent === "Integrate")
+      if (e.target.textContent === "Integrate" || channel.expiredToken)
         setModalData({ isOpen: true, modalData: channel });
     }
     if (setIndexNum) setIndexNum(index);
@@ -29,11 +30,13 @@ const Card = (props: any) => {
 
   return (
     <div
-      className="border-[1px] border-[#A4A4A4] rounded relative z-1  mt-5"
+      className={`border-[1px] ${
+        channel.expiredToken ? "border-[#F35939]" : "border-[#A4A4A4]"
+      } rounded relative z-1  mt-5`}
       key={key}
     >
       <div className={`py-[14px] px-[16px] w-[200px] `}>
-        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-2 gap-x-6 mb-[1rem] lg:w-[160px] min-h-[45px]  ">
+        <div className="flex w-[100%] items-center lg:flex-col lg:items-start lg:gap-y-2 gap-x-6 mb-[1rem] lg:w-[170px] min-h-[45px]  ">
           <div className="flex items-center w-[100%] justify-between">
             <div>
               <img
@@ -50,20 +53,36 @@ const Card = (props: any) => {
                 className="hidden h-max  lg:block"
               />
             </div>
-            <div>
-              {channel.integrated && (
-                <div className="">
-                  <img
-                    alt=""
-                    src={DeleteIcon}
-                    className="cursor-pointer w-5"
-                    onClick={() => {
-                      setDeleteModal(true);
-                      setDeleteChannel(channel);
-                    }}
-                  />
-                </div>
-              )}
+            <div className="flex gap-x-1">
+              <div>
+                {channel.integrated && channel.expiredToken && (
+                  <div className="">
+                    <img
+                      alt=""
+                      src={OrangeAlertIcon}
+                      className="cursor-pointer w-5"
+                      onClick={(e: any) => {
+                        handleIntegration(e);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+              <div>
+                {channel.integrated && (
+                  <div className="">
+                    <img
+                      alt=""
+                      src={DeleteIcon}
+                      className="cursor-pointer w-5"
+                      onClick={() => {
+                        setDeleteModal(true);
+                        setDeleteChannel(channel);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -74,7 +93,7 @@ const Card = (props: any) => {
           )}
         </div>
         <div
-          onClick={handleIntegration}
+          onClick={(e: any) => !channel?.expiredToken && handleIntegration(e)}
           className={` ${
             channel.integrated ? " bg-black  " : "hover:bg-black cursor-pointer"
           } group border-[1px] rounded py-2 px-4 border-[#A4A4A4] w-[118px]   `}
@@ -90,9 +109,15 @@ const Card = (props: any) => {
       </div>
 
       {channel.integrated && (
-        <p className="absolute -top-3 left-5  z-2 bg-[#4D83FF] flex items-center px-3 py-1 h-[24px] font-semibold text-[12px] rounded text-white">
+        <p
+          className={` ${
+            channel.expiredToken ? "bg-[#F35939]" : "bg-[#4D83FF]"
+          } absolute -top-3 left-5  z-2 bg-[#4D83FF] flex items-center px-3 py-1 h-[24px] font-semibold text-[12px] rounded text-white`}
+        >
           {`${
-            channel.integrated
+            channel.expiredToken
+              ? "Token Expired!!"
+              : channel.integrated
               ? calculateDaysAgoFromToday(channel.createdAt).toString() == "0"
                 ? "Integrated Today"
                 : `${calculateDaysAgoFromToday(

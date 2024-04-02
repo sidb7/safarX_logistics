@@ -86,6 +86,8 @@ import { QuestionComponent1 } from "../screens/Onboarding/Questionnaire/question
 import { QuestionComponent2 } from "../screens/Onboarding/Questionnaire/question2";
 import { QuestionComponent3 } from "../screens/Onboarding/Questionnaire/question3";
 import { QuestionComponent4 } from "../screens/Onboarding/Questionnaire/question4";
+import { QuestionComponent5 } from "../screens/Onboarding/Questionnaire/question5";
+
 import { WelcomeKyc } from "../screens/Onboarding/Questionnaire/welcomeKyc";
 
 //order/service - suresh
@@ -164,6 +166,7 @@ import ErrorHandle from "../components/ErrorBoundaries/errorHandle";
 import Label from "../screens/Profile/Settings/labelSetting";
 import CouponScreen from "../components/Coupons/index";
 import Rules from "../screens/Order/Rules";
+import { QuestionComponent6 } from "../screens/Onboarding/Questionnaire/question6";
 
 const MyRoutes: React.FC = () => {
   return (
@@ -252,6 +255,26 @@ const MyRoutes: React.FC = () => {
             <KycProtectedRoute>
               {/* <ProtectedRoute> */}
               <QuestionComponent4 />
+              {/* </ProtectedRoute> */}
+            </KycProtectedRoute>
+          }
+        />
+        <Route
+          path="/onboarding/questionnaire/question5"
+          element={
+            <KycProtectedRoute>
+              {/* <ProtectedRoute> */}
+              <QuestionComponent6 />
+              {/* </ProtectedRoute> */}
+            </KycProtectedRoute>
+          }
+        />
+        <Route
+          path="/onboarding/questionnaire/question6"
+          element={
+            <KycProtectedRoute>
+              {/* <ProtectedRoute> */}
+              <QuestionComponent5 />
               {/* </ProtectedRoute> */}
             </KycProtectedRoute>
           }
