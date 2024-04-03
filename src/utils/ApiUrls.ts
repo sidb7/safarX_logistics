@@ -177,6 +177,9 @@ const GET_WALLET_TRANSACTION = `${SELLER_URL}/api/v1/walletTransaction/getWallet
 const GET_SELLER_BOX_DETAILS = `${SELLER_BASE_URL}/box/getSellerBox`;
 const GET_COMPANY_BOX_DETAILS = `${SELLER_BASE_URL}/box/getCompanyBox`;
 
+const GET_WALLET_BALANCE = `${SELLER_BASE_URL}/wallet/getAmountBlazeToPhp`; // BlazeToPhp money swap into to and from
+const POST_WALLET_BALANCE = `${SELLER_BASE_URL}/wallet/creditDebitAmountBlazeToPhp`; // money transfer
+
 // Validate Token
 const VALIDATE_USER_TOKEN = `${SELLER_URL}/api/v1/seller/validatetoken`;
 const ADD_PICKUP_ADDRESS = `${SELLER_BASE_URL}/pickupAddress/createPickupLocation`;
@@ -540,5 +543,7 @@ export {
   CREATE_UNICOMMERCE_STORE,
   UPDATE_EXPIRED_TOKEN,
   FETCH_RULE,
+  GET_WALLET_BALANCE,
+  POST_WALLET_BALANCE,
   UPDATE_EXPIRED_WC_TOKEN,
 };
