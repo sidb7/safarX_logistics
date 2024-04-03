@@ -28,7 +28,32 @@ const BusinessType = (props: ITypeProps) => {
     company: false,
   });
   useEffect(() => {
-    setChecked({ [`${sessionStorage.getItem("businessType")}`]: true });
+    // Attempt to retrieve the userInfo object from sessionStorage
+    const userInfoString = sessionStorage.getItem("userInfo");
+    let initialBusinessType = "";
+
+    if (userInfoString) {
+      const userInfo = JSON.parse(userInfoString);
+      // Check if businessType is available in userInfo
+      if (userInfo.businessType) {
+        initialBusinessType = userInfo.businessType;
+        // Also ensure businessType is set as a standalone item in sessionStorage
+        sessionStorage.setItem("businessType", initialBusinessType);
+      }
+    }
+
+    // If not found in userInfo, attempt to retrieve it directly from sessionStorage
+    if (!initialBusinessType) {
+      initialBusinessType = sessionStorage.getItem("businessType") || "";
+    }
+
+    // Use the found businessType to set the initial checked state
+    if (initialBusinessType) {
+      setChecked((prevState: any) => ({
+        ...prevState,
+        [initialBusinessType.toLowerCase()]: true,
+      }));
+    }
   }, []);
 
   //Calling API on Submit
@@ -109,6 +134,7 @@ const BusinessType = (props: ITypeProps) => {
                     onClick={setChecked}
                   />
 
+                  {console.log("checked.business", checked.bussiness) as any}
                   <Card
                     name="business"
                     value="business"
