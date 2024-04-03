@@ -122,7 +122,10 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="px-4 pb-4">
           <LabelContainer
             label="Wallet Balance"
-            info={`₹ ${migratedUserWalletDetails?.phpBalance || 0.0}`}
+            info={`₹ ${
+              migratedUserWalletDetails?.phpBalance?.toLocaleString("en-IN") ||
+              0.0
+            }`}
           />
         </div>
       </div>
@@ -161,7 +164,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         <div className="px-4 pb-4">
           <LabelContainer
             label="Wallet Balance"
-            info={`₹ ${migratedUserWalletDetails?.blazeBalance || 0.0}`}
+            info={`₹ ${
+              migratedUserWalletDetails?.blazeBalance?.toLocaleString(
+                "en-IN"
+              ) || 0.0
+            }`}
           />
         </div>
       </div>

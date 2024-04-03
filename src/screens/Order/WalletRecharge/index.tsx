@@ -510,11 +510,11 @@ const WalletRecharge = () => {
                 ) : ( */}
                     {dataFromSession?.isMigrated ? (
                       <div className="flex flex-col h-full ">
-                        <div className="flex flex-col mb-10">
+                        <div className="flex flex-col mb-7">
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
                             Easily move funds to and from Blaze with just a tap.
                           </p>
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-2">
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
                             Experience hassle-free money transfers between old
                           </p>
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
