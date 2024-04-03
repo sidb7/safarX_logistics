@@ -61,6 +61,33 @@ const Index = (props: ITypeProps) => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
 
   useEffect(() => {
+    // Retrieve the 'kycValue' from session storage
+    const kycValueString = sessionStorage.getItem("kycValue");
+    if (kycValueString) {
+      const kycValue = JSON.parse(kycValueString);
+      const kycDetails = kycValue.kycDetails;
+
+      // Check if kycDetails are available and update the state accordingly
+      if (kycDetails) {
+        const { gstNumber, panNumber, aadharNumber } = kycDetails;
+        if (gstNumber && gstNumber !== "0") {
+          setGSTNumber(gstNumber);
+          setgstError("");
+        }
+        if (panNumber) {
+          setPanNumber(panNumber);
+          setPanNumberError("");
+        }
+        if (aadharNumber) {
+          setAadharNumber(aadharNumber);
+          setAadharNumberError("");
+          // Ensure it's a string if your input expects a string
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (Object.keys(state).length > 0 && state) {
       setAadharNumber(state.aadharNo);
       setPanNumber(state.panCard);
@@ -76,6 +103,7 @@ const Index = (props: ITypeProps) => {
     setBusinessType(btype);
   }, []);
 
+  console.log("businessType", businessType);
   function validateGST(gstNo: any) {
     return gstRegex.test(gstNo);
   }
@@ -214,8 +242,11 @@ const Index = (props: ITypeProps) => {
       panNumber?.length !== 0 &&
       panNumberError === ""
     ) {
+      console.log(">>>>>>otp true", aadharNumber?.length !== 0);
       setOtpFormBtnStatus(true);
     } else {
+      console.log(">>>>>>otpfalse", aadharNumber?.length !== 0);
+
       setOtpFormBtnStatus(false);
     }
     // }
@@ -227,6 +258,8 @@ const Index = (props: ITypeProps) => {
     gstNumber,
     panNumber,
   ]);
+
+  console.log("adharNumber", aadharNumber);
 
   useEffect(() => {
     if (businessType === "individual") {

@@ -34,20 +34,16 @@ const BusinessType = (props: ITypeProps) => {
 
     if (userInfoString) {
       const userInfo = JSON.parse(userInfoString);
-      // Check if businessType is available in userInfo
       if (userInfo.businessType) {
         initialBusinessType = userInfo.businessType;
-        // Also ensure businessType is set as a standalone item in sessionStorage
         sessionStorage.setItem("businessType", initialBusinessType);
       }
     }
 
-    // If not found in userInfo, attempt to retrieve it directly from sessionStorage
     if (!initialBusinessType) {
       initialBusinessType = sessionStorage.getItem("businessType") || "";
     }
 
-    // Use the found businessType to set the initial checked state
     if (initialBusinessType) {
       setChecked((prevState: any) => ({
         ...prevState,
