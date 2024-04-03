@@ -86,7 +86,7 @@ const JusPay = (props: IProps) => {
             // } flex p-2 justify-center items-center text-white bg-black rounded-md h-9 w-full`}
           >
             <p className="buttonClassName lg:text-[14px] whitespace-nowrap">
-              JusPay
+              Pay Now
             </p>
           </button>
         </div>
