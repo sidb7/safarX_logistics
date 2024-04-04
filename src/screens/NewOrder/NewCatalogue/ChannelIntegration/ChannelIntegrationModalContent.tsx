@@ -578,6 +578,21 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               />
               <p className="text-[15px]">Upload only Images</p>
             </div> */}
+
+              <p className="font-semibold">Integration Guide</p>
+
+              <iframe
+                src="https://app.tango.us/app/embed/ff443d23-d082-443a-b2e3-6abc34b279db?skipCover=false&defaultListView=false&skipBranding=false"
+                style={{ minHeight: "50vh" }}
+                sandbox="allow-scripts allow-top-navigation-by-user-activation allow-popups allow-same-origin"
+                security="restricted"
+                title="Creating a Custom App for Shipyaari On Shopify"
+                width="100%"
+                height="100%"
+                referrerPolicy="strict-origin-when-cross-origin"
+                frameBorder="0"
+                allowFullScreen={true}
+              ></iframe>
             </div>
           ) : channel === "WOOCOMMERCE" ? (
             <div className="grid gap-y-3">
@@ -633,6 +648,21 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                   setStoreData({ ...storeData, storeName: e.target.value })
                 }
               />
+
+              <p className="font-semibold">Integration Guide</p>
+
+              <iframe
+                src="https://app.tango.us/app/embed/6c54f7ae-6b8d-4906-8f55-ba228d4c8a88?skipCover=false&defaultListView=false&skipBranding=false"
+                style={{ minHeight: "60vh" }}
+                sandbox="allow-scripts allow-top-navigation-by-user-activation allow-popups allow-same-origin"
+                security="restricted"
+                title="Shipyaari Blaze - Integrating your WooCommerce Store"
+                width="100%"
+                height="100%"
+                referrerPolicy="strict-origin-when-cross-origin"
+                frameBorder="0"
+                allowFullScreen={true}
+              ></iframe>
             </div>
           ) : channel === "ZOHO" ? (
             <div className="grid gap-y-3">
@@ -691,6 +721,21 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 options={channelArr}
                 heading="Zoho Domain"
               />
+
+              <p className="font-semibold">Integration Guide</p>
+
+              <iframe
+                src="https://app.tango.us/app/embed/254f715f-b339-4a5a-aad2-9cbdad1b44c6?skipCover=false&defaultListView=false&skipBranding=false"
+                style={{ minHeight: "30vh" }}
+                sandbox="allow-scripts allow-top-navigation-by-user-activation allow-popups allow-same-origin"
+                security="restricted"
+                title="Shipyaari Blaze - Integrating your Zoho Inventory"
+                width="100%"
+                height="100%"
+                referrerPolicy="strict-origin-when-cross-origin"
+                frameBorder="0"
+                allowFullScreen={true}
+              ></iframe>
             </div>
           ) : channel === "AMAZON" ? (
             <div className="grid gap-y-3">
