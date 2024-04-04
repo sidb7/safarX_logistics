@@ -36,7 +36,10 @@ const BusinessType = (props: ITypeProps) => {
       const userInfo = JSON.parse(userInfoString);
       if (userInfo.businessType) {
         initialBusinessType = userInfo.businessType;
-        sessionStorage.setItem("businessType", initialBusinessType);
+        sessionStorage.setItem(
+          "businessType",
+          initialBusinessType.toLocaleLowerCase()
+        );
       }
     }
 
@@ -52,6 +55,7 @@ const BusinessType = (props: ITypeProps) => {
     }
   }, []);
 
+  console.log("cheecked, ", checked);
   //Calling API on Submit
 
   const onSubmitBusinessType = async () => {
