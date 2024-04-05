@@ -6,6 +6,7 @@ import A4PageLabel from "../../../../assets/A4.svg";
 import A5PageLabel from "../../../../assets/A5.svg";
 import A6PageLabel from "../../../../assets/A6.svg";
 import CustomRadioButton from "../../../../components/RadioButton/Index";
+import CustomDropDown from "../../../../components/DropDown";
 
 interface ILabelSizesProps {
   pageSize?: any;
@@ -17,6 +18,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
   labelData,
 }) => {
   const [checked, setChecked] = useState();
+  const [labelPerPage, setLabelPerPage] = useState();
 
   useEffect(() => {
     let tempChecked =
@@ -157,6 +159,20 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                 style={{ accentColor: "black" }}
               />
             </div>
+            {/* <CustomDropDown
+              options={[
+                {
+                  label: "Label Per Page",
+                  value: "2",
+                },
+                {
+                  label: "Label Per Page",
+                  value: "4",
+                },
+              ]}
+              value={""}
+              onChange={(e: any) => console.log(e.targat.value)}
+            /> */}
           </div>
           <div
             className="flex-1 transition-all ease-in-out duration-200 hover:scale-[103%] flex flex-col justify-center items-center cursor-pointer"
