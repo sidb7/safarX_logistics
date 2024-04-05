@@ -75,6 +75,8 @@ const App = () => {
     // };
   }, []);
 
+  console.log("packageversion", process.env.npm_package_version);
+
   //sentry code
   const userInfoString = sessionStorage.getItem("userInfo");
   useEffect(() => {
@@ -116,6 +118,8 @@ const App = () => {
                 scope.setUser({ id: '${sellerId}', email: '${emailId}' });
               }
             });
+  release: "seller-react" + 5.4.24,
+
           };
         `;
       document.body.appendChild(scriptElement);
