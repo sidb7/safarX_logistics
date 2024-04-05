@@ -111,6 +111,8 @@ const App = () => {
                   blockAllMedia: false,
                 }),
               ],
+            release: "seller-react" + 5.4.24,
+
             });
             Sentry.configureScope(function(scope) {
               // Set user.id and user.email if available
@@ -118,7 +120,6 @@ const App = () => {
                 scope.setUser({ id: '${sellerId}', email: '${emailId}' });
               }
             });
-  release: "seller-react" + 5.4.24,
 
           };
         `;
