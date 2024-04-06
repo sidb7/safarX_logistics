@@ -111,7 +111,7 @@ const App = () => {
                   blockAllMedia: false,
                 }),
               ],
-            release: "seller-react" + 5.4.24,
+          release: "react-blaze@5.4.24",
 
             });
             Sentry.configureScope(function(scope) {
