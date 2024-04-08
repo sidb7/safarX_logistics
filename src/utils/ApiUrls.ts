@@ -11,8 +11,9 @@ let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
+console.log("🚀 ~ Environment:", process.env.REACT_APP_ENV);
 
-console.log(process.env, "biswjit");
+// console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
 switch (Environment) {
   case "development":
