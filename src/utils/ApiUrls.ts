@@ -11,13 +11,15 @@ let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
-console.log("🚀 ~ Environment:", process.env.REACT_APP_ENV);
+console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
 
 // console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
 switch (Environment) {
   case "development":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
+    SELLER_URL =
+      // `${process.env.REACT_APP_SELLER_DEV}` ||
+      "https://sysellerconsoledev.yaarilabs.com";
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
     REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
@@ -30,7 +32,9 @@ switch (Environment) {
     break;
 
   case "test":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    SELLER_URL =
+      // `${process.env.REACT_APP_SELLER_TEST}` ||
+      "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -58,7 +62,9 @@ switch (Environment) {
     break;
 
   default:
-    SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
+    SELLER_URL =
+      //`${process.env.REACT_APP_SELLER_LOCAL}` ||
+      "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
