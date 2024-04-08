@@ -12,6 +12,8 @@ let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
 
+console.log(process.env, "biswjit");
+
 switch (Environment) {
   case "development":
     SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
