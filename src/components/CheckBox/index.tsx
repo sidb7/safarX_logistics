@@ -64,17 +64,17 @@ const Checkbox: React.FC<IProps> = ({
         className={`${checkboxClassName} ${inputElementClass} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <p
-        className={`${labelClassName} w-[250px] text-balance select-none text-sm cursor-pointer`}
+        className={`${labelClassName} text-balance select-none text-sm cursor-pointer`}
         onClick={handleCheckboxChange} // Handle checkbox change when the span is clicked
       >
         {/* <HtmlParser htmlString={label} /> */}
-        {textLabel[1] !== undefined ? (
+        {textLabel?.[1] !== undefined ? (
           <>
-            {textLabel[0]}{" "}
-            <span className="text-[0.800rem]">-{textLabel[1]}</span>
+            {textLabel?.[0]}{" "}
+            <span className="text-[0.800rem]">-{textLabel?.[1]}</span>
           </>
         ) : (
-          textLabel[0]
+          textLabel?.[0]
         )}
       </p>
     </div>
