@@ -17,7 +17,7 @@ console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
 
 switch (Environment) {
   case "development":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_DEV || "http://localhost:"}`;
     //||
     // "https://sysellerconsoledev.yaarilabs.com";
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -32,7 +32,7 @@ switch (Environment) {
     break;
 
   case "test":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_TEST || "http://localhost:"}`;
     // ||
     // "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
@@ -48,7 +48,7 @@ switch (Environment) {
     break;
 
   case "production":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_PROD || "http://localhost:"}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -62,7 +62,9 @@ switch (Environment) {
     break;
 
   default:
-    SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
+    SELLER_URL = `${
+      process.env?.REACT_APP_SELLER_LOCAL || "http://localhost:"
+    }`;
     //||
     //  "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
@@ -77,6 +79,8 @@ switch (Environment) {
 
     break;
 }
+
+// console.log(SELLER_URL, "jnjnjj");
 
 //KYC  URLs
 const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;
