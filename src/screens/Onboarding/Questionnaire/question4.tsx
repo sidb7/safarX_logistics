@@ -138,6 +138,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                             name={element.value}
                             label={element.value}
                             style={{ accentColor: "black" }}
+                            labelClassName="w-[250px]"
                             checkboxClassName="gap-2"
                             // labelClassName="customWrap"
                             // inputElementClass="w-[30px]"
