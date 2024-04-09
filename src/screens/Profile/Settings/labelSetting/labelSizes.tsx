@@ -21,8 +21,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
 }) => {
   const [checked, setChecked] = useState();
   const [labelPerPage, setLabelPerPage] = useState();
-  const [a4LabelOption, setA4LabelOption] = useState(false);
-  const [a4LabelOptionValue, setA4LabelOptionValue] = useState("1");
+  // const [a4LabelOption, setA4LabelOption] = useState(false);
+  // const [a4LabelOptionValue, setA4LabelOptionValue] = useState("1");
 
   useEffect(() => {
     let tempChecked =
@@ -32,24 +32,24 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
       labelData &&
       labelData?.labelsOnPage !== undefined &&
       labelData?.labelsOnPage;
-    if (a4LabelStoreOptionsValue && labelData?.pageSize === "A4") {
-      setA4LabelOption(true);
-      setA4LabelOptionValue(a4LabelStoreOptionsValue);
-    }
+    // if (a4LabelStoreOptionsValue && labelData?.pageSize === "A4") {
+    //   setA4LabelOption(true);
+    //   setA4LabelOptionValue(a4LabelStoreOptionsValue);
+    // }
   }, [labelData]);
 
   const handleOptionChange = (e: any) => {
-    if (e === "A4") {
-      setA4LabelOption(true);
-    } else {
-      setA4LabelOption(false);
-    }
+    // if (e === "A4") {
+    //   setA4LabelOption(true);
+    // } else {
+    //   setA4LabelOption(false);
+    // }
     pageSize(e);
     setChecked(e);
   };
 
   const perPageLabelHandler = (e: any) => {
-    setA4LabelOptionValue(e);
+    // setA4LabelOptionValue(e);
     perPageLabel(e);
   };
 
@@ -201,7 +201,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                 </div>
               </div>
             </div>
-            {a4LabelOption && (
+            {/* { a4LabelOption && (
               <div className="w-1/3 flex justify-center">
                 <CustomDropDown
                   options={[
@@ -224,7 +224,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                   wrapperClass="w-[187px] h-[40px]"
                 />
               </div>
-            )}
+            )}*/}
           </div>
         </div>
       </div>
