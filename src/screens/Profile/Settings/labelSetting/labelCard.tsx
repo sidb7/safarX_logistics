@@ -23,7 +23,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide Customer's Mobile Number"
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -59,7 +59,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide Seller's Address."
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -84,7 +84,120 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             {/* <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
+                label="Show Seller's Names (In case of Multiple Shippers)"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData.inputs,
+                      sellerDetails: {
+                        ...labelData.inputs.sellerDetails,
+                        multipleShipperName: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={
+                  labelData?.inputs?.sellerDetails?.multipleShipperName || false
+                }
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
+                Note: For users who ship items belonging to several sellers,
+                check this box to hide the individual seller's name from the
+                Shipped by Section
+              </p>
+            </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Show Seller's Customer Service Contact on Address"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData.inputs,
+                      sellerDetails: {
+                        ...labelData.inputs.sellerDetails,
+                        serviceContactOnAddress: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={
+                  labelData?.inputs?.sellerDetails?.serviceContactOnAddress ||
+                  false
+                }
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
+                Note: For users who ship items belonging to several sellers,
+                check this box to show the seller's customer service contact.
+              </p>
+            </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Show Individual Shipper's Logos (In case of Multiple Shippers)"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData.inputs,
+                      sellerDetails: {
+                        ...labelData.inputs.sellerDetails,
+                        multipleShipperIndividualLogos: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={
+                  labelData?.inputs?.sellerDetails
+                    ?.multipleShipperIndividualLogos || false
+                }
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
+                Note: For users who ship items belonging to several sellers,
+                check this box to hide the individual seller's Logo from the
+                Shipped by Section
+              </p>
+            </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Show Individual Shipper's Order Id (In case of Multiple Shippers)"
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData.inputs,
+                      sellerDetails: {
+                        ...labelData.inputs.sellerDetails,
+                        multipleShipperIndividualOrderId: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={
+                  labelData?.inputs?.sellerDetails
+                    ?.multipleShipperIndividualOrderId || false
+                }
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
+                Note: For users who ship items belonging to several sellers,
+                check this box to show the individual seller's Order Id.
+              </p>
+            </div> */}
+            {/* <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
                 label="Show Seller's Names (In case of Multiple Shippers)."
                 labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -110,7 +223,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             {/* <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Show Individual Shipper's Logos (In case of Multiple Shippers)."
                 labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -146,7 +259,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide the Package Weight."
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -172,7 +285,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide the Package Dimensions."
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -198,7 +311,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             {/* <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Show the Billable Weight on the Label."
                 labelClassName="!font-Open !text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
               />
@@ -220,7 +333,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName=" gap-x-2 !w-6 !h-6 "
+                checkboxClassName=" gap-x-2 !h-6 "
                 label="Hide the Order Value for Prepaid Orders."
                 labelClassName="!font-Open !text-[14px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {
@@ -245,7 +358,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
             <div>
               <Checkbox
                 style={{ accentColor: "black" }}
-                checkboxClassName="gap-x-2 !h-6 !w-6"
+                checkboxClassName="gap-x-2 !h-6"
                 label="Hide The Product Name."
                 labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
                 onChange={(e: any) => {

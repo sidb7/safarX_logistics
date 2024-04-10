@@ -31,6 +31,9 @@ const Index = () => {
   const updatedNumber =
     state?.mobileNo?.toString()?.replace(/(?<=\d)\d(?=\d{2})/g, "*") || "";
 
+  //getting the info from where user signed up, from site or google
+  const UserCameFrom = localStorage.getItem("key");
+
   const { isLgScreen, isMdScreen } = ResponsiveState();
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -94,12 +97,13 @@ const Index = () => {
         // setLocalStorage(tokenKey, response?.data[0]?.token);
 
         window?.dataLayer?.push({
-          event: "reg_3_User Registered",
+          event: "sign_up",
           seller_email: email,
           seller_name: response?.data[0]?.name,
           seller_kyc: response?.data[0]?.nextStep?.kyc,
           sellerId: response?.data[0]?.sellerId,
           seller_bank_verification_done: response?.data[0]?.nextStep?.bank,
+          sign_up_method: UserCameFrom,
           // isReturningUser: isReturningUser,
         });
 
