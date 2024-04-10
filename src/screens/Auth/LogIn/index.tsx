@@ -89,7 +89,7 @@ const Index = () => {
         // );
 
         window?.dataLayer?.push({
-          event: "Login",
+          event: "login",
           seller_email: response?.data[0]?.email,
           sellerId: response?.data[0]?.sellerId,
           seller_name: response?.data[0]?.name,
@@ -170,7 +170,7 @@ const Index = () => {
       sessionStorage.setItem("userName", response?.data[0]?.name);
 
       window?.dataLayer?.push({
-        event: "Login",
+        event: "login",
         seller_email: response?.data[0]?.email,
         sellerId: response?.data[0]?.sellerId,
         seller_name: response?.data[0]?.name,
