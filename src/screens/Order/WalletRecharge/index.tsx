@@ -517,10 +517,10 @@ const WalletRecharge = () => {
                             Easily move funds to and from Blaze with just a tap.
                           </p>
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
-                            Experience hassle-free money transfers between old
+                            Experience hassle-free money transfers for a smooth
                           </p>
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
-                            account and Blaze Wallet!
+                            transition from old dashboard to a new dashboard.
                           </p>
                         </div>
 
