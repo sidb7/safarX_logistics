@@ -107,6 +107,7 @@ const WalletRecharge = () => {
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
   const [dataFromSession, setDataFromSession] = useState<any>();
+  // console.log("🚀 ~ dataFromSession:", dataFromSession?.isPostpaid);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -508,7 +509,8 @@ const WalletRecharge = () => {
                     />
                   </div>
                 ) : ( */}
-                    {dataFromSession?.isMigrated ? (
+                    {dataFromSession?.isMigrated &&
+                    dataFromSession?.isPostpaid === false ? (
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-7">
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
@@ -525,7 +527,14 @@ const WalletRecharge = () => {
                         <div>
                           <ServiceButton
                             text="Transfer Now"
-                            onClick={() => setOpenRightModal(true)}
+                            // onClick={() => setOpenRightModal(true)}
+                            onClick={() =>
+                              dataFromSession?.nextStep?.kyc
+                                ? setOpenRightModal(true)
+                                : toast.error(
+                                    "Complete Your KYC First to avail this feature"
+                                  )
+                            }
                             className="bg-[#1C1C1C] text-white py-2 px-4  font-Open text-base font-semibold leading-5"
                           />
                         </div>
