@@ -60,6 +60,7 @@ const Index = () => {
     password: "",
     referalCode: "",
   });
+
   const signUpOnClick = async (value: any) => {
     // if (
     //   signUpError.email ||
@@ -73,29 +74,30 @@ const Index = () => {
     // }
 
     try {
-
       let signupUtm = {
         utm_source: "sy_website",
         utm_campaign: "",
         utm_medium: "",
-      }
-      
+      };
+
       let payload = {
         sellerData: {
           ...value,
           otherDetails: {
             signupUtm: {
               ...signupUtm,
-              ...getQueryJson()
+              ...getQueryJson(),
             },
           },
         },
       };
-      console.log("🚀 ~ signUpOnClick ~ payload:", payload)
+
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
 
       sessionStorage.setItem("setKycValue", response?.data[0]?.nextStep?.kyc);
+      //setting the local storage  with site signing up to show in dataslayer
+      localStorage.setItem("key", "Site");
       dispatch(signUpUser(sellerData));
       if (response?.success === true) {
         const { sellerId, email, isReturningUser, name, nextStep } =
@@ -148,6 +150,8 @@ const Index = () => {
         );
         navigate(navigationObject);
         // navigate("/onboarding/sendotp");
+        //setting the local storage  with google signing up to show in dataslayer
+        localStorage.setItem("key", "Google");
       } else {
         toast.error(response?.message);
         setLoading(false);
