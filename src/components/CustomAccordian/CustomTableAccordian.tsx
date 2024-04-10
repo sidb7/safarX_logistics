@@ -35,6 +35,7 @@ import CustomInputWithImage from "../../components/InputWithImage/InputWithImage
 import CalenderIcon from "../../assets/calendar.svg";
 import Van from "../../assets/vanWithoutBG.svg";
 import AddBoxIcon from "../../assets/add-circle.svg";
+import { Tooltip } from "react-tooltip";
 
 interface ICustomTableAccordion {
   data?: any;
@@ -48,6 +49,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   //state to store the box data
 
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
+  console.log("🚀 ~ Accordion ~ boxDetailsData:", boxDetailsData);
 
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
@@ -279,6 +281,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [newBox, setNewBox] = useState<any>();
 
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
+  console.log("🚀 ~ Accordion ~ selectBoxIndex:", selectBoxIndex);
 
   const { data } = props;
   let servicePartnerServiceId: any;
@@ -373,6 +376,13 @@ const Accordion = (props: ICustomTableAccordion) => {
     if (boxAccordian === true && !enabled) {
       try {
         let payload = boxProductDetails;
+        console.log(
+          "🚀 ~ handleBoxAccordian ~ boxProductDetails:",
+          boxProductDetails
+        );
+
+        console.log("newBox", newBox);
+        console.log("customInputBox", customInpuBox);
 
         customInpuBox
           ? (boxProductDetails.boxInfo[0] = newBox)
@@ -1524,7 +1534,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                         key={index}
                       >
                         <div className="flex justify-between">
-                          {item?.title}
+                          {item?.title.includes("Box")
+                            ? "Box & Products"
+                            : item.title}
+                          {/* {item?.title} */}
                           {/* {open[`item${index}`] && item} */}
                           {open?.[`item${index}`] ? (
                             <img src={UpwardArrow} alt="" />
@@ -1636,12 +1649,33 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           alt=""
                                                         />
                                                         <div className="flex  items-center align-middle h-full  ">
-                                                          <div className="whitespace-nowrap overflow-x-scroll customScroll font-Lato ">
-                                                            {eachProduct?.name.slice(
-                                                              0,
-                                                              20
-                                                            ) + " ..."}
+                                                          <div
+                                                            className=" whitespace-nowrap max-w-[360px] overflow-hidden overflow-ellipsis"
+                                                            data-tooltip-id="name-id"
+                                                            data-tooltip-content={
+                                                              eachProduct?.name
+                                                            }
+                                                          >
+                                                            <div className="font-bold text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
+                                                              {eachProduct?.name.slice(
+                                                                0,
+                                                                20
+                                                              ) + " ..."}
+                                                            </div>
                                                           </div>
+                                                          <Tooltip
+                                                            id="name-id"
+                                                            style={{
+                                                              color: "#FFFFFF",
+                                                              fontSize: "14px",
+                                                              lineHeight:
+                                                                "14px",
+                                                              maxWidth: "430px",
+                                                              textTransform:
+                                                                "capitalize",
+                                                              zIndex: "50",
+                                                            }}
+                                                          />
                                                         </div>
                                                       </div>
                                                       <div className="flex items-center">
@@ -2183,7 +2217,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     </div>
                                                   </div>
                                                 )}
-                                                {boxAccordian && !enabled && (
+                                                {/* {boxAccordian && !enabled && (
                                                   <div
                                                     className="font-open border-[1.5px] border-black-600 flex justify-between mx-0 py-3 px-1 rounded-md"
                                                     onClick={() => {
@@ -2209,10 +2243,100 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       />
                                                     )}
                                                   </div>
+                                                )} */}
+                                                {boxAccordian && (
+                                                  <>
+                                                    <p className="ml-2 my-2 font-open text-[16px] text-[#494949] font-semibold">
+                                                      Your Existing Box
+                                                    </p>
+                                                    <div className="px-2 border-2 border-black-600 py-3 rounded-md">
+                                                      <CustomDropDown
+                                                        options={boxDetailsData?.map(
+                                                          (
+                                                            option: any,
+                                                            index: any
+                                                          ) => {
+                                                            console.log(
+                                                              "index during mapping",
+                                                              index
+                                                            );
+
+                                                            return {
+                                                              label:
+                                                                option?.name,
+                                                              value:
+                                                                option?.name,
+                                                              index: index,
+                                                            };
+                                                          }
+                                                        )}
+                                                        onChange={(
+                                                          selectedOption: any
+                                                        ) => {
+                                                          const selectedIndex =
+                                                            selectedOption.index;
+                                                          // setSelectBoxIndex(
+                                                          //   selectedIndex
+                                                          // );
+                                                          // setBoxName(true);
+                                                          // setBoxNameAccordian(
+                                                          //   false
+                                                          // );
+                                                          // setCustomInputBox(
+                                                          //   false
+                                                          // );
+                                                        }}
+                                                      />
+                                                      {/* <CustomDropDown
+                                                        options={boxDetailsData?.map(
+                                                          (option: any) => ({
+                                                            label: option?.name,
+                                                            value: option?.name,
+                                                          })
+                                                        )}
+                                                        onChange={(
+                                                          selectedOption: any
+                                                        ) => {
+                                                          // Find the index of the selected option within boxDetailsData array
+                                                          const selectedIndex =
+                                                            boxDetailsData.findIndex(
+                                                              (option: any) =>
+                                                                option.name ===
+                                                                selectedOption.value
+                                                            );
+
+                                                          // Ensure selectedIndex is valid
+                                                          if (
+                                                            selectedIndex !== -1
+                                                          ) {
+                                                            console.log(
+                                                              "Selected Index:",
+                                                              selectedIndex
+                                                            ); // Log the index
+                                                            setSelectBoxIndex(
+                                                              selectedIndex
+                                                            );
+                                                            setBoxName(true);
+                                                            // setBoxNameAccordian(
+                                                            //   false
+                                                            // );
+                                                            setCustomInputBox(
+                                                              false
+                                                            );
+                                                          } else {
+                                                            console.error(
+                                                              "Selected option not found in boxDetailsData:",
+                                                              selectedOption
+                                                            );
+                                                          }
+                                                        }}
+                                                      /> */}
+                                                    </div>
+                                                  </>
                                                 )}
 
-                                                {boxNameAccordian && (
-                                                  <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-4 rounded-md">
+                                                {boxAccordian && (
+                                                  <div className="mt-2 border-b-2 border-t-2  border-l-2 border-r-2 border-black-600 pt-3 pb-4 rounded-md">
                                                     {boxDetailsData?.map(
                                                       (
                                                         boxDetails: any,
@@ -2220,9 +2344,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ) => {
                                                         return (
                                                           <div>
-                                                            {boxNameAccordian && (
+                                                            {boxAccordian && (
                                                               <>
-                                                                <p
+                                                                {/* <p
                                                                   className="px-2 font-open text-[14px] text-[#494949] mx-4 py-2  rounded-md 
                                                                 border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
                                                                   onClick={() => {
@@ -2243,7 +2367,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                   {
                                                                     boxDetails?.name
                                                                   }
-                                                                </p>
+                                                                </p> */}
                                                               </>
                                                             )}
                                                           </div>
@@ -2258,7 +2382,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         // );
                                                         setBoxName(false);
                                                       }}
-                                                      className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-4 py-2 px-2 rounded-md border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
+                                                      className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-2 py-2 px-2 rounded-md border-[1.5px] border-black-600"
                                                     >
                                                       <span>
                                                         <img
