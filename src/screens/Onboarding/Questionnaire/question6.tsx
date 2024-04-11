@@ -13,8 +13,9 @@ import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
+import CustomDropDown from "../../../components/DropDown";
 
-export const QuestionComponent4: React.FunctionComponent = () => {
+export const QuestionComponent6: React.FunctionComponent = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -24,6 +25,10 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   const data = state?.questionsData;
   const [questionsData, setQuestionsData] = useState(data || []);
   const [nextBtnStatus, setNextBtnStatus] = useState(false);
+  const [dropDownvalue, setDropDownvalue] = useState("");
+  const [dropDownArrState, setDropDownArrState] = useState([]);
+
+  let dropDownArr: any = [];
 
   // const modalTitle = () => {
   //   return (
@@ -43,20 +48,32 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   //   );
   // };
 
-  function handleCheckBox(element: any, index: any) {
-    const { value = false } = element;
-    let tempArr = questionsData;
-
-    tempArr[3]?.options?.forEach((e: any, index2: number) => {
-      e.isChecked = false;
-    });
-    tempArr[3].options[index].isChecked = value;
-    setQuestionsData([...tempArr]);
-  }
-
-  const question = questionsData[3]?.question;
+  const question = questionsData[4]?.question;
 
   let payload = { answerBody: questionsData };
+
+  async function submitAnswer(payload: any) {
+    try {
+      setLoading(true);
+      const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
+      if (response?.success === true) {
+        // toast.success(response?.message);
+        const navigationObject = constructNavigationObject(
+          "/onboarding/kyc-welcome",
+          window.location.search
+        );
+        navigate(navigationObject, {
+          state: { questionsData },
+        });
+      } else {
+        toast.error(response?.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      toast.error("Failed to submit the question bank!");
+      return error;
+    }
+  }
 
   const nextHandler = () => {
     // if (questionsData && questionsData?.length > 0) {
@@ -67,19 +84,38 @@ export const QuestionComponent4: React.FunctionComponent = () => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
-    const navigationObject = constructNavigationObject(
-      "/onboarding/questionnaire/question5",
-      window.location.search
-    );
-    navigate(navigationObject, {
-      state: { questionsData },
-    });
-    // submitAnswer(payload);
+    // const navigationObject = constructNavigationObject(
+    //   "/onboarding/questionnaire/question5",
+    //   window.location.search
+    // );
+    // navigate(navigationObject, {
+    //   state: { questionsData },
+    // });
+    submitAnswer(payload);
   };
+
+  // const nextHandler = () => {
+  //   // const navigationObject = constructNavigationObject(
+  //   //   "/onboarding/questionnaire/question3",
+  //   //   window.location.search
+  //   // );
+
+  //   // navigate(navigationObject, {
+  //   //   state: { questionsData },
+  //   // });
+
+  //   const navigationObject = constructNavigationObject(
+  //     "/onboarding/questionnaire/question6",
+  //     window.location.search
+  //   );
+  //   navigate(navigationObject, {
+  //     state: { questionsData },
+  //   });
+  // };
 
   useEffect(() => {
     if (questionsData && questionsData?.length > 0) {
-      const filterQuestion = questionsData[3]?.options.filter(
+      const filterQuestion = questionsData[4]?.options.filter(
         (singleData: any) => singleData.isChecked === true
       );
       if (filterQuestion?.length === 0) {
@@ -88,7 +124,28 @@ export const QuestionComponent4: React.FunctionComponent = () => {
         setNextBtnStatus(true);
       }
     }
+
+    questionsData[4]?.options?.map((el: any) => {
+      dropDownArr.push({
+        label: el?.value,
+        option: el?.value,
+      });
+    });
+    setDropDownArrState(dropDownArr);
   }, [questionsData]);
+
+  const handlerDropDown = (e: any) => {
+    setDropDownvalue(e.target.value);
+    setNextBtnStatus(true);
+    let tempArr = questionsData;
+
+    tempArr[4]?.options?.filter((el: any) => {
+      if (el?.value === e.target.value) {
+        return (el.isChecked = true);
+      }
+    });
+    setQuestionsData([...tempArr]);
+  };
 
   const question4 = () => {
     return (
@@ -126,27 +183,13 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                     </span>
                   </div>
                   <div className="flex flex-col items-start mt-4 capitalize font-Open text-base font-normal leading-[22px]">
-                    {questionsData[3]?.options?.map(
-                      (element: any, index: any) => {
-                        return (
-                          <Checkbox
-                            key={index}
-                            onChange={(element) => {
-                              handleCheckBox(element, index);
-                            }}
-                            checked={element.isChecked}
-                            name={element.value}
-                            label={element.value}
-                            style={{ accentColor: "black" }}
-                            labelClassName="w-[250px]"
-                            checkboxClassName="gap-2"
-                            // labelClassName="customWrap"
-                            // inputElementClass="w-[30px]"
-                            // className="!flex !text-balance"
-                          />
-                        );
-                      }
-                    )}
+                    <CustomDropDown
+                      options={dropDownArrState}
+                      onChange={(e) => handlerDropDown(e)}
+                      heading="Select Your Industry"
+                      value={dropDownvalue}
+                      selectClassName="!h-[38px] "
+                    />
                   </div>
                 </div>
                 <div className="mt-6 flex gap-x-4">
@@ -154,7 +197,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                     className="!bg-[#E8E8E8] !text-black"
                     text="BACK"
                     onClick={() =>
-                      navigate("/onboarding/questionnaire/question3", {
+                      navigate("/onboarding/questionnaire/question4", {
                         state: {
                           questionsData,
                         },

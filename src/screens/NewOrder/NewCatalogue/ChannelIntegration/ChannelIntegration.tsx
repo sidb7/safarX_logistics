@@ -22,6 +22,7 @@ import ServiceButton from "../../../../components/Button/ServiceButton";
 import { DELETE_INTEGRATED_STORE } from "../../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { getLocalStorage, removeLocalStorage } from "../../../../utils/utility";
+import UniCommerceIcon from "../../../../assets/Catalogue/unicommerce fn.svg";
 
 interface IChannelIntegrationProps {
   setChannelData: any;
@@ -215,6 +216,8 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? WooIcon
                   : item.channel === "ZOHO"
                   ? ZohoIcon
+                  : item.channel === "UNICOMMERCE"
+                  ? UniCommerceIcon
                   : AmazonPngIcon,
               iconLg:
                 item.channel === "SHOPIFY"
@@ -223,11 +226,15 @@ const ChannelIntegration = (props: IChannelIntegrationProps) => {
                   ? WooLg
                   : item.channel === "ZOHO"
                   ? ZohoIcon
+                  : item.channel === "UNICOMMERCE"
+                  ? UniCommerceIcon
                   : AmazonPngIcon,
               integrated: true,
               storeId: item.storeId,
               channelName: item.channel,
               createdAt: item.createdAt,
+              expiredToken: item.expiredToken,
+              storeUrl: item.storeUrl,
             });
           });
           setChannelData({ channels: tempArr });

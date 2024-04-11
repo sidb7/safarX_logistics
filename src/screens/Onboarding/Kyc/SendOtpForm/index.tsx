@@ -61,6 +61,34 @@ const Index = (props: ITypeProps) => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
 
   useEffect(() => {
+    // Retrieve the 'kycValue' from session storage
+    const kycValueString = sessionStorage.getItem("kycValue");
+    if (kycValueString) {
+      const kycValue = JSON.parse(kycValueString);
+      const kycDetails = kycValue.kycDetails;
+
+      // Check if kycDetails are available and update the state accordingly
+      if (kycDetails) {
+        const { gstNumber, panNumber, aadharNumber } = kycDetails;
+
+        const isAadharValid = aadharNumber && aadharRegex.test(aadharNumber);
+        const isPanValid = panNumber && panRegex.test(panNumber);
+        const isGstValid =
+          gstNumber && gstNumber !== "0" && gstRegex.test(gstNumber);
+
+        setAadharNumber(isAadharValid ? aadharNumber : "");
+        setAadharNumberError(isAadharValid ? "" : "Invalid Aadhar Number");
+
+        setPanNumber(isPanValid ? panNumber : "");
+        setPanNumberError(isPanValid ? "" : "Invalid PAN Number");
+
+        setGSTNumber(isGstValid ? gstNumber : "");
+        setgstError(isGstValid ? "" : "Invalid GST Number");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (Object.keys(state).length > 0 && state) {
       setAadharNumber(state.aadharNo);
       setPanNumber(state.panCard);
@@ -76,6 +104,7 @@ const Index = (props: ITypeProps) => {
     setBusinessType(btype);
   }, []);
 
+  console.log("businessType", businessType);
   function validateGST(gstNo: any) {
     return gstRegex.test(gstNo);
   }
@@ -119,6 +148,11 @@ const Index = (props: ITypeProps) => {
         } else {
           navigate("/onboarding/kyc");
         }
+
+        window?.dataLayer?.push({
+          event: "KYCVerification",
+          sellerInfo: sessionStorage.getItem("userInfo"),
+        });
       } else {
         setLoading(false);
         toast.error(response?.message);
@@ -209,8 +243,11 @@ const Index = (props: ITypeProps) => {
       panNumber?.length !== 0 &&
       panNumberError === ""
     ) {
+      console.log(">>>>>>otp true", aadharNumber?.length !== 0);
       setOtpFormBtnStatus(true);
     } else {
+      console.log(">>>>>>otpfalse", aadharNumber?.length !== 0);
+
       setOtpFormBtnStatus(false);
     }
     // }
@@ -222,6 +259,8 @@ const Index = (props: ITypeProps) => {
     gstNumber,
     panNumber,
   ]);
+
+  console.log("adharNumber", aadharNumber);
 
   useEffect(() => {
     if (businessType === "individual") {
@@ -284,6 +323,10 @@ const Index = (props: ITypeProps) => {
               );
               if (response?.success) {
                 setLoading(false);
+                window?.dataLayer?.push({
+                  event: "KYCVerification",
+                  sellerInfo: sessionStorage.getItem("userInfo"),
+                });
                 navigate("/onboarding/kyc");
               } else {
                 setLoading(false);
@@ -317,11 +360,19 @@ const Index = (props: ITypeProps) => {
               payload
             );
             if (response?.success) {
+              window?.dataLayer?.push({
+                event: "KYCVerification",
+                sellerInfo: sessionStorage.getItem("userInfo"),
+              });
               // setLoading(false);
               // verifyPAN(panNumber);
               // toast.success(response?.message);
               //Navigate Url's go here
             } else {
+              window?.dataLayer?.push({
+                event: "KYCVerification",
+                sellerInfo: sessionStorage.getItem("userInfo"),
+              });
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);

@@ -29,6 +29,7 @@ import GiftIcon from "../assets/Product/gift.svg";
 import ForkIcon from "../assets/Product/ForkKnife.svg";
 import ZohoIcon from "../assets/Catalogue/ZOHO.svg.png";
 import AmazonPngIcon from "../assets/AmazonIcon.png";
+import UniCommerceIcon from "../assets/Catalogue/unicommerce fn.svg";
 
 export const insufficientBalance = [
   {
@@ -677,6 +678,14 @@ export const ChannelIntegrationCarts = {
       storesIntegrated: 5,
       channel: "ZOHO",
     },
+    // {
+    //   name: "STORE_NAME",
+    //   icon: UniCommerceIcon,
+    //   iconLg: UniCommerceIcon,
+    //   integrated: false,
+    //   storesIntegrated: 5,
+    //   channel: "UNICOMMERCE",
+    // },
     // {
     //   name: "STORE_NAME",
     //   icon: AmazonPngIcon,

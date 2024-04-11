@@ -157,6 +157,11 @@ const Summary = (props: Props) => {
           // // Wait for asynchronous actions to complete, if any
           await new Promise((resolve) => setTimeout(resolve, 800));
 
+          window?.dataLayer?.push({
+            event: "purchase",
+            ecommerce: placeOrderPromise?.data?.data,
+          });
+
           // Add a cache-busting parameter and then replace the URL
           // const newUrl =
           //   "/orders/view-orders?timestamp=" + new Date().getTime();

@@ -21,6 +21,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
     type: "B2C",
     labelId: uuidv4(),
     pageSize: "singlePage",
+    labelsOnPage: 1,
     inputs: {
       buyerDetails: {
         required: true,
@@ -49,6 +50,10 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         companyName: false,
         sellerLogo: false,
         shippedBy: false,
+        multipleShipperName: false,
+        serviceContactOnAddress: false,
+        multipleShipperIndividualLogos: false,
+        multipleShipperIndividualOrderId: false,
       },
 
       courierDetails: {
@@ -80,6 +85,12 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
   const pageSize = (data: any) => {
     setLabelData({ ...labelData, pageSize: data });
   };
+
+  const perPageLabel = (data: any) => {
+    setLabelData({ ...labelData, labelsOnPage: data });
+  };
+
+  console.log("label", labelData);
 
   const getLabelSettingApi = async () => {
     const getLabelSetting: any = await POST(GET_ADD_LABEL_DATA);
@@ -125,6 +136,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         <LabelSizes
           pageSize={pageSize}
           labelData={labelData}
+          perPageLabel={perPageLabel}
           // defaultLabelSetting={getDefaultSettings}
         />
 

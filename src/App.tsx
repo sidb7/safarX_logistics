@@ -75,6 +75,8 @@ const App = () => {
     // };
   }, []);
 
+  console.log("packageversion", process.env.npm_package_version);
+
   //sentry code
   const userInfoString = sessionStorage.getItem("userInfo");
   useEffect(() => {
@@ -99,7 +101,7 @@ const App = () => {
       document.body.appendChild(script);
 
       scriptElement = document.createElement("script");
-      console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
+      // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
       scriptElement.innerHTML = `
           window.sentryOnLoad = function () {
             Sentry.init({
@@ -109,6 +111,8 @@ const App = () => {
                   blockAllMedia: false,
                 }),
               ],
+          release: "react-blaze@5.4.24",
+
             });
             Sentry.configureScope(function(scope) {
               // Set user.id and user.email if available
@@ -116,6 +120,7 @@ const App = () => {
                 scope.setUser({ id: '${sellerId}', email: '${emailId}' });
               }
             });
+
           };
         `;
       document.body.appendChild(scriptElement);

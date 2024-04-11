@@ -38,6 +38,9 @@ const Checkbox: React.FC<IProps> = ({
     onChange({ ...e, name, value: !isChecked });
   };
 
+  let textLabel: any = label;
+  textLabel = textLabel?.split("-");
+
   useEffect(() => {
     setIsChecked(checked);
   }, [checked]);
@@ -46,7 +49,7 @@ const Checkbox: React.FC<IProps> = ({
     <div
       className={`${checkboxClassName} ${className} ${
         disabled ? "text-[gray] bg-gray-100" : ""
-      } cursor-pointer flex items-center justify-start py-1 transition-colors duration-200 text-gray-600 rounded-md whitespace-nowrap`}
+      } cursor-pointer flex items-center justify-start py-1 transition-colors duration-200 text-gray-600 rounded-md`}
       onClick={handleCheckboxChange}
     >
       <input
@@ -60,12 +63,20 @@ const Checkbox: React.FC<IProps> = ({
         style={style}
         className={`${checkboxClassName} ${inputElementClass} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
-      <span
-        className={`${labelClassName} select-none text-sm cursor-pointer`}
+      <p
+        className={`${labelClassName} text-balance select-none text-sm cursor-pointer`}
         onClick={handleCheckboxChange} // Handle checkbox change when the span is clicked
       >
-        {label}
-      </span>
+        {/* <HtmlParser htmlString={label} /> */}
+        {textLabel?.[1] !== undefined ? (
+          <>
+            {textLabel?.[0]}{" "}
+            <span className="text-[0.800rem]">-{textLabel?.[1]}</span>
+          </>
+        ) : (
+          textLabel?.[0]
+        )}
+      </p>
     </div>
   );
 };
