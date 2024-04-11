@@ -28,8 +28,8 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
       seller_email: email,
       sellerId: sellerId,
       seller_name: name,
-      seller_kyc: nextStep?.kyc,
-      seller_bank_verification_done: nextStep?.bank,
+      seller_kyc: nextStep.kyc,
+      seller_bank_verification_done: nextStep.bank,
       isReturningUser: isReturningUser,
     });
   }, [useNavigate()]);
