@@ -23,9 +23,9 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
     <div
       className={`relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] ${
         isError ? "border-red-500" : "border-[#EAEAEA]"
-      }  bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-1/2 lg:col-span-3 `}
+      }  bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-2/4 xl:w-1/4 `}
     >
-      <div className="grid grid-cols-2 gap-3 ">
+      <div className="grid">
         <div
           className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
             type === "B2C" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
@@ -63,7 +63,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
             </p>
           </div>
         </div>
-        <div
+        {/* <div
           className={`relative z-1  border-[1px] rounded ${
             type === "B2B" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
           } bg-[#FEFEFE] h-[150px]  p-5 cursor-pointer`}
@@ -99,7 +99,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
               Business
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg w-[90px] px-[13px] py-[4px] text-[#FFFFFF] lg:font-bold lg:font-lato lg:text-[12px] ">
         Recipient
