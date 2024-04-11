@@ -101,7 +101,7 @@ const App = () => {
       document.body.appendChild(script);
 
       scriptElement = document.createElement("script");
-      console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
+      // console.log("🚀 ~ useEffect ~ userInfo -------------:", userInfo);
       scriptElement.innerHTML = `
           window.sentryOnLoad = function () {
             Sentry.init({
