@@ -129,9 +129,24 @@ const Index = () => {
 
   const signUpWithGoogle = async (googleData: any) => {
     try {
+
+
+      let signupUtm = {
+        utm_source: "sy_website",
+        utm_campaign: "",
+        utm_medium: "",
+      }
+
+    
       const payload = {
         clientId: googleData?.clientId,
         credential: googleData?.credential,
+        otherDetails: {
+          signupUtm: {
+            ...signupUtm,
+            ...getQueryJson()
+          },
+        },
       };
       setLoading(true);
       const { data: response } = await POST(
