@@ -107,7 +107,7 @@ const WalletRecharge = () => {
   });
   const [paymentLoader, setPaymentLoader] = useState<any>(false);
   const [dataFromSession, setDataFromSession] = useState<any>();
-  // console.log("🚀 ~ dataFromSession:", dataFromSession?.isPostpaid);
+  // console.log("🚀 ~ dataFromSession:", dataFromSession);
 
   // const fetchCurrentWallet = async () => {
   //   setLoading(true);
@@ -510,7 +510,8 @@ const WalletRecharge = () => {
                   </div>
                 ) : ( */}
                     {dataFromSession?.isMigrated &&
-                    dataFromSession?.isPostpaid === false ? (
+                    !dataFromSession?.isPostpaid &&
+                    !dataFromSession?.isWalletBlackListed ? (
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-7">
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
