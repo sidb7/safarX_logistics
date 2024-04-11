@@ -94,8 +94,18 @@ export const getQueryJson = () => {
     const decodedValue = decodeURIComponent(value);
     json[decodedKey] = decodedValue;
   });
-  return json;
+  return removeEmptySpaceKeys(json) || {};
 };
+
+function removeEmptySpaceKeys(obj: any) {
+  const newObj: any = {};
+  Object.keys(obj).forEach((key) => {
+    if (key.trim() !== "") {
+      newObj[key] = obj[key];
+    }
+  });
+  return newObj;
+}
 
 export const generateUniqueCode = (minLength: number, maxLength: number) => {
   const charset =

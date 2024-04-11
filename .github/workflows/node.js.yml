@@ -168,76 +168,76 @@ jobs:
   #       pm2 delete seller-react || true
   #       pm2 start process.json
 
-  development:
-    runs-on: development
-    if: github.ref == 'refs/heads/develop'
+  # development:
+  #   runs-on: development
+  #   if: github.ref == 'refs/heads/develop'
 
-    strategy:
-      matrix:
-        node-version: [20.x]
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x]
 
-    env:
-      CI: false
-      REACT_APP_ENV: ${{ secrets.REACT_APP_ENV_DEV }}
-      REACT_APP_COMPANY: ${{ secrets.REACT_APP_COMPANY }}
-      REACT_APP_SELLER_DEV: ${{ secrets.REACT_APP_SELLER_DEV }}
-      REACT_APP_PARTNER_DEV: ${{ secrets.REACT_APP_PARTNER_DEV }}
-      REACT_APP_FILE_SERVER_DEV: ${{ secrets.REACT_APP_FILE_SERVER_DEV }}
-      REACT_APP_LANDMARK_DEV: ${{ secrets.REACT_APP_LANDMARK_DEV }}
-      REACT_APP_TRACKING_URL_DEV: ${{ secrets.REACT_APP_TRACKING_URL_DEV }}
-      REACT_APP_SELLER_WEB_URL_DEV: ${{ secrets.REACT_APP_SELLER_WEB_URL_DEV }}
-      REACT_APP_ADMIN_DEV: ${{ secrets.REACT_APP_ADMIN_DEV }}
+  #   env:
+  #     CI: false
+  #     REACT_APP_ENV: ${{ secrets.REACT_APP_ENV_DEV }}
+  #     REACT_APP_COMPANY: ${{ secrets.REACT_APP_COMPANY }}
+  #     REACT_APP_SELLER_DEV: ${{ secrets.REACT_APP_SELLER_DEV }}
+  #     REACT_APP_PARTNER_DEV: ${{ secrets.REACT_APP_PARTNER_DEV }}
+  #     REACT_APP_FILE_SERVER_DEV: ${{ secrets.REACT_APP_FILE_SERVER_DEV }}
+  #     REACT_APP_LANDMARK_DEV: ${{ secrets.REACT_APP_LANDMARK_DEV }}
+  #     REACT_APP_TRACKING_URL_DEV: ${{ secrets.REACT_APP_TRACKING_URL_DEV }}
+  #     REACT_APP_SELLER_WEB_URL_DEV: ${{ secrets.REACT_APP_SELLER_WEB_URL_DEV }}
+  #     REACT_APP_ADMIN_DEV: ${{ secrets.REACT_APP_ADMIN_DEV }}
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
 
-      - name: Setting Up Development Keys
-        run: |
-          echo "REACT_APP_ENV: $REACT_APP_ENV"
-          echo "REACT_APP_COMPANY: $REACT_APP_COMPANY"
-          echo "REACT_APP_SELLER_DEV: $REACT_APP_SELLER_DEV"
-          echo "REACT_APP_PARTNER_DEV: $REACT_APP_PARTNER_DEV"
-          echo "REACT_APP_FILE_SERVER_DEV: $REACT_APP_FILE_SERVER_DEV"
-          echo "REACT_APP_LANDMARK_DEV: $REACT_APP_LANDMARK_DEV"
-          echo "REACT_APP_TRACKING_URL_DEV: $REACT_APP_TRACKING_URL_DEV"
-          echo "REACT_APP_SELLER_WEB_URL_DEV: $REACT_APP_SELLER_WEB_URL_DEV"
-          echo "REACT_APP_ADMIN_DEV: $REACT_APP_ADMIN_DEV"
+  #     - name: Setting Up Development Keys
+  #       run: |
+  #         echo "REACT_APP_ENV: $REACT_APP_ENV"
+  #         echo "REACT_APP_COMPANY: $REACT_APP_COMPANY"
+  #         echo "REACT_APP_SELLER_DEV: $REACT_APP_SELLER_DEV"
+  #         echo "REACT_APP_PARTNER_DEV: $REACT_APP_PARTNER_DEV"
+  #         echo "REACT_APP_FILE_SERVER_DEV: $REACT_APP_FILE_SERVER_DEV"
+  #         echo "REACT_APP_LANDMARK_DEV: $REACT_APP_LANDMARK_DEV"
+  #         echo "REACT_APP_TRACKING_URL_DEV: $REACT_APP_TRACKING_URL_DEV"
+  #         echo "REACT_APP_SELLER_WEB_URL_DEV: $REACT_APP_SELLER_WEB_URL_DEV"
+  #         echo "REACT_APP_ADMIN_DEV: $REACT_APP_ADMIN_DEV"
 
-      - name: Install and Build for Development
-        run: |
-          npm install
-          CI=false npm run build --if-present
+  #     - name: Install and Build for Development
+  #       run: |
+  #         npm install
+  #         CI=false npm run build --if-present
 
-      - name: Setting Up The Working Dir
-        run: |
-          echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
-          cd ..
-          echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
-          echo "CHILD_DIR=$PWD/seller-react-build" >> $GITHUB_ENV
-          cd $CURRENT_DIR
-          echo "CURRENT_DIR=$CURRENT_DIR"
+  #     - name: Setting Up The Working Dir
+  #       run: |
+  #         echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+  #         cd ..
+  #         echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+  #         echo "CHILD_DIR=$PWD/seller-react-build" >> $GITHUB_ENV
+  #         cd $CURRENT_DIR
+  #         echo "CURRENT_DIR=$CURRENT_DIR"
 
-      - name: Create Serving Folder If Not Exists
-        run: |
-          # Check if the folder exists
-          if [ ! -d $CHILD_DIR ]; then
-            # Create the folder
-            mkdir -p $CHILD_DIR
-          else
-            echo "Folder already exists"
-          fi
+  #     - name: Create Serving Folder If Not Exists
+  #       run: |
+  #         # Check if the folder exists
+  #         if [ ! -d $CHILD_DIR ]; then
+  #           # Create the folder
+  #           mkdir -p $CHILD_DIR
+  #         else
+  #           echo "Folder already exists"
+  #         fi
 
-      - name: Start PM2 Process for Development
-        run: |
-          npm install -g pm2 typescript serve ts-node
-          cp -r $CURRENT_DIR/* $CHILD_DIR/
-          cd $CHILD_DIR/
-          pm2 stop seller-react || true
-          pm2 delete seller-react || true
-          pm2 start process.json
+  #     - name: Start PM2 Process for Development
+  #       run: |
+  #         npm install -g pm2 typescript serve ts-node
+  #         cp -r $CURRENT_DIR/* $CHILD_DIR/
+  #         cd $CHILD_DIR/
+  #         pm2 stop seller-react || true
+  #         pm2 delete seller-react || true
+  #         pm2 start process.json
