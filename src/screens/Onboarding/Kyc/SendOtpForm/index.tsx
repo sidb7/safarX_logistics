@@ -68,7 +68,7 @@ const Index = (props: ITypeProps) => {
       const kycDetails = kycValue.kycDetails;
 
       // Check if kycDetails are available and update the state accordingly
-      if (kycDetails) {
+      if (kycDetails && kycValue?.phpUserId?.length !== 0) {
         const { gstNumber, panNumber, aadharNumber } = kycDetails;
 
         const isAadharValid = aadharNumber && aadharRegex.test(aadharNumber);
@@ -77,10 +77,14 @@ const Index = (props: ITypeProps) => {
           gstNumber && gstNumber !== "0" && gstRegex.test(gstNumber);
 
         setAadharNumber(isAadharValid ? aadharNumber : "");
-        setAadharNumberError(isAadharValid ? "" : "Invalid Aadhar Number");
+        if (isAadharValid !== 0) {
+          setAadharNumberError(isAadharValid ? "" : "Invalid Aadhar Number");
+        }
 
         setPanNumber(isPanValid ? panNumber : "");
-        setPanNumberError(isPanValid ? "" : "Invalid PAN Number");
+        if (isPanValid !== "") {
+          setPanNumberError(isPanValid ? "" : "Invalid PAN Number");
+        }
 
         setGSTNumber(isGstValid ? gstNumber : "");
         setgstError(isGstValid ? "" : "Invalid GST Number");
