@@ -21,8 +21,8 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
 }) => {
   const [checked, setChecked] = useState();
   const [labelPerPage, setLabelPerPage] = useState();
-  // const [a4LabelOption, setA4LabelOption] = useState(false);
-  // const [a4LabelOptionValue, setA4LabelOptionValue] = useState("1");
+  const [a4LabelOption, setA4LabelOption] = useState(false);
+  const [a4LabelOptionValue, setA4LabelOptionValue] = useState("1");
 
   useEffect(() => {
     let tempChecked =
