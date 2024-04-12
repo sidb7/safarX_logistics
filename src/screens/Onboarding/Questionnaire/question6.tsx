@@ -48,6 +48,33 @@ export const QuestionComponent6: React.FunctionComponent = () => {
   //   );
   // };
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  const industryOptions: any = [];
+
+  console.log("questionsData", questionsData);
+  for (let i = 0; i < questionsData.length; i++) {
+    // console.log("questionsData", questionsData[i].question);
+    if (questionsData[i].question === "Which industry are you in?") {
+      // console.log("questionsData[i].question", questionsData[i]?.options);
+      for (let j = 0; j < questionsData[i]?.options.length; j++) {
+        console.log(
+          "questionsData[i]?.options[j].isChecked",
+          questionsData[i]?.options[j]
+        );
+        if (questionsData[i]?.options[j].isChecked === true) {
+          industryOptions[0] = questionsData[i]?.options[j]?.value;
+          console.log("value", questionsData[i]?.options[j]?.value);
+        }
+      }
+    }
+  }
+
+  const industrySelectedOption = industryOptions.join(", ");
+
+  console.log("industryOptions", industryOptions);
+
   const question = questionsData[4]?.question;
 
   let payload = { answerBody: questionsData };
@@ -57,6 +84,11 @@ export const QuestionComponent6: React.FunctionComponent = () => {
       setLoading(true);
       const { data: response } = await POST(POST_SUBMIT_QUESTIONNAIRE, payload);
       if (response?.success === true) {
+        window?.dataLayer?.push({
+          event: "sign_up_qna_industry",
+          sellerId: sellerId,
+          seller_type_selected_industry: industrySelectedOption,
+        });
         // toast.success(response?.message);
         const navigationObject = constructNavigationObject(
           "/onboarding/kyc-welcome",
@@ -142,6 +174,8 @@ export const QuestionComponent6: React.FunctionComponent = () => {
     tempArr[4]?.options?.filter((el: any) => {
       if (el?.value === e.target.value) {
         return (el.isChecked = true);
+      } else {
+        return (el.isChecked = false);
       }
     });
     setQuestionsData([...tempArr]);

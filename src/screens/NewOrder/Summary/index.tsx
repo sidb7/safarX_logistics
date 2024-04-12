@@ -40,6 +40,7 @@ const Summary = (props: Props) => {
   const [loading, setLoading] = useState(true);
   const [ishighRisk, setIsHighRisk] = useState(false);
   const [latestOrder, setLatestOrder] = useState<any>([]);
+  // console.log("latestOrder", latestOrder?.data?.[0]);
   const [ewaybillNumber, setEwaybillNumber] = useState("");
   const dispatch = useDispatch();
 
@@ -100,6 +101,24 @@ const Summary = (props: Props) => {
   const shipyaari_id = params?.shipyaari_id || "";
   let orderSource = params?.source || "";
 
+  const latestProductDetails: any = [];
+
+  //getting the product details of the latest order
+  const latesProducts = latestOrder?.data?.[0]?.boxInfo;
+  for (let i = 0; i < latesProducts?.length; i++) {
+    console.log("boxdetails", latesProducts[i]?.service?.total);
+    latestProductDetails.push(latesProducts[i]?.service?.total);
+    for (let j = 0; j < latesProducts[i]?.products.length; j++) {
+      console.log("j", latesProducts[i]?.products[j]?.name);
+      latestProductDetails.push([
+        { name: latesProducts[i]?.products[j]?.name },
+        { unitprice: latesProducts[i]?.products[j]?.unitPrice },
+        { unittax: latesProducts[i]?.products[j]?.unitTax },
+      ]);
+    }
+  }
+  console.log("latestProductDetails", latestProductDetails);
+  console.log("latesProducts", latesProducts);
   const getLatestOrderDetails = async () => {
     try {
       setLoading(true);
@@ -151,6 +170,7 @@ const Summary = (props: Props) => {
 
         // Check the result of the second API call
         if (placeOrderPromise?.data?.success) {
+          console.log("data", placeOrderPromise?.data);
           // If both API calls are successful, navigate to the desired page
           toast.success(placeOrderPromise?.data?.message);
           // navigate("/orders/view-orders");

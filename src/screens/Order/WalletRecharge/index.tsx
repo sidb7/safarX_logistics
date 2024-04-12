@@ -138,6 +138,9 @@ const WalletRecharge = () => {
   //   })();
   // }, []);
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
   const checkYaariPoints = useSelector(
     (state: any) => state.payment.yaariPointsAvail
   );
@@ -331,7 +334,14 @@ const WalletRecharge = () => {
           if (orderStatus?.data?.success === false) {
             toast.error("Something Went Wrong");
           } else {
+            //gtm
+            window?.dataLayer?.push({
+              event: "seller_wallet_recharge",
+              sellerId: sellerId,
+              wallet_recharge: true,
+            });
             toast.success("Wallet Recharge Successfully");
+
             // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
           }
           setPaymentLoader(false);
