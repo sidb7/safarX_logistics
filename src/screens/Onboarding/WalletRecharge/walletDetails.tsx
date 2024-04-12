@@ -38,6 +38,9 @@ const WalletDetails = () => {
   const [walletRechargeModalOpen, setWalletRechargeModalOpen] = useState(false);
 
   const WalletBankDetails = () => {
+    //getting the sellerID
+    const sellerId = sessionStorage.getItem("sellerId");
+
     const postAccountDetails = async () => {
       setLoading(true);
       const payload = {
@@ -56,6 +59,12 @@ const WalletDetails = () => {
         setWalletRechargeModalOpen(true);
         setLoading(false);
         navigate("/dashboard/overview");
+        //gtm
+        window?.dataLayer?.push({
+          event: "seller_bank_verification",
+          sellerId: sellerId,
+          seller_bank_verification: true,
+        });
       } else {
         toast.error(datas?.data?.message);
         setLoading(false);

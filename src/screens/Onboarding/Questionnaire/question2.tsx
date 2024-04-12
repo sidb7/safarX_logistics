@@ -43,6 +43,25 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
 
   const question = questionsData[1]?.question;
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  const dailyOrder: any = [];
+
+  //for the gmt
+  for (let i = 0; i < questionsData?.length; i++) {
+    if (questionsData[i]?.question === "What is your daily order volume?") {
+      for (let j = 0; j < questionsData[i]?.options.length; j++) {
+        if (questionsData[i]?.options?.[j]?.isChecked === true) {
+          dailyOrder.push(questionsData[i]?.options?.[j]?.value);
+        }
+      }
+    }
+  }
+
+  //for multiple options
+  const dailyOrderOptions = dailyOrder.join(", ");
+
   const nextHandler = () => {
     // if (questionsData && questionsData?.length > 0) {
     //   const filterQuestion = questionsData[1]?.options.filter(
@@ -52,6 +71,12 @@ export const QuestionComponent2: React.FunctionComponent = (props: any) => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
+    //gmt
+    window?.dataLayer?.push({
+      event: "sign_up_qna_order_volume",
+      sellerId: sellerId,
+      seller_type_selected_volume: dailyOrderOptions,
+    });
     const navigationObject = constructNavigationObject(
       "/onboarding/questionnaire/question3",
       window.location.search
