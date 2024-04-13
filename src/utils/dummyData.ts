@@ -1240,6 +1240,10 @@ export const dummyStateDropdownData = [
     label: "Jammu and Kashmir",
     value: "Jammu and Kashmir",
   },
+  {
+    label: "Delhi",
+    value: "Delhi",
+  },
 ];
 
 export const searchProductData = [
