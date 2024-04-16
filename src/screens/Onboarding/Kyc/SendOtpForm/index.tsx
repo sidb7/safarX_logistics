@@ -59,6 +59,8 @@ const Index = (props: ITypeProps) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const { isLgScreen, isMdScreen } = ResponsiveState();
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
 
   useEffect(() => {
     // Retrieve the 'kycValue' from session storage
@@ -144,6 +146,12 @@ const Index = (props: ITypeProps) => {
         //   console.log("Delayed for 1 second.");
         //   // toast.success(response?.message);
         // }, 1000);
+        window?.dataLayer?.push({
+          event: "kyc_verification",
+          sellerId: sellerId,
+          business_type: businessType,
+          kyc_verified: true,
+        });
         setLoading(false);
         // navigate("/onboarding/kyc");
         if (businessType === "business") {
@@ -153,10 +161,10 @@ const Index = (props: ITypeProps) => {
           navigate("/onboarding/kyc");
         }
 
-        window?.dataLayer?.push({
-          event: "KYCVerification",
-          sellerInfo: sessionStorage.getItem("userInfo"),
-        });
+        // window?.dataLayer?.push({
+        //   event: "KYCVerification",
+        //   sellerInfo: sessionStorage.getItem("userInfo"),
+        // });
       } else {
         setLoading(false);
         toast.error(response?.message);
@@ -327,9 +335,12 @@ const Index = (props: ITypeProps) => {
               );
               if (response?.success) {
                 setLoading(false);
+
                 window?.dataLayer?.push({
-                  event: "KYCVerification",
-                  sellerInfo: sessionStorage.getItem("userInfo"),
+                  event: "kyc_verification",
+                  sellerId: sellerId,
+                  business_type: businessType,
+                  kyc_verified: true,
                 });
                 navigate("/onboarding/kyc");
               } else {
@@ -364,19 +375,19 @@ const Index = (props: ITypeProps) => {
               payload
             );
             if (response?.success) {
-              window?.dataLayer?.push({
-                event: "KYCVerification",
-                sellerInfo: sessionStorage.getItem("userInfo"),
-              });
+              // window?.dataLayer?.push({
+              //   event: "KYCVerification",
+              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              // });
               // setLoading(false);
               // verifyPAN(panNumber);
               // toast.success(response?.message);
               //Navigate Url's go here
             } else {
-              window?.dataLayer?.push({
-                event: "KYCVerification",
-                sellerInfo: sessionStorage.getItem("userInfo"),
-              });
+              // window?.dataLayer?.push({
+              //   event: "KYCVerification",
+              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              // });
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);
@@ -414,6 +425,13 @@ const Index = (props: ITypeProps) => {
           if (response?.success) {
             // setLoading(false);
             verifyPAN(panNumber);
+            //gtm
+            window?.dataLayer?.push({
+              event: "kyc_verification",
+              sellerId: sellerId,
+              business_type: businessType,
+              kyc_verified: true,
+            });
           } else {
             setLoading(false);
             toast.error(response?.message);
