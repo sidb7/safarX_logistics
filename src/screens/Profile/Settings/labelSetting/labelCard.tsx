@@ -81,7 +81,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 if this box is checked.
               </p>
             </div>
-            {/* <div>
+            <div>
               <Checkbox
                 style={{ accentColor: "black" }}
                 checkboxClassName="gap-x-2 !h-6"
@@ -193,7 +193,7 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 Note: For users who ship items belonging to several sellers,
                 check this box to show the individual seller's Order Id.
               </p>
-            </div> */}
+            </div>
             {/* <div>
               <Checkbox
                 style={{ accentColor: "black" }}
