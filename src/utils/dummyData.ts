@@ -1126,11 +1126,11 @@ export const dummyStateDropdownData = [
   },
   {
     label: "Andhra Pradesh",
-    value: "Andhra Pradesh",
+    value: "Andhra pradesh",
   },
   {
     label: "Arunachal Pradesh",
-    value: "Arunachal Pradesh",
+    value: "Arunachal pradesh",
   },
   {
     label: "Assam",
@@ -1139,6 +1139,10 @@ export const dummyStateDropdownData = [
   {
     label: "Bihar",
     value: "Bihar",
+  },
+  {
+    label: "Delhi",
+    value: "Delhi",
   },
   {
     label: "Chhattisgarh",
@@ -1158,7 +1162,7 @@ export const dummyStateDropdownData = [
   },
   {
     label: "Himachal Pradesh",
-    value: "Himachal Pradesh",
+    value: "Himachal pradesh",
   },
   {
     label: "Jharkhand",
@@ -1174,7 +1178,7 @@ export const dummyStateDropdownData = [
   },
   {
     label: "Madhya Pradesh",
-    value: "Madhya Pradesh",
+    value: "Madhya pradesh",
   },
   {
     label: "Maharashtra",
@@ -1214,7 +1218,7 @@ export const dummyStateDropdownData = [
   },
   {
     label: "Tamil Nadu",
-    value: "Tamil Nadu",
+    value: "Tamil nadu",
   },
   {
     label: "Telangana",
@@ -1226,7 +1230,7 @@ export const dummyStateDropdownData = [
   },
   {
     label: "Uttar Pradesh",
-    value: "Uttar Pradesh",
+    value: "Uttar pradesh",
   },
   {
     label: "Uttarakhand",
@@ -1234,11 +1238,11 @@ export const dummyStateDropdownData = [
   },
   {
     label: "West Bengal",
-    value: "West Bengal",
+    value: "West bengal",
   },
   {
     label: "Jammu and Kashmir",
-    value: "Jammu and Kashmir",
+    value: "Jammu and kashmir",
   },
 ];
 
