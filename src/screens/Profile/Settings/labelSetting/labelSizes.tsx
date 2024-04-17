@@ -209,10 +209,10 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                       label: "1 Label Per Page",
                       value: "1",
                     },
-                    {
-                      label: "2 Label Per Page",
-                      value: "2",
-                    },
+                    // {
+                    //   label: "2 Label Per Page",
+                    //   value: "2",
+                    // },
                     {
                       label: "4 Label Per Page",
                       value: "4",
