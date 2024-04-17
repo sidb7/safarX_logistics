@@ -9,17 +9,17 @@ import { BrowserRouter } from "react-router-dom";
 import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 
-Sentry.init({
-  dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
-  integrations: [
-    Sentry.feedbackIntegration({
-      // Additional SDK configuration goes in here, for example:
-      colorScheme: "system",
-      isNameRequired: true,
-      isEmailRequired: true,
-    }),
-  ],
-});
+// Sentry.init({
+//   dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+//   integrations: [
+//     Sentry.feedbackIntegration({
+//       // Additional SDK configuration goes in here, for example:
+//       colorScheme: "system",
+//       isNameRequired: true,
+//       isEmailRequired: true,
+//     }),
+//   ],
+// });
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
