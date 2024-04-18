@@ -339,7 +339,9 @@ const commonColumnHelper = [
 const idHelper = (
   navigate: any = "",
   setInfoModalContent?: any,
-  setInfoModalContentFunction: any = () => {}
+  setInfoModalContentFunction: any = () => {},
+  setOpenRightModalForTracking?: any,
+  openRightModalForTracking?: any
 ) => [
   ColumnsHelper.accessor("IDs", {
     header: () => {
@@ -410,8 +412,19 @@ const idHelper = (
             <div className="">
               <span className=" text-sm font-light">Tracking :</span>
               <div className="flex text-base items-center font-medium">
+                {/* console.log("log 1 where it is commented") */}
                 <span
                   onClick={
+                    // on going work temporary currently commented
+
+                    // () => {
+                    //   setOpenRightModalForTracking({
+                    //     ...openRightModalForTracking,
+                    //     isOpen: true,
+                    //     awbNo: awb,
+                    //   });
+                    // }
+
                     () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
                     // navigate({
                     //   pathname: "/tracking",
@@ -1360,7 +1373,9 @@ export const ColumnHelperForBookedAndReadyToPicked = (
   setInfoModalContent?: any,
   setInfoModalContentFunction?: any,
   currentStatus?: any,
-  orderActions?: any
+  orderActions?: any,
+  setOpenRightModalForTracking?: any,
+  openRightModalForTracking?: any
 ) => {
   // const handleCancellationModal = (awbNo: any, orderId: any) => {
   //   setCancellationModal({ isOpen: true, awbNo, orderId });
@@ -1411,7 +1426,13 @@ export const ColumnHelperForBookedAndReadyToPicked = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
+    ...idHelper(
+      navigate,
+      setInfoModalContent,
+      setInfoModalContentFunction,
+      setOpenRightModalForTracking,
+      openRightModalForTracking
+    ),
     ...MainCommonHelper(),
     ColumnsHelper.accessor("asd", {
       header: () => {
@@ -1549,7 +1570,9 @@ export const columnHelpersForRest = (
   setInfoModalContent: any,
   currentStatus?: any,
   orderActions?: any,
-  setInfoModalContentFunction?: any
+  setInfoModalContentFunction?: any,
+  setOpenRightModalForTracking?: any,
+  openRightModalForTracking?: any
 ) => {
   return [
     // ...commonColumnHelper,
@@ -1588,7 +1611,13 @@ export const columnHelpersForRest = (
         );
       },
     }),
-    ...idHelper(navigate, setInfoModalContent, setInfoModalContentFunction),
+    ...idHelper(
+      navigate,
+      setInfoModalContent,
+      setInfoModalContentFunction,
+      setOpenRightModalForTracking,
+      openRightModalForTracking
+    ),
     // ColumnsHelper.accessor("createdAt", {
     //   header: () => {
     //     return (
