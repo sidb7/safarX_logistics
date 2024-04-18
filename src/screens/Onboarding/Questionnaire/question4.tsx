@@ -43,6 +43,24 @@ export const QuestionComponent4: React.FunctionComponent = () => {
   //   );
   // };
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  const syService: any = [];
+
+  //for gmt
+  for (let i = 0; i < questionsData.length; i++) {
+    if (questionsData[i]?.question === "Which product are you looking for?") {
+      for (let j = 0; j < questionsData[i].options.length; j++) {
+        if (questionsData[i].options[j]?.isChecked === true) {
+          syService.push(questionsData[i].options[j]?.value);
+        }
+      }
+    }
+  }
+
+  const syServiceOption = syService.join(", ");
+
   function handleCheckBox(element: any, index: any) {
     const { value = false } = element;
     let tempArr = questionsData;
@@ -67,6 +85,12 @@ export const QuestionComponent4: React.FunctionComponent = () => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
+    //setting thr gmt
+    window?.dataLayer?.push({
+      event: "sign_up_qna_sy_service",
+      sellerId: sellerId,
+      sy_service: syServiceOption,
+    });
     const navigationObject = constructNavigationObject(
       "/onboarding/questionnaire/question5",
       window.location.search
@@ -138,6 +162,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
                             name={element.value}
                             label={element.value}
                             style={{ accentColor: "black" }}
+                            labelClassName="w-[250px]"
                             checkboxClassName="gap-2"
                             // labelClassName="customWrap"
                             // inputElementClass="w-[30px]"

@@ -8,8 +8,6 @@ import {
 import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
 import { Spinner } from "../../components/Spinner/index";
 import CustomInputBox from "../../components/Input";
-import { parse } from "date-fns";
-
 import {
   GET_PINCODE_DATA,
   UPDATE_TEMP_ORDER_INFO,
@@ -17,12 +15,9 @@ import {
   SET_SERVICE_INFO,
   GET_SELLER_BOX,
 } from "../../utils/ApiUrls";
-import { pickupAddress } from "../../utils/dummyData";
-import { convertXMLToXLSX } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { convertEpochToDateTimeV2 } from "../../utils/utility";
-import DatePicker from "react-datepicker";
 import CustomDate from "./CustomDateWithTime";
 import InputBox from "../../components/Input";
 import CustomDropDown from "../../components/DropDown";
@@ -33,8 +28,8 @@ import { gstRegex } from "../../utils/regexCheck";
 import UpwardArrow from "../../assets/AccordionUp.svg";
 import CustomInputWithImage from "../../components/InputWithImage/InputWithImage";
 import CalenderIcon from "../../assets/calendar.svg";
-import Van from "../../assets/vanWithoutBG.svg";
 import AddBoxIcon from "../../assets/add-circle.svg";
+import { Tooltip } from "react-tooltip";
 
 interface ICustomTableAccordion {
   data?: any;
@@ -42,37 +37,24 @@ interface ICustomTableAccordion {
 
 const Accordion = (props: ICustomTableAccordion) => {
   const isFirstRender = useRef(true);
-
   const navigate = useNavigate();
-
   //state to store the box data
-
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
-
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
-
   const [boxName, setBoxName] = useState(false);
-
   const [openIndex, setOpenIndex] = useState<any>(null);
-
   const [orderDetails, setOrderDetails]: any = useState([]);
-
   const [apiCall, setApiCall] = useState<any>(false);
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
   const [pincode, setPincode] = useState<any>();
   const [pincodeData, setPincodeData] = useState<any>("");
-
   const [boxProductDetails, setBoxProductDetails] = useState<any>();
-
   const [serviceLoading, setServiceLoading] = useState<any>(false);
-
   const [productAccordian, setproductAccordian] = useState<any>([]);
-
   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
-
   const [validationError, setValidationError] = useState<any>({
     contactName: "",
     contactType: "",
@@ -113,10 +95,9 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxHeight: "",
     boxName: "",
   });
-
+  console.log("validationError", validationError);
   const [orderId, setOrderId] = useState<any>();
   const [inputError, setInputError] = useState(false);
-
   const [productDetails, setProductDetails] = useState<any>([
     {
       companyId: "",
@@ -209,7 +190,6 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [boxDetails, setBoxDetails] = useState<any>();
   const [productError, setProdctError] = useState<any>([]);
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
-
   const [pickupDate, setPickupDate] = useState("");
   //storing these details to call the post api for updation
   const [updatePayload, setUpdatePayload] = useState({
@@ -218,7 +198,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     source: "",
   });
   const [enabled, setEnabled] = useState<boolean>(true);
-
+  const [isBoxError, setIsBoxError] = useState<boolean>(false);
   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
     pickUpAddress: {
@@ -240,9 +220,7 @@ const Accordion = (props: ICustomTableAccordion) => {
       pickupDate: "",
     },
   });
-
   const [serviceList, setServiceList] = useState<any>([]);
-
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
       contact: {
@@ -263,23 +241,22 @@ const Accordion = (props: ICustomTableAccordion) => {
       gstNumber: "",
     },
   });
-
   const [serviceIndex, setServiceIndex]: any = useState(0);
-
   const [addressOpenModal, setAddressOpenModal] = useState(false);
-
   const [open, setOpen] = useState<any>({});
   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
     useState();
-
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
-
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
   //adding the box into boxinfo
   const [newBox, setNewBox] = useState<any>();
-
+  console.log("newBox", newBox);
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
-
+  //to know the box id
+  const [selectBoxId, setSelectBoxId] = useState<any>(-1);
+  const [dropDownContent, setDropDownContent] = useState<any>(false);
+  const [existingBox, setExistingBox] = useState<any>(false);
+  const [addnewBox, setAddNewBox] = useState<any>(false);
   const { data } = props;
   let servicePartnerServiceId: any;
 
@@ -370,28 +347,38 @@ const Accordion = (props: ICustomTableAccordion) => {
   };
 
   const handleBoxAccordian = async () => {
+    console.log("handleboxaccordian");
     if (boxAccordian === true && !enabled) {
       try {
-        let payload = boxProductDetails;
+        if (customInpuBox) {
+          boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight = newBox?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = newBox?.name;
+          boxProductDetails.boxInfo[0].boxId = newBox?.boxId;
+          boxProductDetails.boxInfo[0].length = newBox?.length;
+          boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
+          boxProductDetails.boxInfo[0].height = newBox?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   newBox?.volumetricWeight;
+        } else {
+          boxProductDetails.boxInfo[0].deadWeight =
+            boxDetailsData[selectBoxId]?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxDetailsData[selectBoxId]?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
+          boxProductDetails.boxInfo[0].boxId =
+            boxDetailsData[selectBoxId]?.boxId;
+          boxProductDetails.boxInfo[0].length =
+            boxDetailsData[selectBoxId]?.length;
+          boxProductDetails.boxInfo[0].breadth =
+            boxDetailsData[selectBoxId]?.breadth;
+          boxProductDetails.boxInfo[0].height =
+            boxDetailsData[selectBoxId]?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   boxDetailsData[selectBoxId]?.volumetricWeight;
+        }
 
-        customInpuBox
-          ? (boxProductDetails.boxInfo[0] = newBox)
-          : (() => {
-              boxProductDetails.boxInfo[0].deadWeight =
-                boxDetailsData[selectBoxIndex]?.deadWeight;
-              boxProductDetails.boxInfo[0].appliedWeight =
-                boxDetailsData[selectBoxIndex]?.appliedWeight;
-              boxProductDetails.boxInfo[0].name =
-                boxDetailsData[selectBoxIndex]?.name;
-              boxProductDetails.boxInfo[0].boxId =
-                boxDetailsData[selectBoxIndex]?.boxId;
-              boxProductDetails.boxInfo[0].length =
-                boxDetailsData[selectBoxIndex]?.length;
-              boxProductDetails.boxInfo[0].breadth =
-                boxDetailsData[selectBoxIndex]?.breadth;
-              boxProductDetails.boxInfo[0].height =
-                boxDetailsData[selectBoxIndex]?.height;
-            })();
+        let payload = boxProductDetails;
 
         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
         if (data?.status) {
@@ -684,6 +671,12 @@ const Accordion = (props: ICustomTableAccordion) => {
       });
 
       const boxData = await POST(GET_SELLER_BOX);
+
+      data?.data?.[0]?.data?.[0]?.errorList?.map((item: any) => {
+        if (item.category === "Box And Product" && item.isActive)
+          setIsBoxError(true);
+        else setIsBoxError(false);
+      });
 
       setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
       setBoxDetailsData(boxData?.data?.data);
@@ -1191,19 +1184,23 @@ const Accordion = (props: ICustomTableAccordion) => {
     if (
       boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
       // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
+      boxProductDetails?.boxInfo?.[0]?.name === 0 ||
       boxProductDetails?.boxInfo?.[0]?.length === 0 ||
       boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.height === 0
+      boxProductDetails?.boxInfo?.[0]?.height === 0 ||
+      isBoxError
     ) {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
 
+      // console.log("🚀 ~ handlePriorValidation ~ element4:", element4);
       // let element5: any = document.getElementById("Box 1");
       let element5: any = document.getElementById(
         `${boxProductDetails?.boxInfo?.[0]?.name}`
       );
+      console.log("🚀 ~ handlePriorValidation ~ element5:", element5);
 
-      if (element4) element4.style.borderColor = "red";
+      if (element4) element4.classList.add("!border-red-500");
       if (element5) element5.style.borderColor = "red";
     } else {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
@@ -1332,6 +1329,17 @@ const Accordion = (props: ICustomTableAccordion) => {
       setOtherDetailsAccordian(false);
       //setAddressOpenModal(true);
       setApiCall(false);
+    }
+  };
+
+  const clickedOption = (e: any) => {
+    for (let i = 0; i < boxDetailsData?.length; i++) {
+      console.log("i", boxDetailsData[i]?.boxId);
+      console.log("e", e);
+      if (e === boxDetailsData[i]?.boxId) {
+        console.log("yesssssssss", i);
+        setSelectBoxId(i);
+      }
     }
   };
 
@@ -1486,11 +1494,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-
-                            // setApiCall(false);
-                            // setOpen({
-                            //   [`item${index}`]: false,
-                            // });
                           } else if (e.target.textContent === "Order History") {
                             setOpen({ [`item${index}`]: false });
                             setOpenIndex(null);
@@ -1501,31 +1504,30 @@ const Accordion = (props: ICustomTableAccordion) => {
                             setOpenIndex(null);
                           } else if (e.target.textContent == "Event Logs") {
                             handleItemClick(index, e.target.textContent);
-                            // setAddressOpenModal(false);
+
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-                            // setOtherDetailsAccordian(false);
 
                             setApiCall(false);
                           } else if (e.target.textContent.includes("Box")) {
-                            // handleItemClick(index, e.target.textContent);
-                            // setAddressOpenModal(false);
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-                            // setOtherDetailsAccordian(false);
-
+                            setExistingBox(false);
+                            setCustomInputBox(false);
                             setApiCall(false);
                           }
                         }}
                         key={index}
                       >
                         <div className="flex justify-between">
-                          {item?.title}
-                          {/* {open[`item${index}`] && item} */}
+                          {item?.title.includes("Box")
+                            ? "Box & Products"
+                            : item.title}
+
                           {open?.[`item${index}`] ? (
                             <img src={UpwardArrow} alt="" />
                           ) : (
@@ -1539,8 +1541,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                             <div
                               className={`entries ${
                                 entriesHeight && entriesHeight < 500
-                                  ? `h-[${entriesHeight}]px`
-                                  : `h-[${500}]px`
+                                  ? `px-5 h-[${entriesHeight}]px`
+                                  : `px-5 h-[${500}]px`
                               } flex flex-col overflow-auto border p-[0.5rem]`}
                             >
                               {Object.entries(item)?.map(
@@ -1570,11 +1572,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     // id={"productname"}
                                                     id={`${eachProduct.productId}`}
                                                     onClick={(e: any) => {
-                                                      // productLoops(
-                                                      //   productAccordian,
-                                                      //   index
-                                                      // );
-
                                                       let temp = [
                                                         ...productAccordian,
                                                       ];
@@ -1636,12 +1633,57 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                           alt=""
                                                         />
                                                         <div className="flex  items-center align-middle h-full  ">
-                                                          <div className="whitespace-nowrap overflow-x-scroll customScroll font-Lato ">
-                                                            {eachProduct?.name.slice(
-                                                              0,
-                                                              20
-                                                            ) + " ..."}
+                                                          <div
+                                                            className=" whitespace-nowrap max-w-[360px] overflow-hidden overflow-ellipsis"
+                                                            data-tooltip-id="name-id"
+                                                            data-tooltip-content={
+                                                              eachProduct?.name
+                                                            }
+                                                          >
+                                                            <div className=" text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
+                                                              <div className="flex gap-x-3">
+                                                                <p className="font-bold min-w-[65px]">
+                                                                  Product
+                                                                </p>
+                                                                {eachProduct
+                                                                  ?.name
+                                                                  ?.length <=
+                                                                20 ? (
+                                                                  <>
+                                                                    {
+                                                                      eachProduct?.name
+                                                                    }
+                                                                    {"  x  " +
+                                                                      eachProduct?.qty +
+                                                                      " (Quantity) "}
+                                                                  </>
+                                                                ) : (
+                                                                  <>
+                                                                    {eachProduct?.name.slice(
+                                                                      0,
+                                                                      20
+                                                                    ) + " ..."}
+                                                                    {" x " +
+                                                                      eachProduct?.qty +
+                                                                      " (Quantity) "}
+                                                                  </>
+                                                                )}
+                                                              </div>
+                                                            </div>
                                                           </div>
+                                                          <Tooltip
+                                                            id="name-id"
+                                                            style={{
+                                                              color: "#FFFFFF",
+                                                              fontSize: "14px",
+                                                              lineHeight:
+                                                                "14px",
+                                                              maxWidth: "430px",
+                                                              textTransform:
+                                                                "capitalize",
+                                                              zIndex: "50",
+                                                            }}
+                                                          />
                                                         </div>
                                                       </div>
                                                       <div className="flex items-center">
@@ -1742,9 +1784,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         <div className="col-span-1">
                                                           <InputBox
                                                             label="Volumetric Weight"
-                                                            // defaultValue={
-                                                            //   eachProduct?.volumetricWeight
-                                                            // }
                                                             value={eachProduct?.volumetricWeight?.toFixed(
                                                               2
                                                             )}
@@ -1996,7 +2035,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       {boxProductDetails?.boxInfo.map(
                                         (eachBox: any, index: number) => {
                                           return (
-                                            <div className="w-full">
+                                            <div className="w-full ">
                                               <div className="w-full">
                                                 <div
                                                   // id={`${item?.title}`}
@@ -2004,10 +2043,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
                                                   id={`${eachBox.name}`}
                                                   onClick={(e: any) => {
-                                                    // boxloops(
-                                                    //   boxProductDetails,
-                                                    //   index
-                                                    // );
                                                     if (
                                                       boxAccordian === true &&
                                                       !boxloops(
@@ -2018,6 +2053,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       setBoxAccordian(false);
                                                       setCustomInputBox(false);
                                                       setBoxName(false);
+                                                      setExistingBox(false);
                                                       setBoxNameAccordian(
                                                         false
                                                       );
@@ -2028,14 +2064,13 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       handleBoxAccordian();
                                                     } else {
                                                       setBoxAccordian(true);
+
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           true,
                                                       });
                                                     }
-                                                    // if (enabled) {
-                                                    //   setBoxAccordian(true);
-                                                    // }
+
                                                     if (
                                                       !open[
                                                         `itemboxProductDetails${index}`
@@ -2049,22 +2084,21 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setAddressOpenModal(false);
                                                   }}
                                                 >
-                                                  <div className="flex gap-x-3">
+                                                  <div className="flex items-center gap-x-3">
                                                     <img
                                                       src={BoxIcon}
                                                       className="w-10 h-10"
                                                       alt=""
                                                     />
-                                                    <p className="flex items-center text-[18px] font-Open">
+                                                    <p className="font-bold text-[14px] min-w-[65px]">
+                                                      Box
+                                                    </p>
+                                                    <p className="text-[14px] font-Open">
                                                       {eachBox?.name}
                                                     </p>
-                                                    <span className="flex items-center mt-1 text-[16px] font-Open">
-                                                      (Box Info)
-                                                    </span>
                                                   </div>
 
                                                   <div className="flex items-center">
-                                                    {/* <img src={DownwardArrow} /> */}
                                                     {open?.[
                                                       `itemboxProductDetails${index}`
                                                     ] ? (
@@ -2080,661 +2114,520 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     )}
                                                   </div>
                                                 </div>
-                                                {/* {boxAccordian && <p>hello</p>} */}
-                                                {enabled && boxAccordian && (
-                                                  <div>
-                                                    <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
-                                                      <p className="text-[16px] font-open ">
-                                                        {
-                                                          // boxDetailsData[
-                                                          //   selectBoxIndex
-                                                          // ]?.name
-                                                          newBox?.name
-                                                        }
-                                                      </p>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Dead Weight (Kg)"
-                                                          defaultValue={
-                                                            // boxDetailsData?.[
-                                                            //   selectBoxIndex
-                                                            // ]?.deadWeight
-                                                            newBox?.deadWeight
-                                                          }
-                                                          isDisabled={true}
-                                                          inputType="number"
-                                                          name="deadWeight"
-                                                          inputMode="numeric"
-                                                        />
-                                                      </div>
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Volumetric Weight"
-                                                          defaultValue={
-                                                            newBox?.volumetricWeight
-                                                          }
-                                                          //   value={
-                                                          //     boxDetailsData?.[
-                                                          //     selectBoxIndex
-                                                          //   ]?.volumetricWeight?.toFixed(
-                                                          //     2
-                                                          //   )
-                                                          // }
-                                                          isDisabled={true}
-                                                          name="volumetricWeight"
-                                                          inputType="number"
-                                                        />
-                                                      </div>
-                                                    </div>
-                                                    <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                      <div className="w-[50%]">
-                                                        <CustomDropDown
-                                                          onChange={() => {}}
-                                                          options={measureUnits}
-                                                        />
-                                                      </div>
-                                                      <div className="flex w-[50%] gap-x-4">
-                                                        <div>
-                                                          <InputBox
-                                                            label="L"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                            name="length"
-                                                            isDisabled={true}
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.length
-                                                              newBox?.length
-                                                            }
-                                                          />
-                                                        </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="B"
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.breadth
-                                                              newBox?.breadth
-                                                            }
-                                                            isDisabled={true}
-                                                            name="breadth"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                          />{" "}
-                                                        </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="H"
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.height
-                                                              newBox?.height
-                                                            }
-                                                            isDisabled={true}
-                                                            name="height"
-                                                          />
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                )}
-                                                {boxAccordian && !enabled && (
-                                                  <div
-                                                    className="font-open border-[1.5px] border-black-600 flex justify-between mx-0 py-3 px-1 rounded-md"
-                                                    onClick={() => {
-                                                      setBoxNameAccordian(
-                                                        !boxNameAccordian
-                                                      );
-                                                      setBoxName(false);
-                                                      setCustomInputBox(false);
-                                                    }}
-                                                  >
-                                                    <p className="text-[16px] font-open text-[#777777] px-2">
-                                                      Select Box From Catalogue
-                                                    </p>
-                                                    {boxNameAccordian ? (
-                                                      <img
-                                                        src={UpwardArrow}
-                                                        alt="img"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src={DownwardArrow}
-                                                        alt="img"
-                                                      />
-                                                    )}
-                                                  </div>
-                                                )}
 
-                                                {boxNameAccordian && (
-                                                  <div className="border-b-2 border-l-2 border-r-2 border-black-600 pt-4 pb-4 rounded-md">
-                                                    {boxDetailsData?.map(
-                                                      (
-                                                        boxDetails: any,
-                                                        index: any
-                                                      ) => {
-                                                        return (
-                                                          <div>
-                                                            {boxNameAccordian && (
-                                                              <>
-                                                                <p
-                                                                  className="px-2 font-open text-[14px] text-[#494949] mx-4 py-2  rounded-md 
-                                                                border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
-                                                                  onClick={() => {
-                                                                    setSelectBoxIndex(
-                                                                      index
-                                                                    );
-                                                                    setBoxName(
-                                                                      true
-                                                                    );
-                                                                    // setBoxNameAccordian(
-                                                                    //   false
-                                                                    // );
-                                                                    setCustomInputBox(
-                                                                      false
-                                                                    );
-                                                                  }}
-                                                                >
-                                                                  {
-                                                                    boxDetails?.name
-                                                                  }
-                                                                </p>
-                                                              </>
+                                                <div className="border border-black-600 px-5 rounded-md">
+                                                  {boxAccordian && (
+                                                    <>
+                                                      <div className="mt-4">
+                                                        <CustomDropDown
+                                                          heading="Select A Box"
+                                                          options={boxDetailsData?.map(
+                                                            (
+                                                              option: any,
+                                                              index: any
+                                                            ) => {
+                                                              return {
+                                                                label:
+                                                                  option?.name,
+                                                                value:
+                                                                  option?.boxId,
+                                                              };
+                                                            }
+                                                          )}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            clickedOption(
+                                                              e.target.value
+                                                            );
+                                                            setSelectBoxIndex(
+                                                              e.target.value
+                                                            );
+                                                            setDropDownContent(
+                                                              true
+                                                            );
+                                                            setExistingBox(
+                                                              true
+                                                            );
+                                                            setCustomInputBox(
+                                                              false
+                                                            );
+                                                          }}
+                                                        />
+                                                        <div className="my-3 rounded-md">
+                                                          <p
+                                                            onClick={() => {
+                                                              setCustomInputBox(
+                                                                true
+                                                              );
+                                                              setExistingBox(
+                                                                false
+                                                              );
+
+                                                              setBoxName(false);
+                                                            }}
+                                                            className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center  py-2 px-2 rounded-md border-[1.90px] border-black-600"
+                                                          >
+                                                            <span>
+                                                              <img
+                                                                src={AddBoxIcon}
+                                                                alt="boxImage"
+                                                                className="w-4 h-4"
+                                                              />
+                                                            </span>
+                                                            <span className="font-open mt-1 ">
+                                                              Add Your Box
+                                                            </span>
+                                                          </p>
+                                                          <div className=" my-2">
+                                                            {customInpuBox && (
+                                                              <div className="">
+                                                                <div className=" mt-4 ">
+                                                                  <CustomInputBox
+                                                                    label="Box Name"
+                                                                    onChange={(
+                                                                      e
+                                                                    ) => {
+                                                                      setNewBox(
+                                                                        {
+                                                                          ...newBox,
+                                                                          name: e
+                                                                            .target
+                                                                            .value,
+                                                                        }
+                                                                      );
+                                                                      if (
+                                                                        e.target
+                                                                          .value ===
+                                                                        ""
+                                                                      ) {
+                                                                        setValidationError(
+                                                                          {
+                                                                            ...validationError,
+                                                                            boxName:
+                                                                              "Field is required",
+                                                                          }
+                                                                        );
+                                                                      } else {
+                                                                        setValidationError(
+                                                                          {
+                                                                            ...validationError,
+                                                                            boxName:
+                                                                              "",
+                                                                          }
+                                                                        );
+                                                                      }
+                                                                    }}
+                                                                  />
+                                                                  <p className="open-sans text-[12px] text-red-600">
+                                                                    {
+                                                                      validationError.boxName
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Dead Weight (Kg)"
+                                                                      defaultValue={
+                                                                        eachBox?.deadWeight
+                                                                      }
+                                                                      isDisabled={
+                                                                        enabled
+                                                                      }
+                                                                      inputType="number"
+                                                                      name="deadWeight"
+                                                                      inputMode="numeric"
+                                                                      onChange={(
+                                                                        e: any
+                                                                      ) => {
+                                                                        setNewBox(
+                                                                          {
+                                                                            ...newBox,
+                                                                            deadWeight:
+                                                                              +e
+                                                                                .target
+                                                                                .value,
+                                                                          }
+                                                                        );
+                                                                        if (
+                                                                          e
+                                                                            .target
+                                                                            .value <=
+                                                                            0 &&
+                                                                          eachBox
+                                                                            .deadWeight
+                                                                            ?.length !=
+                                                                            0
+                                                                        ) {
+                                                                          setValidationError(
+                                                                            {
+                                                                              ...validationError,
+                                                                              boxDeadWeight:
+                                                                                "Should be greater than 0",
+                                                                            }
+                                                                          );
+                                                                        } else {
+                                                                          setValidationError(
+                                                                            {
+                                                                              ...validationError,
+                                                                              boxDeadWeight:
+                                                                                "",
+                                                                            }
+                                                                          );
+                                                                        }
+                                                                      }}
+                                                                      inputError={
+                                                                        eachBox
+                                                                          ?.deadWeight
+                                                                          ?.length ===
+                                                                        0
+                                                                      }
+                                                                    />
+                                                                    <p className="open-sans text-[12px] text-red-600">
+                                                                      {
+                                                                        validationError.boxDeadWeight
+                                                                      }
+                                                                    </p>
+                                                                  </div>
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Volumetric Weight"
+                                                                      value={
+                                                                        (newBox?.length *
+                                                                          newBox?.breadth *
+                                                                          newBox?.height) /
+                                                                        5000
+                                                                      }
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      name="volumetricWeight"
+                                                                      inputType="number"
+                                                                    />
+                                                                  </div>
+                                                                </div>
+                                                                <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
+                                                                  <div className="w-[50%]">
+                                                                    <CustomDropDown
+                                                                      onChange={() => {}}
+                                                                      options={
+                                                                        measureUnits
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div className="flex w-[50%] gap-x-4">
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="L"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        name="length"
+                                                                        defaultValue={
+                                                                          eachBox?.length
+                                                                        }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              length:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              .length
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxLength:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxLength:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.length
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxLength
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="B"
+                                                                        defaultValue={
+                                                                          eachBox?.breadth
+                                                                        }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        name="breadth"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              breadth:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              .breadth
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxBreadth:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxBreadth:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.breadth
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxBreadth
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="H"
+                                                                        defaultValue={
+                                                                          eachBox.height
+                                                                        }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        name="height"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              height:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              .height
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxHeight:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxHeight:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.height
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxHeight
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            )}
+                                                            {/* existing box */}
+                                                            {existingBox && (
+                                                              <div className=" my-1 pb-1">
+                                                                <div className="mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
+                                                                  <p className="text-[16px] font-open ">
+                                                                    {
+                                                                      boxDetailsData[
+                                                                        selectBoxId
+                                                                      ]?.name
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Dead Weight (Kg)"
+                                                                      value={
+                                                                        boxDetailsData?.[
+                                                                          selectBoxId
+                                                                        ]
+                                                                          ?.deadWeight
+                                                                      }
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      inputType="number"
+                                                                      name="deadWeight"
+                                                                      inputMode="numeric"
+                                                                    />
+                                                                  </div>
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Volumetric Weight"
+                                                                      value={boxDetailsData?.[
+                                                                        selectBoxId
+                                                                      ]?.volumetricWeight?.toFixed(
+                                                                        2
+                                                                      )}
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      name="volumetricWeight"
+                                                                      inputType="number"
+                                                                    />
+                                                                  </div>
+                                                                </div>
+                                                                <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
+                                                                  <div className="w-[50%]">
+                                                                    <CustomDropDown
+                                                                      onChange={() => {}}
+                                                                      options={
+                                                                        measureUnits
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div className="flex w-[50%] gap-x-4">
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="L"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        name="length"
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.length
+                                                                        }
+                                                                      />
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="B"
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.breadth
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        name="breadth"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                      />{" "}
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="H"
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.height
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        name="height"
+                                                                      />
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
                                                             )}
                                                           </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                    <p
-                                                      onClick={() => {
-                                                        setCustomInputBox(true);
-                                                        // setBoxNameAccordian(
-                                                        //   false
-                                                        // );
-                                                        setBoxName(false);
-                                                      }}
-                                                      className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-4 py-2 px-2 rounded-md border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
-                                                    >
-                                                      <span>
-                                                        <img
-                                                          src={AddBoxIcon}
-                                                          alt="boxImage"
-                                                          className="w-4 h-4"
-                                                        />
-                                                      </span>
-                                                      <span className="font-open mt-1 ">
-                                                        Add Your Box
-                                                      </span>
-                                                    </p>
-                                                    {boxName && (
-                                                      <div>
-                                                        <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
-                                                          <p className="text-[16px] font-open ">
-                                                            {
-                                                              boxDetailsData[
-                                                                selectBoxIndex
-                                                              ]?.name
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Dead Weight (Kg)"
-                                                              defaultValue={
-                                                                boxDetailsData?.[
-                                                                  selectBoxIndex
-                                                                ]?.deadWeight
-                                                              }
-                                                              isDisabled={true}
-                                                              inputType="number"
-                                                              name="deadWeight"
-                                                              inputMode="numeric"
-                                                            />
-                                                          </div>
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Volumetric Weight"
-                                                              // defaultValue={
-                                                              //   eachBox?.volumetricWeight
-                                                              // }
-                                                              value={boxDetailsData?.[
-                                                                selectBoxIndex
-                                                              ]?.volumetricWeight?.toFixed(
-                                                                2
-                                                              )}
-                                                              isDisabled={true}
-                                                              name="volumetricWeight"
-                                                              inputType="number"
-                                                            />
-                                                          </div>
-                                                        </div>
-                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                          <div className="w-[50%]">
-                                                            <CustomDropDown
-                                                              onChange={() => {}}
-                                                              options={
-                                                                measureUnits
-                                                              }
-                                                            />
-                                                          </div>
-                                                          <div className="flex w-[50%] gap-x-4">
-                                                            <div>
-                                                              <InputBox
-                                                                label="L"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                name="length"
-                                                                isDisabled={
-                                                                  true
-                                                                }
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.length
-                                                                }
-                                                              />
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="B"
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.breadth
-                                                                }
-                                                                isDisabled={
-                                                                  true
-                                                                }
-                                                                name="breadth"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                              />{" "}
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="H"
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.height
-                                                                }
-                                                                isDisabled={
-                                                                  true
-                                                                }
-                                                                name="height"
-                                                              />
-                                                            </div>
-                                                          </div>
                                                         </div>
                                                       </div>
-                                                    )}
-                                                    {customInpuBox && (
-                                                      <div className="">
-                                                        <div className="mx-4 mt-4 ">
-                                                          <CustomInputBox
-                                                            label="Box Name"
-                                                            onChange={(e) => {
-                                                              setNewBox({
-                                                                ...newBox,
-                                                                name: e.target
-                                                                  .value,
-                                                              });
-                                                              if (
-                                                                e.target
-                                                                  .value === ""
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxName:
-                                                                      "Field is required",
-                                                                  }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxName: "",
-                                                                  }
-                                                                );
-                                                              }
-                                                            }}
-                                                          />
-                                                          <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              validationError.boxName
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Dead Weight (Kg)"
-                                                              defaultValue={
-                                                                eachBox?.deadWeight
-                                                              }
-                                                              isDisabled={
-                                                                enabled
-                                                              }
-                                                              inputType="number"
-                                                              name="deadWeight"
-                                                              inputMode="numeric"
-                                                              onChange={(
-                                                                e: any
-                                                              ) => {
-                                                                setNewBox({
-                                                                  ...newBox,
-                                                                  deadWeight:
-                                                                    +e.target
-                                                                      .value,
-                                                                });
-                                                                if (
-                                                                  e.target
-                                                                    .value <=
-                                                                    0 &&
-                                                                  eachBox
-                                                                    .deadWeight
-                                                                    ?.length !=
-                                                                    0
-                                                                ) {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      boxDeadWeight:
-                                                                        "Should be greater than 0",
-                                                                    }
-                                                                  );
-                                                                } else {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      boxDeadWeight:
-                                                                        "",
-                                                                    }
-                                                                  );
-                                                                }
-                                                              }}
-                                                              inputError={
-                                                                eachBox
-                                                                  ?.deadWeight
-                                                                  ?.length === 0
-                                                              }
-                                                            />
-                                                            <p className="open-sans text-[12px] text-red-600">
-                                                              {
-                                                                validationError.boxDeadWeight
-                                                              }
-                                                            </p>
-                                                          </div>
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Volumetric Weight"
-                                                              // defaultValue={
-                                                              //   (eachBox?.length *
-                                                              //     eachBox?.breadth *
-                                                              //     eachBox?.height) /
-                                                              //   5000
-                                                              // }
-                                                              value={
-                                                                // (eachBox?.length *
-                                                                //   eachBox?.breadth *
-                                                                //   eachBox?.height) /
-                                                                // 5000
-                                                                (newBox?.length *
-                                                                  newBox?.breadth *
-                                                                  newBox?.height) /
-                                                                5000
-                                                              }
-                                                              isDisabled={true}
-                                                              name="volumetricWeight"
-                                                              inputType="number"
-                                                              // onChange={(
-                                                              //   e: any
-                                                              // ) => {
-                                                              //   handleBoxInputUpdation(
-                                                              //     index,
-                                                              //     e.target.value,
-                                                              //     "volumetricWeight"
-                                                              //   );
-                                                              //   if (
-                                                              //     e.target.value <=
-                                                              //       0 &&
-                                                              //     eachBox
-                                                              //       .volumetricWeight
-                                                              //       ?.length != 0
-                                                              //   ) {
-                                                              //     setValidationError(
-                                                              //       {
-                                                              //         ...validationError,
-                                                              //         boxVolumetricWeight:
-                                                              //           "Should be greater than 0",
-                                                              //       }
-                                                              //     );
-                                                              //   } else {
-                                                              //     setValidationError(
-                                                              //       {
-                                                              //         ...validationError,
-                                                              //         boxVolumetricWeight:
-                                                              //           "",
-                                                              //       }
-                                                              //     );
-                                                              //   }
-                                                              // }}
-                                                              // inputError={
-                                                              //   eachBox
-                                                              //     ?.volumetricWeight
-                                                              //     ?.length === 0
-                                                              // }
-                                                            />
-                                                            {/* <p className="open-sans text-[12px] text-red-600">
-                                                          {
-                                                            validationError.boxVolumtericWeight
-                                                          }
-                                                        </p> */}
-                                                          </div>
-                                                        </div>
-                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                          <div className="w-[50%]">
-                                                            <CustomDropDown
-                                                              onChange={() => {}}
-                                                              options={
-                                                                measureUnits
-                                                              }
-                                                            />
-                                                          </div>
-                                                          <div className="flex w-[50%] gap-x-4">
-                                                            <div>
-                                                              <InputBox
-                                                                label="L"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                name="length"
-                                                                defaultValue={
-                                                                  eachBox?.length
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    length:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .length
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxLength:
-                                                                          "Should be greater than 0",
-                                                                      }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxLength:
-                                                                          "",
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.length
-                                                                    ?.length ===
-                                                                  0
-                                                                }
-                                                              />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxLength
-                                                                }
-                                                              </p>
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="B"
-                                                                defaultValue={
-                                                                  eachBox?.breadth
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                name="breadth"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    breadth:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .breadth
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxBreadth:
-                                                                          "Should be greater than 0",
-                                                                      }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxBreadth:
-                                                                          "",
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.breadth
-                                                                    ?.length ===
-                                                                  0
-                                                                }
-                                                              />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxBreadth
-                                                                }
-                                                              </p>
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="H"
-                                                                defaultValue={
-                                                                  eachBox.height
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                name="height"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    height:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .height
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxHeight:
-                                                                          "Should be greater than 0",
-                                                                      }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxHeight:
-                                                                          "",
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.height
-                                                                    ?.length ===
-                                                                  0
-                                                                }
-                                                              />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxHeight
-                                                                }
-                                                              </p>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    )}
-                                                  </div>
-                                                )}
+                                                    </>
+                                                  )}
+                                                </div>
                                               </div>
                                             </div>
                                           );
@@ -2871,58 +2764,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     isDisabled={
                                                                       true
                                                                     }
-                                                                    // onChange={(
-                                                                    //   e: any
-                                                                    // ) => {
-                                                                    //   setOrderId(
-                                                                    //     e.target
-                                                                    //       .value
-                                                                    //   );
-                                                                    //   if (
-                                                                    //     e.target
-                                                                    //       .value <=
-                                                                    //       0 &&
-                                                                    //     e.target
-                                                                    //       .value
-                                                                    //       ?.length !=
-                                                                    //       0
-                                                                    //     // eachService
-                                                                    //     //   .orderId
-                                                                    //     //   .length !=
-                                                                    //     //   0
-                                                                    //   ) {
-                                                                    //     setValidationError(
-                                                                    //       {
-                                                                    //         ...validationError,
-                                                                    //         orderId:
-                                                                    //           "Should be greater than 0",
-                                                                    //       }
-                                                                    //     );
-                                                                    //   } else {
-                                                                    //     setValidationError(
-                                                                    //       {
-                                                                    //         ...validationError,
-                                                                    //         orderId:
-                                                                    //           "",
-                                                                    //       }
-                                                                    //     );
-                                                                    //   }
-                                                                    // }}
-                                                                    // inputError={
-                                                                    //   // eachBox
-                                                                    //   //   ?.height
-                                                                    //   //   .length ===
-                                                                    //   // 0
-                                                                    //   orderId?.length ===
-                                                                    //   0
-                                                                    // }
                                                                     className="!max-w-[120px] !h-[30px] !rounded-sm"
                                                                   />
-                                                                  {/* <p className="open-sans text-[12px] text-red-600">
-                                                                    {
-                                                                      validationError.orderId
-                                                                    }
-                                                                  </p> */}
                                                                 </div>
                                                               </div>
                                                             )
@@ -3432,22 +3275,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setGetPickUpAddressData({
                                                       ...temp,
                                                     });
-
-                                                    // if (
-                                                    //   e.target.value.length ===
-                                                    //   0
-                                                    // ) {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactName:
-                                                    //       "Field is required",
-                                                    //   });
-                                                    // } else {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactName: "",
-                                                    //   });
-                                                    // }
                                                   }}
                                                   inputError={inputError}
                                                 />
@@ -3526,16 +3353,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.pickUpAddress?.contact
                                                       ?.emailId
                                                   }
-                                                  // onChange={(e: any) => {
-                                                  //   let emailValue =
-                                                  //     e.target.value;
-                                                  //   setGetPickUpAddressData({
-                                                  //     ...getPickAddressData
-                                                  //       ?.pickUpAdress?.contact,
-                                                  //     emailId: emailValue,
-                                                  //   });
-                                                  //   validateEmailId(emailValue);
-                                                  // }}
                                                   isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const emailValue =
@@ -3561,16 +3378,6 @@ const Accordion = (props: ICustomTableAccordion) => {
 
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
-                                                  // onChange={(e: any) => {
-                                                  //   setServiceabilityData({
-                                                  //     ...serviceabilityData,
-                                                  //     paymentMode:
-                                                  //       e.target.value,
-                                                  //   });
-                                                  // }}
-                                                  // value={
-                                                  //   serviceabilityData?.paymentMode
-                                                  // }
                                                   disabled={enabled}
                                                   value={
                                                     getPickAddressData
@@ -3587,18 +3394,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
                                                   }}
                                                   options={[
-                                                    // {
-                                                    //   label: "Office",
-                                                    //   value: "Office",
-                                                    // },
-                                                    // {
-                                                    //   label: "Warehouse",
-                                                    //   value: "Warehouse",
-                                                    // },
-                                                    // {
-                                                    //   label: "Other",
-                                                    //   value: "Other",
-                                                    // },
                                                     {
                                                       label: "Shopkeeper",
                                                       value: "Shopkeeper",
@@ -3640,28 +3435,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setGetPickUpAddressData({
                                                       ...temp,
                                                     });
-
-                                                    // if (
-                                                    //   e.target.value.length ===
-                                                    //   0
-                                                    // ) {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     flatNo:
-                                                    //       "Field is required",
-                                                    //   });
-                                                    // } else {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     flatNo: "",
-                                                    //   });
-                                                    // }
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.flatNo}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3700,9 +3476,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.locality}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -3746,9 +3519,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.landmark}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3786,9 +3556,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.city}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -3832,9 +3599,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.state}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3873,9 +3637,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.country}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -3979,46 +3740,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     heading="Address Type"
                                                   />
                                                 </div>
-                                                {/* <CustomInputBox
-                                                  label={
-                                                    Object.keys(item)[index]
-                                                  }
-                                                  value={
-                                                    getPickAddressData
-                                                      ?.pickUpAddress
-                                                      ?.addressType
-                                                  }
-                                                  isDisabled={enabled}
-                                                  onChange={(e: any) => {
-                                                    let temp =
-                                                      getPickAddressData;
-                                                    temp.pickUpAddress.addressType =
-                                                      e.target.value;
-                                                    setGetPickUpAddressData({
-                                                      ...temp,
-                                                    });
-
-                                                    if (
-                                                      e.target.value.length ===
-                                                      0
-                                                    ) {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        addressType:
-                                                          "Field is required",
-                                                      });
-                                                    } else {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        addressType: "",
-                                                      });
-                                                    }
-                                                  }}
-                                                  inputError={inputError}
-                                                /> */}
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.addressType}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4208,16 +3929,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                               {/* </div> */}
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
-                                                  // onChange={(e: any) => {
-                                                  //   setServiceabilityData({
-                                                  //     ...serviceabilityData,
-                                                  //     paymentMode:
-                                                  //       e.target.value,
-                                                  //   });
-                                                  // }}
-                                                  // value={
-                                                  //   serviceabilityData?.paymentMode
-                                                  // }
                                                   disabled={enabled}
                                                   value={
                                                     getDeliveryAddressData
@@ -4293,11 +4004,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryFlatNo
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4335,11 +4041,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryLocality
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4382,11 +4083,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryLandmark
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4424,9 +4120,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {validationError.deliveryCity}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4470,11 +4163,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryState
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4512,11 +4200,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryCountry
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4618,11 +4301,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     heading="Address Type"
                                                   />
                                                 </div>
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryAddressType
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}

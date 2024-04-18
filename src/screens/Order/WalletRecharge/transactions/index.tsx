@@ -28,6 +28,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   const [loading, setLoading] = useState(false);
   const [migratedUserWalletDetails, setMigratedUserWalletDetails] =
     useState<any>({});
+  // console.log("🚀 ~ migratedUserWalletDetails:", migratedUserWalletDetails);
 
   const [swap, setSwap] = useState(false);
 
@@ -40,9 +41,11 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     phpAmount: 0,
     blazeAmount: 0,
   });
+  // console.log("🚀 ~ amountForTransaction:", amountForTransaction);
 
   const userDetailsFromSession = () => {
     let temp: any = sessionStorage.getItem("userInfo");
+    // console.log("🚀 ~ userDetailsFromSession ~ temp:", temp);
     temp = JSON.parse(temp);
 
     setUserDetails({
@@ -87,6 +90,30 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
     }
   };
 
+  // const calculateTheHighestAmountToDeduct = () => {
+  //   if (swap) {
+  //     const maxTransferableAmount = Math.max(
+  //       0.8 * migratedUserWalletDetails?.phpBalance,
+  //       migratedUserWalletDetails?.phpBalance - 1000
+  //     );
+  //     // Set the max transferable amount as the input value
+  //     setAmountForTransaction({
+  //       blazeAmount: maxTransferableAmount,
+  //       phpAmount: maxTransferableAmount,
+  //     });
+  //   } else {
+  //     const maxTransferableAmount = Math.max(
+  //       0.8 * migratedUserWalletDetails?.blazeBalance,
+  //       migratedUserWalletDetails?.blazeBalance - 1000
+  //     );
+  //     // Set the max transferable amount as the input value
+  //     setAmountForTransaction({
+  //       blazeAmount: maxTransferableAmount,
+  //       phpAmount: maxTransferableAmount,
+  //     });
+  //   }
+  // };
+
   const oldSyDetailsCard = () => {
     return (
       <div
@@ -97,7 +124,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         >
           <div>
             <span className="text-base font-semibold font-Open leading-[22px]">
-              Old Shipyaari Site
+              Old Shipyaari Platform
             </span>
           </div>
         </div>
@@ -142,7 +169,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
         >
           <div>
             <span className="text-base font-semibold font-Open leading-[22px]">
-              Blaze
+              New Shipyaari Platform
             </span>
           </div>
         </div>
@@ -224,6 +251,7 @@ const Index: React.FunctionComponent<IIndexProps> = (props) => {
   useEffect(() => {
     getWalletBalance();
     userDetailsFromSession();
+    // calculateTheHighestAmountToDeduct();
   }, []);
 
   return (

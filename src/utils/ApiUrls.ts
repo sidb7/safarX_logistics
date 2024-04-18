@@ -11,10 +11,15 @@ let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
+console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
+
+// console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
 switch (Environment) {
   case "development":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_DEV}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_DEV || "Env Not available"}`;
+    //||
+    // "https://sysellerconsoledev.yaarilabs.com";
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
     REACT_APP_GA4_ID = `${process.env.REACT_APP_GA4_ID}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_DEV}`;
@@ -27,7 +32,9 @@ switch (Environment) {
     break;
 
   case "test":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_TEST}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_TEST || "Env Not available"}`;
+    // ||
+    // "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_TEST}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_TEST}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -41,7 +48,7 @@ switch (Environment) {
     break;
 
   case "production":
-    SELLER_URL = `${process.env.REACT_APP_SELLER_PROD}`;
+    SELLER_URL = `${process.env?.REACT_APP_SELLER_PROD || "Env Not available"}`;
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_PROD}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_PROD}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -55,7 +62,11 @@ switch (Environment) {
     break;
 
   default:
-    SELLER_URL = `${process.env.REACT_APP_SELLER_LOCAL}`;
+    SELLER_URL = `${
+      process.env?.REACT_APP_SELLER_LOCAL || "Env Not available"
+    }`;
+    //||
+    //  "https://sysellerconsoledev.yaarilabs.com";
     PARTNER_URL = `${process.env.REACT_APP_PARTNER_LOCAL}`;
     FILE_SERVER_URL = `${process.env.REACT_APP_FILE_SERVER_LOCAL}`;
     REACT_APP_GTM_ID = `${process.env.REACT_APP_GTM_ID}`;
@@ -68,6 +79,8 @@ switch (Environment) {
 
     break;
 }
+
+// console.log(SELLER_URL, "jnjnjj");
 
 //KYC  URLs
 const POST_BUSINESS_TYPE_URL = `${SELLER_URL}/api/v1/seller/updateBusinessType`;

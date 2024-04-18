@@ -126,6 +126,9 @@ const WalletPayment = () => {
     setIsedit(true);
   };
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
   const handleRazorPayTransaction = async () => {
     let replacewalletValue = walletValue?.replace(/,/g, "");
     let redirectUrl = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
@@ -172,6 +175,13 @@ const WalletPayment = () => {
             toast.error("Something Went Wrong");
           } else {
             toast.success("Wallet Recharge Successfully");
+            //gtm
+            window?.dataLayer?.push({
+              event: "seller_onboarding_wallet_recharge",
+              sellerId: sellerId,
+              wallet_recharge: true,
+            });
+            console.log("sellerId", sellerId);
             window.location.href = `${SELLER_WEB_URL}/onboarding/cash-on-delivery`;
           }
           setPaymentLoader(false);

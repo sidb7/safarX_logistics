@@ -89,7 +89,7 @@ const Index = () => {
         // );
 
         window?.dataLayer?.push({
-          event: "Login",
+          event: "login",
           seller_email: response?.data[0]?.email,
           sellerId: response?.data[0]?.sellerId,
           seller_name: response?.data[0]?.name,
@@ -170,7 +170,7 @@ const Index = () => {
       sessionStorage.setItem("userName", response?.data[0]?.name);
 
       window?.dataLayer?.push({
-        event: "Login",
+        event: "login",
         seller_email: response?.data[0]?.email,
         sellerId: response?.data[0]?.sellerId,
         seller_name: response?.data[0]?.name,
@@ -323,7 +323,7 @@ const Index = () => {
 
                 <div className="flex flex-col mt-4 mx-4 md:mx-[85px] gap-y-6">
                   <p className="text-center	 leading-7 text-2xl font-bold font-Lato">
-                    Welcome to Shipyaari test
+                    Welcome to Shipyaari
                   </p>
                   <p className="text-center text-[#494949] font-Open font-light text-sm leading-[22px]">
                     Fast and Easy Shipping from your doorstep to your
