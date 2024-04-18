@@ -28,28 +28,28 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
     let tempChecked =
       labelData && labelData?.pageSize !== undefined && labelData?.pageSize;
     setChecked(tempChecked);
-    // let a4LabelStoreOptionsValue =
-    //   labelData &&
-    //   labelData?.labelsOnPage !== undefined &&
-    //   labelData?.labelsOnPage;
-    // if (a4LabelStoreOptionsValue && labelData?.pageSize === "A4") {
-    //   setA4LabelOption(true);
-    //   setA4LabelOptionValue(a4LabelStoreOptionsValue);
-    // }
+    let a4LabelStoreOptionsValue =
+      labelData &&
+      labelData?.labelsOnPage !== undefined &&
+      labelData?.labelsOnPage;
+    if (a4LabelStoreOptionsValue && labelData?.pageSize === "A4") {
+      setA4LabelOption(true);
+      setA4LabelOptionValue(a4LabelStoreOptionsValue);
+    }
   }, [labelData]);
 
   const handleOptionChange = (e: any) => {
-    // if (e === "A4") {
-    //   setA4LabelOption(true);
-    // } else {
-    //   setA4LabelOption(false);
-    // }
+    if (e === "A4") {
+      setA4LabelOption(true);
+    } else {
+      setA4LabelOption(false);
+    }
     pageSize(e);
     setChecked(e);
   };
 
   const perPageLabelHandler = (e: any) => {
-    // setA4LabelOptionValue(e);
+    setA4LabelOptionValue(e);
     perPageLabel(e);
   };
 

@@ -275,7 +275,7 @@ const OrdersData: React.FunctionComponent<IOrdersDataProps> = (props) => {
     <div>
       <CustomTable
         columns={billingOrdersHeading}
-        data={data}
+        data={[]}
         thclassName={" bg-white"}
       />
     </div>
