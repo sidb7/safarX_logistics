@@ -72,6 +72,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
             //   setCustomAddressType(address?.addressType);
             // }
           }}
+          id="shopkeeper"
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -93,6 +94,8 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
             //   setCustomAddressType(address?.addressType);
             // }
           }}
+          id="warehouse-assistant"
+          // data-testid="warehouse-assistant"
         >
           <img src={LocationIcon} alt="Other" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -114,6 +117,8 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
             handlePickupAddressChange("addressType", customAddressType);
             setIsRightAddressTypeModal(true);
           }}
+          id="other"
+          // data-testid="dispatcher"
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">

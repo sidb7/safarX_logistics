@@ -27,6 +27,25 @@ const BusinessType = (props: ITypeProps) => {
     bussiness: false,
     company: false,
   });
+
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  const bussinessType: any = [];
+
+  //for the gtm
+  if (checked?.individual === true) {
+    bussinessType.push("Individual");
+  } else if (checked?.business === true) {
+    bussinessType.push("Business");
+  } else if (checked?.company === true) {
+    bussinessType.push("Company");
+  }
+
+  console.log("bussinessType", bussinessType);
+
+  const selectedKycOption = bussinessType.join(", ");
+
   useEffect(() => {
     // Attempt to retrieve the userInfo object from sessionStorage
     const userInfoString = sessionStorage.getItem("userInfo");
@@ -55,7 +74,6 @@ const BusinessType = (props: ITypeProps) => {
     }
   }, []);
 
-  console.log("cheecked, ", checked);
   //Calling API on Submit
 
   const onSubmitBusinessType = async () => {
@@ -66,6 +84,11 @@ const BusinessType = (props: ITypeProps) => {
       const { data: response } = await POST(POST_BUSINESS_TYPE_URL, payload);
       if (response?.success) {
         // toast.success(response?.message);
+        window?.dataLayer?.push({
+          event: "seller_kyc_type",
+          sellerId: sellerId,
+          seller_kyc_type: selectedKycOption,
+        });
         setLoading(false);
 
         // navigate("/onboarding/kyc-photo"); // temparory hide

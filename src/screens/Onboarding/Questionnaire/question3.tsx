@@ -54,6 +54,23 @@ export const QuestionComponent3: React.FunctionComponent = () => {
 
   const question = questionsData[2]?.question;
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  const sellerProducts: any = [];
+
+  for (let i = 0; i < questionsData.length; i++) {
+    if (questionsData[i].question === "How do you sell your products?") {
+      for (let j = 0; j < questionsData[i].options?.length; j++) {
+        if (questionsData[i].options[j]?.isChecked === true) {
+          sellerProducts.push(questionsData[i].options[j]?.value);
+        }
+      }
+    }
+  }
+
+  const sellerProductOption = sellerProducts.join(", ");
+
   const nextHandler = () => {
     // if (questionsData && questionsData?.length > 0) {
     //   const filterQuestion = questionsData[2]?.options.filter(
@@ -63,6 +80,11 @@ export const QuestionComponent3: React.FunctionComponent = () => {
     //     return toast.error("Please Select Atleast One Option");
     //   }
     // }
+    window?.dataLayer?.push({
+      event: "sign_up_qna_seller_products",
+      sellerId: sellerId,
+      seller_type_selected_products: sellerProductOption,
+    });
     const navigationObject = constructNavigationObject(
       "/onboarding/questionnaire/question4",
       window.location.search
