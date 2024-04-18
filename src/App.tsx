@@ -34,6 +34,10 @@ Sentry.setUser({
 });
 
 Sentry.init({
+  release: "blaze-react-seller@1.1",
+});
+
+Sentry.init({
   dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
   integrations: [
     Sentry.feedbackIntegration({
