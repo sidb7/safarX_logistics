@@ -27,11 +27,12 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
     checked ? "border-[2px] border-green-500" : "border-[1px] border-[#E8E8E8]"
   } bg-white w-[372px] h-full ${checked ? "bg-gray-100" : "bg-white"}`;
   return (
-    <div className={cardClasses} key={key}>
+    <div className={cardClasses} key={key} id="address-box-outline">
       <div className="flex justify-between ml-3 mb-1">
         <div className="flex items-center space-x-2">
           <CustomCheckbox
             checked={checked}
+            id="pickup-address-checkbox"
 
             // onChange={(e) => {
             //   setIsReturnAddress(e.target.checked);
