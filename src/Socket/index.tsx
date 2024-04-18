@@ -1,7 +1,10 @@
 // socket.ts
 import { io, Socket } from "socket.io-client";
 import { SELLER_URL } from "../utils/ApiUrls";
-import { GlobalToast } from "../components/GlobalToast/GlobalToast";
+import {
+  GlobalToast,
+  GlobalToastSuccess,
+} from "../components/GlobalToast/GlobalToast";
 import { setWalletBalance } from "../redux/reducers/userReducer";
 import { useEffect } from "react";
 import { channelState } from "../redux/reducers/syncChannel";
@@ -60,7 +63,31 @@ const connectSocket = (dispatch?: any) => {
     });
 
     socket.on("order_error", (data: any) => {
-      GlobalToast(data);
+      const url = window.location.href;
+      const parsedUrl = new URL(url);
+      const path = parsedUrl.pathname;
+      if (path === "/orders/view-orders") {
+        GlobalToast(data);
+      }
+    });
+
+    socket.on("webhook_order", (data: any) => {
+      const url = window.location.href;
+      const parsedUrl = new URL(url);
+      const path = parsedUrl.pathname;
+      if (path === "/orders/view-orders") {
+        GlobalToastSuccess("New Orders Found, Please refresh the page");
+      } else {
+        let message = "New Orders Found, Navigate to orders page?";
+        const isConfirmed = window.confirm(message);
+
+        if (isConfirmed) {
+          window.location.href = "/orders/view-orders?activeTab=draft";
+          window.onload = () => {
+            window.location.reload();
+          };
+        }
+      }
     });
 
     socket.on("trigger_refresh", (data: any) => {
