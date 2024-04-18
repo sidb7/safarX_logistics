@@ -526,6 +526,7 @@ const PickupLocation = () => {
               onChange={(e) => {
                 setIsReturnAddress(e.target.checked);
               }}
+              id="return-address-same-as-pickup"
             />
             <p className="text-[14px] font-Open text-[#004EFF] lg:font-semibold">
               Return Address Same As Pickup

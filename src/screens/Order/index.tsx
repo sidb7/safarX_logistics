@@ -74,6 +74,7 @@ import FilterScreen from "./common/FilterScreen/filterScreen";
 import ServiceButton from "../../components/Button/ServiceButton";
 import { Spinner } from "../../components/Spinner";
 import "../../styles/progressBar.css";
+import NewTrackingContent from "./newTrackingContent";
 
 const Buttons = (className?: string) => {
   const navigate = useNavigate();
@@ -326,6 +327,11 @@ const Index = () => {
   const [errorModalData, setErrorModalData]: any = useState();
   const [dateRange, setDateRange]: any = useState([null, null]);
   const [endDate, setEndDate] = useState<any>(new Date());
+  const [openRightModalForTracking, setOpenRightModalForTracking] =
+    useState<any>({
+      isOpen: false,
+      awbNo: "",
+    });
 
   const [startDate, setStartDate] = useState<any>(thirtyDaysAgo);
   const [searchedText, setSearchedText] = useState("");
@@ -1088,7 +1094,9 @@ const Index = () => {
               setInfoModalContent,
               setInfoModalContentFunction,
               currentStatus,
-              orderActions
+              orderActions,
+              setOpenRightModalForTracking,
+              openRightModalForTracking
             )
           );
           break;
@@ -1099,7 +1107,9 @@ const Index = () => {
               setInfoModalContent,
               setInfoModalContentFunction,
               currentStatus,
-              orderActions
+              orderActions,
+              setOpenRightModalForTracking,
+              openRightModalForTracking
             )
           );
           break;
@@ -1110,7 +1120,9 @@ const Index = () => {
               setInfoModalContent,
               currentStatus,
               orderActions,
-              setInfoModalContentFunction
+              setInfoModalContentFunction,
+              setOpenRightModalForTracking,
+              openRightModalForTracking
             )
           );
           break;
@@ -2216,6 +2228,22 @@ const Index = () => {
             ))
           )}
         </div>
+      </CustomRightModal>
+
+      {/* new Tracking Screen with right modal  */}
+      <CustomRightModal
+        isOpen={openRightModalForTracking?.isOpen}
+        onClose={() =>
+          setOpenRightModalForTracking({
+            ...openRightModalForTracking,
+            isOpen: false,
+          })
+        }
+      >
+        <NewTrackingContent
+          setOpenRightModalForTracking={setOpenRightModalForTracking}
+          openRightModalForTracking={openRightModalForTracking}
+        />
       </CustomRightModal>
     </>
   );

@@ -11,6 +11,7 @@ interface IServiceButtonProps {
   icon?: any;
   showIcon?: boolean;
   iconClass?: any;
+  id?: any;
 }
 
 const ServiceButton = (props: IServiceButtonProps) => {
@@ -23,6 +24,7 @@ const ServiceButton = (props: IServiceButtonProps) => {
     icon,
     showIcon,
     iconClass,
+    id,
   } = props;
 
   const excludeWords = ["B2B", "B2C", "KYC"];
@@ -32,6 +34,7 @@ const ServiceButton = (props: IServiceButtonProps) => {
       className={` flex items-center font-Open justify-center leading-5 border-[1px] border-[#A4A4A4] rounded  py-[8px] gap-[8px] text-sm font-semibold text-[#1C1C1C] text-center ${className}`}
       disabled={disabled}
       onClick={onClick}
+      id={id}
     >
       {showIcon && <img className={`${iconClass} mr-2`} src={icon} alt="" />}{" "}
       <p className="capitalize">

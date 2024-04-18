@@ -133,6 +133,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               setValidationError("name", validateName(nameValue));
             }}
             inputError={inputError}
+            name="name-contact-person"
           />
           {validationErrors.name && (
             <div className="flex items-center gap-x-1 mt-1">
@@ -159,6 +160,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
               }
             }}
             inputError={inputError}
+            name="mobile-number-contact-person"
           />
           {inputError && validationErrors.mobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
@@ -183,6 +185,8 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
                 setInputError(false);
               }
             }}
+            // inputError={inputError}
+            name="email-id-contact-person"
           />
           {inputError && validationErrors.emailId && (
             <div className="flex items-center gap-x-1 mt-1">
@@ -207,6 +211,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
                 validateAlternateMobileNo(numericValue)
               );
             }}
+            name="alternate-mobile-number-contact-person"
           />
           {validationErrors.alternateMobileNo && (
             <div className="flex items-center gap-x-1 mt-1">
@@ -235,6 +240,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
           onClick={(e) => {
             handleContactChange("type", "shopkeeper");
           }}
+          id="shopkeeper-contact-person"
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -251,6 +257,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
           onClick={() => {
             handleContactChange("type", "warehouse associate");
           }}
+          id="warehouse-associate-contact-person"
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">
@@ -267,6 +274,7 @@ const ContactDetails: React.FunctionComponent<IContactDetailsProps> = ({
           onClick={() => {
             handleContactChange("type", "dispatcher");
           }}
+          id="dispatcher-contact-person"
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open  lg:text-[14px] ">

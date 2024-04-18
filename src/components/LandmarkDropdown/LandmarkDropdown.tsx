@@ -103,6 +103,7 @@ const CustomInputWithDropDown: React.FC<CustomInputWithDropDownProps> = ({
         }}
         inputError={inputError}
         className="downarrowImage"
+        name="landmark-dropdown"
       />
 
       {isDropdownOpen && arrayValue.length > 0 && (
