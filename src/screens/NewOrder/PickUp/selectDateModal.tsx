@@ -189,7 +189,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
       )}
 
       <div className="lg:hidden ">
-        <Button text="Save" onClick={onClick} />
+        <Button text="Save" onClick={onClick} type="submit" />
       </div>
 
       <div
@@ -200,6 +200,7 @@ const SelectDateModalContent = (props: ITypeProps) => {
           text="SAVE"
           onClick={onClick}
           className="bg-[#1C1C1C] text-[#FFFFFF] lg:!py-2 lg:!px-4"
+          btnType="submit"
         />
       </div>
     </div>

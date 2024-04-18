@@ -46,6 +46,7 @@ const PickupDate: React.FunctionComponent<IPickupDateProps> = ({
         onClick={() => setIsDateRightModal(true)}
         inputError={inputError}
         inputClassName="w-[300px]"
+        name="pickupDate"
       />
 
       <RightSideModal
