@@ -29,10 +29,7 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
-  console.log(
-    "🚀 ~ Tracking ~ trackingCycleDetails:",
-    trackingCycleDetails.length
-  );
+
   const [edd, setEdd] = useState<any>();
   const [orderType, setOrderType] = useState<any>(false);
   const [rtoAwbNo, setRtoAwbNo] = useState<any>();
@@ -188,18 +185,12 @@ const Tracking = () => {
         `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
       );
 
-      console.log(
-        "data",
-        typeof response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
-      );
-
       //edd datatypes are different so based on data type of it
       if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
-        console.log("helloooooooooooo");
         const EDDtime = convertEpochToDateTime(
           response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
         );
-        console.log("EDDtime", EDDtime);
+
         setEdd(EDDtime);
       } else {
         setEdd(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD);
@@ -248,7 +239,6 @@ const Tracking = () => {
         setTrackingState([]);
       }
     } catch (error: any) {
-      console.error("Error in API call:", error);
     } finally {
       setLoading(false);
     }
@@ -480,7 +470,8 @@ const Tracking = () => {
                                             )}
                                           </div>
                                         </div>
-                                        <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
+                                        {/* commented for now */}
+                                        {/* <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
                                           <div className="md:flex-1 mt-2">
                                             <p className="text-[14px] font-normal font-Open leading-[16px] ">
                                               From:
@@ -500,7 +491,7 @@ const Tracking = () => {
                                               }
                                             </p>
                                           </div>
-                                        </div>
+                                        </div> */}
                                         {each?.currentStatus === "CANCELLED" ||
                                         each?.currentStatus ===
                                           "CANCEL REQUESTED" ||
@@ -561,13 +552,14 @@ const Tracking = () => {
                                         <div className="py-3">
                                           <hr />
                                         </div>
-                                        <div
+                                        {/* commented for now */}
+                                        {/* <div
                                           className="flex justify-between cursor-pointer w-[280px] md:w-full"
                                           onClick={() =>
                                             toggleSectionOrderDetails("product")
                                           }
                                         >
-                                          <div className="flex gap-x-1 ">
+                                          <div className="flex gap-x-1">
                                             <img src={Product} alt="" />
                                             <p className="text-sm font-Open font-semibold">
                                               Order Details
@@ -596,7 +588,7 @@ const Tracking = () => {
                                               />
                                             </div>
                                           )}
-                                        </div>
+                                        </div> */}
                                         <div>
                                           {openOrderDetails === "product" && (
                                             <>

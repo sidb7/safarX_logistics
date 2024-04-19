@@ -59,6 +59,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
         boxShadow:
           "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
       }}
+      data-cy="product-box"
     >
       <span
         className={`${
@@ -84,6 +85,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
                 alt=""
                 onClick={onClickEdit}
                 className="w-4 mx-2"
+                data-cy="edit-icon"
               />
             )}
 
@@ -101,6 +103,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
                     singleProduct: productId,
                   });
                 }}
+                data-cy="delete-icon"
               />
             )}
           </div>
