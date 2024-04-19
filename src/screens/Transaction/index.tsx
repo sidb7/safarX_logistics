@@ -183,9 +183,9 @@ export const Transaction = () => {
     }
   };
 
-  const errorFun = () => {
-    throw new Error("Hii");
-  };
+  // const errorFun = () => {
+  //   throw new Error("Hii");
+  // };
 
   return (
     <>
@@ -196,7 +196,7 @@ export const Transaction = () => {
           </div>
         ) : (
           <>
-            <div onClick={() => errorFun()}>
+            <div>
               <Breadcrum label="Transaction History" />
             </div>
             <div className="flex flex-col">
