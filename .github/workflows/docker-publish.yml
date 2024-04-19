@@ -3,7 +3,7 @@ name: Build and Push Docker image
 on:
   push:
     branches:
-      - main # Set to your default branch, e.g., main or master
+      - white-label # Set to your default branch, e.g., main or master
 
 jobs:
   build:
