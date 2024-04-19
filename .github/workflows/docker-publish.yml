@@ -1,0 +1,427 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - master
+      - production
+
+jobs:
+  production:
+    runs-on: production
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production'
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    env:
+      CI: false
+      NODE_ENV: ${{ secrets.NODE_ENV_PROD }}
+      PORT: ${{ secrets.PORT }}
+      GUPSHUP_USER_ID: ${{ secrets.GUPSHUP_USER_ID }}
+      GUPSHUP_PASSWORD: ${{ secrets.GUPSHUP_PASSWORD }}
+      MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+      MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_BUCKET_NAME_PROD: ${{ secrets.AWS_BUCKET_NAME_PROD }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SQS_URL: ${{ secrets.AWS_SQS_URL }}
+      RATE_LIMIT: ${{ secrets.RATE_LIMIT }}
+      TOKEN_VALIDITY: ${{ secrets.TOKEN_VALIDITY }}
+      GOOGLE_MAP_KEY: ${{ secrets.GOOGLE_MAP_KEY }}
+      MESSAGE_BIRD_KEY: ${{ secrets.MESSAGE_BIRD_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      MONGO_URI_USER_PROD: ${{ secrets.MONGO_URI_USER_PROD }}
+      ADMIN_JWT_SECRET_PROD: ${{ secrets.ADMIN_JWT_SECRET_PROD }}
+      ADMIN_SALT_PROD: ${{ secrets.ADMIN_SALT_PROD }}
+      SELLER_JWT_SECRET_PROD: ${{ secrets.SELLER_JWT_SECRET_PROD }}
+      SELLER_SALT_PROD: ${{ secrets.SELLER_SALT_PROD }}
+      REDIS_HOST_PROD: ${{ secrets.REDIS_HOST_PROD }}
+      REDIS_PW_PROD: ${{ secrets.REDIS_PW_PROD }}
+      RABBIT_HOST_PROD: ${{ secrets.RABBIT_HOST_PROD }}
+      DOC_VERIFY_URL_PROD: ${{ secrets.DOC_VERIFY_URL_PROD }}
+      PARTNER_URL_PROD: ${{ secrets.PARTNER_URL_PROD }}
+      PAYMENTS_URL_PROD: ${{ secrets.PAYMENTS_URL_PROD }}
+      FILE_SERVER_URL_PROD: ${{ secrets.FILE_SERVER_URL_PROD }}
+      SENTRY_KEY_PROD: ${{ secrets.SENTRY_KEY_PROD }}
+      SELLER_URL_PROD: ${{ secrets.SELLER_URL_PROD }}
+      SELLER_URL_WEB_PROD: ${{ secrets.SELLER_URL_WEB_PROD }}
+      E_INVOICE_USERNAME: ${{ secrets.E_INVOICE_USERNAME }}
+      E_INVOICE_PASSWORD: ${{ secrets.E_INVOICE_PASSWORD }}
+      E_INVOICE_CLIENT_ID: ${{ secrets.E_INVOICE_CLIENT_ID }}
+      E_INVOICE_CLIENT_SECRET: ${{ secrets.E_INVOICE_CLIENT_SECRET }}
+      E_INVOICE_GRANT_TYPE: ${{ secrets.E_INVOICE_GRANT_TYPE }}
+      MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+      MYSQL_USER: ${{ secrets.MYSQL_USER }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+      API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Using Production Keys
+        run: |
+          echo "CI: $CI"
+          echo "NODE_ENV: $NODE_ENV"
+          echo "PORT: $PORT"
+          echo "GUPSHUP_USER_ID: $GUPSHUP_USER_ID"
+          echo "GUPSHUP_PASSWORD: $GUPSHUP_PASSWORD"
+          echo "MAILGUN_API_KEY: $MAILGUN_API_KEY"
+          echo "MAILGUN_DOMAIN: $MAILGUN_DOMAIN"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "AWS_BUCKET_NAME_PROD: $AWS_BUCKET_NAME_PROD"
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+          echo "AWS_SQS_URL: $AWS_SQS_URL"
+          echo "RATE_LIMIT: $RATE_LIMIT"
+          echo "TOKEN_VALIDITY: $TOKEN_VALIDITY"
+          echo "GOOGLE_MAP_KEY: $GOOGLE_MAP_KEY"
+          echo "MESSAGE_BIRD_KEY: $MESSAGE_BIRD_KEY"
+          echo "OPENAI_API_KEY: $OPENAI_API_KEY"
+          echo "MONGO_URI_USER_PROD: $MONGO_URI_USER_PROD"
+          echo "ADMIN_JWT_SECRET_PROD: $ADMIN_JWT_SECRET_PROD"
+          echo "ADMIN_SALT_PROD: $ADMIN_SALT_PROD"
+          echo "SELLER_JWT_SECRET_PROD: $SELLER_JWT_SECRET_PROD"
+          echo "SELLER_SALT_PROD: $SELLER_SALT_PROD"
+          echo "REDIS_HOST_PROD: $REDIS_HOST_PROD"
+          echo "REDIS_PW_PROD: $REDIS_PW_PROD"
+          echo "RABBIT_HOST_PROD: $RABBIT_HOST_PROD"
+          echo "DOC_VERIFY_URL_PROD: $DOC_VERIFY_URL_PROD"
+          echo "PARTNER_URL_PROD: $PARTNER_URL_PROD"
+          echo "PAYMENTS_URL_PROD: $PAYMENTS_URL_PROD"
+          echo "FILE_SERVER_URL_PROD: $FILE_SERVER_URL_PROD"
+          echo "SENTRY_KEY_PROD: $SENTRY_KEY_PROD"
+          echo "SELLER_URL_PROD: $SELLER_URL_PROD"
+          echo "SELLER_URL_WEB_PROD: $SELLER_URL_WEB_PROD"
+          echo "E_INVOICE_USERNAME: $E_INVOICE_USERNAME"
+          echo "E_INVOICE_PASSWORD: $E_INVOICE_PASSWORD"
+          echo "E_INVOICE_CLIENT_ID: $E_INVOICE_CLIENT_ID"
+          echo "E_INVOICE_CLIENT_SECRET: $E_INVOICE_CLIENT_SECRET"
+          echo "E_INVOICE_GRANT_TYPE: $E_INVOICE_GRANT_TYPE"
+          echo "MYSQL_HOST: $MYSQL_HOST"
+          echo "MYSQL_USER: $MYSQL_USER"
+          echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+          echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+          echo "API_SECRET_TOKEN: $API_SECRET_TOKEN"
+
+      - name: Install and Build for Production
+        run: |
+          npm install
+          npm run build
+
+      - name: Setting Up The Working Dir
+        run: |
+          echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+          cd ..
+          echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+          echo "CHILD_DIR=$PWD/admin-backend-build" >> $GITHUB_ENV
+          cd $CURRENT_DIR
+          echo "CURRENT_DIR=$CURRENT_DIR"
+
+      - name: Create Serving Folder If Not Exists
+        run: |
+          # Check if the folder exists
+          if [ ! -d $CHILD_DIR ]; then
+            # Create the folder
+            mkdir -p $CHILD_DIR
+          else
+            echo "Folder already exists"
+          fi
+
+      - name: Start PM2 Process for Production
+        run: |
+          npm install -g pm2 typescript serve ts-node
+          cp -r $CURRENT_DIR/* $CHILD_DIR/
+          cd $CHILD_DIR/
+          pm2 stop admin-backend || true
+          pm2 delete admin-backend || true
+          pm2 start process.json
+
+  # prod2:
+  #   runs-on: production
+  #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/production'
+
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x]
+
+  #   env:
+  #     CI: false
+  #     NODE_ENV: ${{ secrets.NODE_ENV_PROD }}
+  #     PORT: ${{ secrets.PORT }}
+  #     GUPSHUP_USER_ID: ${{ secrets.GUPSHUP_USER_ID }}
+  #     GUPSHUP_PASSWORD: ${{ secrets.GUPSHUP_PASSWORD }}
+  #     MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+  #     MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     AWS_BUCKET_NAME_PROD: ${{ secrets.AWS_BUCKET_NAME_PROD }}
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     AWS_SQS_URL: ${{ secrets.AWS_SQS_URL }}
+  #     RATE_LIMIT: ${{ secrets.RATE_LIMIT }}
+  #     TOKEN_VALIDITY: ${{ secrets.TOKEN_VALIDITY }}
+  #     GOOGLE_MAP_KEY: ${{ secrets.GOOGLE_MAP_KEY }}
+  #     MESSAGE_BIRD_KEY: ${{ secrets.MESSAGE_BIRD_KEY }}
+  #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #     MONGO_URI_USER_PROD: ${{ secrets.MONGO_URI_USER_PROD }}
+  #     ADMIN_JWT_SECRET_PROD: ${{ secrets.ADMIN_JWT_SECRET_PROD }}
+  #     ADMIN_SALT_PROD: ${{ secrets.ADMIN_SALT_PROD }}
+  #     SELLER_JWT_SECRET_PROD: ${{ secrets.SELLER_JWT_SECRET_PROD }}
+  #     SELLER_SALT_PROD: ${{ secrets.SELLER_SALT_PROD }}
+  #     REDIS_HOST_PROD: ${{ secrets.REDIS_HOST_PROD }}
+  #     REDIS_PW_PROD: ${{ secrets.REDIS_PW_PROD }}
+  #     RABBIT_HOST_PROD: ${{ secrets.RABBIT_HOST_PROD }}
+  #     DOC_VERIFY_URL_PROD: ${{ secrets.DOC_VERIFY_URL_PROD }}
+  #     PARTNER_URL_PROD: ${{ secrets.PARTNER_URL_PROD }}
+  #     PAYMENTS_URL_PROD: ${{ secrets.PAYMENTS_URL_PROD }}
+  #     FILE_SERVER_URL_PROD: ${{ secrets.FILE_SERVER_URL_PROD }}
+  #     SENTRY_KEY_PROD: ${{ secrets.SENTRY_KEY_PROD }}
+  #     SELLER_URL_PROD: ${{ secrets.SELLER_URL_PROD }}
+  #     SELLER_URL_WEB_PROD: ${{ secrets.SELLER_URL_WEB_PROD }}
+  #     E_INVOICE_USERNAME: ${{ secrets.E_INVOICE_USERNAME }}
+  #     E_INVOICE_PASSWORD: ${{ secrets.E_INVOICE_PASSWORD }}
+  #     E_INVOICE_CLIENT_ID: ${{ secrets.E_INVOICE_CLIENT_ID }}
+  #     E_INVOICE_CLIENT_SECRET: ${{ secrets.E_INVOICE_CLIENT_SECRET }}
+  #     E_INVOICE_GRANT_TYPE: ${{ secrets.E_INVOICE_GRANT_TYPE }}
+  #     MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+  #     MYSQL_USER: ${{ secrets.MYSQL_USER }}
+  #     MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  #     MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  #     API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+
+  #     - name: Using Production Keys
+  #       run: |
+  #         echo "CI: $CI"
+  #         echo "NODE_ENV: $NODE_ENV"
+  #         echo "PORT: $PORT"
+  #         echo "GUPSHUP_USER_ID: $GUPSHUP_USER_ID"
+  #         echo "GUPSHUP_PASSWORD: $GUPSHUP_PASSWORD"
+  #         echo "MAILGUN_API_KEY: $MAILGUN_API_KEY"
+  #         echo "MAILGUN_DOMAIN: $MAILGUN_DOMAIN"
+  #         echo "AWS_REGION: $AWS_REGION"
+  #         echo "AWS_BUCKET_NAME_PROD: $AWS_BUCKET_NAME_PROD"
+  #         echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+  #         echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+  #         echo "AWS_SQS_URL: $AWS_SQS_URL"
+  #         echo "RATE_LIMIT: $RATE_LIMIT"
+  #         echo "TOKEN_VALIDITY: $TOKEN_VALIDITY"
+  #         echo "GOOGLE_MAP_KEY: $GOOGLE_MAP_KEY"
+  #         echo "MESSAGE_BIRD_KEY: $MESSAGE_BIRD_KEY"
+  #         echo "OPENAI_API_KEY: $OPENAI_API_KEY"
+  #         echo "MONGO_URI_USER_PROD: $MONGO_URI_USER_PROD"
+  #         echo "ADMIN_JWT_SECRET_PROD: $ADMIN_JWT_SECRET_PROD"
+  #         echo "ADMIN_SALT_PROD: $ADMIN_SALT_PROD"
+  #         echo "SELLER_JWT_SECRET_PROD: $SELLER_JWT_SECRET_PROD"
+  #         echo "SELLER_SALT_PROD: $SELLER_SALT_PROD"
+  #         echo "REDIS_HOST_PROD: $REDIS_HOST_PROD"
+  #         echo "REDIS_PW_PROD: $REDIS_PW_PROD"
+  #         echo "RABBIT_HOST_PROD: $RABBIT_HOST_PROD"
+  #         echo "DOC_VERIFY_URL_PROD: $DOC_VERIFY_URL_PROD"
+  #         echo "PARTNER_URL_PROD: $PARTNER_URL_PROD"
+  #         echo "PAYMENTS_URL_PROD: $PAYMENTS_URL_PROD"
+  #         echo "FILE_SERVER_URL_PROD: $FILE_SERVER_URL_PROD"
+  #         echo "SENTRY_KEY_PROD: $SENTRY_KEY_PROD"
+  #         echo "SELLER_URL_PROD: $SELLER_URL_PROD"
+  #         echo "SELLER_URL_WEB_PROD: $SELLER_URL_WEB_PROD"
+  #         echo "E_INVOICE_USERNAME: $E_INVOICE_USERNAME"
+  #         echo "E_INVOICE_PASSWORD: $E_INVOICE_PASSWORD"
+  #         echo "E_INVOICE_CLIENT_ID: $E_INVOICE_CLIENT_ID"
+  #         echo "E_INVOICE_CLIENT_SECRET: $E_INVOICE_CLIENT_SECRET"
+  #         echo "E_INVOICE_GRANT_TYPE: $E_INVOICE_GRANT_TYPE"
+  #         echo "MYSQL_HOST: $MYSQL_HOST"
+  #         echo "MYSQL_USER: $MYSQL_USER"
+  #         echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+  #         echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+  #         echo "API_SECRET_TOKEN: $API_SECRET_TOKEN"
+
+  #     - name: Install and Build for Production
+  #       run: |
+  #         npm install
+  #         npm run build
+
+  #     - name: Setting Up The Working Dir
+  #       run: |
+  #         echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+  #         cd ..
+  #         echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+  #         echo "CHILD_DIR=$PWD/admin-backend-build" >> $GITHUB_ENV
+  #         cd $CURRENT_DIR
+  #         echo "CURRENT_DIR=$CURRENT_DIR"
+
+  #     - name: Create Serving Folder If Not Exists
+  #       run: |
+  #         # Check if the folder exists
+  #         if [ ! -d $CHILD_DIR ]; then
+  #           # Create the folder
+  #           mkdir -p $CHILD_DIR
+  #         else
+  #           echo "Folder already exists"
+  #         fi
+
+  #     - name: Start PM2 Process for Production
+  #       run: |
+  #         npm install -g pm2 typescript serve ts-node
+  #         cp -r $CURRENT_DIR/* $CHILD_DIR/
+  #         cd $CHILD_DIR/
+  #         pm2 stop admin-backend || true
+  #         pm2 delete admin-backend || true
+  #         pm2 start process.json
+
+  # development:
+  #   runs-on: development
+  #   if: github.ref == 'refs/heads/develop'
+
+  #   strategy:
+  #     matrix:
+  #       node-version: [20.x]
+
+  #   env:
+  #     CI: false
+  #     NODE_ENV: ${{ secrets.NODE_ENV_DEV }}
+  #     PORT: ${{ secrets.PORT }}
+  #     GUPSHUP_USER_ID: ${{ secrets.GUPSHUP_USER_ID }}
+  #     GUPSHUP_PASSWORD: ${{ secrets.GUPSHUP_PASSWORD }}
+  #     MAILGUN_API_KEY: ${{ secrets.MAILGUN_API_KEY }}
+  #     MAILGUN_DOMAIN: ${{ secrets.MAILGUN_DOMAIN }}
+  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+  #     AWS_BUCKET_NAME_DEV: ${{ secrets.AWS_BUCKET_NAME_DEV }}
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     AWS_SQS_URL: ${{ secrets.AWS_SQS_URL }}
+  #     RATE_LIMIT: ${{ secrets.RATE_LIMIT }}
+  #     TOKEN_VALIDITY: ${{ secrets.TOKEN_VALIDITY }}
+  #     GOOGLE_MAP_KEY: ${{ secrets.GOOGLE_MAP_KEY }}
+  #     MESSAGE_BIRD_KEY: ${{ secrets.MESSAGE_BIRD_KEY }}
+  #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #     MONGO_URI_USER_DEV: ${{ secrets.MONGO_URI_USER_DEV }}
+  #     ADMIN_JWT_SECRET_DEV: ${{ secrets.ADMIN_JWT_SECRET_DEV }}
+  #     ADMIN_SALT_DEV: ${{ secrets.ADMIN_SALT_DEV }}
+  #     SELLER_JWT_SECRET_DEV: ${{ secrets.SELLER_JWT_SECRET_DEV }}
+  #     SELLER_SALT_DEV: ${{ secrets.SELLER_SALT_DEV }}
+  #     REDIS_HOST_DEV: ${{ secrets.REDIS_HOST_DEV }}
+  #     REDIS_PW_DEV: ${{ secrets.REDIS_PW_DEV }}
+  #     RABBIT_HOST_DEV: ${{ secrets.RABBIT_HOST_DEV }}
+  #     DOC_VERIFY_URL_DEV: ${{ secrets.DOC_VERIFY_URL_DEV }}
+  #     PARTNER_URL_DEV: ${{ secrets.PARTNER_URL_DEV }}
+  #     PAYMENTS_URL_DEV: ${{ secrets.PAYMENTS_URL_DEV }}
+  #     FILE_SERVER_URL_DEV: ${{ secrets.FILE_SERVER_URL_DEV }}
+  #     SENTRY_KEY_DEV: ${{ secrets.SENTRY_KEY_DEV }}
+  #     SELLER_URL_DEV: ${{ secrets.SELLER_URL_DEV }}
+  #     SELLER_URL_WEB_DEV: ${{ secrets.SELLER_URL_WEB_DEV }}
+  #     E_INVOICE_USERNAME: ${{ secrets.E_INVOICE_USERNAME }}
+  #     E_INVOICE_PASSWORD: ${{ secrets.E_INVOICE_PASSWORD }}
+  #     E_INVOICE_CLIENT_ID: ${{ secrets.E_INVOICE_CLIENT_ID }}
+  #     E_INVOICE_CLIENT_SECRET: ${{ secrets.E_INVOICE_CLIENT_SECRET }}
+  #     E_INVOICE_GRANT_TYPE: ${{ secrets.E_INVOICE_GRANT_TYPE }}
+  #     MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+  #     MYSQL_USER: ${{ secrets.MYSQL_USER }}
+  #     MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+  #     MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+  #     API_SECRET_TOKEN: ${{ secrets.API_SECRET_TOKEN }}
+
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Use Node.js ${{ matrix.node-version }}
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
+
+  #     - name: Using Development Keys
+  #       run: |
+  #         echo "CI: $CI"
+  #         echo "NODE_ENV: $NODE_ENV:"
+  #         echo "PORT: $PORT"
+  #         echo "GUPSHUP_USER_ID: $GUPSHUP_USER_ID"
+  #         echo "GUPSHUP_PASSWORD: $GUPSHUP_PASSWORD"
+  #         echo "MAILGUN_API_KEY: $MAILGUN_API_KEY"
+  #         echo "MAILGUN_DOMAIN: $MAILGUN_DOMAIN"
+  #         echo "AWS_REGION: $AWS_REGION"
+  #         echo "AWS_BUCKET_NAME_DEV: $AWS_BUCKET_NAME_DEV"
+  #         echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+  #         echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+  #         echo "AWS_SQS_URL: $AWS_SQS_URL"
+  #         echo "RATE_LIMIT: $RATE_LIMIT"
+  #         echo "TOKEN_VALIDITY: $TOKEN_VALIDITY"
+  #         echo "GOOGLE_MAP_KEY: $GOOGLE_MAP_KEY"
+  #         echo "MESSAGE_BIRD_KEY: $MESSAGE_BIRD_KEY"
+  #         echo "OPENAI_API_KEY: $OPENAI_API_KEY"
+  #         echo "MONGO_URI_USER_DEV: $MONGO_URI_USER_DEV"
+  #         echo "ADMIN_JWT_SECRET_DEV: $ADMIN_JWT_SECRET_DEV"
+  #         echo "ADMIN_SALT_DEV: $ADMIN_SALT_DEV"
+  #         echo "SELLER_JWT_SECRET_DEV: $SELLER_JWT_SECRET_DEV"
+  #         echo "SELLER_SALT_DEV: $SELLER_SALT_DEV"
+  #         echo "REDIS_HOST_DEV: $REDIS_HOST_DEV"
+  #         echo "REDIS_PW_DEV: $REDIS_PW_DEV"
+  #         echo "RABBIT_HOST_DEV: $RABBIT_HOST_DEV"
+  #         echo "DOC_VERIFY_URL_DEV: $DOC_VERIFY_URL_DEV"
+  #         echo "PARTNER_URL_DEV: $PARTNER_URL_DEV"
+  #         echo "PAYMENTS_URL_DEV: $PAYMENTS_URL_DEV"
+  #         echo "FILE_SERVER_URL_DEV: $FILE_SERVER_URL_DEV"
+  #         echo "SENTRY_KEY_DEV: $SENTRY_KEY_DEV"
+  #         echo "SELLER_URL_DEV: $SELLER_URL_DEV"
+  #         echo "SELLER_URL_WEB_DEV: $SELLER_URL_WEB_DEV"
+  #         echo "E_INVOICE_USERNAME: $E_INVOICE_USERNAME"
+  #         echo "E_INVOICE_PASSWORD: $E_INVOICE_PASSWORD"
+  #         echo "E_INVOICE_CLIENT_ID: $E_INVOICE_CLIENT_ID"
+  #         echo "E_INVOICE_CLIENT_SECRET: $E_INVOICE_CLIENT_SECRET"
+  #         echo "E_INVOICE_GRANT_TYPE: $E_INVOICE_GRANT_TYPE"
+  #         echo "MYSQL_HOST: $MYSQL_HOST"
+  #         echo "MYSQL_USER: $MYSQL_USER"
+  #         echo "MYSQL_PASSWORD: $MYSQL_PASSWORD"
+  #         echo "MYSQL_DATABASE: $MYSQL_DATABASE"
+  #         echo "API_SECRET_TOKEN: $API_SECRET_TOKEN"
+
+  #     - name: Install and Build for Development
+  #       run: |
+  #         npm install
+  #         CI=false npm run build --if-present
+
+  #     - name: Setting Up The Working Dir
+  #       run: |
+  #         echo "CURRENT_DIR=$PWD" >> $GITHUB_ENV
+  #         cd ..
+  #         echo "PARENT_DIR=$PWD" >> $GITHUB_ENV
+  #         echo "CHILD_DIR=$PWD/admin-backend-build" >> $GITHUB_ENV
+  #         cd $CURRENT_DIR
+  #         echo "CURRENT_DIR=$CURRENT_DIR"
+
+  #     - name: Create Serving Folder If Not Exists
+  #       run: |
+  #         # Check if the folder exists
+  #         if [ ! -d $CHILD_DIR ]; then
+  #           # Create the folder
+  #           mkdir -p $CHILD_DIR
+  #         else
+  #           echo "Folder already exists"
+  #         fi
+
+  #     - name: Start PM2 Process for Development
+  #       run: |
+  #         npm install -g pm2 typescript serve ts-node
+  #         cp -r $CURRENT_DIR/* $CHILD_DIR/
+  #         cd $CHILD_DIR/
+  #         pm2 stop admin-backend || true
+  #         pm2 delete admin-backend || true
+  #         pm2 start process.json
