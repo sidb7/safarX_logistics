@@ -66,6 +66,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
         {Object.keys(address.workingDays)?.map((day) => (
           <div
             key={day}
+            id={`timing-change-${day}`}
             className={`flex ${
               isLgScreen
                 ? "flex-row justify-center text-[16px] items-center gap-[8px] border-[0.5px] rounded bg-[#FEFEFE] cursor-pointer lg:h-[35px] py-2 px-4 lg:w-[172px]"
@@ -82,6 +83,7 @@ const AddressTiming: React.FunctionComponent<IAddressTimingProps> = ({
               <Checkbox
                 checked={address.workingDays[day as keyof TimingState]}
                 checkboxClassName="gap-2"
+                id={`checkbox-${day}`}
               />
               <p
                 className={`bg-white lg:font-semibold lg:font-Open lg:text-sm ${

@@ -286,6 +286,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 }}
                 placeholder="Paste Address for the Magic"
                 title=""
+                id="magicAddressInput"
               />
               <div>
                 <div className="absolute right-[1%] top-[70%] transform -translate-y-1/2 cursor-pointer">
@@ -319,6 +320,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             onClick={() => {
               setIsLocationRightModal(true);
             }}
+            name="choose-location"
           />
         </div>
 
@@ -330,6 +332,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               handlePickupAddressChange("flatNo", e.target.value);
             }}
             inputError={inputError}
+            name="flat-no"
           />
         </div>
 
@@ -341,6 +344,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               handlePickupAddressChange("locality", e.target.value)
             }
             inputError={inputError}
+            name="locality"
           />
         </div>
 
@@ -372,6 +376,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
                 setValidationError("PIN code must be a 6-digit number");
               }
             }}
+            name="pincode"
           />
           {validationError && (
             <div className="flex items-center gap-x-1 mt-1">
@@ -389,6 +394,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             value={address.city}
             inputError={inputError}
             onChange={(e) => handlePickupAddressChange("city", e.target.value)}
+            name="city"
           />
         </div>
 
@@ -402,6 +408,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
             options={dummyStateDropdownData}
             placeHolder="Select State"
             inputError={inputError}
+            name="state"
           />
         </div>
 
@@ -413,6 +420,7 @@ const AddressCard: React.FunctionComponent<IAddressCardProps> = ({
               handlePickupAddressChange("country", e.target.value)
             }
             inputError={inputError}
+            name="country"
           />
         </div>
 

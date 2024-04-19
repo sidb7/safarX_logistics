@@ -32,7 +32,7 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
         <div className="flex items-center space-x-2">
           <CustomCheckbox
             checked={checked}
-            id="pickup-address-checkbox"
+            id="address-checkbox"
 
             // onChange={(e) => {
             //   setIsReturnAddress(e.target.checked);
@@ -53,14 +53,24 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
 
       <div className="flex flex-col gap-y-4 px-4 w-[250px] lg:w-[280px] mt-4">
         <div className="flex gap-x-2 ">
-          <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
-          <p className="text-[14px] font-semibold font-Open leading-[18px]">
+          <img
+            src={ProfileImage}
+            alt="profileImage"
+            className="w-[16px] h-[16px]"
+          />
+          <p
+            className="text-[14px] font-semibold font-Open leading-[18px]"
+            id="name"
+          >
             {name}
           </p>
         </div>
         <div className="flex gap-x-2">
           <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
-          <p className="text-xs font-semibold font-Open leading-[18px]">
+          <p
+            className="text-xs font-semibold font-Open leading-[18px]"
+            id="phone"
+          >
             +91 {phoneNumber}
           </p>
         </div>
