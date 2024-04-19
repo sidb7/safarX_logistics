@@ -28,6 +28,18 @@ import { Integrations } from "@sentry/tracing";
 import * as Sentry from "@sentry/react";
 import "./styles/index.css";
 
+const timestamp = Date.now(); // Get the current timestamp in milliseconds
+const date = new Date(timestamp); // Create a Date object from the timestamp
+
+// Format the date as a string in "dd-mm-yyyy" format
+const formattedDate = `${padZero(date.getDate())}-${padZero(
+  date.getMonth() + 1
+)}-${date.getFullYear()}`;
+
+function padZero(num: any) {
+  return num.toString().padStart(2, "0"); // Pad the number with leading zero if less than 10
+}
+
 Sentry.setUser({
   email: JSON.parse(sessionStorage.getItem("userInfo") as any)?.email,
   username: JSON.parse(sessionStorage.getItem("userInfo") as any)?.name,
@@ -46,7 +58,7 @@ Sentry.init({
     new Integrations.BrowserTracing(),
   ],
   tracesSampleRate: 1.0,
-  release: "blaze-react-seller@1.1",
+  release: `blaze-react-seller@${formattedDate}`,
 });
 
 declare global {
