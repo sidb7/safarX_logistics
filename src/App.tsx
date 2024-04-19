@@ -24,6 +24,30 @@ import {
   setLocalStorage,
   tokenKey,
 } from "./utils/utility";
+import { Integrations } from "@sentry/tracing";
+import * as Sentry from "@sentry/react";
+import "./styles/index.css";
+
+Sentry.setUser({
+  email: JSON.parse(sessionStorage.getItem("userInfo") as any)?.email,
+  username: JSON.parse(sessionStorage.getItem("userInfo") as any)?.name,
+});
+
+Sentry.init({
+  dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+  integrations: [
+    Sentry.feedbackIntegration({
+      // Additional SDK configuration goes in here, for example:
+
+      colorScheme: "light",
+      isNameRequired: true,
+      isEmailRequired: true,
+    }),
+    new Integrations.BrowserTracing(),
+  ],
+  tracesSampleRate: 1.0,
+  release: "blaze-react-seller@1.1",
+});
 
 declare global {
   interface Window {
