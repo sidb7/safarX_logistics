@@ -95,7 +95,6 @@ const Index = () => {
 
       Sentry.setUser({
         email: sellerData?.email,
-        username: `${sellerData?.firstName} ${sellerData?.lastName}`,
       });
 
       setLoading(true);
