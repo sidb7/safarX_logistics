@@ -19,7 +19,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v3
       with:
-        context: .docker/dev
+        context: ./docker/dev
         push: true
         tags: avnbusiness/blaze-react:1.0.beta
         cache-to: type=inline
