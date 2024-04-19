@@ -19,19 +19,28 @@ const CommonLayout: React.FunctionComponent<ICommonLayoutProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const userInfo: any = sessionStorage?.getItem("userInfo");
-    const { sellerId, email, isReturningUser, name, nextStep } =
-      JSON.parse(userInfo);
+    const userInfo = sessionStorage.getItem("userInfo");
+    if (userInfo) {
+      try {
+        const parsedUserInfo = JSON.parse(userInfo);
+        const { sellerId, email, isReturningUser, name, nextStep } =
+          parsedUserInfo;
 
-    window?.dataLayer?.push({
-      event: "page_view",
-      seller_email: email,
-      sellerId: sellerId,
-      seller_name: name,
-      seller_kyc: nextStep?.kyc,
-      seller_bank_verification_done: nextStep?.bank,
-      isReturningUser: isReturningUser,
-    });
+        window?.dataLayer?.push({
+          event: "page_view",
+          seller_email: email,
+          sellerId: sellerId,
+          seller_name: name,
+          seller_kyc: nextStep?.kyc,
+          seller_bank_verification_done: nextStep?.bank,
+          isReturningUser: isReturningUser,
+        });
+      } catch (error) {
+        console.error("Failed to parse user info:", error);
+      }
+    } else {
+      console.log("No user info available in sessionStorage");
+    }
   }, [useNavigate()]);
 
   return (
