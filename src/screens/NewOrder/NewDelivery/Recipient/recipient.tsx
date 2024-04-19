@@ -24,8 +24,9 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
       className={`relative z-1 mt-5 mx-5 lg:mb-5 mb-4 border-[1px] h-[230px] rounded border-[#EAEAEA] ${
         isError ? "border-red-500" : "border-[#EAEAEA]"
       }  bg-[#FFFFFF] drop-shadow-xl px-4 pt-[40px] pb-[8px] lg:w-2/4 xl:w-1/4 `}
+      id="consumer-type"
     >
-      <div className="grid">
+      <div className="grid" id="consumer-b2c">
         <div
           className={`relative z-1  border-[1px] rounded  bg-[#FEFEFE] h-[150px] ${
             type === "B2C" ? "border-[#1C1C1C]" : "border-[#EAEAEA]"
@@ -56,6 +57,7 @@ const RecipientType: React.FunctionComponent<IRecipientType> = ({
               <Checkbox
                 checked={type === "B2C" ? true : false}
                 checkboxClassName="gap-2"
+                id="b2c"
               />
             )}
             <p className="bg-white lg:font-semibold lg:font-Open lg:text-sm">

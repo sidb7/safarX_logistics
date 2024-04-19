@@ -66,6 +66,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           onClick={(e) => {
             handlePickupAddressChange("addressType", "office");
           }}
+          id="office"
         >
           <img src={OfficeIcon} alt="ShopKeeper" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -81,6 +82,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
           onClick={(e) => {
             handlePickupAddressChange("addressType", "warehouse");
           }}
+          id="warehouse"
         >
           <img src={LocationIcon} alt="Other" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] ">
@@ -102,6 +104,7 @@ const SaveAddress: React.FunctionComponent<ISaveAddressProps> = ({
             handlePickupAddressChange("addressType", customAddressType);
             setIsRightAddressTypeModal(true);
           }}
+          id="other"
         >
           <img src={WarehouseIcon} alt="Warehouse associate" />
           <p className="lg:font-semibold lg:font-Open lg:text-[14px] whitespace-nowrap">

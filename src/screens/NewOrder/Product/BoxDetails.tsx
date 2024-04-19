@@ -151,9 +151,9 @@ const BoxDetails = (props: IBoxdetails) => {
   };
 
   return (
-    <div className="w-[500px]">
+    <div className="w-[500px]" data-cy="package-container">
       <div className="flex p-3 lg:p-5 gap-x-2">
-        <img src={ProductIcon} alt="Package Icon" />
+        <img src={ProductIcon} alt="Package Icon" data-cy="package-icon" />
         <h1 className="flex items-baseline gap-x-2 font-Lato text-center text-gray-900 font-normal text-[1.2rem] lg:text-[1.5rem] lg:text-[#1C1C1C] ">
           Box {boxIndex + 1}
           <div className="font-Lato text-lg text-gray-900 font-normal text-[1.2rem] lg:text-[1.5rem] lg:text-[#1C1C1C]">{`(${calcTotalProducts(
@@ -168,21 +168,27 @@ const BoxDetails = (props: IBoxdetails) => {
             "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05), 0px 23px 23px 0px rgba(133, 133, 133, 0.04)",
           border: "1px solid #E8E8E8",
         }}
+        data-cy="product-container"
       >
         <div className="p-2 flex items-center ">
-          <div className="font-semibold text-base lg:text-lg">
+          <div
+            className="font-semibold text-base lg:text-lg"
+            data-cy="box-name"
+          >
             {selectedBox.name}
           </div>
           <div className="flex px-4 gap-x-2">
             <div
               onClick={() => handleEditBoxType(selectedBox, boxIndex, true)}
               className="cursor-pointer"
+              data-cy="edit-box-type"
             >
               <img src={EditIcon} alt="" />
             </div>
             <div
               className="cursor-pointer"
               onClick={() => removePackage(boxIndex)}
+              data-cy="remove-package"
             >
               <img src={DeleteIcon} className="!h-4 !w-4" alt="" />
             </div>
@@ -191,6 +197,7 @@ const BoxDetails = (props: IBoxdetails) => {
 
         <div
           className={`!transition-all !duration-700 !ease-in-out flex flex-col scroll-smooth overflow-auto rounded-lg border border-x-[#E8E8E8] shadow-none hover:shadow-inner`}
+          data-cy="product-list"
         >
           {!(allProducts.length > 0) && (
             <div className="h-full w-full flex justify-center items-center">
@@ -199,7 +206,7 @@ const BoxDetails = (props: IBoxdetails) => {
           )}
           {allProducts?.map((e: any, index: number, arr: any) => {
             return (
-              <div key={index}>
+              <div key={index} data-cy={`product-item-${index}`}>
                 <div className="flex justify-between items-center " key={index}>
                   <ProductBox
                     key={index}
@@ -211,6 +218,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     height={e?.height || 0}
                     dimensionClassName="!font-light"
                     className="!border-none !shadow-none !h-[70px]"
+                    data-cy={`product-box-${index}`}
                   />
                   <div className="flex items-center p-1 lg:p-2  gap-2 !mr-2 rounded-lg">
                     <div>
@@ -219,6 +227,7 @@ const BoxDetails = (props: IBoxdetails) => {
                         alt=""
                         className="cursor-pointer"
                         onClick={() => removeUnit(index)}
+                        data-cy={`remove-unit-${index}`}
                       />
                     </div>
                     <div>
@@ -230,6 +239,7 @@ const BoxDetails = (props: IBoxdetails) => {
                         className="cursor-pointer"
                         alt=""
                         onClick={() => addUnit(index)}
+                        data-cy={`add-unit-${index}`}
                       />
                     </div>
 
@@ -240,6 +250,7 @@ const BoxDetails = (props: IBoxdetails) => {
                           : ""
                       } ml-2 cursor-pointer `}
                       onClick={() => handleDeleteProduct(index)}
+                      data-cy={`delete-product-${index}`}
                     >
                       <img
                         src={DeleteIcon}
@@ -251,7 +262,9 @@ const BoxDetails = (props: IBoxdetails) => {
                     </div>
                   </div>
                 </div>
-                {allProducts.length - 1 !== index && <hr />}
+                {allProducts.length - 1 !== index && (
+                  <hr data-cy={`hr-${index}`} />
+                )}
               </div>
             );
           })}
@@ -273,7 +286,10 @@ const BoxDetails = (props: IBoxdetails) => {
         <hr />
         {Object.keys(selectedBox).length > 0 && (
           <>
-            <span className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0">
+            <span
+              className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0"
+              data-cy="applied-weight"
+            >
               {`Products Applied weight is ${calcAllTotalProductAppliedWeight().toFixed(
                 2
               )} Kg`}
@@ -293,9 +309,13 @@ const BoxDetails = (props: IBoxdetails) => {
                       +selectedBox.appliedWeight || 0
                     )}%`,
                   }}
+                  data-cy="progress-bar"
                 ></div>
                 <div className="absolute -top-[6px] right-0">
-                  <p className="text-base font-semibold leading-4 text-[#494949]">
+                  <p
+                    className="text-base font-semibold leading-4 text-[#494949]"
+                    data-cy="applied-weight-value"
+                  >
                     {/* {weight is length x width x height (cm) / 5000.} */}
                     {selectedBox.appliedWeight} Kg
                   </p>
@@ -305,7 +325,10 @@ const BoxDetails = (props: IBoxdetails) => {
             {calcAllTotalProductAppliedWeight() >
             +selectedBox.volumetricWeight ? (
               <>
-                <span className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0  lg:mt-2">
+                <span
+                  className="!text-sm lg:!text-base text-slate-600 py-2 lg:py-0  lg:mt-2"
+                  data-cy="overweight-message"
+                >
                   {` Your billable weight is `}
                   <span className="font-semibold">{`${calcBillableWeight()} KG.`}</span>
                   <br />
@@ -318,7 +341,10 @@ const BoxDetails = (props: IBoxdetails) => {
                 </span>
               </>
             ) : (
-              <span className="!text-sm lg:!text-base  text-slate-600 py-2 lg:py-0 lg:mt-2">
+              <span
+                className="!text-sm lg:!text-base  text-slate-600 py-2 lg:py-0 lg:mt-2"
+                data-cy="billable-weight-message"
+              >
                 {`Your billable weight is ${calcBillableWeight()} KG.`}
                 <br />
                 {` You can add more products up to ${(
@@ -337,6 +363,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   checked={isOrderCOD}
                   inputElementClass="!h-3 !w-3 "
                   onChange={handleCheckBox}
+                  data-cy="cod-checkbox"
                 />
                 <Checkbox
                   label="POD"
@@ -345,6 +372,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   inputElementClass="!h-3 !w-3 "
                   checkboxClassName=" px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
                   onChange={handleCheckBox}
+                  data-cy="pod-checkbox"
                 />
                 <Checkbox
                   name="insurance"
@@ -353,6 +381,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   onChange={handleCheckBox}
                   inputElementClass="!h-3 !w-3 "
                   checked={selectedBox?.insurance?.isInsured}
+                  data-cy="insurance-checkbox"
                 />
                 <Checkbox
                   name="fragile"
@@ -361,6 +390,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   inputElementClass="!h-3 !w-3 "
                   checked={selectedBox?.isFragile}
                   onChange={handleCheckBox}
+                  data-cy="fragile-checkbox"
                 />
               </div>
               {/* <div
@@ -376,6 +406,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     label="Invoice Value"
                     isDisabled={true}
                     value={selectedBox?.codInfo?.invoiceValue}
+                    data-cy="invoice-value-input"
                   />
                 </div>
                 <div
@@ -390,6 +421,7 @@ const BoxDetails = (props: IBoxdetails) => {
                     isDisabled={!selectedBox?.codInfo?.isCod}
                     value={selectedBox?.codInfo?.collectableAmount}
                     onChange={handleCollectableAmmount}
+                    data-cy="cod-amount-input"
                   />
                 </div>
               </div>
