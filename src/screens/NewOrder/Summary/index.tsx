@@ -255,6 +255,7 @@ const Summary = (props: Props) => {
                   if (e.target.value.length <= 12)
                     setEwaybillNumber(e.target.value);
                 }}
+                name="ewaybillNumber"
               />
             </div>
           </div>
@@ -278,6 +279,8 @@ const Summary = (props: Props) => {
               }}
               visibility={true}
               setVisibility={() => {}}
+              name="orderId"
+              data-cy="auto-generate-order-id"
             />
           </div>
         </div>
@@ -288,9 +291,15 @@ const Summary = (props: Props) => {
         </div>
       ) : (
         <div className="flex flex-col md:flex-row">
-          <div className="basis-2/1 grid grid-cols-1 gap-y-5 px-5">
+          <div
+            className="basis-2/1 grid grid-cols-1 gap-y-5 px-5"
+            data-cy="pickup-details"
+          >
             {/* Pickup Details */}
-            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+            <div
+              data-cy="pickup-details"
+              className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 "
+            >
               <SummaryAddressBox
                 locationImage={locationIcon}
                 summaryTitle="Pickup Details"
@@ -336,6 +345,7 @@ const Summary = (props: Props) => {
                 isContactNumber={true}
               />
               <div
+                data-cy="edit-pickup-details-button"
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
                   navigate(
@@ -355,7 +365,10 @@ const Summary = (props: Props) => {
             </div>
 
             {/* Delivery Details */}
-            <div className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 ">
+            <div
+              data-cy="delivery-details"
+              className="flex flex-col lg:flex-row lg:justify-between shadow-lg rounded-lg border-[1px] border-[#E8E8E8] p-4 gap-y-5 max-w-screen-md	 "
+            >
               <SummaryAddressBox
                 locationImage={locationIcon}
                 summaryTitle="Delivery Details"
@@ -402,6 +415,7 @@ const Summary = (props: Props) => {
                 isContactNumber={true}
               />
               <div
+                data-cy="edit-delivery-details-button"
                 className="hidden lg:block cursor-pointer"
                 onClick={() => {
                   navigate(
@@ -448,7 +462,10 @@ const Summary = (props: Props) => {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row mr-5 gap-y-5 px-5  pb-20 max-w-screen-md">
+          <div
+            data-cy="pricing-details"
+            className="flex flex-col lg:flex-row mr-5 gap-y-5 px-5  pb-20 max-w-screen-md"
+          >
             {/* Pricing Details */}
             <PricingDetails
               appliedWeight={serviceDetails?.appliedWeight}

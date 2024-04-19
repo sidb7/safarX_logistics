@@ -210,7 +210,10 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
       >
         <>
           <div className="flex justify-between items-center mr-5">
-            <p className="font-Lato font-normal text-2xl leading-8 p-6">
+            <p
+              className="font-Lato font-normal text-2xl leading-8 p-6"
+              data-cy="add-products-title"
+            >
               Add Products
             </p>
             <img
@@ -218,13 +221,19 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
               src={CloseIcon}
               width="25px"
               onClick={() => setProductModal(false)}
+              alt="Close Icon"
+              data-cy="close-modal-button"
             />
           </div>
           <div className="px-5 mb-20 customScroll">
             {productInputState?.map((e: any, index: number) => {
               return (
                 <>
-                  <div className="py-4" key={index}>
+                  <div
+                    className="py-4"
+                    key={index}
+                    data-cy={`product-${index}`}
+                  >
                     <div className="flex justify-between mt-3 lg:justify-start lg:gap-x-2">
                       <div>
                         <h1 className="text-[#004EFF] text-  items-center font-bold leading-18px font-Lato">
@@ -237,6 +246,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           alt="Delete Product"
                           onClick={(e: any) => deleteProduct(index)}
                           className="w-5 h-5"
+                          data-cy={`delete-product-${index}`}
                         />
                       </div>
                     </div>
@@ -244,7 +254,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                     <div className="grid grid-cols-2 py-4 gap-5">
                       <CustomInputBox
                         label="Product name"
-                        name="name"
+                        name="product-name"
                         value={productInputState[index].name}
                         errorMessage={validationErrors?.name}
                         onChange={(e: any) =>
@@ -387,6 +397,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                             productInputState[index]?.volumetricWeight ||
                             volumetricWeight
                           }
+                          name="volumetricWeight"
                         />
                         <CustomInputBox
                           placeholder="Divisor"
@@ -394,6 +405,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                           inputMode="numeric"
                           isDisabled={true}
                           value={divisor}
+                          name="divisor"
                         />
                       </div>
                       <CustomInputBox
@@ -454,6 +466,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                 <button
                   className="ml-2 text-[#004EFF] text-sm font-semibold leading-5 font-Open"
                   onClick={AddProductInfoData}
+                  data-cy="add-product-button"
                 >
                   ADD PRODUCT
                 </button>
@@ -471,6 +484,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                 setProductModal(false);
               }}
               className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4 "
+              data-cy="cancel-button"
             />
             <ServiceButton
               text={"SAVE"}
@@ -479,6 +493,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                 addProductInfo();
               }}
               className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
+              data-cy="save-button"
             />
           </div>
         </>

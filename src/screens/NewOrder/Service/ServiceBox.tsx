@@ -130,7 +130,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
   }, [options, surface, air, sortingPrice, sortingFastest]);
 
   return (
-    <div>
+    <div data-cy="filter-options">
       {/* <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
         <img src={FilterIcon} alt="Filter" />
         <div className="text-[18px] font-bold lg:font-normal lg:text-2xl">
@@ -153,6 +153,7 @@ const ServiceBox: React.FunctionComponent<IRadioButtonProps> = (
                 : "border-[#c1c1c1]"
             }`}
             onClick={() => handleOnChange(option)}
+            data-cy={`filter-option-${option?.value}`}
             // data-tooltip-id={`my-tooltip-inline-${option.value}`}
           >
             <div className="self-start px-2">
