@@ -46,6 +46,7 @@ Sentry.init({
     new Integrations.BrowserTracing(),
   ],
   tracesSampleRate: 1.0,
+  release: "blaze-react-seller@1.1",
 });
 
 declare global {

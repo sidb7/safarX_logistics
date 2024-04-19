@@ -201,7 +201,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                 </div>
               </div>
             </div>
-            {a4LabelOption && (
+            {/* {a4LabelOption && (
               <div className="w-1/3 flex justify-center">
                 <CustomDropDown
                   options={[
@@ -209,10 +209,10 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                       label: "1 Label Per Page",
                       value: "1",
                     },
-                    {
-                      label: "2 Label Per Page",
-                      value: "2",
-                    },
+                    // {
+                    //   label: "2 Label Per Page",
+                    //   value: "2",
+                    // },
                     {
                       label: "4 Label Per Page",
                       value: "4",
@@ -224,7 +224,7 @@ const LabelSizes: React.FunctionComponent<ILabelSizesProps> = ({
                   wrapperClass="w-[187px] h-[40px]"
                 />
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

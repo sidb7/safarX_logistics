@@ -15,6 +15,7 @@
   left: 10px !important;
   position: fixed !important;
   bottom: 10px !important;
+  width: fit-content;
 }
 
 .dialog__content{
