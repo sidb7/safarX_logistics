@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8010
 
 # The command to run our app
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "local"]
