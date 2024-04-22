@@ -139,7 +139,7 @@ function OrderCard({ data, currentStatus, orderActions }: any) {
 
       fileUrl = labelUrl || "";
       payLoad = {
-        awb: [data?.awb],
+        awbs: [data?.awb],
         fileUrl: labelUrl,
         taxInvoiceUrl: taxInvoiceUrl,
       };
