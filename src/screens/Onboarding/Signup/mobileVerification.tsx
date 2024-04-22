@@ -130,7 +130,7 @@ const Index = () => {
             />
             <CustomButton
               onClick={(e: any) => sendOtpOnClick(body)}
-              text="SEND OTP"
+              text="GET OTP"
             />
           </div>
         </div>
