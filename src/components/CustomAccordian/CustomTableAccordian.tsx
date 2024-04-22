@@ -40,8 +40,12 @@ const Accordion = (props: ICustomTableAccordion) => {
   const navigate = useNavigate();
   //state to store the box data
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
+  // console.log("boxDetailsData", boxDetailsData);
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
+
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
+  // console.log("🚀 ~ Accordion ~ customInpuBox:", customInpuBox);
+
   const [boxName, setBoxName] = useState(false);
   const [openIndex, setOpenIndex] = useState<any>(null);
   const [orderDetails, setOrderDetails]: any = useState([]);
@@ -52,6 +56,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [pincode, setPincode] = useState<any>();
   const [pincodeData, setPincodeData] = useState<any>("");
   const [boxProductDetails, setBoxProductDetails] = useState<any>();
+  console.log("🚀 ~ Accordion ~ boxProductDetails:", boxProductDetails);
   const [serviceLoading, setServiceLoading] = useState<any>(false);
   const [productAccordian, setproductAccordian] = useState<any>([]);
   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
@@ -95,7 +100,9 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxHeight: "",
     boxName: "",
   });
-  console.log("validationError", validationError);
+
+  // console.log("validationErrorssss", validationError);
+
   const [orderId, setOrderId] = useState<any>();
   const [inputError, setInputError] = useState(false);
   const [productDetails, setProductDetails] = useState<any>([
@@ -190,6 +197,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [boxDetails, setBoxDetails] = useState<any>();
   const [productError, setProdctError] = useState<any>([]);
   const [boxAccordian, setBoxAccordian] = useState<any>(false);
+
   const [pickupDate, setPickupDate] = useState("");
   //storing these details to call the post api for updation
   const [updatePayload, setUpdatePayload] = useState({
@@ -249,9 +257,17 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
   //adding the box into boxinfo
-  const [newBox, setNewBox] = useState<any>();
-  console.log("newBox", newBox);
+  const [newBox, setNewBox] = useState<any>({
+    deadWeight: 0,
+    name: "",
+    length: 0,
+    breadth: 0,
+    height: 0,
+  });
+
+  // console.log("newboxxxxxxxxxxx", newBox);
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
+  console.log("🚀 ~ Accordion ~ selectBoxIndex:", selectBoxIndex);
   //to know the box id
   const [selectBoxId, setSelectBoxId] = useState<any>(-1);
   const [dropDownContent, setDropDownContent] = useState<any>(false);
@@ -347,14 +363,269 @@ const Accordion = (props: ICustomTableAccordion) => {
   };
 
   const handleBoxAccordian = async () => {
-    console.log("handleboxaccordian");
     if (boxAccordian === true && !enabled) {
       try {
+        // console.log("newBox", newBox?.deadWeight?.length);
+        if (selectBoxIndex === 0 && newBox?.name === "") {
+          if (
+            newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0 ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            // let element5: any = document.getElementById("Box 1");
+            let element5: any = document.getElementById(
+              // `${boxProductDetails?.boxInfo?.[0]?.name}`
+              "boxname"
+            );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            if (element4) element4.style.borderColor = "red";
+
+            if (element5) element5.style.borderColor = "red";
+          }
+          return toast.error(
+            "Please Select any existing box or create a new box"
+          );
+        }
+        if (selectBoxIndex === 0 && newBox?.deadWeight === 0) {
+          if (
+            // newBox?.name === ""
+            // ||
+            newBox?.deadWeight === 0
+            // ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            // let element5: any = document.getElementById("Box 1");
+            let element5: any = document.getElementById(
+              // `${boxProductDetails?.boxInfo?.[0]?.name}`
+              "boxname"
+            );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            if (element4) element4.style.borderColor = "red";
+
+            if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (selectBoxIndex === 0 && newBox?.length === 0) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            newBox?.length === 0
+            // ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            // let element5: any = document.getElementById("Box 1");
+            let element5: any = document.getElementById(
+              // `${boxProductDetails?.boxInfo?.[0]?.name}`
+              "boxname"
+            );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            if (element4) element4.style.borderColor = "red";
+
+            if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (selectBoxIndex === 0 && newBox?.breadth === 0) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            newBox?.breadth === 0
+            // ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            // let element5: any = document.getElementById("Box 1");
+            let element5: any = document.getElementById(
+              // `${boxProductDetails?.boxInfo?.[0]?.name}`
+              "boxname"
+            );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            if (element4) element4.style.borderColor = "red";
+
+            if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (selectBoxIndex === 0 && newBox?.height === 0) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            // newBox?.breadth === 0
+            // ||
+            newBox?.height === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              boxHeight: "Field is required",
+            });
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            // let element5: any = document.getElementById("Box 1");
+            let element5: any = document.getElementById(
+              // `${boxProductDetails?.boxInfo?.[0]?.name}`
+              "boxname"
+            );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            if (element4) element4.style.borderColor = "red";
+
+            if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        // if (selectBoxIndex === 0 && newBox?.name === "") {
+        //   if (newBox?.name === "") {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   } else {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "",
+        //     });
+        //   }
+        //   if (newBox?.deadWeight === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxDeadWeight: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+
+        //   if (newBox?.length === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxLength: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+        //   return toast.error(
+        //     "Please Select any existing box or create a new box"
+        //   );
+        // }
         if (customInpuBox) {
           boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
-          boxProductDetails.boxInfo[0].appliedWeight = newBox?.appliedWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxProductDetails.boxInfo[0]?.appliedWeight;
           boxProductDetails.boxInfo[0].name = newBox?.name;
-          boxProductDetails.boxInfo[0].boxId = newBox?.boxId;
+          boxProductDetails.boxInfo[0].boxId =
+            boxProductDetails.boxInfo[0]?.boxId;
           boxProductDetails.boxInfo[0].length = newBox?.length;
           boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
           boxProductDetails.boxInfo[0].height = newBox?.height;
@@ -380,15 +651,68 @@ const Accordion = (props: ICustomTableAccordion) => {
 
         let payload = boxProductDetails;
 
-        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-        if (data?.status) {
-          toast.success("Updated Box Successfully");
-          setServiceList([]);
-          setServiceRefresh(true);
-          // getServiceList();
+        // console.log("payload", payload?.boxInfo?.[0]);
+        // console.log(
+        //   "length",
+        //   payload?.boxInfo?.[0]?.name?.length,
+        //   payload?.boxInfo?.[0]?.deadWeight,
+        //   payload?.boxInfo?.[0]?.length,
+        //   payload?.boxInfo?.[0]?.breadth,
+        //   payload?.boxInfo?.[0]?.height
+        // );
+
+        if (
+          payload?.boxInfo?.[0]?.name?.length !== 0 &&
+          payload?.boxInfo?.[0]?.deadWeight !== 0 &&
+          payload?.boxInfo?.[0]?.length !== 0 &&
+          payload?.boxInfo?.[0]?.breadth !== 0 &&
+          payload?.boxInfo?.[0]?.height !== 0
+        ) {
+          const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+          if (data?.status) {
+            toast.success("Updated Box Successfully");
+            setServiceList([]);
+            setServiceRefresh(true);
+            setBoxAccordian(false);
+            setCustomInputBox(false);
+            setSelectBoxIndex(0);
+            setNewBox({
+              ...newBox,
+              deadWeight: 0,
+              name: "",
+              length: 0,
+              breadth: 0,
+              height: 0,
+            });
+
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+            // console.log("element4", element4);
+            let element5: any = document.getElementById("boxname");
+            if (element5) element5.style.borderColor = "#E8E8E8";
+            // if (element5) element5.classList.add("#E8E8E8");
+            // if (element4) element4.classList.add("#E8E8E8");
+            // f (element4) element4.style.borderColor = "#E8E8E8";
+            // getServiceList();
+          } else {
+            toast.error("Something went wrong");
+            setBoxAccordian(true);
+            setCustomInputBox(true);
+          }
         } else {
-          toast.error("Something went wrong");
+          setBoxAccordian(true);
+          setCustomInputBox(true);
         }
+        // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        // if (data?.status) {
+        //   toast.success("Updated Box Successfully");
+        //   setServiceList([]);
+        //   setServiceRefresh(true);
+        //   // getServiceList();
+        // } else {
+        //   toast.error("Something went wrong");
+        // }
       } catch (error: any) {
         console.log(error.message);
       }
@@ -677,8 +1001,8 @@ const Accordion = (props: ICustomTableAccordion) => {
           setIsBoxError(true);
         else setIsBoxError(false);
       });
-
-      setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
+      //commented out it is showing the previous data
+      // setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
 
@@ -1088,21 +1412,22 @@ const Accordion = (props: ICustomTableAccordion) => {
       boxDetails?.length > 0 &&
       boxDetails?.breadth > 0 &&
       boxDetails?.height > 0 &&
+      boxDetails?.name?.length > 0 &&
       !enabled
     ) {
       return false;
     } else {
-      setValidationError({
-        ...validationError,
-        boxDeadWeight:
-          boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
-        // boxVolumtericWeight:
-        //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
-        boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
-        boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
-        boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
-        boxName: boxDetails?.name.length == 0 ? "Field is required" : "",
-      });
+      // setValidationError({
+      //   ...validationError,
+      //   boxDeadWeight:
+      //     boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
+      //   // boxVolumtericWeight:
+      //   //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
+      //   boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
+      //   boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
+      //   boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
+      //   boxName: boxDetails?.name?.length == 0 ? "Field is required" : "",
+      // });
       setInputError(true);
       return true;
     }
@@ -1166,7 +1491,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     //services
 
-    if ((serviceList.length === 0 && !partnerServiceId) || serviceRefresh) {
+    if ((serviceList?.length === 0 && !partnerServiceId) || serviceRefresh) {
       let elemente3: any = document.getElementById("Services");
 
       // if (elemente3) elemente3.style.backgroundColor = "yellow";
@@ -1193,12 +1518,10 @@ const Accordion = (props: ICustomTableAccordion) => {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
 
-      // console.log("🚀 ~ handlePriorValidation ~ element4:", element4);
       // let element5: any = document.getElementById("Box 1");
       let element5: any = document.getElementById(
         `${boxProductDetails?.boxInfo?.[0]?.name}`
       );
-      console.log("🚀 ~ handlePriorValidation ~ element5:", element5);
 
       if (element4) element4.classList.add("!border-red-500");
       if (element5) element5.style.borderColor = "red";
@@ -1213,7 +1536,11 @@ const Accordion = (props: ICustomTableAccordion) => {
       if (element5) element5.style.borderColor = "#E8E8E8";
     }
 
-    for (let i = 0; i < boxProductDetails?.boxInfo?.[0]?.products.length; i++) {
+    for (
+      let i = 0;
+      i < boxProductDetails?.boxInfo?.[0]?.products?.length;
+      i++
+    ) {
       if (
         boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0 ||
         boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
@@ -1257,7 +1584,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pincode.length < 6 ||
+        getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
         getPickAddressData?.pickUpAddress?.pincode === 0 ||
         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
@@ -1334,10 +1661,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   const clickedOption = (e: any) => {
     for (let i = 0; i < boxDetailsData?.length; i++) {
-      console.log("i", boxDetailsData[i]?.boxId);
-      console.log("e", e);
       if (e === boxDetailsData[i]?.boxId) {
-        console.log("yesssssssss", i);
         setSelectBoxId(i);
       }
     }
@@ -1353,7 +1677,7 @@ const Accordion = (props: ICustomTableAccordion) => {
   }, [data]);
 
   useEffect(() => {
-    if (orderDetails.length > 0) {
+    if (orderDetails?.length > 0) {
       const deliveryAddress = orderDetails[1];
 
       delete deliveryAddress.title;
@@ -1741,7 +2065,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                         .name[
                                                                         e.target
                                                                           .name
-                                                                          .length -
+                                                                          ?.length -
                                                                           1
                                                                       ]
                                                                     ) {
@@ -1838,7 +2162,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -1850,7 +2174,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                               .value <=
                                                                               0 &&
                                                                             eachProduct
-                                                                              .length
+                                                                              ?.length
                                                                               ?.length !=
                                                                               0
                                                                               ? "Should be greater than 0"
@@ -1911,7 +2235,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -1984,7 +2308,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -2041,27 +2365,33 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   // id={`${item?.title}`}
 
                                                   className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
-                                                  id={`${eachBox.name}`}
+                                                  // id={`${eachBox.name}`}
+                                                  id={"boxname"}
                                                   onClick={(e: any) => {
+                                                    // console.log(
+                                                    //   "boxAccordian",
+                                                    //   boxAccordian
+                                                    // );
                                                     if (
-                                                      boxAccordian === true &&
-                                                      !boxloops(
-                                                        boxProductDetails,
-                                                        index
-                                                      )
+                                                      boxAccordian === true
+                                                      // &&
+                                                      // !boxloops(
+                                                      //   boxProductDetails,
+                                                      //   index
+                                                      // )
                                                     ) {
-                                                      setBoxAccordian(false);
-                                                      setCustomInputBox(false);
+                                                      handleBoxAccordian();
+                                                      // setBoxAccordian(false);
+                                                      // setCustomInputBox(false);
                                                       setBoxName(false);
                                                       setExistingBox(false);
-                                                      setBoxNameAccordian(
-                                                        false
-                                                      );
+                                                      // setBoxNameAccordian(
+                                                      //   false
+                                                      // );
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           false,
                                                       });
-                                                      handleBoxAccordian();
                                                     } else {
                                                       setBoxAccordian(true);
 
@@ -2094,7 +2424,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       Box
                                                     </p>
                                                     <p className="text-[14px] font-Open">
-                                                      {eachBox?.name}
+                                                      {
+                                                        //This was written for getSellerBox api to show the no box found message
+                                                        // boxDetailsData?.length ===
+                                                        // 0
+                                                        //   ? "No Box Found"
+                                                        //   :
+                                                        eachBox?.name
+                                                      }
                                                     </p>
                                                   </div>
 
@@ -2118,8 +2455,58 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                 <div className="border border-black-600 px-5 rounded-md">
                                                   {boxAccordian && (
                                                     <>
+                                                      {boxDetailsData?.length ===
+                                                      0 ? (
+                                                        <>
+                                                          <p className="font-open text-[14px] font-medium mt-6">
+                                                            Existing box not
+                                                            found, Please create
+                                                            a box
+                                                          </p>
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          <div className="mt-4">
+                                                            <CustomDropDown
+                                                              heading="Select A Box"
+                                                              options={boxDetailsData?.map(
+                                                                (
+                                                                  option: any,
+                                                                  index: any
+                                                                ) => {
+                                                                  return {
+                                                                    label:
+                                                                      option?.name,
+                                                                    value:
+                                                                      option?.boxId,
+                                                                  };
+                                                                }
+                                                              )}
+                                                              onChange={(
+                                                                e: any
+                                                              ) => {
+                                                                clickedOption(
+                                                                  e.target.value
+                                                                );
+                                                                setSelectBoxIndex(
+                                                                  e.target.value
+                                                                );
+                                                                setDropDownContent(
+                                                                  true
+                                                                );
+                                                                setExistingBox(
+                                                                  true
+                                                                );
+                                                                setCustomInputBox(
+                                                                  false
+                                                                );
+                                                              }}
+                                                            />
+                                                          </div>
+                                                        </>
+                                                      )}
                                                       <div className="mt-4">
-                                                        <CustomDropDown
+                                                        {/* <CustomDropDown
                                                           heading="Select A Box"
                                                           options={boxDetailsData?.map(
                                                             (
@@ -2153,9 +2540,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               false
                                                             );
                                                           }}
-                                                        />
+                                                        /> */}
                                                         <div className="my-3 rounded-md">
-                                                          <p
+                                                          {/* <p
                                                             onClick={() => {
                                                               setCustomInputBox(
                                                                 true
@@ -2178,7 +2565,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             <span className="font-open mt-1 ">
                                                               Add Your Box
                                                             </span>
-                                                          </p>
+                                                          </p> */}
                                                           <div className=" my-2">
                                                             {customInpuBox && (
                                                               <div className="">
@@ -2229,9 +2616,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                   <div className="col-span-1">
                                                                     <InputBox
                                                                       label="Dead Weight (Kg)"
-                                                                      defaultValue={
-                                                                        eachBox?.deadWeight
-                                                                      }
+                                                                      // defaultValue={
+                                                                      //   eachBox?.deadWeight
+                                                                      // }
+                                                                      // value={
+                                                                      //   newBox?.deadWeight
+                                                                      // }
                                                                       isDisabled={
                                                                         enabled
                                                                       }
@@ -2241,6 +2631,13 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                       onChange={(
                                                                         e: any
                                                                       ) => {
+                                                                        // console.log(
+                                                                        //   "length",
+                                                                        //   e
+                                                                        //     .target
+                                                                        //     .value
+                                                                        //     ?.length
+                                                                        // );
                                                                         setNewBox(
                                                                           {
                                                                             ...newBox,
@@ -2253,12 +2650,13 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                         if (
                                                                           e
                                                                             .target
-                                                                            .value <=
-                                                                            0 &&
-                                                                          eachBox
-                                                                            .deadWeight
-                                                                            ?.length !=
-                                                                            0
+                                                                            .value ===
+                                                                          0
+                                                                          //   &&
+                                                                          // eachBox
+                                                                          //   .deadWeight
+                                                                          //   ?.length !=
+                                                                          //   0
                                                                         ) {
                                                                           setValidationError(
                                                                             {
@@ -2267,7 +2665,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                                 "Should be greater than 0",
                                                                             }
                                                                           );
-                                                                        } else {
+                                                                        }
+
+                                                                        // }
+                                                                        else {
                                                                           setValidationError(
                                                                             {
                                                                               ...validationError,
@@ -2277,12 +2678,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           );
                                                                         }
                                                                       }}
-                                                                      inputError={
-                                                                        eachBox
-                                                                          ?.deadWeight
-                                                                          ?.length ===
-                                                                        0
-                                                                      }
+                                                                      // inputError={
+                                                                      //   eachBox
+                                                                      //     ?.deadWeight
+                                                                      //     ?.length ===
+                                                                      //   0
+                                                                      // }
                                                                     />
                                                                     <p className="open-sans text-[12px] text-red-600">
                                                                       {
@@ -2323,9 +2724,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                         inputType="number"
                                                                         inputMode="numeric"
                                                                         name="length"
-                                                                        defaultValue={
-                                                                          eachBox?.length
-                                                                        }
+                                                                        // defaultValue={
+                                                                        //   eachBox?.length
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.length
+                                                                        // }
                                                                         isDisabled={
                                                                           enabled
                                                                         }
@@ -2347,7 +2751,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                               .value <=
                                                                               0 &&
                                                                             eachBox
-                                                                              .length
+                                                                              ?.length
                                                                               ?.length !=
                                                                               0
                                                                           ) {
@@ -2384,9 +2788,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     <div>
                                                                       <InputBox
                                                                         label="B"
-                                                                        defaultValue={
-                                                                          eachBox?.breadth
-                                                                        }
+                                                                        // defaultValue={
+                                                                        //   eachBox?.breadth
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.breadth
+                                                                        // }
                                                                         isDisabled={
                                                                           enabled
                                                                         }
@@ -2448,9 +2855,12 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     <div>
                                                                       <InputBox
                                                                         label="H"
-                                                                        defaultValue={
-                                                                          eachBox.height
-                                                                        }
+                                                                        // defaultValue={
+                                                                        //   eachBox.height
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.height
+                                                                        // }
                                                                         isDisabled={
                                                                           enabled
                                                                         }
@@ -3582,7 +3992,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -3620,7 +4030,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -3674,14 +4084,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.pickUpAddress.pincode =
                                                       numericValue;
                                                     if (
-                                                      numericValue.length === 6
+                                                      numericValue?.length === 6
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
                                                         pincode: "",
                                                       });
                                                     } else if (
-                                                      numericValue.length === 0
+                                                      numericValue?.length === 0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
@@ -3813,7 +4223,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -3858,7 +4268,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.deliveryAddress.contact.mobileNo =
                                                       numbericValue;
                                                     if (
-                                                      numbericValue.length ===
+                                                      numbericValue?.length ===
                                                       10
                                                     ) {
                                                       setValidationError({
@@ -3866,7 +4276,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         deliveryMobileNo: "",
                                                       });
                                                     } else if (
-                                                      numbericValue.length === 0
+                                                      numbericValue?.length ===
+                                                      0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
@@ -3987,7 +4398,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4024,7 +4435,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4066,7 +4477,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4103,7 +4514,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4146,7 +4557,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4183,7 +4594,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4234,14 +4645,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.deliveryAddress.pincode =
                                                       numericValue;
                                                     if (
-                                                      numericValue.length === 6
+                                                      numericValue?.length === 6
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
                                                         deliveryPincode: "",
                                                       });
                                                     } else if (
-                                                      numericValue.length === 0
+                                                      numericValue?.length === 0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,

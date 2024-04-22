@@ -72,6 +72,7 @@ const RuleEngineCustomInputWithDropDown: React.FC<
         e.stopPropagation();
         setIsDropdownOpen(!isDropdownOpen);
       }}
+      data-cy="dropdown-container"
     >
       <CustomInputBox
         inputType="select"
@@ -84,6 +85,7 @@ const RuleEngineCustomInputWithDropDown: React.FC<
           setInputValueInfo(e.target.value);
         }}
         className={`${className} w-full downarrowImage`}
+        data-cy="custom-input"
       />
 
       {isDropdownOpen && (
@@ -92,9 +94,10 @@ const RuleEngineCustomInputWithDropDown: React.FC<
             ref={dropdownRef}
             className="custom-dropdown absolute mt-2 w-full customScroll rounded-md bg-white max-h-60 min-h-[30px]"
             onClick={(e) => e.stopPropagation()}
+            data-cy="dropdown-menu"
           >
             {isLoading && (
-              <div className="">
+              <div className="" data-cy="loading-indicator">
                 <ProgressBar />
               </div>
             )}
@@ -106,6 +109,7 @@ const RuleEngineCustomInputWithDropDown: React.FC<
                   setIsDropdownOpen(false);
                   setInputValueInfo(name.categoryName);
                 }}
+                data-cy={`dropdown-item-${index}`}
               >
                 <p className="text-[12px] text-[#777777] leading-4 font-Open">
                   {name?.categoryName}
