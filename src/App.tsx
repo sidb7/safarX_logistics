@@ -41,6 +41,9 @@ function padZero(num: any) {
 }
 
 Sentry.setUser({
+  id: `Seller ID: ${
+    JSON.parse(sessionStorage.getItem("userInfo") as any)?.sellerId
+  }`,
   email: JSON.parse(sessionStorage.getItem("userInfo") as any)?.email,
   username: JSON.parse(sessionStorage.getItem("userInfo") as any)?.name,
 });
@@ -55,6 +58,7 @@ Sentry.init({
       isNameRequired: true,
       isEmailRequired: true,
     }),
+
     new Integrations.BrowserTracing(),
   ],
   tracesSampleRate: 1.0,
