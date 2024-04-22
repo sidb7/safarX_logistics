@@ -46,7 +46,7 @@ const Index = () => {
       if (response?.success === true) {
         window?.dataLayer?.push({
           event: "reg_2_Mobile_Verified",
-          seller_email:email,
+          seller_email: email,
           seller_name: firstName,
           // seller_kyc: nextStep?.kyc,
           // seller_bank_verification_done: nextStep?.bank,
@@ -57,7 +57,7 @@ const Index = () => {
           window.location.search
         );
         navigate(navigationObject, { state: { path: body } });
-        
+
         // navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
@@ -116,7 +116,7 @@ const Index = () => {
             <CustomInputBox
               value={mobileNumber?.mobileNo || ""}
               inputMode="numeric"
-              label="Enter Your Mobile Number"
+              label="Enter Your 10 Digit Mobile Number"
               maxLength={10}
               onChange={(e: any) => {
                 if (isNaN(e.target.value)) {
