@@ -254,7 +254,7 @@ const AddProductPanel: React.FunctionComponent<IProductFilledProps> = (
                     <div className="grid grid-cols-2 py-4 gap-5">
                       <CustomInputBox
                         label="Product name"
-                        name="product-name"
+                        name="name"
                         value={productInputState[index].name}
                         errorMessage={validationErrors?.name}
                         onChange={(e: any) =>
