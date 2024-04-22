@@ -40,33 +40,6 @@ function padZero(num: any) {
   return num.toString().padStart(2, "0"); // Pad the number with leading zero if less than 10
 }
 
-Sentry.setUser({
-  id: `Seller ID: ${
-    JSON.parse(sessionStorage.getItem("userInfo") as any)?.sellerId
-  }`,
-  email: JSON.parse(sessionStorage.getItem("userInfo") as any)?.email,
-  username: `${JSON.parse(sessionStorage.getItem("userInfo") as any)?.name} (${
-    JSON.parse(sessionStorage.getItem("userInfo") as any)?.sellerId
-  })`,
-});
-
-Sentry.init({
-  dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
-  integrations: [
-    Sentry.feedbackIntegration({
-      // Additional SDK configuration goes in here, for example:
-
-      colorScheme: "light",
-      isNameRequired: true,
-      isEmailRequired: true,
-    }),
-
-    new Integrations.BrowserTracing(),
-  ],
-  tracesSampleRate: 1.0,
-  release: `blaze-react-seller@${formattedDate}`,
-});
-
 declare global {
   interface Window {
     dataLayer?: any;
@@ -130,6 +103,29 @@ const App = () => {
 
     let script: any = "";
     let scriptElement: any = "";
+
+    Sentry.setUser({
+      id: `Seller ID: ${userInfo?.sellerId}`,
+      email: userInfo?.email,
+      username: `${userInfo?.name} (${userInfo?.sellerId})`,
+    });
+
+    Sentry.init({
+      dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+      integrations: [
+        Sentry.feedbackIntegration({
+          // Additional SDK configuration goes in here, for example:
+
+          colorScheme: "light",
+          isNameRequired: true,
+          isEmailRequired: true,
+        }),
+
+        new Integrations.BrowserTracing(),
+      ],
+      tracesSampleRate: 1.0,
+      release: `blaze-react-seller@${formattedDate}`,
+    });
 
     if (
       Environment === "production" &&
