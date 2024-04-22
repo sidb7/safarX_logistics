@@ -45,7 +45,9 @@ Sentry.setUser({
     JSON.parse(sessionStorage.getItem("userInfo") as any)?.sellerId
   }`,
   email: JSON.parse(sessionStorage.getItem("userInfo") as any)?.email,
-  username: JSON.parse(sessionStorage.getItem("userInfo") as any)?.name,
+  username: `${JSON.parse(sessionStorage.getItem("userInfo") as any)?.name} (${
+    JSON.parse(sessionStorage.getItem("userInfo") as any)?.sellerId
+  })`,
 });
 
 Sentry.init({
