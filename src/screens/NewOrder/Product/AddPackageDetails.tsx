@@ -279,7 +279,10 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
   const ProductDetails = () => {
     return (
       <div className="h-full">
-        <div className="p-5 customScroll relative h-full">
+        <div
+          className="p-5 customScroll relative h-full"
+          data-cy="search-product-modal"
+        >
           <img
             src={CrossIcon}
             alt="Cross Icon"
@@ -291,6 +294,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
             className={`${
               selectedProductTemp.length > 0 ? "opacity-100 " : "opacity-0 "
             }  flex duration-100 ease-in-out transition-all items-center `}
+            data-cy="selected-products-section"
           >
             <div className="flex gap-x-2">
               <img src={ProductIcon} alt="Product" />
@@ -308,9 +312,11 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 : "opacity-0 "
             } flex-wrap  max-h-[0] duration-300 ease-in-out transition-all mt-2 overflow-auto`}
             // style={{ border: "2px solid red" }}
+            data-cy="selected-products-container"
           >
             <div
               className={`h-auto flex flex-wrap  duration-300  w-full customScroll transition-all ease-in-out  gap-y-4 gap-x-2 `}
+              data-cy="selected-products"
             >
               {selectedProductTemp?.map((eachProduct: any, index: number) => {
                 return (
@@ -418,6 +424,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                 itemsPerPageOptions={[10, 20, 30, 50]}
                 onPageChange={onPageIndexChange}
                 onItemsPerPageChange={onPerPageItemChange}
+                data-cy="pagination"
               />
             )}
           </div>
@@ -430,7 +437,10 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
                   Combo Products
                 </div>
               </div>
-              <div className="flex flex-wrap gap-5 mb-6 py-6 px-2 customScroll ">
+              <div
+                className="flex flex-wrap gap-5 mb-6 py-6 px-2 customScroll "
+                data-cy="combo-products-container"
+              >
                 {comboProducts?.map((combo: any, index: number) => {
                   return (
                     <ComboProductBox
@@ -456,6 +466,7 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
         <div
           className="flex justify-end gap-x-5  shadow-lg border-[1px] h-[68px]  bg-[#FFFFFF] px-6 py-4 rounded-tr-[32px] rounded-tl-[32px]    fixed bottom-0 "
           style={{ width: "-webkit-fill-available" }}
+          data-cy="modal-footer"
         >
           <ServiceButton
             text={"CANCEL"}
@@ -463,11 +474,13 @@ const AddPackageDetails: React.FunctionComponent<ISearchProductProps> = (
               setIsSearchProductRightModalOpen(false);
             }}
             className="bg-white  text-[#1C1C1C] h-[36px] !py-2 !px-4 "
+            data-cy="cancel-button"
           />
           <ServiceButton
             text={"SAVE"}
             onClick={() => productsAndComboDetailsTobeSend()}
             className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2 !px-4 "
+            data-cy="save-button"
           />
         </div>
       </div>

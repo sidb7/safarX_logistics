@@ -179,7 +179,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
       <div className="grid px-5 mt-6 gap-5 ">
         <div className="flex justify-between items-center gap-x-2 pb-2">
           <div className="flex gap-x-2">
-            <img src={ProductIcon} alt="Package Icon" />
+            <img src={ProductIcon} alt="Package Icon" data-cy="box-icon" />
             <h1 className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C] ">
               {`${isEditMode ? "Edit Box" : "Create Box"}`}
             </h1>
@@ -189,6 +189,7 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             src={CloseIcon}
             width="25px"
             onClick={() => setSellerBoxDetailsModal(false)}
+            alt="close icon"
           />
         </div>
         <div className="grid grid-cols-2 gap-5">
@@ -320,11 +321,13 @@ const SellerBoxDetails = (props: ISellerBoxDetailsProps) => {
             setSellerBoxDetailsModal(false);
           }}
           className="bg-white text-[#1C1C1C] h-[36px] !py-2 !px-4"
+          data-cy="cancel-button"
         />
         <ServiceButton
           text={`${isEditMode ? "UPDATE" : "SAVE"}`}
           onClick={() => createAndUpdateSellerBoxDetails()}
           className="bg-[#1C1C1C] text-[#FFFFFF] h-[36px] !py-2  !px-4 disabled:bg-[#E8E8E8] disabled:text-[#BBB] disabled:border-none"
+          data-cy={`${isEditMode ? "update-button" : "save-button"}`}
         />
       </div>
     </>
