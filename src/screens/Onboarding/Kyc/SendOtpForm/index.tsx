@@ -692,7 +692,7 @@ const Index = (props: ITypeProps) => {
                 />
               ) : (
                 <ServiceButton
-                  text="SEND OTP"
+                  text="Get OTP"
                   disabled={!otpFormBtnStatus}
                   btnType="submit"
                   onClick={() => onSendOtp()}
