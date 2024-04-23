@@ -8,7 +8,7 @@
     "@reduxjs/toolkit": "1.9.5",
     "@sentry/cli": "^2.31.0",
     "@sentry/react": "^7.110.1",
-    "@sentry/tracing": "^7.110.1", 
+    "@sentry/tracing": "^7.110.1",
     "@tanstack/react-table": "^8.9.3",
     "@tanstack/react-virtual": "^3.1.3",
     "@testing-library/react": "13.4.0",
@@ -65,7 +65,7 @@
     "test-build": "REACT_APP_ENV=test GENERATE_SOURCEMAP=false react-scripts build",
     "dev-build": "REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-scripts build",
     "prod-build": "REACT_APP_ENV=production GENERATE_SOURCEMAP=true react-scripts build && npm run sentry:sourcemaps",
-    "build": "GENERATE_SOURCEMAP=true react-scripts build && npm run sentry:sourcemaps",
+    "build": "GENERATE_SOURCEMAP=true react-scripts build && npm run sentry:sourcemaps && npm run sentry:sourcemaps",
     "local": "REACT_APP_ENV=local react-scripts start",
     "dev": "REACT_APP_ENV=development react-scripts start",
     "test": "REACT_APP_ENV=test react-scripts start",
@@ -73,7 +73,7 @@
     "eject": "react-scripts eject",
     "jest": "jest --coverage",
     "test:watch": " jest  --runInBand --onlyChanged ",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli --url https://shipyaari.sentry.io/ sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
   },
   "eslintConfig": {
     "extends": [
