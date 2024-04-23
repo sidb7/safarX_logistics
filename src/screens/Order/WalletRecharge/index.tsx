@@ -43,6 +43,7 @@ import {
   PHONEPE_TRANSACTION_STATUS,
   SELLER_WEB_URL,
   SELLER_URL,
+  GET_WALLET_BALANCE,
 } from "../../../utils/ApiUrls";
 import BottomLayout from "../../../components/Layout/bottomLayout";
 import Paytm from "../../../paytm/Paytm";
@@ -77,7 +78,12 @@ const WalletRecharge = () => {
   let currentBalance = parseFloat(walletBalance?.toFixed(2));
   // const isActive = roles.roles?.[0]?.menu?.[3]?.menu?.[0]?.pages?.[0]?.isActive;
   const isActive = checkPageAuthorized("View Wallet");
-
+  const [migratedUserWalletDetails, setMigratedUserWalletDetails] =
+    useState<any>({});
+  const [amountForTransaction, setAmountForTransaction] = useState<any>({
+    phpAmount: 0,
+    blazeAmount: 0,
+  });
   const [payment, setPayment] = useState(false);
   const [isPhonePeOpen, setIsPhonePeOpen] = useState(false);
   const [modal, setModal] = useState(false);
@@ -378,6 +384,46 @@ const WalletRecharge = () => {
     } else setIsDisabled(true);
   }, [walletValue]);
 
+  const getWalletBalance = async () => {
+    try {
+      setLoading(true);
+      const { data: response } = await POST(GET_WALLET_BALANCE);
+
+      if (response?.success) {
+        setMigratedUserWalletDetails(response?.data);
+        setAmountForTransaction({
+          ...amountForTransaction,
+          phpAmount:
+            response?.data?.phpBalance !== undefined
+              ? response.data.phpBalance === 0
+                ? 0
+                : response.data.phpBalance
+              : "N/A",
+          blazeAmount:
+            response?.data?.blazeBalance !== undefined
+              ? response.data.blazeBalance === 0
+                ? 0
+                : response.data.blazeBalance
+              : "N/A",
+        });
+        setLoading(false);
+      } else {
+        toast.error(response?.message);
+        setLoading(false);
+      }
+    } catch {
+      toast.error("Failed to fetch wallet details!");
+      setLoading(false);
+      return;
+    }
+  };
+
+  useEffect(() => {
+    getWalletBalance();
+    userDetailsFromSession();
+    // calculateTheHighestAmountToDeduct();
+  }, []);
+
   return (
     <>
       {paymentLoader && <PaymentLoader />}
@@ -524,6 +570,13 @@ const WalletRecharge = () => {
                     !dataFromSession?.isWalletBlackListed ? (
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-7">
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                            {`Old System Balance - ₹ ${
+                              migratedUserWalletDetails?.phpBalance?.toLocaleString(
+                                "en-IN"
+                              ) || 0.0
+                            }`}{" "}
+                          </p>
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
                             Easily move funds to and from Blaze with just a tap.
                           </p>
