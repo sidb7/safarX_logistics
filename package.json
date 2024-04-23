@@ -8,7 +8,7 @@
     "@reduxjs/toolkit": "1.9.5",
     "@sentry/cli": "^2.31.0",
     "@sentry/react": "^7.110.1",
-    "@sentry/tracing": "^7.110.1", 
+    "@sentry/tracing": "^7.110.1",
     "@tanstack/react-table": "^8.9.3",
     "@tanstack/react-virtual": "^3.1.3",
     "@testing-library/react": "13.4.0",
@@ -73,7 +73,7 @@
     "eject": "react-scripts eject",
     "jest": "jest --coverage",
     "test:watch": " jest  --runInBand --onlyChanged ",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli --url https://shipyaari.sentry.io/ sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
   },
   "eslintConfig": {
     "extends": [
