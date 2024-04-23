@@ -76,7 +76,7 @@ const Index = () => {
 
     try {
       let signupUtm = {
-        utm_source: "sy_website",
+        utm_source: "",
         utm_campaign: "",
         utm_medium: "",
       };
@@ -137,7 +137,7 @@ const Index = () => {
   const signUpWithGoogle = async (googleData: any) => {
     try {
       let signupUtm = {
-        utm_source: "sy_website",
+        utm_source: "",
         utm_campaign: "",
         utm_medium: "",
       };
