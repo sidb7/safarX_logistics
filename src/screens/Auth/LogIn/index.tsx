@@ -104,8 +104,8 @@ const Index = () => {
 
         const token = sessionStorage.getItem("sellerId")
           ? `${sessionStorage.getItem(
-              "sellerId"
-            )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+            "sellerId"
+          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
           : "";
 
         if (token !== "") {
@@ -190,8 +190,8 @@ const Index = () => {
 
       const token = sessionStorage.getItem("sellerId")
         ? `${sessionStorage.getItem(
-            "sellerId"
-          )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
+          "sellerId"
+        )}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`
         : "";
 
       if (token !== "") {
@@ -307,9 +307,8 @@ const Index = () => {
           </div>
         ) : (
           <div
-            className={` ${
-              isMdScreen ? "m-auto  !w-[500px]" : ""
-            } flex flex-col relative lg:px-0 lg:gap-y-0`}
+            className={` ${isMdScreen ? "m-auto  !w-[500px]" : ""
+              } flex flex-col relative lg:px-0 lg:gap-y-0`}
           >
             <div className={`rounded-lg ${isMdScreen ? "custom_shadow" : ""}`}>
               <div className="flex flex-col gap-y-8 w-full">
@@ -337,7 +336,7 @@ const Index = () => {
                   <div className="flex justify-center">
                     <GoogleLogin
                       onSuccess={(googleData) => signInWithGoogle(googleData)}
-                      onError={() => {}}
+                      onError={() => { }}
                     />
                   </div>
                   <hr className="mb-[-30px] mt-2" />
@@ -411,7 +410,7 @@ const Index = () => {
                       informativeIcon={InformativeIcon}
                       value={loginCredentials.password}
                       visibility={viewPassWord}
-                      onClick={() => {}}
+                      onClick={() => { }}
                       rightIcon={viewPassWord ? CrossEyeIcon : EyeIcon}
                       setVisibility={setViewPassWord}
                       onChange={(e) => {
@@ -512,12 +511,16 @@ const Index = () => {
             </CenterModal>
           )} */}
 
+          {/* /////////////////////// */}
+
           {isMdScreen && (
             <div className="flex justify-center items-center h-screen">
               {loginComponent()}
             </div>
           )}
-          {!isLgScreen && loginComponent()}
+          {!isMdScreen && loginComponent()}
+
+
         </>
       )}
 

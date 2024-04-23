@@ -27,7 +27,7 @@ const ServiceButton = (props: IServiceButtonProps) => {
     id,
   } = props;
 
-  const excludeWords = ["B2B", "B2C", "KYC"];
+  const excludeWords = ["B2B", "B2C", "KYC","OTP"];
 
   return (
     <button
