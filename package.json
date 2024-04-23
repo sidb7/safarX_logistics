@@ -73,7 +73,7 @@
     "eject": "react-scripts eject",
     "jest": "jest --coverage",
     "test:watch": " jest  --runInBand --onlyChanged ",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli --url https://shipyaari.sentry.io/ sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org shipyaari --project blaze-react-seller ./build && sentry-cli sourcemaps upload --org shipyaari --project blaze-react-seller ./build"
   },
   "eslintConfig": {
     "extends": [
