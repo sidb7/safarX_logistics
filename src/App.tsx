@@ -127,6 +127,16 @@ const App = () => {
       release: `blaze-react-seller@${formattedDate}`,
     });
 
+    Sentry.replayIntegration({
+      maskAllText: false,
+      maskAllInputs:false,
+      blockAllMedia: false,
+      unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+      unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+    })
+    
+    
+
     if (
       Environment === "production" &&
       userInfo !== undefined &&
