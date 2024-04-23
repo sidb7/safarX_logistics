@@ -570,7 +570,7 @@ const WalletRecharge = () => {
                     !dataFromSession?.isWalletBlackListed ? (
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-7">
-                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] mt-1">
+                          <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] ">
                             {`Old System Balance - ₹ ${
                               migratedUserWalletDetails?.phpBalance?.toLocaleString(
                                 "en-IN"
@@ -599,7 +599,7 @@ const WalletRecharge = () => {
                                     "Complete Your KYC First to avail this feature"
                                   )
                             }
-                            className="bg-[#1C1C1C] text-white py-2 px-4  font-Open text-base font-semibold leading-5"
+                            className="bg-[#1C1C1C] text-white py-4 px-4  font-Open text-base font-semibold leading-5"
                           />
                         </div>
                       </div>
