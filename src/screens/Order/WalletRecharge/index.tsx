@@ -571,7 +571,7 @@ const WalletRecharge = () => {
                       <div className="flex flex-col h-full ">
                         <div className="flex flex-col mb-7">
                           <p className="font-Open lg:text-sm xl:text-base font-semibold leading-[22px] ">
-                            {`Old System Balance - ₹ ${
+                            {`Old System Balance  ₹ ${
                               migratedUserWalletDetails?.phpBalance?.toLocaleString(
                                 "en-IN"
                               ) || 0.0
