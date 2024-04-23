@@ -2084,7 +2084,7 @@ const Index = () => {
             </p>
           </div>
         </div>
-        <CustomTableAccordian data={infoModalContent} />
+        <CustomTableAccordian getAllSellerData={infoModalContent} />
       </CustomRightModal>
 
       <CustomRightModal
