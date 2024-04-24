@@ -121,6 +121,14 @@ const App = () => {
           isEmailRequired: true,
         }),
 
+        // Sentry.replayIntegration({
+        //   maskAllText: false,
+        //   maskAllInputs:false,
+        //   blockAllMedia: false,
+        //   unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+        //   unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+        // }),
+
         new Integrations.BrowserTracing(),
       ],
       tracesSampleRate: 1.0,
@@ -146,7 +154,10 @@ const App = () => {
               integrations: [
                 new Sentry.Replay({
                   maskAllText: false,
+                  maskAllInputs:false,
                   blockAllMedia: false,
+                  unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+                  unmask: ['.sentry-unmask, [data-sentry-unmask]'],
                 }),
               ],
           release: "react-blaze@5.4.24",

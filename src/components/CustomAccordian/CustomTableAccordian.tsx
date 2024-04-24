@@ -30,33 +30,36 @@ import CustomInputWithImage from "../../components/InputWithImage/InputWithImage
 import CalenderIcon from "../../assets/calendar.svg";
 import AddBoxIcon from "../../assets/add-circle.svg";
 import { Tooltip } from "react-tooltip";
+import AddIcon from "../../assets/add-circle.svg";
 
 interface ICustomTableAccordion {
-  data?: any;
+  getAllSellerData?: any;
 }
 
 const Accordion = (props: ICustomTableAccordion) => {
   const isFirstRender = useRef(true);
+  const addressOpen = useRef(false);
   const navigate = useNavigate();
   //state to store the box data
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
-  // console.log("boxDetailsData", boxDetailsData);
+
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
 
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
-  // console.log("🚀 ~ Accordion ~ customInpuBox:", customInpuBox);
 
   const [boxName, setBoxName] = useState(false);
   const [openIndex, setOpenIndex] = useState<any>(null);
+
   const [orderDetails, setOrderDetails]: any = useState([]);
   const [apiCall, setApiCall] = useState<any>(false);
+
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
   const [pincode, setPincode] = useState<any>();
   const [pincodeData, setPincodeData] = useState<any>("");
   const [boxProductDetails, setBoxProductDetails] = useState<any>();
-  console.log("🚀 ~ Accordion ~ boxProductDetails:", boxProductDetails);
+
   const [serviceLoading, setServiceLoading] = useState<any>(false);
   const [productAccordian, setproductAccordian] = useState<any>([]);
   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
@@ -100,8 +103,6 @@ const Accordion = (props: ICustomTableAccordion) => {
     boxHeight: "",
     boxName: "",
   });
-
-  // console.log("validationErrorssss", validationError);
 
   const [orderId, setOrderId] = useState<any>();
   const [inputError, setInputError] = useState(false);
@@ -229,6 +230,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     },
   });
   const [serviceList, setServiceList] = useState<any>([]);
+
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
     deliveryAddress: {
       contact: {
@@ -250,12 +252,15 @@ const Accordion = (props: ICustomTableAccordion) => {
     },
   });
   const [serviceIndex, setServiceIndex]: any = useState(0);
+
   const [addressOpenModal, setAddressOpenModal] = useState(false);
+
   const [open, setOpen] = useState<any>({});
   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
     useState();
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
+
   //adding the box into boxinfo
   const [newBox, setNewBox] = useState<any>({
     deadWeight: 0,
@@ -265,15 +270,14 @@ const Accordion = (props: ICustomTableAccordion) => {
     height: 0,
   });
 
-  // console.log("newboxxxxxxxxxxx", newBox);
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
-  console.log("🚀 ~ Accordion ~ selectBoxIndex:", selectBoxIndex);
+
   //to know the box id
   const [selectBoxId, setSelectBoxId] = useState<any>(-1);
   const [dropDownContent, setDropDownContent] = useState<any>(false);
   const [existingBox, setExistingBox] = useState<any>(false);
   const [addnewBox, setAddNewBox] = useState<any>(false);
-  const { data } = props;
+  const { getAllSellerData } = props;
   let servicePartnerServiceId: any;
 
   const mainDate: any = convertEpochToDateTimeV2(
@@ -362,362 +366,374 @@ const Accordion = (props: ICustomTableAccordion) => {
     setvolumetricWeighAfterEditValue(boxProductDetails?.boxInfo[0]?.products);
   };
 
-  const handleBoxAccordian = async () => {
-    if (boxAccordian === true && !enabled) {
-      try {
-        // console.log("newBox", newBox?.deadWeight?.length);
-        if (selectBoxIndex === 0 && newBox?.name === "") {
-          if (
-            newBox?.name === ""
-            // ||
-            // newBox?.deadWeight === 0 ||
-            // newBox?.length?.length === 0 ||
-            // newBox?.breadth === 0 ||
-            // newBox?.height?.length === 0
-          ) {
-            // return toast.error("Filed Empty");
-            setValidationError({
-              ...validationError,
-              boxName: "Field is required",
-              // boxDeadWeight: "Field is required",
-              // boxLength: "Field is required",
-              // boxBreadth: "Field is required",
-              // boxHeight: "Field is required",
-            });
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
+  // const handleBoxAccordian = async () => {
+  //   if (boxAccordian === true && !enabled) {
+  //     try {
+  //       if (
+  //         selectBoxIndex === 0
+  //         // commented as not implemeting add box now
+  //         // && newBox?.name === ""
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           selectBoxIndex === 0
+  //           // ||
+  //           // newBox?.deadWeight === 0 ||
+  //           // newBox?.length?.length === 0 ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-            // let element5: any = document.getElementById("Box 1");
-            let element5: any = document.getElementById(
-              // `${boxProductDetails?.boxInfo?.[0]?.name}`
-              "boxname"
-            );
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // ("boxname");
+  //           // );
 
-            // if (element4) element4.classList.add("!border-red-500");
-            if (element4) element4.style.borderColor = "red";
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-            if (element5) element5.style.borderColor = "red";
-          }
-          return toast.error(
-            "Please Select any existing box or create a new box"
-          );
-        }
-        if (selectBoxIndex === 0 && newBox?.deadWeight === 0) {
-          if (
-            // newBox?.name === ""
-            // ||
-            newBox?.deadWeight === 0
-            // ||
-            // newBox?.length?.length === 0 ||
-            // newBox?.breadth === 0 ||
-            // newBox?.height?.length === 0
-          ) {
-            // return toast.error("Filed Empty");
-            setValidationError({
-              ...validationError,
-              // boxName: "Field is required",
-              boxDeadWeight: "Field is required",
-              // boxLength: "Field is required",
-              // boxBreadth: "Field is required",
-              // boxHeight: "Field is required",
-            });
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         return toast.error(
+  //           "Please Select any existing box or create a new box"
+  //         );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.deadWeight === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           selectBoxIndex === 0
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length?.length === 0 ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-            // let element5: any = document.getElementById("Box 1");
-            let element5: any = document.getElementById(
-              // `${boxProductDetails?.boxInfo?.[0]?.name}`
-              "boxname"
-            );
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
 
-            // if (element4) element4.classList.add("!border-red-500");
-            if (element4) element4.style.borderColor = "red";
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-            if (element5) element5.style.borderColor = "red";
-          }
-          // return toast.error(
-          //   "Please Select any existing box or create a new box"
-          // );
-        }
-        if (selectBoxIndex === 0 && newBox?.length === 0) {
-          if (
-            // newBox?.name === ""
-            // ||
-            // newBox?.deadWeight === 0
-            // ||
-            newBox?.length === 0
-            // ||
-            // newBox?.breadth === 0 ||
-            // newBox?.height?.length === 0
-          ) {
-            // return toast.error("Filed Empty");
-            setValidationError({
-              ...validationError,
-              // boxName: "Field is required",
-              // boxDeadWeight: "Field is required",
-              boxLength: "Field is required",
-              // boxBreadth: "Field is required",
-              // boxHeight: "Field is required",
-            });
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.length === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           selectBoxIndex === 0
+  //           // ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-            // let element5: any = document.getElementById("Box 1");
-            let element5: any = document.getElementById(
-              // `${boxProductDetails?.boxInfo?.[0]?.name}`
-              "boxname"
-            );
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
 
-            // if (element4) element4.classList.add("!border-red-500");
-            if (element4) element4.style.borderColor = "red";
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-            if (element5) element5.style.borderColor = "red";
-          }
-          // return toast.error(
-          //   "Please Select any existing box or create a new box"
-          // );
-        }
-        if (selectBoxIndex === 0 && newBox?.breadth === 0) {
-          if (
-            // newBox?.name === ""
-            // ||
-            // newBox?.deadWeight === 0
-            // ||
-            // newBox?.length === 0
-            // ||
-            newBox?.breadth === 0
-            // ||
-            // newBox?.height?.length === 0
-          ) {
-            // return toast.error("Filed Empty");
-            setValidationError({
-              ...validationError,
-              // boxName: "Field is required",
-              // boxDeadWeight: "Field is required",
-              // boxLength: "Field is required",
-              boxBreadth: "Field is required",
-              // boxHeight: "Field is required",
-            });
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.breadth === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           // ||
+  //           selectBoxIndex === 0
+  //           // newBox?.breadth === 0
+  //           // ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-            // let element5: any = document.getElementById("Box 1");
-            let element5: any = document.getElementById(
-              // `${boxProductDetails?.boxInfo?.[0]?.name}`
-              "boxname"
-            );
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
 
-            // if (element4) element4.classList.add("!border-red-500");
-            if (element4) element4.style.borderColor = "red";
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-            if (element5) element5.style.borderColor = "red";
-          }
-          // return toast.error(
-          //   "Please Select any existing box or create a new box"
-          // );
-        }
-        if (selectBoxIndex === 0 && newBox?.height === 0) {
-          if (
-            // newBox?.name === ""
-            // ||
-            // newBox?.deadWeight === 0
-            // ||
-            // newBox?.length === 0
-            // ||
-            // newBox?.breadth === 0
-            // ||
-            newBox?.height === 0
-          ) {
-            // return toast.error("Filed Empty");
-            setValidationError({
-              ...validationError,
-              // boxName: "Field is required",
-              // boxDeadWeight: "Field is required",
-              // boxLength: "Field is required",
-              // boxBreadth: "Field is required",
-              boxHeight: "Field is required",
-            });
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.height === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           // ||
+  //           // newBox?.breadth === 0
+  //           // ||
+  //           // newBox?.height === 0
+  //           selectBoxIndex === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-            // let element5: any = document.getElementById("Box 1");
-            let element5: any = document.getElementById(
-              // `${boxProductDetails?.boxInfo?.[0]?.name}`
-              "boxname"
-            );
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
 
-            // if (element4) element4.classList.add("!border-red-500");
-            if (element4) element4.style.borderColor = "red";
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-            if (element5) element5.style.borderColor = "red";
-          }
-          // return toast.error(
-          //   "Please Select any existing box or create a new box"
-          // );
-        }
-        // if (selectBoxIndex === 0 && newBox?.name === "") {
-        //   if (newBox?.name === "") {
-        //     setValidationError({
-        //       ...validationError,
-        //       boxName: "Field is required",
-        //     });
-        //     let element4: any = document.getElementById(
-        //       `${orderDetails[2]?.title}`
-        //     );
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       // if (selectBoxIndex === 0 && newBox?.name === "") {
+  //       //   if (newBox?.name === "") {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxName: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
 
-        //     if (element4) element4.style.borderColor = "red";
-        //     let element5: any = document.getElementById(
-        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
-        //       "boxname"
-        //     );
-        //     if (element5) element5.style.borderColor = "red";
-        //   } else {
-        //     setValidationError({
-        //       ...validationError,
-        //       boxName: "",
-        //     });
-        //   }
-        //   if (newBox?.deadWeight === 0) {
-        //     setValidationError({
-        //       ...validationError,
-        //       boxDeadWeight: "Field is required",
-        //     });
-        //     let element4: any = document.getElementById(
-        //       `${orderDetails[2]?.title}`
-        //     );
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   } else {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxName: "",
+  //       //     });
+  //       //   }
+  //       //   if (newBox?.deadWeight === 0) {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxDeadWeight: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
 
-        //     if (element4) element4.style.borderColor = "red";
-        //     let element5: any = document.getElementById(
-        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
-        //       "boxname"
-        //     );
-        //     if (element5) element5.style.borderColor = "red";
-        //   }
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   }
 
-        //   if (newBox?.length === 0) {
-        //     setValidationError({
-        //       ...validationError,
-        //       boxLength: "Field is required",
-        //     });
-        //     let element4: any = document.getElementById(
-        //       `${orderDetails[2]?.title}`
-        //     );
+  //       //   if (newBox?.length === 0) {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxLength: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
 
-        //     if (element4) element4.style.borderColor = "red";
-        //     let element5: any = document.getElementById(
-        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
-        //       "boxname"
-        //     );
-        //     if (element5) element5.style.borderColor = "red";
-        //   }
-        //   return toast.error(
-        //     "Please Select any existing box or create a new box"
-        //   );
-        // }
-        if (customInpuBox) {
-          boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
-          boxProductDetails.boxInfo[0].appliedWeight =
-            boxProductDetails.boxInfo[0]?.appliedWeight;
-          boxProductDetails.boxInfo[0].name = newBox?.name;
-          boxProductDetails.boxInfo[0].boxId =
-            boxProductDetails.boxInfo[0]?.boxId;
-          boxProductDetails.boxInfo[0].length = newBox?.length;
-          boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
-          boxProductDetails.boxInfo[0].height = newBox?.height;
-          // boxProductDetails.boxinfo[0].volumetricWeight =
-          //   newBox?.volumetricWeight;
-        } else {
-          boxProductDetails.boxInfo[0].deadWeight =
-            boxDetailsData[selectBoxId]?.deadWeight;
-          boxProductDetails.boxInfo[0].appliedWeight =
-            boxDetailsData[selectBoxId]?.appliedWeight;
-          boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
-          boxProductDetails.boxInfo[0].boxId =
-            boxDetailsData[selectBoxId]?.boxId;
-          boxProductDetails.boxInfo[0].length =
-            boxDetailsData[selectBoxId]?.length;
-          boxProductDetails.boxInfo[0].breadth =
-            boxDetailsData[selectBoxId]?.breadth;
-          boxProductDetails.boxInfo[0].height =
-            boxDetailsData[selectBoxId]?.height;
-          // boxProductDetails.boxinfo[0].volumetricWeight =
-          //   boxDetailsData[selectBoxId]?.volumetricWeight;
-        }
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   }
+  //       //   return toast.error(
+  //       //     "Please Select any existing box or create a new box"
+  //       //   );
+  //       // }
+  //       if (customInpuBox) {
+  //         boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
+  //         boxProductDetails.boxInfo[0].appliedWeight =
+  //           boxProductDetails.boxInfo[0]?.appliedWeight;
+  //         boxProductDetails.boxInfo[0].name = newBox?.name;
+  //         boxProductDetails.boxInfo[0].boxId =
+  //           boxProductDetails.boxInfo[0]?.boxId;
+  //         boxProductDetails.boxInfo[0].length = newBox?.length;
+  //         boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
+  //         boxProductDetails.boxInfo[0].height = newBox?.height;
+  //         // boxProductDetails.boxinfo[0].volumetricWeight =
+  //         //   newBox?.volumetricWeight;
+  //       } else {
+  //         boxProductDetails.boxInfo[0].deadWeight =
+  //           boxDetailsData[selectBoxId]?.deadWeight;
+  //         boxProductDetails.boxInfo[0].appliedWeight =
+  //           boxDetailsData[selectBoxId]?.appliedWeight;
+  //         boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
+  //         boxProductDetails.boxInfo[0].boxId =
+  //           boxDetailsData[selectBoxId]?.boxId;
+  //         boxProductDetails.boxInfo[0].length =
+  //           boxDetailsData[selectBoxId]?.length;
+  //         boxProductDetails.boxInfo[0].breadth =
+  //           boxDetailsData[selectBoxId]?.breadth;
+  //         boxProductDetails.boxInfo[0].height =
+  //           boxDetailsData[selectBoxId]?.height;
+  //         // boxProductDetails.boxinfo[0].volumetricWeight =
+  //         //   boxDetailsData[selectBoxId]?.volumetricWeight;
+  //       }
 
-        let payload = boxProductDetails;
+  //       let payload = boxProductDetails;
 
-        // console.log("payload", payload?.boxInfo?.[0]);
-        // console.log(
-        //   "length",
-        //   payload?.boxInfo?.[0]?.name?.length,
-        //   payload?.boxInfo?.[0]?.deadWeight,
-        //   payload?.boxInfo?.[0]?.length,
-        //   payload?.boxInfo?.[0]?.breadth,
-        //   payload?.boxInfo?.[0]?.height
-        // );
+  //       if (
+  //         payload?.boxInfo?.[0]?.name?.length !== 0 &&
+  //         payload?.boxInfo?.[0]?.deadWeight !== 0 &&
+  //         payload?.boxInfo?.[0]?.length !== 0 &&
+  //         payload?.boxInfo?.[0]?.breadth !== 0 &&
+  //         payload?.boxInfo?.[0]?.height !== 0
+  //       ) {
+  //         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+  //         if (data?.status) {
+  //           toast.success("Updated Box Successfully");
+  //           setServiceList([]);
+  //           setServiceRefresh(true);
+  //           setBoxAccordian(false);
+  //           setCustomInputBox(false);
+  //           setSelectBoxIndex(0);
+  //           setNewBox({
+  //             ...newBox,
+  //             deadWeight: 0,
+  //             name: "",
+  //             length: 0,
+  //             breadth: 0,
+  //             height: 0,
+  //           });
 
-        if (
-          payload?.boxInfo?.[0]?.name?.length !== 0 &&
-          payload?.boxInfo?.[0]?.deadWeight !== 0 &&
-          payload?.boxInfo?.[0]?.length !== 0 &&
-          payload?.boxInfo?.[0]?.breadth !== 0 &&
-          payload?.boxInfo?.[0]?.height !== 0
-        ) {
-          const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-          if (data?.status) {
-            toast.success("Updated Box Successfully");
-            setServiceList([]);
-            setServiceRefresh(true);
-            setBoxAccordian(false);
-            setCustomInputBox(false);
-            setSelectBoxIndex(0);
-            setNewBox({
-              ...newBox,
-              deadWeight: 0,
-              name: "",
-              length: 0,
-              breadth: 0,
-              height: 0,
-            });
+  //           //calling the getSellerCompleteData api again to get the updated details for updating the error borders
 
-            let element4: any = document.getElementById(
-              `${orderDetails[2]?.title}`
-            );
-            // console.log("element4", element4);
-            let element5: any = document.getElementById("boxname");
-            if (element5) element5.style.borderColor = "#E8E8E8";
-            // if (element5) element5.classList.add("#E8E8E8");
-            // if (element4) element4.classList.add("#E8E8E8");
-            // f (element4) element4.style.borderColor = "#E8E8E8";
-            // getServiceList();
-          } else {
-            toast.error("Something went wrong");
-            setBoxAccordian(true);
-            setCustomInputBox(true);
-          }
-        } else {
-          setBoxAccordian(true);
-          setCustomInputBox(true);
-        }
-        // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-        // if (data?.status) {
-        //   toast.success("Updated Box Successfully");
-        //   setServiceList([]);
-        //   setServiceRefresh(true);
-        //   // getServiceList();
-        // } else {
-        //   toast.error("Something went wrong");
-        // }
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    }
-  };
+  //           let element4: any = document.getElementById(
+  //             `${orderDetails[2]?.title}`
+  //           );
+
+  //           let element5: any = document.getElementById("boxname");
+  //           if (element5) element5.style.borderColor = "#E8E8E8";
+  //           // if (element5) element5.classList.add("#E8E8E8");
+  //           if (element4) element4.classList.add("!#E8E8E8");
+  //           // f (element4) element4.style.borderColor = "#E8E8E8";
+  //           // getServiceList();
+  //         } else {
+  //           toast.error("Something went wrong");
+  //           setBoxAccordian(true);
+  //           setCustomInputBox(true);
+  //         }
+  //       } else {
+  //         setBoxAccordian(true);
+  //         setCustomInputBox(true);
+  //       }
+  //       // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+  //       // if (data?.status) {
+  //       //   toast.success("Updated Box Successfully");
+  //       //   setServiceList([]);
+  //       //   setServiceRefresh(true);
+  //       //   // getServiceList();
+  //       // } else {
+  //       //   toast.error("Something went wrong");
+  //       // }
+  //     } catch (error: any) {
+  //       console.log(error.message);
+  //     }
+  //   }
+  // };
 
   const handleBoxInputUpdation = (
     box_index: any,
@@ -784,6 +800,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           setServiceLoading(false);
           setServiceList(response?.data?.data);
           setServiceRefresh(false);
+          setAddressOpenModal(true);
         } else {
           //services
 
@@ -800,9 +817,45 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    if (addressOpenModal === false) {
-      if (requestName === "Services") {
-        getServiceList();
+    if (addressOpen?.current == false) {
+      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
+      if (
+        element4.classList.contains("!border-red-500") &&
+        requestName === "Services"
+      ) {
+        return toast.error("Please solve the box error");
+      } else if (requestName === "Services" && addressOpen.current === false) {
+        await getServiceList();
+        // setAddressOpenModal(true);
+        addressOpen.current = true;
+      }
+    } else if (
+      requestName == "Services" &&
+      !enabled &&
+      addressOpen.current === true
+    ) {
+      try {
+        const payload: any = {
+          partnerServiceId: serviceList[serviceIndex]?.partnerServiceId,
+          partnerServiceName: serviceList[serviceIndex]?.partnerServiceName,
+          companyServiceId: serviceList[serviceIndex]?.companyServiceId,
+          companyServiceName: serviceList[serviceIndex]?.companyServiceName,
+          tempOrderId: boxProductDetails?.tempOrderId,
+          source: boxProductDetails?.source,
+
+          category: "Service",
+        };
+
+        const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
+
+        if (responseData?.success) {
+          toast.success("Updated Service Successfully");
+          addressOpen.current = false;
+        } else {
+          toast.error("Something went wrong");
+        }
+      } catch (error: any) {
+        console.log(error.message);
       }
     }
 
@@ -919,30 +972,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         }
       } catch (error) {
         console.log(error);
-      }
-    }
-
-    if (requestName == "Services" && !enabled) {
-      try {
-        const payload: any = {
-          partnerServiceId: serviceList[serviceIndex].partnerServiceId,
-          partnerServiceName: serviceList[serviceIndex].partnerServiceName,
-          companyServiceId: serviceList[serviceIndex].companyServiceId,
-          companyServiceName: serviceList[serviceIndex].companyServiceName,
-          tempOrderId: boxProductDetails?.tempOrderId,
-          source: boxProductDetails?.source,
-
-          category: "Service",
-        };
-
-        const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
-        if (responseData?.success) {
-          toast.success("Updated Service Successfully");
-        } else {
-          toast.error("Something went wrong");
-        }
-      } catch (error: any) {
-        console.log(error.message);
       }
     }
   };
@@ -1335,6 +1364,376 @@ const Accordion = (props: ICustomTableAccordion) => {
   servicePartnerServiceId =
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
 
+  const handleBoxAccordian = async () => {
+    if (boxAccordian === true && !enabled) {
+      try {
+        if (
+          selectBoxIndex === 0
+          // commented as not implemeting add box now
+          // && newBox?.name === ""
+        ) {
+          if (
+            // newBox?.name === ""
+            selectBoxIndex === 0
+            // ||
+            // newBox?.deadWeight === 0 ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // ("boxname");
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          return toast.error(
+            "Please Select any existing box or create a new box"
+          );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.deadWeight === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            selectBoxIndex === 0
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.length === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            selectBoxIndex === 0
+            // ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.breadth === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            selectBoxIndex === 0
+            // newBox?.breadth === 0
+            // ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.height === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            // newBox?.breadth === 0
+            // ||
+            // newBox?.height === 0
+            selectBoxIndex === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        // if (selectBoxIndex === 0 && newBox?.name === "") {
+        //   if (newBox?.name === "") {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   } else {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "",
+        //     });
+        //   }
+        //   if (newBox?.deadWeight === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxDeadWeight: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+
+        //   if (newBox?.length === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxLength: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+        //   return toast.error(
+        //     "Please Select any existing box or create a new box"
+        //   );
+        // }
+        if (customInpuBox) {
+          boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxProductDetails.boxInfo[0]?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = newBox?.name;
+          boxProductDetails.boxInfo[0].boxId =
+            boxProductDetails.boxInfo[0]?.boxId;
+          boxProductDetails.boxInfo[0].length = newBox?.length;
+          boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
+          boxProductDetails.boxInfo[0].height = newBox?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   newBox?.volumetricWeight;
+        } else {
+          boxProductDetails.boxInfo[0].deadWeight =
+            boxDetailsData[selectBoxId]?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxDetailsData[selectBoxId]?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
+          boxProductDetails.boxInfo[0].boxId =
+            boxDetailsData[selectBoxId]?.boxId;
+          boxProductDetails.boxInfo[0].length =
+            boxDetailsData[selectBoxId]?.length;
+          boxProductDetails.boxInfo[0].breadth =
+            boxDetailsData[selectBoxId]?.breadth;
+          boxProductDetails.boxInfo[0].height =
+            boxDetailsData[selectBoxId]?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   boxDetailsData[selectBoxId]?.volumetricWeight;
+        }
+
+        let payload = boxProductDetails;
+
+        if (
+          payload?.boxInfo?.[0]?.name?.length !== 0 &&
+          payload?.boxInfo?.[0]?.deadWeight !== 0 &&
+          payload?.boxInfo?.[0]?.length !== 0 &&
+          payload?.boxInfo?.[0]?.breadth !== 0 &&
+          payload?.boxInfo?.[0]?.height !== 0
+        ) {
+          const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+          if (data?.status) {
+            toast.success("Updated Box Successfully");
+            setServiceList([]);
+            setServiceRefresh(true);
+            setBoxAccordian(false);
+            setCustomInputBox(false);
+            setSelectBoxIndex(0);
+            setNewBox({
+              ...newBox,
+              deadWeight: 0,
+              name: "",
+              length: 0,
+              breadth: 0,
+              height: 0,
+            });
+
+            //calling the getSellerCompleteData api again to get the updated details for updating the error borders
+
+            getSellerOrderCompleteData(getAllSellerData?.data);
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            let element5: any = document.getElementById("boxname");
+            if (element5) element5.style.borderColor = "#E8E8E8";
+            // if (element5) element5.classList.add("#E8E8E8");
+            if (element4) element4.classList.add("!#E8E8E8");
+            // f (element4) element4.style.borderColor = "#E8E8E8";
+            // getServiceList();
+          } else {
+            toast.error("Something went wrong");
+            setBoxAccordian(true);
+            setCustomInputBox(true);
+          }
+        } else {
+          setBoxAccordian(true);
+          setCustomInputBox(true);
+        }
+        // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        // if (data?.status) {
+        //   toast.success("Updated Box Successfully");
+        //   setServiceList([]);
+        //   setServiceRefresh(true);
+        //   // getServiceList();
+        // } else {
+        //   toast.error("Something went wrong");
+        // }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    }
+  };
+
   const productLoops = (productAccordian: any, dataIndex: any) => {
     if (enabled) {
       return false;
@@ -1513,18 +1912,22 @@ const Accordion = (props: ICustomTableAccordion) => {
       boxProductDetails?.boxInfo?.[0]?.length === 0 ||
       boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
       boxProductDetails?.boxInfo?.[0]?.height === 0 ||
-      isBoxError
+      isBoxError ||
+      (selectBoxIndex === 0 &&
+        boxProductDetails?.boxInfo?.[0]?.name === "Box 1")
     ) {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
 
       // let element5: any = document.getElementById("Box 1");
       let element5: any = document.getElementById(
-        `${boxProductDetails?.boxInfo?.[0]?.name}`
+        // `${boxProductDetails?.boxInfo?.[0]?.name}`
+        "boxname"
       );
 
       if (element4) element4.classList.add("!border-red-500");
       if (element5) element5.style.borderColor = "red";
+      // if (element5) element5.classList.add("!border-red-500");
     } else {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
@@ -1668,13 +2071,13 @@ const Accordion = (props: ICustomTableAccordion) => {
   };
 
   useEffect(() => {
-    const { data: dataFromState, isOpen } = data;
+    const { data: dataFromState, isOpen } = getAllSellerData;
 
-    if (data !== undefined && isOpen === true) {
+    if (getAllSellerData !== undefined && isOpen === true) {
       setOrderDetails([]);
       getSellerOrderCompleteData(dataFromState);
     }
-  }, [data]);
+  }, [getAllSellerData]);
 
   useEffect(() => {
     if (orderDetails?.length > 0) {
@@ -1972,24 +2375,24 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 {eachProduct
                                                                   ?.name
                                                                   ?.length <=
-                                                                20 ? (
+                                                                10 ? (
                                                                   <>
                                                                     {
                                                                       eachProduct?.name
                                                                     }
                                                                     {"  x  " +
                                                                       eachProduct?.qty +
-                                                                      " (Quantity) "}
+                                                                      " (Qty) "}
                                                                   </>
                                                                 ) : (
                                                                   <>
                                                                     {eachProduct?.name.slice(
                                                                       0,
-                                                                      20
+                                                                      10
                                                                     ) + " ..."}
                                                                     {" x " +
                                                                       eachProduct?.qty +
-                                                                      " (Quantity) "}
+                                                                      " (Qty) "}
                                                                   </>
                                                                 )}
                                                               </div>
@@ -2368,10 +2771,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   // id={`${eachBox.name}`}
                                                   id={"boxname"}
                                                   onClick={(e: any) => {
-                                                    // console.log(
-                                                    //   "boxAccordian",
-                                                    //   boxAccordian
-                                                    // );
                                                     if (
                                                       boxAccordian === true
                                                       // &&
@@ -2430,7 +2829,10 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         // 0
                                                         //   ? "No Box Found"
                                                         //   :
-                                                        eachBox?.name
+                                                        eachBox?.name ===
+                                                        "Box 1"
+                                                          ? ""
+                                                          : eachBox?.name
                                                       }
                                                     </p>
                                                   </div>
@@ -2463,6 +2865,24 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                             found, Please create
                                                             a box
                                                           </p>
+                                                          <div
+                                                            className="cursor-pointer flex my-3 gap-x-2 items-center border-[1.5px] border-[#E8E8E8] rounded-md py-2 px-2"
+                                                            onClick={() =>
+                                                              navigate(
+                                                                "/catalogues/box-catalogue"
+                                                              )
+                                                            }
+                                                          >
+                                                            <img
+                                                              src={AddIcon}
+                                                              alt="image"
+                                                              className="w-4 h-4"
+                                                            />
+                                                            <p className="text-[14px] font-open text-[#004EFF] mt-1 ">
+                                                              Click here to
+                                                              create a box
+                                                            </p>
+                                                          </div>
                                                         </>
                                                       ) : (
                                                         <>
@@ -2502,6 +2922,24 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                 );
                                                               }}
                                                             />
+                                                            <div
+                                                              className="cursor-pointer flex my-3 gap-x-2 items-center border-[1.5px] border-[#E8E8E8] rounded-md py-2 px-2"
+                                                              onClick={() =>
+                                                                navigate(
+                                                                  "/catalogues/box-catalogue"
+                                                                )
+                                                              }
+                                                            >
+                                                              <img
+                                                                src={AddIcon}
+                                                                alt="image"
+                                                                className="w-4 h-4"
+                                                              />
+                                                              <p className="text-[14px] font-open text-[#004EFF] mt-1 ">
+                                                                Click here to
+                                                                create a box
+                                                              </p>
+                                                            </div>
                                                           </div>
                                                         </>
                                                       )}
@@ -2631,13 +3069,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                       onChange={(
                                                                         e: any
                                                                       ) => {
-                                                                        // console.log(
-                                                                        //   "length",
-                                                                        //   e
-                                                                        //     .target
-                                                                        //     .value
-                                                                        //     ?.length
-                                                                        // );
                                                                         setNewBox(
                                                                           {
                                                                             ...newBox,
