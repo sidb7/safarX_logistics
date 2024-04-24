@@ -1912,7 +1912,9 @@ const Accordion = (props: ICustomTableAccordion) => {
       boxProductDetails?.boxInfo?.[0]?.length === 0 ||
       boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
       boxProductDetails?.boxInfo?.[0]?.height === 0 ||
-      isBoxError
+      isBoxError ||
+      (selectBoxIndex === 0 &&
+        boxProductDetails?.boxInfo?.[0]?.name === "Box 1")
     ) {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
