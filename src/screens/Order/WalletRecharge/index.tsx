@@ -385,36 +385,41 @@ const WalletRecharge = () => {
   }, [walletValue]);
 
   const getWalletBalance = async () => {
-    try {
-      setLoading(true);
-      const { data: response } = await POST(GET_WALLET_BALANCE);
+    // Check conditions before making the API call
+    if (
+      dataFromSession?.isMigrated &&
+      !dataFromSession?.isPostpaid &&
+      !dataFromSession?.isWalletBlackListed
+    ) {
+      try {
+        setLoading(true);
+        const { data: response } = await POST(GET_WALLET_BALANCE);
 
-      if (response?.success) {
-        setMigratedUserWalletDetails(response?.data);
-        setAmountForTransaction({
-          ...amountForTransaction,
-          phpAmount:
-            response?.data?.phpBalance !== undefined
-              ? response.data.phpBalance === 0
-                ? 0
-                : response.data.phpBalance
-              : "N/A",
-          blazeAmount:
-            response?.data?.blazeBalance !== undefined
-              ? response.data.blazeBalance === 0
-                ? 0
-                : response.data.blazeBalance
-              : "N/A",
-        });
-        setLoading(false);
-      } else {
-        toast.error(response?.message);
+        if (response?.success) {
+          setMigratedUserWalletDetails(response?.data);
+          setAmountForTransaction({
+            ...amountForTransaction,
+            phpAmount:
+              response?.data?.phpBalance !== undefined
+                ? response.data.phpBalance === 0
+                  ? 0
+                  : response.data.phpBalance
+                : "N/A",
+            blazeAmount:
+              response?.data?.blazeBalance !== undefined
+                ? response.data.blazeBalance === 0
+                  ? 0
+                  : response.data.blazeBalance
+                : "N/A",
+          });
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch wallet details!");
+      } finally {
         setLoading(false);
       }
-    } catch {
-      toast.error("Failed to fetch wallet details!");
-      setLoading(false);
-      return;
     }
   };
 
