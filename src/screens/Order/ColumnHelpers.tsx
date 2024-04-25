@@ -417,15 +417,15 @@ const idHelper = (
                   onClick={
                     // on going work temporary currently commented
 
-                    // () => {
-                    //   setOpenRightModalForTracking({
-                    //     ...openRightModalForTracking,
-                    //     isOpen: true,
-                    //     awbNo: awb,
-                    //   });
-                    // }
+                    () => {
+                      setOpenRightModalForTracking({
+                        ...openRightModalForTracking,
+                        isOpen: true,
+                        awbNo: awb,
+                      });
+                    }
 
-                    () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
+                    // () => window.open(`/tracking?trackingNo=${awb}`, "_blank")
                     // navigate({
                     //   pathname: "/tracking",
                     //   search: `?trackingNo=${awb}`,
