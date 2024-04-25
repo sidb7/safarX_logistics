@@ -17,6 +17,7 @@ import Location from "../../assets/Location.svg";
 import AccordianCloseIcon from "../../assets/AccordianCloseIcon.svg";
 import AccordianOpenIcon from "../../assets/AccordianOpen.svg";
 import RefreshIcon from "../../assets/RefreshIcon.svg";
+import { isNumber } from "lodash";
 interface INewTrackingContentProps {
   setOpenRightModalForTracking?: any;
   openRightModalForTracking?: any;
@@ -76,6 +77,7 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
   });
   const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
   const [currentProductName, setCurrentProductName] = useState<any>("");
+  const [edd, setEdd] = useState<any>();
 
   const [accordionOpen, setAccordionOpen] = useState<boolean[]>([]);
 
@@ -214,6 +216,16 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
       if (response?.success && response?.data[0]?.trackingInfo?.length > 0) {
         toast.success(response.message);
         setTrackingData(response?.data?.[0]?.trackingInfo?.[0]);
+        //edd datatypes are different so based on data type of it
+        if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
+          const EDDtime = convertEpochToDateTime(
+            response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
+          );
+
+          setEdd(EDDtime);
+        } else {
+          setEdd(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD);
+        }
 
         getlastUpdateTime(response?.data[0]?.trackingInfo);
         productName(response?.data[0]?.trackingInfo?.[0]?.boxInfo[0]?.products);
@@ -453,17 +465,34 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                 <div className="flex  md:flex-row gap-x-2 my-1 md:my-0">
                   <p className="flex flex-col md:flex-row text-[10px] font-normal font-Open leading-[16px] whitespace-nowrap  md:items-center">
                     Last Update:
-                    <div className="flex gap-x-1 md:ml-1 text-[10px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
-                      <span>{lastUpdate.hours + " ,"}</span>
-                      <span>{lastUpdate.date}</span>
+                    {trackingCycleDetails.length === 0 ? (
+                      <div className="flex gap-x-1 md:ml-1 text-[10px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                        <span>
+                          {formatDate(
+                            convertEpochToDateTime(trackingData?.createdAt)
+                          )}
+                        </span>
 
-                      <img
-                        src={RefreshIcon}
-                        alt=""
-                        className="ml-2 cursor-pointer"
-                        onClick={() => getTrackingData()}
-                      />
-                    </div>
+                        <img
+                          src={RefreshIcon}
+                          alt=""
+                          className="ml-2 cursor-pointer"
+                          onClick={() => getTrackingData()}
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex gap-x-1 md:ml-1 text-[10px] font-semibold font-Open leading-[16px] whitespace-nowrap  items-center">
+                        <span>{lastUpdate.hours + " ,"}</span>
+                        <span>{lastUpdate.date}</span>
+
+                        <img
+                          src={RefreshIcon}
+                          alt=""
+                          className="ml-2 cursor-pointer"
+                          onClick={() => getTrackingData()}
+                        />
+                      </div>
+                    )}
                   </p>
                 </div>
               </div>
@@ -491,7 +520,10 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                         Order Placed:
                       </p>
                       <p className="font-Open text-sm font-semibold leading-5">
-                        {lastUpdate.date || "N/A"}
+                        {/* {lastUpdate.date || "N/A"} */}
+                        {formatDate(
+                          convertEpochToDateTime(trackingData?.createdAt)
+                        ) || "N/A"}
                       </p>
                     </div>
                   </div>
@@ -506,6 +538,31 @@ const NewTrackingContent: React.FunctionComponent<INewTrackingContentProps> = (
                 </div>
               </div>
               <div className="pt-4 pb-9">
+                {/* {trackingData?.currentStatus === "CANCELLED" ||
+                trackingData?.currentStatus === "CANCEL REQUESTED" ||
+                "EXCEPTION" ? (
+                  <div className=" items-center text-center border-[#F0A22E] h-[24px] bg-[#FDF6EA] text-[#F0A22E] text-[10px] font-normal leading-3s rounded-sm  font-Open xl:text-xs xl:font-semibold xl:leading-4 ">
+                    <p>
+                      {trackingData?.currentStatus === "CANCELLED" ||
+                      trackingData?.currentStatus === "CANCEL REQUESTED"
+                        ? "Cancelled Order"
+                        : "Exception"}
+                    </p>
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <div
+                  className={` ${
+                    trackingData?.currentStatus === "CANCELLED" ||
+                    trackingData?.currentStatus === "CANCEL REQUESTED" ||
+                    "EXCEPTION"
+                      ? "blur-sm"
+                      : ""
+                  }`}
+                >
+                  <Stepper steps={orderSteps} />
+                </div> */}
                 <Stepper steps={orderSteps} />
               </div>
             </div>

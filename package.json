@@ -68,7 +68,7 @@
     "build": "GENERATE_SOURCEMAP=true react-scripts build && npm run sentry:sourcemaps",
     "local": "REACT_APP_ENV=local react-scripts start",
     "dev": "REACT_APP_ENV=development react-scripts start",
-    "test": "REACT_APP_ENV=test react-scripts start",
+    "test": "REACT_APP_ENV=test react-scripts start & wait-on http://localhost:3000 && cypress run",
     "prod": "REACT_APP_ENV=production react-scripts start",
     "eject": "react-scripts eject",
     "jest": "jest --coverage",
@@ -113,6 +113,8 @@
     "autoprefixer": "^10.4.16",
     "babel-jest": "^29.7.0",
     "babel-preset-react": "^6.24.1",
+    "cypress": "^13.8.1",
+    "cypress-xpath": "^2.0.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jest-svg-transformer": "^1.0.0",
@@ -124,6 +126,7 @@
     "terser": "^3.14.1",
     "ts-jest": "^29.1.1",
     "uuid": "^9.0.0",
+    "wait-on": "^7.2.0",
     "xlsx": "^0.18.5"
   },
   "resolutions": {
