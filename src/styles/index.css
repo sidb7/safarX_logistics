@@ -10,3 +10,18 @@
 .infinite-rotate {
   animation: rotate infinite 2s linear; /* Adjust the duration as needed */
 }
+
+#sentry-feedback{
+  left: 10px !important;
+  position: fixed !important;
+  bottom: 10px !important;
+  width: fit-content;
+}
+
+.dialog__content{
+  left: 10px !important;
+  position: fixed !important;
+  bottom: 10px !important;
+}
+
+

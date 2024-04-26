@@ -24,6 +24,21 @@ import {
   setLocalStorage,
   tokenKey,
 } from "./utils/utility";
+import { Integrations } from "@sentry/tracing";
+import * as Sentry from "@sentry/react";
+import "./styles/index.css";
+
+const timestamp = Date.now(); // Get the current timestamp in milliseconds
+const date = new Date(timestamp); // Create a Date object from the timestamp
+
+// Format the date as a string in "dd-mm-yyyy" format
+const formattedDate = `${padZero(date.getDate())}-${padZero(
+  date.getMonth() + 1
+)}-${date.getFullYear()}`;
+
+function padZero(num: any) {
+  return num.toString().padStart(2, "0"); // Pad the number with leading zero if less than 10
+}
 
 declare global {
   interface Window {
@@ -89,6 +104,37 @@ const App = () => {
     let script: any = "";
     let scriptElement: any = "";
 
+    Sentry.setUser({
+      id: `Seller ID: ${userInfo?.sellerId}`,
+      email: userInfo?.email,
+      username: `${userInfo?.name} (${userInfo?.sellerId})`,
+    });
+
+    Sentry.init({
+      dsn: "https://23c8372ecd2f2f7fdd613c6b664ae402@o4505170950488064.ingest.us.sentry.io/4506071970349056",
+      integrations: [
+        Sentry.feedbackIntegration({
+          // Additional SDK configuration goes in here, for example:
+
+          colorScheme: "light",
+          isNameRequired: true,
+          isEmailRequired: true,
+        }),
+
+        // Sentry.replayIntegration({
+        //   maskAllText: false,
+        //   maskAllInputs:false,
+        //   blockAllMedia: false,
+        //   unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+        //   unmask: ['.sentry-unmask, [data-sentry-unmask]'],
+        // }),
+
+        new Integrations.BrowserTracing(),
+      ],
+      tracesSampleRate: 1.0,
+      release: `blaze-react-seller@${formattedDate}`,
+    });
+
     if (
       Environment === "production" &&
       userInfo !== undefined &&
@@ -108,7 +154,10 @@ const App = () => {
               integrations: [
                 new Sentry.Replay({
                   maskAllText: false,
+                  maskAllInputs:false,
                   blockAllMedia: false,
+                  unblock: ['.sentry-unblock, [data-sentry-unblock]'],
+                  unmask: ['.sentry-unmask, [data-sentry-unmask]'],
                 }),
               ],
           release: "react-blaze@5.4.24",

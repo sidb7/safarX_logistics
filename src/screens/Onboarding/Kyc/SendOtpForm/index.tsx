@@ -59,6 +59,8 @@ const Index = (props: ITypeProps) => {
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const { isLgScreen, isMdScreen } = ResponsiveState();
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
 
   useEffect(() => {
     // Retrieve the 'kycValue' from session storage
@@ -68,7 +70,7 @@ const Index = (props: ITypeProps) => {
       const kycDetails = kycValue.kycDetails;
 
       // Check if kycDetails are available and update the state accordingly
-      if (kycDetails) {
+      if (kycDetails && kycValue?.phpUserId?.length !== 0) {
         const { gstNumber, panNumber, aadharNumber } = kycDetails;
 
         const isAadharValid = aadharNumber && aadharRegex.test(aadharNumber);
@@ -77,10 +79,14 @@ const Index = (props: ITypeProps) => {
           gstNumber && gstNumber !== "0" && gstRegex.test(gstNumber);
 
         setAadharNumber(isAadharValid ? aadharNumber : "");
-        setAadharNumberError(isAadharValid ? "" : "Invalid Aadhar Number");
+        if (isAadharValid !== 0) {
+          setAadharNumberError(isAadharValid ? "" : "Invalid Aadhar Number");
+        }
 
         setPanNumber(isPanValid ? panNumber : "");
-        setPanNumberError(isPanValid ? "" : "Invalid PAN Number");
+        if (isPanValid !== "") {
+          setPanNumberError(isPanValid ? "" : "Invalid PAN Number");
+        }
 
         setGSTNumber(isGstValid ? gstNumber : "");
         setgstError(isGstValid ? "" : "Invalid GST Number");
@@ -140,6 +146,12 @@ const Index = (props: ITypeProps) => {
         //   console.log("Delayed for 1 second.");
         //   // toast.success(response?.message);
         // }, 1000);
+        window?.dataLayer?.push({
+          event: "kyc_verification",
+          sellerId: sellerId,
+          business_type: businessType,
+          kyc_verified: true,
+        });
         setLoading(false);
         // navigate("/onboarding/kyc");
         if (businessType === "business") {
@@ -149,10 +161,10 @@ const Index = (props: ITypeProps) => {
           navigate("/onboarding/kyc");
         }
 
-        window?.dataLayer?.push({
-          event: "KYCVerification",
-          sellerInfo: sessionStorage.getItem("userInfo"),
-        });
+        // window?.dataLayer?.push({
+        //   event: "KYCVerification",
+        //   sellerInfo: sessionStorage.getItem("userInfo"),
+        // });
       } else {
         setLoading(false);
         toast.error(response?.message);
@@ -323,9 +335,12 @@ const Index = (props: ITypeProps) => {
               );
               if (response?.success) {
                 setLoading(false);
+
                 window?.dataLayer?.push({
-                  event: "KYCVerification",
-                  sellerInfo: sessionStorage.getItem("userInfo"),
+                  event: "kyc_verification",
+                  sellerId: sellerId,
+                  business_type: businessType,
+                  kyc_verified: true,
                 });
                 navigate("/onboarding/kyc");
               } else {
@@ -360,19 +375,19 @@ const Index = (props: ITypeProps) => {
               payload
             );
             if (response?.success) {
-              window?.dataLayer?.push({
-                event: "KYCVerification",
-                sellerInfo: sessionStorage.getItem("userInfo"),
-              });
+              // window?.dataLayer?.push({
+              //   event: "KYCVerification",
+              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              // });
               // setLoading(false);
               // verifyPAN(panNumber);
               // toast.success(response?.message);
               //Navigate Url's go here
             } else {
-              window?.dataLayer?.push({
-                event: "KYCVerification",
-                sellerInfo: sessionStorage.getItem("userInfo"),
-              });
+              // window?.dataLayer?.push({
+              //   event: "KYCVerification",
+              //   sellerInfo: sessionStorage.getItem("userInfo"),
+              // });
               setLoading(false);
               setOTPNumber("");
               toast.error(response?.message);
@@ -410,6 +425,13 @@ const Index = (props: ITypeProps) => {
           if (response?.success) {
             // setLoading(false);
             verifyPAN(panNumber);
+            //gtm
+            window?.dataLayer?.push({
+              event: "kyc_verification",
+              sellerId: sellerId,
+              business_type: businessType,
+              kyc_verified: true,
+            });
           } else {
             setLoading(false);
             toast.error(response?.message);
@@ -670,7 +692,7 @@ const Index = (props: ITypeProps) => {
                 />
               ) : (
                 <ServiceButton
-                  text="SEND OTP"
+                  text="Get OTP"
                   disabled={!otpFormBtnStatus}
                   btnType="submit"
                   onClick={() => onSendOtp()}

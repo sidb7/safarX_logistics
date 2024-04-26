@@ -35,6 +35,7 @@ import {
   tokenKey,
 } from "../../../utils/utility";
 import { Tooltip } from "react-tooltip";
+import * as Sentry from "@sentry/react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const Index = () => {
 
     try {
       let signupUtm = {
-        utm_source: "sy_website",
+        utm_source: "",
         utm_campaign: "",
         utm_medium: "",
       };
@@ -91,6 +92,10 @@ const Index = () => {
           },
         },
       };
+
+      Sentry.setUser({
+        email: sellerData?.email,
+      });
 
       setLoading(true);
       const { data: response } = await POST(POST_SIGN_UP_URL, payload);
@@ -131,22 +136,19 @@ const Index = () => {
 
   const signUpWithGoogle = async (googleData: any) => {
     try {
-
-
       let signupUtm = {
-        utm_source: "sy_website",
+        utm_source: "",
         utm_campaign: "",
         utm_medium: "",
-      }
+      };
 
-    
       const payload = {
         clientId: googleData?.clientId,
         credential: googleData?.credential,
         otherDetails: {
           signupUtm: {
             ...signupUtm,
-            ...getQueryJson()
+            ...getQueryJson(),
           },
         },
       };

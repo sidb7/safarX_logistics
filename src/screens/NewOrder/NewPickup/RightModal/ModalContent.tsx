@@ -65,6 +65,7 @@ const ModalContent = (props: ITypeProps) => {
           className="  md:!w-[350px]"
           value={customAddressType}
           onChange={handleAddressTypeSelected}
+          name="address-type-input"
         />
       </div>
       <div
@@ -75,6 +76,7 @@ const ModalContent = (props: ITypeProps) => {
           text={buttonText}
           onClick={handleButtonClick}
           className="bg-[#1C1C1C] text-[#FFFFFF] !py-2 !px-4"
+          id="confirm-address-button"
         />
       </div>
     </div>

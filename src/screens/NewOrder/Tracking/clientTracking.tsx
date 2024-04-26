@@ -29,10 +29,9 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
-  console.log(
-    "🚀 ~ Tracking ~ trackingCycleDetails:",
-    trackingCycleDetails.length
-  );
+  const [sellerId, setSellerId] = useState<any>();
+  const [loggedIn, setLoggedIn] = useState<any>(false);
+
   const [edd, setEdd] = useState<any>();
   const [orderType, setOrderType] = useState<any>(false);
   const [rtoAwbNo, setRtoAwbNo] = useState<any>();
@@ -174,7 +173,23 @@ const Tracking = () => {
     }
   };
 
+  //getting seller id
+
+  const getJwtTokenForUser = (sellerId: any) => {
+    // Construct the dynamic key based on the user ID
+    const dynamicKey = `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`;
+
+    // Retrieve JWT token from local storage using the dynamic key
+    if (sellerId) {
+      setLoggedIn(true);
+    }
+  };
+
   const handleTrackOrderClick = async () => {
+    const getSellerId = sessionStorage.getItem("sellerId");
+
+    setSellerId(getSellerId);
+    getJwtTokenForUser(getSellerId);
     try {
       if (trackingNo === "" || !trackingNo || !trackingNo.length) {
         setTrackingState([]);
@@ -188,18 +203,12 @@ const Tracking = () => {
         `${GET_CLIENTTRACKING_INFO}?trackingNo=${trackingNo}`
       );
 
-      console.log(
-        "data",
-        typeof response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
-      );
-
       //edd datatypes are different so based on data type of it
       if (isNumber(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD)) {
-        console.log("helloooooooooooo");
         const EDDtime = convertEpochToDateTime(
           response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD
         );
-        console.log("EDDtime", EDDtime);
+
         setEdd(EDDtime);
       } else {
         setEdd(response?.data[0]?.trackingInfo[0]?.shipmentStatus?.EDD);
@@ -248,7 +257,6 @@ const Tracking = () => {
         setTrackingState([]);
       }
     } catch (error: any) {
-      console.error("Error in API call:", error);
     } finally {
       setLoading(false);
     }
@@ -480,27 +488,34 @@ const Tracking = () => {
                                             )}
                                           </div>
                                         </div>
-                                        <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
-                                          <div className="md:flex-1 mt-2">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px] ">
-                                              From:
-                                            </p>
-                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
-                                              {each?.pickupAddress?.fullAddress}
-                                            </p>
+                                        {/* commented for now */}
+                                        {loggedIn && (
+                                          <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
+                                            <div className="md:flex-1 mt-2">
+                                              <p className="text-[14px] font-normal font-Open leading-[16px] ">
+                                                From:
+                                              </p>
+                                              <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
+                                                {
+                                                  each?.pickupAddress
+                                                    ?.fullAddress
+                                                }
+                                              </p>
+                                            </div>
+                                            <div className="md:flex-1 mt-2 ]">
+                                              <p className="text-[14px] font-normal font-Open leading-[16px]">
+                                                To:
+                                              </p>
+                                              <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
+                                                {
+                                                  each?.deliveryAddress
+                                                    ?.fullAddress
+                                                }
+                                              </p>
+                                            </div>
                                           </div>
-                                          <div className="md:flex-1 mt-2 ]">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px]">
-                                              To:
-                                            </p>
-                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
-                                              {
-                                                each?.deliveryAddress
-                                                  ?.fullAddress
-                                              }
-                                            </p>
-                                          </div>
-                                        </div>
+                                        )}
+
                                         {each?.currentStatus === "CANCELLED" ||
                                         each?.currentStatus ===
                                           "CANCEL REQUESTED" ||
@@ -561,42 +576,49 @@ const Tracking = () => {
                                         <div className="py-3">
                                           <hr />
                                         </div>
-                                        <div
-                                          className="flex justify-between cursor-pointer w-[280px] md:w-full"
-                                          onClick={() =>
-                                            toggleSectionOrderDetails("product")
-                                          }
-                                        >
-                                          <div className="flex gap-x-1 ">
-                                            <img src={Product} alt="" />
-                                            <p className="text-sm font-Open font-semibold">
-                                              Order Details
-                                            </p>
+                                        {/* commented for now */}
+                                        {loggedIn && (
+                                          <div
+                                            className="flex justify-between cursor-pointer w-[280px] md:w-full"
+                                            onClick={() =>
+                                              toggleSectionOrderDetails(
+                                                "product"
+                                              )
+                                            }
+                                          >
+                                            <div className="flex gap-x-1">
+                                              <img src={Product} alt="" />
+                                              <p className="text-sm font-Open font-semibold">
+                                                Order Details
+                                              </p>
+                                            </div>
+                                            {openOrderDetails === "product" ? (
+                                              <div className="flex gap-x-1  items-center">
+                                                <img
+                                                  src={
+                                                    openOrderDetails ===
+                                                    "product"
+                                                      ? UpwardArrow
+                                                      : DownwardArrow
+                                                  }
+                                                  alt=""
+                                                />
+                                              </div>
+                                            ) : (
+                                              <div className="flex gap-x-1  items-center">
+                                                <img
+                                                  src={
+                                                    openOrderDetails ===
+                                                    "product"
+                                                      ? UpwardArrow
+                                                      : DownwardArrow
+                                                  }
+                                                  alt=""
+                                                />
+                                              </div>
+                                            )}
                                           </div>
-                                          {openOrderDetails === "product" ? (
-                                            <div className="flex gap-x-1  items-center">
-                                              <img
-                                                src={
-                                                  openOrderDetails === "product"
-                                                    ? UpwardArrow
-                                                    : DownwardArrow
-                                                }
-                                                alt=""
-                                              />
-                                            </div>
-                                          ) : (
-                                            <div className="flex gap-x-1  items-center">
-                                              <img
-                                                src={
-                                                  openOrderDetails === "product"
-                                                    ? UpwardArrow
-                                                    : DownwardArrow
-                                                }
-                                                alt=""
-                                              />
-                                            </div>
-                                          )}
-                                        </div>
+                                        )}
                                         <div>
                                           {openOrderDetails === "product" && (
                                             <>

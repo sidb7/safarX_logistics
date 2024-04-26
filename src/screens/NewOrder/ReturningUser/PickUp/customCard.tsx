@@ -27,11 +27,12 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
     checked ? "border-[2px] border-green-500" : "border-[1px] border-[#E8E8E8]"
   } bg-white w-[372px] h-full ${checked ? "bg-gray-100" : "bg-white"}`;
   return (
-    <div className={cardClasses} key={key}>
+    <div className={cardClasses} key={key} id="address-box-outline">
       <div className="flex justify-between ml-3 mb-1">
         <div className="flex items-center space-x-2">
           <CustomCheckbox
             checked={checked}
+            id="address-checkbox"
 
             // onChange={(e) => {
             //   setIsReturnAddress(e.target.checked);
@@ -52,14 +53,24 @@ const PickupCard: React.FunctionComponent<IPickUpData> = ({
 
       <div className="flex flex-col gap-y-4 px-4 w-[250px] lg:w-[280px] mt-4">
         <div className="flex gap-x-2 ">
-          <img src={ProfileImage} alt="" className="w-[16px] h-[16px]" />
-          <p className="text-[14px] font-semibold font-Open leading-[18px]">
+          <img
+            src={ProfileImage}
+            alt="profileImage"
+            className="w-[16px] h-[16px]"
+          />
+          <p
+            className="text-[14px] font-semibold font-Open leading-[18px]"
+            id="name"
+          >
             {name}
           </p>
         </div>
         <div className="flex gap-x-2">
           <img src={PhoneIcon} alt="" className="w-[16px] h-[16px]" />
-          <p className="text-xs font-semibold font-Open leading-[18px]">
+          <p
+            className="text-xs font-semibold font-Open leading-[18px]"
+            id="phone"
+          >
             +91 {phoneNumber}
           </p>
         </div>

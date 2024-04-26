@@ -52,6 +52,9 @@ const Index = (props: ITypeProps) => {
   let route = window.location.href;
   let routeCheck = route.includes("kyc-aadhar-form");
 
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
   const { isMdScreen } = ResponsiveState();
 
   const isBigScreen = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -115,6 +118,13 @@ const Index = (props: ITypeProps) => {
           if (response?.success) {
             // toast.success(response?.message);
             //Navigate Url's go here
+            //gtm
+            window?.dataLayer?.push({
+              event: "kyc_verification",
+              sellerId: sellerId,
+              business_type: businessType,
+              kyc_verified: true,
+            });
             navigate("/onboarding/kyc");
           } else {
             toast.error(response?.message);
@@ -273,7 +283,7 @@ const Index = (props: ITypeProps) => {
               {!otp && (
                 <div className="flex  md:justify-center md:items-center px-5 md:px-0 pb-12 mb-[209px]">
                   <ServiceButton
-                    text="SEND OTP"
+                    text="Get OTP"
                     disabled={!otpBtnStatus}
                     className={`bg-[#1C1C1C] !h-[36px] text-white w-full  md:!w-[320px] ${
                       otpBtnStatus === true

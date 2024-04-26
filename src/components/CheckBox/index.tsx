@@ -13,6 +13,7 @@ interface IProps {
   required?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showCase?: boolean;
+  id?: any;
 }
 const Checkbox: React.FC<IProps> = ({
   label,
@@ -28,6 +29,7 @@ const Checkbox: React.FC<IProps> = ({
   inputElementClass,
   required,
   showCase = false,
+  id,
 }) => {
   const [isChecked, setIsChecked] = useState(checked);
 
@@ -61,6 +63,7 @@ const Checkbox: React.FC<IProps> = ({
         onChange={(e) => handleCheckboxChange(e)}
         title="Checkbox"
         style={style}
+        id={id}
         className={`${checkboxClassName} ${inputElementClass} form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out cursor-pointer`}
       />
       <p

@@ -81,6 +81,32 @@ const LabelCard: React.FunctionComponent<ILabelCardProps> = ({
                 if this box is checked.
               </p>
             </div>
+            <div>
+              <Checkbox
+                style={{ accentColor: "black" }}
+                checkboxClassName="gap-x-2 !h-6"
+                label="Show Seller Footer Logo."
+                labelClassName="!font-Open !text-[15px] md:!text-lg !text-[#777777] !font-semibold !leading-[22px] !capitalize"
+                onChange={(e: any) => {
+                  setLabelData({
+                    ...labelData,
+                    inputs: {
+                      ...labelData.inputs,
+                      sellerDetails: {
+                        ...labelData.inputs.sellerDetails,
+                        showfooterLogo: e.value,
+                      },
+                    },
+                  });
+                }}
+                checked={
+                  labelData?.inputs?.sellerDetails?.showfooterLogo || false
+                }
+              />
+              <p className="font-Open text-[13px] md:text-base font-normal leading-5 md:leading-[22px] text-[#777777] capitalize pt-1 md:pt-2">
+                Note: Show's Seller Footer Logo if this box is checked.
+              </p>
+            </div>
             {/* <div>
               <Checkbox
                 style={{ accentColor: "black" }}

@@ -8,8 +8,6 @@ import {
 import { date_DD_MMM_YYYY_HH_MM_SS } from "../../utils/dateFormater";
 import { Spinner } from "../../components/Spinner/index";
 import CustomInputBox from "../../components/Input";
-import { parse } from "date-fns";
-
 import {
   GET_PINCODE_DATA,
   UPDATE_TEMP_ORDER_INFO,
@@ -17,12 +15,9 @@ import {
   SET_SERVICE_INFO,
   GET_SELLER_BOX,
 } from "../../utils/ApiUrls";
-import { pickupAddress } from "../../utils/dummyData";
-import { convertXMLToXLSX } from "../../utils/helper";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { convertEpochToDateTimeV2 } from "../../utils/utility";
-import DatePicker from "react-datepicker";
 import CustomDate from "./CustomDateWithTime";
 import InputBox from "../../components/Input";
 import CustomDropDown from "../../components/DropDown";
@@ -33,48 +28,41 @@ import { gstRegex } from "../../utils/regexCheck";
 import UpwardArrow from "../../assets/AccordionUp.svg";
 import CustomInputWithImage from "../../components/InputWithImage/InputWithImage";
 import CalenderIcon from "../../assets/calendar.svg";
-import Van from "../../assets/vanWithoutBG.svg";
 import AddBoxIcon from "../../assets/add-circle.svg";
 import { Tooltip } from "react-tooltip";
+import AddIcon from "../../assets/add-circle.svg";
 
 interface ICustomTableAccordion {
-  data?: any;
+  getAllSellerData?: any;
 }
 
 const Accordion = (props: ICustomTableAccordion) => {
   const isFirstRender = useRef(true);
-
+  const addressOpen = useRef(false);
   const navigate = useNavigate();
-
   //state to store the box data
-
   const [boxDetailsData, setBoxDetailsData] = useState<any>([]);
-  console.log("🚀 ~ Accordion ~ boxDetailsData:", boxDetailsData);
 
   const [boxNameAccordian, setBoxNameAccordian] = useState<any>(false);
+
   const [customInpuBox, setCustomInputBox] = useState<any>(false);
 
   const [boxName, setBoxName] = useState(false);
-
   const [openIndex, setOpenIndex] = useState<any>(null);
 
   const [orderDetails, setOrderDetails]: any = useState([]);
-
   const [apiCall, setApiCall] = useState<any>(false);
+
   const [openPickupDatePicker, setOpenPickupDatePicker] =
     useState<Boolean>(false);
   const [isLoading, setIsLoading]: any = useState(false);
   const [pincode, setPincode] = useState<any>();
   const [pincodeData, setPincodeData] = useState<any>("");
-
   const [boxProductDetails, setBoxProductDetails] = useState<any>();
 
   const [serviceLoading, setServiceLoading] = useState<any>(false);
-
   const [productAccordian, setproductAccordian] = useState<any>([]);
-
   const [otherDetailsAccordian, setOtherDetailsAccordian] = useState(false);
-
   const [validationError, setValidationError] = useState<any>({
     contactName: "",
     contactType: "",
@@ -118,7 +106,6 @@ const Accordion = (props: ICustomTableAccordion) => {
 
   const [orderId, setOrderId] = useState<any>();
   const [inputError, setInputError] = useState(false);
-
   const [productDetails, setProductDetails] = useState<any>([
     {
       companyId: "",
@@ -220,7 +207,7 @@ const Accordion = (props: ICustomTableAccordion) => {
     source: "",
   });
   const [enabled, setEnabled] = useState<boolean>(true);
-
+  const [isBoxError, setIsBoxError] = useState<boolean>(false);
   //storing the data of pickupaddress, which is getting from GET_SELLER_ORDER_COMPLETE_DATA api
   const [getPickAddressData, setGetPickUpAddressData] = useState<any>({
     pickUpAddress: {
@@ -242,7 +229,6 @@ const Accordion = (props: ICustomTableAccordion) => {
       pickupDate: "",
     },
   });
-
   const [serviceList, setServiceList] = useState<any>([]);
 
   const [getDeliveryAddressData, setGetDeliveryAddressData] = useState<any>({
@@ -265,7 +251,6 @@ const Accordion = (props: ICustomTableAccordion) => {
       gstNumber: "",
     },
   });
-
   const [serviceIndex, setServiceIndex]: any = useState(0);
 
   const [addressOpenModal, setAddressOpenModal] = useState(false);
@@ -273,17 +258,26 @@ const Accordion = (props: ICustomTableAccordion) => {
   const [open, setOpen] = useState<any>({});
   const [volumetricWeighAfterEditValue, setvolumetricWeighAfterEditValue] =
     useState();
-
   const [partnerServiceId, setPartnerServiceId] = useState<any>();
-
   const [serviceRefresh, setServiceRefresh] = useState<any>(false);
+
   //adding the box into boxinfo
-  const [newBox, setNewBox] = useState<any>();
+  const [newBox, setNewBox] = useState<any>({
+    deadWeight: 0,
+    name: "",
+    length: 0,
+    breadth: 0,
+    height: 0,
+  });
 
   const [selectBoxIndex, setSelectBoxIndex] = useState<any>(0);
-  console.log("🚀 ~ Accordion ~ selectBoxIndex:", selectBoxIndex);
 
-  const { data } = props;
+  //to know the box id
+  const [selectBoxId, setSelectBoxId] = useState<any>(-1);
+  const [dropDownContent, setDropDownContent] = useState<any>(false);
+  const [existingBox, setExistingBox] = useState<any>(false);
+  const [addnewBox, setAddNewBox] = useState<any>(false);
+  const { getAllSellerData } = props;
   let servicePartnerServiceId: any;
 
   const mainDate: any = convertEpochToDateTimeV2(
@@ -372,51 +366,374 @@ const Accordion = (props: ICustomTableAccordion) => {
     setvolumetricWeighAfterEditValue(boxProductDetails?.boxInfo[0]?.products);
   };
 
-  const handleBoxAccordian = async () => {
-    if (boxAccordian === true && !enabled) {
-      try {
-        let payload = boxProductDetails;
-        console.log(
-          "🚀 ~ handleBoxAccordian ~ boxProductDetails:",
-          boxProductDetails
-        );
+  // const handleBoxAccordian = async () => {
+  //   if (boxAccordian === true && !enabled) {
+  //     try {
+  //       if (
+  //         selectBoxIndex === 0
+  //         // commented as not implemeting add box now
+  //         // && newBox?.name === ""
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           selectBoxIndex === 0
+  //           // ||
+  //           // newBox?.deadWeight === 0 ||
+  //           // newBox?.length?.length === 0 ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
 
-        console.log("newBox", newBox);
-        console.log("customInputBox", customInpuBox);
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // ("boxname");
+  //           // );
 
-        customInpuBox
-          ? (boxProductDetails.boxInfo[0] = newBox)
-          : (() => {
-              boxProductDetails.boxInfo[0].deadWeight =
-                boxDetailsData[selectBoxIndex]?.deadWeight;
-              boxProductDetails.boxInfo[0].appliedWeight =
-                boxDetailsData[selectBoxIndex]?.appliedWeight;
-              boxProductDetails.boxInfo[0].name =
-                boxDetailsData[selectBoxIndex]?.name;
-              boxProductDetails.boxInfo[0].boxId =
-                boxDetailsData[selectBoxIndex]?.boxId;
-              boxProductDetails.boxInfo[0].length =
-                boxDetailsData[selectBoxIndex]?.length;
-              boxProductDetails.boxInfo[0].breadth =
-                boxDetailsData[selectBoxIndex]?.breadth;
-              boxProductDetails.boxInfo[0].height =
-                boxDetailsData[selectBoxIndex]?.height;
-            })();
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
 
-        const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
-        if (data?.status) {
-          toast.success("Updated Box Successfully");
-          setServiceList([]);
-          setServiceRefresh(true);
-          // getServiceList();
-        } else {
-          toast.error("Something went wrong");
-        }
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    }
-  };
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         return toast.error(
+  //           "Please Select any existing box or create a new box"
+  //         );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.deadWeight === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           selectBoxIndex === 0
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length?.length === 0 ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
+
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
+
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
+
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.length === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           selectBoxIndex === 0
+  //           // ||
+  //           // newBox?.breadth === 0 ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
+
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
+
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
+
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.breadth === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           // ||
+  //           selectBoxIndex === 0
+  //           // newBox?.breadth === 0
+  //           // ||
+  //           // newBox?.height?.length === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             boxBreadth: "Field is required",
+  //             // boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
+
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
+
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
+
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       if (
+  //         selectBoxIndex === 0
+  //         // && newBox?.height === 0
+  //       ) {
+  //         if (
+  //           // newBox?.name === ""
+  //           // ||
+  //           // newBox?.deadWeight === 0
+  //           // ||
+  //           // newBox?.length === 0
+  //           // ||
+  //           // newBox?.breadth === 0
+  //           // ||
+  //           // newBox?.height === 0
+  //           selectBoxIndex === 0
+  //         ) {
+  //           // return toast.error("Filed Empty");
+  //           setValidationError({
+  //             ...validationError,
+  //             // boxName: "Field is required",
+  //             // boxDeadWeight: "Field is required",
+  //             // boxLength: "Field is required",
+  //             // boxBreadth: "Field is required",
+  //             boxHeight: "Field is required",
+  //           });
+  //           // let element4: any = document.getElementById(
+  //           //   `${orderDetails[2]?.title}`
+  //           // );
+
+  //           // let element5: any = document.getElementById("Box 1");
+  //           // let element5: any = document.getElementById(
+  //           // `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //           // "boxname"
+  //           // );
+
+  //           // if (element4) element4.classList.add("!border-red-500");
+  //           // if (element4) element4.style.borderColor = "red";
+
+  //           // if (element5) element5.style.borderColor = "red";
+  //         }
+  //         // return toast.error(
+  //         //   "Please Select any existing box or create a new box"
+  //         // );
+  //       }
+  //       // if (selectBoxIndex === 0 && newBox?.name === "") {
+  //       //   if (newBox?.name === "") {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxName: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
+
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   } else {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxName: "",
+  //       //     });
+  //       //   }
+  //       //   if (newBox?.deadWeight === 0) {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxDeadWeight: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
+
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   }
+
+  //       //   if (newBox?.length === 0) {
+  //       //     setValidationError({
+  //       //       ...validationError,
+  //       //       boxLength: "Field is required",
+  //       //     });
+  //       //     let element4: any = document.getElementById(
+  //       //       `${orderDetails[2]?.title}`
+  //       //     );
+
+  //       //     if (element4) element4.style.borderColor = "red";
+  //       //     let element5: any = document.getElementById(
+  //       //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+  //       //       "boxname"
+  //       //     );
+  //       //     if (element5) element5.style.borderColor = "red";
+  //       //   }
+  //       //   return toast.error(
+  //       //     "Please Select any existing box or create a new box"
+  //       //   );
+  //       // }
+  //       if (customInpuBox) {
+  //         boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
+  //         boxProductDetails.boxInfo[0].appliedWeight =
+  //           boxProductDetails.boxInfo[0]?.appliedWeight;
+  //         boxProductDetails.boxInfo[0].name = newBox?.name;
+  //         boxProductDetails.boxInfo[0].boxId =
+  //           boxProductDetails.boxInfo[0]?.boxId;
+  //         boxProductDetails.boxInfo[0].length = newBox?.length;
+  //         boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
+  //         boxProductDetails.boxInfo[0].height = newBox?.height;
+  //         // boxProductDetails.boxinfo[0].volumetricWeight =
+  //         //   newBox?.volumetricWeight;
+  //       } else {
+  //         boxProductDetails.boxInfo[0].deadWeight =
+  //           boxDetailsData[selectBoxId]?.deadWeight;
+  //         boxProductDetails.boxInfo[0].appliedWeight =
+  //           boxDetailsData[selectBoxId]?.appliedWeight;
+  //         boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
+  //         boxProductDetails.boxInfo[0].boxId =
+  //           boxDetailsData[selectBoxId]?.boxId;
+  //         boxProductDetails.boxInfo[0].length =
+  //           boxDetailsData[selectBoxId]?.length;
+  //         boxProductDetails.boxInfo[0].breadth =
+  //           boxDetailsData[selectBoxId]?.breadth;
+  //         boxProductDetails.boxInfo[0].height =
+  //           boxDetailsData[selectBoxId]?.height;
+  //         // boxProductDetails.boxinfo[0].volumetricWeight =
+  //         //   boxDetailsData[selectBoxId]?.volumetricWeight;
+  //       }
+
+  //       let payload = boxProductDetails;
+
+  //       if (
+  //         payload?.boxInfo?.[0]?.name?.length !== 0 &&
+  //         payload?.boxInfo?.[0]?.deadWeight !== 0 &&
+  //         payload?.boxInfo?.[0]?.length !== 0 &&
+  //         payload?.boxInfo?.[0]?.breadth !== 0 &&
+  //         payload?.boxInfo?.[0]?.height !== 0
+  //       ) {
+  //         const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+  //         if (data?.status) {
+  //           toast.success("Updated Box Successfully");
+  //           setServiceList([]);
+  //           setServiceRefresh(true);
+  //           setBoxAccordian(false);
+  //           setCustomInputBox(false);
+  //           setSelectBoxIndex(0);
+  //           setNewBox({
+  //             ...newBox,
+  //             deadWeight: 0,
+  //             name: "",
+  //             length: 0,
+  //             breadth: 0,
+  //             height: 0,
+  //           });
+
+  //           //calling the getSellerCompleteData api again to get the updated details for updating the error borders
+
+  //           let element4: any = document.getElementById(
+  //             `${orderDetails[2]?.title}`
+  //           );
+
+  //           let element5: any = document.getElementById("boxname");
+  //           if (element5) element5.style.borderColor = "#E8E8E8";
+  //           // if (element5) element5.classList.add("#E8E8E8");
+  //           if (element4) element4.classList.add("!#E8E8E8");
+  //           // f (element4) element4.style.borderColor = "#E8E8E8";
+  //           // getServiceList();
+  //         } else {
+  //           toast.error("Something went wrong");
+  //           setBoxAccordian(true);
+  //           setCustomInputBox(true);
+  //         }
+  //       } else {
+  //         setBoxAccordian(true);
+  //         setCustomInputBox(true);
+  //       }
+  //       // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+  //       // if (data?.status) {
+  //       //   toast.success("Updated Box Successfully");
+  //       //   setServiceList([]);
+  //       //   setServiceRefresh(true);
+  //       //   // getServiceList();
+  //       // } else {
+  //       //   toast.error("Something went wrong");
+  //       // }
+  //     } catch (error: any) {
+  //       console.log(error.message);
+  //     }
+  //   }
+  // };
 
   const handleBoxInputUpdation = (
     box_index: any,
@@ -483,6 +800,7 @@ const Accordion = (props: ICustomTableAccordion) => {
           setServiceLoading(false);
           setServiceList(response?.data?.data);
           setServiceRefresh(false);
+          setAddressOpenModal(true);
         } else {
           //services
 
@@ -499,9 +817,45 @@ const Accordion = (props: ICustomTableAccordion) => {
     requestName?: string
     // title?: any
   ) => {
-    if (addressOpenModal === false) {
-      if (requestName === "Services") {
-        getServiceList();
+    if (addressOpen?.current == false) {
+      let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
+      if (
+        element4.classList.contains("!border-red-500") &&
+        requestName === "Services"
+      ) {
+        return toast.error("Please solve the box error");
+      } else if (requestName === "Services" && addressOpen.current === false) {
+        await getServiceList();
+        // setAddressOpenModal(true);
+        addressOpen.current = true;
+      }
+    } else if (
+      requestName == "Services" &&
+      !enabled &&
+      addressOpen.current === true
+    ) {
+      try {
+        const payload: any = {
+          partnerServiceId: serviceList[serviceIndex]?.partnerServiceId,
+          partnerServiceName: serviceList[serviceIndex]?.partnerServiceName,
+          companyServiceId: serviceList[serviceIndex]?.companyServiceId,
+          companyServiceName: serviceList[serviceIndex]?.companyServiceName,
+          tempOrderId: boxProductDetails?.tempOrderId,
+          source: boxProductDetails?.source,
+
+          category: "Service",
+        };
+
+        const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
+
+        if (responseData?.success) {
+          toast.success("Updated Service Successfully");
+          addressOpen.current = false;
+        } else {
+          toast.error("Something went wrong");
+        }
+      } catch (error: any) {
+        console.log(error.message);
       }
     }
 
@@ -620,30 +974,6 @@ const Accordion = (props: ICustomTableAccordion) => {
         console.log(error);
       }
     }
-
-    if (requestName == "Services" && !enabled) {
-      try {
-        const payload: any = {
-          partnerServiceId: serviceList[serviceIndex].partnerServiceId,
-          partnerServiceName: serviceList[serviceIndex].partnerServiceName,
-          companyServiceId: serviceList[serviceIndex].companyServiceId,
-          companyServiceName: serviceList[serviceIndex].companyServiceName,
-          tempOrderId: boxProductDetails?.tempOrderId,
-          source: boxProductDetails?.source,
-
-          category: "Service",
-        };
-
-        const { data: responseData } = await POST(SET_SERVICE_INFO, payload);
-        if (responseData?.success) {
-          toast.success("Updated Service Successfully");
-        } else {
-          toast.error("Something went wrong");
-        }
-      } catch (error: any) {
-        console.log(error.message);
-      }
-    }
   };
 
   //to set particular object key you can use this
@@ -695,7 +1025,13 @@ const Accordion = (props: ICustomTableAccordion) => {
 
       const boxData = await POST(GET_SELLER_BOX);
 
-      setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
+      data?.data?.[0]?.data?.[0]?.errorList?.map((item: any) => {
+        if (item.category === "Box And Product" && item.isActive)
+          setIsBoxError(true);
+        else setIsBoxError(false);
+      });
+      //commented out it is showing the previous data
+      // setNewBox(data?.data[0]?.data[0]?.boxInfo[0]);
       setBoxDetailsData(boxData?.data?.data);
       setPartnerServiceId(data.data[0]?.data[0]?.service?.partnerServiceId);
 
@@ -1028,6 +1364,376 @@ const Accordion = (props: ICustomTableAccordion) => {
   servicePartnerServiceId =
     boxProductDetails?.boxInfo[0]?.service?.partnerServiceId;
 
+  const handleBoxAccordian = async () => {
+    if (boxAccordian === true && !enabled) {
+      try {
+        if (
+          selectBoxIndex === 0
+          // commented as not implemeting add box now
+          // && newBox?.name === ""
+        ) {
+          if (
+            // newBox?.name === ""
+            selectBoxIndex === 0
+            // ||
+            // newBox?.deadWeight === 0 ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // ("boxname");
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          return toast.error(
+            "Please Select any existing box or create a new box"
+          );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.deadWeight === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            selectBoxIndex === 0
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length?.length === 0 ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.length === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            selectBoxIndex === 0
+            // ||
+            // newBox?.breadth === 0 ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.breadth === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            selectBoxIndex === 0
+            // newBox?.breadth === 0
+            // ||
+            // newBox?.height?.length === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              boxBreadth: "Field is required",
+              // boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        if (
+          selectBoxIndex === 0
+          // && newBox?.height === 0
+        ) {
+          if (
+            // newBox?.name === ""
+            // ||
+            // newBox?.deadWeight === 0
+            // ||
+            // newBox?.length === 0
+            // ||
+            // newBox?.breadth === 0
+            // ||
+            // newBox?.height === 0
+            selectBoxIndex === 0
+          ) {
+            // return toast.error("Filed Empty");
+            setValidationError({
+              ...validationError,
+              // boxName: "Field is required",
+              // boxDeadWeight: "Field is required",
+              // boxLength: "Field is required",
+              // boxBreadth: "Field is required",
+              boxHeight: "Field is required",
+            });
+            // let element4: any = document.getElementById(
+            //   `${orderDetails[2]?.title}`
+            // );
+
+            // let element5: any = document.getElementById("Box 1");
+            // let element5: any = document.getElementById(
+            // `${boxProductDetails?.boxInfo?.[0]?.name}`
+            // "boxname"
+            // );
+
+            // if (element4) element4.classList.add("!border-red-500");
+            // if (element4) element4.style.borderColor = "red";
+
+            // if (element5) element5.style.borderColor = "red";
+          }
+          // return toast.error(
+          //   "Please Select any existing box or create a new box"
+          // );
+        }
+        // if (selectBoxIndex === 0 && newBox?.name === "") {
+        //   if (newBox?.name === "") {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   } else {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxName: "",
+        //     });
+        //   }
+        //   if (newBox?.deadWeight === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxDeadWeight: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+
+        //   if (newBox?.length === 0) {
+        //     setValidationError({
+        //       ...validationError,
+        //       boxLength: "Field is required",
+        //     });
+        //     let element4: any = document.getElementById(
+        //       `${orderDetails[2]?.title}`
+        //     );
+
+        //     if (element4) element4.style.borderColor = "red";
+        //     let element5: any = document.getElementById(
+        //       //  `${boxProductDetails?.boxInfo?.[0]?.name}`
+        //       "boxname"
+        //     );
+        //     if (element5) element5.style.borderColor = "red";
+        //   }
+        //   return toast.error(
+        //     "Please Select any existing box or create a new box"
+        //   );
+        // }
+        if (customInpuBox) {
+          boxProductDetails.boxInfo[0].deadWeight = newBox?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxProductDetails.boxInfo[0]?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = newBox?.name;
+          boxProductDetails.boxInfo[0].boxId =
+            boxProductDetails.boxInfo[0]?.boxId;
+          boxProductDetails.boxInfo[0].length = newBox?.length;
+          boxProductDetails.boxInfo[0].breadth = newBox?.breadth;
+          boxProductDetails.boxInfo[0].height = newBox?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   newBox?.volumetricWeight;
+        } else {
+          boxProductDetails.boxInfo[0].deadWeight =
+            boxDetailsData[selectBoxId]?.deadWeight;
+          boxProductDetails.boxInfo[0].appliedWeight =
+            boxDetailsData[selectBoxId]?.appliedWeight;
+          boxProductDetails.boxInfo[0].name = boxDetailsData[selectBoxId]?.name;
+          boxProductDetails.boxInfo[0].boxId =
+            boxDetailsData[selectBoxId]?.boxId;
+          boxProductDetails.boxInfo[0].length =
+            boxDetailsData[selectBoxId]?.length;
+          boxProductDetails.boxInfo[0].breadth =
+            boxDetailsData[selectBoxId]?.breadth;
+          boxProductDetails.boxInfo[0].height =
+            boxDetailsData[selectBoxId]?.height;
+          // boxProductDetails.boxinfo[0].volumetricWeight =
+          //   boxDetailsData[selectBoxId]?.volumetricWeight;
+        }
+
+        let payload = boxProductDetails;
+
+        if (
+          payload?.boxInfo?.[0]?.name?.length !== 0 &&
+          payload?.boxInfo?.[0]?.deadWeight !== 0 &&
+          payload?.boxInfo?.[0]?.length !== 0 &&
+          payload?.boxInfo?.[0]?.breadth !== 0 &&
+          payload?.boxInfo?.[0]?.height !== 0
+        ) {
+          const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+          if (data?.status) {
+            toast.success("Updated Box Successfully");
+            setServiceList([]);
+            setServiceRefresh(true);
+            setBoxAccordian(false);
+            setCustomInputBox(false);
+            setSelectBoxIndex(0);
+            setNewBox({
+              ...newBox,
+              deadWeight: 0,
+              name: "",
+              length: 0,
+              breadth: 0,
+              height: 0,
+            });
+
+            //calling the getSellerCompleteData api again to get the updated details for updating the error borders
+
+            getSellerOrderCompleteData(getAllSellerData?.data);
+            let element4: any = document.getElementById(
+              `${orderDetails[2]?.title}`
+            );
+
+            let element5: any = document.getElementById("boxname");
+            if (element5) element5.style.borderColor = "#E8E8E8";
+            // if (element5) element5.classList.add("#E8E8E8");
+            if (element4) element4.classList.add("!#E8E8E8");
+            // f (element4) element4.style.borderColor = "#E8E8E8";
+            // getServiceList();
+          } else {
+            toast.error("Something went wrong");
+            setBoxAccordian(true);
+            setCustomInputBox(true);
+          }
+        } else {
+          setBoxAccordian(true);
+          setCustomInputBox(true);
+        }
+        // const { data } = await POST(UPDATE_TEMP_ORDER_INFO, payload);
+        // if (data?.status) {
+        //   toast.success("Updated Box Successfully");
+        //   setServiceList([]);
+        //   setServiceRefresh(true);
+        //   // getServiceList();
+        // } else {
+        //   toast.error("Something went wrong");
+        // }
+      } catch (error: any) {
+        console.log(error.message);
+      }
+    }
+  };
+
   const productLoops = (productAccordian: any, dataIndex: any) => {
     if (enabled) {
       return false;
@@ -1105,21 +1811,22 @@ const Accordion = (props: ICustomTableAccordion) => {
       boxDetails?.length > 0 &&
       boxDetails?.breadth > 0 &&
       boxDetails?.height > 0 &&
+      boxDetails?.name?.length > 0 &&
       !enabled
     ) {
       return false;
     } else {
-      setValidationError({
-        ...validationError,
-        boxDeadWeight:
-          boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
-        // boxVolumtericWeight:
-        //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
-        boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
-        boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
-        boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
-        boxName: boxDetails?.name.length == 0 ? "Field is required" : "",
-      });
+      // setValidationError({
+      //   ...validationError,
+      //   boxDeadWeight:
+      //     boxDetails?.deadWeight == 0 ? "Should be greater than 0" : "",
+      //   // boxVolumtericWeight:
+      //   //   boxDetails?.volumetricWeight == 0 ? "Should be greater than 0" : "",
+      //   boxLength: boxDetails?.length == 0 ? "Should be greater than 0" : "",
+      //   boxBreadth: boxDetails?.breadth == 0 ? "Should be greater than 0" : "",
+      //   boxHeight: boxDetails?.height == 0 ? "Should be greater than 0" : "",
+      //   boxName: boxDetails?.name?.length == 0 ? "Field is required" : "",
+      // });
       setInputError(true);
       return true;
     }
@@ -1183,7 +1890,7 @@ const Accordion = (props: ICustomTableAccordion) => {
 
     //services
 
-    if ((serviceList.length === 0 && !partnerServiceId) || serviceRefresh) {
+    if ((serviceList?.length === 0 && !partnerServiceId) || serviceRefresh) {
       let elemente3: any = document.getElementById("Services");
 
       // if (elemente3) elemente3.style.backgroundColor = "yellow";
@@ -1201,20 +1908,26 @@ const Accordion = (props: ICustomTableAccordion) => {
     if (
       boxProductDetails?.boxInfo?.[0]?.deadWeight === 0 ||
       // boxProductDetails?.boxInfo?.[0]?.volumetricWeight === 0 ||
+      boxProductDetails?.boxInfo?.[0]?.name === 0 ||
       boxProductDetails?.boxInfo?.[0]?.length === 0 ||
       boxProductDetails?.boxInfo?.[0]?.breadth === 0 ||
-      boxProductDetails?.boxInfo?.[0]?.height === 0
+      boxProductDetails?.boxInfo?.[0]?.height === 0 ||
+      isBoxError ||
+      (selectBoxIndex === 0 &&
+        boxProductDetails?.boxInfo?.[0]?.name === "Box 1")
     ) {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
 
       // let element5: any = document.getElementById("Box 1");
       let element5: any = document.getElementById(
-        `${boxProductDetails?.boxInfo?.[0]?.name}`
+        // `${boxProductDetails?.boxInfo?.[0]?.name}`
+        "boxname"
       );
 
-      if (element4) element4.style.borderColor = "red";
+      if (element4) element4.classList.add("!border-red-500");
       if (element5) element5.style.borderColor = "red";
+      // if (element5) element5.classList.add("!border-red-500");
     } else {
       // let element4: any = document.getElementById("Box Info  Product(s) x 5");
       let element4: any = document.getElementById(`${orderDetails[2]?.title}`);
@@ -1226,7 +1939,11 @@ const Accordion = (props: ICustomTableAccordion) => {
       if (element5) element5.style.borderColor = "#E8E8E8";
     }
 
-    for (let i = 0; i < boxProductDetails?.boxInfo?.[0]?.products.length; i++) {
+    for (
+      let i = 0;
+      i < boxProductDetails?.boxInfo?.[0]?.products?.length;
+      i++
+    ) {
       if (
         boxProductDetails?.boxInfo?.[0]?.products[i]?.deadWeight == 0 ||
         boxProductDetails?.boxInfo?.[0]?.products[i]?.length == 0 ||
@@ -1270,7 +1987,7 @@ const Accordion = (props: ICustomTableAccordion) => {
         getPickAddressData?.pickUpAddress?.city?.length === 0 ||
         getPickAddressData?.pickUpAddress?.state?.length === 0 ||
         getPickAddressData?.pickUpAddress?.country?.length === 0 ||
-        getPickAddressData?.pickUpAddress?.pincode.length < 6 ||
+        getPickAddressData?.pickUpAddress?.pincode?.length < 6 ||
         getPickAddressData?.pickUpAddress?.pincode === 0 ||
         // getPickAddressData?.pickUpAddress?.addressType?.length === 0 ||
         getPickAddressData?.pickUpAddress?.pickupDate?.length === 0
@@ -1345,17 +2062,25 @@ const Accordion = (props: ICustomTableAccordion) => {
     }
   };
 
-  useEffect(() => {
-    const { data: dataFromState, isOpen } = data;
+  const clickedOption = (e: any) => {
+    for (let i = 0; i < boxDetailsData?.length; i++) {
+      if (e === boxDetailsData[i]?.boxId) {
+        setSelectBoxId(i);
+      }
+    }
+  };
 
-    if (data !== undefined && isOpen === true) {
+  useEffect(() => {
+    const { data: dataFromState, isOpen } = getAllSellerData;
+
+    if (getAllSellerData !== undefined && isOpen === true) {
       setOrderDetails([]);
       getSellerOrderCompleteData(dataFromState);
     }
-  }, [data]);
+  }, [getAllSellerData]);
 
   useEffect(() => {
-    if (orderDetails.length > 0) {
+    if (orderDetails?.length > 0) {
       const deliveryAddress = orderDetails[1];
 
       delete deliveryAddress.title;
@@ -1496,11 +2221,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-
-                            // setApiCall(false);
-                            // setOpen({
-                            //   [`item${index}`]: false,
-                            // });
                           } else if (e.target.textContent === "Order History") {
                             setOpen({ [`item${index}`]: false });
                             setOpenIndex(null);
@@ -1511,23 +2231,20 @@ const Accordion = (props: ICustomTableAccordion) => {
                             setOpenIndex(null);
                           } else if (e.target.textContent == "Event Logs") {
                             handleItemClick(index, e.target.textContent);
-                            // setAddressOpenModal(false);
+
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-                            // setOtherDetailsAccordian(false);
 
                             setApiCall(false);
                           } else if (e.target.textContent.includes("Box")) {
-                            // handleItemClick(index, e.target.textContent);
-                            // setAddressOpenModal(false);
                             setOpen({
                               [`item${index}`]: false,
                             });
                             setOpenIndex(null);
-                            // setOtherDetailsAccordian(false);
-
+                            setExistingBox(false);
+                            setCustomInputBox(false);
                             setApiCall(false);
                           }
                         }}
@@ -1537,8 +2254,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                           {item?.title.includes("Box")
                             ? "Box & Products"
                             : item.title}
-                          {/* {item?.title} */}
-                          {/* {open[`item${index}`] && item} */}
+
                           {open?.[`item${index}`] ? (
                             <img src={UpwardArrow} alt="" />
                           ) : (
@@ -1552,8 +2268,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                             <div
                               className={`entries ${
                                 entriesHeight && entriesHeight < 500
-                                  ? `h-[${entriesHeight}]px`
-                                  : `h-[${500}]px`
+                                  ? `px-5 h-[${entriesHeight}]px`
+                                  : `px-5 h-[${500}]px`
                               } flex flex-col overflow-auto border p-[0.5rem]`}
                             >
                               {Object.entries(item)?.map(
@@ -1583,11 +2299,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     // id={"productname"}
                                                     id={`${eachProduct.productId}`}
                                                     onClick={(e: any) => {
-                                                      // productLoops(
-                                                      //   productAccordian,
-                                                      //   index
-                                                      // );
-
                                                       let temp = [
                                                         ...productAccordian,
                                                       ];
@@ -1656,11 +2367,35 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                               eachProduct?.name
                                                             }
                                                           >
-                                                            <div className="font-bold text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
-                                                              {eachProduct?.name.slice(
-                                                                0,
-                                                                20
-                                                              ) + " ..."}
+                                                            <div className=" text-[14px] overflow-hidden text-ellipsis whitespace-nowrap text-[#323232]">
+                                                              <div className="flex gap-x-3">
+                                                                <p className="font-bold min-w-[65px]">
+                                                                  Product
+                                                                </p>
+                                                                {eachProduct
+                                                                  ?.name
+                                                                  ?.length <=
+                                                                10 ? (
+                                                                  <>
+                                                                    {
+                                                                      eachProduct?.name
+                                                                    }
+                                                                    {"  x  " +
+                                                                      eachProduct?.qty +
+                                                                      " (Qty) "}
+                                                                  </>
+                                                                ) : (
+                                                                  <>
+                                                                    {eachProduct?.name.slice(
+                                                                      0,
+                                                                      10
+                                                                    ) + " ..."}
+                                                                    {" x " +
+                                                                      eachProduct?.qty +
+                                                                      " (Qty) "}
+                                                                  </>
+                                                                )}
+                                                              </div>
                                                             </div>
                                                           </div>
                                                           <Tooltip
@@ -1733,7 +2468,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                         .name[
                                                                         e.target
                                                                           .name
-                                                                          .length -
+                                                                          ?.length -
                                                                           1
                                                                       ]
                                                                     ) {
@@ -1776,9 +2511,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         <div className="col-span-1">
                                                           <InputBox
                                                             label="Volumetric Weight"
-                                                            // defaultValue={
-                                                            //   eachProduct?.volumetricWeight
-                                                            // }
                                                             value={eachProduct?.volumetricWeight?.toFixed(
                                                               2
                                                             )}
@@ -1833,7 +2565,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -1845,7 +2577,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                               .value <=
                                                                               0 &&
                                                                             eachProduct
-                                                                              .length
+                                                                              ?.length
                                                                               ?.length !=
                                                                               0
                                                                               ? "Should be greater than 0"
@@ -1906,7 +2638,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -1979,7 +2711,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                           e
                                                                             .target
                                                                             .name
-                                                                            .length -
+                                                                            ?.length -
                                                                             1
                                                                         ]
                                                                       ) {
@@ -2030,46 +2762,44 @@ const Accordion = (props: ICustomTableAccordion) => {
                                       {boxProductDetails?.boxInfo.map(
                                         (eachBox: any, index: number) => {
                                           return (
-                                            <div className="w-full">
+                                            <div className="w-full ">
                                               <div className="w-full">
                                                 <div
                                                   // id={`${item?.title}`}
 
                                                   className="border  border-black-600 p-2 flex justify-between w-full rounded-md"
-                                                  id={`${eachBox.name}`}
+                                                  // id={`${eachBox.name}`}
+                                                  id={"boxname"}
                                                   onClick={(e: any) => {
-                                                    // boxloops(
-                                                    //   boxProductDetails,
-                                                    //   index
-                                                    // );
                                                     if (
-                                                      boxAccordian === true &&
-                                                      !boxloops(
-                                                        boxProductDetails,
-                                                        index
-                                                      )
+                                                      boxAccordian === true
+                                                      // &&
+                                                      // !boxloops(
+                                                      //   boxProductDetails,
+                                                      //   index
+                                                      // )
                                                     ) {
-                                                      setBoxAccordian(false);
-                                                      setCustomInputBox(false);
+                                                      handleBoxAccordian();
+                                                      // setBoxAccordian(false);
+                                                      // setCustomInputBox(false);
                                                       setBoxName(false);
-                                                      setBoxNameAccordian(
-                                                        false
-                                                      );
+                                                      setExistingBox(false);
+                                                      // setBoxNameAccordian(
+                                                      //   false
+                                                      // );
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           false,
                                                       });
-                                                      handleBoxAccordian();
                                                     } else {
                                                       setBoxAccordian(true);
+
                                                       setOpen({
                                                         [`itemboxProductDetails${index}`]:
                                                           true,
                                                       });
                                                     }
-                                                    // if (enabled) {
-                                                    //   setBoxAccordian(true);
-                                                    // }
+
                                                     if (
                                                       !open[
                                                         `itemboxProductDetails${index}`
@@ -2083,22 +2813,31 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setAddressOpenModal(false);
                                                   }}
                                                 >
-                                                  <div className="flex gap-x-3">
+                                                  <div className="flex items-center gap-x-3">
                                                     <img
                                                       src={BoxIcon}
                                                       className="w-10 h-10"
                                                       alt=""
                                                     />
-                                                    <p className="flex items-center text-[18px] font-Open">
-                                                      {eachBox?.name}
+                                                    <p className="font-bold text-[14px] min-w-[65px]">
+                                                      Box
                                                     </p>
-                                                    <span className="flex items-center mt-1 text-[16px] font-Open">
-                                                      (Box Info)
-                                                    </span>
+                                                    <p className="text-[14px] font-Open">
+                                                      {
+                                                        //This was written for getSellerBox api to show the no box found message
+                                                        // boxDetailsData?.length ===
+                                                        // 0
+                                                        //   ? "No Box Found"
+                                                        //   :
+                                                        eachBox?.name ===
+                                                        "Box 1"
+                                                          ? ""
+                                                          : eachBox?.name
+                                                      }
+                                                    </p>
                                                   </div>
 
                                                   <div className="flex items-center">
-                                                    {/* <img src={DownwardArrow} /> */}
                                                     {open?.[
                                                       `itemboxProductDetails${index}`
                                                     ] ? (
@@ -2114,751 +2853,622 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     )}
                                                   </div>
                                                 </div>
-                                                {/* {boxAccordian && <p>hello</p>} */}
-                                                {enabled && boxAccordian && (
-                                                  <div>
-                                                    <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
-                                                      <p className="text-[16px] font-open ">
-                                                        {
-                                                          // boxDetailsData[
-                                                          //   selectBoxIndex
-                                                          // ]?.name
-                                                          newBox?.name
-                                                        }
-                                                      </p>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Dead Weight (Kg)"
-                                                          defaultValue={
-                                                            // boxDetailsData?.[
-                                                            //   selectBoxIndex
-                                                            // ]?.deadWeight
-                                                            newBox?.deadWeight
-                                                          }
-                                                          isDisabled={true}
-                                                          inputType="number"
-                                                          name="deadWeight"
-                                                          inputMode="numeric"
-                                                        />
-                                                      </div>
-                                                      <div className="col-span-1">
-                                                        <InputBox
-                                                          label="Volumetric Weight"
-                                                          defaultValue={
-                                                            newBox?.volumetricWeight
-                                                          }
-                                                          //   value={
-                                                          //     boxDetailsData?.[
-                                                          //     selectBoxIndex
-                                                          //   ]?.volumetricWeight?.toFixed(
-                                                          //     2
-                                                          //   )
-                                                          // }
-                                                          isDisabled={true}
-                                                          name="volumetricWeight"
-                                                          inputType="number"
-                                                        />
-                                                      </div>
-                                                    </div>
-                                                    <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                      <div className="w-[50%]">
-                                                        <CustomDropDown
-                                                          onChange={() => {}}
-                                                          options={measureUnits}
-                                                        />
-                                                      </div>
-                                                      <div className="flex w-[50%] gap-x-4">
-                                                        <div>
-                                                          <InputBox
-                                                            label="L"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                            name="length"
-                                                            isDisabled={true}
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.length
-                                                              newBox?.length
-                                                            }
-                                                          />
-                                                        </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="B"
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.breadth
-                                                              newBox?.breadth
-                                                            }
-                                                            isDisabled={true}
-                                                            name="breadth"
-                                                            inputType="number"
-                                                            inputMode="numeric"
-                                                          />{" "}
-                                                        </div>
-                                                        <div>
-                                                          <InputBox
-                                                            label="H"
-                                                            defaultValue={
-                                                              // boxDetailsData?.[
-                                                              //   selectBoxIndex
-                                                              // ]?.height
-                                                              newBox?.height
-                                                            }
-                                                            isDisabled={true}
-                                                            name="height"
-                                                          />
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                  </div>
-                                                )}
-                                                {/* {boxAccordian && !enabled && (
-                                                  <div
-                                                    className="font-open border-[1.5px] border-black-600 flex justify-between mx-0 py-3 px-1 rounded-md"
-                                                    onClick={() => {
-                                                      setBoxNameAccordian(
-                                                        !boxNameAccordian
-                                                      );
-                                                      setBoxName(false);
-                                                      setCustomInputBox(false);
-                                                    }}
-                                                  >
-                                                    <p className="text-[16px] font-open text-[#777777] px-2">
-                                                      Select Box From Catalogue
-                                                    </p>
-                                                    {boxNameAccordian ? (
-                                                      <img
-                                                        src={UpwardArrow}
-                                                        alt="img"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src={DownwardArrow}
-                                                        alt="img"
-                                                      />
-                                                    )}
-                                                  </div>
-                                                )} */}
-                                                {boxAccordian && (
-                                                  <>
-                                                    <p className="ml-2 my-2 font-open text-[16px] text-[#494949] font-semibold">
-                                                      Your Existing Box
-                                                    </p>
-                                                    <div className="px-2 border-2 border-black-600 py-3 rounded-md">
-                                                      <CustomDropDown
-                                                        options={boxDetailsData?.map(
-                                                          (
-                                                            option: any,
-                                                            index: any
-                                                          ) => {
-                                                            console.log(
-                                                              "index during mapping",
-                                                              index
-                                                            );
 
-                                                            return {
-                                                              label:
-                                                                option?.name,
-                                                              value:
-                                                                option?.name,
-                                                              index: index,
-                                                            };
-                                                          }
-                                                        )}
-                                                        onChange={(
-                                                          selectedOption: any
-                                                        ) => {
-                                                          const selectedIndex =
-                                                            selectedOption.index;
-                                                          // setSelectBoxIndex(
-                                                          //   selectedIndex
-                                                          // );
-                                                          // setBoxName(true);
-                                                          // setBoxNameAccordian(
-                                                          //   false
-                                                          // );
-                                                          // setCustomInputBox(
-                                                          //   false
-                                                          // );
-                                                        }}
-                                                      />
-                                                      {/* <CustomDropDown
-                                                        options={boxDetailsData?.map(
-                                                          (option: any) => ({
-                                                            label: option?.name,
-                                                            value: option?.name,
-                                                          })
-                                                        )}
-                                                        onChange={(
-                                                          selectedOption: any
-                                                        ) => {
-                                                          // Find the index of the selected option within boxDetailsData array
-                                                          const selectedIndex =
-                                                            boxDetailsData.findIndex(
-                                                              (option: any) =>
-                                                                option.name ===
-                                                                selectedOption.value
-                                                            );
-
-                                                          // Ensure selectedIndex is valid
-                                                          if (
-                                                            selectedIndex !== -1
-                                                          ) {
-                                                            console.log(
-                                                              "Selected Index:",
-                                                              selectedIndex
-                                                            ); // Log the index
-                                                            setSelectBoxIndex(
-                                                              selectedIndex
-                                                            );
-                                                            setBoxName(true);
-                                                            // setBoxNameAccordian(
-                                                            //   false
-                                                            // );
-                                                            setCustomInputBox(
-                                                              false
-                                                            );
-                                                          } else {
-                                                            console.error(
-                                                              "Selected option not found in boxDetailsData:",
-                                                              selectedOption
-                                                            );
-                                                          }
-                                                        }}
-                                                      /> */}
-                                                    </div>
-                                                  </>
-                                                )}
-
-                                                {boxAccordian && (
-                                                  <div className="mt-2 border-b-2 border-t-2  border-l-2 border-r-2 border-black-600 pt-3 pb-4 rounded-md">
-                                                    {boxDetailsData?.map(
-                                                      (
-                                                        boxDetails: any,
-                                                        index: any
-                                                      ) => {
-                                                        return (
-                                                          <div>
-                                                            {boxAccordian && (
-                                                              <>
-                                                                {/* <p
-                                                                  className="px-2 font-open text-[14px] text-[#494949] mx-4 py-2  rounded-md 
-                                                                border-l-[1.5px] border-r-[1.5px] border-b-[1.5px] border-black-600"
-                                                                  onClick={() => {
-                                                                    setSelectBoxIndex(
-                                                                      index
-                                                                    );
-                                                                    setBoxName(
-                                                                      true
-                                                                    );
-                                                                    // setBoxNameAccordian(
-                                                                    //   false
-                                                                    // );
-                                                                    setCustomInputBox(
-                                                                      false
-                                                                    );
-                                                                  }}
-                                                                >
-                                                                  {
-                                                                    boxDetails?.name
-                                                                  }
-                                                                </p> */}
-                                                              </>
-                                                            )}
-                                                          </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                    <p
-                                                      onClick={() => {
-                                                        setCustomInputBox(true);
-                                                        // setBoxNameAccordian(
-                                                        //   false
-                                                        // );
-                                                        setBoxName(false);
-                                                      }}
-                                                      className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center mx-2 py-2 px-2 rounded-md border-[1.5px] border-black-600"
-                                                    >
-                                                      <span>
-                                                        <img
-                                                          src={AddBoxIcon}
-                                                          alt="boxImage"
-                                                          className="w-4 h-4"
-                                                        />
-                                                      </span>
-                                                      <span className="font-open mt-1 ">
-                                                        Add Your Box
-                                                      </span>
-                                                    </p>
-                                                    {boxName && (
-                                                      <div>
-                                                        <div className="mx-4 mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
-                                                          <p className="text-[16px] font-open ">
-                                                            {
-                                                              boxDetailsData[
-                                                                selectBoxIndex
-                                                              ]?.name
-                                                            }
+                                                <div className="border border-black-600 px-5 rounded-md">
+                                                  {boxAccordian && (
+                                                    <>
+                                                      {boxDetailsData?.length ===
+                                                      0 ? (
+                                                        <>
+                                                          <p className="font-open text-[14px] font-medium mt-6">
+                                                            Existing box not
+                                                            found, Please create
+                                                            a box
                                                           </p>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Dead Weight (Kg)"
-                                                              defaultValue={
-                                                                boxDetailsData?.[
-                                                                  selectBoxIndex
-                                                                ]?.deadWeight
-                                                              }
-                                                              isDisabled={true}
-                                                              inputType="number"
-                                                              name="deadWeight"
-                                                              inputMode="numeric"
+                                                          <div
+                                                            className="cursor-pointer flex my-3 gap-x-2 items-center border-[1.5px] border-[#E8E8E8] rounded-md py-2 px-2"
+                                                            onClick={() =>
+                                                              navigate(
+                                                                "/catalogues/box-catalogue"
+                                                              )
+                                                            }
+                                                          >
+                                                            <img
+                                                              src={AddIcon}
+                                                              alt="image"
+                                                              className="w-4 h-4"
                                                             />
+                                                            <p className="text-[14px] font-open text-[#004EFF] mt-1 ">
+                                                              Click here to
+                                                              create a box
+                                                            </p>
                                                           </div>
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Volumetric Weight"
-                                                              // defaultValue={
-                                                              //   eachBox?.volumetricWeight
-                                                              // }
-                                                              value={boxDetailsData?.[
-                                                                selectBoxIndex
-                                                              ]?.volumetricWeight?.toFixed(
-                                                                2
-                                                              )}
-                                                              isDisabled={true}
-                                                              name="volumetricWeight"
-                                                              inputType="number"
-                                                            />
-                                                          </div>
-                                                        </div>
-                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                          <div className="w-[50%]">
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          <div className="mt-4">
                                                             <CustomDropDown
-                                                              onChange={() => {}}
-                                                              options={
-                                                                measureUnits
-                                                              }
-                                                            />
-                                                          </div>
-                                                          <div className="flex w-[50%] gap-x-4">
-                                                            <div>
-                                                              <InputBox
-                                                                label="L"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                name="length"
-                                                                isDisabled={
-                                                                  true
+                                                              heading="Select A Box"
+                                                              options={boxDetailsData?.map(
+                                                                (
+                                                                  option: any,
+                                                                  index: any
+                                                                ) => {
+                                                                  return {
+                                                                    label:
+                                                                      option?.name,
+                                                                    value:
+                                                                      option?.boxId,
+                                                                  };
                                                                 }
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.length
-                                                                }
-                                                              />
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="B"
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.breadth
-                                                                }
-                                                                isDisabled={
-                                                                  true
-                                                                }
-                                                                name="breadth"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                              />{" "}
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="H"
-                                                                defaultValue={
-                                                                  boxDetailsData?.[
-                                                                    selectBoxIndex
-                                                                  ]?.height
-                                                                }
-                                                                isDisabled={
-                                                                  true
-                                                                }
-                                                                name="height"
-                                                              />
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                    )}
-                                                    {customInpuBox && (
-                                                      <div className="">
-                                                        <div className="mx-4 mt-4 ">
-                                                          <CustomInputBox
-                                                            label="Box Name"
-                                                            onChange={(e) => {
-                                                              setNewBox({
-                                                                ...newBox,
-                                                                name: e.target
-                                                                  .value,
-                                                              });
-                                                              if (
-                                                                e.target
-                                                                  .value === ""
-                                                              ) {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxName:
-                                                                      "Field is required",
-                                                                  }
-                                                                );
-                                                              } else {
-                                                                setValidationError(
-                                                                  {
-                                                                    ...validationError,
-                                                                    boxName: "",
-                                                                  }
-                                                                );
-                                                              }
-                                                            }}
-                                                          />
-                                                          <p className="open-sans text-[12px] text-red-600">
-                                                            {
-                                                              validationError.boxName
-                                                            }
-                                                          </p>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-x-[1rem] px-[1rem] mt-5">
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Dead Weight (Kg)"
-                                                              defaultValue={
-                                                                eachBox?.deadWeight
-                                                              }
-                                                              isDisabled={
-                                                                enabled
-                                                              }
-                                                              inputType="number"
-                                                              name="deadWeight"
-                                                              inputMode="numeric"
+                                                              )}
                                                               onChange={(
                                                                 e: any
                                                               ) => {
-                                                                setNewBox({
-                                                                  ...newBox,
-                                                                  deadWeight:
-                                                                    +e.target
-                                                                      .value,
-                                                                });
-                                                                if (
-                                                                  e.target
-                                                                    .value <=
-                                                                    0 &&
-                                                                  eachBox
-                                                                    .deadWeight
-                                                                    ?.length !=
-                                                                    0
-                                                                ) {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      boxDeadWeight:
-                                                                        "Should be greater than 0",
-                                                                    }
-                                                                  );
-                                                                } else {
-                                                                  setValidationError(
-                                                                    {
-                                                                      ...validationError,
-                                                                      boxDeadWeight:
-                                                                        "",
-                                                                    }
-                                                                  );
-                                                                }
+                                                                clickedOption(
+                                                                  e.target.value
+                                                                );
+                                                                setSelectBoxIndex(
+                                                                  e.target.value
+                                                                );
+                                                                setDropDownContent(
+                                                                  true
+                                                                );
+                                                                setExistingBox(
+                                                                  true
+                                                                );
+                                                                setCustomInputBox(
+                                                                  false
+                                                                );
                                                               }}
-                                                              inputError={
-                                                                eachBox
-                                                                  ?.deadWeight
-                                                                  ?.length === 0
-                                                              }
                                                             />
-                                                            <p className="open-sans text-[12px] text-red-600">
-                                                              {
-                                                                validationError.boxDeadWeight
+                                                            <div
+                                                              className="cursor-pointer flex my-3 gap-x-2 items-center border-[1.5px] border-[#E8E8E8] rounded-md py-2 px-2"
+                                                              onClick={() =>
+                                                                navigate(
+                                                                  "/catalogues/box-catalogue"
+                                                                )
                                                               }
-                                                            </p>
-                                                          </div>
-                                                          <div className="col-span-1">
-                                                            <InputBox
-                                                              label="Volumetric Weight"
-                                                              // defaultValue={
-                                                              //   (eachBox?.length *
-                                                              //     eachBox?.breadth *
-                                                              //     eachBox?.height) /
-                                                              //   5000
-                                                              // }
-                                                              value={
-                                                                // (eachBox?.length *
-                                                                //   eachBox?.breadth *
-                                                                //   eachBox?.height) /
-                                                                // 5000
-                                                                (newBox?.length *
-                                                                  newBox?.breadth *
-                                                                  newBox?.height) /
-                                                                5000
-                                                              }
-                                                              isDisabled={true}
-                                                              name="volumetricWeight"
-                                                              inputType="number"
-                                                              // onChange={(
-                                                              //   e: any
-                                                              // ) => {
-                                                              //   handleBoxInputUpdation(
-                                                              //     index,
-                                                              //     e.target.value,
-                                                              //     "volumetricWeight"
-                                                              //   );
-                                                              //   if (
-                                                              //     e.target.value <=
-                                                              //       0 &&
-                                                              //     eachBox
-                                                              //       .volumetricWeight
-                                                              //       ?.length != 0
-                                                              //   ) {
-                                                              //     setValidationError(
-                                                              //       {
-                                                              //         ...validationError,
-                                                              //         boxVolumetricWeight:
-                                                              //           "Should be greater than 0",
-                                                              //       }
-                                                              //     );
-                                                              //   } else {
-                                                              //     setValidationError(
-                                                              //       {
-                                                              //         ...validationError,
-                                                              //         boxVolumetricWeight:
-                                                              //           "",
-                                                              //       }
-                                                              //     );
-                                                              //   }
-                                                              // }}
-                                                              // inputError={
-                                                              //   eachBox
-                                                              //     ?.volumetricWeight
-                                                              //     ?.length === 0
-                                                              // }
-                                                            />
-                                                            {/* <p className="open-sans text-[12px] text-red-600">
-                                                          {
-                                                            validationError.boxVolumtericWeight
-                                                          }
-                                                        </p> */}
-                                                          </div>
-                                                        </div>
-                                                        <div className="flex justify-between w-[100%] gap-x-[1rem] px-[1rem] mt-2">
-                                                          <div className="w-[50%]">
-                                                            <CustomDropDown
-                                                              onChange={() => {}}
-                                                              options={
-                                                                measureUnits
-                                                              }
-                                                            />
-                                                          </div>
-                                                          <div className="flex w-[50%] gap-x-4">
-                                                            <div>
-                                                              <InputBox
-                                                                label="L"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                name="length"
-                                                                defaultValue={
-                                                                  eachBox?.length
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    length:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .length
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxLength:
-                                                                          "Should be greater than 0",
-                                                                      }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxLength:
-                                                                          "",
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.length
-                                                                    ?.length ===
-                                                                  0
-                                                                }
+                                                            >
+                                                              <img
+                                                                src={AddIcon}
+                                                                alt="image"
+                                                                className="w-4 h-4"
                                                               />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxLength
-                                                                }
+                                                              <p className="text-[14px] font-open text-[#004EFF] mt-1 ">
+                                                                Click here to
+                                                                create a box
                                                               </p>
                                                             </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="B"
-                                                                defaultValue={
-                                                                  eachBox?.breadth
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                name="breadth"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    breadth:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .breadth
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxBreadth:
-                                                                          "Should be greater than 0",
-                                                                      }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxBreadth:
-                                                                          "",
-                                                                      }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.breadth
-                                                                    ?.length ===
-                                                                  0
-                                                                }
+                                                          </div>
+                                                        </>
+                                                      )}
+                                                      <div className="mt-4">
+                                                        {/* <CustomDropDown
+                                                          heading="Select A Box"
+                                                          options={boxDetailsData?.map(
+                                                            (
+                                                              option: any,
+                                                              index: any
+                                                            ) => {
+                                                              return {
+                                                                label:
+                                                                  option?.name,
+                                                                value:
+                                                                  option?.boxId,
+                                                              };
+                                                            }
+                                                          )}
+                                                          onChange={(
+                                                            e: any
+                                                          ) => {
+                                                            clickedOption(
+                                                              e.target.value
+                                                            );
+                                                            setSelectBoxIndex(
+                                                              e.target.value
+                                                            );
+                                                            setDropDownContent(
+                                                              true
+                                                            );
+                                                            setExistingBox(
+                                                              true
+                                                            );
+                                                            setCustomInputBox(
+                                                              false
+                                                            );
+                                                          }}
+                                                        /> */}
+                                                        <div className="my-3 rounded-md">
+                                                          {/* <p
+                                                            onClick={() => {
+                                                              setCustomInputBox(
+                                                                true
+                                                              );
+                                                              setExistingBox(
+                                                                false
+                                                              );
+
+                                                              setBoxName(false);
+                                                            }}
+                                                            className="font-open text-[14px] text-[#004EFF] flex gap-x-1 items-center  py-2 px-2 rounded-md border-[1.90px] border-black-600"
+                                                          >
+                                                            <span>
+                                                              <img
+                                                                src={AddBoxIcon}
+                                                                alt="boxImage"
+                                                                className="w-4 h-4"
                                                               />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxBreadth
-                                                                }
-                                                              </p>
-                                                            </div>
-                                                            <div>
-                                                              <InputBox
-                                                                label="H"
-                                                                defaultValue={
-                                                                  eachBox.height
-                                                                }
-                                                                isDisabled={
-                                                                  enabled
-                                                                }
-                                                                name="height"
-                                                                inputType="number"
-                                                                inputMode="numeric"
-                                                                onChange={(
-                                                                  e: any
-                                                                ) => {
-                                                                  setNewBox({
-                                                                    ...newBox,
-                                                                    height:
-                                                                      +e.target
-                                                                        .value,
-                                                                  });
-                                                                  if (
-                                                                    e.target
-                                                                      .value <=
-                                                                      0 &&
-                                                                    eachBox
-                                                                      .height
-                                                                      ?.length !=
-                                                                      0
-                                                                  ) {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxHeight:
-                                                                          "Should be greater than 0",
+                                                            </span>
+                                                            <span className="font-open mt-1 ">
+                                                              Add Your Box
+                                                            </span>
+                                                          </p> */}
+                                                          <div className=" my-2">
+                                                            {customInpuBox && (
+                                                              <div className="">
+                                                                <div className=" mt-4 ">
+                                                                  <CustomInputBox
+                                                                    label="Box Name"
+                                                                    onChange={(
+                                                                      e
+                                                                    ) => {
+                                                                      setNewBox(
+                                                                        {
+                                                                          ...newBox,
+                                                                          name: e
+                                                                            .target
+                                                                            .value,
+                                                                        }
+                                                                      );
+                                                                      if (
+                                                                        e.target
+                                                                          .value ===
+                                                                        ""
+                                                                      ) {
+                                                                        setValidationError(
+                                                                          {
+                                                                            ...validationError,
+                                                                            boxName:
+                                                                              "Field is required",
+                                                                          }
+                                                                        );
+                                                                      } else {
+                                                                        setValidationError(
+                                                                          {
+                                                                            ...validationError,
+                                                                            boxName:
+                                                                              "",
+                                                                          }
+                                                                        );
                                                                       }
-                                                                    );
-                                                                  } else {
-                                                                    setValidationError(
-                                                                      {
-                                                                        ...validationError,
-                                                                        boxHeight:
-                                                                          "",
+                                                                    }}
+                                                                  />
+                                                                  <p className="open-sans text-[12px] text-red-600">
+                                                                    {
+                                                                      validationError.boxName
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Dead Weight (Kg)"
+                                                                      // defaultValue={
+                                                                      //   eachBox?.deadWeight
+                                                                      // }
+                                                                      // value={
+                                                                      //   newBox?.deadWeight
+                                                                      // }
+                                                                      isDisabled={
+                                                                        enabled
                                                                       }
-                                                                    );
-                                                                  }
-                                                                }}
-                                                                inputError={
-                                                                  eachBox
-                                                                    ?.height
-                                                                    ?.length ===
-                                                                  0
-                                                                }
-                                                              />
-                                                              <p className="open-sans text-[12px] text-red-600">
-                                                                {
-                                                                  validationError.boxHeight
-                                                                }
-                                                              </p>
-                                                            </div>
+                                                                      inputType="number"
+                                                                      name="deadWeight"
+                                                                      inputMode="numeric"
+                                                                      onChange={(
+                                                                        e: any
+                                                                      ) => {
+                                                                        setNewBox(
+                                                                          {
+                                                                            ...newBox,
+                                                                            deadWeight:
+                                                                              +e
+                                                                                .target
+                                                                                .value,
+                                                                          }
+                                                                        );
+                                                                        if (
+                                                                          e
+                                                                            .target
+                                                                            .value ===
+                                                                          0
+                                                                          //   &&
+                                                                          // eachBox
+                                                                          //   .deadWeight
+                                                                          //   ?.length !=
+                                                                          //   0
+                                                                        ) {
+                                                                          setValidationError(
+                                                                            {
+                                                                              ...validationError,
+                                                                              boxDeadWeight:
+                                                                                "Should be greater than 0",
+                                                                            }
+                                                                          );
+                                                                        }
+
+                                                                        // }
+                                                                        else {
+                                                                          setValidationError(
+                                                                            {
+                                                                              ...validationError,
+                                                                              boxDeadWeight:
+                                                                                "",
+                                                                            }
+                                                                          );
+                                                                        }
+                                                                      }}
+                                                                      // inputError={
+                                                                      //   eachBox
+                                                                      //     ?.deadWeight
+                                                                      //     ?.length ===
+                                                                      //   0
+                                                                      // }
+                                                                    />
+                                                                    <p className="open-sans text-[12px] text-red-600">
+                                                                      {
+                                                                        validationError.boxDeadWeight
+                                                                      }
+                                                                    </p>
+                                                                  </div>
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Volumetric Weight"
+                                                                      value={
+                                                                        (newBox?.length *
+                                                                          newBox?.breadth *
+                                                                          newBox?.height) /
+                                                                        5000
+                                                                      }
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      name="volumetricWeight"
+                                                                      inputType="number"
+                                                                    />
+                                                                  </div>
+                                                                </div>
+                                                                <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
+                                                                  <div className="w-[50%]">
+                                                                    <CustomDropDown
+                                                                      onChange={() => {}}
+                                                                      options={
+                                                                        measureUnits
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div className="flex w-[50%] gap-x-4">
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="L"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        name="length"
+                                                                        // defaultValue={
+                                                                        //   eachBox?.length
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.length
+                                                                        // }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              length:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              ?.length
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxLength:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxLength:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.length
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxLength
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="B"
+                                                                        // defaultValue={
+                                                                        //   eachBox?.breadth
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.breadth
+                                                                        // }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        name="breadth"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              breadth:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              .breadth
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxBreadth:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxBreadth:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.breadth
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxBreadth
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="H"
+                                                                        // defaultValue={
+                                                                        //   eachBox.height
+                                                                        // }
+                                                                        // value={
+                                                                        //   newBox?.height
+                                                                        // }
+                                                                        isDisabled={
+                                                                          enabled
+                                                                        }
+                                                                        name="height"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        onChange={(
+                                                                          e: any
+                                                                        ) => {
+                                                                          setNewBox(
+                                                                            {
+                                                                              ...newBox,
+                                                                              height:
+                                                                                +e
+                                                                                  .target
+                                                                                  .value,
+                                                                            }
+                                                                          );
+                                                                          if (
+                                                                            e
+                                                                              .target
+                                                                              .value <=
+                                                                              0 &&
+                                                                            eachBox
+                                                                              .height
+                                                                              ?.length !=
+                                                                              0
+                                                                          ) {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxHeight:
+                                                                                  "Should be greater than 0",
+                                                                              }
+                                                                            );
+                                                                          } else {
+                                                                            setValidationError(
+                                                                              {
+                                                                                ...validationError,
+                                                                                boxHeight:
+                                                                                  "",
+                                                                              }
+                                                                            );
+                                                                          }
+                                                                        }}
+                                                                        inputError={
+                                                                          eachBox
+                                                                            ?.height
+                                                                            ?.length ===
+                                                                          0
+                                                                        }
+                                                                      />
+                                                                      <p className="open-sans text-[12px] text-red-600">
+                                                                        {
+                                                                          validationError.boxHeight
+                                                                        }
+                                                                      </p>
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            )}
+                                                            {/* existing box */}
+                                                            {existingBox && (
+                                                              <div className=" my-1 pb-1">
+                                                                <div className="mt-4 border border-black-600 py-2 px-2 rounded-md bg-[#E8E8E8]">
+                                                                  <p className="text-[16px] font-open ">
+                                                                    {
+                                                                      boxDetailsData[
+                                                                        selectBoxId
+                                                                      ]?.name
+                                                                    }
+                                                                  </p>
+                                                                </div>
+                                                                <div className="grid grid-cols-2 gap-x-[1rem]  mt-5">
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Dead Weight (Kg)"
+                                                                      value={
+                                                                        boxDetailsData?.[
+                                                                          selectBoxId
+                                                                        ]
+                                                                          ?.deadWeight
+                                                                      }
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      inputType="number"
+                                                                      name="deadWeight"
+                                                                      inputMode="numeric"
+                                                                    />
+                                                                  </div>
+                                                                  <div className="col-span-1">
+                                                                    <InputBox
+                                                                      label="Volumetric Weight"
+                                                                      value={boxDetailsData?.[
+                                                                        selectBoxId
+                                                                      ]?.volumetricWeight?.toFixed(
+                                                                        2
+                                                                      )}
+                                                                      isDisabled={
+                                                                        true
+                                                                      }
+                                                                      name="volumetricWeight"
+                                                                      inputType="number"
+                                                                    />
+                                                                  </div>
+                                                                </div>
+                                                                <div className="flex justify-between w-[100%] gap-x-[1rem]  mt-2">
+                                                                  <div className="w-[50%]">
+                                                                    <CustomDropDown
+                                                                      onChange={() => {}}
+                                                                      options={
+                                                                        measureUnits
+                                                                      }
+                                                                    />
+                                                                  </div>
+                                                                  <div className="flex w-[50%] gap-x-4">
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="L"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                        name="length"
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.length
+                                                                        }
+                                                                      />
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="B"
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.breadth
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        name="breadth"
+                                                                        inputType="number"
+                                                                        inputMode="numeric"
+                                                                      />{" "}
+                                                                    </div>
+                                                                    <div>
+                                                                      <InputBox
+                                                                        label="H"
+                                                                        value={
+                                                                          boxDetailsData?.[
+                                                                            selectBoxId
+                                                                          ]
+                                                                            ?.height
+                                                                        }
+                                                                        isDisabled={
+                                                                          true
+                                                                        }
+                                                                        name="height"
+                                                                      />
+                                                                    </div>
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                            )}
                                                           </div>
                                                         </div>
                                                       </div>
-                                                    )}
-                                                  </div>
-                                                )}
+                                                    </>
+                                                  )}
+                                                </div>
                                               </div>
                                             </div>
                                           );
@@ -2995,58 +3605,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                                     isDisabled={
                                                                       true
                                                                     }
-                                                                    // onChange={(
-                                                                    //   e: any
-                                                                    // ) => {
-                                                                    //   setOrderId(
-                                                                    //     e.target
-                                                                    //       .value
-                                                                    //   );
-                                                                    //   if (
-                                                                    //     e.target
-                                                                    //       .value <=
-                                                                    //       0 &&
-                                                                    //     e.target
-                                                                    //       .value
-                                                                    //       ?.length !=
-                                                                    //       0
-                                                                    //     // eachService
-                                                                    //     //   .orderId
-                                                                    //     //   .length !=
-                                                                    //     //   0
-                                                                    //   ) {
-                                                                    //     setValidationError(
-                                                                    //       {
-                                                                    //         ...validationError,
-                                                                    //         orderId:
-                                                                    //           "Should be greater than 0",
-                                                                    //       }
-                                                                    //     );
-                                                                    //   } else {
-                                                                    //     setValidationError(
-                                                                    //       {
-                                                                    //         ...validationError,
-                                                                    //         orderId:
-                                                                    //           "",
-                                                                    //       }
-                                                                    //     );
-                                                                    //   }
-                                                                    // }}
-                                                                    // inputError={
-                                                                    //   // eachBox
-                                                                    //   //   ?.height
-                                                                    //   //   .length ===
-                                                                    //   // 0
-                                                                    //   orderId?.length ===
-                                                                    //   0
-                                                                    // }
                                                                     className="!max-w-[120px] !h-[30px] !rounded-sm"
                                                                   />
-                                                                  {/* <p className="open-sans text-[12px] text-red-600">
-                                                                    {
-                                                                      validationError.orderId
-                                                                    }
-                                                                  </p> */}
                                                                 </div>
                                                               </div>
                                                             )
@@ -3556,22 +4116,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setGetPickUpAddressData({
                                                       ...temp,
                                                     });
-
-                                                    // if (
-                                                    //   e.target.value.length ===
-                                                    //   0
-                                                    // ) {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactName:
-                                                    //       "Field is required",
-                                                    //   });
-                                                    // } else {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     contactName: "",
-                                                    //   });
-                                                    // }
                                                   }}
                                                   inputError={inputError}
                                                 />
@@ -3650,16 +4194,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ?.pickUpAddress?.contact
                                                       ?.emailId
                                                   }
-                                                  // onChange={(e: any) => {
-                                                  //   let emailValue =
-                                                  //     e.target.value;
-                                                  //   setGetPickUpAddressData({
-                                                  //     ...getPickAddressData
-                                                  //       ?.pickUpAdress?.contact,
-                                                  //     emailId: emailValue,
-                                                  //   });
-                                                  //   validateEmailId(emailValue);
-                                                  // }}
                                                   isDisabled={enabled}
                                                   onChange={(e: any) => {
                                                     const emailValue =
@@ -3685,16 +4219,6 @@ const Accordion = (props: ICustomTableAccordion) => {
 
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
-                                                  // onChange={(e: any) => {
-                                                  //   setServiceabilityData({
-                                                  //     ...serviceabilityData,
-                                                  //     paymentMode:
-                                                  //       e.target.value,
-                                                  //   });
-                                                  // }}
-                                                  // value={
-                                                  //   serviceabilityData?.paymentMode
-                                                  // }
                                                   disabled={enabled}
                                                   value={
                                                     getPickAddressData
@@ -3711,18 +4235,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
                                                   }}
                                                   options={[
-                                                    // {
-                                                    //   label: "Office",
-                                                    //   value: "Office",
-                                                    // },
-                                                    // {
-                                                    //   label: "Warehouse",
-                                                    //   value: "Warehouse",
-                                                    // },
-                                                    // {
-                                                    //   label: "Other",
-                                                    //   value: "Other",
-                                                    // },
                                                     {
                                                       label: "Shopkeeper",
                                                       value: "Shopkeeper",
@@ -3764,28 +4276,9 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     setGetPickUpAddressData({
                                                       ...temp,
                                                     });
-
-                                                    // if (
-                                                    //   e.target.value.length ===
-                                                    //   0
-                                                    // ) {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     flatNo:
-                                                    //       "Field is required",
-                                                    //   });
-                                                    // } else {
-                                                    //   setValidationError({
-                                                    //     ...validationError,
-                                                    //     flatNo: "",
-                                                    //   });
-                                                    // }
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.flatNo}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3824,9 +4317,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.locality}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -3870,9 +4360,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.landmark}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3910,9 +4397,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.city}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -3939,7 +4423,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -3956,9 +4440,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.state}
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -3980,7 +4461,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -3997,9 +4478,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.country}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4037,14 +4515,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.pickUpAddress.pincode =
                                                       numericValue;
                                                     if (
-                                                      numericValue.length === 6
+                                                      numericValue?.length === 6
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
                                                         pincode: "",
                                                       });
                                                     } else if (
-                                                      numericValue.length === 0
+                                                      numericValue?.length === 0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
@@ -4103,46 +4581,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     heading="Address Type"
                                                   />
                                                 </div>
-                                                {/* <CustomInputBox
-                                                  label={
-                                                    Object.keys(item)[index]
-                                                  }
-                                                  value={
-                                                    getPickAddressData
-                                                      ?.pickUpAddress
-                                                      ?.addressType
-                                                  }
-                                                  isDisabled={enabled}
-                                                  onChange={(e: any) => {
-                                                    let temp =
-                                                      getPickAddressData;
-                                                    temp.pickUpAddress.addressType =
-                                                      e.target.value;
-                                                    setGetPickUpAddressData({
-                                                      ...temp,
-                                                    });
-
-                                                    if (
-                                                      e.target.value.length ===
-                                                      0
-                                                    ) {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        addressType:
-                                                          "Field is required",
-                                                      });
-                                                    } else {
-                                                      setValidationError({
-                                                        ...validationError,
-                                                        addressType: "",
-                                                      });
-                                                    }
-                                                  }}
-                                                  inputError={inputError}
-                                                /> */}
-                                                {/* <p className="open-sans text-[14px] text-red-600">
-                                                  {validationError.addressType}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4216,7 +4654,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     });
 
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4261,7 +4699,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.deliveryAddress.contact.mobileNo =
                                                       numbericValue;
                                                     if (
-                                                      numbericValue.length ===
+                                                      numbericValue?.length ===
                                                       10
                                                     ) {
                                                       setValidationError({
@@ -4269,7 +4707,8 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                         deliveryMobileNo: "",
                                                       });
                                                     } else if (
-                                                      numbericValue.length === 0
+                                                      numbericValue?.length ===
+                                                      0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
@@ -4332,16 +4771,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                               {/* </div> */}
                                               <div className="w-[158px] xl:w-[274px]">
                                                 <CustomDropDown
-                                                  // onChange={(e: any) => {
-                                                  //   setServiceabilityData({
-                                                  //     ...serviceabilityData,
-                                                  //     paymentMode:
-                                                  //       e.target.value,
-                                                  //   });
-                                                  // }}
-                                                  // value={
-                                                  //   serviceabilityData?.paymentMode
-                                                  // }
                                                   disabled={enabled}
                                                   value={
                                                     getDeliveryAddressData
@@ -4400,7 +4829,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4417,11 +4846,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryFlatNo
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4442,7 +4866,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4459,11 +4883,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryLocality
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4489,7 +4908,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4506,11 +4925,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryLandmark
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4531,7 +4945,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4548,9 +4962,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {validationError.deliveryCity}
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4577,7 +4988,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4594,11 +5005,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryState
-                                                  }
-                                                </p> */}
                                               </div>
                                               <div className="xl:w-[274px]">
                                                 <CustomInputBox
@@ -4619,7 +5025,7 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                       ...temp,
                                                     });
                                                     if (
-                                                      e.target.value.length ===
+                                                      e.target.value?.length ===
                                                       0
                                                     ) {
                                                       setValidationError({
@@ -4636,11 +5042,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                   }}
                                                   inputError={inputError}
                                                 />
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryCountry
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}
@@ -4675,14 +5076,14 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     temp.deliveryAddress.pincode =
                                                       numericValue;
                                                     if (
-                                                      numericValue.length === 6
+                                                      numericValue?.length === 6
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
                                                         deliveryPincode: "",
                                                       });
                                                     } else if (
-                                                      numericValue.length === 0
+                                                      numericValue?.length === 0
                                                     ) {
                                                       setValidationError({
                                                         ...validationError,
@@ -4742,11 +5143,6 @@ const Accordion = (props: ICustomTableAccordion) => {
                                                     heading="Address Type"
                                                   />
                                                 </div>
-                                                {/* <p className="open-sans text-[12px] text-red-600">
-                                                  {
-                                                    validationError.deliveryAddressType
-                                                  }
-                                                </p> */}
                                               </div>
                                             </div>
                                           )}

@@ -11,7 +11,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { toast } from "react-hot-toast";
 import { POST } from "../../../utils/webService";
-import { GET_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import { GET_QUESTIONNAIRE, REACT_APP_GTM_ID } from "../../../utils/ApiUrls";
 import { constructNavigationObject } from "../../../utils/utility";
 
 export const QuestionComponent1: React.FunctionComponent = () => {
@@ -19,11 +19,31 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   const { isLgScreen, isMdScreen } = ResponsiveState();
   // const [isModalOpen, setIsModalOpen] = useState(true);
   const [questionsData, setQuestionsData] = useState<any>([]);
+
   const [nextBtnStatus, setNextBtnStatus] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const location = useLocation();
   const state = location.state || {};
+
+  //getting the sellerID
+  const sellerId = sessionStorage.getItem("sellerId");
+
+  //storing the selected options
+  const selectedDescribeYourself: any = [];
+
+  //This is used for GTM
+  for (let i = 0; i <= questionsData.length; i++) {
+    if (questionsData[i]?.question === "Describe yourself") {
+      for (let j = 0; j < questionsData[i]?.options.length; j++) {
+        if (questionsData[i]?.options[j]?.isChecked === true) {
+          selectedDescribeYourself.push(questionsData[i]?.options[j]?.value);
+        }
+      }
+    }
+  }
+
+  const allSelectedOptions = selectedDescribeYourself.join(", ");
 
   async function getQuestions() {
     try {
@@ -61,6 +81,17 @@ export const QuestionComponent1: React.FunctionComponent = () => {
   }
 
   const nextHandler = () => {
+    // window?.dataLayer?.push({
+    //   event: "sign_up_qna_seller_type",
+    //   sellerId: sellerId,
+    //   seller_type_selected_options: selectedDescribeYourself,
+    // });
+    window?.dataLayer?.push({
+      event: "sign_up_qna_seller_type",
+      sellerId: sellerId,
+      seller_type_selected_options: allSelectedOptions,
+    });
+
     const navigationObject = constructNavigationObject(
       "/onboarding/questionnaire/question2",
       window.location.search

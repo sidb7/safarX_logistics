@@ -88,7 +88,7 @@ const CustomInputBox: React.FunctionComponent<propTypes> = (
           className={`${className} ${
             errorMessage !== true && errorMessage !== false && "!border-[red]"
           }  ${inputError && !value ? "border-red-500" : "border-[#A4A4A4]"}
-           rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input  `}
+           rounded border-[1px] w-full border-[#A4A4A4] p-[10px] focus:border-[#004eff]  gap-[10px] h-[48px] font-Open text-[12px] text-[#1C1C1C] outline-none custom-input sentry-unmask `}
           required={isRequired}
           onChange={(e: any) => onChange(e)}
           onBlur={(e: any) => onBlur(e)}

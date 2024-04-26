@@ -44,7 +44,11 @@ const productBox: React.FunctionComponent<ISummaryData> = ({
         </div>
         {isEditIcon && (
           <div>
-            <img src={editImage} alt="" className="lg:hidden" />
+            <img
+              src={editImage}
+              alt="edit-icon-address"
+              className="lg:hidden"
+            />
           </div>
         )}
       </div>
