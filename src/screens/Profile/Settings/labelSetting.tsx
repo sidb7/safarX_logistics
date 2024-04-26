@@ -54,6 +54,7 @@ const Label: React.FunctionComponent = (props: ILabelProps) => {
         serviceContactOnAddress: false,
         multipleShipperIndividualLogos: false,
         multipleShipperIndividualOrderId: false,
+        showfooterLogo: false,
       },
 
       courierDetails: {
