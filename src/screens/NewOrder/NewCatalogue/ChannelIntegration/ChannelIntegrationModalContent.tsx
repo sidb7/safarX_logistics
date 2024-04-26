@@ -548,7 +548,8 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               </p>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Token"
+                // placeholder="Store Token"
+                label="Store Token"
                 isRequired={true}
                 value={storeData.storeToken}
                 onChange={(e) =>
