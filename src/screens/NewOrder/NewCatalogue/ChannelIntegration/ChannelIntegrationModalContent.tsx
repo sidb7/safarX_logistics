@@ -537,12 +537,12 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
                 onChange={(e) =>
                   setStoreData({ ...storeData, storeUrl: e.target.value })
                 }
-                label="Store Domain"
+                label="Store Sub Domain"
               />
               <p className="text-[15px]">
                 Example : https://
                 <strong>
-                  {storeData.storeUrl ? storeData.storeUrl : "domainName"}
+                  {storeData.storeUrl ? storeData.storeUrl : "subDomainName"}
                 </strong>
                 .myshopify.com/{" "}
               </p>
