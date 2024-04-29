@@ -374,7 +374,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   onChange={handleCheckBox}
                   data-cy="pod-checkbox"
                 />
-                <Checkbox
+                {/* <Checkbox
                   name="insurance"
                   label="Insurance"
                   checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
@@ -382,7 +382,7 @@ const BoxDetails = (props: IBoxdetails) => {
                   inputElementClass="!h-3 !w-3 "
                   checked={selectedBox?.insurance?.isInsured}
                   data-cy="insurance-checkbox"
-                />
+                /> */}
                 <Checkbox
                   name="fragile"
                   checkboxClassName="px-2 hover:transition-all border gap-2 shadow-none border-[1px] border-x-zinc-300 hover:shadow-md"
