@@ -25,7 +25,7 @@ const ModalContent = (props: ITypeProps) => {
     handlePickupAddressChange,
   } = props;
 
-  const [customAddressType, setCustomAddressType] = useState("");
+  const [customAddressType, setCustomAddressType] = useState("Other");
 
   const handleAddressTypeSelected = (
     event: React.ChangeEvent<HTMLInputElement>
