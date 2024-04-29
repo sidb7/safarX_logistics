@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import CustomInputBox from "../../../../components/Input";
 import ServiceButton from "../../../../components/Button/ServiceButton";
+import toast from "react-hot-toast";
 
 interface ITypeProps {
   titleIcon?: string;
@@ -25,7 +26,7 @@ const ModalContent = (props: ITypeProps) => {
     handlePickupAddressChange,
   } = props;
 
-  const [customAddressType, setCustomAddressType] = useState("");
+  const [customAddressType, setCustomAddressType] = useState("Other");
 
   const handleAddressTypeSelected = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -34,6 +35,12 @@ const ModalContent = (props: ITypeProps) => {
   };
 
   const handleButtonClick = () => {
+    if (!customAddressType.trim()) {
+      // If customAddressType is empty or only contains whitespace
+      toast.error("Address type cannot be empty");
+      return;
+    }
+
     onCustomAddressTypeSelection(customAddressType);
     handlePickupAddressChange("addressType", customAddressType);
     setCustomAddressType(customAddressType);
