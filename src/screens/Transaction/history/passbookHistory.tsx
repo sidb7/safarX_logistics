@@ -205,9 +205,10 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex justify-center whitespace-nowrap ">
-            {isValidJSON(info.row.original?.remark)
-              ? JSON.parse(info.row.original?.remark)?.tempOrderId !== undefined
-                ? JSON.parse(info.row.original?.remark)?.tempOrderId
+            {isValidJSON(info?.row?.original?.remark)
+              ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
+                undefined
+                ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
                 : "---"
               : "---"}
           </div>
@@ -227,11 +228,11 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div className="flex  items-center justify-between ">
             <div className=" w-[80px] whitespace-nowrap  overflow-hidden overflow-ellipsis ">
-              {info.row.original.orderId}
+              {info?.row?.original?.orderId}
             </div>
             <div className="cursor-pointer">
               <CopyTooltip
-                stringToBeCopied={`${info.row.original.orderId}
+                stringToBeCopied={`${info?.row?.original?.orderId}
                `}
               />
             </div>
@@ -252,11 +253,11 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex whitespace-nowrap justify-center ">
-            {isValidJSON(info.row.original?.remark)
-              ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]?.tracking
+            {isValidJSON(info?.row?.original?.remark)
+              ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]?.tracking
                   ?.awb !== undefined
-                ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]?.tracking
-                    ?.awb
+                ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
+                    ?.tracking?.awb
                 : "---"
               : "---"}
           </div>
@@ -279,8 +280,8 @@ export const PassbookColumns = (setSortOrder: any) => {
       cell: (info: any) => {
         return (
           <div className="flex  ">
-            {info.row.original.type === "credit"
-              ? `₹ ${info.row?.original?.amount}`
+            {info?.row?.original?.type === "credit"
+              ? `₹ ${info?.row?.original?.amount}`
               : "₹ 0"}
           </div>
         );
@@ -300,10 +301,12 @@ export const PassbookColumns = (setSortOrder: any) => {
         );
       },
       cell: (info: any) => {
-        let debitedAmount = parseFloat(info.row?.original?.amount).toFixed(2);
+        let debitedAmount = parseFloat(info?.row?.original?.amount).toFixed(2);
         return (
           <div className="flex whitespace-nowrap   ">
-            {info.row.original.type === "debit" ? `₹ ${debitedAmount}` : "₹ 0"}
+            {info?.row?.original?.type === "debit"
+              ? `₹ ${debitedAmount}`
+              : "₹ 0"}
           </div>
         );
       },
@@ -359,7 +362,7 @@ export const PassbookColumns = (setSortOrder: any) => {
         return (
           <div>
             <span className="font-Open font-normal text-sm leading-5 ">
-              {info.row?.original?.description}
+              {info?.row?.original?.description}
             </span>
           </div>
         );
@@ -380,32 +383,34 @@ export const PassbookColumns = (setSortOrder: any) => {
             <div className="cursor-pointer">
               <CopyTooltip
                 stringToBeCopied={`
-                Date:${date_DD_MMM_YYY(info.row?.original?.createdAt)},
-                TransactionId:${info.row?.original?.transactionId},
+                Date:${date_DD_MMM_YYY(info?.row?.original?.createdAt)},
+                TransactionId:${info?.row?.original?.transactionId},
                 ${
-                  info.row?.original?.type === "credit" ? "Credited" : "Debited"
-                }:${info.row?.original?.amount},Balance:${
-                  info.row?.original?.balance
+                  info?.row?.original?.type === "credit"
+                    ? "Credited"
+                    : "Debited"
+                }:${info?.row?.original?.amount},Balance:${
+                  info?.row?.original?.balance
                 },
                 TrackingNo:${
-                  isValidJSON(info.row.original?.remark)
-                    ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]
+                  isValidJSON(info?.row?.original?.remark)
+                    ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
                         ?.tracking?.awb !== undefined
-                      ? JSON.parse(info.row.original?.remark)?.boxInfo?.[0]
+                      ? JSON.parse(info?.row?.original?.remark)?.boxInfo?.[0]
                           ?.tracking?.awb
                       : "---"
                     : "---"
                 },
                 ShipyaariId:${
-                  isValidJSON(info.row.original?.remark)
-                    ? JSON.parse(info.row.original?.remark)?.tempOrderId !==
+                  isValidJSON(info?.row?.original?.remark)
+                    ? JSON.parse(info?.row?.original?.remark)?.tempOrderId !==
                       undefined
-                      ? JSON.parse(info.row.original?.remark)?.tempOrderId
+                      ? JSON.parse(info?.row?.original?.remark)?.tempOrderId
                       : "---"
                     : "---"
                 },
-                Status:${info.row?.original?.status},
-                Description:${info.row?.original?.description}`}
+                Status:${info?.row?.original?.status},
+                Description:${info?.row?.original?.description}`}
               />
             </div>
           </div>
