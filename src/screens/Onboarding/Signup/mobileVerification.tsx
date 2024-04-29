@@ -123,7 +123,7 @@ const Index = () => {
                 } else {
                   setMobileNumber({
                     ...mobileNumber,
-                    mobileNo: +e.target.value,
+                    mobileNo: e.target.value,
                   });
                 }
               }}
