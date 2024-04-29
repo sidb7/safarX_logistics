@@ -319,7 +319,7 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
       setStoreData({
         ...storeData,
         storeUrl: modalData?.modalData?.storeUrl,
-        storeName: modalData?.modalData?.name,
+        storeName: "",
       });
     })();
   }, []);
@@ -522,27 +522,34 @@ function ChannelIntegrationModalContent(props: IChannelProps) {
               <CustomInputBox
                 className="removePaddingPlaceHolder"
                 isRequired={true}
-                placeholder="Store Name"
+                // placeholder="Store Name"
                 value={storeData.storeName}
                 onChange={(e) =>
                   setStoreData({ ...storeData, storeName: e.target.value })
                 }
+                label="Store Name"
               />
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Domain"
+                //   placeholder="Store Domain"
                 isRequired={true}
                 value={storeData.storeUrl}
                 onChange={(e) =>
                   setStoreData({ ...storeData, storeUrl: e.target.value })
                 }
+                label="Store Sub Domain"
               />
               <p className="text-[15px]">
-                Example : https://<strong>domainName</strong>.myshopify.com/{" "}
+                Example : https://
+                <strong>
+                  {storeData.storeUrl ? storeData.storeUrl : "subDomainName"}
+                </strong>
+                .myshopify.com/{" "}
               </p>
               <CustomInputBox
                 className="removePaddingPlaceHolder"
-                placeholder="Store Token"
+                // placeholder="Store Token"
+                label="Store Token"
                 isRequired={true}
                 value={storeData.storeToken}
                 onChange={(e) =>
