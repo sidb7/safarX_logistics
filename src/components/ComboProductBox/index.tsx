@@ -11,6 +11,12 @@ import ViewIcon from "../../assets/Login/eye.svg";
 import BottomModal from "../../components/CustomModal/customBottomModal";
 import { useMediaQuery } from "react-responsive";
 import DeleteIcon from "../../assets/DeleteIconRedColor.svg";
+import ItemIcon from "../../assets/Product/Item.svg";
+import ShopifyLg from "../../assets/Catalogue/shopifyLg.svg";
+import WooLg from "../../assets/Catalogue/WooCommerceLg.svg";
+import ZohoIcon from "../../assets/Catalogue/ZOHO.svg.png";
+import AmazonPngIcon from "../../assets/AmazonIcon.png";
+import UniCommerceIcon from "../../assets/Catalogue/unicommerce fn.svg";
 
 interface IPackageBoxProps {
   image?: any;
@@ -34,6 +40,7 @@ interface IPackageBoxProps {
   setIsDeleteModalOpen?: any;
   setDeleteProductsData?: any;
   deleteProductsData?: any;
+  source?: string;
 }
 const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   image = "",
@@ -56,6 +63,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
   setIsDeleteModalOpen,
   setDeleteProductsData,
   deleteProductsData = "",
+  source,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<any>(false);
   const navigate = useNavigate();
@@ -120,14 +128,35 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
           onRequestClose={() => setIsModalOpen(false)}
         >
           <div className="h-[100%] w-[100%] p-6 border">
-            <div className="flex justify-between right-4 top-4">
-              <div className="text-[25px] font-bold">{data.name}</div>
+            <div className="flex justify-between items-center right-4 top-4 w-[100%]">
               <img
-                src={CrossIcon}
+                width={100}
+                src={
+                  source === "SHOPIFY"
+                    ? ShopifyLg
+                    : source === "WOOCOMMERCE"
+                    ? WooLg
+                    : source === "ZOHO"
+                    ? ZohoIcon
+                    : source === "AMAZON"
+                    ? AmazonPngIcon
+                    : source === "UNICOMMERCE"
+                    ? UniCommerceIcon
+                    : ""
+                }
                 alt="Cross Icon"
-                className="cursor-pointer"
-                onClick={() => setIsModalOpen(false)}
+                className={`cursor-pointer ${!source ? "hidden" : ""}`}
               />
+
+              <div className="text-[25px] font-bold">{data.name}</div>
+              <div className="w-[100px] flex flex-row-reverse">
+                <img
+                  src={CrossIcon}
+                  alt="Cross Icon"
+                  className="cursor-pointer"
+                  onClick={() => setIsModalOpen(false)}
+                />
+              </div>
             </div>
             <div className="mt-6">
               <div className="my-4 max-h-[480px] overflow-auto">
@@ -141,7 +170,7 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
                         image={
                           (singleProduct?.images?.length > 0 &&
                             singleProduct?.images[0].url) ||
-                          ""
+                          ItemIcon
                         }
                         productName={singleProduct?.name}
                         weight={`${singleProduct?.appliedWeight} ${singleProduct?.weightUnit}`}
