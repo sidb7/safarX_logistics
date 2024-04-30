@@ -383,6 +383,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                         >
                           <ComboProductBox
                             image={StackLogo}
+                            source={data?.source}
                             productName={data?.name}
                             weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
                             Value={data?.totalValue}
