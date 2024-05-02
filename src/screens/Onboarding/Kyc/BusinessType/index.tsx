@@ -8,7 +8,10 @@ import CompanyLogo from "../../../../assets/Navbar/shipyaariLogos.svg";
 import WelcomeHeader from "../welcomeHeader";
 import { useNavigate } from "react-router-dom";
 import { POST } from "../../../../utils/webService";
-import { POST_BUSINESS_TYPE_URL } from "../../../../utils/ApiUrls";
+import {
+  POST_BUSINESS_TYPE_URL,
+  POST_SKIP_FOR_NOW_TRACKER,
+} from "../../../../utils/ApiUrls";
 import { ResponsiveState } from "../../../../utils/responsiveState";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -110,6 +113,27 @@ const BusinessType = (props: ITypeProps) => {
     }
   };
 
+  const handleSkipForNow = async () => {
+    try {
+      const payload = {
+        status: "KYC_SKIPPED",
+      };
+
+      const { data: response }: any = await POST(
+        POST_SKIP_FOR_NOW_TRACKER,
+        payload
+      );
+
+      if (response?.success) {
+        navigate("/dashboard/overview");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const businessTypeComponent = () => {
     return (
       <>
@@ -190,7 +214,8 @@ const BusinessType = (props: ITypeProps) => {
                   <ServiceButton
                     text="SKIP FOR NOW"
                     className="!text-[#004EFF] !font-Open  underline !border-none"
-                    onClick={() => navigate("/dashboard/overview")}
+                    // onClick={() => navigate("/dashboard/overview")}
+                    onClick={() => handleSkipForNow()}
                   />
                 </div>
               </div>
