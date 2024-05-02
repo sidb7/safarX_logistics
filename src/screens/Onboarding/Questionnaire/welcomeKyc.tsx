@@ -9,7 +9,10 @@ import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../utils/webService";
-import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
+import {
+  POST_SKIP_FOR_NOW_TRACKER,
+  POST_SUBMIT_QUESTIONNAIRE,
+} from "../../../utils/ApiUrls";
 import TickLogo from "../../../assets/tick.svg";
 
 export const WelcomeKyc: React.FunctionComponent = () => {
@@ -47,6 +50,27 @@ export const WelcomeKyc: React.FunctionComponent = () => {
     const { value = false } = element;
     questionsData[5].options[index].isChecked = value;
   }
+
+  const handleSkipForNow = async () => {
+    try {
+      const payload = {
+        status: "KYC_SKIPPED",
+      };
+
+      const { data: response }: any = await POST(
+        POST_SKIP_FOR_NOW_TRACKER,
+        payload
+      );
+
+      if (response?.success) {
+        navigate("/dashboard/overview");
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const question5 = () => {
     return (
@@ -145,7 +169,8 @@ export const WelcomeKyc: React.FunctionComponent = () => {
 
             <div
               className="flex justify-center text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF] mt-4 cursor-pointer"
-              onClick={() => navigate("/dashboard/overview")}
+              // onClick={() => navigate("/dashboard/overview")}
+              onClick={() => handleSkipForNow()}
             >
               SKIP FOR NOW
             </div>

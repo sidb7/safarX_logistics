@@ -8,6 +8,9 @@ import { useState } from "react";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import TickLogo from "../../../assets/tick.svg";
+import { POST } from "../../../utils/webService";
+import { POST_SKIP_FOR_NOW_TRACKER } from "../../../utils/ApiUrls";
+import toast from "react-hot-toast";
 
 const modalTitle = () => {
   return (
@@ -44,6 +47,27 @@ const WalletMain = () => {
           </p>
         </>
       );
+    };
+
+    const handleSkipForNow = async () => {
+      try {
+        const payload = {
+          status: "BANK_RECHARGE_SKIPPED",
+        };
+
+        const { data: response }: any = await POST(
+          POST_SKIP_FOR_NOW_TRACKER,
+          payload
+        );
+
+        if (response?.success) {
+          navigate("/onboarding/cash-on-delivery");
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     return (
@@ -122,7 +146,8 @@ const WalletMain = () => {
 
                 <div
                   className="flex justify-center mt-4 cursor-pointer"
-                  onClick={() => navigate("/onboarding/cash-on-delivery")}
+                  // onClick={() => navigate("/onboarding/cash-on-delivery")}
+                  onClick={() => handleSkipForNow()}
                 >
                   <p className="text-[14px] font-semibold font-Open leading-5  text-[#004EFF] text-sm underline underline-offset-4	decoration-[#004EFF]">
                     SKIP FOR NOW

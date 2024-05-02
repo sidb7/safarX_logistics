@@ -11,7 +11,7 @@ let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
-console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
+// console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
 
 // console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
 
@@ -114,6 +114,7 @@ const POST_SIGN_IN_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/seller/signInWithGoogle
 // Questionair URLs
 const GET_QUESTIONNAIRE = `${SELLER_BASE_URL}/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SUBMIT_QUESTIONNAIRE = `${SELLER_BASE_URL}/sellerQnA/submitAnswer`;
+const POST_SKIP_FOR_NOW_TRACKER = `${SELLER_BASE_URL}/seller/skipFornowLog`;
 
 // Profile URLs
 const GET_PROFILE_URL = `${SELLER_BASE_URL}/seller/getSingleSeller`;
@@ -559,4 +560,5 @@ export {
   GET_WALLET_BALANCE,
   POST_WALLET_BALANCE,
   UPDATE_EXPIRED_WC_TOKEN,
+  POST_SKIP_FOR_NOW_TRACKER,
 };
