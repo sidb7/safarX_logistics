@@ -361,7 +361,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
                               }
                             />
                           </div>
-                          <div className="w-[80%] ml-[-8%]">
+                          <div className="w-[80%] ml-[-5%]">
                             <ProductBox
                               image={
                                 (data?.images?.length > 0 &&
