@@ -32,6 +32,7 @@ import { capitalizeFirstLetter, getQueryJson } from "../../../utils/utility";
 import { tokenKey } from "../../../utils/utility";
 import FilterScreen from "../common/FilterScreen/filterScreen";
 import { Spinner } from "../../../components/Spinner";
+import { useSelector } from "react-redux";
 
 interface IOrderstatusProps {
   filterId: any;
@@ -140,6 +141,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   const [manifestButton, setManifestButton] = useState<any>(true);
   let { activeTab } = getQueryJson();
   activeTab = activeTab?.toUpperCase();
+  const stateValue = useSelector((state: any) => state?.paginationSlice);
 
   const getIndexFromActiveTab = (arr: any, tabName: any) => {
     let tabIndex = arr.findIndex((e: any) => e.value === tabName);
@@ -581,7 +583,7 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
       }
       case 1: {
         const subStatus = "DRAFT";
-        getAllOrders(subStatus);
+        getAllOrders(subStatus, stateValue);
         break;
       }
       // case 2: {
@@ -773,10 +775,14 @@ export const OrderStatus: React.FunctionComponent<IOrderstatusProps> = ({
   //    setStatusId(index);
   // };
 
-  const getAllOrders = async (subStatus?: any) => {
+  const getAllOrders = async (subStatus?: any, stateValue?: any) => {
+    let value;
+    if (stateValue) {
+      value = stateValue.value;
+    }
     let payload: any = {
       skip: 0,
-      limit: 10,
+      limit: +value || 10,
       pageNo: 1,
       sort: { _id: -1 },
       currentStatus,
