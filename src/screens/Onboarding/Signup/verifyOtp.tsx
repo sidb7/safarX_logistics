@@ -13,6 +13,7 @@ import {
   POST_VERIFY_OTP,
   POST_SEND_OTP_URL,
   REACT_APP_GTM_ID,
+  LARGE_LOGO,
 } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import TagManager from "react-gtm-module";
@@ -164,7 +165,7 @@ const Index = () => {
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         {/* <img
@@ -188,7 +189,7 @@ const Index = () => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt="CompanyLogo"
           />
         </div>

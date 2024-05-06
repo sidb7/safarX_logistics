@@ -11,15 +11,19 @@ import { getLocalStorage, removeLocalStorage } from "../../../utils/utility";
 import { POST } from "../../../utils/webService";
 import {
   PHONEPE_TRANSACTION_STATUS,
+  POST_SKIP_FOR_NOW_TRACKER,
   RECHARGE_STATUS,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../utils/ApiUrls";
+import toast from "react-hot-toast";
 
 const modalTitle = () => {
   return (
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
         className=" ml-6  h-[25px] object-contain"
-        src={CompanyLogo}
+        src={LARGE_LOGO}
         alt="Company Logo"
       />
     </div>
@@ -37,6 +41,27 @@ const Cashondelivery = () => {
       navigate("/onboarding/wallet-details");
       setIsRechargeModalOpen(true);
       setIsModalOpen(false);
+    };
+
+    const handleSkipForNow = async () => {
+      try {
+        const payload = {
+          status: "BANK_COD_ACCEPTANCE_SKIPPED",
+        };
+
+        const { data: response }: any = await POST(
+          POST_SKIP_FOR_NOW_TRACKER,
+          payload
+        );
+
+        if (response?.success) {
+          navigate("/dashboard/overview");
+        } else {
+          toast.error(response?.message);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     useEffect(() => {
@@ -67,7 +92,7 @@ const Cashondelivery = () => {
           <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img
               className="my-auto h-[25px] object-contain"
-              src={CompanyLogo}
+              src={LARGE_LOGO}
               alt="Company Logo"
             />
           </div>
@@ -93,7 +118,8 @@ const Cashondelivery = () => {
             <div className="mx-5 mt-[4rem] md:mt-6">
               <CustomButton
                 text={"Skip"}
-                onClick={() => navigate("/dashboard/overview")}
+                // onClick={() => navigate("/dashboard/overview")}
+                onClick={() => handleSkipForNow()}
                 className="!bg-white !text-black border-solid border-2 border-[#A4A4A4]"
               />
             </div>

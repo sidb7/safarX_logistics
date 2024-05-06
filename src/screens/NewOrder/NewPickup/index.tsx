@@ -222,9 +222,9 @@ const PickupLocation = () => {
 
       const isPickupDateValid = pickupDate !== "" && pickupDate !== "0";
       // console.log("isPickuPDateValid", isPickupDateValid);
-      // console.log("pickupAddress", pickupAddress);
+      console.log("pickupAddress", pickupAddress);
 
-      // console.log("isPickupAddValid", isPickupAddressValid);
+      console.log("isPickupAddValid", isPickupAddressValid);
       if (
         !isPickupAddressValid ||
         !isContactDetailsValid ||

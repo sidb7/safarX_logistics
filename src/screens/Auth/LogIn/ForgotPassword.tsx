@@ -12,6 +12,8 @@ import {
   POST_SEND_OTP_URL,
   POST_VERIFY_OTP,
   VERIFY_FORGET_PASSWORD,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 } from "../../../utils/ApiUrls";
 import { useSelector } from "react-redux";
 import CustomButton from "../../../components/Button";
@@ -23,14 +25,14 @@ import { Breadcrum } from "../../../components/Layout/breadcrum";
 import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import "../../../styles/signupPages.css";
-import { Spinner } from "flowbite-react";
+import { Spinner } from "../../../components/Spinner";
 import EyeIcon from "../../../assets/Login/eye.svg";
 import CrossEyeIcon from "../../../assets/Login/crosseye.svg";
 import { strongpasswordRegex } from "../../../utils/regexCheck";
 interface ITypeProps {
   onClick?: any;
-  resetPassword?: any;
-  source?: any;
+  sellerEmail?: any;
+  companyName?: any;
 }
 interface PasswordVisibility {
   newPassword: boolean;
@@ -38,7 +40,7 @@ interface PasswordVisibility {
 }
 
 const ForgotPassword = (props: ITypeProps) => {
-  const { onClick, resetPassword, source } = props;
+  const { onClick, sellerEmail, companyName } = props;
 
   const navigate = useNavigate();
   const { isLgScreen } = ResponsiveState();
@@ -52,7 +54,7 @@ const ForgotPassword = (props: ITypeProps) => {
   });
   const [formData, setFormData] = useState({
     email: "",
-    companyName: "SHIPYAARI",
+    companyName: `${WHITE_COMPANYNAME}`.toUpperCase(),
   });
 
   const [password, setPassword] = useState({
@@ -210,17 +212,17 @@ const ForgotPassword = (props: ITypeProps) => {
   };
 
   useEffect(() => {
-    if (resetPassword !== undefined && source !== undefined) {
-      setFormData({ email: resetPassword, companyName: source });
+    if (sellerEmail !== undefined && companyName !== undefined) {
+      setFormData({ email: sellerEmail, companyName: companyName });
     }
-  }, []);
+  }, [sellerEmail]);
 
   const modalTitle = () => {
     return (
       <div className="product-box  z-10 bg-white flex justify-between w-full h-[60px] top-0">
         <img
           className="my-auto lg:ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
         <img
@@ -280,7 +282,7 @@ const ForgotPassword = (props: ITypeProps) => {
           <div className="product-box flex justify-between items-center lg:hidden">
             <img
               className="m-4 h-[25px] object-contain"
-              src={CompanyLogo}
+              src={LARGE_LOGO}
               alt="Company Logo"
             />
             <img
@@ -339,7 +341,10 @@ const ForgotPassword = (props: ITypeProps) => {
                 containerStyle="mt-[12px]"
                 label="Enter OTP"
                 onChange={(e: any) => {
-                  setOtp({ ...otp, forgotPasswordOtp: e.target.value });
+                  setOtp({
+                    ...otp,
+                    forgotPasswordOtp: e.target.value,
+                  });
                 }}
               />
 
@@ -394,7 +399,10 @@ const ForgotPassword = (props: ITypeProps) => {
                   ...passwordError,
                   newPassword: "",
                 });
-                setPassword({ ...password, newPassword: e.target.value });
+                setPassword({
+                  ...password,
+                  newPassword: e.target.value,
+                });
               }}
               onBlur={(e) => {
                 if (

@@ -22,7 +22,7 @@ interface IPackageBoxProps {
   productId?: any;
   setDeleteProductsData?: any;
   deleteProductsData?: any;
-
+  productNameClass?: any;
   filterId?: any;
 }
 
@@ -46,7 +46,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
   productId = "",
   setDeleteProductsData,
   deleteProductsData = false,
-
+  productNameClass,
   filterId,
 }) => {
   return (
@@ -59,6 +59,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
         boxShadow:
           "0px 0px 0px 0px rgba(133, 133, 133, 0.05), 0px 6px 13px 0px rgba(133, 133, 133, 0.05)",
       }}
+      data-cy="product-box"
     >
       <span
         className={`${
@@ -75,7 +76,9 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
       </div> */}
       <div className="flex flex-col w-full">
         <div className="flex justify-between ">
-          <span className="line-clamp-1  w-[100px]">{productName}</span>
+          <span className={`line-clamp-1 !${productNameClass} w-[100px]`}>
+            {productName}
+          </span>
 
           <div className="flex items-center ">
             {editMode && !isActiveChannel && (
@@ -84,6 +87,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
                 alt=""
                 onClick={onClickEdit}
                 className="w-4 mx-2"
+                data-cy="edit-icon"
               />
             )}
 
@@ -101,6 +105,7 @@ const productBox: React.FunctionComponent<IPackageBoxProps> = ({
                     singleProduct: productId,
                   });
                 }}
+                data-cy="delete-icon"
               />
             )}
           </div>

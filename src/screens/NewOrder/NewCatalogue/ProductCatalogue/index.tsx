@@ -30,6 +30,9 @@ import { Spinner } from "../../../../components/Spinner";
 import WebCrossIcon from "../../../../assets/PickUp/ModalCrossWeb.svg";
 import ServiceButton from "../../../../components/Button/ServiceButton";
 import DeleteGifIcon from "../../../../assets/deleteGif.svg";
+import ShopifyRibbon from "../../../../assets/Catalogue/shopifyRibbon.png";
+import WooCommerceRibbon from "../../../../assets/Catalogue/woocommerceRibbon.png";
+import ShipyaariRibbon from "../../../../assets/Catalogue/shipyaariRibbon.png";
 
 interface IProductCatalogue {
   setProductCatalogueTab: React.Dispatch<React.SetStateAction<string>>;
@@ -122,31 +125,31 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
       toast.error(data?.message);
     }
     if (filterId === 1) return;
-    let incomingChannelProducts = [];
-    const { data: storeDetails } = await POST(GET_ALL_STORES, {});
+    // let incomingChannelProducts = [];
+    // const { data: storeDetails } = await POST(GET_ALL_STORES, {});
 
-    let channelName: any = [];
-    storeDetails?.data?.map((elem: any) => {
-      channelName.push(elem.channel);
-    });
+    // let channelName: any = [];
+    // storeDetails?.data?.map((elem: any) => {
+    //   channelName.push(elem.channel);
+    // });
 
-    const { data: channelInventory } = await POST(GET_CHANNEL_INVENTORY, {
-      channels: channelName,
-    });
-    setChannels(channelName);
+    // const { data: channelInventory } = await POST(GET_CHANNEL_INVENTORY, {
+    //   channels: channelName,
+    // });
+    // setChannels(channelName);
 
-    for (let elem of channelInventory?.data) {
-      incomingChannelProducts.push({
-        image: elem?.images?.[0]?.src || "",
-        productName: elem?.title,
-        weight: +(elem?.variants?.[0]?.grams / 1000).toFixed(2) || "",
-        height: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
-        breadth: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
-        length: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
-      });
-    }
+    // for (let elem of channelInventory?.data) {
+    //   incomingChannelProducts.push({
+    //     image: elem?.images?.[0]?.src || "",
+    //     productName: elem?.title,
+    //     weight: +(elem?.variants?.[0]?.grams / 1000).toFixed(2) || "",
+    //     height: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
+    //     breadth: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
+    //     length: +(elem?.variants?.[0]?.grams / 3000).toFixed(2) || "",
+    //   });
+    // }
 
-    setChannelProducts(incomingChannelProducts);
+    // setChannelProducts(incomingChannelProducts);
 
     setLoading(false);
   };
@@ -338,51 +341,67 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               </div>
             ) : (
               <div>
-                <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-center mt-1 gap-y-6 pt-4">
+                <div className="flex flex-col lg:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-center mt-1 gap-y-6 pt-4">
                   {productData?.map((data: any, index: number) => {
                     if (filterId === 0) {
                       return (
                         <div
                           key={index}
-                          className="lg:w-[272px] lg:min-h-full"
+                          className="w-[95%] lg:min-h-full flex border-2 rounded-md"
                           // onClick={() => setViewed(index)}
                         >
-                          <ProductBox
-                            image={
-                              (data?.images?.length > 0 &&
-                                data?.images[0].url) ||
-                              ItemIcon
-                            }
-                            productName={data?.name}
-                            weight={`${data?.appliedWeight} ${data?.weightUnit}`}
-                            height={data?.height}
-                            breadth={data?.breadth}
-                            length={data?.length}
-                            editMode={true}
-                            productId={data?.productId}
-                            className={`cursor-pointer p-[16px] ${
-                              viewed === index
-                                ? "border-2 border-solid border-[#004EFF]"
-                                : ""
-                            }`}
-                            onClickEdit={() => {
-                              setEditAddressModal(true);
-                              setEditProductData(data);
-                            }}
-                            setIsDeleteModalOpen={setIsDeleteModalOpen}
-                            setDeleteProductsData={setDeleteProductsData}
-                            deleteProductsData={deleteProductsData}
-                          />
+                          <div className="w-[20%]">
+                            <img
+                              src={
+                                data?.source === "SHOPIFY"
+                                  ? ShopifyRibbon
+                                  : data?.source === "WOOCOMMERCE"
+                                  ? WooCommerceRibbon
+                                  : ShipyaariRibbon
+                              }
+                            />
+                          </div>
+                          <div className="w-[80%] ml-[-5%]">
+                            <ProductBox
+                              image={
+                                (data?.images?.length > 0 &&
+                                  data?.images?.[0]?.url) ||
+                                data?.images?.[0] ||
+                                ItemIcon
+                              }
+                              productName={data?.name}
+                              weight={`${data?.appliedWeight} ${data?.weightUnit}`}
+                              height={data?.height}
+                              breadth={data?.breadth}
+                              length={data?.length}
+                              editMode={true}
+                              productId={data?.productId}
+                              className={`cursor-pointer p-[16px] pl-0  ${
+                                viewed === index
+                                  ? "border-2 border-solid border-[#004EFF]"
+                                  : ""
+                              } !border-0`}
+                              onClickEdit={() => {
+                                setEditAddressModal(true);
+                                setEditProductData(data);
+                              }}
+                              setIsDeleteModalOpen={setIsDeleteModalOpen}
+                              setDeleteProductsData={setDeleteProductsData}
+                              deleteProductsData={deleteProductsData}
+                              productNameClass={`w-[80%]`}
+                            />
+                          </div>
                         </div>
                       );
                     } else if (filterId === 1) {
                       return (
                         <div
-                          className="w-[272px] h-[76px] my-2"
+                          className="w-[95%] h-[76px] my-2"
                           key={`${data.name}_${index}`}
                         >
                           <ComboProductBox
                             image={StackLogo}
+                            source={data?.source}
                             productName={data?.name}
                             weight={`${data?.totalDeadWeight} ${data?.weightUnit}`}
                             Value={data?.totalValue}
@@ -417,7 +436,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
             )}
           </div>
         </div>
-        {channels.length > 0 && filterId === 0 && (
+        {/* {channels.length > 0 && filterId === 0 && (
           <div className="flex flex-col mt-8">
             <h1 className="text-[#323232] leading-8 font-Lato text-[24px] font-normal flex mb-4">
               <img src={DeliceryIcon} alt="" className="mr-2" /> By Channel
@@ -475,7 +494,7 @@ const ProductCatalogue: React.FunctionComponent<IProductCatalogue> = ({
               </div>
             )}
           </div>
-        )}
+        )} */}
         {/* <div className="absolute bottom-24">
           {totalItemCount > 0 && (
             <PaginationComponent

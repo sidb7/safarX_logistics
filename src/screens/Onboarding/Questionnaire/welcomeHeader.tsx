@@ -1,5 +1,6 @@
 import { WelcomeQuestion } from "./welcome";
 import CompanyLogo from "../../../assets/Navbar/shipyaariLogos.svg";
+import { LARGE_LOGO } from "../../../utils/ApiUrls";
 
 interface IWelcomeProps {
   className?: string;
@@ -17,7 +18,7 @@ const WelcomeHeader: React.FunctionComponent<IWelcomeProps> = ({
       <div
         className={`${className} flex items-center shadow-md w-full h-[60px]`}
       >
-        <img src={CompanyLogo} alt="" className="ml-6" />
+        <img src={LARGE_LOGO} alt="" className="ml-6" />
       </div>
 
       <div className="mx-4 text-base font-Open font-light leading-[22px] text-[#494949]">

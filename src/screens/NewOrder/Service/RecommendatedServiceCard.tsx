@@ -98,7 +98,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
   };
 
   return (
-    <div>
+    <div data-cy="service-cards">
       <div className="flex items-center cursor-pointer px-4 gap-4 flex-wrap">
         {cheapestService && (
           <>
@@ -112,6 +112,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(cheapestService)}
+              data-cy="cheapest-service-card"
               // data-tooltip-id={`my-tooltip-inline-${cheapestService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
@@ -166,6 +167,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(fastestService)}
+              data-cy="fastest-service-card"
               // data-tooltip-id={`my-tooltip-inline-${fastestService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">
@@ -218,6 +220,7 @@ const RecommendatedServiceCard: React.FunctionComponent<IRadioButtonProps> = (
                   : "border-[#c1c1c1]"
               }`}
               onClick={() => handleOnChange(balancedService)}
+              data-cy="balanced-service-card"
               // data-tooltip-id={`my-tooltip-inline-${balancedService.value}`}
             >
               <p className="absolute z-2 -top-3 left-5 bg-[#00AEEF] rounded-lg text-[12px] font-semibold px-[12px] py-[2px] text-[#FFFFFF]">

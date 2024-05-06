@@ -436,9 +436,16 @@ const Index: React.FC = () => {
       <div className="lg:mb-8">
         <Stepper steps={steps} />
       </div>
-      <div className="flex flex-row gap-x-2 mb-5 lg:mb-[38px] px-5">
+      <div
+        className="flex flex-row gap-x-2 mb-5 lg:mb-[38px] px-5"
+        data-cy="service-container"
+      >
         <img src={TruckIcon} alt="Truck Icon" className="lg:hidden" />
-        <img src={WebTruckIcon} alt="" className="hidden lg:block" />
+        <img
+          src={WebTruckIcon}
+          alt="web-truck-icon"
+          className="hidden lg:block"
+        />
         <p className="font-semibold font-Lato text-center text-gray-900 lg:font-normal text-[1.5rem] lg:text-[#1C1C1C]  ">
           Service
         </p>
@@ -450,7 +457,7 @@ const Index: React.FC = () => {
         </div>
       ) : (
         <>
-          <div>
+          <div data-cy="filter-section">
             <div className="flex flex-row items-center gap-x-2 mb-5 ml-4">
               <img src={FilterIcon} alt="Filter" />
               <div className="text-[18px] font-bold lg:font-normal lg:text-2xl">
@@ -462,6 +469,7 @@ const Index: React.FC = () => {
                 items={["All", "Surface", "Air"]}
                 onClick={handleSortBy}
                 initialSelectedFilter="All"
+                data-cy="filter-items"
               />
             </div>
 
@@ -473,6 +481,7 @@ const Index: React.FC = () => {
                 selectedValue={setSelectedService}
                 selectedOption={selectedOption}
                 setSelectedOption={setSelectedOption}
+                data-cy="recommended-service-card"
               />
             </div>
 
@@ -485,6 +494,7 @@ const Index: React.FC = () => {
                 <div
                   className="flex gap-x-1"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
+                  data-cy="view-all-services"
                 >
                   <h1
                     className="font-Lato ml-4 mb-3 text-[14px] font-bold lg:font-normal cursor-pointer text-blue-500"
@@ -496,6 +506,7 @@ const Index: React.FC = () => {
                     src={DownArrow}
                     alt="Downarrow"
                     className="pb-4  cursor-pointer"
+                    data-cy="down-arrow"
                   />
                 </div>
 
@@ -506,6 +517,7 @@ const Index: React.FC = () => {
                     selectedOption={selectedOption}
                     setSelectedOption={setSelectedOption}
                     ignoreRecommended={true}
+                    data-cy="service-box"
                   />
                 )}
               </div>

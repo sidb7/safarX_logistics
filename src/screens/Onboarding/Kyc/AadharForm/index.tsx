@@ -283,7 +283,7 @@ const Index = (props: ITypeProps) => {
               {!otp && (
                 <div className="flex  md:justify-center md:items-center px-5 md:px-0 pb-12 mb-[209px]">
                   <ServiceButton
-                    text="SEND OTP"
+                    text="Get OTP"
                     disabled={!otpBtnStatus}
                     className={`bg-[#1C1C1C] !h-[36px] text-white w-full  md:!w-[320px] ${
                       otpBtnStatus === true

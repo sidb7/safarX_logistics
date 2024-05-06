@@ -9,11 +9,18 @@ let TRACKING_URL = "";
 let REACT_APP_GTM_ID = "";
 let REACT_APP_GA4_ID = "";
 let ADMIN_URL = "";
+let SMALL_LOGO = "";
+let LARGE_LOGO = "";
+let WHITE_COMPANYNAME = "";
 // Environment Declaration
 Environment = process.env.REACT_APP_ENV || "development";
-console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
+// console.log("🚀 ~ Environment:5454", process.env.REACT_APP_SELLER_DEV);
 
 // console.log(process.env.REACT_APP_SELLER_DEV, "biswjit");
+console.log(
+  "process.env.REACT_APP_LARGE_LOGO",
+  process.env.REACT_APP_LARGE_LOGO
+);
 
 switch (Environment) {
   case "development":
@@ -29,6 +36,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_DEV}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_DEV}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    WHITE_COMPANYNAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
     break;
 
   case "test":
@@ -44,6 +54,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_TEST}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_TEST}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_DEV}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    WHITE_COMPANYNAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
 
     break;
 
@@ -58,6 +71,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_PROD}`;
     SELLER_WEB_URL = `${process.env.REACT_APP_SELLER_WEB_URL_PROD}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_PROD}`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    WHITE_COMPANYNAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
 
     break;
 
@@ -76,6 +92,9 @@ switch (Environment) {
     TRACKING_URL = `${process.env.REACT_APP_TRACKING_URL_LOCAL}`;
     ADMIN_URL = `${process.env.REACT_APP_ADMIN_LOCAL}`;
     SELLER_WEB_URL = `http://localhost:3000`;
+    SMALL_LOGO = `${process.env.REACT_APP_SMALL_LOGO}`;
+    LARGE_LOGO = `${process.env.REACT_APP_LARGE_LOGO}`;
+    WHITE_COMPANYNAME = `${process.env.REACT_APP_WHITE_COMPANYNAME}`;
 
     break;
 }
@@ -114,6 +133,7 @@ const POST_SIGN_IN_WITH_GOOGLE_URL = `${SELLER_BASE_URL}/seller/signInWithGoogle
 // Questionair URLs
 const GET_QUESTIONNAIRE = `${SELLER_BASE_URL}/accounSetupQnA/getQuestionBank?companyName=${process.env.REACT_APP_COMPANY}`;
 const POST_SUBMIT_QUESTIONNAIRE = `${SELLER_BASE_URL}/sellerQnA/submitAnswer`;
+const POST_SKIP_FOR_NOW_TRACKER = `${SELLER_BASE_URL}/seller/skipFornowLog`;
 
 // Profile URLs
 const GET_PROFILE_URL = `${SELLER_BASE_URL}/seller/getSingleSeller`;
@@ -559,4 +579,8 @@ export {
   GET_WALLET_BALANCE,
   POST_WALLET_BALANCE,
   UPDATE_EXPIRED_WC_TOKEN,
+  POST_SKIP_FOR_NOW_TRACKER,
+  SMALL_LOGO,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
 };

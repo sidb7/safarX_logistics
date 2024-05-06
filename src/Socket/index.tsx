@@ -6,7 +6,6 @@ import {
   GlobalToastSuccess,
 } from "../components/GlobalToast/GlobalToast";
 import { setWalletBalance } from "../redux/reducers/userReducer";
-import { useEffect } from "react";
 import { channelState } from "../redux/reducers/syncChannel";
 
 let socket: Socket | null = null;
@@ -75,18 +74,48 @@ const connectSocket = (dispatch?: any) => {
       const url = window.location.href;
       const parsedUrl = new URL(url);
       const path = parsedUrl.pathname;
-      if (path === "/orders/view-orders") {
-        GlobalToastSuccess("New Orders Found, Please refresh the page");
-      } else {
-        let message = "New Orders Found, Navigate to orders page?";
-        const isConfirmed = window.confirm(message);
+      let message = data || "New Orders Placed";
 
-        if (isConfirmed) {
-          window.location.href = "/orders/view-orders?activeTab=draft";
-          window.onload = () => {
-            window.location.reload();
-          };
+      if (path === "/orders/view-orders") {
+        GlobalToastSuccess(`${message}, Please refresh the page`);
+      } else {
+        const modalContent: any = document.createElement("div");
+        modalContent.className =
+          "inset-0 flex items-center justify-center z-50";
+        modalContent.innerHTML = `
+    <div class="bg-white p-4 max-w-sm w-full gap-4 mx-auto absolute top-[10px] rounded-md shadow-lg">
+      <div class="float-right cursor-pointer">
+        <a
+          class="hover:underline hover:cursor-pointer text-sm mr-3 text-blue-400"
+          href="/orders/view-orders?activeTab=draft"
+        >
+          View Orders
+        </a>
+        <span class="close-button">X</span>
+      </div>
+      <div>
+        <span>${message}</span>     
+      </div>
+    </div>
+  `;
+
+        const closeButton = modalContent.querySelector(".close-button");
+        if (closeButton) {
+          closeButton.addEventListener("click", () => {
+            if (document.body.contains(modalContent)) {
+              document.body.removeChild(modalContent);
+            }
+          });
         }
+
+        document.body.appendChild(modalContent);
+
+        // Automatically close modal after 5 seconds
+        setTimeout(() => {
+          if (document.body.contains(modalContent)) {
+            document.body.removeChild(modalContent);
+          }
+        }, 5000);
       }
     });
 

@@ -8,7 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useEffect, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
-import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
+import {
+  POST_SEND_OTP_URL,
+  LARGE_LOGO,
+  WHITE_COMPANYNAME,
+} from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -46,7 +50,7 @@ const Index = () => {
       if (response?.success === true) {
         window?.dataLayer?.push({
           event: "reg_2_Mobile_Verified",
-          seller_email:email,
+          seller_email: email,
           seller_name: firstName,
           // seller_kyc: nextStep?.kyc,
           // seller_bank_verification_done: nextStep?.bank,
@@ -57,7 +61,7 @@ const Index = () => {
           window.location.search
         );
         navigate(navigationObject, { state: { path: body } });
-        
+
         // navigate("/onboarding/verifyOtp", { state: { path: body } });
       } else {
         toast.error(response?.message);
@@ -72,7 +76,7 @@ const Index = () => {
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={CompanyLogo}
+          src={LARGE_LOGO}
           alt="Company Logo"
         />
       </div>
@@ -90,7 +94,7 @@ const Index = () => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={CompanyLogo}
+            src={LARGE_LOGO}
             alt="CompanyLogo"
           />
         </div>
@@ -116,21 +120,21 @@ const Index = () => {
             <CustomInputBox
               value={mobileNumber?.mobileNo || ""}
               inputMode="numeric"
-              label="Enter Your Mobile Number"
+              label="Enter Your 10 Digit Mobile Number"
               maxLength={10}
               onChange={(e: any) => {
                 if (isNaN(e.target.value)) {
                 } else {
                   setMobileNumber({
                     ...mobileNumber,
-                    mobileNo: +e.target.value,
+                    mobileNo: e.target.value,
                   });
                 }
               }}
             />
             <CustomButton
               onClick={(e: any) => sendOtpOnClick(body)}
-              text="SEND OTP"
+              text="GET OTP"
             />
           </div>
         </div>

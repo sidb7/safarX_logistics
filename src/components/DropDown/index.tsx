@@ -1,5 +1,7 @@
 import "./dropDown.css";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { updateDropdownValue } from "../../redux/reducers/paginationReducer";
 
 interface IDropDownProps {
   options?: any;
@@ -27,6 +29,7 @@ const CustomDropDown = (props: IDropDownProps) => {
     inputError,
     disabled,
   } = props;
+  const dispatch = useDispatch();
 
   const dropdownRef: any = useRef(null);
 
@@ -37,6 +40,18 @@ const CustomDropDown = (props: IDropDownProps) => {
   let label =
     placeHolder?.replace(/\b\w/g, (match) => match.toUpperCase()) || "";
 
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newValue = event.target.value;
+    dispatch(updateDropdownValue(newValue)); // Dispatch action to update Redux state
+  };
+
+  const handleCombinedChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    handleChange(event);
+    onChange && onChange(event); // Call the external onChange handler if provided
+  };
+
   return (
     <>
       <div
@@ -46,7 +61,7 @@ const CustomDropDown = (props: IDropDownProps) => {
       >
         <select
           id="selectDropdown"
-          onChange={onChange}
+          onChange={handleCombinedChange}
           value={value}
           // className={` ${selectClassName} select-dropdown appearance-none pr-8 pl-2 form-select bg-no-repeat h-[48px] px-2 rounded block w-full bg-transparent border-[1px] border-[#A4A4A4] text-[12px] text-[#777777] outline-none cursor-pointer`}
           placeholder={placeHolder}

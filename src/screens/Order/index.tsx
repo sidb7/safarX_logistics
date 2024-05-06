@@ -271,7 +271,12 @@ const Index = () => {
       number: "13000",
       gif: DeliveryGIF,
     },
-    { label: "Sucsess Rate", value: "sucsessRate", number: "5%", gif: false },
+    {
+      label: "Sucsess Rate",
+      value: "sucsessRate",
+      number: "5%",
+      gif: false,
+    },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [infoModalContent, setInfoModalContent]: any = useState({
@@ -830,7 +835,6 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
@@ -895,13 +899,18 @@ const Index = () => {
       });
 
       const resdata: any = await data?.blob();
-
-      const blob = new Blob([resdata], { type: "application/pdf" });
+      const blob = new Blob([resdata], { type: resdata?.type });
+      let filename: any;
+      if (resdata?.type === "image/png") {
+        filename = "Label_Report.png";
+      } else {
+        filename = "Label_Report.pdf";
+      }
 
       var url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Label_Report.pdf`;
+      a.download = filename;
       a.click();
       return true;
     } else {
@@ -937,7 +946,10 @@ const Index = () => {
           });
           // setIsPartnerModal(true);
         } else {
-          setDeleteModalDraftOrder({ isOpen: true, payload: payLoad });
+          setDeleteModalDraftOrder({
+            isOpen: true,
+            payload: payLoad,
+          });
         }
         break;
       case "BOOKED":
@@ -999,17 +1011,6 @@ const Index = () => {
             }
           });
       } else {
-        // const index = tempArr.findIndex(
-        //   (statusData: any) => statusData?.value === currentStatus
-        // );
-
-        // if (index > -1) {
-        //   tempArr[index].orderNumber = updatedCount.toLocaleString("en-US", {
-        //     minimumIntegerDigits: 2,
-        //     useGrouping: false,
-        //   });
-        // }
-
         for (let index = 0; index < tempArr.length; index++) {
           const element = tempArr[index];
 
@@ -1173,11 +1174,11 @@ const Index = () => {
           }
         }
 
-        updateFilterArr(tempArrTwo, "codInfo.isCod", "$in", tempArr);
+        updateFilterArr(tempArrOne, "codInfo.isCod", "$in", tempArr);
         PersistFilterArr("paymentType", data);
         break;
       case "Partners":
-        updateFilterArr(tempArrTwo, "service.partnerName", "$in", data);
+        updateFilterArr(tempArrOne, "service.partnerName", "$in", data);
         PersistFilterArr("partners", data);
         break;
       case "Order Type":
@@ -1221,7 +1222,6 @@ const Index = () => {
     selectedEndDate?: any,
     firstFilterData?: any,
     secondFilterData?: any
-    // filterPayLoad?: any,
   ) => {
     let payload: any = {};
 
@@ -1342,7 +1342,6 @@ const Index = () => {
       limit = data?.itemsPerPage;
       pageNo = data?.currentPage || 0;
     }
-
     const { OrderData } = await getSellerOrder(
       tabs[globalIndex].value,
       pageNo,
@@ -1378,7 +1377,6 @@ const Index = () => {
     }
 
     setIsLoading(true);
-
     const { OrderData } = await getSellerOrder(
       tabs[globalIndex].value,
       pageNo,
@@ -1417,6 +1415,7 @@ const Index = () => {
         pageNo,
         sort,
         currentStatus,
+        subStatus: "DRAFT",
       };
 
       let firstFilterData = [];
@@ -1470,7 +1469,6 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
@@ -1507,11 +1505,7 @@ const Index = () => {
     const payload: any = {
       awbs: arrLebels.filter((item: any) => item !== ""),
     };
-    // const { data } = await POST(
-    //   FETCH_LABELS_REPORT_DOWNLOAD,
-    //   payload
-    //   // responseType: "blob",
-    // );
+
     let header = {
       Accept: "/",
       Authorization: `Bearer ${localStorage.getItem(
@@ -1524,15 +1518,7 @@ const Index = () => {
       headers: header,
       body: JSON.stringify(payload),
     });
-    // const data1 = await response.json();
-    // if (!data?.status) {
-    //   toast.error(data.msg);
-    //   setIsLoadingManifest({
-    //     isLoading: false,
-    //     identifier: "",
-    //   });
-    //   return;
-    // }
+
     setIsLoadingManifest({
       isLoading: false,
       identifier: "",
@@ -1540,7 +1526,13 @@ const Index = () => {
 
     const resdata: any = await data.blob();
 
-    const blob = new Blob([resdata], { type: "application/pdf" });
+    const blob = new Blob([resdata], { type: resdata?.type });
+    let filename: any;
+    if (resdata?.type === "image/png") {
+      filename = "Label_Report.png";
+    } else {
+      filename = "Label_Report.pdf";
+    }
 
     var url = URL.createObjectURL(blob);
     setIsLoadingManifest({
@@ -1550,7 +1542,7 @@ const Index = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Label_Report.pdf`;
+    a.download = filename;
     a.click();
     return true;
   };
@@ -1674,10 +1666,6 @@ const Index = () => {
         }
       });
 
-      // setDraftOrderCount((prev: any) => {
-      //   return { ...prev, error: errorListCount };
-      // });
-
       setErrorData(result);
       setIsErrorListLoading(false);
     } else {
@@ -1733,7 +1721,6 @@ const Index = () => {
           }
         );
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
       const { OrderData, orderCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);
@@ -1798,28 +1785,8 @@ const Index = () => {
   }, [infoModalContent]);
 
   useEffect(() => {
-    // if (filterState?.menu?.length === 0) return;
     getObjectWithIsActiveTrue(filterState?.menu, filterState?.name);
-    // if (filterState?.menu?.length > 0) {
-    // }
   }, [filterState]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     //   if (!infoModalContent.isOpen) {
-  //     const data = await getSellerOrderByStatus();
-  //     const { OrderData } = data;
-  //     setOrders(OrderData);
-  //     //   }
-  //   })();
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(
-  //     "filterPayLoad-----------------%$##$%^----------->",
-  //     filterPayLoad
-  //   );
-  // }, [filterPayLoad]);
 
   useEffect(() => {
     if (channelReduxData.length > 0) {
@@ -1830,10 +1797,8 @@ const Index = () => {
   useEffect(() => {
     (async () => {
       try {
-        // fetchCurrentWallet();
         const juspayOrderId = getLocalStorage("order_id");
         if (juspayOrderId) {
-          // setPaymentLoader(true);
           const orderStatus = await POST(RECHARGE_STATUS, {
             orderId: juspayOrderId,
             paymentGateway: "JUSPAY",
@@ -1843,8 +1808,7 @@ const Index = () => {
             toast.error("Something Went Wrong");
           } else {
             toast.success("Wallet Recharge Successfully");
-            // navigate(`${SELLER_WEB_URL}/wallet/view-wallet`);
-            // ------------------------------------------------------------------------------------------
+
             let paymentPayload: any = getLocalStorage("paymentErrorObject");
             if (paymentPayload) {
               paymentPayload = JSON.parse(paymentPayload);
@@ -2021,9 +1985,6 @@ const Index = () => {
                       )}
                     </div>
                   )}
-                  {/* <div className="mt-24 lg:hidden">
-                  <BottomNavBar />
-                </div> */}
                 </div>
               )}
             </div>
@@ -2035,7 +1996,10 @@ const Index = () => {
       <DeleteModal
         isOpen={cancellationModal?.isOpen}
         setModalClose={() =>
-          setCancellationModal({ ...cancellationModal, isOpen: false })
+          setCancellationModal({
+            ...cancellationModal,
+            isOpen: false,
+          })
         }
         deleteTextMessage={warningMessageForCancel(cancellationModal?.payload)}
         payloadBody={cancellationModal.payload}
@@ -2050,7 +2014,10 @@ const Index = () => {
         isOpen={deleteModalDraftOrder?.isOpen}
         reloadData={handleTabChanges}
         closeModal={() => {
-          setDeleteModalDraftOrder({ ...deleteModalDraftOrder, isOpen: false });
+          setDeleteModalDraftOrder({
+            ...deleteModalDraftOrder,
+            isOpen: false,
+          });
         }}
         title={warningMessageForDelete(deleteModalDraftOrder?.payload)}
       />
@@ -2073,18 +2040,10 @@ const Index = () => {
               {infoModalContent?.data?.orderId?.split("T")?.[1] ||
                 infoModalContent?.data?.orderId ||
                 ""}
-              {/* {!infoModalContent?.data?.orderNumber
-                ? `Shipyaari Id: (${
-                    infoModalContent?.data?.orderId?.split("T")?.[1] ||
-                    infoModalContent?.data?.orderId
-                  })`
-                : `${
-                    infoModalContent?.data?.orderNumber || ""
-                  } - Order Details`} */}
             </p>
           </div>
         </div>
-        <CustomTableAccordian data={infoModalContent} />
+        <CustomTableAccordian getAllSellerData={infoModalContent} />
       </CustomRightModal>
 
       <CustomRightModal

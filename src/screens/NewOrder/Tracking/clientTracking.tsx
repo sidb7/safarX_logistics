@@ -8,7 +8,7 @@ import Stepper from "./clientStepper";
 import TickLogo from "../../../assets/common/Tick.svg";
 import { Spinner } from "../../../components/Spinner";
 import { GET, POST } from "../../../utils/webService";
-import { GET_CLIENTTRACKING_INFO } from "../../../utils/ApiUrls";
+import { GET_CLIENTTRACKING_INFO, LARGE_LOGO } from "../../../utils/ApiUrls";
 import CustomButton from "../../../components/Button";
 import { toast } from "react-hot-toast";
 import { convertEpochToDateTime } from "../../../utils/utility";
@@ -29,6 +29,8 @@ const Tracking = () => {
   const [trackingNo, setTrackingNo] = useState<any>(trackingNoParams);
   const [loading, setLoading] = useState(false);
   const [trackingCycleDetails, setTrackingCycleDetails] = useState<any>([]);
+  const [sellerId, setSellerId] = useState<any>();
+  const [loggedIn, setLoggedIn] = useState<any>(false);
 
   const [edd, setEdd] = useState<any>();
   const [orderType, setOrderType] = useState<any>(false);
@@ -171,7 +173,23 @@ const Tracking = () => {
     }
   };
 
+  //getting seller id
+
+  const getJwtTokenForUser = (sellerId: any) => {
+    // Construct the dynamic key based on the user ID
+    const dynamicKey = `${sellerId}_891f5e6d-b3b3-4c16-929d-b06c3895e38d`;
+
+    // Retrieve JWT token from local storage using the dynamic key
+    if (sellerId) {
+      setLoggedIn(true);
+    }
+  };
+
   const handleTrackOrderClick = async () => {
+    const getSellerId = sessionStorage.getItem("sellerId");
+
+    setSellerId(getSellerId);
+    getJwtTokenForUser(getSellerId);
     try {
       if (trackingNo === "" || !trackingNo || !trackingNo.length) {
         setTrackingState([]);
@@ -302,7 +320,11 @@ const Tracking = () => {
         <div className="mx-5">
           {/*shipyaari icon */}
           <div className="flex  justify-center p-3">
-            <img src={shipyaari} alt="Shipyaari" />
+            <img
+              className="mt-8 m-4 h-[60px] object-contain"
+              src={LARGE_LOGO}
+              alt="Shipyaari"
+            />
           </div>
           <div className="flex justify-center items-center py-4">
             <div className="w-[50rem]">
@@ -471,27 +493,33 @@ const Tracking = () => {
                                           </div>
                                         </div>
                                         {/* commented for now */}
-                                        {/* <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
-                                          <div className="md:flex-1 mt-2">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px] ">
-                                              From:
-                                            </p>
-                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
-                                              {each?.pickupAddress?.fullAddress}
-                                            </p>
+                                        {loggedIn && (
+                                          <div className="flex  flex-col md:flex-row md:gap-x-2 w-full">
+                                            <div className="md:flex-1 mt-2">
+                                              <p className="text-[14px] font-normal font-Open leading-[16px] ">
+                                                From:
+                                              </p>
+                                              <p className="text-[12px] font-normal font-Open leading-[16px] mt-1  h-[50px] customScroll">
+                                                {
+                                                  each?.pickupAddress
+                                                    ?.fullAddress
+                                                }
+                                              </p>
+                                            </div>
+                                            <div className="md:flex-1 mt-2 ]">
+                                              <p className="text-[14px] font-normal font-Open leading-[16px]">
+                                                To:
+                                              </p>
+                                              <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
+                                                {
+                                                  each?.deliveryAddress
+                                                    ?.fullAddress
+                                                }
+                                              </p>
+                                            </div>
                                           </div>
-                                          <div className="md:flex-1 mt-2 ]">
-                                            <p className="text-[14px] font-normal font-Open leading-[16px]">
-                                              To:
-                                            </p>
-                                            <p className="text-[12px] font-normal font-Open leading-[16px] mt-1 h-[50px] customScroll">
-                                              {
-                                                each?.deliveryAddress
-                                                  ?.fullAddress
-                                              }
-                                            </p>
-                                          </div>
-                                        </div> */}
+                                        )}
+
                                         {each?.currentStatus === "CANCELLED" ||
                                         each?.currentStatus ===
                                           "CANCEL REQUESTED" ||
@@ -553,42 +581,48 @@ const Tracking = () => {
                                           <hr />
                                         </div>
                                         {/* commented for now */}
-                                        {/* <div
-                                          className="flex justify-between cursor-pointer w-[280px] md:w-full"
-                                          onClick={() =>
-                                            toggleSectionOrderDetails("product")
-                                          }
-                                        >
-                                          <div className="flex gap-x-1">
-                                            <img src={Product} alt="" />
-                                            <p className="text-sm font-Open font-semibold">
-                                              Order Details
-                                            </p>
+                                        {loggedIn && (
+                                          <div
+                                            className="flex justify-between cursor-pointer w-[280px] md:w-full"
+                                            onClick={() =>
+                                              toggleSectionOrderDetails(
+                                                "product"
+                                              )
+                                            }
+                                          >
+                                            <div className="flex gap-x-1">
+                                              <img src={Product} alt="" />
+                                              <p className="text-sm font-Open font-semibold">
+                                                Order Details
+                                              </p>
+                                            </div>
+                                            {openOrderDetails === "product" ? (
+                                              <div className="flex gap-x-1  items-center">
+                                                <img
+                                                  src={
+                                                    openOrderDetails ===
+                                                    "product"
+                                                      ? UpwardArrow
+                                                      : DownwardArrow
+                                                  }
+                                                  alt=""
+                                                />
+                                              </div>
+                                            ) : (
+                                              <div className="flex gap-x-1  items-center">
+                                                <img
+                                                  src={
+                                                    openOrderDetails ===
+                                                    "product"
+                                                      ? UpwardArrow
+                                                      : DownwardArrow
+                                                  }
+                                                  alt=""
+                                                />
+                                              </div>
+                                            )}
                                           </div>
-                                          {openOrderDetails === "product" ? (
-                                            <div className="flex gap-x-1  items-center">
-                                              <img
-                                                src={
-                                                  openOrderDetails === "product"
-                                                    ? UpwardArrow
-                                                    : DownwardArrow
-                                                }
-                                                alt=""
-                                              />
-                                            </div>
-                                          ) : (
-                                            <div className="flex gap-x-1  items-center">
-                                              <img
-                                                src={
-                                                  openOrderDetails === "product"
-                                                    ? UpwardArrow
-                                                    : DownwardArrow
-                                                }
-                                                alt=""
-                                              />
-                                            </div>
-                                          )}
-                                        </div> */}
+                                        )}
                                         <div>
                                           {openOrderDetails === "product" && (
                                             <>
