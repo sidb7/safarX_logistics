@@ -13,7 +13,6 @@ import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
-import { LARGE_LOGO } from "../../../utils/ApiUrls";
 
 export const QuestionComponent4: React.FunctionComponent = () => {
   const navigate = useNavigate();
@@ -132,7 +131,7 @@ export const QuestionComponent4: React.FunctionComponent = () => {
             <div className="product-box flex items-center ">
               <img
                 className="m-4 h-[25px] object-contain"
-                src={LARGE_LOGO}
+                src={CompanyLogo}
                 alt="CompanyLogo"
               />
             </div>

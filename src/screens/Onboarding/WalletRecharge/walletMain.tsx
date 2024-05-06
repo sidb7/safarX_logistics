@@ -9,11 +9,7 @@ import CompanyLogo from "./../../../assets/CompanyLogo/shipyaari icon.svg";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
 import TickLogo from "../../../assets/tick.svg";
 import { POST } from "../../../utils/webService";
-import {
-  POST_SKIP_FOR_NOW_TRACKER,
-  LARGE_LOGO,
-  WHITE_COMPANYNAME,
-} from "../../../utils/ApiUrls";
+import { POST_SKIP_FOR_NOW_TRACKER } from "../../../utils/ApiUrls";
 import toast from "react-hot-toast";
 
 const modalTitle = () => {
@@ -21,7 +17,7 @@ const modalTitle = () => {
     <div className="product-box flex justify-between items-center w-full h-[60px] absolute top-0">
       <img
         className=" ml-6  h-[25px] object-contain"
-        src={LARGE_LOGO}
+        src={CompanyLogo}
         alt="Company Logo"
       />
     </div>
@@ -84,7 +80,7 @@ const WalletMain = () => {
           <div className="product-box flex justify-between items-center w-full h-[60px] top-0 pl-5">
             <img
               className="my-auto h-[25px] object-contain"
-              src={LARGE_LOGO}
+              src={CompanyLogo}
               alt="Company Logo"
             />
           </div>
@@ -93,7 +89,7 @@ const WalletMain = () => {
               <div className="md:grid">
                 <div className="mx-5  mt-[44px] md:mt-[0px] ">
                   <h1 className="font-Lato text-[22px] font-bold leading-7 text-center">
-                    Welcome to {WHITE_COMPANYNAME}
+                    Welcome to Shipyaari
                   </h1>
                   {/* Temporary Comment */}
                   {/* <p className="mt-3 text-[#494949] text-[16px] font-light text-center">

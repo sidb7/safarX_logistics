@@ -8,11 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { ResponsiveState } from "../../../utils/responsiveState";
 import { useEffect, useState } from "react";
 import CenterModal from "../../../components/CustomModal/customCenterModal";
-import {
-  POST_SEND_OTP_URL,
-  LARGE_LOGO,
-  WHITE_COMPANYNAME,
-} from "../../../utils/ApiUrls";
+import { POST_SEND_OTP_URL } from "../../../utils/ApiUrls";
 import { POST } from "../../../utils/webService";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
@@ -76,7 +72,7 @@ const Index = () => {
       <div className="product-box sticky z-10 bg-white flex justify-between items-center w-full h-[60px] top-0">
         <img
           className="my-auto ml-6  h-[25px] object-contain"
-          src={LARGE_LOGO}
+          src={CompanyLogo}
           alt="Company Logo"
         />
       </div>
@@ -94,7 +90,7 @@ const Index = () => {
         <div className="product-box flex items-center ">
           <img
             className="m-4 h-[25px] object-contain"
-            src={LARGE_LOGO}
+            src={CompanyLogo}
             alt="CompanyLogo"
           />
         </div>

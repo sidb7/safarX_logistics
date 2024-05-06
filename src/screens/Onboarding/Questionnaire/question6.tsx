@@ -9,7 +9,7 @@ import { ResponsiveState } from "../../../utils/responsiveState";
 import CompanyLogo from "../../../assets/CompanyLogo/shipyaari icon.svg";
 // import CenterModal from "../../../components/CustomModal/customCenterModal";
 import { POST } from "../../../utils/webService";
-import { POST_SUBMIT_QUESTIONNAIRE, LARGE_LOGO } from "../../../utils/ApiUrls";
+import { POST_SUBMIT_QUESTIONNAIRE } from "../../../utils/ApiUrls";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../../components/Spinner";
 import { constructNavigationObject } from "../../../utils/utility";
@@ -198,7 +198,7 @@ export const QuestionComponent6: React.FunctionComponent = () => {
             <div className="product-box flex items-center ">
               <img
                 className="m-4 h-[25px] object-contain"
-                src={LARGE_LOGO}
+                src={CompanyLogo}
                 alt="CompanyLogo"
               />
             </div>
