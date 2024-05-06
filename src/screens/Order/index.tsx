@@ -835,7 +835,6 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount, draftCount, failedCount, errorCount } = data?.data[0];
@@ -1343,7 +1342,6 @@ const Index = () => {
       limit = data?.itemsPerPage;
       pageNo = data?.currentPage || 0;
     }
-
     const { OrderData } = await getSellerOrder(
       tabs[globalIndex].value,
       pageNo,
@@ -1379,7 +1377,6 @@ const Index = () => {
     }
 
     setIsLoading(true);
-
     const { OrderData } = await getSellerOrder(
       tabs[globalIndex].value,
       pageNo,
@@ -1418,6 +1415,7 @@ const Index = () => {
         pageNo,
         sort,
         currentStatus,
+        subStatus: "DRAFT",
       };
 
       let firstFilterData = [];
@@ -1471,7 +1469,6 @@ const Index = () => {
         payload.filterArrOne = firstFilterData;
         payload.filterArrTwo = secondFilterData;
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
 
       const { orderCount } = data?.data[0];
@@ -1724,7 +1721,6 @@ const Index = () => {
           }
         );
       }
-
       const { data } = await POST(GET_SELLER_ORDER, payload);
       const { OrderData, orderCount } = data?.data?.[0];
       setStatusCount("", currentStatus, orderCount);

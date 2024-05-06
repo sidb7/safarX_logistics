@@ -98,7 +98,9 @@ const ComboProductBox: React.FunctionComponent<IPackageBoxProps> = ({
             <div>
               <span className="line-clamp-1">{productName}</span>
             </div>
-            <span className="flex ">{`${weight} | ₹${Value?.toFixed(2)}`}</span>
+            <span className="flex ">{`${weight} | ₹${
+              Value && Value?.toFixed(2)
+            }`}</span>
           </div>
         </div>
         {deleteProductsData && (
